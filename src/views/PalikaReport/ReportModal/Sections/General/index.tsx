@@ -9,7 +9,13 @@ import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import NextPrevBtns from '../../NextPrevBtns';
 import 'nepali-datepicker-reactjs/dist/index.css';
-
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
 import {
     setCarKeysAction,
     setGeneralDataAction,
@@ -29,7 +35,22 @@ const mapDispatchToProps = dispatch => ({
     setCarKeys: params => dispatch(setCarKeysAction(params)),
 
 });
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
+    FiscalYearFetch: {
+        url: '/nepali-fiscal-year/',
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let fiscalYearList: CitizenReport[] = [];
+            const fiscalYearListResponse = response as MultiResponse<CitizenReport>;
+            fiscalYearList = fiscalYearListResponse.results;
+            params.fiscalYearList(fiscalYearList);
+        },
+    },
+
+};
 export interface GeneralData{
     reportTitle?: string;
     fiscalYear: string;
@@ -71,13 +92,13 @@ const General = (props: Props) => {
         formationDate: fd,
         committeeMembers: cm,
     } = props.generalData;
-
+    const { requests: { FiscalYearFetch } } = props;
 
     const [reportTitle, setreportTitle] = useState<string>(rt);
     const [fiscalYear, setfiscalYear] = useState<string>(fy);
     const [formationDate, setformationDate] = useState<string>(fd);
     const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
-
+    const [fiscalYearList, setFiscalYearList] = useState([]);
     const handleReportTitle = (title: any) => {
         setreportTitle(title.target.value);
     };
@@ -90,11 +111,18 @@ const General = (props: Props) => {
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
     };
-
+    const handleFiscalYearList = (response) => {
+        setFiscalYearList(response);
+    };
     useEffect(() => {
         props.setCarKeys('null');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    FiscalYearFetch.setDefaultParams({
+        fiscalYearList: handleFiscalYearList,
+    });
+    console.log('this is fiscal year list>>>', fiscalYear);
 
     const handleAddContact = () => {
         const { setCarKeys } = props;
@@ -120,6 +148,8 @@ const General = (props: Props) => {
             committeeMembers,
         });
         updateTab();
+
+        props.handleNextClick();
     };
 
     const selectStyles = {
@@ -164,17 +194,10 @@ const General = (props: Props) => {
                             className={styles.inputElement}
                         >
                             <option value="select">Select Fiscal Year</option>
-                            <option value="2077/2078">2077/2078</option>
-                            <option value="2076/2077">2076/2077</option>
-                            <option value="2075/2076">2075/2076</option>
-                            <option value="2074/2075">2074/2075</option>
-                            <option value="2073/2074">2073/2074</option>
-                            <option value="2072/2073">2072/2073</option>
-                            <option value="2071/2072">2071/2072</option>
-                            <option value="2070/2071">2070/2071</option>
-                            <option value="2069/2070">2069/2070</option>
-                            <option value="2068/2069">2068/2069</option>
-                            <option value="2067/2068">2067/2068</option>
+                            {fiscalYearList && fiscalYearList.map(item => (
+                                <option value={item.id}>{item.titleEn}</option>
+                            ))}
+
                         </select>
                     </div>
 
@@ -353,7 +376,7 @@ const General = (props: Props) => {
             </div>
             <NextPrevBtns
                 handlePrevClick={props.handlePrevClick}
-                handleNextClick={props.handleNextClick}
+                handleNextClick={handleDataSave}
                 firstpage
             />
 
@@ -363,4 +386,10 @@ const General = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(General);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            General,
+        ),
+    ),
+);

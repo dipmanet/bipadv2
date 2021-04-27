@@ -106,7 +106,7 @@ const Sidebar = (props) => {
         setSelectedMenuId(id);
         setInitialRender(false);
         props.getmenuId(id);
-        props.getsubmenuId(null);
+        // props.getsubmenuId(null);
     };
     const handleSelectSubmenu = (id, url, title, slug, menumainSlug) => {
         setSelectedSubMenuId(id);
@@ -116,10 +116,16 @@ const Sidebar = (props) => {
         props.getsubmenuTitle(title);
         setMenuSlug(menumainSlug);
         setSubMenuSlug(slug);
+        console.log('tested?', id);
         // ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
     };
+    console.log('is this selected submenu>>>', selectedSubMenuId);
     useEffect(() => {
-        props.getsubmenuId(selectedSubMenuId);
+        if (selectedSubMenuId) {
+            console.log('What>>>', selectedSubMenuId);
+            props.getsubmenuId(selectedSubMenuId);
+        }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSubMenuId]);
 

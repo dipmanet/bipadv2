@@ -244,7 +244,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             selectedMunicipalityId: undefined,
             selectedWardId: undefined,
         });
-        const { checkFilterButtonProvince } = this.props;
+        const { checkProvince } = this.props;
 
 
         this.handleRegionChange({
@@ -252,7 +252,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             geoarea: selectedProvinceId,
         });
 
-        checkFilterButtonProvince(selectedProvinceId);
+        checkProvince(selectedProvinceId);
     }
 
     private handleDistrictChange = (selectedDistrictId: number) => {
@@ -263,13 +263,13 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedProvinceId } = this.state;
-        const { checkFilterButtonDistrict } = this.props;
+        const { checkDistrict } = this.props;
 
         this.handleRegionChange({
             adminLevel: selectedDistrictId ? 2 : 1,
             geoarea: selectedDistrictId || selectedProvinceId,
         });
-        checkFilterButtonDistrict(selectedDistrictId);
+        checkDistrict(selectedDistrictId);
     }
 
     private handleMunicipalityChange = (selectedMunicipalityId: number) => {
@@ -279,12 +279,12 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         });
 
         const { selectedDistrictId } = this.state;
-        const { checkFilterButtonMun } = this.props;
+        const { checkMun } = this.props;
         this.handleRegionChange({
             adminLevel: selectedMunicipalityId ? 3 : 2,
             geoarea: selectedMunicipalityId || selectedDistrictId,
         });
-        checkFilterButtonMun(selectedMunicipalityId);
+        checkMun(selectedMunicipalityId);
     }
 
     private handleWardChange = (selectedWardId: number) => {

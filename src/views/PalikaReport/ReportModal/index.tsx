@@ -107,7 +107,13 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         handleNextClick,
 
     } = props;
-
+    const [reportTitle, setreportTitle] = useState('');
+    const [datefrom, setdatefrom] = useState('');
+    const [dateTo, setdateTo] = useState('');
+    const [formationDate, setformationDate] = useState('');
+    const [memberCount, setmemberCount] = useState('');
+    const [reportData, setReportData] = useState([]);
+    const [pdfReport, setPdfReport] = useState(null);
 
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
@@ -138,15 +144,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 heightLeft -= pageHeight;
             }
             doc.save('palika-report.pdf');
+
+            const pdf = doc.output('blob');
+
+            const data = new FormData();
+            data.append('file', pdf, 'test.pdf');
+
+            // setPdfReport(data);
         });
     };
 
-    const [reportTitle, setreportTitle] = useState('');
-    const [datefrom, setdatefrom] = useState('');
-    const [dateTo, setdateTo] = useState('');
-    const [formationDate, setformationDate] = useState('');
-    const [memberCount, setmemberCount] = useState('');
-    const [reportData, setReportData] = useState([]);
 
     const getGeneralData = () => ({
         reportTitle,
