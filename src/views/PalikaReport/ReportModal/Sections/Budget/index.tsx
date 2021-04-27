@@ -71,7 +71,6 @@ const Budget = (props: Props) => {
         additionalFund: af,
     } = budgetData;
 
-    console.log('budge data', budgetData);
     const [municipalBudget, setmunicipalBudget] = useState(mb);
     const [drrFund, setdrrFund] = useState(df);
     const [additionalFund, setadditionalFund] = useState(af);

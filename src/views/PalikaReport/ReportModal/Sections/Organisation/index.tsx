@@ -86,6 +86,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [paginationParameters, setPaginationParameters] = useState();
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
+    const [CIselected, setCISelected] = useState('');
+
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
         municipalities,
@@ -106,10 +108,13 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
+
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
-
         setOffset(selectedPage * 2);
+    };
+    const handleCIButton = (item) => {
+        setCISelected(item);
     };
 
     const handleOrnaisationRedirect = () => {
@@ -125,7 +130,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
         governance: defaultQueryParameter,
         meta,
         user,
-
     });
 
 
@@ -144,33 +148,43 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 <strong>DRR related organizations in Municipal Government</strong>
             </h2>
             <div className={styles.palikaTable}>
+                {fetchedData && fetchedData.length > 0
+                    ? fetchedData.map((item, i) => (
+                        <tr key={item.id}>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    onClick={() => handleCIButton(item.title)}
+                                >
+                                    {item.title}
+                                </button>
+                            </td>
+                        </tr>
+                    )) : ''
+                }
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
-
                             <th>S.N</th>
                             <th>Name of Organization</th>
-                            <th>Number of Employee</th>
-                            <th>Gender(M/F)</th>
-                            <th>Level(A/B/C)</th>
                             <th>Type of organization</th>
-
+                            {/* <th>Level (for governmental organization)</th> */}
+                            <th>Number of Male Employee</th>
+                            <th>Number of Female Employee</th>
                         </tr>
-
-
                         {fetchedData && fetchedData.length > 0
                             ? fetchedData.map((item, i) => (
                                 <tr key={item.id}>
                                     <td>{i + 1}</td>
                                     <td>{item.title}</td>
-                                    <td>{item.noOfEmployee}</td>
+                                    <td>{item.type}</td>
                                     <td>
                                         {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
-/
+                                    </td>
+                                    <td>
                                         {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
                                     </td>
-                                    <td>{item.level ? item.level : 'null'}</td>
-                                    <td>{item.type}</td>
                                 </tr>
                             )) : ''
                         }

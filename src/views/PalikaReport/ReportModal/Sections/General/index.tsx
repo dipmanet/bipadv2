@@ -107,8 +107,8 @@ const General = (props: Props) => {
         focalPerson,
         generalData,
         updateTab,
+        localMembers,
     } = props;
-
     const handleDataSave = () => {
         props.setGeneralDatapp({
             reportTitle,
@@ -151,9 +151,10 @@ const General = (props: Props) => {
                         <input
                             type="text"
                             className={styles.inputElement}
-                            placeholder="Report Title"
+                            placeholder="Disaster Risk Reduction and Management Report"
                             onChange={handleReportTitle}
                             value={reportTitle || ''}
+                            disabled
                         />
                     </div>
 
@@ -309,20 +310,7 @@ const General = (props: Props) => {
                                 </tr>
                             </tbody>
                         </table>
-                        {/* <ul>
-                            <li>
-                                <span className={styles.titlePersonal}>
-                                Mayor or Nagar Pramukh:
-                                </span>
-                                {' '}
-                                {mayor || 'Data Unavailable'}
-                            </li>
-
-                        </ul> */}
-
-
                     </div>
-
                 </div>
                 <div className={styles.row}>
                     <div className={styles.inputContainer}>
@@ -336,18 +324,70 @@ const General = (props: Props) => {
 
                         />
                     </div>
-                    <div className={styles.inputContainer}>
+                    <h3><strong>Committee Members </strong></h3>
 
-                        <input
-                            type="number"
-                            className={styles.inputElement}
-                            placeholder={'Number of DRRM committee members'}
-                            value={committeeMembers || ''}
-                            onChange={handleMembers}
-                        />
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+                                <th>SN</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Add/Edit Details</th>
+
+                            </tr>
+                            {localMembers
+
+                                 && localMembers.map((item, i) => (
+                                     <tr key={item.name}>
+                                         <td>
+                                             {i + 1}
+                                         </td>
+                                         <td>
+                                             {item.name || 'No Data'}
+                                         </td>
+                                         <td>
+                                             {item.email || 'No Data'}
+                                         </td>
+                                         <td>
+                                             {item.mobileNumber || 'No Data'}
+                                         </td>
+                                         <td>
+                                             {item.name
+                                                 ? (
+                                                     <button
+                                                         type="button"
+                                                         onClick={handleAddContact}
+                                                         className={styles.addEditBtn}
+                                                     >
+                                                         <Icon
+                                                             name="edit"
+                                                             className={styles.addEditIcon}
+                                                         />
+                                                     </button>
+                                                 )
+                                                 : (
+                                                     <button
+                                                         type="button"
+                                                         className={styles.addEditBtn}
+                                                         onClick={handleAddContact}
+                                                     >
+                                                         <Icon
+                                                             name="plus"
+                                                             className={styles.addEditIcon}
+                                                         />
+                                                     </button>
+                                                 )
+
+                                             }
+                                         </td>
+                                     </tr>
+                                 ))
+                            }
 
 
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

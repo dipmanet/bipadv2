@@ -135,6 +135,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
     const [pending, setPending] = useState(false);
+
+    const [localMembers, setLocalMembers] = useState([]);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -148,7 +150,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
         setProvince(provincefromProp);
         setDistrict(districtfromProp);
     }
-
     const handleReportData = (response) => {
         setReportData(response);
     };
@@ -216,27 +217,11 @@ const MainModal: React.FC<Props> = (props: Props) => {
         },
         {
             key: 9,
-            content: 'Recovery',
-            url: '',
-        },
-        {
-            key: 10,
             content: 'Simulation',
             url: '/simulation/',
         },
         {
-            key: 11,
-            content: 'Loss & Damage',
-            url: '',
-        },
-        {
-            key: 12,
-            content: 'Preparedness',
-            url: '',
-        },
-
-        {
-            key: 13,
+            key: 10,
             content: 'Preview',
             url: '/simulation/',
         },
@@ -261,8 +246,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
     }, []);
 
     useEffect(() => {
-        if (reportData) {
-            reportData.map((item) => {
+        if (reportData && user && user.profile.municipality) {
+            const localM = reportData
+                .filter(item => item.committee === 'LDMC' && item.municipality === user.profile.municipality);
+            setLocalMembers(localM);
+
+            reportData.filter(item => item.municipality === municipality).map((item) => {
                 if (item.isDrrFocalPerson) {
                     setfocalPerson(item.name);
                 }
@@ -277,13 +266,10 @@ const MainModal: React.FC<Props> = (props: Props) => {
                 if (item.position && item.position.includes('Chief Administrative Officer')) {
                     setcao(item.name);
                 }
-
                 return null;
             });
         }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [reportData]);
+    }, [municipality, reportData, user]);
 
     console.log(reportData);
 
@@ -424,6 +410,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                                         mayor={mayor}
                                         cao={cao}
                                         focalPerson={focalPerson}
+                                        localMembers={localMembers}
                                         updateTab={handleNextClick}
                                         tabsLength={tabs.length}
                                         handlePrevClick={handlePrevClick}

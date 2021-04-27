@@ -1,3 +1,14 @@
+.addEditBtn{
+    background: transparent;
+    border: none;
+    filter: saturate(100%);
+    margin-left: 12px;
+    .addEditIcon{
+        color: rgb(0,92,230);
+        font-size: 20px;
+    }
+        
+    }
 .mainPageDetailsContainer{
     min-height: 400px !important;
     display: flex;
@@ -19,6 +30,9 @@
             // border: 1px solid red;
             justify-content: flex-start;
             flex-direction: column;
+            table{
+                margin: 0;
+            }
             .inputContainer{
                 display: flex;
                 border-radius: 3px;

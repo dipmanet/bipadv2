@@ -107,10 +107,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         tabsLength,
         handlePrevClick,
         handleNextClick,
-
+        localMembers,
     } = props;
 
-
+    console.log('local memebrs in report :', localMembers);
     const handleWelcomePage = () => hideWelcomePage();
     const handlePreviewBtn = () => {
         const divToDisplay = document.getElementById('reportPreview');
@@ -249,6 +249,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             page={-1}
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
+                            localMembers={localMembers}
                         />
                     )
                     : ''
@@ -373,15 +374,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 9
                && showTabs)
                     ? (
-                        <Recovery />
-                    )
-                    : ''
-            }
-
-            {
-                (keyTab === 10
-               && showTabs)
-                    ? (
                         <>
                             <Simulation
                                 handlePrevClick={handlePrevClick}
@@ -393,36 +385,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     )
                     : ''
             }
-            {
-                (keyTab === 11
-               && showTabs)
-                    ? (
-                        <>
-                            <DamageAndLoss
-                                handlePrevClick={handlePrevClick}
-                                handleNextClick={handleNextClick}
-                                page={-1}
-                                updateTab={updateTab}
-                            />
-                        </>
-                    )
-                    : ''
-            }
-            {
-                (keyTab === 12
-               && showTabs)
-                    ? (
-                        <>
-                            <Preparedness
-                                handlePrevClick={handlePrevClick}
-                                handleNextClick={handleNextClick}
-                                page={-1}
-                                updateTab={updateTab}
-                            />
-                        </>
-                    )
-                    : ''
-            }
+,
             {
                 keyTab === (tabsLength - 1) && showTabs
                     ? (
