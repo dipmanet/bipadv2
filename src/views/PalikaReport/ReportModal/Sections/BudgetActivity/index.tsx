@@ -89,64 +89,69 @@ const BudgetActivity = (props: Props) => {
         budgetActivityData,
         generalData,
     } = props;
-    const {
-        name: nm,
-        fundSource: fd,
-        additionalDrrBudget: ad,
-        budgetCode: bc,
-        drrmCycle: dc,
-        projStatus: ps,
-        projCompletionDate: pcd,
-        allocatedBudget: ab,
-        actualExp: ae,
-        remarks: rm,
-    } = budgetActivityData;
+
 
     const TableNameTitle = {
-        name: 'Name',
-        fundSource: 'Fund Source',
-        additionalDrrBudget: 'Additional DRR Budget',
+        name: 'Name of Activity',
+        fundSource: 'Source of Fund',
         budgetCode: 'Budget Code',
-        drrmCycle: 'Priority Area',
         projStatus: 'Project Status',
-        projCompletionDate: 'Project Completion Date',
         allocatedBudget: 'Allocated Budget',
         actualExp: 'Actual Expenses',
         remarks: 'Remarks',
+        priorityArea: 'Priority Area',
+        action: 'Priority Action',
+        activity: 'Priority Activity',
+        areaofImplementation: 'Area of Implementation',
+        fundingType: 'Funding Type',
+        organisationName: 'Name of Organisation',
+        projcompletionDate: 'Project Completion Date',
+        projstartDate: 'Project Start Date',
     };
 
+    const {
+        name: namefromprops,
+        fundSource: fundSourcefromprops,
+        budgetCode: budgetCodefromprops,
+        projStatus: projStatusfromprops,
+        projCompletionDate: projCompletionDatefromprops,
+        allocatedBudget: allocatedBudgetfromprops,
+        actualExp: actualExpfromprops,
+        remarks: remarksfromprops,
+        priorityArea: priorityAreafromprops,
+        action: actionfromprops,
+        activity: activityfromprops,
+        areaofImplementation: areaofImplementationfromprops,
+        fundingType: fundingTypefromprops,
+        organisationName: organisationNamefromprops,
+        projstartDate: projstartDatefromprops,
 
-    const [startDate, setStartDate] = useState('');
-    const [projcompletionDate, setprojCompletionDate] = useState(pcd);
-    const [activityName, setactivityName] = useState(nm);
-    const [fundSource, setfundSource] = useState(fd);
-    const [fundSourcetype, setfundSourcetype] = useState(ad);
+    } = budgetActivityData;
+
+
+    const [projstartDate, setStartDate] = useState(projstartDatefromprops);
+    const [projcompletionDate, setprojCompletionDate] = useState(projCompletionDatefromprops);
+    const [activityName, setactivityName] = useState(namefromprops);
+    const [fundSource, setfundSource] = useState(fundSourcefromprops);
+    const [fundingType, setfundingType] = useState(fundingTypefromprops);
     const [otherFund, setotherFund] = useState('');
-    const [budgetCode, setbudgetCode] = useState(bc);
-    const [drrmCycle, setdrrmCycle] = useState(dc);
-    const [projStatus, setprojStatus] = useState(ps);
-    const [allocatedBudget, setallocatedBudget] = useState(ab);
-    const [actualExp, setactualExp] = useState(ae);
-    const [remarks, setremarks] = useState(rm);
-    // const tableData = [];
-
+    const [budgetCode, setbudgetCode] = useState(budgetCodefromprops);
+    const [projStatus, setprojStatus] = useState(projStatusfromprops);
+    const [allocatedBudget, setallocatedBudget] = useState(allocatedBudgetfromprops);
+    const [actualExp, setactualExp] = useState(actualExpfromprops);
+    const [remarks, setremarks] = useState(remarksfromprops);
+    const [priorityArea, setpriorityArea] = useState(priorityAreafromprops);
+    const [action, setAction] = useState(actionfromprops);
+    const [activity, setActivity] = useState(activityfromprops);
+    const [areaofImplementation, setareaofImplementation] = useState(areaofImplementationfromprops);
+    const [organisationName, setorganisationName] = useState(organisationNamefromprops);
     const [priorityAction, setPriorityAction] = useState([]);
-    const [priorityActivity, setPriorityActivity] = useState('');
-    const [priorityOptions, setPriorityOptions] = useState('');
-    const [optionsSelected, setoptionsSelected] = useState('');
 
-    const [priorityArea, setpriorityArea] = useState('');
-    const [action, setAction] = useState('');
-    const [activity, setActivity] = useState('');
-
-    const [organisationName, setorganisationName] = useState('');
-
-
-    const [showTable, setShowTable] = useState(false);
     const [tableData, setTableData] = useState([]);
-
+    const [showtable, setShowTable] = useState(false);
     const [showSourceType, setSourceType] = useState(false);
     const [showSourceTypeOther, setSourceTypeOther] = useState(false);
+    const [showmunGovernment, setshowmunGovernment] = useState(false);
     const [selectedOption, setSelectedOption] = useState({});
     const handleOrganisationName = (org: string) => {
         setorganisationName(org.target.value);
@@ -162,53 +167,47 @@ const BudgetActivity = (props: Props) => {
         updateTab();
     };
 
-    const handleSave = () => {
-        const newArr = [...tableData, {
-            name: activityName,
-            fundSource,
-            additionalDrrBudget: '',
-            budgetCode,
-            drrmCycle,
-            projStatus,
-            projcompletionDate,
-            allocatedBudget,
-            actualExp,
-            remarks,
-        }];
-        setTableData(newArr);
-        setBudgetActivityDatapp(newArr);
-    };
-
     const handleAddNew = () => {
         const newArr = [...tableData, {
             name: activityName,
             fundSource,
-            additionalDrrBudget: '',
             budgetCode,
-            drrmCycle,
             projStatus,
             projcompletionDate,
             allocatedBudget,
             actualExp,
             remarks,
+            priorityArea,
+            action,
+            activity,
+            areaofImplementation,
+            fundingType,
+            organisationName,
+            projstartDate,
         }];
         setTableData(newArr);
         setBudgetActivityDatapp(newArr);
-
         setShowTable(true);
+
         setStartDate('');
         setprojCompletionDate('');
         setactivityName('');
         setfundSource('');
-        setfundSourcetype('');
+        setfundingType('');
         setotherFund('');
         setbudgetCode('');
-        setdrrmCycle('');
         setprojStatus('');
         setallocatedBudget('');
         setactualExp('');
         setremarks('');
-        document.body.scrollTop = 0;
+        setpriorityArea('');
+        setAction('');
+        setActivity('');
+        setorganisationName('');
+        setPriorityAction([]);
+        setSourceType(false);
+        setSourceTypeOther(false);
+        setshowmunGovernment(false);
     };
 
 
@@ -217,28 +216,31 @@ const BudgetActivity = (props: Props) => {
     };
     const handlefundSource = (data) => {
         setfundSource(data.target.value);
-        if (data.target.value === 'Additional') {
-            setSourceType(true);
-        } else {
+
+        if (data.target.value === 'DRR Fund of Muicipality') {
+            setshowmunGovernment(true);
             setSourceType(false);
+            setSourceTypeOther(false);
+        } if (data.target.value === 'Other DRR related funding') {
+            setSourceType(true);
+            setshowmunGovernment(false);
         }
     };
-    const handlefundSourceType = (data) => {
-        console.log(data.target.value);
-        setfundSourcetype(data.target.value);
+    const handlefundingType = (data) => {
         if (data.target.value === 'Others') {
             setSourceTypeOther(true);
+        } else {
+            setSourceTypeOther(false);
+            setfundingType(data.target.value);
         }
     };
     const handleOtherFund = (data) => {
-        setotherFund(data.target.value);
+        setfundingType(data.target.value);
     };
     const handleBudgetCode = (data) => {
         setbudgetCode(data.target.value);
     };
-    const handleDrrmCycle = (data) => {
-        setdrrmCycle(data.target.value);
-    };
+
     const handleprojStatus = (data) => {
         setprojStatus(data.target.value);
     };
@@ -255,12 +257,7 @@ const BudgetActivity = (props: Props) => {
         setSelectedOption(data);
     };
     const getSubPriorityAction = (data) => {
-        console.log(data);
-        console.log('pA: ', priorityAction);
-        console.log(selectedOption);
-        // if(data.length>0){
-        // }
-        if (data.length > 0 && priorityAction.length === 0) {
+        if (data.length > 0 && action.length === 0) {
             setPriorityAction(data);
         }
     };
@@ -277,15 +274,7 @@ const BudgetActivity = (props: Props) => {
                 setActivity(ourdata[0].title);
             }
         }
-    }, [priorityAction, priorityAction.length, selectedOption]);
-
-    const getPriorityActivity = (data) => {
-        setPriorityActivity(data);
-    };
-    const getPriorityOptions = (data) => {
-        setPriorityOptions(data);
-    };
-
+    }, [action, priorityAction, selectedOption]);
 
     return (
         <div className={styles.mainPageDetailsContainer}>
@@ -306,10 +295,7 @@ const BudgetActivity = (props: Props) => {
                             className={styles.view}
                             showFilterOnly
                             getSelectedOption={getSelectedOption}
-
-                        // getPriorityOptions={getPriorityOptions}
                             getSubPriorityAction={getSubPriorityAction}
-                        // getPriorityActivity={getPriorityActivity}
                         />
                     </div>
 
@@ -321,19 +307,35 @@ const BudgetActivity = (props: Props) => {
                             className={styles.inputElement}
                         >
                             <option value="select"> Select Funding Type</option>
-                            <option value="DRR">DRR Fund of Municipality</option>
-                            <option value="Additional">Other DRR related funding</option>
+                            <option value="DRR Fund of Muicipality">DRR Fund of Municipality</option>
+                            <option value="Other DRR related funding">Other DRR related funding</option>
                         </select>
 
                     </div>
+                    {
+                        showmunGovernment
+                            ? (
+                                <div className={styles.inputContainer}>
+
+                                    <input
+                                        type="text"
+                                        className={styles.inputElement}
+                                        value={otherFund}
+                                        placeholder={'Source Of Fund: Municipal Government'}
+                                        disabled
+                                    />
+                                </div>
+                            ) : ''
+
+                    }
                     {
                         showSourceType
                             ? (
                                 <div className={styles.inputContainer}>
                                     <span className={styles.dpText}>Source of Fund</span>
                                     <select
-                                        value={fundSourcetype}
-                                        onChange={handlefundSourceType}
+                                        value={fundingType}
+                                        onChange={handlefundingType}
                                         className={styles.inputElement}
                                     >
                                         <option value="select">Select Source of Funds</option>
@@ -349,23 +351,7 @@ const BudgetActivity = (props: Props) => {
                             ) : ''
 
                     }
-                    {
-                        !showSourceType
-                            ? (
-                                <div className={styles.inputContainer}>
 
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleOtherFund}
-                                        value={otherFund}
-                                        placeholder={'Source Of Fund: Municipal Government'}
-                                        disabled
-                                    />
-                                </div>
-                            ) : ''
-
-                    }
                     {showSourceTypeOther
                       && (
                           <div className={styles.inputContainer}>
@@ -374,7 +360,7 @@ const BudgetActivity = (props: Props) => {
                                   type="text"
                                   className={styles.inputElement}
                                   onChange={handleOtherFund}
-                                  value={otherFund}
+                                  value={fundingType}
                                   placeholder={'Please specify Other source type'}
                               />
 
@@ -427,16 +413,11 @@ const BudgetActivity = (props: Props) => {
                         <NepaliDatePicker
                             inputClassName="form-control"
                             className={styles.datepicker}
-                            value={startDate}
+                            value={projstartDate}
                             onChange={date => setStartDate(date)}
                             options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
                         />
-                        {/* <DatePicker
-                            selected={startDate}
-                            onChange={date => setStartDate(date)}
-                            className={styles.datepicker}
-                        /> */}
 
                     </div>
                     <div className={styles.inputContainer}>
@@ -451,10 +432,7 @@ const BudgetActivity = (props: Props) => {
                             options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
                         />
-                        {/* <DatePicker
-                            selected={projcompletionDate}
-                            onChange={date => setprojCompletionDate(date)}
-                        /> */}
+
                     </div>
                     <div className={styles.inputContainer}>
 
@@ -499,23 +477,13 @@ const BudgetActivity = (props: Props) => {
                          <Table className={styles.bdaTable} striped bordered hover size="md">
                              <thead>
                                  <tr>
+
                                      {Object.keys(props.budgetActivityData[0]).map(item => (
                                          <th key={item}>
                                              {TableNameTitle[item]}
                                          </th>
                                      ))}
-                                     <th>
-                                         Start Date
-                                     </th>
-                                     <th>
-                                         Priority Area
-                                     </th>
-                                     <th>
-                                         Priority Action
-                                     </th>
-                                     <th>
-                                         Priority Activity
-                                     </th>
+
 
                                  </tr>
                              </thead>
@@ -526,13 +494,11 @@ const BudgetActivity = (props: Props) => {
                                              {Object.keys(props.budgetActivityData[0])
                                                  .map(title => (
                                                      <td key={title}>
-
                                                          {data[title] ? String(data[title]) : 'No data'}
-
                                                      </td>
                                                  ))}
-                                             <td>
-                                                 {startDate}
+                                             {/* <td>
+                                                 {projstartDate}
                                              </td>
                                              <td>
                                                  {priorityArea}
@@ -544,7 +510,7 @@ const BudgetActivity = (props: Props) => {
                                              <td>
                                                  {activity}
 ``
-                                             </td>
+                                             </td> */}
                                          </tr>
                                      ))
                                  }
