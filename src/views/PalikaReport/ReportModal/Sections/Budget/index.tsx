@@ -13,11 +13,12 @@ import {
 import {
     setGeneralDataAction,
     setBudgetDataAction,
+    setBudgetIdAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
     budgetDataSelector,
-    userSelector,
+    userSelector, budgetIdSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
@@ -51,11 +52,13 @@ const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     budgetData: budgetDataSelector(state),
     user: userSelector(state),
+    budgetId: budgetIdSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
+    setBudgetId: params => dispatch(setBudgetIdAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     BudgetGetRequest: { url: '/annual-budget/',
@@ -81,8 +84,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/annual-budget/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             console.log('This is response', response);
+            params.budgetId(response);
         },
 
 
@@ -103,22 +107,23 @@ const Budget = (props: Props) => {
         budgetData,
         updateTab,
         setBudgetDatapp,
-        user,
+        user, budgetId, setBudgetId,
     } = props;
-    console.log('Final props fiscal year>>>', generalData);
+
+    // setBudgetId({ id: 2 });
     const {
         municipalBudget: mb,
         drrFund: df,
         additionalFund: af,
     } = budgetData;
-
+    console.log('Final props fiscal year>>>', budgetId);
     console.log('budge data', user);
     const [municipalBudget, setmunicipalBudget] = useState(mb);
     const [drrFund, setdrrFund] = useState(df);
     const [additionalFund, setadditionalFund] = useState(af);
-    const [province, setProvince] = useState(null);
-    const [district, setDistrict] = useState(null);
-    const [municipality, setMunicipality] = useState(null);
+    const [province, setProvince] = useState(0);
+    const [district, setDistrict] = useState(0);
+    const [municipality, setMunicipality] = useState(0);
     const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
     const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
@@ -192,6 +197,9 @@ const Budget = (props: Props) => {
             return { ...provided, opacity, transition };
         },
     };
+    const handleBudgetId = (response) => {
+        setBudgetId({ id: response.id });
+    };
     const handleNextClick = () => {
         BudgetPostRequest.do({
 
@@ -205,13 +213,24 @@ const Budget = (props: Props) => {
                 district,
                 municipality,
             },
+            budgetId: handleBudgetId,
 
         });
-        // props.handleNextClick();
+        props.handleNextClick();
     };
+
     const handleChange = (e) => {
         setProvince(e.target.value);
     };
+    console.log('annual Budget>>>', annualBudgetData);
+    useEffect(() => {
+        if (annualBudgetData.length > 0) {
+            setBudgetTitle(annualBudgetData[0].title);
+            setdrrFund(annualBudgetData[0].disasterBudgetNrs);
+            setmunicipalBudget(annualBudgetData[0].totalBudgetNrs);
+            setadditionalFund(annualBudgetData[0].otherBudgetNrs);
+        }
+    }, [annualBudgetData]);
     return (
         <div>
 
@@ -322,50 +341,6 @@ Other DRR related funding
                 </table>
 
 
-                {/* <div className={styles.inputContainer}>
-                        <span className={styles.dpText}>Total Municipal Budget of FY</span>
-                        {' '}
-                        { `${generalData.fiscalYear}`}
-                        <input
-                            type="number"
-                            className={styles.inputElement}
-                            onChange={handleMunicipalBudget}
-                            placeholder={'Kindly specify total municipal budget in numbers (NPR)'}
-                            value={municipalBudget}
-                        />
-
-
-                    </div>
-                    <div className={styles.inputContainer}>
-
-                        <span className={styles.dpText}>Total DRR Fund for FY</span>
-                        { `${generalData.fiscalYear}`}
-                        <input
-                            type="number"
-                            className={styles.inputElement}
-                            onChange={handleDRRFund}
-                            value={drrFund}
-                            placeholder={'Kindly specify total DRR fund for FY in numbers (NPR)'}
-                        />
-
-
-                    </div>
-                    <div className={styles.inputContainer}>
-
-                        <span className={styles.dpText}>Other DRR related funding</span>
-                        { `${generalData.fiscalYear}`}
-
-                        <input
-                            type="number"
-                            className={styles.inputElement}
-                            onChange={handleAddFund}
-                            placeholder=
-                            {'Kindly specify other DRR related funding in numbers (NPR)'}
-                            value={additionalFund}
-                        />
-
-
-                    </div> */}
                 <NextPrevBtns
                     handlePrevClick={props.handlePrevClick}
                     handleNextClick={handleNextClick}

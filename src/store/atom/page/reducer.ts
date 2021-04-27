@@ -19,6 +19,11 @@ export const setGeneralDataAction = generalData => ({
     generalData,
 });
 
+export const setBudgetIdAction = budgetId => ({
+    type: Type.PageType.SET_BUDGET_ID,
+    budgetId,
+});
+
 export const setBudgetDataAction = budgetData => ({
     type: Type.PageType.SET_BUDGET_DATA,
     budgetData,
@@ -1206,6 +1211,7 @@ const setGeneralData = (state: Type.PageState, action: Type.SetGeneralData) => {
     return newState;
 };
 
+
 const setBudgetData = (state: Type.PageState, action: Type.SetBudgetData) => {
     const { budgetData } = action;
     const newState = produce(state, (deferedState) => {
@@ -1233,12 +1239,22 @@ const setProgramAndPolicyData = (state: Type.PageState, action: Type.SetProgramA
     return newState;
 };
 
+const setBudgetId = (state: Type.PageState, action: Type.SetBudgetId) => {
+    const { budgetId } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.budgetId = budgetId;
+    });
+    return newState;
+};
 
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_BUDGET_ID:
+            return setBudgetId(state, action);
         case Type.PageType.SET_PROGRAM_AND_POLICY_DATA:
             return setProgramAndPolicyData(state, action);
         case Type.PageType.SET_BUDGET_ACTIVITY_DATA:
