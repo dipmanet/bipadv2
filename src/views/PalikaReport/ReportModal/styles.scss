@@ -2,6 +2,14 @@
 .firstPageContainer{
     position: relative;
     top: -60px;
+    .tabsPageContainer{
+        width: 100%;
+        display: flex;
+        .buttonContainer{
+            display:flex;
+        }
+
+    }
     .title{
         margin-top: 60px;
         color: #222;

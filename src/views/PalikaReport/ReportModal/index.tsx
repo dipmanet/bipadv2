@@ -32,6 +32,8 @@ import {
 import { userSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
 import Preparedness from './Sections/Preparedness';
+import NextPrevBtns from './NextPrevBtns';
+import Recovery from './Sections/Recovery';
 
 interface Props {
     keyTab: number;
@@ -378,12 +380,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 (keyTab === 9
                && showTabs)
                     ? (
-                        <Relief
-                            handlePrevClick={handlePrevClick}
-                            handleNextClick={handleNextClick}
-                            page={-1}
-                            updateTab={updateTab}
-                        />
+                        <Recovery />
                     )
                     : ''
             }
@@ -437,13 +434,17 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 keyTab === (tabsLength - 1) && showTabs
                     ? (
                         <div className={styles.tabsPageContainer}>
-                            <button
-                                type="button"
-                                onClick={handlePreviewBtn}
-                                className={styles.agreeBtn}
-                            >
+                            <div className={styles.buttonContainer}>
+                                <button
+                                    type="button"
+                                    onClick={handlePreviewBtn}
+                                    className={styles.agreeBtn}
+                                >
                                 Download this page
-                            </button>
+                                </button>
+                                {/* <NextPrevBtns lastpage /> */}
+                            </div>
+
 
                             <div id={'reportPreview'}>
                                 <PreviewPageOne

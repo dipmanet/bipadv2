@@ -15,6 +15,7 @@
         filter: saturate(80%);
         border: none;
         margin-right: 10px;
+        white-space: nowrap;
     }
 
 }
@@ -59,7 +60,13 @@ td{
             // border: 1px solid red;
             justify-content: flex-start;
             flex-direction: column;
-       
+            .ndrrsaContainer{
+                padding-top: 25px;
+                input{
+                    border: 1px solid rgb(232,232,232);
+                    width: 400px !important;
+                }
+            }
             .inputContainer{
                 display: flex;
                 border-radius: 3px;
@@ -68,6 +75,10 @@ td{
                 align-items: center;
                 margin-top: 10px;
                 padding-left: 10px;
+                .view{
+                    width: 100%;
+                    // border: 1px solid red;
+                }
                 .labelDate{
                     padding-left: 10px;
                     color: #777;

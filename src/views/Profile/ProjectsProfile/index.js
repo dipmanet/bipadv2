@@ -307,6 +307,12 @@ class ProjectsProfile extends React.PureComponent {
             filters: { faramValues = emptyObject } = {},
             regionLevel,
             className,
+            showFilterOnly,
+            getSelectedOption,
+            getPriorityOptions,
+            getSubPriorityAction,
+            getPriorityActivity,
+
         } = this.props;
 
         const ndrrsap = getResults(requests, 'ndrrsapRequest');
@@ -324,6 +330,9 @@ class ProjectsProfile extends React.PureComponent {
 
         const ndrrsapMap = listToMap(ndrrsap, ndrrsapKeySelector, item => item);
         const priorityOptions = unflatten(ndrrsap, ndrrsapKeySelector, ndrrsapParentSelector);
+        if (getSubPriorityAction) {
+            getSubPriorityAction(ndrrsap);
+        }
 
         let subPriorityOptions = emptyList;
         const selectedPriority = priorityOptions.find(
@@ -369,7 +378,6 @@ class ProjectsProfile extends React.PureComponent {
         })).filter(data => data.value !== 0);
 
         // AGGREGATIONS
-
         const organizationMap = listToMap(organization, organizationKeySelector, item => item);
         const projectMap = listToMap(projects, projectKeySelector, item => item);
         const drrCycleMap = listToMap(drrcycle, drrCycleKeySelector, item => item);
@@ -390,23 +398,30 @@ class ProjectsProfile extends React.PureComponent {
                     }
                     return (
                         <React.Fragment>
-                            {/* <Loading pending={pending} /> */}
-                            {/* <Map
-                                projects={filteredProjects}
-                                regions={regions}
-                                regionLevel={regionLevel}
-                            /> */}
-                            {/* <LeftPane
-                                className={_cs(styles.leftPane, className)}
-                                projects={filteredProjects}
-                                drrCycleData={drrPieData}
-                                categoryData={categoryPieData}
-                                drrCycleMap={drrCycleMap}
-                                categoryMap={categoryMap}
-                                organizationMap={organizationMap}
-                                projectMap={projectMap}
-                                projectOrganizationPieData={projectOrganizationPieData}
-                            /> */}
+
+                            { !showFilterOnly
+                            && (
+                                <>
+                                    <Loading pending={pending} />
+                                    <Map
+                                        projects={filteredProjects}
+                                        regions={regions}
+                                        regionLevel={regionLevel}
+                                    />
+                                    <LeftPane
+                                        className={_cs(styles.leftPane, className)}
+                                        projects={filteredProjects}
+                                        drrCycleData={drrPieData}
+                                        categoryData={categoryPieData}
+                                        drrCycleMap={drrCycleMap}
+                                        categoryMap={categoryMap}
+                                        organizationMap={organizationMap}
+                                        projectMap={projectMap}
+                                        projectOrganizationPieData={projectOrganizationPieData}
+                                    />
+                                </>
+                            )
+                            }
                             <ProjectsProfileFilter
                                 drrCycleOptions={drrcycle}
                                 elementsOptions={category}
@@ -414,7 +429,11 @@ class ProjectsProfile extends React.PureComponent {
                                 priorityOptions={priorityOptions}
                                 subPriorityOptions={subPriorityOptions}
                                 activityOptions={activityOptions}
+                                showFilterOnly
+                                getSelectedOption={getSelectedOption}
                             />
+
+
                         </React.Fragment>
                     );
                 }}

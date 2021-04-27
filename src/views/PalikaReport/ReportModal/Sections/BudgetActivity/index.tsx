@@ -5,6 +5,7 @@ import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
+import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -78,6 +79,7 @@ const currentFiscalYear = new Date().getFullYear() + 56;
 const options = Array.from(Array(10).keys()).map(item => ({
     value: currentFiscalYear - item,
 }));
+const subpriority = [];
 
 const BudgetActivity = (props: Props) => {
     const {
@@ -128,6 +130,15 @@ const BudgetActivity = (props: Props) => {
     const [remarks, setremarks] = useState(rm);
     // const tableData = [];
 
+    const [priorityAction, setPriorityAction] = useState([]);
+    const [priorityActivity, setPriorityActivity] = useState('');
+    const [priorityOptions, setPriorityOptions] = useState('');
+    const [optionsSelected, setoptionsSelected] = useState('');
+
+    const [priorityArea, setpriorityArea] = useState('');
+    const [action, setAction] = useState('');
+    const [activity, setActivity] = useState('');
+
     const [organisationName, setorganisationName] = useState('');
 
 
@@ -136,7 +147,7 @@ const BudgetActivity = (props: Props) => {
 
     const [showSourceType, setSourceType] = useState(false);
     const [showSourceTypeOther, setSourceTypeOther] = useState(false);
-
+    const [selectedOption, setSelectedOption] = useState({});
     const handleOrganisationName = (org: string) => {
         setorganisationName(org.target.value);
     };
@@ -240,6 +251,40 @@ const BudgetActivity = (props: Props) => {
     const handleRemarks = (data) => {
         setremarks(data.target.value);
     };
+    const getSelectedOption = (data) => {
+        setSelectedOption(data);
+    };
+    const getSubPriorityAction = (data) => {
+        console.log(data);
+        console.log('pA: ', priorityAction);
+        console.log(selectedOption);
+        // if(data.length>0){
+        // }
+        if (data.length > 0 && priorityAction.length === 0) {
+            setPriorityAction(data);
+        }
+    };
+
+    useEffect(() => {
+        if (selectedOption && selectedOption.label && priorityAction.length > 0) {
+            const ourdata = priorityAction
+                .filter(item => item.ndrrsapid === selectedOption.optionKey);
+            if (selectedOption.label === 'priority area') {
+                setpriorityArea(ourdata[0].title);
+            } else if (selectedOption.label === 'priority action') {
+                setAction(ourdata[0].title);
+            } else {
+                setActivity(ourdata[0].title);
+            }
+        }
+    }, [priorityAction, priorityAction.length, selectedOption]);
+
+    const getPriorityActivity = (data) => {
+        setPriorityActivity(data);
+    };
+    const getPriorityOptions = (data) => {
+        setPriorityOptions(data);
+    };
 
 
     return (
@@ -247,6 +292,17 @@ const BudgetActivity = (props: Props) => {
             <div className={styles.formColumn}>
                 <h2 className={styles.title}>Budget Activities</h2>
                 <div className={styles.row}>
+                    <div className={_cs(styles.inputContainer, styles.ndrrsaContainer)}>
+                        <ProjectsProfile
+                            className={styles.view}
+                            showFilterOnly
+                            getSelectedOption={getSelectedOption}
+
+                        // getPriorityOptions={getPriorityOptions}
+                            getSubPriorityAction={getSubPriorityAction}
+                        // getPriorityActivity={getPriorityActivity}
+                        />
+                    </div>
                     <div className={styles.inputContainer}>
 
                         <input
@@ -306,6 +362,7 @@ const BudgetActivity = (props: Props) => {
                                         onChange={handleOtherFund}
                                         value={otherFund}
                                         placeholder={'Source Of Fund: Municipal Government'}
+                                        disabled
                                     />
                                 </div>
                             ) : ''
@@ -353,7 +410,7 @@ const BudgetActivity = (props: Props) => {
                     </div>
 
                     <div className={styles.inputContainer}>
-
+                        <span className={styles.dpText}>Project Status</span>
                         <select
                             value={projStatus}
                             onChange={handleprojStatus}
@@ -437,43 +494,64 @@ const BudgetActivity = (props: Props) => {
 
                     </div>
                 </div>
-
-
-                <ProjectsProfile
-                    className={styles.view}
-                />
-
                 {props.budgetActivityData && props.budgetActivityData.length > 0
                  && (
+                     <>
 
-                     <Table className={styles.bdaTable} striped bordered hover size="md">
-                         <thead>
-                             <tr>
-                                 {Object.keys(props.budgetActivityData[0]).map(item => (
-                                     <th key={item}>
-                                         {TableNameTitle[item]}
+                         <Table className={styles.bdaTable} striped bordered hover size="md">
+                             <thead>
+                                 <tr>
+                                     {Object.keys(props.budgetActivityData[0]).map(item => (
+                                         <th key={item}>
+                                             {TableNameTitle[item]}
+                                         </th>
+                                     ))}
+                                     <th>
+                                         Start Date
                                      </th>
-                                 ))}
+                                     <th>
+                                         Priority Area
+                                     </th>
+                                     <th>
+                                         Priority Action
+                                     </th>
+                                     <th>
+                                         Priority Activity
+                                     </th>
 
-                             </tr>
-                         </thead>
-                         <tbody>
-                             {
-                                 props.budgetActivityData.map(data => (
-                                     <tr key={data.name}>
-                                         {Object.keys(props.budgetActivityData[0]).map((title) => {
-                                             console.log('data', data[title]);
-                                             return (
-                                                 <td key={title}>
-                                                     {data[title] ? String(data[title]) : 'No data'}
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 {
+                                     props.budgetActivityData.map(data => (
+                                         <tr key={data.name}>
+                                             {Object.keys(props.budgetActivityData[0])
+                                                 .map(title => (
+                                                     <td key={title}>
+                                                         {data[title] ? String(data[title]) : 'No data'}
 
-                                                 </td>
-                                             );
-                                         })}
-                                     </tr>
-                                 ))}
-                         </tbody>
-                     </Table>
+                                                     </td>
+                                                 ))}
+                                             <td>
+                                                 {startDate}
+                                             </td>
+                                             <td>
+                                                 {priorityArea}
+                                             </td>
+                                             <td>
+                                                 {action}
+`
+                                             </td>
+                                             <td>
+                                                 {activity}
+``
+                                             </td>
+                                         </tr>
+                                     ))
+                                 }
+                             </tbody>
+                         </Table>
+                     </>
                  )
 
                 }

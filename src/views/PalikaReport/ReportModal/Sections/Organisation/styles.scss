@@ -1,5 +1,20 @@
 
 .tabsPageContainer{
+  min-height: 400px !important;
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+
+  h2{
+      text-align: left;
+  }
+      
+  .btnsCont{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    // border: 1px solid red;
+  }
   .savebtn{
     position: relative;
     left: 80%;
@@ -13,33 +28,11 @@
     // border: none;
     filter: saturate(80%);
 }
-  padding: 15px;
   // position: relative;
   // border: 1px solid red;
   // width: fit-content;
-  h2{
-    margin-bottom: 15px;
-    font-size: 14px;
-    font-weight: 400;
-  }
-    table{
-        border-collapse: collapse;
-        // width: 100%;
-        // border: 1px solid #f5f5f5;
-    }
-    th{
-        padding: 0.5rem;
-        text-align: left;
-    }
-    td{
-        // border-top: 1px solid #f5f5f5;
-        // border-bottom: 1px solid #f5f5f5;
-        padding: 0.5rem;
-        text-align: left;
-    }
-    //     tr:nth-child(even) {
-    //     background-color:#f5f5f5
-    // }
+
+  
 
 
 .palikaTable{
@@ -51,22 +44,25 @@
         font-weight: 400;
     }
     table{
-        border-collapse: collapse;
-        width: 100%;
-        }
-        th{
-        padding: 0.5rem;
-        text-align: left;
-        }
-        td{
-        border-top: 1px solid #f5f5f5;
-        border-bottom: 1px solid #f5f5f5;
-        padding: 0.5rem;
-        text-align: left;
-        }
-        tr:nth-child(even) {
-        background-color:#f5f5f5
-        }
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #f5f5f5;
+      height: 80%;
+      overflow-y: scroll;
+  }
+  th{
+      padding: 0.5rem;
+      text-align: left;
+  }
+  td{
+      border-top: 1px solid #f5f5f5;
+      border-bottom: 1px solid #f5f5f5;
+      padding: 0.5rem;
+      text-align: left;
+  }
+      tr:nth-child(even) {
+      background-color:#f5f5f5
+  }
     }
      
     .pagination {

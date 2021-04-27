@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
+import * as ReachRouter from '@reach/router';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 import {
@@ -19,7 +20,15 @@ import { provincesSelector,
     userSelector } from '#selectors';
 
 import NextPrevBtns from '../../NextPrevBtns';
+import {
+    setCarKeysAction,
+    setGeneralDataAction,
+} from '#actionCreators';
 
+const mapDispatchToProps = dispatch => ({
+    setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+    setCarKeys: params => dispatch(setCarKeysAction(params)),
+});
 
 interface Props{
 
@@ -30,6 +39,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
 });
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportOrganizationReport: {
         url: ({ params }) => `${params.url}`,
@@ -101,6 +111,12 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
         setOffset(selectedPage * 2);
     };
+
+    const handleOrnaisationRedirect = () => {
+        const { setCarKeys } = props;
+        setCarKeys(1);
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
+    };
     PalikaReportOrganizationReport.setDefaultParams({
         organisation: handleFetchedData,
         paginationParameters: handlePaginationParameters,
@@ -128,7 +144,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 <strong>DRR related organizations in Municipal Government</strong>
             </h2>
             <div className={styles.palikaTable}>
-                <Table id="table-to-xls">
+                <table id="table-to-xls">
                     <tbody>
                         <tr>
 
@@ -161,14 +177,24 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
 
                     </tbody>
-                </Table>
+                </table>
                 {
                     props.hide !== 1
                         ? (
-                            <NextPrevBtns
-                                handlePrevClick={props.handlePrevClick}
-                                handleNextClick={props.handleNextClick}
-                            />
+                            <div className={styles.btnsCont}>
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleOrnaisationRedirect}
+                                    className={styles.savebtn}
+                                >
+
+                                + Add Data
+                                </button>
+                            </div>
                         )
                         : ''
                 }
@@ -179,7 +205,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
             Organisation,
