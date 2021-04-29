@@ -5,7 +5,9 @@ import ReactPaginate from 'react-paginate';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
 import { Item } from 'semantic-ui-react';
+import * as ReachRouter from '@reach/router';
 import styles from './styles.scss';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -18,6 +20,9 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
+import {
+    setPalikaRedirectAction,
+} from '#actionCreators';
 
 
 interface Props{
@@ -25,6 +30,10 @@ interface Props{
     height?: string;
 
 }
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+});
+
 const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -117,6 +126,15 @@ const CriticalInfra = (props: Props) => {
         }
     };
 
+    const handleAddResource = () => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            showModal: 'addResource',
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
+    };
 
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
@@ -223,13 +241,21 @@ const CriticalInfra = (props: Props) => {
                     handlePrevClick={props.handlePrevClick}
                     handleNextClick={props.handleNextClick}
                 />
+
+                <button
+                    type="button"
+                    onClick={handleAddResource}
+                    className={styles.savebtn}
+                >
+                    Add Resource
+                </button>
             </div>
 
         </div>
 
     );
 };
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
             CriticalInfra,
