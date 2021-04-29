@@ -1965,7 +1965,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 { (showResourceForm)
                     && (
                         <AddResourceForm
-                            resourceId={resourceDetails ? resourceDetails.id : null}
+                            resourceId={resourceDetails.id}
                             resourceDetails={resourceDetails}
                             onEditSuccess={this.handleResourceEdit}
                             closeModal={this.handleEditResourceFormCloseButtonClick}
@@ -1976,8 +1976,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 { (palikaRedirectState)
                     && (
                         <AddResourceForm
-                            resourceId={resourceDetails ? resourceDetails.id : null}
-                            resourceDetails={resourceDetails || null}
+                            resourceId={null}
+                            resourceDetails={resourceDetails || ''}
                             onEditSuccess={this.handleResourceEdit}
                             closeModal={this.handleEditResourceFormCloseButtonClick}
                         />
