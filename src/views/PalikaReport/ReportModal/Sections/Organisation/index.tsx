@@ -126,6 +126,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
         setPalikaRedirect({
             showForm: true,
             organisationItem,
+            showModal: 'addResource',
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
@@ -133,7 +134,11 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     const handleOrnaisationRedirect = () => {
         const { setPalikaRedirect } = props;
-        setPalikaRedirect({ showForm: true });
+        setPalikaRedirect({
+            showForm: true,
+            organisationItem: null,
+            showModal: 'addResource',
+        });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
     };

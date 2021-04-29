@@ -514,29 +514,18 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                         !hideButtons && (
                             <ModalFooter className={styles.footer}>
                                 <DangerButton onClick={closeModal}>
-                            Close
+                                    {palikaRedirect.showForm
+                                        ? 'Close and return to Palika Report'
+                                        : 'Close'
+                                    }
                                 </DangerButton>
-                                {palikaRedirect.showForm
-                                    ? (
-                                        <PrimaryButton
-                                            type="submit"
-                                            disabled={pristine}
-                                            pending={addResourcePending || editResourcePending}
-                                        >
-                                     Save and Return to Palika Report
-                                        </PrimaryButton>
-                                    )
-                                    : (
-                                        <PrimaryButton
-                                            type="submit"
-                                            disabled={pristine}
-                                            pending={addResourcePending || editResourcePending}
-                                        >
-                            Save
-                                        </PrimaryButton>
-                                    )
-                                }
-
+                                <PrimaryButton
+                                    type="submit"
+                                    disabled={pristine}
+                                    pending={addResourcePending || editResourcePending}
+                                >
+                                                Save
+                                </PrimaryButton>
 
                             </ModalFooter>
                         )}

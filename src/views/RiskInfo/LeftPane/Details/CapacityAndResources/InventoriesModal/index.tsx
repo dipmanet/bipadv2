@@ -1,6 +1,8 @@
 import React from 'react';
 import { _cs, Obj, isDefined } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
+import * as ReachRouter from '@reach/router';
 import modalize from '#rscg/Modalize';
 import TextOutput from '#components/TextOutput';
 import FormattedDate from '#rscv/FormattedDate';
@@ -21,13 +23,28 @@ import {
     NewProps,
     ClientAttributes,
     methods,
+    createConnectedRequestCoordinator,
 } from '#request';
+
+import {
+    setPalikaRedirectAction,
+} from '#actionCreators';
+import { palikaRedirectSelector } from '#selectors';
+
 
 import { MultiResponse } from '#store/atom/response/types';
 
 
 import AddInventoryForm from './AddInventoryForm';
 import styles from './styles.scss';
+
+const mapStateToProps = (state, props) => ({
+    palikaRedirect: palikaRedirectSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+});
 
 const ModalButton = modalize(Button);
 
@@ -48,6 +65,8 @@ const InventoryItem = (props: InventoryItemProps) => {
         onDelete,
         disabled,
         resourceId,
+        palikaRedirect,
+        setPalikaRedirect,
     } = props;
 
     const {
@@ -193,6 +212,15 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleReturnToPalika = () => {
+        const { setPalikaRedirect } = this.props;
+        setPalikaRedirect({
+            showForm: false,
+        });
+        ReachRouter.navigate('/palika-report/',
+            { state: { showForm: true }, replace: true });
+    };
+
     public render() {
         const {
             className,
@@ -204,6 +232,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                 },
             },
             resourceId,
+            palikaRedirect,
         } = this.props;
 
         let inventoryList: PageType.Inventory[] = [];
@@ -252,12 +281,30 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                         rendererParams={this.rendererParams}
                         pending={pending}
                     />
+                    { isDefined(palikaRedirect.inventoryItem)
+
+                            && (
+                                <button
+                                    onClick={this.handleReturnToPalika}
+                                    type="button"
+                                >
+                                  Close and return to Palika Report
+
+                                </button>
+                            )
+                    }
+
+
                 </ModalBody>
             </Modal>
         );
     }
 }
 
-export default createRequestClient(requests)(
-    InventoriesModal,
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            InventoriesModal,
+        ),
+    ),
 );

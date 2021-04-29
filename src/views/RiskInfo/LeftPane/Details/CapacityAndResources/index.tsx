@@ -862,6 +862,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const {
             palikaRedirect,
             setPalikaRedirect,
+
         } = this.props;
 
         if (palikaRedirect.showForm) {
@@ -872,9 +873,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleInventoryModalClose = () => {
+        const {
+            setPalikaRedirect,
+        } = this.props;
+
         this.setState({
             showInventoryModal: false,
         });
+        setPalikaRedirect({ showForm: false });
     }
 
     private handleIconClick = (key: string) => {
@@ -1974,7 +1980,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     )
 
                 }
-                { (palikaRedirectState)
+                { (palikaRedirectState && palikaRedirect.showModal === 'addResource')
                     && (
                         <AddResourceForm
                             resourceId={isDefined(palikaRedirect.organisationItem)
@@ -1990,6 +1996,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 }
 
                 { }
+                { palikaRedirect.showForm && palikaRedirect.showModal === 'inventory'
+                    // && isDefined(inventoryItem)
+                    // && isDefined(inventoryItem.id)
+                    && (
+                        <InventoriesModal
+                            resourceId={palikaRedirect.inventoryItem.resource || ''}
+                            closeModal={this.handleInventoryModalClose}
+                        />
+                    )
+                }
                 {showInventoryModal
                     && isDefined(resourceDetails)
                     && isDefined(resourceDetails.id)
