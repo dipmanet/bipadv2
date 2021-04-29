@@ -12,6 +12,10 @@ interface Centroid {
 }
 type BBox = [number, number, number, number];
 
+export interface BudgetId{
+    id: string;
+}
+
 export interface GeneralData{
     reportTitle?: string;
     fiscalYear: string;
@@ -21,6 +25,7 @@ export interface GeneralData{
     formationDate: string;
     committeeMembers: number;
 }
+
 
 export interface BudgetData{
     totMunBudget: number;
@@ -534,6 +539,7 @@ export interface PageState {
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
     generalData: GeneralData;
+    budgetId: BudgetId;
     budgetData: BudgetData;
     budgetActivityData: BudgetActivityData;
     programAndPolicyData: ProgramAndPolicyData;
@@ -545,6 +551,7 @@ export interface PageState {
 export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
+    SET_BUDGET_ID = 'page/SET_BUDGET_ID',
     SET_BUDGET_DATA = 'page/SET_BUDGET_DATA',
     SET_PROGRAM_AND_POLICY_DATA = 'page/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/SET_BUDGET_ACTIVITY_DATA',
@@ -637,6 +644,11 @@ export interface SetGeneralData {
     type: typeof PageType.SET_GENERAL_DATA;
     generalData: GeneralData;
 }
+export interface SetBudgetId {
+    type: typeof PageType.SET_BUDGET_ID;
+    budgetId: BudgetId;
+}
+
 
 export interface SetBudgetData {
     type: typeof PageType.SET_BUDGET_DATA;
@@ -906,7 +918,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetProgramAndPolicyData | SetBudgetActivityData | SetBudgetData |
+    SetBudgetId | SetProgramAndPolicyData | SetBudgetActivityData | SetBudgetData |
     SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |

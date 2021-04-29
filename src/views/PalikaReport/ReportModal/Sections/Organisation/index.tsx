@@ -120,7 +120,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const handleOrnaisationRedirect = () => {
         const { setCarKeys } = props;
         setCarKeys(1);
-        ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
+        // ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+        // { state: { showForm: true }, replace: true });
     };
     PalikaReportOrganizationReport.setDefaultParams({
         organisation: handleFetchedData,
@@ -132,7 +133,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
         user,
     });
 
-
+    console.log('this url>>', url);
     useEffect(() => {
         PalikaReportOrganizationReport.do({
             offset,

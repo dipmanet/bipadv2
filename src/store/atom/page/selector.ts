@@ -554,6 +554,7 @@ export const generalDataSelector = ({ page }: AppState) => page.generalData;
 export const budgetDataSelector = ({ page }: AppState) => page.budgetData;
 export const budgetActivityDataSelector = ({ page }: AppState) => page.budgetActivityData;
 export const programAndPolicySelector = ({ page }: AppState) => page.programAndPolicyData;
+export const budgetIdSelector = ({ page }: AppState) => page.budgetId;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

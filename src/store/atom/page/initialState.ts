@@ -230,6 +230,9 @@ const state: PageState = {
         pointTwo: '',
         pointThree: '',
     },
+    budgetId: {
+        id: '',
+    },
 
 };
 export default state;
