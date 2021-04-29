@@ -19,6 +19,11 @@ export const setGeneralDataAction = generalData => ({
     generalData,
 });
 
+export const setPalikaRedirectAction = palikaRedirect => ({
+    type: Type.PageType.SET_PALIKA_REDIRECT,
+    palikaRedirect,
+});
+
 export const setBudgetIdAction = budgetId => ({
     type: Type.PageType.SET_BUDGET_ID,
     budgetId,
@@ -1248,6 +1253,15 @@ const setBudgetId = (state: Type.PageState, action: Type.SetBudgetId) => {
     return newState;
 };
 
+const setPalikaRedirect = (state: Type.PageState, action: Type.SetPalikaRedirect) => {
+    const { palikaRedirect } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.palikaRedirect = palikaRedirect;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
@@ -1255,6 +1269,8 @@ export default function routeReducer(
     switch (action.type) {
         case Type.PageType.SET_BUDGET_ID:
             return setBudgetId(state, action);
+        case Type.PageType.SET_PALIKA_REDIRECT:
+            return setPalikaRedirect(state, action);
         case Type.PageType.SET_PROGRAM_AND_POLICY_DATA:
             return setProgramAndPolicyData(state, action);
         case Type.PageType.SET_BUDGET_ACTIVITY_DATA:

@@ -12,8 +12,12 @@ interface Centroid {
 }
 type BBox = [number, number, number, number];
 
+
 export interface BudgetId{
     id: string;
+}
+export interface PalikaRedirect{
+    showForm: boolean;
 }
 
 export interface GeneralData{
@@ -539,6 +543,7 @@ export interface PageState {
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
     generalData: GeneralData;
+    palikaRedirect: PalikaRedirect;
     budgetId: BudgetId;
     budgetData: BudgetData;
     budgetActivityData: BudgetActivityData;
@@ -551,6 +556,7 @@ export interface PageState {
 export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
+    SET_PALIKA_REDIRECT = 'page/SET_PALIKA_REDIRECT',
     SET_BUDGET_ID = 'page/SET_BUDGET_ID',
     SET_BUDGET_DATA = 'page/SET_BUDGET_DATA',
     SET_PROGRAM_AND_POLICY_DATA = 'page/SET_PROGRAM_AND_POLICY_DATA',
@@ -644,6 +650,12 @@ export interface SetGeneralData {
     type: typeof PageType.SET_GENERAL_DATA;
     generalData: GeneralData;
 }
+
+export interface SetPalikaRedirect {
+    type: typeof PageType.SET_PALIKA_REDIRECT;
+    palikaRedirect: PalikaRedirect;
+}
+
 export interface SetBudgetId {
     type: typeof PageType.SET_BUDGET_ID;
     budgetId: BudgetId;
@@ -918,7 +930,8 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetBudgetId | SetProgramAndPolicyData | SetBudgetActivityData | SetBudgetData |
+    SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
+    SetBudgetActivityData | SetBudgetData |
     SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |

@@ -5,6 +5,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import produce from 'immer';
 import memoize from 'memoize-one';
+import * as ReachRouter from '@reach/router';
+
 import { MapboxGeoJSONFeature } from 'mapbox-gl';
 import {
     _cs,
@@ -21,6 +23,7 @@ import {
 import {
     // setRegionAction,
     setFiltersAction,
+    setPalikaRedirectAction,
     setCarKeysAction,
 } from '#actionCreators';
 import {
@@ -36,6 +39,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     carKeysSelector,
+    palikaRedirectSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -306,12 +310,15 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     carKeys: carKeysSelector(state),
-
+    palikaRedirect: palikaRedirectSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setFilters: params => dispatch(setFiltersAction(params)),
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setCarKeys: params => dispatch(setCarKeysAction(params)),
+
+
 });
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
@@ -413,7 +420,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 resourceGetRequest,
             },
             filters,
-
+            palikaRedirect,
         } = this.props;
 
         this.state = {
@@ -441,6 +448,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 communityspace: [],
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
+            palikaRedirectState: false,
         };
 
         const { faramValues: { region } } = filters;
@@ -456,13 +464,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     public componentDidMount() {
         const {
-            handleCarActive,
-            carKeys,
-            setCarKeys,
-        } = this.props;
+            palikaRedirect,
+            setPalikaRedirect,
 
-        console.log('props', this.props);
-        handleCarActive(true);
+        } = this.props;
+        this.setState({
+            palikaRedirectState: palikaRedirect.showForm,
+        });
+
+        // setPalikaRedirect({ showForm: false });
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
     }
@@ -472,7 +482,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             filters: { faramValues: { region } },
             carKeys,
             requests,
-            setCarKeys,
         } = this.props;
         if (prevProps.filters.faramValues.region !== region) {
             requests.resourceGetRequest.do(
@@ -847,8 +856,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleEditResourceFormCloseButtonClick = () => {
         this.setState({
             showResourceForm: false,
+            palikaRedirectState: false,
         });
-        this.props.setCarKeys(0);
+
+        const {
+            palikaRedirect,
+            setPalikaRedirect,
+        } = this.props;
+
+        if (palikaRedirect.showForm) {
+            setPalikaRedirect({ showForm: false });
+            ReachRouter.navigate('/palika-report/',
+                { state: { showForm: true }, replace: true });
+        }
     }
 
     private handleInventoryModalClose = () => {
@@ -950,7 +970,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             droneImagePending,
             requests: { openspaceDeleteRequest },
             authState: { authenticated },
-            carKeys,
         } = this.props;
 
         const {
@@ -966,6 +985,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeModal,
             singleOpenspaceDetailsModal,
             CommunitySpaceDetailsModal,
+            palikaRedirectState,
         } = this.state;
 
         const {
@@ -1942,11 +1962,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     )}
                 </div>
                 { }
-                { (showResourceForm || carKeys)
+                { (showResourceForm)
                     && (
                         <AddResourceForm
-                        // resourceId={resourceDetails.id}
-                        // resourceDetails={resourceDetails}
+                            resourceId={resourceDetails ? resourceDetails.id : null}
+                            resourceDetails={resourceDetails}
+                            onEditSuccess={this.handleResourceEdit}
+                            closeModal={this.handleEditResourceFormCloseButtonClick}
+                        />
+                    )
+
+                }
+                { (palikaRedirectState)
+                    && (
+                        <AddResourceForm
+                            resourceId={resourceDetails ? resourceDetails.id : null}
+                            resourceDetails={resourceDetails || null}
                             onEditSuccess={this.handleResourceEdit}
                             closeModal={this.handleEditResourceFormCloseButtonClick}
                         />

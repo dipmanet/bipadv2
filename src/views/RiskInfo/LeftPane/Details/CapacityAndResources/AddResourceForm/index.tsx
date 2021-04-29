@@ -8,6 +8,7 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import Faram from '@togglecorp/faram';
+import * as ReachRouter from '@reach/router';
 
 import LocationInput from '#components/LocationInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
@@ -34,7 +35,11 @@ import {
 import {
     enumOptionsSelector,
     resourceTypeListSelector,
+    palikaRedirectSelector,
 } from '#selectors';
+import {
+    setPalikaRedirectAction,
+} from '#actionCreators';
 
 import EducationFields from './EducationFields';
 import HealthFields from './HealthFields';
@@ -115,9 +120,17 @@ interface State {
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+
+});
+
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     enumOptions: enumOptionsSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+
 });
 
 const labelSelector = (d: PageType.Field) => d.title;
@@ -332,7 +345,10 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         const {
             resourceId,
         } = this.state;
-
+        const {
+            setPalikaRedirect,
+            palikaRedirect,
+        } = this.props;
         console.warn('here', faramValues);
 
         let values = others;
@@ -358,6 +374,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 body: values,
                 onSuccess: this.handleAddResourceSuccess,
                 setFaramErrors: this.handleFaramValidationFailure,
+                showForm: palikaRedirect.showForm,
+                setPalikaRedirect,
+                navigate: ReachRouter.navigate,
             });
         } else {
             editResourcePutRequest.do({
@@ -515,6 +534,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
 }
 
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requests),
 )(AddResourceForm);
