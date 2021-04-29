@@ -121,6 +121,16 @@ const Organisation: React.FC<Props> = (props: Props) => {
         setCISelected(item);
     };
 
+    const handleEditResource = (organisationItem) => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            organisationItem,
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
+    };
+
     const handleOrnaisationRedirect = () => {
         const { setPalikaRedirect } = props;
         setPalikaRedirect({ showForm: true });
@@ -175,6 +185,14 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     <td>
                                         {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
                                     </td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleEditResource(item)}
+                                        >
+                                            Edit
+                                        </button>
+                                    </td>
                                 </tr>
                             )) : ''
                         }
@@ -188,7 +206,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                     className={styles.savebtn}
                 >
 
-                                Add/Edit Data
+                                Add Data
                 </button>
                 {
                     props.hide !== 1

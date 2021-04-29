@@ -970,6 +970,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             droneImagePending,
             requests: { openspaceDeleteRequest },
             authState: { authenticated },
+            palikaRedirect,
         } = this.props;
 
         const {
@@ -1976,8 +1977,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 { (palikaRedirectState)
                     && (
                         <AddResourceForm
-                            resourceId={null}
-                            resourceDetails={resourceDetails || ''}
+                            resourceId={isDefined(palikaRedirect.organisationItem)
+                                ? palikaRedirect.organisationItem.id : null
+                            }
+                            resourceDetails={isDefined(palikaRedirect.organisationItem)
+                                ? palikaRedirect.organisationItem : null}
                             onEditSuccess={this.handleResourceEdit}
                             closeModal={this.handleEditResourceFormCloseButtonClick}
                         />

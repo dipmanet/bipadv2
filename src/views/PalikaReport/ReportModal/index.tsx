@@ -306,7 +306,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                         <Organisation
                             url={keyTabUrl}
-                            page={-1}
+                            // page={-1}
                             updateTab={updateTab}
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
@@ -321,7 +321,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         <Inventory
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
-                            page={-1}
+                            // page={-1}
                             updateTab={updateTab}
                             width={'100%'}
                             height={'40%'}

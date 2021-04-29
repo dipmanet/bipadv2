@@ -374,9 +374,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 body: values,
                 onSuccess: this.handleAddResourceSuccess,
                 setFaramErrors: this.handleFaramValidationFailure,
-                showForm: palikaRedirect.showForm,
-                setPalikaRedirect,
-                navigate: ReachRouter.navigate,
             });
         } else {
             editResourcePutRequest.do({
@@ -432,6 +429,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                     pending: addResourcePending,
                 }, addResourcePostRequest,
             },
+            palikaRedirect,
         } = this.props;
 
         const {
@@ -518,13 +516,28 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                 <DangerButton onClick={closeModal}>
                             Close
                                 </DangerButton>
-                                <PrimaryButton
-                                    type="submit"
-                                    disabled={pristine}
-                                    pending={addResourcePending || editResourcePending}
-                                >
+                                {palikaRedirect.showForm
+                                    ? (
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={pristine}
+                                            pending={addResourcePending || editResourcePending}
+                                        >
+                                     Save and Return to Palika Report
+                                        </PrimaryButton>
+                                    )
+                                    : (
+                                        <PrimaryButton
+                                            type="submit"
+                                            disabled={pristine}
+                                            pending={addResourcePending || editResourcePending}
+                                        >
                             Save
-                                </PrimaryButton>
+                                        </PrimaryButton>
+                                    )
+                                }
+
+
                             </ModalFooter>
                         )}
                 </Faram>
