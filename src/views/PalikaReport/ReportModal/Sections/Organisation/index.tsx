@@ -148,21 +148,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 <strong>DRR related organizations in Municipal Government</strong>
             </h2>
             <div className={styles.palikaTable}>
-                {fetchedData && fetchedData.length > 0
-                    ? fetchedData.map((item, i) => (
-                        <tr key={item.id}>
-
-                            <td>
-                                <button
-                                    type="button"
-                                    onClick={() => handleCIButton(item.title)}
-                                >
-                                    {item.title}
-                                </button>
-                            </td>
-                        </tr>
-                    )) : ''
-                }
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
