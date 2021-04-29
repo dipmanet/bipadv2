@@ -42,14 +42,19 @@ export interface ProgramAndPolicyData{
 export interface BudgetActivityData{
     name: string;
     fundSource: string;
-    additionalDrrBudget: string;
     budgetCode: string;
-    drrmCycle: string;
     projStatus: string;
-    projCompletionDate: string;
     allocatedBudget: string;
     actualExp: string;
     remarks: string;
+    priorityArea: string;
+    action: string;
+    activity: string;
+    areaofImplementation: string;
+    fundingType: string;
+    organisationName: string;
+    projcompletionDate: string;
+    projstartDate: string;
 }
 
 export interface Province {
