@@ -18,6 +18,7 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
+import Loading from '#components/Loading';
 
 interface Props{
 
@@ -85,6 +86,9 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('inventories');
     const [meta, setMeta] = useState(true);
+    const [finalInventoriesData, setFinalInventoriesData] = useState([]);
+    const [firstSerialNumber, setFirstSerialNumber] = useState(0);
+    const [lastSerialNumber, setLastSerialNumber] = useState(10);
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
@@ -94,11 +98,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected;
 
-        setOffset(selectedPage * 2);
-    };
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
         paginationParameters: handlePaginationParameters,
@@ -119,8 +119,50 @@ const Inventory: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
     // Finding Header for table data
+    let count = 0;
+    console.log('page>>>', props.page);
 
-    console.log('inventory data', fetchedData);
+    const inventoriesData = fetchedData.map(item => (
+        item.inventories.map((data) => {
+            count += 1;
+            return ({
+                ...data,
+                SN: count,
+                resourceName: item.title,
+                organizationType: item.type,
+
+
+            }
+
+
+            );
+        })
+    ));
+    console.log('This is data>>>', inventoriesData);
+
+
+    useEffect(() => {
+        if (finalInventoriesData.length === 0) {
+            inventoriesData.map((item) => {
+                if (item.length > 0) {
+                    finalInventoriesData.push(...item);
+                }
+                return null;
+            });
+        }
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inventoriesData]);
+    console.log('This is finaldata>>>', finalInventoriesData);
+    const handlePageClick = (e) => {
+        const selectedPage = e.selected + 1;
+        // setOffset((selectedPage - 1) * paginationQueryLimit);
+        // setCurrentPageNumber(selectedPage);
+        console.log('What is click>>>', e.selected);
+        setLastSerialNumber(finalInventoriesData.length);
+    };
+
 
     return (
         <div className={styles.tabsPageContainer}>
@@ -134,57 +176,72 @@ const Inventory: React.FC<Props> = (props: Props) => {
                     <tbody>
                         <tr>
 
-                            {/* <th>S.N</th> */}
-                            <th>Name of resource</th>
+                            <th>S.N</th>
+                            <th>Name of Resource</th>
                             <th>Quantity</th>
                             <th>Unit</th>
-                            <th>Owner Organization</th>
+                            <th>Category</th>
+                            <th>Owner Organization Name</th>
                             <th>Type of Organization</th>
                             <th>Added Date</th>
+                            <th>Updated Date</th>
 
                         </tr>
 
-                        {fetchedData && fetchedData.map(item => (
-                            item.inventories.map((data, i) => (
-                                <tr>
-                                    {/* <td>
-                                        {i + 1}
-                                    </td> */}
-                                    <td>{data.item.title}</td>
-                                    <td>{data.quantity}</td>
-                                    <td>{'pcs'}</td>
-                                    <td>
-                                        {item.title}
-                                    </td>
-                                    <td>{item.type}</td>
-                                    <td>{data.createdOn.split('T')[0]}</td>
-                                </tr>
-                            ))
+                        {finalInventoriesData && finalInventoriesData.map(item => (
+
+                            <tr>
+
+                                <td>
+                                    {item.SN}
+                                </td>
+                                <td>{item.item.title}</td>
+                                <td>{item.quantity}</td>
+                                <td>{item.item.unit}</td>
+                                <td>{item.item.category}</td>
+                                <td>
+
+                                    {item.resourceName}
+                                </td>
+                                <td>{item.organizationType}</td>
+                                <td>{item.createdOn.split('T')[0]}</td>
+                                <td>{item.modifiedOn.split('T')[0]}</td>
+                            </tr>
+
 
                         ))}
-                        {/* {fetchedData.map(array => (
 
-                            array.map((data, i) => (
 
-                                <tr key={data.item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{data.item.title}</td>
-                                    <td>{data.quantity}</td>
-                                    <td />
+                        {/* {fetchedData && fetchedData.map(item => (
+                            item.inventories.map((data, i) => {
+                                count += 1;
 
-                                    <td>
+                                return (
+                                    <tr>
 
-                                        {data.item.category}
-                                    </td>
-                                </tr>
-                            ))
+                                        <td>
+                                            {count}
+                                        </td>
+                                        <td>{data.item.title}</td>
+                                        <td>{data.quantity}</td>
+                                        <td>{data.item.unit}</td>
+                                        <td>{data.item.category}</td>
+                                        <td>
+                                            {item.title}
+                                        </td>
+                                        <td>{item.type}</td>
+                                        <td>{data.createdOn.split('T')[0]}</td>
+                                        <td>{data.modifiedOn.split('T')[0]}</td>
+                                    </tr>
+                                );
+                            })
 
                         ))} */}
 
 
                     </tbody>
                 </table>
-                {/* {paginationParameters && paginationParameters.count !== 0
+                {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
                                     <ReactPaginate
@@ -195,21 +252,20 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                         onPageChange={handlePageClick}
                                         marginPagesDisplayed={2}
                                         pageRangeDisplayed={5}
-                                        pageCount={Math.ceil(paginationParameters.count
-                                         / paginationQueryLimit)}
+                                        pageCount={Math.ceil(finalInventoriesData.length
+                                         / 10)}
                                         containerClassName={styles.pagination}
                                         subContainerClassName={_cs(styles.pagination)}
                                         activeClassName={styles.active}
                                     />
                                 </div>
                             )}
-                {fetchedData && fetchedData.length === 0
+                {finalInventoriesData && finalInventoriesData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                 }
 
 
-                } */}
                 <NextPrevBtns
                     handlePrevClick={props.handlePrevClick}
                     handleNextClick={props.handleNextClick}

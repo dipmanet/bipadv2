@@ -18,7 +18,7 @@ import {
 import {
     budgetActivityDataSelector,
     generalDataSelector,
-    budgetDataSelector,
+    budgetDataSelector, budgetIdSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -28,12 +28,14 @@ const mapStateToProps = state => ({
     budgetActivityData: budgetActivityDataSelector(state),
     generalData: generalDataSelector(state),
     budgetData: budgetDataSelector(state),
+    budgetId: budgetIdSelector(state),
 
 });
 
 const mapDispatchToProps = dispatch => ({
     setBudgetActivityDatapp: params => dispatch(setBudgetActivityDataAction(params)),
 });
+
 
 interface BudgetActivityData{
     name: string;
@@ -88,6 +90,7 @@ const BudgetActivity = (props: Props) => {
         setBudgetActivityDatapp,
         budgetActivityData,
         generalData,
+        budgetId,
     } = props;
 
 
@@ -280,9 +283,185 @@ const BudgetActivity = (props: Props) => {
 
     return (
         <div className={styles.mainPageDetailsContainer}>
-            <div className={styles.formColumn}>
-                <h2 className={styles.title}>Budget Activities</h2>
-                <div className={styles.row}>
+            <h2 className={styles.title}>Budget Activities</h2>
+            <table id="table-to-xls">
+                <tbody>
+
+
+                    <>
+
+                        <tr>
+
+                            <th>SN</th>
+
+
+                            <th>
+                                        Name of activity
+
+
+                            </th>
+                            <th>
+                                        Priority Area
+
+
+                            </th>
+                            <th>
+                                        Priority Action
+
+
+                            </th>
+                            <th>
+                                        Priority Activity
+
+
+                            </th>
+                            <th>
+                                        Area of implementation
+
+
+                            </th>
+                            <th>
+                                        Funding type
+
+
+                            </th>
+                            <th>
+                                        Source of fund
+
+
+                            </th>
+                            <th>
+                                        Budget code
+
+
+                            </th>
+                            <th>
+                                        Organization Name
+
+
+                            </th>
+                            <th>
+                                        Project start date
+
+
+                            </th>
+                            <th>
+                                        Project Completion date
+
+
+                            </th>
+                            <th>
+                                        Status
+
+
+                            </th>
+                            <th>
+                                        Allocated Project budget
+
+
+                            </th>
+                            <th>
+                                        Actual expenditure
+
+
+                            </th>
+                            <th>
+                                        Remarks
+
+
+                            </th>
+
+
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+                            <td>
+                                {' '}
+                                <input type="text" placeholder="Total Budget" />
+                            </td>
+
+                        </tr>
+
+                    </>
+
+
+                </tbody>
+            </table>
+            {/* <div className={styles.row}>
                     <div className={styles.inputContainer}>
                         <input
                             type="text"
@@ -309,8 +488,10 @@ const BudgetActivity = (props: Props) => {
                             className={styles.inputElement}
                         >
                             <option value="select"> Select Funding Type</option>
-                            <option value="DRR Fund of Muicipality">DRR Fund of Municipality</option>
-                            <option value="Other DRR related funding">Other DRR related funding</option>
+                            <option value="DRR Fund of Muicipality">
+                            DRR Fund of Municipality</option>
+                            <option value="Other DRR related funding">
+                            Other DRR related funding</option>
                         </select>
 
                     </div>
@@ -341,8 +522,10 @@ const BudgetActivity = (props: Props) => {
                                         className={styles.inputElement}
                                     >
                                         <option value="select">Select Source of Funds</option>
-                                        <option value="Federal Government">Federal Government</option>
-                                        <option value="Provincial Government">Provincial Government</option>
+                                        <option value="Federal Government">
+                                        Federal Government</option>
+                                        <option value="Provincial Government">
+                                        Provincial Government</option>
                                         <option value="INGO">I/NGOs</option>
                                         <option value="Private Sector">Private Sector</option>
                                         <option value="Academia">Academia</option>
@@ -483,8 +666,8 @@ const BudgetActivity = (props: Props) => {
                         />
 
                     </div>
-                </div>
-                {props.budgetActivityData && props.budgetActivityData.length > 0
+                </div> */}
+            {/* {props.budgetActivityData && props.budgetActivityData.length > 0
                  && (
                      <>
 
@@ -505,26 +688,15 @@ const BudgetActivity = (props: Props) => {
                                  {
                                      props.budgetActivityData.map(data => (
                                          <tr key={data.name}>
-                                             {Object.keys(props.budgetActivityData[0])
+                                             {Object.keys
+                                                (props.budgetActivityData[0])
                                                  .map(title => (
                                                      <td key={title}>
-                                                         {data[title] ? String(data[title]) : 'No data'}
+                                                         {data[title]
+                                                            ? String(data[title]) : 'No data'}
                                                      </td>
                                                  ))}
-                                             {/* <td>
-                                                 {projstartDate}
-                                             </td>
-                                             <td>
-                                                 {priorityArea}
-                                             </td>
-                                             <td>
-                                                 {action}
-`
-                                             </td>
-                                             <td>
-                                                 {activity}
-``
-                                             </td> */}
+
                                          </tr>
                                      ))
                                  }
@@ -533,23 +705,22 @@ const BudgetActivity = (props: Props) => {
                      </>
                  )
 
-                }
-                <div className={styles.btns}>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={props.handleNextClick}
-                    />
-                    <button
-                        type="button"
-                        onClick={handleAddNew}
-                        className={styles.newActivityBtn}
-                    >
+                } */}
+            <div className={styles.btns}>
+                <NextPrevBtns
+                    handlePrevClick={props.handlePrevClick}
+                    handleNextClick={props.handleNextClick}
+                />
+                <button
+                    type="button"
+                    onClick={handleAddNew}
+                    className={styles.newActivityBtn}
+                >
                             Add New Activity
-                    </button>
-
-                </div>
+                </button>
 
             </div>
+
 
         </div>
     );

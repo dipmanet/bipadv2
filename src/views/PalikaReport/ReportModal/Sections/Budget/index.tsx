@@ -216,7 +216,7 @@ const Budget = (props: Props) => {
             budgetId: handleBudgetId,
 
         });
-        props.handleNextClick();
+        // props.handleNextClick();
     };
 
     const handleChange = (e) => {
