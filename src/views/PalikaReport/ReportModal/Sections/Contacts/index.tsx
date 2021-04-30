@@ -112,6 +112,11 @@ const Contacts = (props: Props) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
+
+    useEffect(() => {
+        console.log('fetched data:', fetchedData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchedData]);
     // Finding Header for table data
     const handleDataSave = () => {
         props.updateTab();
