@@ -5,8 +5,10 @@ import ReactPaginate from 'react-paginate';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
 import { Item } from 'semantic-ui-react';
+import * as ReachRouter from '@reach/router';
 import NextPrevBtns from '../../NextPrevBtns';
 import styles from './styles.scss';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -17,8 +19,14 @@ import {
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    userSelector } from '#selectors';
+    userSelector,
+    palikaRedirectSelector } from '#selectors';
 import Loading from '#components/Loading';
+
+
+import {
+    setPalikaRedirectAction,
+} from '#actionCreators';
 
 interface Props{
 
@@ -28,7 +36,16 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+
 });
+
+
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+});
+
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
@@ -97,6 +114,19 @@ const Inventory: React.FC<Props> = (props: Props) => {
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
+    };
+
+
+    const handleEditInventory = (inventoryItem) => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            inventoryItem,
+            showModal: 'inventory',
+
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
     };
 
     PalikaReportInventoriesReport.setDefaultParams({
@@ -206,39 +236,16 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                 <td>{item.organizationType}</td>
                                 <td>{item.createdOn.split('T')[0]}</td>
                                 <td>{item.modifiedOn.split('T')[0]}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleEditInventory(item)}
+                                    >
+                                            Edit
+                                    </button>
+                                </td>
                             </tr>
-
-
                         ))}
-
-
-                        {/* {fetchedData && fetchedData.map(item => (
-                            item.inventories.map((data, i) => {
-                                count += 1;
-
-                                return (
-                                    <tr>
-
-                                        <td>
-                                            {count}
-                                        </td>
-                                        <td>{data.item.title}</td>
-                                        <td>{data.quantity}</td>
-                                        <td>{data.item.unit}</td>
-                                        <td>{data.item.category}</td>
-                                        <td>
-                                            {item.title}
-                                        </td>
-                                        <td>{item.type}</td>
-                                        <td>{data.createdOn.split('T')[0]}</td>
-                                        <td>{data.modifiedOn.split('T')[0]}</td>
-                                    </tr>
-                                );
-                            })
-
-                        ))} */}
-
-
                     </tbody>
                 </table>
                 {paginationParameters && paginationParameters.count !== 0
@@ -276,7 +283,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
             Inventory,

@@ -29,7 +29,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { userSelector } from '#selectors';
+import { userSelector, palikaRedirectSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
 import Preparedness from './Sections/Preparedness';
 import NextPrevBtns from './NextPrevBtns';
@@ -45,9 +45,10 @@ interface SyntheticEvent<T> {
     currentTarget: EventTarget & T;
 }
 const mapStateToProps = (state, props) => ({
-
     user: userSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
 });
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportGetRequest: {
         url: ({ params }) => `${params.url}`,
@@ -108,6 +109,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         handlePrevClick,
         handleNextClick,
         localMembers,
+        palikaRedirect,
     } = props;
 
     const handleWelcomePage = () => hideWelcomePage();
@@ -160,9 +162,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         memberCount,
     });
 
+    const { showForm } = palikaRedirect;
+
     return (
         <>
-            {!showTabs
+            {!showTabs && !showForm
                     && (
                         <div className={styles.firstPageContainer}>
                             <div className={styles.title}>
@@ -302,7 +306,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                         <Organisation
                             url={keyTabUrl}
-                            page={-1}
+                            // page={-1}
                             updateTab={updateTab}
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
@@ -317,7 +321,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         <Inventory
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
-                            page={-1}
+                            // page={-1}
                             updateTab={updateTab}
                             width={'100%'}
                             height={'40%'}

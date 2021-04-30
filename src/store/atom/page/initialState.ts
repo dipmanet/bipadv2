@@ -233,6 +233,9 @@ const state: PageState = {
     budgetId: {
         id: '',
     },
+    palikaRedirect: {
+        showForm: false,
+    },
 
 };
 export default state;

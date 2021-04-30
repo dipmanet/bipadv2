@@ -5,7 +5,9 @@ import ReactPaginate from 'react-paginate';
 import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
 import { Item } from 'semantic-ui-react';
+import * as ReachRouter from '@reach/router';
 import styles from './styles.scss';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -18,6 +20,9 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
+import {
+    setPalikaRedirectAction,
+} from '#actionCreators';
 
 
 interface Props{
@@ -25,6 +30,10 @@ interface Props{
     height?: string;
 
 }
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+});
+
 const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -77,6 +86,9 @@ const CriticalInfra = (props: Props) => {
     const [paginationParameters, setPaginationParameters] = useState();
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
+    const [ciType, setciType] = useState('all');
+    const [filteredSelectData, setFilteredSelectData] = useState([]);
+    const [filteredtData, setFilteredData] = useState([]);
     const [url, setUrl] = useState('/resource/');
     const { requests: { PalikaReportInventoriesReport }, provinces,
         districts,
@@ -102,6 +114,28 @@ const CriticalInfra = (props: Props) => {
 
         setOffset(selectedPage * 2);
     };
+
+    const handleCIFilter = (filter) => {
+        setciType(filter.target.value);
+        const selected = filter.target.value;
+        if (selected !== 'all') {
+            const fD = fetchedData.filter(item => item.resourceType === selected);
+            setFilteredData(fD);
+        } else {
+            setFilteredData(fetchedData);
+        }
+    };
+
+    const handleAddResource = () => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            showModal: 'addResource',
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
+    };
+
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
         paginationParameters: handlePaginationParameters,
@@ -113,7 +147,7 @@ const CriticalInfra = (props: Props) => {
         meta,
 
     });
-    console.log('hang fetch data>>>', fetchedData);
+
 
     useEffect(() => {
         PalikaReportInventoriesReport.do({
@@ -123,6 +157,13 @@ const CriticalInfra = (props: Props) => {
     }, [offset]);
     // Finding Header for table data
 
+    useEffect(() => {
+        if (fetchedData.length > 0 && filteredSelectData.length === 0) {
+            const filteredSelectDataArr = [...new Set(fetchedData.map(item => item.resourceType))];
+            setFilteredSelectData(filteredSelectDataArr);
+            setFilteredData(fetchedData);
+        }
+    }, [fetchedData, filteredSelectData.length]);
 
     return (
 
@@ -133,10 +174,23 @@ const CriticalInfra = (props: Props) => {
                 </strong>
             </h2>
             <div className={styles.palikaTable}>
+                Filter by:
+                <select
+                    value={ciType}
+                    onChange={handleCIFilter}
+                    className={styles.inputElement}
+                >
+                    <option value="select">Select an Option</option>
+                    <option value="all">All Resource Type</option>
+                    {filteredSelectData
+                    && filteredSelectData.map(item => <option value={item}>{item}</option>)
+
+                    }
+
+                </select>
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
-
                             <th>S.N</th>
                             <th>Resource Name</th>
                             <th>Resource Type</th>
@@ -144,9 +198,8 @@ const CriticalInfra = (props: Props) => {
                             <th>Number Of male Employee</th>
                             <th>Number Of female Employee</th>
                             <th>Total Employee</th>
-
                         </tr>
-                        {fetchedData.map((item, i) => (
+                        {filteredtData && filteredtData.map((item, i) => (
                             <tr key={item.id}>
                                 <td>{i + 1}</td>
                                 <td>{item.title ? item.title : '-'}</td>
@@ -188,13 +241,21 @@ const CriticalInfra = (props: Props) => {
                     handlePrevClick={props.handlePrevClick}
                     handleNextClick={props.handleNextClick}
                 />
+
+                <button
+                    type="button"
+                    onClick={handleAddResource}
+                    className={styles.savebtn}
+                >
+                    Add Resource
+                </button>
             </div>
 
         </div>
 
     );
 };
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
             CriticalInfra,

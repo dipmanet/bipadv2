@@ -14,20 +14,23 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { provincesSelector,
+import {
+    provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    userSelector } from '#selectors';
+    userSelector,
+    palikaRedirectSelector,
+} from '#selectors';
 
 import NextPrevBtns from '../../NextPrevBtns';
 import {
-    setCarKeysAction,
+    setPalikaRedirectAction,
     setGeneralDataAction,
 } from '#actionCreators';
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
-    setCarKeys: params => dispatch(setCarKeysAction(params)),
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
 });
 
 interface Props{
@@ -38,6 +41,7 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -117,11 +121,26 @@ const Organisation: React.FC<Props> = (props: Props) => {
         setCISelected(item);
     };
 
+    const handleEditResource = (organisationItem) => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            organisationItem,
+            showModal: 'addResource',
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
+    };
+
     const handleOrnaisationRedirect = () => {
-        const { setCarKeys } = props;
-        setCarKeys(1);
-        // ReachRouter.navigate('/risk-info/#/capacity-and-resources',
-        // { state: { showForm: true }, replace: true });
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            organisationItem: null,
+            showModal: 'addResource',
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
     };
     PalikaReportOrganizationReport.setDefaultParams({
         organisation: handleFetchedData,
@@ -149,21 +168,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 <strong>DRR related organizations in Municipal Government</strong>
             </h2>
             <div className={styles.palikaTable}>
-                {fetchedData && fetchedData.length > 0
-                    ? fetchedData.map((item, i) => (
-                        <tr key={item.id}>
-
-                            <td>
-                                <button
-                                    type="button"
-                                    onClick={() => handleCIButton(item.title)}
-                                >
-                                    {item.title}
-                                </button>
-                            </td>
-                        </tr>
-                    )) : ''
-                }
                 <table id="table-to-xls">
                     <tbody>
                         <tr>
@@ -186,6 +190,14 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     <td>
                                         {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
                                     </td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleEditResource(item)}
+                                        >
+                                            Edit
+                                        </button>
+                                    </td>
                                 </tr>
                             )) : ''
                         }
@@ -193,6 +205,14 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                     </tbody>
                 </table>
+                <button
+                    type="button"
+                    onClick={handleOrnaisationRedirect}
+                    className={styles.savebtn}
+                >
+
+                                Add Data
+                </button>
                 {
                     props.hide !== 1
                         ? (
