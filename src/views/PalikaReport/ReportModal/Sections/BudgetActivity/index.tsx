@@ -461,83 +461,91 @@ const BudgetActivity = (props: Props) => {
 
                 </tbody>
             </table>
-            {/* <div className={styles.row}>
-                    <div className={styles.inputContainer}>
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleActivityName}
-                            value={activityName}
-                            placeholder={'Name of Activity'}
-                        />
-                    </div>
-                    <div className={_cs(styles.inputContainer, styles.ndrrsaContainer)}>
-                        <ProjectsProfile
-                            className={styles.view}
-                            showFilterOnly
-                            getSelectedOption={getSelectedOption}
-                            getSubPriorityAction={getSubPriorityAction}
-                        />
-                    </div>
+            <div className={styles.row}>
+                <div className={styles.inputContainer}>
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleActivityName}
+                        value={activityName}
+                        placeholder={'Name of Activity'}
+                    />
+                </div>
+                <div className={_cs(styles.inputContainer, styles.ndrrsaContainer)}>
+                    <ProjectsProfile
+                        className={styles.view}
+                        showFilterOnly
+                        getSelectedOption={getSelectedOption}
+                        getSubPriorityAction={getSubPriorityAction}
+                    />
+                </div>
 
-                    <div className={styles.inputContainer}>
-                        <span className={styles.dpText}>Funding Type</span>
-                        <select
-                            value={fundSource}
-                            onChange={handlefundSource}
-                            className={styles.inputElement}
-                        >
-                            <option value="select"> Select Funding Type</option>
-                            <option value="DRR Fund of Muicipality">
-                            DRR Fund of Municipality</option>
-                            <option value="Other DRR related funding">
-                            Other DRR related funding</option>
-                        </select>
+                <div className={styles.inputContainer}>
+                    <span className={styles.dpText}>Funding Type</span>
+                    <select
+                        value={fundSource}
+                        onChange={handlefundSource}
+                        className={styles.inputElement}
+                    >
+                        <option value="select"> Select Funding Type</option>
+                        <option value="DRR Fund of Muicipality">
+                            DRR Fund of Municipality
 
-                    </div>
-                    {
-                        showmunGovernment
-                            ? (
-                                <div className={styles.inputContainer}>
+                        </option>
+                        <option value="Other DRR related funding">
+                            Other DRR related funding
 
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        value={otherFund}
-                                        placeholder={'Source Of Fund: Municipal Government'}
-                                        disabled
-                                    />
-                                </div>
-                            ) : ''
+                        </option>
+                    </select>
 
-                    }
-                    {
-                        showSourceType
-                            ? (
-                                <div className={styles.inputContainer}>
-                                    <span className={styles.dpText}>Source of Fund</span>
-                                    <select
-                                        value={fundingType}
-                                        onChange={handlefundingType}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="select">Select Source of Funds</option>
-                                        <option value="Federal Government">
-                                        Federal Government</option>
-                                        <option value="Provincial Government">
-                                        Provincial Government</option>
-                                        <option value="INGO">I/NGOs</option>
-                                        <option value="Private Sector">Private Sector</option>
-                                        <option value="Academia">Academia</option>
-                                        <option value="Others">Others</option>
-                                    </select>
+                </div>
+                {
+                    showmunGovernment
+                        ? (
+                            <div className={styles.inputContainer}>
 
-                                </div>
-                            ) : ''
+                                <input
+                                    type="text"
+                                    className={styles.inputElement}
+                                    value={otherFund}
+                                    placeholder={'Source Of Fund: Municipal Government'}
+                                    disabled
+                                />
+                            </div>
+                        ) : ''
 
-                    }
+                }
+                {
+                    showSourceType
+                        ? (
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Source of Fund</span>
+                                <select
+                                    value={fundingType}
+                                    onChange={handlefundingType}
+                                    className={styles.inputElement}
+                                >
+                                    <option value="select">Select Source of Funds</option>
+                                    <option value="Federal Government">
+                                        Federal Government
 
-                    {showSourceTypeOther
+                                    </option>
+                                    <option value="Provincial Government">
+                                        Provincial Government
+
+                                    </option>
+                                    <option value="INGO">I/NGOs</option>
+                                    <option value="Private Sector">Private Sector</option>
+                                    <option value="Academia">Academia</option>
+                                    <option value="Others">Others</option>
+                                </select>
+
+                            </div>
+                        ) : ''
+
+                }
+
+                {showSourceTypeOther
                       && (
                           <div className={styles.inputContainer}>
 
@@ -553,121 +561,122 @@ const BudgetActivity = (props: Props) => {
                           </div>
                       )
 
-                    }
+                }
 
-                    <div className={styles.inputContainer}>
+                <div className={styles.inputContainer}>
 
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleBudgetCode}
-                            value={budgetCode}
-                            placeholder={'Budget Code'}
-                        />
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleBudgetCode}
+                        value={budgetCode}
+                        placeholder={'Budget Code'}
+                    />
 
-                    </div>
-                    <div className={styles.inputContainer}>
-                        <span className={styles.dpText}>Area of Implementation</span>
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleAreaOfImplementation}
-                            value={areaofImplementation}
-                            placeholder={'Enter ward number and village name'}
-                        />
+                </div>
+                <div className={styles.inputContainer}>
+                    <span className={styles.dpText}>Area of Implementation</span>
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleAreaOfImplementation}
+                        value={areaofImplementation}
+                        placeholder={'Enter ward number and village name'}
+                    />
 
-                    </div>
+                </div>
 
-                    <div className={styles.inputContainer}>
+                <div className={styles.inputContainer}>
 
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleOrganisationName}
-                            value={organisationName}
-                            placeholder={'Name of Organisation'}
-                        />
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleOrganisationName}
+                        value={organisationName}
+                        placeholder={'Name of Organisation'}
+                    />
 
-                    </div>
+                </div>
 
-                    <div className={styles.inputContainer}>
-                        <span className={styles.dpText}>Project Status</span>
-                        <select
-                            value={projStatus}
-                            onChange={handleprojStatus}
-                            className={styles.inputElement}
-                            placeholder={'Project Status'}
-                        >
-                            <option value="select">Select an Option</option>
-                            <option value="Rehabilitation">Started</option>
-                            <option value="Not started">Ongoing</option>
-                            <option value="INGO">Completed</option>
-                        </select>
+                <div className={styles.inputContainer}>
+                    <span className={styles.dpText}>Project Status</span>
+                    <select
+                        value={projStatus}
+                        onChange={handleprojStatus}
+                        className={styles.inputElement}
+                        placeholder={'Project Status'}
+                    >
+                        <option value="select">Select an Option</option>
+                        <option value="Rehabilitation">Started</option>
+                        <option value="Not started">Ongoing</option>
+                        <option value="INGO">Completed</option>
+                    </select>
 
-                    </div>
-                    <div className={styles.inputContainer}>
-                        <span className={styles.dpText}>Project Start Date</span>
-                        <NepaliDatePicker
-                            inputClassName="form-control"
-                            className={styles.datepicker}
-                            value={projstartDate}
-                            onChange={date => setStartDate(date)}
-                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                </div>
+                <div className={styles.inputContainer}>
+                    <span className={styles.dpText}>Project Start Date</span>
+                    <NepaliDatePicker
+                        inputClassName="form-control"
+                        className={styles.datepicker}
+                        value={projstartDate}
+                        onChange={date => setStartDate(date)}
+                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
-                        />
+                    />
 
-                    </div>
-                    <div className={styles.inputContainer}>
-                        <span className={styles.dpText}>
+                </div>
+                <div className={styles.inputContainer}>
+                    <span className={styles.dpText}>
                                 Project Completion Date
-                        </span>
-                        <NepaliDatePicker
-                            inputClassName="form-control"
-                            className={styles.datepicker}
-                            value={projcompletionDate}
-                            onChange={date => setprojCompletionDate(date)}
-                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                    </span>
+                    <NepaliDatePicker
+                        inputClassName="form-control"
+                        className={styles.datepicker}
+                        value={projcompletionDate}
+                        onChange={date => setprojCompletionDate(date)}
+                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
-                        />
+                    />
 
-                    </div>
-                    <div className={styles.inputContainer}>
+                </div>
+                <div className={styles.inputContainer}>
 
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleAlocBudget}
-                            value={allocatedBudget}
-                            placeholder={'Allocated Project Budget'}
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleAlocBudget}
+                        value={allocatedBudget}
+                        placeholder={'Allocated Project Budget'}
 
-                        />
+                    />
 
-                    </div>
-                    <div className={styles.inputContainer}>
+                </div>
+                <div className={styles.inputContainer}>
 
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleActualExp}
-                            value={actualExp}
-                            placeholder={'Actual Expenditure'}
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleActualExp}
+                        value={actualExp}
+                        placeholder={'Actual Expenditure'}
 
-                        />
+                    />
 
-                    </div>
-                    <div className={styles.inputContainer}>
+                </div>
+                <div className={styles.inputContainer}>
 
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            onChange={handleRemarks}
-                            value={remarks}
-                            placeholder={'Remarks'}
-                        />
+                    <input
+                        type="text"
+                        className={styles.inputElement}
+                        onChange={handleRemarks}
+                        value={remarks}
+                        placeholder={'Remarks'}
+                    />
 
-                    </div>
-                </div> */}
-            {/* {props.budgetActivityData && props.budgetActivityData.length > 0
+                </div>
+            </div>
+
+            {props.budgetActivityData && props.budgetActivityData.length > 0
                  && (
                      <>
 
@@ -688,12 +697,11 @@ const BudgetActivity = (props: Props) => {
                                  {
                                      props.budgetActivityData.map(data => (
                                          <tr key={data.name}>
-                                             {Object.keys
-                                                (props.budgetActivityData[0])
+                                             {Object.keys(props.budgetActivityData[0])
                                                  .map(title => (
                                                      <td key={title}>
                                                          {data[title]
-                                                            ? String(data[title]) : 'No data'}
+                                                             ? String(data[title]) : 'No data'}
                                                      </td>
                                                  ))}
 
@@ -704,8 +712,9 @@ const BudgetActivity = (props: Props) => {
                          </Table>
                      </>
                  )
+            }
 
-                } */}
+
             <div className={styles.btns}>
                 <NextPrevBtns
                     handlePrevClick={props.handlePrevClick}
