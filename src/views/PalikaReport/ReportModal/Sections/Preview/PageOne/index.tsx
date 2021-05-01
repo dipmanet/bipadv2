@@ -218,7 +218,6 @@ const Preview = (props: Props) => {
         },
 
     ];
-    console.log('PAP DATA ', programAndPolicyData);
 
     return (
         <div className={styles.previewContainer}>
