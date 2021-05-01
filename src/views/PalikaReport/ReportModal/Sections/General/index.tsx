@@ -114,15 +114,10 @@ const General = (props: Props) => {
     const handleFiscalYearList = (response) => {
         setFiscalYearList(response);
     };
-    useEffect(() => {
-        props.setCarKeys('null');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     FiscalYearFetch.setDefaultParams({
         fiscalYearList: handleFiscalYearList,
     });
-    console.log('this is fiscal year list>>>', fiscalYear);
 
     const handleAddContact = () => {
         const { setCarKeys } = props;
