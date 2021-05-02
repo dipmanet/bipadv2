@@ -1182,7 +1182,10 @@ const BudgetActivity = (props: Props) => {
                                     {' '}
                                 </span>
                                 <span className={styles.biggerNum}>
-                                    600
+                                    {budgetActivities.length > 0
+                                        ? budgetActivities.length
+                                        : 0
+                                    }
                                 </span>
                             </div>
                             <div className={styles.legenditem}>
