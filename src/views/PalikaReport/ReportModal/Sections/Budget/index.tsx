@@ -201,22 +201,27 @@ const Budget = (props: Props) => {
         setBudgetId({ id: response.id });
     };
     const handleNextClick = () => {
-        BudgetPostRequest.do({
+        if (!annualBudgetData.length) {
+            console.log('Hang>>>');
+            BudgetPostRequest.do({
 
-            body: {
-                title: budgetTitle,
-                totalBudgetNrs: Number(drrFund),
-                disasterBudgetNrs: Number(municipalBudget),
-                otherBudgetNrs: Number(additionalFund),
-                fiscalYear: fiscal,
-                province,
-                district,
-                municipality,
-            },
-            budgetId: handleBudgetId,
+                body: {
+                    title: budgetTitle,
+                    totalBudgetNrs: Number(drrFund),
+                    disasterBudgetNrs: Number(municipalBudget),
+                    otherBudgetNrs: Number(additionalFund),
+                    fiscalYear: fiscal,
+                    province,
+                    district,
+                    municipality,
+                },
+                budgetId: handleBudgetId,
 
-        });
-        // props.handleNextClick();
+            });
+        } else {
+            console.log('Hang1>>>');
+            setBudgetId({ id: annualBudgetData[0].id });
+        }
     };
 
     const handleChange = (e) => {
@@ -230,7 +235,17 @@ const Budget = (props: Props) => {
             setmunicipalBudget(annualBudgetData[0].totalBudgetNrs);
             setadditionalFund(annualBudgetData[0].otherBudgetNrs);
         }
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annualBudgetData]);
+
+    useEffect(() => {
+        if (budgetId.id) {
+            props.handleNextClick();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [budgetId.id]);
     return (
         <div>
 
