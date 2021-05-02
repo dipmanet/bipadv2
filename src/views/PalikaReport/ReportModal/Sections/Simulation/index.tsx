@@ -180,8 +180,8 @@ const Simulation = (props: Props) => {
     // HazardGetRequest.setDefaultParams({
     //     hazardData: handleHazardData,
     // });
-    console.log('This is hazardType>>>', hazardType);
-    console.log('This is hazardType>>>', simulationData);
+    console.log('This is hazardType>>>', priorityData);
+
     const handleSelectedProvince = (response) => {
         const selectedProvince = response.filter(item => item.id === profile.district);
 

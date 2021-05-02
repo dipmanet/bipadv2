@@ -116,9 +116,9 @@ const Budget = (props: Props) => {
         drrFund: df,
         additionalFund: af,
     } = budgetData;
-    const [municipalBudget, setmunicipalBudget] = useState(mb);
-    const [drrFund, setdrrFund] = useState(df);
-    const [additionalFund, setadditionalFund] = useState(af);
+    const [municipalBudget, setmunicipalBudget] = useState();
+    const [drrFund, setdrrFund] = useState();
+    const [additionalFund, setadditionalFund] = useState();
     const [province, setProvince] = useState(0);
     const [district, setDistrict] = useState(0);
     const [municipality, setMunicipality] = useState(0);
@@ -195,6 +195,7 @@ const Budget = (props: Props) => {
     };
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
+        props.handleNextClick();
     };
     const handleNextClick = () => {
         setBudgetDatapp({
