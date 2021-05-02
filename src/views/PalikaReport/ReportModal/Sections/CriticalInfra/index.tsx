@@ -171,34 +171,6 @@ const CriticalInfra = (props: Props) => {
         if (fetchedData.length > 0 && chartData.length === 0) {
             setChartData(
                 [
-                    // {
-                    //     name: 'Educational Institutions',
-                    //     Total: 1000,
-                    // },
-                    // {
-                    //     name: 'Banks',
-                    //     Total: 500,
-                    // },
-                    // {
-                    //     name: 'Hospitals',
-                    //     Total: 300,
-                    // },
-                    // {
-                    //     name: 'Cultural Sites',
-                    //     Total: 200,
-                    // },
-                    // {
-                    //     name: 'Hotels or Restaurants',
-                    //     Total: 100,
-                    // },
-                    // {
-                    //     name: 'Government Buildings',
-                    //     Total: 50,
-                    // },
-                    // {
-                    //     name: 'Industries',
-                    //     Total: 25,
-                    // },
                     {
                         name: 'Educational Institutions',
                         Total: fetchedData.filter(item => item.resourceType === 'education').length,
@@ -308,36 +280,36 @@ const CriticalInfra = (props: Props) => {
                 && (
                     <div className={styles.budgetPreviewContainer}>
                         <h2> Critical Infrastructure</h2>
-                        <ResponsiveContainer width={350} height={400}>
+                        <ResponsiveContainer width={400} height={400}>
                             <BarChart
-                                width={350}
+                                width={400}
                                 height={400}
                                 data={chartData}
                                 layout="vertical"
-                                margin={{ left: 20, right: 20 }}
+                                margin={{ left: 10, right: 5, top: 10 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" />
+                                <XAxis
+                                    type="number"
+                                    tick={false}
+
+                                />
                                 <YAxis
                                     type="category"
                                     dataKey="name"
-                                    tick={{ fill: '#94bdcf' }}
+                                    tick={{ fill: '#777', fontSize: '10px' }}
                                 />
-                                {/* <Tooltip /> */}
-                                {/* <Legend /> */}
                                 <Bar
                                     dataKey="Total"
                                     fill="rgb(0,164,109)"
                                     // barCategoryGap={30}
-                                    barCategoryGap={20}
-                                    label={{ position: 'insideRight' }}
+                                    barCategoryGap={80}
+                                    label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
                                     tick={{ fill: 'rgb(200,200,200)' }}
                                     cx={90}
-                                    cy={95}
+                                    cy={105}
+                                    barSize={20}
                                 />
-                                {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
-                                {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}
-                                {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}
                             </BarChart>
                         </ResponsiveContainer>
 
