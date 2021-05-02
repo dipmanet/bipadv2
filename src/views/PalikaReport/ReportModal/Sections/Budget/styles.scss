@@ -1,3 +1,39 @@
+.budgetPreviewContainer{
+    h2{
+        font-size: 18px;
+        font-weight: 600;
+        margin-left: 2%;
+    }
+    .budgetDetailsContainer{
+        .budgetDetails{
+            display: flex;
+            align-items: center;
+            .lighter{
+                color: #777;
+                padding-left: 2px;
+
+            }
+            .light{
+                color: #777;
+                font-weight: 600;
+                padding-left: 2px;
+            }
+            ul{
+                list-style: none; 
+                padding-left: 2%;
+                padding-right: 2%;
+                li{
+                    white-space: nowrap;
+                }
+            }
+    
+        }
+    }
+    .budgetChartContainer{
+        border: 1px solid red;
+    }
+}
+
 .btns{
     display: flex;
     // border: 1px solid red;

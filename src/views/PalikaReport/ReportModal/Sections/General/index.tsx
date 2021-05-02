@@ -224,16 +224,6 @@ const General = (props: Props) => {
                             onChange={handleSelectChange}
                             className={styles.inputElement}
                         >
-                            {' '}
-                            {fiscalYear
-                                ? <option value="select">Select Fiscal Year</option>
-                                : (
-                                    <option value={fiscalYear}>
-                                        {fiscalYearList
-                                && fiscalYearList.filter(item => item.id === fiscalYear).titleEn}
-                                    </option>
-                                )
-                            }
                             <option value="select">Select Fiscal Year</option>
                             {fiscalYearList && fiscalYearList.map(item => (
                                 <option value={item.id}>{item.titleEn}</option>

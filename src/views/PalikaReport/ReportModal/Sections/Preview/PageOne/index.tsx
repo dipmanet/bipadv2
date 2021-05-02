@@ -7,7 +7,6 @@ import { PieChart, Pie, Legend,
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
-
 import {
     generalDataSelector,
     budgetDataSelector,
@@ -17,6 +16,7 @@ import {
 } from '#selectors';
 import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
+import Budget from '../../Budget';
 import Header from './Header';
 
 const mapStateToProps = state => ({
@@ -218,64 +218,19 @@ const Preview = (props: Props) => {
         <div className={styles.previewContainer}>
             <Header />
             <div className={styles.rowOne}>
+
                 <div className={styles.columnOneOne}>
-                    <div className={styles.mainTitle}>
-                        TOTAL MUNICIPAL BUDGET
-                        {' '}
-                        {municipalBudget}
-                    </div>
-                    <PieChart
-                        width={180}
-                        height={180}
-                    >
-                        <Pie
-                            dataKey="value"
-                            isAnimationActive={false}
-                            data={budgetChartData}
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={40}
-                            fill="#8884d8"
-                            label
-                        />
-                        <Tooltip />
-                        <Legend align="right" />
-
-                    </PieChart>
+                    <Budget
+                        previewDetails
+                        reportData={''}
+                        tableHeader={() => {}}
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                    />
                 </div>
-                <div className={styles.columnOneTwo}>
-                    <div className={styles.mainTitle}>
-                        BUDGET ACTIVITIES
-                    </div>
-                    <Table striped bordered hover size="md">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Source of Fund</th>
-                                <th>Budget Code</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {budgetActivityData && budgetActivityData.length > 0
-                                ? budgetActivityData.map(
-                                    data => (
-                                        <tr key={Math.random()}>
-
-                                            {activityTableData.map(item => (
-                                                <td key={Math.random()}>
-                                                    {data[item]}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ),
-                                ) : ''
-                            }
-
-
-                        </tbody>
-                    </Table>
-                </div>
+                <div className={styles.columnOneTwo} />
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>

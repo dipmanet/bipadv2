@@ -196,8 +196,12 @@ const Budget = (props: Props) => {
         setBudgetId({ id: response.id });
     };
     const handleNextClick = () => {
+        setBudgetDatapp({
+            municipalBudget,
+            drrFund,
+            additionalFund,
+        });
         if (!annualBudgetData.length) {
-            console.log('Hang>>>');
             BudgetPostRequest.do({
 
                 body: {
@@ -214,8 +218,8 @@ const Budget = (props: Props) => {
 
             });
         } else {
-            console.log('Hang1>>>');
             setBudgetId({ id: annualBudgetData[0].id });
+            props.handleNextClick();
         }
     };
 
@@ -234,131 +238,211 @@ const Budget = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annualBudgetData]);
 
-    useEffect(() => {
-        if (budgetId.id) {
-            props.handleNextClick();
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [budgetId.id]);
+    // useEffect(() => {
+    //     if (budgetId.id) {
+    //         props.handleNextClick();
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [budgetId.id]);
     return (
-        <div>
+        <>
+            {' '}
+            {
+                !props.previewDetails
 
-            <h2 className={styles.title}>Please enter Disaster Profile details</h2>
-            <div className={styles.palikaTable}>
-                <table id="table-to-xls">
-                    <tbody>
+        && (
+            <div>
 
-
-                        <>
-                            {annualBudgetData.length > 0
-                                ? (
-                                    <tr>
-
-                                        <th>SN</th>
+                <h2 className={styles.title}>Please enter Disaster Profile details</h2>
+                <div className={styles.palikaTable}>
+                    <table id="table-to-xls">
+                        <tbody>
 
 
-                                        <th>
+                            <>
+                                {annualBudgetData.length > 0
+                                    ? (
+                                        <tr>
+
+                                            <th>SN</th>
+
+
+                                            <th>
                                 Total municipal budget
 
 
-                                        </th>
-                                        <th>
+                                            </th>
+                                            <th>
                                 DRR fund of municipality
 
 
-                                        </th>
-                                        <th>
+                                            </th>
+                                            <th>
                                 Other DRR related funding
 
 
-                                        </th>
-                                        <th>
+                                            </th>
+                                            <th>
                                Updated By
 
 
-                                        </th>
-                                        <th>
+                                            </th>
+                                            <th>
                                 Updated On
 
 
-                                        </th>
+                                            </th>
 
 
-                                    </tr>
-                                ) : (
-                                    <tr>
+                                        </tr>
+                                    ) : (
+                                        <tr>
 
-                                        <th>SN</th>
+                                            <th>SN</th>
 
 
-                                        <th>
+                                            <th>
 Total municipal budget
 
 
-                                        </th>
-                                        <th>
+                                            </th>
+                                            <th>
 DRR fund of municipality
 
 
-                                        </th>
-                                        <th>
+                                            </th>
+                                            <th>
 Other DRR related funding
 
 
-                                        </th>
+                                            </th>
+
+
+                                        </tr>
+                                    )}
+                                {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
+                                    <tr key={item.id}>
+                                        <td>{i + 1}</td>
+                                        <td>{item.totalBudgetNrs}</td>
+                                        <td>{item.disasterBudgetNrs}</td>
+                                        <td>{item.otherBudgetNrs}</td>
+                                        <td>{item.updatedBy}</td>
+                                        <td>{item.modifiedOn}</td>
 
 
                                     </tr>
-                                )}
-                            {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.totalBudgetNrs}</td>
-                                    <td>{item.disasterBudgetNrs}</td>
-                                    <td>{item.otherBudgetNrs}</td>
-                                    <td>{item.updatedBy}</td>
-                                    <td>{item.modifiedOn}</td>
+                                )) : (
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <input type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
+                                            {' '}
+                                        </td>
+                                        <td>
+                                            <input type="text" value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
+                                            {' '}
+                                        </td>
+                                        <td>
+                                            <input type="text" value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
+                                            {' '}
+                                        </td>
 
 
-                                </tr>
-                            )) : (
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <input type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
-                                        {' '}
-                                    </td>
-                                    <td>
-                                        <input type="text" value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
-                                        {' '}
-                                    </td>
-                                    <td>
-                                        <input type="text" value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
-                                        {' '}
-                                    </td>
+                                    </tr>
+                                )
+                                }
 
 
-                                </tr>
-                            )
-                            }
+                            </>
 
 
-                        </>
+                        </tbody>
+                    </table>
 
 
-                    </tbody>
-                </table>
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={handleNextClick}
+                    />
 
-
-                <NextPrevBtns
-                    handlePrevClick={props.handlePrevClick}
-                    handleNextClick={handleNextClick}
-                />
-
+                </div>
             </div>
-        </div>
+        )
+            }
+            {
+                props.previewDetails
+                    && (
+                        <div className={styles.budgetPreviewContainer}>
+                            <h2>Budget</h2>
+                            <div className={styles.budgetDetailsContainer}>
+
+                                <div className={styles.budgetDetails}>
+                                    <ul>
+                                        <li>
+                                            <h2>
+                                                Rs
+                                                {' '}
+                                                {''}
+                                                {' '}
+                                                {municipalBudget || 'No data'}
+                                            </h2>
+                                        </li>
+                                        <li>
+                                            <span className={styles.light}>Municipal Budget</span>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            <span className={styles.lighter}>
+                                                {Number(drrFund) / Number(municipalBudget) * 100}
+                                                {'%'}
+                                                {' '}
+                                            of municipal budget
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h2>
+                                            Rs
+                                                {''}
+                                                {drrFund}
+                                            </h2>
+
+                                        </li>
+                                        <li>
+                                            <span className={styles.light}>
+                                             DRR Fund of Municipality
+                                            </span>
+
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className={styles.budgetDetails}>
+                                    <ul>
+                                        <li>
+                                            <h2>
+                                                {' '}
+                                                {additionalFund || 0}
+                                            </h2>
+                                        </li>
+                                        <li>
+                                            <span className={styles.light}>
+                                            Other sources of DRR funding
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
 
 
+                            </div>
+                            <div className={styles.budgetChartContainer}>
+
+                                chart goes here
+                            </div>
+
+                        </div>
+                    )
+            }
+        </>
     );
 };
 
