@@ -1,19 +1,83 @@
+.budgetActPreviewContainer{
+    h2{
+        font-size: 18px;
+        font-weight: 600;
+        margin-left: 2%;
+    }
+    .budgetActChartContainer{
+        display: flex;
+        .legend{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+            .activitiesAmt{
+                .light{
+                    color: #777;
+                }
+                .biggerNum{
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+            }
+            .bottomRow{
+                position: relative;
+                right: 5px;
+            }
+            .legenditem{
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                .legendColorContainer{
+                    height: 100%;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    //need to fix this
+                    padding-top: 17px;
+                    padding-right: 5px;
+                    .legendColor{
+                        width: 15px;
+                        height: 15px;
+                        background-color: gray;
+                        border-radius: 50%;
+                        // display: none;
+                    }   
+                }
+                .numberRow {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    ul{list-style: none; 
+                        padding-left: 1%;
+                        padding-top: 0;
+                    }
+                  
+                    .bigerNum{
+                        font-size: 18px;
+                    font-weight: 600;
+                    }        
+                    .light{
+                        color: #777;
+        
+                    } 
+                }     
+            }
+        }
+    }
+}
 .btns{
     display: flex;
-    // border: 1px solid red;
     .newActivityBtn{
         position: relative;
         margin-top: 45px;
         // width: fit-content;
         max-width: 100%;
         background-color: rgb(0,105,222) !important;
-        border-radius: 15px;
         color: white; 
         padding: 0 12px;
         cursor: pointer;
-        // border: none;
         filter: saturate(80%);
-        border: none;
         margin-right: 10px;
         white-space: nowrap;
     }
@@ -21,7 +85,6 @@
 }
 
 // table{
-//     border-collapse: collapse;
 //     width: 100%;
 //     margin-top: 0px;
 // }
@@ -32,8 +95,6 @@
 //     font-weight: 400;
 // }
 // td{
-//     border-top: 1px solid #f5f5f5;
-//     border-bottom: 1px solid #f5f5f5;
 //     padding: 0.5rem;
 //     text-align: left;
 // }
@@ -45,7 +106,6 @@
 
 
 // table{
-//     border-collapse: collapse;
 //     width: 100%;
 //     margin-top: 40px;
 // }
@@ -56,8 +116,6 @@
 //     font-weight: 400;
 // }
 // td{
-//     border-top: 1px solid #f5f5f5;
-//     border-bottom: 1px solid #f5f5f5;
 //     padding: 0.5rem;
 //     text-align: left;
 // }
@@ -75,25 +133,21 @@
   }
   .pagination > .active > a{
     background-color: #3498FC ;
-    border-color: #F5F5F5;
     color: #fff;
   }
   .pagination > li > a{
-    border: 1px solid #F5F5F5 ;
     padding: 5px 10px;
     outline: none;
     cursor: pointer;
   }
   .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
     background-color: #3498FC ;
-    border-color: #F5F5F5;
     outline: none ;
   }
   .pagination > li > a, .pagination > li > span{
     color: black
   }
   .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
-    border-radius: unset
   }
   .paginationRight{
       margin-left: auto;
@@ -107,7 +161,6 @@
         margin-bottom: 15px;
     }
     table{
-        border-collapse: collapse;
         width: 100%;
         margin-top: 0px;
     }
@@ -119,8 +172,6 @@
         
     }
     td{
-        border-top: 1px solid #f5f5f5;
-        border-bottom: 1px solid #f5f5f5;
         padding: 0.5rem;
         text-align: left;
      
@@ -136,19 +187,16 @@
         .row{
             display: flex;
             width: 61%;
-            // border: 1px solid red;
             justify-content: flex-start;
             flex-direction: column;
             .ndrrsaContainer{
                 padding-top: 25px;
                 input{
-                    border: 1px solid rgb(232,232,232);
                     width: 400px !important;
                 }
             }
             .inputContainer{
                 display: flex;
-                border-radius: 3px;
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
@@ -156,7 +204,6 @@
                 padding-left: 10px;
                 .view{
                     width: 100%;
-                    // border: 1px solid red;
                 }
                 .labelDate{
                     padding-left: 10px;
@@ -164,7 +211,6 @@
                     width: 100%;
                 }
                 select{
-                    border: none !important;
                     padding: 15px 10px;
                     background: transparent;
                     width: 100%;
@@ -187,7 +233,6 @@
                 }
                 .addEditBtn{
                     background-color: transparent;
-                    border: none;
                     cursor: pointer;
                     filter: saturate(100%);
 
@@ -208,7 +253,6 @@
                 }
 
                 input{
-                    border: none;
                     padding: 15px 10px !important;
                     background: transparent;
                     width: 100%;
@@ -253,7 +297,6 @@
                 }
                 .addEditBtn{
                     background: transparent;
-                    border: none;
                     filter: saturate(100%);
                     margin-left: 12px;
                     .addEditIcon{
