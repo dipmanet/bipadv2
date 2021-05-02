@@ -183,7 +183,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             });
             const chatData = [...new Set(finalInventoriesData.map(inventory => inventory.item.category))];
 
-            setChartData(chatData.map(item => ({
+            setChartData(chatData.slice(0, 4).map(item => ({
                 name: item,
                 Total: finalInventoriesData.filter(inven => inven.item.category === item).length,
             })));
@@ -297,7 +297,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                     </h2>
                     <BarChart
                         width={400}
-                        height={400}
+                        height={250}
                         data={chartData}
                         layout="vertical"
                         margin={{ left: 10, right: 5, top: 10 }}
