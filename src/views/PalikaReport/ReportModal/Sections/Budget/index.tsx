@@ -178,6 +178,7 @@ const Budget = (props: Props) => {
 
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
+        props.handleNextClick();
     };
 
     const handleNextClick = () => {
