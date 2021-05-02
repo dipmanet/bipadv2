@@ -26,8 +26,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             district: params.district,
             municipality: params.municipality,
             province: params.province,
-            offset: params.offset,
-            limit: params.page,
+            // offset: params.offset,
+            // limit: params.page,
             ordering: params.id,
         }),
         method: methods.GET,
@@ -205,7 +205,7 @@ const ProgramPolicies = (props: Props) => {
                 handlePrevClick={props.handlePrevClick}
                 handleNextClick={props.handleNextClick}
             />
-            {paginationParameters && paginationParameters.count !== 0
+            {/* {paginationParameters && paginationParameters.count !== 0
 && (
     <div className={styles.paginationRight}>
 
@@ -224,7 +224,7 @@ const ProgramPolicies = (props: Props) => {
             activeClassName={styles.active}
         />
     </div>
-)}
+)} */}
         </div>
     );
 };

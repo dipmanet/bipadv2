@@ -248,7 +248,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                         ))}
                     </tbody>
                 </table>
-                {paginationParameters && paginationParameters.count !== 0
+                {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
                                     <ReactPaginate
@@ -266,7 +266,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                         activeClassName={styles.active}
                                     />
                                 </div>
-                            )}
+                            )} */}
                 {finalInventoriesData && finalInventoriesData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 

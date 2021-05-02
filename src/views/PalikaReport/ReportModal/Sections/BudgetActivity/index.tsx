@@ -52,9 +52,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             district: params.district,
             municipality: params.municipality,
             province: params.province,
-            limit: params.page,
+            // limit: params.page,
             ordering: params.id,
-            offset: params.offset,
+            // offset: params.offset,
         }),
         method: methods.GET,
         onMount: true,
@@ -312,47 +312,6 @@ const BudgetActivity = (props: Props) => {
             budgetActivities: handleBudgetActivities,
             dataSubmitted: handleDataSubmittedResponse,
         });
-
-
-        // const newArr = [...tableData, {
-        //     name: activityName,
-        //     fundSource,
-        //     budgetCode,
-        //     projStatus,
-        //     projcompletionDate,
-        //     allocatedBudget,
-        //     actualExp,
-        //     remarks,
-
-        //     action,
-        //     activity,
-        //     areaofImplementation,
-        //     fundingType,
-        //     organisationName,
-        //     projstartDate,
-        // }];
-        // setTableData(newArr);
-        // setBudgetActivityDatapp(newArr);
-        // setShowTable(true);
-
-        // setStartDate('');
-        // setprojCompletionDate('');
-        // setactivityName('');
-        // setfundSource('');
-        // setfundingType('');
-        // setotherFund('');
-        // setbudgetCode('');
-        // setprojStatus('');
-        // setallocatedBudget('');
-        // setactualExp('');
-        // setremarks('');
-        // setAction('');
-        // setActivity('');
-        // setorganisationName('');
-        // setPriorityAction([]);
-        // setSourceType(false);
-        // setSourceTypeOther(false);
-        // setshowmunGovernment(false);
     };
     console.log('budget Activity>>>', budgetActivities);
     const handleActivityName = (data) => {
@@ -1096,7 +1055,7 @@ const BudgetActivity = (props: Props) => {
 
 
                 } */}
-            {paginationParameters && paginationParameters.count !== 0
+            {/* {paginationParameters && paginationParameters.count !== 0
 && (
     <div className={styles.paginationRight}>
 
@@ -1115,7 +1074,7 @@ const BudgetActivity = (props: Props) => {
             activeClassName={styles.active}
         />
     </div>
-)}
+)} */}
             <div className={styles.btns}>
                 <NextPrevBtns
                     handlePrevClick={props.handlePrevClick}
