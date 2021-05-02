@@ -18,6 +18,7 @@ import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
 import Budget from '../../Budget';
 import Header from './Header';
+import BudgetActivity from '../../BudgetActivity';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -229,7 +230,15 @@ const Preview = (props: Props) => {
                         handlePrevClick={() => {}}
                         handleNextClick={() => {}}
                     />
+                    <BudgetActivity
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
+
                 <div className={styles.columnOneTwo} />
             </div>
             <div className={styles.rowTwo}>

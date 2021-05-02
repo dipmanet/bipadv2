@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
@@ -380,9 +381,7 @@ Other DRR related funding
                                     <ul>
                                         <li>
                                             <h2>
-                                                Rs
-                                                {' '}
-                                                {''}
+                                                Rs.
                                                 {' '}
                                                 {municipalBudget || 'No data'}
                                             </h2>
@@ -394,7 +393,7 @@ Other DRR related funding
                                     <ul>
                                         <li>
                                             <span className={styles.lighter}>
-                                                {Number(drrFund) / Number(municipalBudget) * 100}
+                                                {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
                                                 {'%'}
                                                 {' '}
                                             of municipal budget
@@ -402,8 +401,8 @@ Other DRR related funding
                                         </li>
                                         <li>
                                             <h2>
-                                            Rs
-                                                {''}
+                                            Rs.
+                                                {' '}
                                                 {drrFund}
                                             </h2>
 
@@ -420,6 +419,7 @@ Other DRR related funding
                                     <ul>
                                         <li>
                                             <h2>
+                                                Rs.
                                                 {' '}
                                                 {additionalFund || 0}
                                             </h2>
@@ -434,11 +434,6 @@ Other DRR related funding
 
 
                             </div>
-                            <div className={styles.budgetChartContainer}>
-
-                                chart goes here
-                            </div>
-
                         </div>
                     )
             }
