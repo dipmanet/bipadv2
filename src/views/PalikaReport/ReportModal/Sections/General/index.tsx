@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import * as ReachRouter from '@reach/router';
 
@@ -80,10 +80,6 @@ interface Location{
 
 const currentFiscalYear = new Date().getFullYear() + 56;
 
-const options = Array.from(Array(10).keys()).map(item => ({
-    value: currentFiscalYear - item,
-}));
-
 
 const General = (props: Props) => {
     const {
@@ -99,6 +95,11 @@ const General = (props: Props) => {
     const [formationDate, setformationDate] = useState<string>(fd);
     const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
     const [fiscalYearList, setFiscalYearList] = useState([]);
+
+    const [showErr, setShowErr] = useState(false);
+    const [fyErr, setFyErr] = useState(false);
+    const [dateErr, setDate] = useState(false);
+
     const handleReportTitle = (title: any) => {
         setreportTitle(title.target.value);
     };
@@ -132,19 +133,53 @@ const General = (props: Props) => {
         updateTab,
         localMembers,
     } = props;
-    const handleDataSave = () => {
-        props.setGeneralDatapp({
-            reportTitle,
-            fiscalYear,
-            mayor,
-            cao,
-            focalPerson,
-            formationDate,
-            committeeMembers,
-        });
-        updateTab();
 
-        props.handleNextClick();
+    const validationErrs = () => {
+        const e = [fiscalYear, formationDate];
+        const f = [setFyErr, setDate];
+        const result = e.map((item) => {
+            if (!item) {
+                return true;
+            }
+            return false;
+        });
+        if (result.indexOf(true) > -1) {
+            result.map((item, i) => {
+                if (item === true) {
+                    f[i](true);
+                } else {
+                    f[i](false);
+                }
+
+                return null;
+            });
+            return true;
+        } return false;
+    };
+
+    // useEffect(() => {
+    //     validationErrs();
+    // }, [fiscalYear, formationDate, validationErrs]);
+
+    const handleDataSave = () => {
+        console.log('VE', validationErrs());
+        if (!validationErrs()) {
+            props.setGeneralDatapp({
+                reportTitle,
+                fiscalYear,
+                mayor,
+                cao,
+                focalPerson,
+                formationDate,
+                committeeMembers,
+            });
+            updateTab();
+
+            props.handleNextClick();
+        } else {
+            validationErrs();
+            setShowErr(true);
+        }
     };
 
     const selectStyles = {
@@ -172,7 +207,7 @@ const General = (props: Props) => {
             <div className={styles.formColumn}>
                 <h3><strong>General Information</strong></h3>
                 <div className={styles.row}>
-                    <div className={styles.inputContainer}>
+                    {/* <div className={styles.inputContainer}>
                         <input
                             type="text"
                             className={styles.inputElement}
@@ -181,7 +216,7 @@ const General = (props: Props) => {
                             value={reportTitle || ''}
                             disabled
                         />
-                    </div>
+                    </div> */}
 
                     <div className={styles.inputContainer}>
                         <select
@@ -189,12 +224,29 @@ const General = (props: Props) => {
                             onChange={handleSelectChange}
                             className={styles.inputElement}
                         >
+                            {' '}
+                            {fiscalYear
+                                ? <option value="select">Select Fiscal Year</option>
+                                : (
+                                    <option value={fiscalYear}>
+                                        {fiscalYearList
+                                && fiscalYearList.filter(item => item.id === fiscalYear).titleEn}
+                                    </option>
+                                )
+                            }
                             <option value="select">Select Fiscal Year</option>
                             {fiscalYearList && fiscalYearList.map(item => (
                                 <option value={item.id}>{item.titleEn}</option>
                             ))}
 
                         </select>
+                        {showErr && fyErr
+                            ? (
+                                <div className={styles.errorMsg}>
+                                 Please select fiscal year
+                                </div>
+                            )
+                            : ''}
                     </div>
 
                 </div>
@@ -341,6 +393,13 @@ const General = (props: Props) => {
                             options={{ calenderLocale: 'ne', valueLocale: 'en' }}
 
                         />
+                        {showErr && dateErr
+                            ? (
+                                <div className={styles.errorMsg}>
+                                 Please select DRRM committee formation date
+                                </div>
+                            )
+                            : ''}
                     </div>
                     <h3><strong>Committee Members </strong></h3>
 

@@ -85,7 +85,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
-            console.log('This is response', response);
             params.budgetId(response);
         },
 
@@ -116,8 +115,6 @@ const Budget = (props: Props) => {
         drrFund: df,
         additionalFund: af,
     } = budgetData;
-    console.log('Final props fiscal year>>>', budgetId);
-    console.log('budge data', user);
     const [municipalBudget, setmunicipalBudget] = useState(mb);
     const [drrFund, setdrrFund] = useState(df);
     const [additionalFund, setadditionalFund] = useState(af);
@@ -144,7 +141,6 @@ const Budget = (props: Props) => {
 
     });
 
-    console.log('This is annual>>>', annualBudgetData);
     const handleSelectedProvince = (response) => {
         const selectedProvince = response.filter(item => item.id === profile.district);
 
@@ -159,7 +155,6 @@ const Budget = (props: Props) => {
     }, [profile.district, profile.municipality, profile.province]);
 
 
-    console.log('This profile>>>', profile);
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
     };
@@ -222,7 +217,6 @@ const Budget = (props: Props) => {
     const handleChange = (e) => {
         setProvince(e.target.value);
     };
-    console.log('annual Budget>>>', annualBudgetData);
     useEffect(() => {
         if (annualBudgetData.length > 0) {
             setBudgetTitle(annualBudgetData[0].title);
