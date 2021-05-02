@@ -419,9 +419,10 @@ const BudgetActivity = (props: Props) => {
     //     }
     // }, [action, priorityAction, selectedOption]);
 
+
     return (
         <>
-            {!props.previewDetails
+            {!props.previewDetails && !props.monitoringDetails
         && (
             <div className={styles.mainPageDetailsContainer}>
                 <h2 className={styles.title}>Budget Activities</h2>
@@ -748,29 +749,27 @@ const BudgetActivity = (props: Props) => {
                 <div className={styles.budgetActPreviewContainer}>
                     <h2>Budget Activity</h2>
                     <div className={styles.budgetActChartContainer}>
-                        <ResponsiveContainer height={200} width={200}>
 
-                            <PieChart width={200} height={200}>
-                                <Pie
-                                    data={chartdata}
-                                    cx={90}
-                                    cy={95}
-                                    innerRadius={40}
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    paddingAngle={1}
-                                    dataKey="value"
-                                    startAngle={90}
-                                    endAngle={450}
-                                >
-                                    {chartdata.map((entry, index) => (
+                        <PieChart width={200} height={200}>
+                            <Pie
+                                data={chartdata}
+                                cx={90}
+                                cy={95}
+                                innerRadius={40}
+                                outerRadius={80}
+                                fill="#8884d8"
+                                paddingAngle={1}
+                                dataKey="value"
+                                startAngle={90}
+                                endAngle={450}
+                            >
+                                {chartdata.map((entry, index) => (
                                     // eslint-disable-next-line react/no-array-index-key
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                            </PieChart>
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                        </PieChart>
 
-                        </ResponsiveContainer>
                         <div className={styles.legend}>
                             <div className={styles.activitiesAmt}>
                                 <span className={styles.light}>
@@ -846,7 +845,84 @@ const BudgetActivity = (props: Props) => {
                             </div>
                         </div>
                     </div>
+
                 </div>
+            )
+
+            }
+
+            {props.monitoringDetails
+            && (
+                <>
+                    <ul>
+                        <li>
+                            <span className={styles.darkerText}>
+                          Monitoring the activities based on the Priority Areas
+                            </span>
+                        </li>
+                        <li>
+                            <span className={styles.smallerText}>
+                            Disaster Risk Reduction National Strategic Plan of Action 2018-2039
+                            </span>
+                        </li>
+                    </ul>
+
+                    <div className={styles.monitoringRow}>
+                        <div className={styles.monitoringItem}>
+                            <span className={styles.monTitle}>Area1</span>
+                            <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                            <div className={styles.scorePatch}>
+                                {budgetActivities.length > 0
+                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
+                                    : 0
+                                }
+                            </div>
+                        </div>
+                        <div className={styles.monitoringItem}>
+                            <span className={styles.monTitle}>Area2</span>
+                            <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                            <div className={styles.scorePatch}>
+                                {budgetActivities.length > 0
+                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
+                                    : 0
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.monitoringRow}>
+                        <div className={styles.monitoringItem}>
+                            <span className={styles.monTitle}>Area3</span>
+                            <span className={styles.monDesc}>
+                                    Promoting Comprehensive
+                                    Risk-Informed Private and Public
+                                    Investments in Disaster Risk Reduction
+                                    for Resilience
+                            </span>
+                            <div className={styles.scorePatch}>
+                                {budgetActivities.length > 0
+
+                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
+                                    : 0
+                                }
+                            </div>
+                        </div>
+                        <div className={styles.monitoringItem}>
+                            <span className={styles.monTitle}>Area4</span>
+                            <span className={styles.monDesc}>
+                                    Enhancing Disaster Preparedness for
+                                    Effective Response and to &quot; Build Back Better &quot;
+                                    in Recovery, Rehabilitation and Reconstruction
+                            </span>
+                            <div className={styles.scorePatch}>
+                                {budgetActivities.length > 0
+                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
+                                    : 0
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </>
+
             )
 
             }

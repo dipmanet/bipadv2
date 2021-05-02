@@ -252,53 +252,13 @@ const Preview = (props: Props) => {
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
-                    <ul>
-                        <li>
-                            <span className={styles.darkerText}>
-                              Monitoring the activities based on the Priority Areas
-                            </span>
-                        </li>
-                        <li>
-                            <span className={styles.smallerText}>
-                                Disaster Risk Reduction National Strategic Plan of Action 2018-2039
-                            </span>
-                        </li>
-                    </ul>
-
-                    <div className={styles.monitoringRow}>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area1</span>
-                            <span className={styles.monDesc}>Understanding Disaster Risk</span>
-                            <div className={styles.scorePatch}>50</div>
-                        </div>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area2</span>
-                            <span className={styles.monDesc}>Understanding Disaster Risk</span>
-                            <div className={styles.scorePatch}>50</div>
-                        </div>
-                    </div>
-                    <div className={styles.monitoringRow}>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area3</span>
-                            <span className={styles.monDesc}>
-                                        Promoting Comprehensive
-                                        Risk-Informed Private and Public
-                                        Investments in Disaster Risk Reduction
-                                        for Resilience
-                            </span>
-                            <div className={styles.scorePatch}>50</div>
-                        </div>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area4</span>
-                            <span className={styles.monDesc}>
-                                        Enhancing Disaster Preparedness for
-                                        Effective Response and to &quot; Build Back Better &quot;
-                                        in Recovery, Rehabilitation and Reconstruction
-                            </span>
-                            <div className={styles.scorePatch}>50</div>
-                        </div>
-                    </div>
-
+                    <BudgetActivity
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        monitoringDetails
+                    />
 
                 </div>
 
