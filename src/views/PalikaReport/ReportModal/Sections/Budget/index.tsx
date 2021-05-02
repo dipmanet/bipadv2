@@ -203,7 +203,6 @@ const Budget = (props: Props) => {
                 disasterBudgetNrs,
                 otherBudgetNrs,
             } = annualBudgetData[0];
-            console.log('budget data', annualBudgetData);
             setBudgetDatapp({
                 municipalBudget: totalBudgetNrs,
                 drrFund: disasterBudgetNrs,

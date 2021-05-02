@@ -19,6 +19,7 @@ import Inventory from '../../Inventory';
 import Budget from '../../Budget';
 import Header from './Header';
 import BudgetActivity from '../../BudgetActivity';
+import CriticalInfra from '../../CriticalInfra';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -239,7 +240,15 @@ const Preview = (props: Props) => {
                     />
                 </div>
 
-                <div className={styles.columnOneTwo} />
+                <div className={styles.columnOneTwo}>
+                    <CriticalInfra
+                        previewDetails
+                        handleNextClick={() => {}}
+                        updateTab={() => {}}
+
+                    />
+
+                </div>
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
