@@ -116,9 +116,9 @@ const Budget = (props: Props) => {
         drrFund: df,
         additionalFund: af,
     } = budgetData;
-    const [municipalBudget, setmunicipalBudget] = useState(mb);
-    const [drrFund, setdrrFund] = useState(df);
-    const [additionalFund, setadditionalFund] = useState(af);
+    const [municipalBudget, setmunicipalBudget] = useState('');
+    const [drrFund, setdrrFund] = useState('');
+    const [additionalFund, setadditionalFund] = useState('');
     const [province, setProvince] = useState(0);
     const [district, setDistrict] = useState(0);
     const [municipality, setMunicipality] = useState(0);
@@ -175,33 +175,12 @@ const Budget = (props: Props) => {
         updateTab();
     };
 
-    const selectStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: '1px dotted gray',
-            color: state.isSelected ? 'white' : 'gray',
-            padding: 10,
-        }),
-        control: () => ({
-            // none of react-select's styles are passed to <Control />
-            width: 200,
-        }),
-        singleValue: (provided, state) => {
-            const opacity = state.isDisabled ? 0.5 : 1;
-            const transition = 'opacity 900ms';
 
-            return { ...provided, opacity, transition };
-        },
-    };
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
     };
+
     const handleNextClick = () => {
-        setBudgetDatapp({
-            municipalBudget,
-            drrFund,
-            additionalFund,
-        });
         if (!annualBudgetData.length) {
             BudgetPostRequest.do({
 
@@ -219,7 +198,17 @@ const Budget = (props: Props) => {
 
             });
         } else {
-            setBudgetId({ id: annualBudgetData[0].id });
+            const {
+                totalBudgetNrs,
+                disasterBudgetNrs,
+                otherBudgetNrs,
+            } = annualBudgetData[0];
+            console.log('budget data', annualBudgetData);
+            setBudgetDatapp({
+                municipalBudget: totalBudgetNrs,
+                drrFund: disasterBudgetNrs,
+                additionalFund: otherBudgetNrs,
+            });
             props.handleNextClick();
         }
     };
