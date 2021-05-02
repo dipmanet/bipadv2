@@ -1,5 +1,5 @@
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
 import AccentButton from '#rsca/Button/AccentButton';
@@ -15,17 +15,19 @@ import Document from './Document';
 
 import styles from './styles.scss';
 import {
-    userSelector,
-
-    carKeysSelector,
+    palikaRedirectSelector,
 } from '#selectors';
 
 import {
-    setCarKeysAction,
+    setPalikaRedirectAction,
 } from '#actionCreators';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
-    carKeys: carKeysSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
 });
 
 type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';
@@ -49,8 +51,17 @@ class Profile extends React.PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        if (this.props.carKeys && this.props.carKeys === 'contact');
-        this.setState({ activeView: 'contact' });
+        const {
+            palikaRedirect,
+            setPalikaRedirect,
+
+        } = this.props;
+
+        if (palikaRedirect.showForm
+            && palikaRedirect.showModal
+            && palikaRedirect.showModal === 'contact') {
+            this.setState({ activeView: 'contact' });
+        }
     }
 
     private handleSummaryButtonClick = () => {
@@ -180,4 +191,4 @@ class Profile extends React.PureComponent<Props, State> {
         );
     }
 }
-export default connect(mapStateToProps, undefined)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

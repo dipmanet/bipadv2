@@ -8,6 +8,12 @@ import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+
+
+import govtlogo from '../../../../govtLogo.svg';
+
+
 import {
     generalDataSelector,
     budgetDataSelector,
@@ -17,7 +23,6 @@ import {
 } from '#selectors';
 import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
-import Header from './Header';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -213,10 +218,42 @@ const Preview = (props: Props) => {
         },
 
     ];
+    console.log('PAP DATA ', programAndPolicyData);
 
     return (
         <div className={styles.previewContainer}>
-            <Header />
+            <div className={styles.header}>
+
+
+                <div className={styles.address}>
+                    <ScalableVectorGraphics
+                        className={styles.bulletPoint}
+                        src={govtlogo}
+                        alt="Nepal Government"
+                    />
+
+                    <div className={styles.desc}>
+                        <ul>
+                            <li className={styles.pageOneTitle}>Rajapur Municipality</li>
+                            <li>Bardiya District, Lumbini Province</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+                <div className={styles.location}>
+                    <ul>
+                        <li className={styles.pageOneTitle}>{reportTitle}</li>
+                        <li>
+                            FY
+                            {fiscalYear}
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
             <div className={styles.rowOne}>
                 <div className={styles.columnOneOne}>
                     <div className={styles.mainTitle}>
@@ -305,7 +342,7 @@ const Preview = (props: Props) => {
                 </div> */}
                 <div className={styles.columnTwoTwo}>
 
-                    <Organisation hide={1} page={5} />
+                    {/* <Organisation hide={1} page={5} /> */}
                 </div>
             </div>
 

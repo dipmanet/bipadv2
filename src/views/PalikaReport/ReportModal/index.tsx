@@ -93,7 +93,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 };
 
-
 const ReportModal: React.FC<Props> = (props: Props) => {
     const {
         keyTab,
@@ -113,36 +112,61 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     } = props;
 
     const handleWelcomePage = () => hideWelcomePage();
+
     const handlePreviewBtn = () => {
         const divToDisplay = document.getElementById('reportPreview');
         html2canvas(divToDisplay).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
-
-            /*
-            Here are the numbers (paper width and height) that I found to work.
-            It still creates a little overlap part between the pages, but good enough for me.
-            if you can find an official number from jsPDF, use them.
-            */
             const imgWidth = 210;
             const pageHeight = 295;
             const imgHeight = canvas.height * imgWidth / canvas.width;
             let heightLeft = imgHeight;
-
             const doc = new JsPDF('p', 'mm');
-            let position = 0;
+            let position = 10; // give some top padding to first page
 
             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
             heightLeft -= pageHeight;
 
             while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
+                position = heightLeft - imgHeight; // top padding for other pages
                 doc.addPage();
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
             }
-            doc.save('palika-report.pdf');
+
+            doc.save('file.pdf');
         });
     };
+    // const handlePreviewBtn = () => {
+    //     const divToDisplay = document.getElementById('reportPreview');
+    //     html2canvas(divToDisplay).then((canvas) => {
+    //         const imgData = canvas.toDataURL('image/png');
+
+    //         /*
+    //         Here are the numbers (paper width and height) that I found to work.
+    //         It still creates a little overlap part between the pages, but good enough for me.
+    //         if you can find an official number from jsPDF, use them.
+    //         */
+    //         const imgWidth = 210;
+    //         const pageHeight = 275;
+    //         const imgHeight = canvas.height * imgWidth / canvas.width;
+    //         let heightLeft = imgHeight;
+
+    //         const doc = new JsPDF('p', 'mm');
+    //         let position = 0;
+
+    //         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    //         heightLeft -= pageHeight;
+
+    //         while (heightLeft >= 0) {
+    //             position = heightLeft - imgHeight;
+    //             doc.addPage();
+    //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    //             heightLeft -= pageHeight;
+    //         }
+    //         doc.save('palika-report.pdf');
+    //     });
+    // };
 
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
@@ -406,15 +430,20 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
 
                             <div id={'reportPreview'}>
-                                <PreviewPageOne
-                                    generalData={getGeneralData()}
-                                    url={keyTabUrl}
+                                <div className={'page'}>
+                                    <PreviewPageOne
+                                        generalData={getGeneralData()}
+                                        url={keyTabUrl}
 
-                                />
-                                <PreviewPageTwo
-                                    reportData={[<Budget />, <BudgetActivity />]}
+                                    />
+                                </div>
+                                <div className={'page'}>
 
-                                />
+                                    <PreviewPageTwo
+                                        reportData={[<Budget />, <BudgetActivity />]}
+
+                                    />
+                                </div>
 
                             </div>
                         </div>
