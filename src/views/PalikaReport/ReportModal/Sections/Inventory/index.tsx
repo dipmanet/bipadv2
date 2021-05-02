@@ -1,18 +1,20 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
-import { useTheme } from '@material-ui/core';
-import { Item } from 'semantic-ui-react';
 import * as ReachRouter from '@reach/router';
+import {
+    Bar, BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    XAxis, YAxis,
+} from 'recharts';
 import NextPrevBtns from '../../NextPrevBtns';
 import styles from './styles.scss';
 
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
@@ -106,6 +108,8 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const [finalInventoriesData, setFinalInventoriesData] = useState([]);
     const [firstSerialNumber, setFirstSerialNumber] = useState(0);
     const [lastSerialNumber, setLastSerialNumber] = useState(10);
+    const [chartData, setChartData] = useState([]);
+
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
@@ -150,7 +154,6 @@ const Inventory: React.FC<Props> = (props: Props) => {
     }, [offset]);
     // Finding Header for table data
     let count = 0;
-    console.log('page>>>', props.page);
 
     const inventoriesData = fetchedData.map(item => (
         item.inventories.map((data) => {
@@ -168,7 +171,6 @@ const Inventory: React.FC<Props> = (props: Props) => {
             );
         })
     ));
-    console.log('This is data>>>', inventoriesData);
 
 
     useEffect(() => {
@@ -179,76 +181,81 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 }
                 return null;
             });
+            const chatData = [...new Set(finalInventoriesData.map(inventory => inventory.item.category))];
+
+            setChartData(chatData.map(item => ({
+                name: item,
+                Total: finalInventoriesData.filter(inven => inven.item.category === item).length,
+            })));
         }
-
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inventoriesData]);
-    console.log('This is finaldata>>>', finalInventoriesData);
     const handlePageClick = (e) => {
         const selectedPage = e.selected + 1;
         // setOffset((selectedPage - 1) * paginationQueryLimit);
         // setCurrentPageNumber(selectedPage);
-        console.log('What is click>>>', e.selected);
         setLastSerialNumber(finalInventoriesData.length);
     };
 
 
     return (
-        <div className={styles.tabsPageContainer}>
-            <h2>
-                <strong>
+        <>
+            { !props.previewDetails
+            && (
+                <div className={styles.tabsPageContainer}>
+                    <h2>
+                        <strong>
                Inventories
-                </strong>
-            </h2>
-            <div className={styles.palikaTable}>
-                <table id="table-to-xls">
-                    <tbody>
-                        <tr>
+                        </strong>
+                    </h2>
+                    <div className={styles.palikaTable}>
+                        <table id="table-to-xls">
+                            <tbody>
+                                <tr>
 
-                            <th>S.N</th>
-                            <th>Name of Resource</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Category</th>
-                            <th>Owner Organization Name</th>
-                            <th>Type of Organization</th>
-                            <th>Added Date</th>
-                            <th>Updated Date</th>
+                                    <th>S.N</th>
+                                    <th>Name of Resource</th>
+                                    <th>Quantity</th>
+                                    <th>Unit</th>
+                                    <th>Category</th>
+                                    <th>Owner Organization Name</th>
+                                    <th>Type of Organization</th>
+                                    <th>Added Date</th>
+                                    <th>Updated Date</th>
 
-                        </tr>
+                                </tr>
 
-                        {finalInventoriesData && finalInventoriesData.map(item => (
+                                {finalInventoriesData && finalInventoriesData.map(item => (
 
-                            <tr>
+                                    <tr>
 
-                                <td>
-                                    {item.SN}
-                                </td>
-                                <td>{item.item.title}</td>
-                                <td>{item.quantity}</td>
-                                <td>{item.item.unit}</td>
-                                <td>{item.item.category}</td>
-                                <td>
+                                        <td>
+                                            {item.SN}
+                                        </td>
+                                        <td>{item.item.title}</td>
+                                        <td>{item.quantity}</td>
+                                        <td>{item.item.unit}</td>
+                                        <td>{item.item.category}</td>
+                                        <td>
 
-                                    {item.resourceName}
-                                </td>
-                                <td>{item.organizationType}</td>
-                                <td>{item.createdOn.split('T')[0]}</td>
-                                <td>{item.modifiedOn.split('T')[0]}</td>
-                                <td>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleEditInventory(item)}
-                                    >
+                                            {item.resourceName}
+                                        </td>
+                                        <td>{item.organizationType}</td>
+                                        <td>{item.createdOn.split('T')[0]}</td>
+                                        <td>{item.modifiedOn.split('T')[0]}</td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleEditInventory(item)}
+                                            >
                                             Edit
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {/* {paginationParameters && paginationParameters.count !== 0
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        {/* {paginationParameters && paginationParameters.count !== 0
                             && (
                                 <div className={styles.paginationRight}>
                                     <ReactPaginate
@@ -267,19 +274,61 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     />
                                 </div>
                             )} */}
-                {finalInventoriesData && finalInventoriesData.length === 0
+                        {finalInventoriesData && finalInventoriesData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
-                }
+                        }
 
 
-                <NextPrevBtns
-                    handlePrevClick={props.handlePrevClick}
-                    handleNextClick={props.handleNextClick}
-                />
-            </div>
+                        <NextPrevBtns
+                            handlePrevClick={props.handlePrevClick}
+                            handleNextClick={props.handleNextClick}
+                        />
+                    </div>
 
-        </div>
+                </div>
+            )
+            }
+            { props.previewDetails
+            && (
+                <div className={styles.budgetPreviewContainer}>
+                    <h2>
+                        Disaster Inventories
+                    </h2>
+                    <BarChart
+                        width={400}
+                        height={400}
+                        data={chartData}
+                        layout="vertical"
+                        margin={{ left: 10, right: 5, top: 10 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            type="number"
+                            tick={false}
+                        />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#777', fontSize: '10px' }}
+                        />
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,164,109)"
+                            // barCategoryGap={30}
+                            barCategoryGap={80}
+                            label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
+                            tick={{ fill: 'rgb(200,200,200)' }}
+                            cx={90}
+                            cy={105}
+                            barSize={20}
+                        />
+                    </BarChart>
+                </div>
+            )
+            }
+
+        </>
     );
 };
 

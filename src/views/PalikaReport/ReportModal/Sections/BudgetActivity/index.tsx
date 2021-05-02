@@ -853,7 +853,8 @@ const BudgetActivity = (props: Props) => {
 
             {props.monitoringDetails
             && (
-                <>
+                <div className={styles.budgetActPreviewContainer}>
+
                     <ul>
                         <li>
                             <span className={styles.darkerText}>
@@ -921,7 +922,7 @@ const BudgetActivity = (props: Props) => {
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
 
             )
 

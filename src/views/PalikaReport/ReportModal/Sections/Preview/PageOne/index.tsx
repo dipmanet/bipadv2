@@ -263,7 +263,13 @@ const Preview = (props: Props) => {
                 </div>
 
                 <div className={styles.columnTwoTwo}>
-                    Disaster Inventories
+                    <Inventory
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
             </div>
 
