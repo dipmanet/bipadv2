@@ -321,51 +321,52 @@ const Contacts = (props: Props) => {
                 props.previewDetails
                 && (
                     <div className={styles.budgetPreviewContainer}>
-                        <h2>
-                             DRR Related Training
-                        </h2>
                         <div className={styles.simElementsContainer}>
-                            <div className={styles.simElements}>
-                                <div className={styles.circlePatch}>
-                                    {mergedData.length > 0
+                            <h2>
+                                 DRR Related Training
+                            </h2>
+                            <div className={styles.simRow}>
+                                <div className={styles.simElements}>
+                                    <div className={styles.circlePatch}>
+                                        {mergedData.length > 0
                                         && mergedData.map((item) => {
                                             if (item.trainingTitle) {
                                                 return item;
                                             }
                                             return null;
                                         }).filter(contact => contact !== null).length
-                                    }
+                                        }
+                                    </div>
+                                    <p className={styles.simDesc}>
+                                    No. of trained people
+                                    </p>
                                 </div>
-                                <p className={styles.simDesc}>
-                            No. of trained
-
-                            people
-                                </p>
-                            </div>
-                            <div className={styles.simElements}>
-                                <div className={styles.circlePatch}>
-                                    {trainingsList.length}
-                                </div>
-                                <p className={styles.simDesc}>
+                                <div className={styles.simElements}>
+                                    <div className={styles.circlePatch}>
+                                        {trainingsList.length}
+                                    </div>
+                                    <p className={styles.simDesc}>
                                  Training Activities
-
-                                </p>
+                                    </p>
+                                </div>
                             </div>
-                            <div className={styles.simElements}>
-                                <p>List of training activities</p>
-                                <ul>
-                                    {trainingsList.length > 0
+                        </div>
+                        <div className={styles.simElementsContainer}>
+                            <p>List of training activities</p>
+                            <div className={styles.simRow}>
+                                <div className={styles.simElements}>
+                                    <ul>
+                                        {trainingsList.length > 0
                                     && trainingsList.map(item => (
                                         <li key={Math.random()}>
                                             {item}
                                         </li>
                                     ))
 
-                                    }
-                                </ul>
-
+                                        }
+                                    </ul>
+                                </div>
                             </div>
-
 
                         </div>
                     </div>
