@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
+import axios from 'axios';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -29,7 +29,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { userSelector, palikaRedirectSelector } from '#selectors';
+import { userSelector, palikaRedirectSelector, generalDataSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
 import Preparedness from './Sections/Preparedness';
 import NextPrevBtns from './NextPrevBtns';
@@ -47,6 +47,7 @@ interface SyntheticEvent<T> {
 const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    generalData: generalDataSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -91,8 +92,35 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
     },
 
-};
+    PreviewDataPost: {
+        url: '/disaster-profile/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
 
+        onSuccess: ({ response, props, params }) => {
+            console.log('Thiis is response>>>', response);
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                console.log('This is params>>>', params);
+            }
+        },
+        onFatal: ({ params }) => {
+            console.log('This is params>>>', params);
+        },
+        extras: {
+            hasFile: true,
+
+        },
+
+
+    },
+
+};
+const formdata = new FormData();
+const config = {};
 const ReportModal: React.FC<Props> = (props: Props) => {
     const {
         keyTab,
@@ -109,19 +137,40 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         handleNextClick,
         localMembers,
         palikaRedirect,
+        requests: { PreviewDataPost },
+        generalData,
+        user: { profile },
     } = props;
-
+    const [reportTitle, setreportTitle] = useState('');
+    const [datefrom, setdatefrom] = useState('');
+    const [dateTo, setdateTo] = useState('');
+    const [formationDate, setformationDate] = useState('');
+    const [memberCount, setmemberCount] = useState('');
+    const [reportData, setReportData] = useState([]);
+    const [savePDF, setSavePDF] = useState();
+    const getGeneralData = () => ({
+        reportTitle,
+        datefrom,
+        dateTo,
+        mayor,
+        cao,
+        focalPerson,
+        formationDate,
+        memberCount,
+    });
     const handleWelcomePage = () => hideWelcomePage();
 
-    const handlePreviewBtn = () => {
+    const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
-        html2canvas(divToDisplay).then((canvas) => {
+        html2canvas(divToDisplay).then(async (canvas) => {
+            // const formData = new FormData();
             const imgData = canvas.toDataURL('image/png');
             const imgWidth = 210;
             const pageHeight = 295;
             const imgHeight = canvas.height * imgWidth / canvas.width;
             let heightLeft = imgHeight;
             const doc = new JsPDF('p', 'mm');
+            console.log('This is document', doc);
             let position = 10; // give some top padding to first page
 
             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
@@ -133,10 +182,45 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
             }
+            const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
+            // const file = new File([blob], 'image.pdf');
+            // const blob = await doc.output('blob');
+            // formdata.append('file', blob);
+            // const base64 = doc.output('datauristring');
+            // canvas.toBlob((blob) => {
 
-            doc.save('file.pdf');
+            // });
+            formdata.append('file', blob);
+            formdata.append('title', 'This is title');
+            formdata.append('fiscalYear', generalData.fiscalYear);
+            formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
+            formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
+            formdata.append('province', profile.province);
+            formdata.append('district', profile.district);
+            formdata.append('municipality', profile.municipality);
+            formdata.append('mayorChairperson', generalData.mayor);
+            formdata.append('chiefAdministrativeOfficer', generalData.cao);
+            formdata.append('drrFocalPerson', generalData.focalPerson);
+
+            axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
+                'content-type': 'multipart/form-data',
+            } })
+                .then((response) => {
+                    console.log('what is response', response);
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+            // doc.save('file.pdf');
         });
     };
+    useEffect(() => {
+        formdata.append('title', 'title');
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // const handlePreviewBtn = () => {
     //     const divToDisplay = document.getElementById('reportPreview');
     //     html2canvas(divToDisplay).then((canvas) => {
@@ -168,23 +252,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     //     });
     // };
 
-    const [reportTitle, setreportTitle] = useState('');
-    const [datefrom, setdatefrom] = useState('');
-    const [dateTo, setdateTo] = useState('');
-    const [formationDate, setformationDate] = useState('');
-    const [memberCount, setmemberCount] = useState('');
-    const [reportData, setReportData] = useState([]);
-
-    const getGeneralData = () => ({
-        reportTitle,
-        datefrom,
-        dateTo,
-        mayor,
-        cao,
-        focalPerson,
-        formationDate,
-        memberCount,
-    });
 
     const { showForm } = palikaRedirect;
 
