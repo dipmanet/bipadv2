@@ -21,6 +21,7 @@ import Header from './Header';
 import BudgetActivity from '../../BudgetActivity';
 import CriticalInfra from '../../CriticalInfra';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
+import Simulation from '../../Simulation';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -295,69 +296,15 @@ const Preview = (props: Props) => {
             </div>
             <div className={styles.rowFour}>
                 <div className={styles.columnFourOne}>
-                    <div className={styles.columnThreeOne}>
-                        <div className={styles.mainTitle}>
-                             AVAILABLE TRAINED HUMAN RESOURCE IN DRR
-                        </div>
-                        <table id="table-to-xls">
-                            <tbody>
-                                <tr>
-
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Training Title</th>
-                                    <th>Training Date</th>
-
-
-                                </tr>
-                                <tr>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-
-                                </tr>
-                                <tr>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-
-                                </tr>
-                                <tr>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-
-                                </tr>
-                                <tr>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-                                    <td>{'no data'}</td>
-
-                                </tr>
-
-
-                            </tbody>
-                        </table>
-                    </div>
+                    <Simulation
+                        updateTab={() => {}}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
                 <div className={styles.columnFourTwo}>
-                    <div className={styles.mainTitle}>
-                 SIMULATIONS EXERCISES IN RAJAPUR MUNICIPALITY
-                    </div>
-                    <div className={styles.simulations}>
-                     Total number of simulations: 50
-                        <ul className={styles.simuList}>
-                            <li>Hazardwise classification</li>
-                            <li>Fire: 20</li>
-                            <li>Flood: 2</li>
-                            <li>Earthquake: 3</li>
-                        </ul>
-
-                    </div>
+                    Trainings
                 </div>
             </div>
 

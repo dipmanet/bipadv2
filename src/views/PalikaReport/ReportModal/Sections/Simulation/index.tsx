@@ -89,7 +89,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
-            console.log('This is response', response);
             params.submittedData(response);
         },
 
@@ -180,7 +179,6 @@ const Simulation = (props: Props) => {
     // HazardGetRequest.setDefaultParams({
     //     hazardData: handleHazardData,
     // });
-    console.log('This is hazardType>>>', priorityData);
 
     const handleSelectedProvince = (response) => {
         const selectedProvince = response.filter(item => item.id === profile.district);
@@ -196,7 +194,6 @@ const Simulation = (props: Props) => {
     }, [profile.district, profile.municipality, profile.province]);
 
 
-    console.log('This profile>>>', profile);
     const handleSimulationName = (e) => {
         setSimulationName(e.target.value);
     };
@@ -229,7 +226,6 @@ const Simulation = (props: Props) => {
         });
         updateTab();
     };
-    console.log('Hazard data>>>', focusHazard);
     const selectStyles = {
         option: (provided, state) => ({
             ...provided,
@@ -253,7 +249,6 @@ const Simulation = (props: Props) => {
     };
     const handleNextClick = () => {
         // if (!annualBudgetData.length) {
-        //     console.log('Hang>>>');
         //     SimulationPostRequest.do({
 
         //         body: {
@@ -270,7 +265,6 @@ const Simulation = (props: Props) => {
 
         //     });
         // } else {
-        //     console.log('Hang1>>>');
         //     setBudgetId({ id: annualBudgetData[0].id });
         // }
         props.handleNextClick();
@@ -293,7 +287,6 @@ const Simulation = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationData]);
 
-    console.log('Arr>>>', finalArr);
     const handleChange = (e) => {
         setProvince(e.target.value);
     };
@@ -341,7 +334,6 @@ const Simulation = (props: Props) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [submittedData]);
-    console.log('annual Budget>>>', annualBudgetData);
     // useEffect(() => {
     //     if (annualBudgetData.length > 0) {
     //         setBudgetTitle(annualBudgetData[0].title);
@@ -361,191 +353,231 @@ const Simulation = (props: Props) => {
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [budgetId.id]);
     return (
-        <div>
-
-            <h2 className={styles.title}>Please enter Disaster Profile details</h2>
-            <div className={styles.palikaTable}>
-                <table id="table-to-xls">
-                    <tbody>
-
-
-                        <>
-
-
-                            <tr>
-
-                                <th>SN</th>
+        <>
+            {
+                !props.previewDetails
+            && (
+                <div>
+                    <h2 className={styles.title}>Please enter Disaster Profile details</h2>
+                    <div className={styles.palikaTable}>
+                        <table id="table-to-xls">
+                            <tbody>
 
 
-                                <th>
-                                        Name of Simulation excerise
+                                <>
 
 
-                                </th>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>
-                                        Priority Area
+                                    <tr>
+
+                                        <th>SN</th>
 
 
-                                </th>
-                                <th>
-                                        Priority Action
+                                        <th>
+                                            Name of Simulation excerise
 
 
-                                </th>
-                                <th>
-                                        Priority Acitivity
+                                        </th>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>
+                                            Priority Area
 
 
-                                </th>
-                                <th>
-                                        Organizer
+                                        </th>
+                                        <th>
+                                            Priority Action
 
 
-                                </th>
-                                <th>
-                                        Number of Participants
+                                        </th>
+                                        <th>
+                                            Priority Acitivity
 
 
-                                </th>
-                                <th>
-                                        Focused Hazard
+                                        </th>
+                                        <th>
+                                            Organizer
 
 
-                                </th>
+                                        </th>
+                                        <th>
+                                            Number of Participants
 
 
-                            </tr>
-                            {finalArr && finalArr.map((item, i) => (
-                                <tr key={item.data.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.data.title}</td>
-                                    <td>{item.data.date}</td>
-                                    <td>{item.data.description}</td>
-                                    <td>{item.data.priorityArea}</td>
-                                    <td>{item.data.priorityAction}</td>
-                                    <td>{item.data.priorityActivity}</td>
-                                    <td>{item.data.organizer}</td>
-                                    <td>{item.data.totalParticipants}</td>
-                                    <td>{item.HazardName}</td>
-                                </tr>
-                            ))}
-
-                            <tr>
-                                <td />
-                                <td>
-                                    <input type="text" value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
-                                    {' '}
-                                </td>
-                                <td>
-                                    <NepaliDatePicker
-                                        inputClassName="form-control"
-                                        className={styles.datepicker}
-                                        value={startDate}
-                                        onChange={date => setStartDate(date)}
-                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                                    />
-                                </td>
-                                <td>
-                                    <input type="text" value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
-                                    {' '}
-                                </td>
-                                <td>
-                                    <select
-                                        value={priorityArea}
-                                        onChange={handlePriorityArea}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Area</option>
-                                        {PriorityArea.map(data => (
-                                            <option value={data.title}>
-                                                {data.title}
-                                            </option>
-                                        ))}
-
-                                    </select>
-                                </td>
-                                <td>
-                                    <select
-                                        value={priorityAction}
-                                        onChange={handlePriorityAction}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Action</option>
-                                        {PriorityAction.map(data => (
-                                            <option value={data.title}>
-                                                {data.title}
-                                            </option>
-                                        ))}
-
-                                    </select>
-                                </td>
-                                <td>
-                                    <select
-                                        value={priorityActivity}
-                                        onChange={handlePriorityActivity}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Activity</option>
-                                        {PriorityActivity.map(data => (
-                                            <option value={data.title}>
-                                                {data.title}
-                                            </option>
-                                        ))}
-
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="text" value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
-                                    {' '}
-                                </td>
-                                <td>
-                                    <input type="number" value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
-                                    {' '}
-                                </td>
-                                <td>
-                                    <select
-                                        value={focusHazard}
-                                        onChange={handleFocusHazard}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Activity</option>
-                                        {hazardType && hazardType.map(data => (
-                                            <option value={data.id}>
-                                                {data.titleEn}
-                                            </option>
-                                        ))}
-
-                                    </select>
-                                </td>
-
-                            </tr>
+                                        </th>
+                                        <th>
+                                            Focused Hazard
 
 
-                        </>
+                                        </th>
 
 
-                    </tbody>
-                </table>
+                                    </tr>
+                                    {finalArr && finalArr.map((item, i) => (
+                                        <tr key={item.data.id}>
+                                            <td>{i + 1}</td>
+                                            <td>{item.data.title}</td>
+                                            <td>{item.data.date}</td>
+                                            <td>{item.data.description}</td>
+                                            <td>{item.data.priorityArea}</td>
+                                            <td>{item.data.priorityAction}</td>
+                                            <td>{item.data.priorityActivity}</td>
+                                            <td>{item.data.organizer}</td>
+                                            <td>{item.data.totalParticipants}</td>
+                                            <td>{item.HazardName}</td>
+                                        </tr>
+                                    ))}
 
-                <div className={styles.btns}>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={handleNextClick}
-                    />
-                    <button
-                        type="button"
-                        onClick={handleAddNew}
-                        className={styles.newActivityBtn}
-                    >
-                            Add New Activity
-                    </button>
+                                    <tr>
+                                        <td />
+                                        <td>
+                                            <input type="text" value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
+                                            {' '}
+                                        </td>
+                                        <td>
+                                            <NepaliDatePicker
+                                                inputClassName="form-control"
+                                                className={styles.datepicker}
+                                                value={startDate}
+                                                onChange={date => setStartDate(date)}
+                                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type="text" value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
+                                            {' '}
+                                        </td>
+                                        <td>
+                                            <select
+                                                value={priorityArea}
+                                                onChange={handlePriorityArea}
+                                                className={styles.inputElement}
+                                            >
+                                                <option value="">Select Priority Area</option>
+                                                {PriorityArea.map(data => (
+                                                    <option value={data.title}>
+                                                        {data.title}
+                                                    </option>
+                                                ))}
+
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                value={priorityAction}
+                                                onChange={handlePriorityAction}
+                                                className={styles.inputElement}
+                                            >
+                                                <option value="">Select Priority Action</option>
+                                                {PriorityAction.map(data => (
+                                                    <option value={data.title}>
+                                                        {data.title}
+                                                    </option>
+                                                ))}
+
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select
+                                                value={priorityActivity}
+                                                onChange={handlePriorityActivity}
+                                                className={styles.inputElement}
+                                            >
+                                                <option value="">Select Priority Activity</option>
+                                                {PriorityActivity.map(data => (
+                                                    <option value={data.title}>
+                                                        {data.title}
+                                                    </option>
+                                                ))}
+
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
+                                            {' '}
+                                        </td>
+                                        <td>
+                                            <input type="number" value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
+                                            {' '}
+                                        </td>
+                                        <td>
+                                            <select
+                                                value={focusHazard}
+                                                onChange={handleFocusHazard}
+                                                className={styles.inputElement}
+                                            >
+                                                <option value="">Select Priority Activity</option>
+                                                {hazardType && hazardType.map(data => (
+                                                    <option value={data.id}>
+                                                        {data.titleEn}
+                                                    </option>
+                                                ))}
+
+                                            </select>
+                                        </td>
+
+                                    </tr>
+
+
+                                </>
+
+
+                            </tbody>
+                        </table>
+
+                        <div className={styles.btns}>
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={handleNextClick}
+                            />
+                            <button
+                                type="button"
+                                onClick={handleAddNew}
+                                className={styles.newActivityBtn}
+                            >
+                                Add New Activity
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )
+            }
+
+            {
+                props.previewDetails
+                && (
+                    <div className={styles.budgetPreviewContainer}>
+                        <h2>
+                             Simulations
+                        </h2>
+                        <div className={styles.simElementsContainer}>
+                            <div className={styles.simElements}>
+                                <div className={styles.circlePatch}>
+                            22
+                                </div>
+                                <p className={styles.simDesc}>
+                            No. of simulation
+                                    {' '}
+                                    <br />
+                            conducted
+                                </p>
+                            </div>
+                            <div className={styles.simElements}>
+                                <div className={styles.circlePatch}>
+                            10
+                                </div>
+                                <p className={styles.simDesc}>
+                            No. of people
+                                    {' '}
+                                    <br />
+                            trained
+                                </p>
+                            </div>
 
 
+                        </div>
+                    </div>
+                )}
+        </>
     );
 };
 
