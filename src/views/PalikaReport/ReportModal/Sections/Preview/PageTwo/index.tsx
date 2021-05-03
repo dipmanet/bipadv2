@@ -1,296 +1,204 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable no-tabs */
+import React from 'react';
 import { connect } from 'react-redux';
-import { ComposedChart,
-    Line,
-    Area,
-    Bar,
-    YAxis,
-    XAxis,
-    CartesianGrid,
-    Legend,
-    Scatter,
-    ResponsiveContainer,
-    BarChart } from 'recharts';
 import styles from './styles.scss';
-import LineData from './data';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import DamageAndLoss from '../../DamageAndLoss';
-import Inventory from '../../Inventory';
-import Budget from '../../Budget';
-import WardwiseDeath from '../../DamageAndLoss/WardwiseDeath';
-import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
-import BudgetActivity from '../../BudgetActivity';
-
-import page2line2 from './page2line2.svg';
-import page2line21 from './page2line21.svg';
-import page2line3 from './beneficiary.svg';
-import prep from './page2line3.svg';
-import recons from './page2line31.svg';
-
-import govtlogo from '../../../../govtLogo.svg';
-
 import {
     generalDataSelector,
+    budgetDataSelector,
+    budgetActivityDataSelector,
+    programAndPolicySelector,
+
 } from '#selectors';
+import Organisation from '../../Organisation';
+import Inventory from '../../Inventory';
+import Budget from '../../Budget';
+import Header from './Header';
+import BudgetActivity from '../../BudgetActivity';
+import CriticalInfra from '../../CriticalInfra';
+import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
+import Simulation from '../../Simulation';
+import Contacts from '../../Contacts';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
+    programAndPolicyData: programAndPolicySelector(state),
+    budgetData: budgetDataSelector(state),
+    budgetActivityData: budgetActivityDataSelector(state),
 });
 
 interface Props{
     reportData: Element[];
 }
 
-const PageTwo = (props: Props) => {
-    const { reportData, generalData } = props;
-    const [mayorName, setmayorName] = useState('');
+export interface GeneralData{
+    reportTitle?: string;
+    fiscalYear: string;
+    mayor: string;
+    cao: string;
+    focalPerson: string;
+    formationDate: string;
+    committeeMembers: number;
+}
+
+export interface BudgetData{
+    totMunBudget: number;
+    totDrrBudget: number;
+    additionalDrrBudget: number;
+}
+
+export interface ProgramAndPolicyData{
+    pointOne: string;
+    pointTwo: string;
+    pointThree: string;
+}
+
+export interface BudgetActivityData{
+    name: string;
+    fundSource: string;
+    additionalDrrBudget: string;
+    budgetCode: string;
+    drrmCycle: string;
+    projStatus: string;
+    projCompletionDate: string;
+    allocatedBudget: string;
+    actualExp: string;
+    remarks: string;
+}
+
+const Preview = (props: Props) => {
     const {
-        lineData,
-        composedChart,
-        scatterChart,
-        barChart,
-    } = LineData;
-    useEffect(() => {
-        if (generalData && generalData.mayor) {
-            const mayor = generalData.mayor.split(',')[0].split(':')[1];
-            setmayorName(mayor);
-        }
-    }, [generalData]);
+        generalData,
+        programAndPolicyData,
+        budgetData,
+        budgetActivityData,
+        url,
+    } = props;
+
+    const {
+        reportTitle,
+        fiscalYear,
+        mayor,
+        cao,
+        focalPerson,
+        formationDate,
+        committeeMembers,
+    } = generalData;
+
+    const {
+        municipalBudget,
+        drrFund,
+        additionalFund,
+    } = budgetData;
+
+    const {
+        name,
+        fundSource,
+        budgetCode,
+        drrmCycle,
+        projStatus,
+        projCompletionDate,
+        allocatedBudget,
+        actualExp,
+        remarks,
+    } = budgetActivityData;
+
+
     return (
         <div className={styles.previewContainer}>
-            {/* {reportData.map(comp => (
-                <div key={comp.name} className={styles.previewComps}>
-
-                    {comp}
-                </div>
-            ))} */}
+            {/* <Header /> */}
             <div className={styles.rowOne}>
-                <div className={styles.mainTitle}>
-                    DISASTER INCIDENT SUMMARY
-                    <DamageAndLoss hide={1} />
+
+                <div className={styles.columnOneOne}>
+                    <Budget
+                        previewDetails
+                        reportData={''}
+                        tableHeader={() => {}}
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                    />
+                    <BudgetActivity
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
+                </div>
+
+                <div className={styles.columnOneTwo}>
+                    <CriticalInfra
+                        previewDetails
+                        handleNextClick={() => {}}
+                        updateTab={() => {}}
+
+                    />
+
                 </div>
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
-                    <div className={styles.mainTitle}>
-                PEOPLE DEATH IN RAJAPUR (TOP 5 WARDS)
-                    </div>
-                    <ScalableVectorGraphics
-                        className={styles.sectionSvg}
-                        src={page2line2}
-                        alt="Nepal Government"
+                    <BudgetActivity
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        monitoringDetails
                     />
-                </div>
-                <div className={styles.columnTwoTwo}>
-                    <div className={styles.mainTitle}>
-                HAZARDWISE IMPACT
-                    </div>
-                    <ScalableVectorGraphics
-                        className={styles.sectionSvg}
-                        src={page2line21}
-                        alt="Nepal Government"
-                    />
+
                 </div>
 
+                <div className={styles.columnTwoTwo}>
+                    <Inventory
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
+                </div>
             </div>
+
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                    <div className={styles.mainTitle}>
-                        RELIEF
-                    </div>
-                    <div className={styles.mainTitle}>
-                        <p>Total Relief amount: Rs 347688</p>
-                        <p>Total number of beneficiary families: 122</p>
-                        <div className={styles.colmunText}>
-                            <p>Madhesi: 15</p>
-                            <p>Disabled: 18</p>
-                            <p>Female: 22</p>
-                            <p>Janajati: 55</p>
-                            <p>Dalit: 44</p>
-                        </div>
-
-                    </div>
-
-                    <ScalableVectorGraphics
-                        className={styles.sectionSvg}
-                        src={page2line3}
-                        alt="Nepal Government"
+                    <ProgrammeAndPolicies
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
                     />
-                    {' '}
-
                 </div>
-
-            </div>
-
-
-            <div className={styles.rowNew}>
-                <div className={styles.columnNewOne}>
-                    <div className={styles.mainTitle}>
-                Initiatives taken in Disaster Risk reduction and Preparedness
-                    </div>
-                    <table id="table-to-xls">
-                        <tbody>
-                            <tr>
-
-                                <th>Activity Name</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Source of funding</th>
-                                <th>Total Expenditure</th>
-                                <th>SFDRR Priority Area </th>
-
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-                </div>
-                <div className={styles.columnNewTwo}>
-                    <div className={styles.mainTitle}>
-                         Recovery and reconstruction
-                    </div>
-                    <table id="table-to-xls">
-                        <tbody>
-                            <tr>
-
-                                <th>Activity Name</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Source of funding</th>
-                                <th>Total Expenditure</th>
-                                <th>SFDRR Priority Area </th>
-
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-                            <tr>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-                                <td>{'no data'}</td>
-
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-
+                <div className={styles.columnThreeTwo}>
+                    <Organisation
+                        updateTab={() => {}}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
             </div>
-
-
             <div className={styles.rowFour}>
-
-                <div className={styles.sectionLeft}>
-                    <ScalableVectorGraphics
-                        className={styles.bulletPoint}
-                        src={govtlogo}
-                        alt="Nepal Government"
+                <div className={styles.columnFourOne}>
+                    <Simulation
+                        updateTab={() => {}}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
                     />
-
-                    <div className={styles.address}>
-                        <span className={styles.title}>Rajapur Municipality</span>
-                        <br />
-                        <span className={styles.desc}> Bardiya District, Lumbini Province</span>
-                    </div>
-
                 </div>
-                <div className={styles.sectionright}>
-                    <div className={styles.mayorName}>
-                        <ul className={styles.list}>
-                            <li className={styles.title}>Mayor/NagarPramukh</li>
-                            <li>{mayorName}</li>
-                            <li>9858027167 </li>
-
-                        </ul>
-                    </div>
-                    <div className={styles.mayorName}>
-                        <ul className={styles.list}>
-                            <li className={styles.title}>CAO</li>
-                            <li>No Data </li>
-                            <li>No Data </li>
-                        </ul>
-                    </div>
-                    <div className={styles.mayorName}>
-                        <ul className={styles.list}>
-                            <li className={styles.title}>Focal Person</li>
-                            <li>Khusi Ram Tharu</li>
-                            <li>9851046372</li>
-                        </ul>
-                    </div>
-
+                <div className={styles.columnFourTwo}>
+                    <Contacts
+                        updateTab={() => {}}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
             </div>
-
         </div>
-
-
     );
 };
 
-export default connect(mapStateToProps, undefined)(PageTwo);
+export default connect(mapStateToProps, undefined)(Preview);

@@ -293,7 +293,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                         Disaster Inventories
                     </h2>
                     <BarChart
-                        width={400}
+                        width={350}
                         height={200}
                         data={chartData}
                         layout="vertical"

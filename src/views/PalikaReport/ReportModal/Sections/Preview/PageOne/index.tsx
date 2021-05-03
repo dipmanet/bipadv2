@@ -1,11 +1,6 @@
 /* eslint-disable no-tabs */
 import React from 'react';
-import { PieChart, Pie, Legend,
-    Tooltip, ResponsiveContainer,
-    BarChart, CartesianGrid, XAxis,
-    YAxis, Bar } from 'recharts';
 import { connect } from 'react-redux';
-import { Table } from 'react-bootstrap';
 import styles from './styles.scss';
 import {
     generalDataSelector,
@@ -70,15 +65,6 @@ export interface BudgetActivityData{
     remarks: string;
 }
 
-
-const data02 = [
-    { name: 'Group A', value: 2400 },
-    { name: 'Group B', value: 4567 },
-    { name: 'Group C', value: 1398 },
-
-];
-
-
 const Preview = (props: Props) => {
     const {
         generalData,
@@ -116,108 +102,6 @@ const Preview = (props: Props) => {
         remarks,
     } = budgetActivityData;
 
-    const budgetChartData = Object.keys(budgetData).map(item => ({
-        name: item,
-        value: parseInt(budgetData[item], 10),
-    }));
-
-    const activityTableData = ['name', 'fundSource', 'budgetCode', 'allocatedBudget'];
-
-    const disasterInventoryChartData = [
-        {
-            name: 'Bed',
-            Amount: 98,
-        },
-        {
-            name: 'Ambulance',
-            Amount: 12,
-        },
-        {
-            name: 'FireBrigade',
-            Amount: 1,
-        },
-        {
-            name: 'Loader',
-            Amount: 13,
-        },
-        {
-            name: 'Excavator',
-            Amount: 9,
-        },
-
-    ];
-
-    const CIChartData = [
-        {
-            name: 'Education',
-            Amount: 98,
-        },
-        {
-            name: 'Health',
-            Amount: 12,
-        },
-        {
-            name: 'Finance',
-            Amount: 1,
-        },
-        {
-            name: 'Governance',
-            Amount: 13,
-        },
-        {
-            name: 'Tourism',
-            Amount: 9,
-        },
-        {
-            name: 'Culture',
-            Amount: 9,
-        },
-        {
-            name: 'Industry',
-            Amount: 9,
-        },
-        {
-            name: 'Communication',
-            Amount: 9,
-        },
-
-    ];
-
-    const trainedHRData = [
-        {
-            name: 'Education',
-            Amount: 98,
-        },
-        {
-            name: 'Health',
-            Amount: 12,
-        },
-        {
-            name: 'Finance',
-            Amount: 1,
-        },
-        {
-            name: 'Governance',
-            Amount: 13,
-        },
-        {
-            name: 'Tourism',
-            Amount: 9,
-        },
-        {
-            name: 'Culture',
-            Amount: 9,
-        },
-        {
-            name: 'Industry',
-            Amount: 9,
-        },
-        {
-            name: 'Communication',
-            Amount: 9,
-        },
-
-    ];
 
     return (
         <div className={styles.previewContainer}>
@@ -313,11 +197,7 @@ const Preview = (props: Props) => {
                     />
                 </div>
             </div>
-
-
         </div>
-
-
     );
 };
 

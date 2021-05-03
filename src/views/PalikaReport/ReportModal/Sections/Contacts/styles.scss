@@ -1,12 +1,13 @@
 .budgetPreviewContainer{
   margin-left: 30px;
   margin-top: 10px;
+  margin-right: 30px;
+
   display: flex;
   .simElementsContainer{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-  
     h2{
         font-size: 14px;
         font-weight: 600;

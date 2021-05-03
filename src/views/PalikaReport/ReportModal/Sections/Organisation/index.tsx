@@ -270,7 +270,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                     on DRRM activities in Rajapur
                 </h2>
                 <BarChart
-                    width={400}
+                    width={350}
                     height={150}
                     data={chartData}
                     // layout="vertical"
