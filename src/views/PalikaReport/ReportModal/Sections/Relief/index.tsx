@@ -2,16 +2,11 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
-import { useTheme } from '@material-ui/core';
-import { Item } from 'semantic-ui-react';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
@@ -43,14 +38,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     limit: params.page,
                     resource_type: params.inventories,
                     expand: params.fields,
-
-
                 };
             }
-
-
             return { limit: params.page,
-                offset: params.offset,
                 resource_type: params.inventories,
                 expand: params.fields };
         },
@@ -65,9 +55,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.organisation) {
                 params.organisation(citizenReportList);
             }
-            if (params && params.paginationParameters) {
-                params.paginationParameters(response);
-            }
         },
     },
 };
@@ -77,15 +64,14 @@ const Relief = (props: Props) => {
         props.updateTab();
     };
     const [fetchedData, setFetechedData] = useState([]);
-    const [tableHeader, setTableHeader] = useState([]);
-    const [paginationParameters, setPaginationParameters] = useState();
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
-    const [offset, setOffset] = useState(0);
     const [url, setUrl] = useState('/incident/');
-    const { requests: { PalikaReportInventoriesReport }, provinces,
+    const {
+        requests: { PalikaReportInventoriesReport },
+        provinces,
         districts,
         municipalities,
-        user } = props;
+        user,
+    } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
     const [meta, setMeta] = useState(true);
@@ -111,14 +97,6 @@ const Relief = (props: Props) => {
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
-    const handlePaginationParameters = (response) => {
-        setPaginationParameters(response);
-    };
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-
-        setOffset(selectedPage * 2);
-    };
 
     const handleReliefAdd = (data) => {
         setShowRelief(true);
@@ -126,6 +104,11 @@ const Relief = (props: Props) => {
         console.log(data);
     };
 
+    useEffect(() => {
+        if (fetchedData) {
+            console.log('incident data: ', fetchedData);
+        }
+    }, [fetchedData]);
     const [maleBenefited, setmaleBenefited] = useState('');
     const [femaleBenefited, setfemaleBenefited] = useState('');
     const [miorities, setmiorities] = useState('');
@@ -160,23 +143,13 @@ const Relief = (props: Props) => {
 
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
-        paginationParameters: handlePaginationParameters,
         url,
-        page: paginationQueryLimit,
         inventories: defaultQueryParameter,
         fields,
         user,
         meta,
 
     });
-
-    useEffect(() => {
-        PalikaReportInventoriesReport.do({
-            offset,
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
-    // Finding Header for table data
 
     return (
         <div className={styles.tabsPageContainer}>
@@ -192,7 +165,6 @@ const Relief = (props: Props) => {
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
-
                                         <th>S.N</th>
                                         <th>Title</th>
                                         <th>Hazard</th>
@@ -205,7 +177,6 @@ const Relief = (props: Props) => {
                                         <th>Infrastructure Affected</th>
                                         <th>Infrastructure Destroyed</th>
                                         <th>Livestock Destroyed</th>
-
                                     </tr>
 
                                     {fetchedData.map((item, i) => (
@@ -242,33 +213,8 @@ const Relief = (props: Props) => {
 
                                         </tr>
                                     ))}
-
-
                                 </tbody>
                             </table>
-                            {/* {paginationParameters && paginationParameters.count !== 0
-                            && (
-                                <div className={styles.paginationRight}>
-                                    <ReactPaginate
-                                        previousLabel={'prev'}
-                                        nextLabel={'next'}
-                                        breakLabel={'...'}
-                                        breakClassName={'break-me'}
-                                        onPageChange={handlePageClick}
-                                        marginPagesDisplayed={2}
-                                        pageRangeDisplayed={5}
-                                        pageCount={Math.ceil(paginationParameters.count
-                                         / paginationQueryLimit)}
-                                        containerClassName={styles.pagination}
-                                        subContainerClassName={_cs(styles.pagination)}
-                                        activeClassName={styles.active}
-                                    />
-                                </div>
-                            )}
-                    {fetchedData && fetchedData.length === 0
-                && <p className={styles.dataUnavailable}>Data Unavailable</p>
-
-                    } */}
                         </div>
                         <NextPrevBtns
                             handlePrevClick={props.handlePrevClick}
@@ -283,12 +229,10 @@ const Relief = (props: Props) => {
                     <>
                         {' '}
                         <h3>Incident Selected</h3>
-
                         <div className={styles.incidentDetails}>
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
-
                                         <th>Title</th>
                                         <th>Hazard</th>
                                         <th>Incident On</th>
@@ -300,10 +244,7 @@ const Relief = (props: Props) => {
                                         <th>Infrastructure Affected</th>
                                         <th>Infrastructure Destroyed</th>
                                         <th>Livestock Destroyed</th>
-
-
                                     </tr>
-
                                     {
                                         <tr key={currentRelief.id}>
                                             <td>{currentRelief.title}</td>
@@ -324,11 +265,8 @@ const Relief = (props: Props) => {
                                             </td>
                                             <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
                                             <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
-
                                         </tr>
                                     }
-
-
                                 </tbody>
                             </table>
                         </div>
