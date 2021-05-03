@@ -18,11 +18,9 @@ interface Props{
 
 }
 const DamageAndLoss = (props: Props) => {
-    console.log(props);
     const handleDataSave = () => {
         props.updateTab();
     };
-    console.log('damage prop: ', props.hide);
     return (
         <div className={styles.tabsPageContainer}>
             {/* <Table striped bordered hover size="md">

@@ -146,12 +146,12 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     });
 
-    useEffect(() => {
-        PalikaReportInventoriesReport.do({
-            offset,
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
+    // useEffect(() => {
+    //     PalikaReportInventoriesReport.do({
+    //         offset,
+    //     });
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [offset]);
     // Finding Header for table data
     let count = 0;
 
@@ -163,18 +163,14 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 SN: count,
                 resourceName: item.title,
                 organizationType: item.type,
-
-
             }
-
-
             );
         })
     ));
 
 
     useEffect(() => {
-        if (finalInventoriesData.length === 0) {
+        if (finalInventoriesData.length === 0 && inventoriesData.length > 0) {
             inventoriesData.map((item) => {
                 if (item.length > 0) {
                     finalInventoriesData.push(...item);
@@ -190,6 +186,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inventoriesData]);
+
     const handlePageClick = (e) => {
         const selectedPage = e.selected + 1;
         // setOffset((selectedPage - 1) * paginationQueryLimit);

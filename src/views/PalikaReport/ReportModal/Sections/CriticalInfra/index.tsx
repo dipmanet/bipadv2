@@ -280,38 +280,36 @@ const CriticalInfra = (props: Props) => {
                 && (
                     <div className={styles.budgetPreviewContainer}>
                         <h2> Critical Infrastructure</h2>
-                        <ResponsiveContainer width={400} height={400}>
-                            <BarChart
-                                width={400}
-                                height={400}
-                                data={chartData}
-                                layout="vertical"
-                                margin={{ left: 10, right: 5, top: 10 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis
-                                    type="number"
-                                    tick={false}
+                        <BarChart
+                            width={400}
+                            height={400}
+                            data={chartData}
+                            layout="vertical"
+                            margin={{ left: 10, right: 5, top: 10 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis
+                                type="number"
+                                tick={false}
 
-                                />
-                                <YAxis
-                                    type="category"
-                                    dataKey="name"
-                                    tick={{ fill: '#777', fontSize: '10px' }}
-                                />
-                                <Bar
-                                    dataKey="Total"
-                                    fill="rgb(0,164,109)"
-                                    // barCategoryGap={30}
-                                    barCategoryGap={80}
-                                    label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
-                                    tick={{ fill: 'rgb(200,200,200)' }}
-                                    cx={90}
-                                    cy={105}
-                                    barSize={20}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                            />
+                            <YAxis
+                                type="category"
+                                dataKey="name"
+                                tick={{ fill: '#777', fontSize: '10px' }}
+                            />
+                            <Bar
+                                dataKey="Total"
+                                fill="rgb(0,164,109)"
+                                // barCategoryGap={30}
+                                barCategoryGap={80}
+                                label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
+                                tick={{ fill: 'rgb(200,200,200)' }}
+                                cx={90}
+                                cy={105}
+                                barSize={20}
+                            />
+                        </BarChart>
 
                     </div>
                 )

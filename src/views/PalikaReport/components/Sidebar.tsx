@@ -99,7 +99,6 @@ const Sidebar = (props) => {
     },
     ];
     const Data = municipalityName ? Data1 : Data2;
-    console.log('This data>>>', Data);
     const handleSelectMenu = (index, id, name) => {
         setSelectedSubmenu(Data[index].components);
         setIsSubmenuClicked(true);
@@ -116,24 +115,19 @@ const Sidebar = (props) => {
         props.getsubmenuTitle(title);
         setMenuSlug(menumainSlug);
         setSubMenuSlug(slug);
-        console.log('tested?', id);
         // ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
     };
-    console.log('is this selected submenu>>>', selectedSubMenuId);
     useEffect(() => {
         if (selectedSubMenuId) {
-            console.log('What>>>', selectedSubMenuId);
             props.getsubmenuId(selectedSubMenuId);
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSubMenuId]);
 
-    // console.log('Test', Data);
     // if (menuSlug) {
     //     const Test = Data.filter(item => item.slug === menuSlug);
     //     const finalTest = Test.components.filter(item => item.slug === subMenuSlug);
-    //     console.log('What is this>>>>', finalTest);
     // }
 
     useEffect(() => {
@@ -145,7 +139,6 @@ const Sidebar = (props) => {
 
                 // const linkUrl = selectedSubmenu.filter(item => item.id
                 //     === selectedSubMenuId).map(item => item.url);
-                // console.log('link url>>>', linkUrl);
                 // props.urlData(linkUrl[0]);
             }
         };

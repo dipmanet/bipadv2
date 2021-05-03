@@ -20,6 +20,7 @@ import Budget from '../../Budget';
 import Header from './Header';
 import BudgetActivity from '../../BudgetActivity';
 import CriticalInfra from '../../CriticalInfra';
+import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -273,116 +274,23 @@ const Preview = (props: Props) => {
                 </div>
             </div>
 
-
-            <div className={styles.rowOrg}>
-                {/* <Organisation rows={5} url={url} /> */}
-                <div className={styles.mainTitle}>
-                 DRR related organizations in Municipal Government
-                </div>
-                <Table striped bordered hover size="md">
-                    <thead>
-                        <tr>
-                            <th>S.N</th>
-                            <th>Name of Organisation</th>
-                            <th>Number of Employees</th>
-                            <th>Gender(M/F)</th>
-                            <th>Level(A/B/C)</th>
-                            <th>Type of organisation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Police Station, Godiyana,09 Rajapur</td>
-                            <td>7</td>
-                            <td>7/0</td>
-                            <td>null</td>
-                            <td>Government</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Police Station, Godiyana,09 Rajapur</td>
-                            <td>8</td>
-                            <td>8/0</td>
-                            <td>null</td>
-                            <td>Government</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Police Station, Godiyana,09 Rajapur</td>
-                            <td>7</td>
-                            <td>7/0</td>
-                            <td>null</td>
-                            <td>Government</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Police Station, Godiyana,09 Rajapur</td>
-                            <td>3</td>
-                            <td>2/1</td>
-                            <td>null</td>
-                            <td>CSO</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Police Station, Godiyana,09 Rajapur</td>
-                            <td>14</td>
-                            <td>11/3</td>
-                            <td>null</td>
-                            <td>Government</td>
-                        </tr>
-
-
-                    </tbody>
-                </Table>
-
-            </div>
             <div className={styles.rowThree}>
                 <div className={styles.columnThreeOne}>
-                    <div className={styles.mainTitle}>
-                 DRR RELATED CRITICAL INFRASTRUCTURES IN MUNICIPALITY
-                    </div>
-                    <BarChart
-                        width={300}
-                        height={130}
-                        data={CIChartData}
-                        layout="vertical"
-                        margin={{ left: 20, right: 20 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        {/* <Tooltip /> */}
-                        {/* <Legend /> */}
-                        <Bar dataKey="Amount" stackId="a" fill="#8884d8" />
-                    </BarChart>
+                    <ProgrammeAndPolicies
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
                 <div className={styles.columnThreeTwo}>
-                    <div className={styles.mainTitle}>
-                 DRR RELATED INVETORIES IN MUNICIPAL GOVERNMENT
-                    </div>
-                    <BarChart
-                        width={300}
-                        height={130}
-                        data={disasterInventoryChartData}
-                        layout="vertical"
-                        margin={{ left: 20, right: 20 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        {/* <Tooltip /> */}
-                        {/* <Legend /> */}
-                        <Bar dataKey="Amount" stackId="a" fill="#8884d8" />
-                    </BarChart>
+                    <Organisation
+                        updateTab={() => {}}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
             </div>
             <div className={styles.rowFour}>

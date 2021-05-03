@@ -42,7 +42,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportGetRequest: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            console.log('this params>>>', params);
             if (params && params.submitQuery) {
                 return {
                     province: params.submitQuery.province,
@@ -139,7 +138,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     } = props;
 
     let municipalityName = '';
-    console.log('this is final fetch data>>>', fetchedData);
     if (user && user.profile && !user.profile.municipality) {
         const {
             profile: {
@@ -187,7 +185,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         fiscalYear: handleFiscalYear,
     });
 
-    console.log('this value>>>', newRegionValues);
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
@@ -262,9 +259,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         const selectedPage = e.selected + 1;
         setOffset((selectedPage - 1) * paginationQueryLimit);
         setCurrentPageNumber(selectedPage);
-        console.log('What is click>>>', e.selected);
     };
-    console.log('this is >>>', user);
     useEffect(() => {
         if (user && submenuId === 2) {
             const {
@@ -319,7 +314,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const getSubmenuId = (data) => {
         setSubmenuId(data);
         setCurrentPageNumber(1);
-        console.log('Hell data', data);
         if (user) {
             const {
                 profile: {
@@ -334,7 +328,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                     municipality,
                 });
             } else {
-                console.log('Hell');
                 PalikaReportGetRequest.do({
 
                     municipality: null,
@@ -513,13 +506,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             const data = fetchedData.sort(function (a, b) {
                 return b.municipality - a.municipality;
             });
-            console.log('What data>>>', data);
             setFetechedData(data);
             setSortBy(sortBy);
         }
     };
-    console.log('Final data sort>>>', isSort);
-    console.log('This fetch data>>>', fetchedData);
     const handleSortFiscalYear = (isSort) => {
         setFetechedData([]);
         setIsSort(isSort);
@@ -613,7 +603,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         //     finalArr = [...new Set(finalfetchedData)];
         // }
         if (fetchedData && fiscalYear) {
-            console.log('Testing');
             const finalfetchedData = fetchedData.map((item, i) => {
                 const provinceDetails = provinces.find(data => data.id === item.province);
                 const districtDetails = districts.find(data => data.id === item.district);
@@ -651,7 +640,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort, submenuId, fetchedData]);
-    console.log('WWW', submenuId);
 
     return (
         <>

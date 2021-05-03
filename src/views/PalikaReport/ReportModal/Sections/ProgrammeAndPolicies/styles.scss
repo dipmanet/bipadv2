@@ -1,3 +1,24 @@
+.budgetPreviewContainer{
+    margin-left: 30px;
+    margin-top: 10px;
+    h2{
+        font-size: 18px;
+        font-weight: 600;
+        // margin-left: 35px;
+        color: #222;
+        white-space: pre-wrap;
+    }
+    ul{
+        list-style: square;
+        padding-left: 10px;
+        color: #777;
+        li{
+            font-size: 14px;
+            line-height: 1.7em;
+    
+        }
+    }
+}
 .btns{
     display: flex;
     // border: 1px solid red;
