@@ -121,26 +121,17 @@ const Preview = (props: Props) => {
 
             </div>
             <div className={styles.rowTwo}>
-                <div className={styles.columnTwoOne}>
-                    <BudgetActivity
-                        updateTab={() => {}}
-                        page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        monitoringDetails
-                    />
+                <Relief
+                    hazardwiseImpact
+                    reportData={''}
+                    tableHeader={() => {}}
+                    updateTab={() => {}}
+                    page={-1}
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
 
-                </div>
 
-                <div className={styles.columnTwoTwo}>
-                    <Inventory
-                        updateTab={() => {}}
-                        page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        previewDetails
-                    />
-                </div>
             </div>
 
             <div className={styles.rowThree}>
