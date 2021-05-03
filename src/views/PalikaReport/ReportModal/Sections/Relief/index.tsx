@@ -15,7 +15,15 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
+import IncidentIcon from '../../Icons/incident.svg';
+import EstimatedLossIcon from '../../Icons/loss.svg';
+import DeathIcon from '../../Icons/death.svg';
+import MissingIcon from '../../Icons/missing.svg';
+import InjredIcon from '../../Icons/injured.svg';
+import InfraIcon from '../../Icons/infrastructure.svg';
+import LivestockIcon from '../../Icons/livestock.svg';
 
 interface Props{
 
@@ -161,15 +169,6 @@ const Relief = (props: Props) => {
                 .filter(item => item !== undefined)
                 .reduce((a, b) => a + b);
             setLivestockDestroyed(livestock);
-            console.log(
-                incidentCount,
-                totalEstimatedLoss,
-                deathCount,
-                missing,
-                injured,
-                infraDestroyed,
-                livestockDestroyed,
-            );
         }
     }, [deathCount, fetchedData, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
     const [maleBenefited, setmaleBenefited] = useState('');
@@ -216,8 +215,10 @@ const Relief = (props: Props) => {
 
     return (
         <>
-            <div className={styles.tabsPageContainer}>
-                {!showRelief
+            {!props.previewDetails
+         && (
+             <div className={styles.tabsPageContainer}>
+                 {!showRelief
                 && (
                     <>
                         <h2>
@@ -286,9 +287,9 @@ const Relief = (props: Props) => {
                         />
                     </>
                 )
-                }
+                 }
 
-                {showRelief
+                 {showRelief
                 && (
                     <>
                         {' '}
@@ -459,18 +460,101 @@ const Relief = (props: Props) => {
                         </button>
                     </>
                 )
-                }
+                 }
+             </div>
+         )
+            }
 
+            {
+                props.previewDetails
+            && (
+                <div className={styles.budgetPreviewContainer}>
+                    <div className={styles.lossSection}>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={IncidentIcon}
+                                alt="Bullet Point"
+                            />
 
-            </div>
-
-            {/*
-            props.previewDetails
-            &&
-            <div className={styles.budgetPreviewContainer}>
-                <div className={styles.fsds}>
+                            <ul>
+                                <p className={styles.darkerText}>{incidentCount}</p>
+                                <p className={styles.smallerText}>Incident</p>
+                            </ul>
+                        </div>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={EstimatedLossIcon}
+                                alt="Bullet Point"
+                            />
+                            <ul>
+                                <p className={styles.darkerText}>{`${(totalEstimatedLoss / 1000000).toFixed(2)}m`}</p>
+                                <p className={styles.smallerText}>ESTIMATED LOSS (RS)</p>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className={styles.lossSection}>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={DeathIcon}
+                                alt="Bullet Point"
+                            />
+                            <ul>
+                                <p className={styles.darkerText}>{deathCount}</p>
+                                <p className={styles.smallerText}>DEATH</p>
+                            </ul>
+                        </div>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={MissingIcon}
+                                alt="Bullet Point"
+                            />
+                            <ul>
+                                <p className={styles.darkerText}>{missing}</p>
+                                <p className={styles.smallerText}>MISSING</p>
+                            </ul>
+                        </div>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={InjredIcon}
+                                alt="Bullet Point"
+                            />
+                            <ul>
+                                <p className={styles.darkerText}>{injured}</p>
+                                <p className={styles.smallerText}>INJURED</p>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className={styles.lossSection}>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={InfraIcon}
+                                alt="Bullet Point"
+                            />
+                            <ul>
+                                <p className={styles.darkerText}>{infraDestroyed}</p>
+                                <p className={styles.smallerText}>INFRASTRUCTURE DESTROYED</p>
+                            </ul>
+                        </div>
+                        <div className={styles.lossElement}>
+                            <ScalableVectorGraphics
+                                className={styles.lossIcon}
+                                src={LivestockIcon}
+                                alt="Bullet Point"
+                            />
+                            <ul>
+                                <p className={styles.darkerText}>{livestockDestroyed}</p>
+                                <p className={styles.smallerText}>LIVE STOCK DESTROYED</p>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div> */}
+            )}
 
 
         </>

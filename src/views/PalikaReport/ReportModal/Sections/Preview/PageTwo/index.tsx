@@ -18,6 +18,7 @@ import CriticalInfra from '../../CriticalInfra';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import Simulation from '../../Simulation';
 import Contacts from '../../Contacts';
+import Relief from '../../Relief';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -108,34 +109,16 @@ const Preview = (props: Props) => {
             {/* <Header /> */}
             <div className={styles.rowOne}>
 
-                <div className={styles.columnOneOne}>
-                    <Budget
-                        previewDetails
-                        reportData={''}
-                        tableHeader={() => {}}
-                        updateTab={() => {}}
-                        page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                    />
-                    <BudgetActivity
-                        updateTab={() => {}}
-                        page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        previewDetails
-                    />
-                </div>
+                <Relief
+                    previewDetails
+                    reportData={''}
+                    tableHeader={() => {}}
+                    updateTab={() => {}}
+                    page={-1}
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
 
-                <div className={styles.columnOneTwo}>
-                    <CriticalInfra
-                        previewDetails
-                        handleNextClick={() => {}}
-                        updateTab={() => {}}
-
-                    />
-
-                </div>
             </div>
             <div className={styles.rowTwo}>
                 <div className={styles.columnTwoOne}>
