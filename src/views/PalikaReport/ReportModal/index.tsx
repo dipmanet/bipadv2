@@ -122,7 +122,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             const imgHeight = canvas.height * imgWidth / canvas.width;
             let heightLeft = imgHeight;
             const doc = new JsPDF('p', 'mm');
-            let position = 10; // give some top padding to first page
+            let position = 0; // give some top padding to first page
 
             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
             heightLeft -= pageHeight;
@@ -330,7 +330,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                         <Organisation
                             url={keyTabUrl}
-                            // page={-1}
                             updateTab={updateTab}
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}

@@ -281,8 +281,8 @@ const CriticalInfra = (props: Props) => {
                     <div className={styles.budgetPreviewContainer}>
                         <h2> Critical Infrastructure</h2>
                         <BarChart
-                            width={400}
-                            height={400}
+                            width={350}
+                            height={300}
                             data={chartData}
                             layout="vertical"
                             margin={{ left: 10, right: 5, top: 10 }}

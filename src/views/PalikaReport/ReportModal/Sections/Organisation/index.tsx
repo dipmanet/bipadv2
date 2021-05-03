@@ -271,7 +271,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 </h2>
                 <BarChart
                     width={400}
-                    height={250}
+                    height={150}
                     data={chartData}
                     // layout="vertical"
                     margin={{ left: 10, right: 5, top: 10 }}
