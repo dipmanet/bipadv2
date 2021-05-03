@@ -83,6 +83,16 @@ const Relief = (props: Props) => {
     const [reliefAmount, setreliefAmount] = useState('');
     const [currentRelief, setCurrentRelief] = useState({});
 
+    const [incidentCount, setIncidentsCount] = useState(0);
+    const [totalEstimatedLoss, setTotalEstimatedLoss] = useState(0);
+
+    const [deathCount, setDeathCount] = useState(0);
+    const [missing, setMissing] = useState(0);
+    const [injured, setInjured] = useState(0);
+
+    const [infraDestroyed, setInfraDestroyed] = useState(0);
+    const [livestockDestroyed, setLivestockDestroyed] = useState(0);
+
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
     };
@@ -101,14 +111,67 @@ const Relief = (props: Props) => {
     const handleReliefAdd = (data) => {
         setShowRelief(true);
         setCurrentRelief(data);
-        console.log(data);
     };
 
     useEffect(() => {
-        if (fetchedData) {
-            console.log('incident data: ', fetchedData);
+        if (fetchedData.length > 0) {
+            setIncidentsCount(fetchedData.length);
+
+            const estimatedLoss = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.estimatedLoss)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setTotalEstimatedLoss(estimatedLoss);
+
+            const deathTotal = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.peopleDeathCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setDeathCount(deathTotal);
+
+            const missingTotal = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.peopleMissingCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setMissing(missingTotal);
+
+
+            const injuredTotal = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.peopleInjuredCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setInjured(injuredTotal);
+
+
+            const infra = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.infrastructureDestroyedCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setInfraDestroyed(infra);
+
+
+            const livestock = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.livestockDestroyedCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setLivestockDestroyed(livestock);
+            console.log(
+                incidentCount,
+                totalEstimatedLoss,
+                deathCount,
+                missing,
+                injured,
+                infraDestroyed,
+                livestockDestroyed,
+            );
         }
-    }, [fetchedData]);
+    }, [deathCount, fetchedData, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
     const [maleBenefited, setmaleBenefited] = useState('');
     const [femaleBenefited, setfemaleBenefited] = useState('');
     const [miorities, setmiorities] = useState('');
@@ -152,8 +215,9 @@ const Relief = (props: Props) => {
     });
 
     return (
-        <div className={styles.tabsPageContainer}>
-            {!showRelief
+        <>
+            <div className={styles.tabsPageContainer}>
+                {!showRelief
                 && (
                     <>
                         <h2>
@@ -222,9 +286,9 @@ const Relief = (props: Props) => {
                         />
                     </>
                 )
-            }
+                }
 
-            {showRelief
+                {showRelief
                 && (
                     <>
                         {' '}
@@ -395,10 +459,21 @@ const Relief = (props: Props) => {
                         </button>
                     </>
                 )
-            }
+                }
 
 
-        </div>
+            </div>
+
+            {/*
+            props.previewDetails
+            &&
+            <div className={styles.budgetPreviewContainer}>
+                <div className={styles.fsds}>
+                </div>
+            </div> */}
+
+
+        </>
     );
 };
 
