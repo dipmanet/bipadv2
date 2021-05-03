@@ -1,4 +1,53 @@
-  
+.budgetPreviewContainer{
+  margin-left: 30px;
+  margin-top: 10px;
+  h2{
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 2%;
+      color: #222;
+      margin-bottom: 7px;
+  }
+  .simElementsContainer{
+      display: flex;
+      justify-content: flex-start;
+      .simElements{
+          display:flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin-right: 7px;
+          white-space: pre-wrap;
+          ul{
+            list-style: none;
+            padding-left: 0;
+          }
+          p{
+            font-size: 12px;
+            color: #222;
+          }
+          .circlePatch{
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              background-color: rgb(0,177,117);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-weight: 600;
+              font-size: 20px;
+              color: white;
+              
+          }
+          .simDesc{
+              font-size: 10px;
+              text-transform: uppercase;
+              color: #777;
+              white-space: no-wrap;
+          }
+      }
+  }
+}  
 .tabsPageContainer{
     table{
         border-collapse: collapse;

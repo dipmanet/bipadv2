@@ -22,6 +22,7 @@ import BudgetActivity from '../../BudgetActivity';
 import CriticalInfra from '../../CriticalInfra';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import Simulation from '../../Simulation';
+import Contacts from '../../Contacts';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -304,7 +305,12 @@ const Preview = (props: Props) => {
                     />
                 </div>
                 <div className={styles.columnFourTwo}>
-                    Trainings
+                    <Contacts
+                        updateTab={() => {}}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                        previewDetails
+                    />
                 </div>
             </div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
@@ -120,6 +121,8 @@ const Contacts = (props: Props) => {
     const [offset, setOffset] = useState(0);
     const [orgList, setOrgList] = useState([]);
     const [trainedContacts, setTrainedContacts] = useState([]);
+    const [mergedData, setMergedData] = useState([]);
+    const [trainingsList, setTrainingsList] = useState([]);
     const [url, setUrl] = useState('/municipality-contact/');
     const { requests: {
         PalikaReportInventoriesReport,
@@ -197,6 +200,20 @@ const Contacts = (props: Props) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
+    useEffect(() => {
+        if (mergedData.length > 0) {
+            const arr = [];
+            const data = mergedData.map((item) => {
+                if (item.trainingTitle) {
+                    return (item.trainingTitle);
+                }
+                return null;
+            }).filter(contact => contact !== null).map(e => arr.push(...e));
+            setTrainingsList(arr);
+        }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mergedData]);
 
     useEffect(() => {
         if (fetchedData.length > 0 && orgList.length > 0 && trainedContacts.length > 0) {
@@ -212,6 +229,7 @@ const Contacts = (props: Props) => {
                         trainingDuration: (trainedContactsObj
                             .map(trainings => trainings.durationDays)),
                     });
+                    setMergedData(mergedList);
                 } else {
                     mergedList.push({ ...item, orgType: 'No data', orgName: 'No data' });
                 }
@@ -222,80 +240,137 @@ const Contacts = (props: Props) => {
     }, [fetchedData, orgList, trainedContacts]);
 
     return (
+        <>
+            {
+                !props.previewDetails
+                && (
+                    <div className={styles.tabsPageContainer}>
+                        <h2>
+                            <strong>
+                        DRR related Person Contact Info
+                            </strong>
+                        </h2>
+                        <div className={styles.palikaTable}>
+                            <table id="table-to-xls">
+                                <tbody>
+                                    <tr>
+                                        <th>S.N</th>
+                                        <th>Name</th>
+                                        <th>Type of Organisation</th>
+                                        <th>Position</th>
+                                        <th>Name of Organisation</th>
+                                        <th>Trained Title</th>
+                                        <th>Training Duration</th>
+                                        <th>Contact number</th>
+                                        <th>Email</th>
+                                    </tr>
+                                    {mergedList
+                                        ? mergedList.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.name || 'No data'}</td>
+                                                <td>{item.orgType || 'No data'}</td>
+                                                <td>{item.position || 'No data'}</td>
+                                                <td>{item.orgName || 'No data'}</td>
+                                                <td>
+                                                    {
+                                                        item.trainingTitle
+                                                            ? item.trainingTitle.map(training => training)
+                                                            : 'No data'
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {
+                                                        item.trainingDuration
+                                                            ? item.trainingDuration.map(training => training)
+                                                            : 'No data'
+                                                    }
+                                                </td>
+                                                <td>{item.mobileNumber || 'No Data'}</td>
+                                                <td>{item.email || 'No Data'}</td>
+                                                <td>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleEditContacts(item)}
+                                                    >
+                                                    Edit
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                        : 'No Data'
+                                    }
+                                </tbody>
+                            </table>
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={props.handleNextClick}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => handleAddContacts()}
+                                className={styles.savebtn}
+                            >
+                            Add
+                            </button>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                props.previewDetails
+                && (
+                    <div className={styles.budgetPreviewContainer}>
+                        <h2>
+                             DRR Related Training
+                        </h2>
+                        <div className={styles.simElementsContainer}>
+                            <div className={styles.simElements}>
+                                <div className={styles.circlePatch}>
+                                    {mergedData.length > 0
+                                        && mergedData.map((item) => {
+                                            if (item.trainingTitle) {
+                                                return item;
+                                            }
+                                            return null;
+                                        }).filter(contact => contact !== null).length
+                                    }
+                                </div>
+                                <p className={styles.simDesc}>
+                            No. of trained
 
-        <div className={styles.tabsPageContainer}>
-            <h2>
-                <strong>
-                DRR related Person Contact Info
-                </strong>
-            </h2>
-            <div className={styles.palikaTable}>
-                <table id="table-to-xls">
-                    <tbody>
-                        <tr>
-                            <th>S.N</th>
-                            <th>Name</th>
-                            <th>Type of Organisation</th>
-                            <th>Position</th>
-                            <th>Name of Organisation</th>
-                            <th>Trained Title</th>
-                            <th>Training Duration</th>
-                            <th>Contact number</th>
-                            <th>Email</th>
-                        </tr>
-                        {mergedList
-                            ? mergedList.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.name || 'No data'}</td>
-                                    <td>{item.orgType || 'No data'}</td>
-                                    <td>{item.position || 'No data'}</td>
-                                    <td>{item.orgName || 'No data'}</td>
-                                    <td>
-                                        {
-                                            item.trainingTitle
-                                                ? item.trainingTitle.map(training => training)
-                                                : 'No data'
-                                        }
-                                    </td>
-                                    <td>
-                                        {
-                                            item.trainingDuration
-                                                ? item.trainingDuration.map(training => training)
-                                                : 'No data'
-                                        }
-                                    </td>
-                                    <td>{item.mobileNumber || 'No Data'}</td>
-                                    <td>{item.email || 'No Data'}</td>
-                                    <td>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleEditContacts(item)}
-                                        >
-                                            Edit
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                            : 'No Data'
-                        }
-                    </tbody>
-                </table>
+                            people
+                                </p>
+                            </div>
+                            <div className={styles.simElements}>
+                                <div className={styles.circlePatch}>
+                                    {trainingsList.length}
+                                </div>
+                                <p className={styles.simDesc}>
+                                 Training Activities
+
+                                </p>
+                            </div>
+                            <div className={styles.simElements}>
+                                <p>List of training activities</p>
+                                <ul>
+                                    {trainingsList.length > 0
+                                    && trainingsList.map(item => (
+                                        <li key={Math.random()}>
+                                            {item}
+                                        </li>
+                                    ))
+
+                                    }
+                                </ul>
+
+                            </div>
 
 
-                <NextPrevBtns
-                    handlePrevClick={props.handlePrevClick}
-                    handleNextClick={props.handleNextClick}
-                />
-                <button
-                    type="button"
-                    onClick={() => handleAddContacts()}
-                    className={styles.savebtn}
-                >
-                    Add
-                </button>
-            </div>
-        </div>
+                        </div>
+                    </div>
+                )}
+        </>
     );
 };
 

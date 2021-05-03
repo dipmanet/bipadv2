@@ -362,52 +362,31 @@ const Simulation = (props: Props) => {
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
                             <tbody>
-
-
                                 <>
-
-
                                     <tr>
-
                                         <th>SN</th>
-
-
                                         <th>
                                             Name of Simulation excerise
-
-
                                         </th>
                                         <th>Date</th>
                                         <th>Description</th>
                                         <th>
                                             Priority Area
-
-
                                         </th>
                                         <th>
                                             Priority Action
-
-
                                         </th>
                                         <th>
                                             Priority Acitivity
-
-
                                         </th>
                                         <th>
                                             Organizer
-
-
                                         </th>
                                         <th>
                                             Number of Participants
-
-
                                         </th>
                                         <th>
                                             Focused Hazard
-
-
                                         </th>
 
 
