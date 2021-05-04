@@ -340,6 +340,7 @@ const Relief = (props: Props) => {
                                         <th>Infrastructure Affected</th>
                                         <th>Infrastructure Destroyed</th>
                                         <th>Livestock Destroyed</th>
+                                        <th>Action</th>
                                     </tr>
 
                                     {fetchedData.map((item, i) => (
@@ -367,7 +368,7 @@ const Relief = (props: Props) => {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleReliefAdd(item)}
-                                                    // className={styles.reliefBtn}
+                                                    className={styles.reliefBtn}
                                                 >
                                                      Add Relief
                                                 </button>
