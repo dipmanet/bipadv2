@@ -1,8 +1,7 @@
 .previewContainer{
     display:block;
-    
+    border: 1px solid #f5f5f5;
     table{
-        border-collapse: collapse;
         width: 100%;
     }
     th{
@@ -13,8 +12,6 @@
         font-size: 11px;
     }
     td{
-        border-top: 1px solid #f5f5f5;
-        border-bottom: 1px solid #f5f5f5;
         padding: 0.1rem;
         text-align: left;
     }
@@ -26,43 +23,29 @@
 
 .rowOne{
     height: 12%;
-    border: 1px solid red;
-
+    display: flex;
 }
 
 .rowTwo{
    height: 12%;
-   border: 1px solid red;
+   display: flex;
+.columnTwoOne{
+    width: calc(50% - 30px);
+    margin-left: 30px;
+}
 
 }
 
-.rowCI{
-    height: 12%;
-    border: 1px solid red;
 
-   
-}
-.rowOrg{
-    height: 12%;
-    border: 1px solid red;
-  
-}
-
-.rowInventory{
-    height: 12%;
-    border: 1px solid red;
-   
-}
 .rowThree{
     height: 12%;
-    border: 1px solid red;
-   
+    display: flex;
 }
 
 .rowFour{
    height: 12%;
-   border: 1px solid red;
-    
+    display: flex;
+    justify-content: space-between;
 }
 
 }

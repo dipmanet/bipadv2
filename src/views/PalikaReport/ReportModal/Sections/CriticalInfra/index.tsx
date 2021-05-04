@@ -1,20 +1,23 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
-import { useTheme } from '@material-ui/core';
-import { Item } from 'semantic-ui-react';
 import * as ReachRouter from '@reach/router';
+import {
+    Bar, BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    XAxis, YAxis,
+} from 'recharts';
 import styles from './styles.scss';
 
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
+
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -41,7 +44,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    PalikaReportInventoriesReport: {
+    PalikaResources: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
             if (params && params.user) {
@@ -90,7 +93,9 @@ const CriticalInfra = (props: Props) => {
     const [filteredSelectData, setFilteredSelectData] = useState([]);
     const [filteredtData, setFilteredData] = useState([]);
     const [url, setUrl] = useState('/resource/');
-    const { requests: { PalikaReportInventoriesReport }, provinces,
+    const [chartData, setChartData] = useState([]);
+
+    const { requests: { PalikaResources }, provinces,
         districts,
         municipalities,
         user } = props;
@@ -136,7 +141,7 @@ const CriticalInfra = (props: Props) => {
             { state: { showForm: true }, replace: true });
     };
 
-    PalikaReportInventoriesReport.setDefaultParams({
+    PalikaResources.setDefaultParams({
         organisation: handleFetchedData,
         paginationParameters: handlePaginationParameters,
         url,
@@ -150,7 +155,7 @@ const CriticalInfra = (props: Props) => {
 
 
     useEffect(() => {
-        PalikaReportInventoriesReport.do({
+        PalikaResources.do({
             offset,
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -163,96 +168,154 @@ const CriticalInfra = (props: Props) => {
             setFilteredSelectData(filteredSelectDataArr);
             setFilteredData(fetchedData);
         }
-    }, [fetchedData, filteredSelectData.length]);
+        if (fetchedData.length > 0 && chartData.length === 0) {
+            setChartData(
+                [
+                    {
+                        name: 'Educational Institutions',
+                        Total: fetchedData.filter(item => item.resourceType === 'education').length,
+                    },
+                    {
+                        name: 'Banks',
+                        Total: fetchedData.filter(item => item.resourceType === 'finance').length,
+                    },
+                    {
+                        name: 'Hospitals',
+                        Total: fetchedData.filter(item => item.resourceType === 'health').length,
+                    },
+                    {
+                        name: 'Cultural Sites',
+                        Total: fetchedData.filter(item => item.resourceType === 'cultural').length,
+                    },
+                    {
+                        name: 'Hotels or Restaurants',
+                        Total: fetchedData.filter(item => item.resourceType === 'tourism').length,
+                    },
+                    {
+                        name: 'Government Buildings',
+                        Total: fetchedData.filter(item => item.resourceType === 'governance').length,
+                    },
+                    {
+                        name: 'Industries',
+                        Total: fetchedData.filter(item => item.resourceType === 'industry').length,
+                    },
+                ],
+
+            );
+        }
+    }, [chartData.length, fetchedData, filteredSelectData.length]);
 
     return (
+        <>
+            {
+                !props.previewDetails
 
-        <div className={styles.tabsPageContainer}>
-            <h2>
-                <strong>
+        && (
+            <div className={styles.tabsPageContainer}>
+                <h2>
+                    <strong>
                    Critical Infrastructures
-                </strong>
-            </h2>
-            <div className={styles.palikaTable}>
+                    </strong>
+                </h2>
+                <div className={styles.palikaTable}>
                 Filter by:
-                <select
-                    value={ciType}
-                    onChange={handleCIFilter}
-                    className={styles.inputElement}
-                >
-                    <option value="select">Select an Option</option>
-                    <option value="all">All Resource Type</option>
-                    {filteredSelectData
+                    <select
+                        value={ciType}
+                        onChange={handleCIFilter}
+                        className={styles.inputElement}
+                    >
+                        <option value="select">Select an Option</option>
+                        <option value="all">All Resource Type</option>
+                        {filteredSelectData
                     && filteredSelectData.map(item => <option value={item}>{item}</option>)
 
-                    }
+                        }
 
-                </select>
-                <table id="table-to-xls">
-                    <tbody>
-                        <tr>
-                            <th>S.N</th>
-                            <th>Resource Name</th>
-                            <th>Resource Type</th>
-                            <th>Operator Type</th>
-                            <th>Number Of male Employee</th>
-                            <th>Number Of female Employee</th>
-                            <th>Total Employee</th>
-                        </tr>
-                        {filteredtData && filteredtData.map((item, i) => (
-                            <tr key={item.id}>
-                                <td>{i + 1}</td>
-                                <td>{item.title ? item.title : '-'}</td>
-                                <td>{item.resourceType ? item.resourceType : '-'}</td>
-                                <td>{item.operatorType ? item.operatorType : '-'}</td>
-                                <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
-                                <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
-                                <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
+                    </select>
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+                                <th>S.N</th>
+                                <th>Resource Name</th>
+                                <th>Resource Type</th>
+                                <th>Operator Type</th>
+                                <th>Number Of male Employee</th>
+                                <th>Number Of female Employee</th>
+                                <th>Total Employee</th>
                             </tr>
-                        ))}
+                            {filteredtData && filteredtData.map((item, i) => (
+                                <tr key={item.id}>
+                                    <td>{i + 1}</td>
+                                    <td>{item.title ? item.title : '-'}</td>
+                                    <td>{item.resourceType ? item.resourceType : '-'}</td>
+                                    <td>{item.operatorType ? item.operatorType : '-'}</td>
+                                    <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
+                                    <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
+                                    <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
+                                </tr>
+                            ))}
 
 
-                    </tbody>
-                </table>
-                {/* {paginationParameters && paginationParameters.count !== 0
-                                && (
-                                    <div className={styles.paginationRight}>
-                                        <ReactPaginate
-                                            previousLabel={'prev'}
-                                            nextLabel={'next'}
-                                            breakLabel={'...'}
-                                            breakClassName={'break-me'}
-                                            onPageChange={handlePageClick}
-                                            marginPagesDisplayed={2}
-                                            pageRangeDisplayed={5}
-                                            pageCount={Math.ceil(paginationParameters.count
-                                             / paginationQueryLimit)}
-                                            containerClassName={styles.pagination}
-                                            subContainerClassName={_cs(styles.pagination)}
-                                            activeClassName={styles.active}
-                                        />
-                                    </div>
-                                )}
-                {fetchedData && fetchedData.length === 0
-                    && <p className={styles.dataUnavailable}>Data Unavailable</p>
+                        </tbody>
+                    </table>
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={props.handleNextClick}
+                    />
 
-                } */}
-                <NextPrevBtns
-                    handlePrevClick={props.handlePrevClick}
-                    handleNextClick={props.handleNextClick}
-                />
-
-                <button
-                    type="button"
-                    onClick={handleAddResource}
-                    className={styles.savebtn}
-                >
+                    <button
+                        type="button"
+                        onClick={handleAddResource}
+                        className={styles.savebtn}
+                    >
                     Add Resource
-                </button>
+                    </button>
+                </div>
+
             </div>
+        )
+            }
+            {
+                props.previewDetails
+                && (
+                    <div className={styles.budgetPreviewContainer}>
+                        <h2> Critical Infrastructure</h2>
+                        <BarChart
+                            width={350}
+                            height={300}
+                            data={chartData}
+                            layout="vertical"
+                            margin={{ left: 10, right: 5, top: 10 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis
+                                type="number"
+                                tick={false}
 
-        </div>
+                            />
+                            <YAxis
+                                type="category"
+                                dataKey="name"
+                                tick={{ fill: '#777', fontSize: '10px' }}
+                            />
+                            <Bar
+                                dataKey="Total"
+                                fill="rgb(0,164,109)"
+                                // barCategoryGap={30}
+                                barCategoryGap={80}
+                                label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
+                                tick={{ fill: 'rgb(200,200,200)' }}
+                                cx={90}
+                                cy={105}
+                                barSize={20}
+                            />
+                        </BarChart>
 
+                    </div>
+                )
+            }
+
+        </>
     );
 };
 export default connect(mapStateToProps, mapDispatchToProps)(

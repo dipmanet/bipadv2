@@ -49,7 +49,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
-            console.log('This is response', response);
             params.dataSubmitted(response);
         },
 
@@ -140,7 +139,6 @@ const ProgramPolicies = (props: Props) => {
         const selectedPage = e.selected + 1;
         setOffset((selectedPage - 1) * paginationQueryLimit);
         setCurrentPageNumber(selectedPage);
-        console.log('What is click>>>', e.selected);
     };
     useEffect(() => {
         PolicyGetRequest.do({
@@ -155,7 +153,6 @@ const ProgramPolicies = (props: Props) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
-    console.log('This hang>>>>', finalPolicyData);
     useEffect(() => {
         if (dataSubmittedResponse) {
             PolicyGetRequest.do({
@@ -174,80 +171,68 @@ const ProgramPolicies = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
     return (
-        <div>
-            <table id="table-to-xls">
-                <tbody>
-                    <tr>
-                        <th>SN</th>
-                        <th>Points</th>
-                    </tr>
-                    {finalPolicyData.length > 0 && finalPolicyData.map((item, i) => (
-                        <tr key={item.id}>
-                            <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
-                            <td>{item.point}</td>
-                        </tr>
-                    ))
-                    }
+        <>
+            { !props.previewDetails
+            && (
+                <div>
+                    <table id="table-to-xls">
+                        <tbody>
+                            <tr>
+                                <th>SN</th>
+                                <th>Points</th>
+                            </tr>
+                            {finalPolicyData.length > 0 && finalPolicyData.map((item, i) => (
+                                <tr key={item.id}>
+                                    <td>
+                                        {(currentPageNumber - 1) * paginationQueryLimit + i + 1}
+                                    </td>
+                                    <td>{item.point}</td>
+                                </tr>
+                            ))
+                            }
 
-                    {/* <td>
-                            {' '}
-                            <input type="Number" placeholder="Disaster Budget" />
-                        </td> */}
+                            {/* <td>
+                                {' '}
+                                <input type="Number" placeholder="Disaster Budget" />
+                            </td> */}
 
 
-                </tbody>
-            </table>
-            <div className={styles.txtAreadetails}>
-                <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
-                <button type="button" onClick={handleSubmit}>Add</button>
-            </div>
-            <NextPrevBtns
-                handlePrevClick={props.handlePrevClick}
-                handleNextClick={props.handleNextClick}
-            />
-            {/* {paginationParameters && paginationParameters.count !== 0
-&& (
-    <div className={styles.paginationRight}>
+                        </tbody>
+                    </table>
+                    <div className={styles.txtAreadetails}>
+                        <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
+                        <button type="button" onClick={handleSubmit}>Add</button>
+                    </div>
+                    <NextPrevBtns
+                        handlePrevClick={props.handlePrevClick}
+                        handleNextClick={props.handleNextClick}
+                    />
 
-        <ReactPaginate
-            previousLabel={'prev'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            breakClassName={'break-me'}
-            onPageChange={handlePageClick}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            pageCount={Math.ceil(paginationParameters.count
-                                        / paginationQueryLimit)}
-            containerClassName={styles.pagination}
-            subContainerClassName={styles.pagination}
-            activeClassName={styles.active}
-        />
-    </div>
-)} */}
-        </div>
+                </div>
+            )}
+
+            { props.previewDetails
+            && (
+                <div className={styles.budgetPreviewContainer}>
+                    <h2>
+                    Disaster related topics in Annual Program and policies
+                    </h2>
+                    <ul>
+                        {finalPolicyData.length > 0
+                            ? finalPolicyData.map(item => (
+                                <li key={item.id}>
+                                    {item.point}
+                                </li>
+                            ))
+                            : 'No Data'
+                        }
+                    </ul>
+                </div>
+            )}
+
+        </>
     );
 };
-// <div className={styles.mainPageDetailsContainer}>
-//     <div className={styles.formColumn}>
-//         <h2>Annual Program and Policy</h2>
-//         <p>DRR programmes listed in the annual policy and programme</p>
-//         <div className={styles.row}>
-//             <div className={styles.inputContainer}>
-//                 <textarea
-//                     placeholder="Kindly enter DRR programmes "
-//                     value={policies}
-//                     onChange={handlePolicies}
-//                     rows={10}
-//                 />
-//             </div>
-
-//
-
-//         </div>
-//     </div>
-// </div>
-// <div>
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(

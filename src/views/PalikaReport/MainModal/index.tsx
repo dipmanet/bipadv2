@@ -271,7 +271,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
         }
     }, [municipality, reportData, user]);
 
-    console.log(reportData);
 
     useEffect(() => {
         const getURL = (tabValue: number) => {
@@ -317,7 +316,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
     const getTranslateVal = () => {
         // const rect = document.getElementById('palikaModal').getBoundingClientRect();
-        // console.log(rect);
         if (tabSelected > 5) {
             return (500);
         }

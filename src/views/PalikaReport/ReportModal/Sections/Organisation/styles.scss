@@ -1,4 +1,14 @@
-
+.budgetPreviewContainer{
+  // margin-left: 30px;
+  margin-top: 10px;
+  h2{
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 2%;
+      color: #222;
+      white-space: pre-wrap;
+  }
+}
 .tabsPageContainer{
   min-height: 400px !important;
   display: flex;

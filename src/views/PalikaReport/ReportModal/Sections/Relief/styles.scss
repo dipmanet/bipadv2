@@ -1,5 +1,256 @@
+.incidentImpactRow{
+  display: flex;
+  .incidentSection{
+    display: flex;
+    flex-direction: column;
+    h2{
+      font-size: 14px;
+      color: #444;
+      font-weight: 600;
+      margin-left: 30px;
+    }
+    .chartandlegend{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .legend{
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        align-items: center;
+            .activitiesAmt{
+                .light{
+                    color: #777;
+                }
+                .biggerNum{
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+            }
+            .bottomRow{
+                position: relative;
+                right: 5px;
+            }
+            .legenditem{
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                .legendColorContainer{
+                    height: 100%;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    //need to fix this
+                    padding-top: 17px;
+                    padding-right: 2px;
+                    .legendColor{
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 50%;
+                        // display: none;
+                    }   
+                }
+                .numberRow {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    ul{list-style: none; 
+                        padding-left: 1%;
+                        padding-top: 0;
+                    }
+                  
+                    .bigerNum{
+                        font-size: 18px;
+                    font-weight: 600;
+                    }        
+                    .light{
+                        color: #777;
+        
+                    } 
+                }     
+            }
+        }
+    }
+  }
+  .incidentMiddleSection{
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    align-items: center;
+    position: relative;
+    h2{
+      font-size: 14px;
+      color: #444;
+      font-weight: 600;
+    align-self: flex-start;  
+    margin-left: 10px;
+    }
+    .chartandlegend{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .legend{
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        align-items: center;
+            .activitiesAmt{
+                .light{
+                    color: #777;
+                }
+                .biggerNum{
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+            }
+            .bottomRow{
+                position: relative;
+                right: 5px;
+            }
+            .legenditem{
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                .legendColorContainer{
+                    height: 100%;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    //need to fix this
+                    padding-top: 17px;
+                    padding-right: 2px;
+                    .legendColor{
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 50%;
+                        // display: none;
+                    }   
+                }
+                .numberRow {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    ul{list-style: none; 
+                        padding-left: 1%;
+                        padding-top: 0;
+                    }
+                  
+                    .bigerNum{
+                        font-size: 18px;
+                    font-weight: 600;
+                    }        
+                    .light{
+                        color: #777;
+        
+                    } 
+                }     
+            }
+        }
+    }
+    .houseData{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content:  flex-start;
+      position: absolute;
+      bottom: 10px;
+      p{
+        font-size: 12px;
+        color: #222;
+        font-weight: 600;
+      }
+      .houseRow{
+        display: flex;
+        flex-direction: row;
+        .houseElement{
+          display: flex;
+          .darker{
+            font-size: 12px;
+            font-weight: 600;
+          }
+          .houseIcon{
+            width: 50px;
+            path{
+              fill: rgb(84,174,186);
+            }
+          }
+          ul{
+            list-style: none;
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
 
 
+}
+.budgetPreviewContainer{
+  // margin-left: 30px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  h2{
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 2%;
+      color: #222
+  }
+  .lossSection{
+    display: flex;
+    // flex: 1;
+    border: 2px solid green;
+    border-bottom: 2px solid white;
+    margin: 0 2%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    border-radius: 40px;
+    bottom: 40px;
+    position: relative;
+    .lossElement{
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      margin: 0 15px;
+      position: relative;
+      top: 10px;
+      background: white;
+      // border: 1px solid blue;
+      // height: 80%;
+      padding: 0;
+      .lossIcon{
+       height: 50px;
+       position: relative;
+       top: 18px;
+       path{
+         fill:rgb(0,177,117);
+       }
+      }
+      ul{
+        padding-left: 0;
+        padding-top: 0;
+        list-style: none;
+        text-align: center;
+        line-height: 0.9em;
+        height: 0;
+        .darkerText{
+          font-size: 18px;
+          color: #222;
+          font-weight: 600;
+        }
+        .smallerText{
+          font-size: 10px;
+          color: #777;
+          position: relative;
+          bottom: 7px;
+        }
+      }
+    }
+  }
+
+}
 .tabsPageContainer{
   width:100%;
   overflow-x: scroll;
