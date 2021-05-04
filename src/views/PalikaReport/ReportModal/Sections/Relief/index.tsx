@@ -322,9 +322,7 @@ const Relief = (props: Props) => {
                 && (
                     <>
                         <h2>
-                            <strong>
-                                Incidents
-                            </strong>
+                                Incident and Relief
                         </h2>
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">

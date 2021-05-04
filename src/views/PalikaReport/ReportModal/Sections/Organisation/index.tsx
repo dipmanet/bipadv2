@@ -34,6 +34,7 @@ import {
     setPalikaRedirectAction,
     setGeneralDataAction,
 } from '#actionCreators';
+import Icon from '#rscg/Icon';
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
@@ -187,7 +188,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
             && (
                 <div className={styles.tabsPageContainer}>
                     <h2>
-                        <strong>DRR related organizations in Municipal Government</strong>
+                            DRR related Organizations
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
@@ -199,6 +200,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     {/* <th>Level (for governmental organization)</th> */}
                                     <th>Number of Male Employee</th>
                                     <th>Number of Female Employee</th>
+                                    <th>Action</th>
                                 </tr>
                                 {fetchedData && fetchedData.length > 0
                                     ? fetchedData.map((item, i) => (
@@ -232,8 +234,12 @@ const Organisation: React.FC<Props> = (props: Props) => {
                             onClick={handleOrnaisationRedirect}
                             className={styles.savebtn}
                         >
+                            <Icon
+                                name="plus"
+                                className={styles.plusIcon}
 
-                                Add Data
+                            />
+                             Add Organisation Data
                         </button>
                         {
                             props.hide !== 1
@@ -243,14 +249,6 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                             handlePrevClick={props.handlePrevClick}
                                             handleNextClick={props.handleNextClick}
                                         />
-                                        <button
-                                            type="button"
-                                            onClick={handleOrnaisationRedirect}
-                                            className={styles.savebtn}
-                                        >
-
-                                + Add Data
-                                        </button>
                                     </div>
                                 )
                                 : ''

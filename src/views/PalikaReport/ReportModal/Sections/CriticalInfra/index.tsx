@@ -26,6 +26,7 @@ import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
 } from '#actionCreators';
+import Icon from '#rscg/Icon';
 
 
 interface Props{
@@ -113,6 +114,17 @@ const CriticalInfra = (props: Props) => {
         props.updateTab();
     };
 
+
+    const handleEditResource = (organisationItem) => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            organisationItem,
+            showModal: 'addResource',
+        });
+        ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+            { state: { showForm: true }, replace: true });
+    };
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
@@ -213,9 +225,7 @@ const CriticalInfra = (props: Props) => {
         && (
             <div className={styles.tabsPageContainer}>
                 <h2>
-                    <strong>
                    Critical Infrastructures
-                    </strong>
                 </h2>
                 <div className={styles.palikaTable}>
                 Filter by:
@@ -242,6 +252,7 @@ const CriticalInfra = (props: Props) => {
                                 <th>Number Of male Employee</th>
                                 <th>Number Of female Employee</th>
                                 <th>Total Employee</th>
+                                <th>Action</th>
                             </tr>
                             {filteredtData && filteredtData.map((item, i) => (
                                 <tr key={item.id}>
@@ -252,24 +263,36 @@ const CriticalInfra = (props: Props) => {
                                     <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
                                     <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
                                     <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
+                                    <td>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleEditResource(item)}
+                                        >
+                                            Edit
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
 
 
                         </tbody>
                     </table>
+                    <button
+                        type="button"
+                        className={styles.savebtn}
+                        onClick={handleAddResource}
+                    >
+                        <Icon
+                            name="plus"
+                            className={styles.plusIcon}
+                        />
+                            Add Resources
+                    </button>
                     <NextPrevBtns
                         handlePrevClick={props.handlePrevClick}
                         handleNextClick={props.handleNextClick}
                     />
 
-                    <button
-                        type="button"
-                        onClick={handleAddResource}
-                        className={styles.savebtn}
-                    >
-                    Add Resource
-                    </button>
                 </div>
 
             </div>

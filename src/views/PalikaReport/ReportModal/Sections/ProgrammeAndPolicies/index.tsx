@@ -175,6 +175,7 @@ const ProgramPolicies = (props: Props) => {
             { !props.previewDetails
             && (
                 <div>
+                    <h2>Programmes and Policies </h2>
                     <table id="table-to-xls">
                         <tbody>
                             <tr>

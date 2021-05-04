@@ -198,7 +198,7 @@ const General = (props: Props) => {
 
     return (
         <div className={styles.mainPageDetailsContainer}>
-            <h2 className={styles.title}>Disaster Profile details</h2>
+            <h2>General Details</h2>
             <div className={styles.formColumn}>
                 <h3><strong>General Information</strong></h3>
                 <div className={styles.row}>

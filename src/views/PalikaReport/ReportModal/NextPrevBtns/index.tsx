@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
 const NextPrevBtns = (props) => {
@@ -10,7 +11,7 @@ const NextPrevBtns = (props) => {
 
     return (
         <div className={styles.btnContainer}>
-            {!firstpage
+            {/* {!firstpage
                        && (
                            <button
                                type="button"
@@ -21,7 +22,7 @@ const NextPrevBtns = (props) => {
                            </button>
                        )
 
-            }
+            } */}
 
             {!lastpage
             && (
@@ -30,7 +31,11 @@ const NextPrevBtns = (props) => {
                     onClick={handleNClick}
                     className={styles.savebtn}
                 >
-                Next
+                    <Icon
+                        name="plus"
+                        className={styles.plusIcon}
+                    />
+                Save and Continue
                 </button>
             )}
         </div>

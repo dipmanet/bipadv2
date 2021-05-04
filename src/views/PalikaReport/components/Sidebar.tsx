@@ -64,7 +64,7 @@ const menuItems: {
     },
     {
         key: 10,
-        content: 'Preview',
+        content: 'Create Report',
         url: '/simulation/',
     },
 ];
@@ -217,21 +217,41 @@ const Sidebar = (props) => {
             {
                 showReportEdit
                 && (
-                    <ul className={styles.menuList}>
-                        {menuItems.map(item => (
-                            <li>
-                                <button
-                                    key={item.key}
-                                    className={selectedTab === item.key ? styles.selected : styles.notSelected}
-                                    onClick={() => handleMenuItemClick(item.key)}
-                                    type="button"
-                                >
+                    <div className={styles.reportSidebarMainContainer}>
+                        <h2>Create a Report</h2>
+                        <ul className={styles.menuList}>
+                            {menuItems.map((item) => {
+                                if (item.key < menuItems.length - 1) {
+                                    return (
+                                        <li>
+                                            <button
+                                                key={item.key}
+                                                className={selectedTab === item.key ? styles.selected : styles.notSelected}
+                                                onClick={() => handleMenuItemClick(item.key)}
+                                                type="button"
+                                            >
 
-                                    {item.content}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                                                {item.content}
+                                            </button>
+                                        </li>
+                                    );
+                                }
+                                return (
+                                    <li>
+                                        <button
+                                            key={item.key}
+                                            className={styles.createReport}
+                                            onClick={() => handleMenuItemClick(item.key)}
+                                            type="button"
+                                        >
+
+                                            {item.content}
+                                        </button>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 )
             }
         </div>
