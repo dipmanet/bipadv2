@@ -259,10 +259,7 @@ const Relief = (props: Props) => {
 
             const wardWiseImpactData = wards.map(wardItem => fetchedData.filter(e => e.wards[0] !== undefined && e.wards[0] === wardItem)
                 .map(item => item.loss)
-                .filter((iitems) => {
-                    console.log(iitems);
-                    return iitems !== undefined;
-                })
+                .filter(iitems => iitems !== undefined)
                 .reduce((a, b) => ({
                     ward: wardItem,
                     Death: (a.peopledeathCount || 0) + (b.peopledeathCount || 0),

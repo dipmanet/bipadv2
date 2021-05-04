@@ -19,6 +19,7 @@ import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
 import Simulation from '../../Simulation';
 import Contacts from '../../Contacts';
 import Relief from '../../Relief';
+import Leadership from './Leadership';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -130,46 +131,11 @@ const Preview = (props: Props) => {
                     handlePrevClick={() => {}}
                     handleNextClick={() => {}}
                 />
-
-
             </div>
+
 
             <div className={styles.rowThree}>
-                <div className={styles.columnThreeOne}>
-                    <ProgrammeAndPolicies
-                        updateTab={() => {}}
-                        page={-1}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        previewDetails
-                    />
-                </div>
-                <div className={styles.columnThreeTwo}>
-                    <Organisation
-                        updateTab={() => {}}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        previewDetails
-                    />
-                </div>
-            </div>
-            <div className={styles.rowFour}>
-                <div className={styles.columnFourOne}>
-                    <Simulation
-                        updateTab={() => {}}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        previewDetails
-                    />
-                </div>
-                <div className={styles.columnFourTwo}>
-                    <Contacts
-                        updateTab={() => {}}
-                        handlePrevClick={() => {}}
-                        handleNextClick={() => {}}
-                        previewDetails
-                    />
-                </div>
+                <Leadership />
             </div>
         </div>
     );

@@ -98,17 +98,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
 
         onSuccess: ({ response, props, params }) => {
-            console.log('Thiis is response>>>', response);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
-                console.warn('failure', error);
-                console.log('This is params>>>', params);
             }
         },
         onFatal: ({ params }) => {
-            console.log('This is params>>>', params);
         },
         extras: {
             hasFile: true,
@@ -139,7 +135,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         palikaRedirect,
         requests: { PreviewDataPost },
         generalData,
-        user: { profile },
+        user,
     } = props;
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
@@ -189,14 +185,19 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             // canvas.toBlob((blob) => {
 
             // });
+            let profileUser = {};
+            if (user) {
+                profileUser = user.profile;
+            }
+
             formdata.append('file', blob, 'report.pdf');
             formdata.append('title', 'This is title');
             formdata.append('fiscalYear', generalData.fiscalYear);
             formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
             formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-            formdata.append('province', profile.province);
-            formdata.append('district', profile.district);
-            formdata.append('municipality', profile.municipality);
+            formdata.append('province', (profileUser.province || ''));
+            formdata.append('district', (profileUser.district || ''));
+            formdata.append('municipality', (profileUser.municipality || ''));
             formdata.append('mayorChairperson', generalData.mayor);
             formdata.append('chiefAdministrativeOfficer', generalData.cao);
             formdata.append('drrFocalPerson', generalData.focalPerson);
@@ -205,9 +206,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
-                    console.log('what is response', response);
                 }).catch((error) => {
-                    console.log(error);
                 });
 
             // doc.save('file.pdf');

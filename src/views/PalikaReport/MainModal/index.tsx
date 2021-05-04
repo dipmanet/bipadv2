@@ -251,9 +251,10 @@ const MainModal: React.FC<Props> = (props: Props) => {
                 .filter(item => item.committee === 'LDMC' && item.municipality === user.profile.municipality);
             setLocalMembers(localM);
 
-            reportData.filter(item => item.municipality === municipality).map((item) => {
+            reportData.filter(item => item.municipality === user.profile.municipality).map((item) => {
                 if (item.isDrrFocalPerson) {
-                    setfocalPerson(item.name);
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
+                    setfocalPerson(details);
                 }
                 if (item.position && item.position.includes('Mayor')) {
                     const details = `${item.name},${item.email},${item.mobileNumber} `;
@@ -264,7 +265,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chief Administrative Officer')) {
-                    setcao(item.name);
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
+                    setcao(details);
                 }
                 return null;
             });

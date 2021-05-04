@@ -88,7 +88,7 @@ const General = (props: Props) => {
         formationDate: fd,
         committeeMembers: cm,
     } = props.generalData;
-    const { requests: { FiscalYearFetch } } = props;
+    const { requests: { FiscalYearFetch }, setGeneralDatapp } = props;
 
     const [reportTitle, setreportTitle] = useState<string>(rt);
     const [fiscalYear, setfiscalYear] = useState<string>(fy);
@@ -157,12 +157,7 @@ const General = (props: Props) => {
         } return false;
     };
 
-    // useEffect(() => {
-    //     validationErrs();
-    // }, [fiscalYear, formationDate, validationErrs]);
-
     const handleDataSave = () => {
-        console.log('VE', validationErrs());
         if (!validationErrs()) {
             props.setGeneralDatapp({
                 reportTitle,
