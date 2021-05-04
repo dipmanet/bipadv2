@@ -190,7 +190,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             // canvas.toBlob((blob) => {
 
             // });
-            formdata.append('file', blob);
+            formdata.append('file', blob, 'report.pdf');
             formdata.append('title', 'This is title');
             formdata.append('fiscalYear', generalData.fiscalYear);
             formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
