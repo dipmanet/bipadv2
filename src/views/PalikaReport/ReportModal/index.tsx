@@ -446,7 +446,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     )
                     : ''
             }
-,
             {
                 keyTab === (tabsLength - 1)
                     ? (

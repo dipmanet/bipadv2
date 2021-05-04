@@ -10,6 +10,7 @@
     .leftContainer{
     flex: 1;
         height: 100vh;
+        background: rgb(235,235,235);
         .heading{
             height: 40px;
             width: 100%;
@@ -51,9 +52,10 @@
     }
     .rightContainer{
         flex: 3;
-        height: 100vh;
+        min-height: 100vh;
         padding: 20px;
         background-color: white;
+        overflow-y: scroll;
         .reportEditingSection{
             border: 1px solid gray;
         }
