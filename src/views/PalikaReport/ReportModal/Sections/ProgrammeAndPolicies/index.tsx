@@ -215,7 +215,9 @@ const ProgramPolicies = (props: Props) => {
             && (
                 <div className={styles.budgetPreviewContainer}>
                     <h2>
-                    Disaster related topics in Annual Program and policies
+                    Disaster related topics in
+                        <br />
+                    Annual Program and policies
                     </h2>
                     <ul>
                         {finalPolicyData.length > 0
