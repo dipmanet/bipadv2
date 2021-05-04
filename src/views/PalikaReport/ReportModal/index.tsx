@@ -206,10 +206,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
+                    console.log(response);
+                    doc.save('file.pdf');
                 }).catch((error) => {
+                    console.log(error);
                 });
-
-            // doc.save('file.pdf');
         });
     };
     useEffect(() => {
