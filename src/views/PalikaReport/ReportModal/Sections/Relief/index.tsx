@@ -52,50 +52,7 @@ const genderWiseDeathData = [
     { name: 'Other DRR related funding', value: 30 },
 ];
 
-const wardwiseData = [
-    {
-        name: 'Ward A',
-        Death: 4000,
-        Missing: 2400,
-        Injured: 2400,
-    },
-    {
-        name: 'Ward B',
-        Death: 3000,
-        Missing: 1398,
-        Injured: 2210,
-    },
-    {
-        name: 'Ward C',
-        Death: 2000,
-        Missing: 9800,
-        Injured: 2290,
-    },
-    {
-        name: 'Ward D',
-        Death: 2780,
-        Missing: 3908,
-        Injured: 2000,
-    },
-    {
-        name: 'Ward E',
-        Death: 1890,
-        Missing: 4800,
-        Injured: 2181,
-    },
-    {
-        name: 'Ward F',
-        Death: 2390,
-        Missing: 3800,
-        Injured: 2500,
-    },
-    {
-        name: 'Ward G',
-        Death: 3490,
-        Missing: 4300,
-        Injured: 2100,
-    },
-];
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
@@ -172,6 +129,8 @@ const Relief = (props: Props) => {
 
     const [houseAffected, setHouseAffected] = useState(0);
     const [houseDamaged, setHouseDamaged] = useState(0);
+
+    const [wardWiseImpact, setWardWiseImpact] = useState([]);
 
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
@@ -293,6 +252,24 @@ const Relief = (props: Props) => {
                 ],
             );
             sethazardwiseImpact(hazardwiseImpactData);
+
+
+            const wards = [...new Set(fetchedData.map(item => item.wards[0]))]
+                .filter(ward => ward !== undefined);
+
+            const wardWiseImpactData = wards.map(wardItem => fetchedData.filter(e => e.wards[0] !== undefined && e.wards[0] === wardItem)
+                .map(item => item.loss)
+                .filter((iitems) => {
+                    console.log(iitems);
+                    return iitems !== undefined;
+                })
+                .reduce((a, b) => ({
+                    ward: wardItem,
+                    Death: (a.peopledeathCount || 0) + (b.peopledeathCount || 0),
+                    Injured: (a.peopleInjuredCount || 0) + (b.peopledeathCount || 0),
+                    Missing: (a.peopleMissingCount || 0) + (b.peopledeathCount || 0),
+                })));
+            setWardWiseImpact(wardWiseImpactData);
         }
     }, [deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
@@ -849,7 +826,7 @@ const Relief = (props: Props) => {
                             <BarChart
                                 width={250}
                                 height={250}
-                                data={wardwiseData}
+                                data={wardWiseImpact}
                                 margin={{ left: 0, right: 5, top: 10, bottom: 20 }}
 
                             >
