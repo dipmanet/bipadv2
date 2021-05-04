@@ -54,6 +54,9 @@
         height: 100vh;
         padding: 20px;
         background-color: white;
+        .reportEditingSection{
+            border: 1px solid gray;
+        }
         .rightContainerHeading{
             width: 100%;
           
@@ -184,6 +187,8 @@
               }
         }
     }
+
+
     
 }
 

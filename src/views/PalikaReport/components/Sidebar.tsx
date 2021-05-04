@@ -1,8 +1,74 @@
+/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { _cs, reverseRoute } from '@togglecorp/fujs';
 import * as ReachRouter from '@reach/router';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+
+
+const menuItems: {
+    key: number;
+    content: TabContent;
+    url?: string;
+}[] = [
+    {
+        key: 0,
+        content: 'General',
+        url: '/municipality-contact/',
+    },
+    {
+        key: 1,
+        content: 'Budget',
+        url: '/annual-budget/',
+    },
+    {
+        key: 2,
+        content: 'Budget Activity',
+        url: '/annual-budget-activity/',
+    },
+    {
+        key: 3,
+        content: 'Programme and Policies',
+        url: '/annual-policy-program/',
+    },
+    {
+        key: 4,
+        content: 'Organisation',
+        url: '/resource/',
+    },
+    {
+        key: 5,
+        content: 'Inventories',
+        url: '',
+    },
+    {
+        key: 6,
+        content: 'Resources',
+        url: '',
+    },
+    {
+        key: 7,
+        content: 'Contacts',
+        url: '',
+    },
+    {
+        key: 8,
+        content: 'Incident and Relief',
+        url: '',
+    },
+    {
+        key: 9,
+        content: 'Simulation',
+        url: '/simulation/',
+    },
+    {
+        key: 10,
+        content: 'Preview',
+        url: '/simulation/',
+    },
+];
+
 
 const Sidebar = (props) => {
     const [selectedSubmenu, setSelectedSubmenu] = useState([]);
@@ -15,8 +81,17 @@ const Sidebar = (props) => {
     const [subMenuSlug, setSubMenuSlug] = useState('');
     // eslint-disable-next-line react/prop-types
     // eslint-disable-next-line @typescript-eslint/camelcase
-    const { municipalityName, municipalityName: { title_en } } = props;
+    const {
+        municipalityName,
+        municipalityName: { title_en },
+        showReportEdit,
+        handleMenuClick,
+        selectedTab,
+    } = props;
 
+    const handleMenuItemClick = (menuItem: number) => {
+        handleMenuClick(menuItem);
+    };
     const Data1 = [{
         id: 1,
         title: 'Palika Reports',
@@ -31,61 +106,7 @@ const Sidebar = (props) => {
             title: `${title_en} Municipality Reports`,
             url: '/disaster-profile/',
             slug: 'my-reports' }],
-    },
-        // { id: 2,
-        //     title: 'Budget',
-        //     slug: 'budget',
-        //     components: [{ id: 1,
-        //         title: 'Annual Budgets',
-        //         url: '/annual-budget/',
-        //         slug: 'annual-budget' },
-        //     { id: 2,
-        //         title: 'Annual Budget Activities',
-        //         url: '/annual-budget-activity/',
-        //         slug: 'annual-budget-activities' },
-        //     { id: 3,
-        //         title: 'Annual Policy and Programmes',
-        //         url: '/annual-policy-program/',
-        //         slug: 'annual-policy-and-programmes' }] },
-
-        // { id: 3,
-        //     title: 'Simulation',
-        //     slug: 'simulation',
-        //     components: [{ id: 1,
-        //         title: 'All Simulations',
-        //         url: '/simulation/',
-        //         slug: 'all-simulations' }] },
-        // { id: 4,
-        //     title: 'Risk Reduction',
-        //     slug: 'risk-reduction',
-        //     components: [{ id: 1,
-        //         title: 'All Risk Reductions',
-        //         url: '/risk-reduction/',
-        //         slug: 'all-risk-reduction' }] },
-        // { id: 5,
-        //     title: 'Recovery',
-        //     slug: 'recovery',
-        //     components: [{ id: 1,
-        //         title: 'All Recoveries',
-        //         url: '/recovery/',
-        //         slug: 'all-recoveries' }] },
-        // { id: 6,
-        //     title: 'Research',
-        //     slug: 'research',
-        //     components: [{ id: 1,
-        //         title: 'All Researches',
-        //         url: '/research/',
-        //         slug: 'all-researches' }] },
-        // { id: 7,
-        //     title: 'Organization',
-        //     slug: 'organization',
-        //     components: [{ id: 1,
-        //         title: 'All Organizations',
-        //         url: '/organization/',
-        //         slug: 'all-organizations' }] },
-
-
-    ];
+    }];
     const Data2 = [{
         id: 1,
         title: 'Palika Reports',
@@ -147,77 +168,72 @@ const Sidebar = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedMenuId]);
 
-    // const handleDataAdd = () => {
-
-    //     ReachRouter.navigate('/risk-info/#/capacity-and-resources',
-    // { state: { showForm: true }, replace: true });
-    //     setCarKeys(1);
-    // };
     return (
         <div>
-            <ul className={styles.orderList}>
-                {Data.map((item, i) => (
-                    <button className={styles.menu} type="button" key={item.id} onClick={() => handleSelectMenu(i, item.id)}>
-                        <div className={styles.menuName}>
-                            {isSubmenuClicked && item.id === selectedMenuId ? <Icon className={styles.icons} name="arrowDown" /> : <Icon className={styles.icons} name="play" />}
-                            {item.title}
+            {
+                !showReportEdit
+                && (
+                    <ul className={styles.orderList}>
+                        {Data.map((item, i) => (
+                            <button className={styles.menu} type="button" key={item.id} onClick={() => handleSelectMenu(i, item.id)}>
+                                <div className={styles.menuName}>
+                                    {isSubmenuClicked && item.id === selectedMenuId ? <Icon className={styles.icons} name="arrowDown" /> : <Icon className={styles.icons} name="play" />}
+                                    {item.title}
 
-                        </div>
-                        {isSubmenuClicked && selectedMenuId === item.id
-                            ? item.components.map((data, index) => (
-                                <div className={styles.subMenuDiv} key={data.id}>
-                                    <button
-                                        type="submit"
-
-
-                                        className={isIndicatorClicked
-                                        && selectedSubMenuId === data.id ? _cs(
-                                                styles.subMenu, styles.subMenuActive,
-                                            ) : styles.subMenu}
-
-                                        onClick={() => handleSelectSubmenu(data.id,
-                                            data.url, data.title, data.slug, item.slug)}
-                                    >
-
-                                        {data.title}
-
-
-                                    </button>
                                 </div>
-                                // <button
-                                //     className={styles.subMenu}
-                                //     type="button"
-                                //     key={data.id}
-                                //     onClick={() => handleSelectSubmenu(i, data.id)}
-                                // >
-                                //     <div>
-                                //         {isIndicatorClicked && selectedSubMenuId
-                                //         === item.components[index].id
-                                //             ? <Icon className={styles.icons} name="arrowDown" />
-                                //             : <Icon className={styles.icons} name="play" />}
-                                //         <li>{data.title}</li>
-                                //     </div>
-                                //     {isIndicatorClicked
-                                //     && selectedSubMenuId === item.components[index].id
-                                //         ? item.components[index].indicators.map(indicator => (
-                                //             <button
-                                //                 className={styles.indicator}
-                                //                 type="button"
-                                //                 key={indicator.id}
-                                //             >
-                                //                 {indicator.title}
-                                //             </button>
-                                //         )) : ''}
-                                // </button>
-                            ))
-                            : ''
-                        }
+                                {isSubmenuClicked && selectedMenuId === item.id
+                                    ? item.components.map((data, index) => (
+                                        <div className={styles.subMenuDiv} key={data.id}>
+                                            <button
+                                                type="submit"
 
 
-                    </button>
-                ))}
+                                                className={isIndicatorClicked
+                                        && selectedSubMenuId === data.id ? _cs(
+                                                        styles.subMenu, styles.subMenuActive,
+                                                    ) : styles.subMenu}
 
-            </ul>
+                                                onClick={() => handleSelectSubmenu(data.id,
+                                                    data.url, data.title, data.slug, item.slug)}
+                                            >
+
+                                                {data.title}
+
+
+                                            </button>
+                                        </div>
+                                    ))
+                                    : ''
+                                }
+
+
+                            </button>
+                        ))}
+
+                    </ul>
+                )
+            }
+
+            {
+                showReportEdit
+                && (
+                    <ul className={styles.menuList}>
+                        {menuItems.map(item => (
+                            <li>
+                                <button
+                                    key={item.key}
+                                    className={selectedTab === item.key ? styles.selected : styles.notSelected}
+                                    onClick={() => handleMenuItemClick(item.key)}
+                                    type="button"
+                                >
+
+                                    {item.content}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                )
+            }
         </div>
 
     );

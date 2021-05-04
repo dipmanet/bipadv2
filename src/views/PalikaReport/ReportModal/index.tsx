@@ -220,43 +220,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // const handlePreviewBtn = () => {
-    //     const divToDisplay = document.getElementById('reportPreview');
-    //     html2canvas(divToDisplay).then((canvas) => {
-    //         const imgData = canvas.toDataURL('image/png');
-
-    //         /*
-    //         Here are the numbers (paper width and height) that I found to work.
-    //         It still creates a little overlap part between the pages, but good enough for me.
-    //         if you can find an official number from jsPDF, use them.
-    //         */
-    //         const imgWidth = 210;
-    //         const pageHeight = 275;
-    //         const imgHeight = canvas.height * imgWidth / canvas.width;
-    //         let heightLeft = imgHeight;
-
-    //         const doc = new JsPDF('p', 'mm');
-    //         let position = 0;
-
-    //         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    //         heightLeft -= pageHeight;
-
-    //         while (heightLeft >= 0) {
-    //             position = heightLeft - imgHeight;
-    //             doc.addPage();
-    //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    //             heightLeft -= pageHeight;
-    //         }
-    //         doc.save('palika-report.pdf');
-    //     });
-    // };
-
 
     const { showForm } = palikaRedirect;
-
+    console.log('keytab: ', keyTab);
     return (
         <>
-            {!showTabs && !showForm
+            {/* {!showTabs && !showForm
                     && (
                         <div className={styles.firstPageContainer}>
                             <div className={styles.title}>
@@ -329,10 +298,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         </div>
                     )
 
-            }
+            } */}
             {
                 (keyTab === 0
-               && showTabs)
+                )
                     ? (
                         <General
                             mayor={mayor}
@@ -349,7 +318,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 1
-               && showTabs)
+                )
                     ? (
                         <Budget
                             reportData={reportData}
@@ -378,7 +347,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 3
-               && showTabs)
+                )
                     ? (
                         <ProgrammeAndPolicies
                             updateTab={updateTab}
@@ -391,7 +360,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 4
-               && showTabs)
+                )
                     ? (
 
                         <Organisation
@@ -405,7 +374,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 5
-               && showTabs)
+                )
                     ? (
                         <Inventory
                             handlePrevClick={handlePrevClick}
@@ -420,7 +389,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 6
-               && showTabs)
+                )
                     ? (
                         <CriticalInfra
                             handlePrevClick={handlePrevClick}
@@ -435,7 +404,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 7
-               && showTabs)
+                )
                     ? (
                         <>
                             <Contacts
@@ -451,7 +420,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 8
-               && showTabs)
+                )
                     ? (
                         <Relief
                             updateTab={updateTab}
@@ -464,7 +433,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 9
-               && showTabs)
+                )
                     ? (
                         <>
                             <Simulation
@@ -479,7 +448,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
 ,
             {
-                keyTab === (tabsLength - 1) && showTabs
+                keyTab === (tabsLength - 1)
                     ? (
                         <div className={styles.tabsPageContainer}>
                             <div className={styles.buttonContainer}>
