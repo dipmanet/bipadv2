@@ -32,6 +32,8 @@ import MissingIcon from '../../Icons/missing.svg';
 import InjredIcon from '../../Icons/injured.svg';
 import InfraIcon from '../../Icons/infrastructure.svg';
 import LivestockIcon from '../../Icons/livestock.svg';
+import HouseAffIcon from '../../Icons/house_partial.svg';
+import HouseDmgIcon from '../../Icons/house_complete.svg';
 
 interface Props{
 
@@ -44,12 +46,56 @@ const mapStateToProps = (state, props) => ({
     hazardTypes: hazardTypesSelector(state),
 });
 
-const COLORS = ['rgb(0,117,117)', 'rgb(198,233,232)'];
+const COLORS = ['rgb(0,177,117)', 'rgb(198,233,232)'];
 const genderWiseDeathData = [
     { name: 'DRR funding of municipality', value: 10 },
     { name: 'Other DRR related funding', value: 30 },
 ];
 
+const wardwiseData = [
+    {
+        name: 'Ward A',
+        Death: 4000,
+        Missing: 2400,
+        Injured: 2400,
+    },
+    {
+        name: 'Ward B',
+        Death: 3000,
+        Missing: 1398,
+        Injured: 2210,
+    },
+    {
+        name: 'Ward C',
+        Death: 2000,
+        Missing: 9800,
+        Injured: 2290,
+    },
+    {
+        name: 'Ward D',
+        Death: 2780,
+        Missing: 3908,
+        Injured: 2000,
+    },
+    {
+        name: 'Ward E',
+        Death: 1890,
+        Missing: 4800,
+        Injured: 2181,
+    },
+    {
+        name: 'Ward F',
+        Death: 2390,
+        Missing: 3800,
+        Injured: 2500,
+    },
+    {
+        name: 'Ward G',
+        Death: 3490,
+        Missing: 4300,
+        Injured: 2100,
+    },
+];
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
@@ -59,12 +105,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.user.profile.province,
                     district: params.user.profile.district,
                     municipality: params.user.profile.municipality,
-                    limit: params.page,
+                    limit: params.Ward,
                     resource_type: params.inventories,
                     expand: params.fields,
                 };
             }
-            return { limit: params.page,
+            return { limit: params.Ward,
                 resource_type: params.inventories,
                 expand: params.fields };
         },
@@ -123,6 +169,9 @@ const Relief = (props: Props) => {
 
     const [maleDeath, setMaleDeath] = useState(0);
     const [femaleDeath, setFemaleDeath] = useState(0);
+
+    const [houseAffected, setHouseAffected] = useState(0);
+    const [houseDamaged, setHouseDamaged] = useState(0);
 
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
@@ -223,6 +272,20 @@ const Relief = (props: Props) => {
                 .reduce((a, b) => a + b);
             setFemaleDeath(deathFemaleData);
 
+            const houseAffectedData = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.infrastructureAffectedHouseCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setHouseAffected(houseAffectedData);
+
+            const houseDamagedData = fetchedData.map(item => item.loss)
+                .filter(item => item !== undefined)
+                .map(item => item.infrastructureDestroyedHouseCount)
+                .filter(item => item !== undefined)
+                .reduce((a, b) => a + b);
+            setHouseDamaged(houseDamagedData);
+
             setdeathGenderChartData(
                 [
                     { name: 'Male', value: deathMaleData },
@@ -280,7 +343,7 @@ const Relief = (props: Props) => {
         <>
             {!props.previewDetails && !props.hazardwiseImpact
          && (
-             <div className={styles.tabsPageContainer}>
+             <div className={styles.tabsWardContainer}>
                  {!showRelief
                 && (
                     <>
@@ -647,12 +710,13 @@ const Relief = (props: Props) => {
                                 />
                                 <Bar
                                     dataKey="No. of Incidents"
-                                    fill="rgb(0,117,117)"
+                                    fill="rgb(0,173,115)"
 
                                 />
                             </BarChart>
                         </div>
-                        <div className={styles.incidentSection}>
+
+                        <div className={styles.incidentMiddleSection}>
                             <h2>
                              Genderwise Death
                             </h2>
@@ -744,7 +808,83 @@ const Relief = (props: Props) => {
                                 </div>
 
                             </div>
+                            <div className={styles.houseData}>
+                                <p>House Damaged</p>
+                                <div className={styles.houseRow}>
+                                    <div className={styles.houseElement}>
+
+                                        <ScalableVectorGraphics
+                                            className={styles.houseIcon}
+                                            src={HouseAffIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <span className={styles.darker}>{houseAffected}</span>
+                                            <li>PARTIAL</li>
+                                        </ul>
+
+                                    </div>
+                                    <div className={styles.houseElement}>
+
+                                        <ScalableVectorGraphics
+                                            className={styles.houseIcon}
+                                            src={HouseDmgIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <ul>
+                                            <li><span className={styles.darker}>{houseDamaged}</span></li>
+                                            <li>FULLY</li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+
+                        <div className={styles.incidentSection}>
+                            <h2>
+                             Wardwise Human Impact
+                            </h2>
+                            <BarChart
+                                width={250}
+                                height={250}
+                                data={wardwiseData}
+                                margin={{ left: 0, right: 5, top: 10, bottom: 20 }}
+
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend wrapperStyle={{
+                                    paddingTop: '5px',
+                                    paddingLeft: '5px',
+                                }}
+                                />
+                                <Bar
+                                    dataKey="Death"
+                                    stackId="a"
+                                    fill="rgb(143,212,221)"
+                                    barSize={10}
+
+                                />
+                                <Bar
+                                    dataKey="Missing"
+                                    stackId="a"
+                                    fill="rgb(0,82,52)"
+                                    barSize={10}
+
+                                />
+                                <Bar
+                                    dataKey="Injured"
+                                    stackId="a"
+                                    fill="rgb(0,177,117)"
+                                    barSize={10}
+                                />
+                            </BarChart>
+                        </div>
+
                     </div>
 
                 )

@@ -46,7 +46,6 @@
                     .legendColor{
                         width: 15px;
                         height: 15px;
-                        background-color: gray;
                         border-radius: 50%;
                         // display: none;
                     }   
@@ -73,6 +72,118 @@
         }
     }
   }
+  .incidentMiddleSection{
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    align-items: center;
+    position: relative;
+    h2{
+      font-size: 14px;
+      color: #444;
+      font-weight: 600;
+    align-self: flex-start;  
+    margin-left: 10px;
+    }
+    .chartandlegend{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .legend{
+        display: flex;
+        flex-direction: column;
+        // justify-content: center;
+        align-items: center;
+            .activitiesAmt{
+                .light{
+                    color: #777;
+                }
+                .biggerNum{
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+            }
+            .bottomRow{
+                position: relative;
+                right: 5px;
+            }
+            .legenditem{
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+                .legendColorContainer{
+                    height: 100%;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    //need to fix this
+                    padding-top: 17px;
+                    padding-right: 2px;
+                    .legendColor{
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 50%;
+                        // display: none;
+                    }   
+                }
+                .numberRow {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    ul{list-style: none; 
+                        padding-left: 1%;
+                        padding-top: 0;
+                    }
+                  
+                    .bigerNum{
+                        font-size: 18px;
+                    font-weight: 600;
+                    }        
+                    .light{
+                        color: #777;
+        
+                    } 
+                }     
+            }
+        }
+    }
+    .houseData{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content:  flex-start;
+      position: absolute;
+      bottom: 10px;
+      p{
+        font-size: 12px;
+        color: #222;
+        font-weight: 600;
+      }
+      .houseRow{
+        display: flex;
+        flex-direction: row;
+        .houseElement{
+          display: flex;
+          .darker{
+            font-size: 12px;
+            font-weight: 600;
+          }
+          .houseIcon{
+            width: 50px;
+            path{
+              fill: rgb(84,174,186);
+            }
+          }
+          ul{
+            list-style: none;
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+
+
 }
 .budgetPreviewContainer{
   // margin-left: 30px;
@@ -89,7 +200,6 @@
   .lossSection{
     display: flex;
     // flex: 1;
-    // border: 1px solid gray;
     border: 2px solid green;
     border-bottom: 2px solid white;
     margin: 0 2%;
@@ -114,6 +224,9 @@
        height: 50px;
        position: relative;
        top: 18px;
+       path{
+         fill:rgb(0,177,117);
+       }
       }
       ul{
         padding-left: 0;
@@ -121,7 +234,6 @@
         list-style: none;
         text-align: center;
         line-height: 0.9em;
-      // border: 1px solid gray;
         height: 0;
         .darkerText{
           font-size: 18px;
