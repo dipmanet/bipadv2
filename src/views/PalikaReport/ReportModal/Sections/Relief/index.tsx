@@ -367,7 +367,7 @@ const Relief = (props: Props) => {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleReliefAdd(item)}
-                                                    className={styles.reliefBtn}
+                                                    // className={styles.reliefBtn}
                                                 >
                                                      Add Relief
                                                 </button>

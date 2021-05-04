@@ -358,8 +358,8 @@ const Simulation = (props: Props) => {
             {
                 !props.previewDetails
             && (
-                <div>
-                    <h2 className={styles.title}>Simulations</h2>
+                <div className={styles.mainDiv}>
+                    <h2>Simulations</h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
                             <tbody>
@@ -503,23 +503,23 @@ const Simulation = (props: Props) => {
 
                             </tbody>
                         </table>
-
+                        <button
+                            type="button"
+                            onClick={handleAddNew}
+                            className={styles.savebtn}
+                        >
+                            <Icon
+                                name="plus"
+                                className={styles.plusIcon}
+                            />
+                                Add New Simulation
+                        </button>
                         <div className={styles.btns}>
                             <NextPrevBtns
                                 handlePrevClick={props.handlePrevClick}
                                 handleNextClick={handleNextClick}
                             />
-                            <button
-                                type="button"
-                                onClick={handleAddNew}
-                                className={styles.newActivityBtn}
-                            >
-                                <Icon
-                                    name="plus"
-                                    className={styles.plusIcon}
-                                />
-                                Add New Activity
-                            </button>
+
                         </div>
                     </div>
                 </div>
