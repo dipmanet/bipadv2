@@ -120,6 +120,12 @@ const Sidebar = (props) => {
     },
     ];
     const Data = municipalityName ? Data1 : Data2;
+    const handleMyPalikaClick = () => {
+        props.handleMyPalikaSelect(true);
+    };
+    const handleMyPalikaClickReport = () => {
+        props.handleMyPalikaSelect(false);
+    };
     const handleSelectMenu = (index, id, name) => {
         setSelectedSubmenu(Data[index].components);
         setIsSubmenuClicked(true);
@@ -170,6 +176,32 @@ const Sidebar = (props) => {
 
     return (
         <div>
+
+            {showReportEdit
+
+            && (
+                <div className={styles.breadcrumbRow}>
+                    <button
+                        className={styles.breadcrumb}
+                        type="button"
+                        onClick={handleMyPalikaClick}
+                    >
+                        My Palika Report &gt;
+
+                    </button>
+                    <button
+                        className={_cs(styles.breadcrumb, styles.rightCrumb)}
+                        type="button"
+                        onClick={handleMyPalikaClickReport}
+                    >
+                    Add a report
+
+                    </button>
+                </div>
+            )
+            }
+
+
             {
                 !showReportEdit
                 && (

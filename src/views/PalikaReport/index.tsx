@@ -121,7 +121,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
-    const [showReportEdit, setShowReportEdit] = useState(true);
+    const [showReportEdit, setShowReportEdit] = useState(false);
     const [loggedInMunicipality, setLoggedInMunicipality] = useState(null);
     const [selectedTab, setSelectedTab] = useState(0);
 
@@ -303,6 +303,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const handleAddbuttonClick = () => {
         setShowReportModal(true);
         setShowTabs(true);
+        setShowReportEdit(true);
     };
     const hideWelcomePage = () => {
         setShowTabs(true);
@@ -566,6 +567,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         }
     };
 
+    const handleMyPalikaSelect = () => {
+        setShowReportEdit(false);
+    };
     const handleTabSelect = (tab: number) => {
         setSelectedTab(tab);
     };
@@ -641,6 +645,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             showReportEdit={showReportEdit}
                             selectedTab={selectedTab}
                             handleMenuClick={handleMenuClick}
+                            handleMyPalikaSelect={handleMyPalikaSelect}
                         />
 
                     </div>
