@@ -89,27 +89,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
     },
 
-    PreviewDataPost: {
-        url: '/disaster-profile/',
-        method: methods.POST,
-        body: ({ params }) => params && params.body,
+    // PreviewDataPost: {
+    //     url: '/disaster-profile/',
+    //     method: methods.POST,
+    //     body: ({ params }) => params && params.body,
 
-        onSuccess: ({ response, props, params }) => {
-        },
-        onFailure: ({ error, params }) => {
-            if (params && params.setFaramErrors) {
-                // TODO: handle error
-            }
-        },
-        onFatal: ({ params }) => {
-        },
-        extras: {
-            hasFile: true,
+    //     onSuccess: ({ response, props, params }) => {
+    //     },
+    //     onFailure: ({ error, params }) => {
+    //         if (params && params.setFaramErrors) {
+    //             // TODO: handle error
+    //         }
+    //     },
+    //     onFatal: ({ params }) => {
+    //     },
+    //     extras: {
+    //         hasFile: true,
 
-        },
+    //     },
 
 
-    },
+    // },
 
 };
 const formdata = new FormData();
@@ -195,15 +195,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             formdata.append('province', (profileUser.province || ''));
             formdata.append('district', (profileUser.district || ''));
             formdata.append('municipality', (profileUser.municipality || ''));
-            formdata.append('mayorChairperson', generalData.mayor);
-            formdata.append('chiefAdministrativeOfficer', generalData.cao);
-            formdata.append('drrFocalPerson', generalData.focalPerson);
+            // formdata.append('mayorChairperson', generalData.mayor);
+            // formdata.append('chiefAdministrativeOfficer', generalData.cao);
+            // formdata.append('drrFocalPerson', generalData.focalPerson);
 
             axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
-                    console.log(response);
+                    console.log('this data', response);
                 }).catch((error) => {
                     console.log(error);
                 });

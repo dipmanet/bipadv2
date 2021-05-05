@@ -10,6 +10,12 @@ import { BarChart,
     Legend, PieChart,
     Pie } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import ModalFooter from '#rscv/Modal/Footer';
+import DangerButton from '#rsca/Button/DangerButton';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
@@ -201,6 +207,13 @@ const Relief = (props: Props) => {
     const [updateButton, setUpdateButton] = useState(false);
     const [postButton, setPostButton] = useState(false);
     const [reliefId, setReliefId] = useState();
+    const [modalClose, setModalClose] = useState(true);
+    const [disableInput, setDisableInput] = useState(false);
+    const handleCloseModal = () => {
+        setModalClose(true);
+        setShowRelief(false);
+        setDisableInput(false);
+    };
     const handleReliefData = (response) => {
         setReliefData(response);
     };
@@ -232,6 +245,7 @@ const Relief = (props: Props) => {
         setCurrentRelief(data);
         setPostButton(true);
         setUpdateButton(false);
+        setModalClose(false);
     };
     const handleFilteredViewRelief = (response) => {
         setfamiliesBenefited(response[0].numberOfBeneficiaryFamily);
@@ -252,9 +266,11 @@ const Relief = (props: Props) => {
     console.log('This is show relief>>>', familiesBenefited);
     const handleReliefView = (data) => {
         setShowRelief(true);
+        setDisableInput(true);
         setCurrentRelief(data);
         setPostButton(false);
         setUpdateButton(false);
+        setModalClose(false);
         ReliefDataGet.do({
             incidentId: data.id,
             filteredViewRelief: handleFilteredViewRelief,
@@ -263,6 +279,7 @@ const Relief = (props: Props) => {
     const handleReliefEdit = (data, item) => {
         console.log(data);
         setReliefId(data.id);
+        setModalClose(false);
         setPostButton(false);
         setUpdateButton(true);
         setCurrentRelief(item);
@@ -421,7 +438,7 @@ const Relief = (props: Props) => {
         setjanajatis(data.target.value);
     };
 
-
+    console.log('This is relief date>>>', reliefDate);
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
         url,
@@ -433,6 +450,8 @@ const Relief = (props: Props) => {
     });
     const handleBackButton = () => {
         setShowRelief(false);
+        setModalClose(true);
+        setDisableInput(false);
         setfamiliesBenefited(null);
         setnamesofBeneficiaries('');
         setreliefDate('');
@@ -459,6 +478,7 @@ const Relief = (props: Props) => {
     };
     const handleSavedReliefData = (response) => {
         setShowRelief(false);
+        setModalClose(true);
         setfamiliesBenefited(null);
         setnamesofBeneficiaries('');
         setreliefDate('');
@@ -507,6 +527,7 @@ const Relief = (props: Props) => {
 
     const handleUpdateAndClose = (response) => {
         setShowRelief(false);
+        setModalClose(true);
         setfamiliesBenefited(null);
         setnamesofBeneficiaries('');
         setreliefDate('');
@@ -556,6 +577,7 @@ const Relief = (props: Props) => {
     console.log('This is relief data>>>', reliefData);
     return (
         <>
+
             {!props.previewDetails && !props.hazardwiseImpact
          && (
              <div className={styles.tabsWardContainer}>
@@ -678,203 +700,58 @@ const Relief = (props: Props) => {
                  }
 
                  {showRelief
-                && (
-                    <>
-                        {' '}
-                        <h3>Incident Selected</h3>
-                        <div className={styles.incidentDetails}>
-                            <table id="table-to-xls">
-                                <tbody>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Hazard</th>
-                                        <th>Incident On</th>
-                                        <th>Reported On</th>
-                                        <th>Total Death</th>
-                                        <th>Total Injured</th>
-                                        <th>Total Missing</th>
-                                        <th>Family Affected</th>
-                                        <th>Infrastructure Affected</th>
-                                        <th>Infrastructure Destroyed</th>
-                                        <th>Livestock Destroyed</th>
-                                    </tr>
+                      && (
+                          <>
+                              {' '}
+                              <h3>Incident Selected</h3>
+                              <div className={styles.incidentDetails}>
+                                  <table id="table-to-xls">
+                                      <tbody>
+                                          <tr>
+                                              <th>Title</th>
+                                              <th>Hazard</th>
+                                              <th>Incident On</th>
+                                              <th>Reported On</th>
+                                              <th>Total Death</th>
+                                              <th>Total Injured</th>
+                                              <th>Total Missing</th>
+                                              <th>Family Affected</th>
+                                              <th>Infrastructure Affected</th>
+                                              <th>Infrastructure Destroyed</th>
+                                              <th>Livestock Destroyed</th>
+                                          </tr>
 
-                                    <tr key={currentRelief.id}>
-                                        <td>{currentRelief.title}</td>
-                                        <td>{currentRelief.hazard}</td>
-                                        <td>{currentRelief.incidentOn.split('T')[0]}</td>
-                                        <td>{currentRelief.reportedOn.split('T')[0]}</td>
-                                        <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
-                                        <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
-                                        <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
-                                        <td>{currentRelief.loss ? currentRelief.loss.familyAffectedCount : 0}</td>
-                                        <td>
-                                            {Number(currentRelief.loss
-                                                ? currentRelief.loss.infrastructureAffectedBridgeCount : 0)
+                                          <tr key={currentRelief.id}>
+                                              <td>{currentRelief.title}</td>
+                                              <td>{currentRelief.hazard}</td>
+                                              <td>{currentRelief.incidentOn.split('T')[0]}</td>
+                                              <td>{currentRelief.reportedOn.split('T')[0]}</td>
+                                              <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
+                                              <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
+                                              <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
+                                              <td>{currentRelief.loss ? currentRelief.loss.familyAffectedCount : 0}</td>
+                                              <td>
+                                                  {Number(currentRelief.loss
+                                                      ? currentRelief.loss.infrastructureAffectedBridgeCount : 0)
                                         + Number(currentRelief.loss
                                             ? currentRelief.loss.infrastructureAffectedElectricityCount : 0)
                                         + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedHouseCount : 0)
                                         + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedRoadCount : 0)}
-                                        </td>
-                                        <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
-                                        <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
-                                    </tr>
+                                              </td>
+                                              <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
+                                              <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
+                                          </tr>
 
-                                </tbody>
-                            </table>
-                        </div>
-                        <h3>Please add relief detail for the above incident</h3>
-
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Number of Beneficiary Families</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleFamiliesBenefited}
-                                value={familiesBenefited}
-                                placeholder={'Kindly specify number of families benefited'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Names of beneficiaries</span>
-                            <textarea
-                                className={styles.inputElement}
-                                onChange={handleNameofBeneficiaries}
-                                value={namesofBeneficiaries}
-                                placeholder={'Kindly specify the names of beneficiaries'}
-                                rows={10}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Date of relief distribution</span>
-                            <NepaliDatePicker
-                                inputClassName="form-control"
-                                className={styles.datepicker}
-                                value={reliefDate}
-                                onChange={date => setreliefDate(date)}
-                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Relief Amount (NPR)</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleReliefAmount}
-                                value={reliefAmount}
-                                placeholder={'Kindly specify Relief amount'}
-                            />
-                        </div>
+                                      </tbody>
+                                  </table>
+                              </div>
 
 
-                        <h3><strong>People benefited from the relief Distribution</strong></h3>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Male</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handlemaleBenefited}
-                                value={maleBenefited}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Female</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handlefemaleBenefited}
-                                value={femaleBenefited}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Minorities</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleMinorities}
-                                value={miorities}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Dalit</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleDalit}
-                                value={dalits}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Madhesis</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleMadhesis}
-                                value={madhesis}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Person with disabilities</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleDisabilities}
-                                value={disabilities}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <span className={styles.dpText}>Relief Amount (NPR)</span>
-                            <input
-                                type="number"
-                                className={styles.inputElement}
-                                onChange={handleJanajaties}
-                                value={janajatis}
-                                placeholder={'Kindly specify a number'}
-                            />
-                        </div>
+                              )
 
 
-                        <button
-                            type="button"
-                            className={styles.savebtn}
-                            onClick={handleBackButton}
-
-                        >
-                            BACK
-                        </button>
-                        {postButton && (
-                            <button
-                                type="button"
-                                className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
-                                onClick={handleSaveRelief}
-                            >
-                            Save
-                            </button>
-                        )
-                        }
-
-                        {updateButton && (
-                            <button
-                                type="button"
-                                className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
-                                onClick={handleUpdateRelief}
-                            >
-                            UPDATE
-                            </button>
-                        )
-
-                        }
-
-                    </>
-                )
+                          </>
+                      )
                  }
              </div>
          )
@@ -1097,6 +974,7 @@ const Relief = (props: Props) => {
                                 </div>
 
                             </div>
+
                             <div className={styles.houseData}>
                                 <p>House Damaged</p>
                                 <div className={styles.houseRow}>
@@ -1180,8 +1058,199 @@ const Relief = (props: Props) => {
 
 
             }
+            {modalClose ? ''
+                : (
+                    <Modal>
+                        <ModalHeader
 
+                            rightComponent={(
+                                <DangerButton
+                                    transparent
+                                    iconName="close"
+                                    title="Close Modal"
+                                    onClick={handleCloseModal}
+                                />
+                            )}
+                        />
+                        <ModalBody>
+                            <h3>Please add relief detail for the above incident</h3>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Number of Beneficiary Families</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleFamiliesBenefited}
+                                    value={familiesBenefited}
+                                    placeholder={'Kindly specify number of families benefited'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Names of beneficiaries</span>
+                                <textarea
+                                    className={styles.inputElement}
+                                    onChange={handleNameofBeneficiaries}
+                                    value={namesofBeneficiaries}
+                                    placeholder={'Kindly specify the names of beneficiaries'}
+                                    rows={5}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Date of relief distribution</span>
+                                {disableInput ? (
+                                    <input
+                                        type="text"
+                                        className={styles.inputElement}
+                                        onChange={handleReliefAmount}
+                                        value={reliefDate}
+
+                                        disabled={disableInput}
+                                    />
+                                ) : (
+                                    <NepaliDatePicker
+                                        inputClassName="form-control"
+                                        className={styles.datepicker}
+                                        value={reliefDate}
+                                        onChange={date => setreliefDate(date)}
+                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                    />
+                                )
+
+                                }
+
+
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Relief Amount (NPR)</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleReliefAmount}
+                                    value={reliefAmount}
+                                    placeholder={'Kindly specify Relief amount'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+
+
+                            <h3><strong>People benefited from the relief Distribution</strong></h3>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Male</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handlemaleBenefited}
+                                    value={maleBenefited}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Female</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handlefemaleBenefited}
+                                    value={femaleBenefited}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Minorities</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleMinorities}
+                                    value={miorities}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Dalit</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleDalit}
+                                    value={dalits}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Madhesis</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleMadhesis}
+                                    value={madhesis}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Person with disabilities</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleDisabilities}
+                                    value={disabilities}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+                            <div className={styles.inputContainer}>
+                                <span className={styles.dpText}>Relief Amount (NPR)</span>
+                                <input
+                                    type="number"
+                                    className={styles.inputElement}
+                                    onChange={handleJanajaties}
+                                    value={janajatis}
+                                    placeholder={'Kindly specify a number'}
+                                    disabled={disableInput}
+                                />
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className={styles.savebtn}
+                                onClick={handleBackButton}
+
+                            >
+                            BACK
+                            </button>
+                            {postButton && (
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                    onClick={handleSaveRelief}
+                                >
+                            Save
+                                </button>
+                            )
+                            }
+
+                            {updateButton && (
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                    onClick={handleUpdateRelief}
+                                >
+                            UPDATE
+                                </button>
+                            )}
+                        </ModalBody>
+
+                    </Modal>
+                )
+            }
         </>
+
     );
 };
 
