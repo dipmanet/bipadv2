@@ -227,11 +227,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
 
     const { showForm } = palikaRedirect;
-    console.log('local members:', localMembers);
-
-    useEffect(() => {
-        console.log('local members:', localMembers);
-    }, [localMembers]);
     return (
         <>
             {/* {!showTabs && !showForm
