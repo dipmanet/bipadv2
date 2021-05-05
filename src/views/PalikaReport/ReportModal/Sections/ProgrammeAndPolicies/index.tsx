@@ -200,14 +200,21 @@ const ProgramPolicies = (props: Props) => {
 
                         </tbody>
                     </table>
-                    <div className={styles.txtAreadetails}>
-                        <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
-                        <button type="button" onClick={handleSubmit}>Add</button>
-                    </div>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={props.handleNextClick}
-                    />
+                    {
+                        !props.annex
+                        && (
+                            <>
+                                <div className={styles.txtAreadetails}>
+                                    <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
+                                    <button type="button" onClick={handleSubmit}>Add</button>
+                                </div>
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            </>
+                        )
+                    }
 
                 </div>
             )}
