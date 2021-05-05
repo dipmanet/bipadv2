@@ -223,7 +223,10 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     <th>Type of Organization</th>
                                     <th>Added Date</th>
                                     <th>Updated Date</th>
-                                    <th>Action</th>
+                                    {
+                                        !props.annex
+                                        && <th>Action</th>
+                                    }
 
                                 </tr>
 
@@ -245,14 +248,19 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                         <td>{item.organizationType}</td>
                                         <td>{item.createdOn.split('T')[0]}</td>
                                         <td>{item.modifiedOn.split('T')[0]}</td>
-                                        <td>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleEditInventory(item)}
-                                            >
+                                        {
+                                            !props.annex
+                                            && (
+                                                <td>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleEditInventory(item)}
+                                                    >
                                             Edit
-                                            </button>
-                                        </td>
+                                                    </button>
+                                                </td>
+                                            )
+                                        }
                                     </tr>
                                 ))}
                             </tbody>
@@ -262,11 +270,15 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                         }
-
-                        <NextPrevBtns
-                            handlePrevClick={props.handlePrevClick}
-                            handleNextClick={props.handleNextClick}
-                        />
+                        {
+                            !props.annex
+                            && (
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            )
+                        }
                     </div>
 
                 </div>

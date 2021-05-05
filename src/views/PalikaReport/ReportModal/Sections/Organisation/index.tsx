@@ -200,7 +200,10 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     {/* <th>Level (for governmental organization)</th> */}
                                     <th>Number of Male Employee</th>
                                     <th>Number of Female Employee</th>
-                                    <th>Action</th>
+                                    {
+                                        !props.annex
+                                        && <th>Action</th>
+                                    }
                                 </tr>
                                 {fetchedData && fetchedData.length > 0
                                     ? fetchedData.map((item, i) => (
@@ -214,14 +217,19 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                             <td>
                                                 {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
                                             </td>
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleEditResource(item)}
-                                                >
+                                            {
+                                                !props.annex
+                                                && (
+                                                    <td>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleEditResource(item)}
+                                                        >
                                             Edit
-                                                </button>
-                                            </td>
+                                                        </button>
+                                                    </td>
+                                                )
+                                            }
                                         </tr>
                                     )) : ''
                                 }
@@ -229,20 +237,24 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                             </tbody>
                         </table>
-                        <button
-                            type="button"
-                            onClick={handleOrnaisationRedirect}
-                            className={styles.savebtn}
-                        >
-                            <Icon
-                                name="plus"
-                                className={styles.plusIcon}
-
-                            />
-                             Add Organisation Data
-                        </button>
                         {
-                            props.hide !== 1
+                            !props.annex
+                            && (
+                                <button
+                                    type="button"
+                                    onClick={handleOrnaisationRedirect}
+                                    className={styles.savebtn}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.plusIcon}
+                                    />
+                             Add Organisation Data
+                                </button>
+                            )
+                        }
+                        {
+                            !props.annex
                                 ? (
                                     <div className={styles.btnsCont}>
                                         <NextPrevBtns

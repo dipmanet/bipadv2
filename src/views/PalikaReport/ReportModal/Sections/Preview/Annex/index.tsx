@@ -122,7 +122,6 @@ const Annex = (props: Props) => {
                     handleNextClick={() => {}}
                     localMembers={localMembers}
                 />
-
             </div>
 
             <h1>Annex B</h1>
@@ -156,6 +155,34 @@ const Annex = (props: Props) => {
 
             </div>
 
+            <h1>Annex E</h1>
+            <div className={styles.rowOne}>
+                <Organisation
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+            <h1>Annex F</h1>
+            <div className={styles.rowOne}>
+                <Inventory
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+            <h1>Annex G</h1>
+            <div className={styles.rowOne}>
+                <CriticalInfra
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+
 
             <h1>Annex H</h1>
 
@@ -167,6 +194,18 @@ const Annex = (props: Props) => {
                     tableHeader={() => {}}
                     updateTab={() => {}}
                     page={-1}
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                    annex
+                />
+
+            </div>
+
+            <h1>Annex I</h1>
+
+            <div className={styles.rowOne}>
+
+                <Simulation
                     handlePrevClick={() => {}}
                     handleNextClick={() => {}}
                     annex

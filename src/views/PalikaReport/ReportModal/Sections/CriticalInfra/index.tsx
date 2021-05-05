@@ -228,20 +228,26 @@ const CriticalInfra = (props: Props) => {
                    Critical Infrastructures
                 </h2>
                 <div className={styles.palikaTable}>
+                    {
+                        !props.annex
+                        && (
+                            <>
+
                 Filter by:
-                    <select
-                        value={ciType}
-                        onChange={handleCIFilter}
-                        className={styles.inputElement}
-                    >
-                        <option value="select">Select an Option</option>
-                        <option value="all">All Resource Type</option>
-                        {filteredSelectData
-                    && filteredSelectData.map(item => <option value={item}>{item}</option>)
-
-                        }
-
-                    </select>
+                                <select
+                                    value={ciType}
+                                    onChange={handleCIFilter}
+                                    className={styles.inputElement}
+                                >
+                                    <option value="select">Select an Option</option>
+                                    <option value="all">All Resource Type</option>
+                                    {filteredSelectData
+                             && filteredSelectData.map(item => <option value={item}>{item}</option>)
+                                    }
+                                </select>
+                            </>
+                        )
+                    }
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
@@ -252,7 +258,10 @@ const CriticalInfra = (props: Props) => {
                                 <th>Number Of male Employee</th>
                                 <th>Number Of female Employee</th>
                                 <th>Total Employee</th>
-                                <th>Action</th>
+                                {
+                                    !props.annex
+                                    && <th>Action</th>
+                                }
                             </tr>
                             {filteredtData && filteredtData.map((item, i) => (
                                 <tr key={item.id}>
@@ -263,35 +272,47 @@ const CriticalInfra = (props: Props) => {
                                     <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
                                     <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
                                     <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
-                                    <td>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleEditResource(item)}
-                                        >
+                                    {
+                                        !props.annex
+                                        && (
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleEditResource(item)}
+                                                >
                                             Edit
-                                        </button>
-                                    </td>
+                                                </button>
+                                            </td>
+                                        )
+                                    }
                                 </tr>
                             ))}
 
 
                         </tbody>
                     </table>
-                    <button
-                        type="button"
-                        className={styles.savebtn}
-                        onClick={handleAddResource}
-                    >
-                        <Icon
-                            name="plus"
-                            className={styles.plusIcon}
-                        />
+                    {
+                        !props.annex
+                        && (
+                            <>
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                                    onClick={handleAddResource}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.plusIcon}
+                                    />
                             Add Resources
-                    </button>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={props.handleNextClick}
-                    />
+                                </button>
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            </>
+                        )
+                    }
 
                 </div>
 
