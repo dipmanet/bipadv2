@@ -3,7 +3,7 @@ import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 
 const NextPrevBtns = (props) => {
-    const { handlePrevClick, handleNextClick, lastpage, firstpage } = props;
+    const { handlePrevClick, handleNextClick, lastpage, firstpage, disabled } = props;
 
     const handleNClick = () => handleNextClick();
     const handlePClick = () => handlePrevClick();
@@ -30,6 +30,7 @@ const NextPrevBtns = (props) => {
                     type="button"
                     onClick={handleNClick}
                     className={styles.savebtn}
+                    disabled={disabled}
                 >
                     <Icon
                         name="plus"

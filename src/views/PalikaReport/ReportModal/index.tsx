@@ -56,7 +56,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.province,
                     district: params.district,
                     municipality: params.municipality,
-                    limit: -1,
+
                 };
             }
 
@@ -207,15 +207,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 }).catch((error) => {
                     console.log(error);
                 });
+
             doc.save('file.pdf');
         });
     };
-    useEffect(() => {
-        formdata.append('title', 'title');
+    // useEffect(() => {
+    //     formdata.append('title', 'title');
 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
 
     const { showForm } = palikaRedirect;

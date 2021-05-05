@@ -9,8 +9,8 @@ import styles from './styles.scss';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import ReportModal from '../ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import ReportModal from '../ReportModal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import {
@@ -82,7 +82,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     // province: params.province,
                     // district: params.district,
                     municipality: params.municipality,
-                    limit: -1,
+
                 };
             }
 
@@ -194,7 +194,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 4,
             content: 'Organisation',
-            url: '/resource/',
+            url: '',
         },
         {
             key: 5,
