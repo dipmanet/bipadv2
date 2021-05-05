@@ -415,7 +415,7 @@ const General = (props: Props) => {
                                 className={styles.datepicker}
                                 value={formationDate}
                                 onChange={(value: string) => setformationDate(value)}
-                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
                             />
                             {showErr && dateErr
                                 ? (

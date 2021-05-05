@@ -166,12 +166,20 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
             heightLeft -= pageHeight;
-
+            let count = 0;
             while (heightLeft >= 0) {
-                position = heightLeft - imgHeight; // top padding for other pages
-                doc.addPage();
-                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                heightLeft -= pageHeight;
+                count += 1;
+                if (count >= 2) {
+                    position = heightLeft - imgHeight; // top padding for other pages
+                    doc.addPage('a4', 'landscape');
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                    heightLeft -= pageHeight;
+                } else {
+                    position = heightLeft - imgHeight; // top padding for other pages
+                    doc.addPage('a4', 'portrait');
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                    heightLeft -= pageHeight;
+                }
             }
             const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
             // const file = new File([blob], 'image.pdf');
@@ -203,11 +211,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             } })
                 .then((response) => {
                     console.log(response);
-                    doc.save('file.pdf');
                     alert('Your palika report has been uploaded sucessfully');
                 }).catch((error) => {
                     console.log(error);
                 });
+            doc.save('file.pdf');
         });
     };
     // useEffect(() => {
