@@ -349,11 +349,15 @@ Other DRR related funding
                         </tbody>
                     </table>
 
-
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={handleNextClick}
-                    />
+                    {
+                        !props.annex
+                    && (
+                        <NextPrevBtns
+                            handlePrevClick={props.handlePrevClick}
+                            handleNextClick={handleNextClick}
+                        />
+                    )
+                    }
 
                 </div>
             </div>

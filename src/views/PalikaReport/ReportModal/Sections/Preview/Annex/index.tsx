@@ -124,6 +124,18 @@ const Annex = (props: Props) => {
                 />
 
             </div>
+
+            <h1>Annex B</h1>
+            <div className={styles.rowOne}>
+                <Budget
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+            <h1>Annex H</h1>
+
             <div className={styles.rowOne}>
 
                 <Relief
