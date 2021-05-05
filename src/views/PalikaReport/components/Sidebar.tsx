@@ -106,7 +106,7 @@ const Sidebar = (props) => {
         if (generalData && generalData.fiscalYear) {
             handleMenuClick(menuItem);
             setShowErr(false);
-            props.setShowErr(false);
+            props.handleShowErr(false);
         } else {
             props.handleShowErr(true);
             setShowErr(true);

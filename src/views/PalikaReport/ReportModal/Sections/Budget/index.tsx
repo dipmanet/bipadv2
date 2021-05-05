@@ -1,9 +1,11 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import Loader from 'react-loader-spinner';
 
 import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -77,7 +79,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-
+            params.handlePendingState(false);
             if (params && params.finalAnnualBudgetData) {
                 params.finalAnnualBudgetData(citizenReportList);
             }
@@ -89,6 +91,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         onSuccess: ({ response, props, params }) => {
             params.budgetId(response);
             params.callGetApi(response);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
         },
 
 
@@ -128,13 +135,22 @@ const Budget = (props: Props) => {
     const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
 
+
+    const [pending, setPending] = useState(false);
+    const [postErrors, setPostErrors] = useState({});
+
+
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest } } = props;
-
+    const handlePending = (data: boolean) => {
+        setPending(data);
+    };
+    const handleErrors = (errors) => {
+        setPostErrors(errors);
+    };
 
     const handleSaveAnnualBudgetData = (response) => {
         setAnnualBudgetData(response);
-        console.log('this response>>>', response);
     };
 
     BudgetGetRequest.setDefaultParams({
@@ -191,6 +207,8 @@ const Budget = (props: Props) => {
             municipality: profile.municipality,
             province: profile.province,
             finalAnnualBudgetData: handleSaveAnnualBudgetData,
+            handlePendingState: handlePending,
+            setErrors: handleErrors,
 
         });
     };
@@ -208,6 +226,8 @@ const Budget = (props: Props) => {
                     province,
                     district,
                     municipality,
+                    handlePendingState: handlePending,
+                    setErrors: handleErrors,
                 },
                 budgetId: handleBudgetId,
                 callGetApi: handleCallGetApi,
@@ -252,152 +272,191 @@ const Budget = (props: Props) => {
         <>
             {' '}
             {
-                !props.previewDetails
+                pending
+                    ? (
+                        <div className={styles.loaderClass}>
 
-        && (
-            <div>
+                            <Loader
+                                type="TailSpin"
+                                color="#00BFFF"
+                                height={50}
+                                width={50}
+                                timeout={10000}
 
-                <h2>Budget</h2>
-                <div className={styles.palikaTable}>
-                    <table id="table-to-xls">
-                        <tbody>
+                            />
+                        </div>
+                    )
+                    : (
+                        <div>
+                            {
+                                !props.previewDetails
 
+            && (
+                <div>
 
-                            <>
-                                {annualBudgetData.length > 0
-                                    ? (
-                                        <tr>
-
-                                            <th>SN</th>
-
-
-                                            <th>
-                                Total municipal budget
-
-
-                                            </th>
-                                            <th>
-                                DRR fund of municipality
-
-
-                                            </th>
-                                            <th>
-                                Other DRR related funding
+                    <h2>Budget</h2>
+                    <div className={styles.palikaTable}>
+                        <table id="table-to-xls">
+                            <tbody>
 
 
-                                            </th>
-                                            <th>
-                               Updated By
+                                <>
+                                    {annualBudgetData.length > 0
+                                        ? (
+                                            <tr>
+
+                                                <th>SN</th>
 
 
-                                            </th>
-                                            <th>
-                                Updated On
+                                                <th>
+                                    Total municipal budget
 
 
-                                            </th>
+                                                </th>
+                                                <th>
+                                    DRR fund of municipality
+
+
+                                                </th>
+                                                <th>
+                                    Other DRR related funding
+
+
+                                                </th>
+                                                <th>
+                                Updated By
+
+
+                                                </th>
+                                                <th>
+                                    Updated On
+
+
+                                                </th>
+
+
+                                            </tr>
+                                        ) : (
+                                            <tr>
+
+                                                <th>SN</th>
+
+
+                                                <th>
+    Total municipal budget
+
+
+                                                </th>
+                                                <th>
+    DRR fund of municipality
+
+
+                                                </th>
+                                                <th>
+    Other DRR related funding
+
+
+                                                </th>
+
+
+                                            </tr>
+                                        )}
+                                    {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
+                                        <tr key={item.id}>
+                                            <td>{i + 1}</td>
+                                            <td>{item.totalBudgetNrs}</td>
+                                            <td>{item.disasterBudgetNrs}</td>
+                                            <td>{item.otherBudgetNrs}</td>
+                                            <td>{item.updatedBy}</td>
+                                            <td>{item.modifiedOn}</td>
 
 
                                         </tr>
-                                    ) : (
+                                    )) : (
                                         <tr>
-
-                                            <th>SN</th>
-
-
-                                            <th>
-Total municipal budget
-
-
-                                            </th>
-                                            <th>
-DRR fund of municipality
-
-
-                                            </th>
-                                            <th>
-Other DRR related funding
-
-
-                                            </th>
+                                            <td>1</td>
+                                            <td>
+                                                <input type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
+                                                {' '}
+                                            </td>
+                                            <td>
+                                                <input type="text" value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
+                                                {' '}
+                                            </td>
+                                            <td>
+                                                <input type="text" value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
+                                                {' '}
+                                            </td>
 
 
                                         </tr>
-                                    )}
-                                {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
-                                    <tr key={item.id}>
-                                        <td>{i + 1}</td>
-                                        <td>{item.totalBudgetNrs}</td>
-                                        <td>{item.disasterBudgetNrs}</td>
-                                        <td>{item.otherBudgetNrs}</td>
-                                        <td>{item.updatedBy}</td>
-                                        <td>{item.modifiedOn}</td>
+                                    )
+                                    }
 
 
-                                    </tr>
-                                )) : (
-                                    <tr>
-                                        <td>1</td>
-                                        <td>
-                                            <input type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
-                                            {' '}
-                                        </td>
-                                        <td>
-                                            <input type="text" value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
-                                            {' '}
-                                        </td>
-                                        <td>
-                                            <input type="text" value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
-                                            {' '}
-                                        </td>
+                                </>
 
 
-                                    </tr>
-                                )
+                            </tbody>
+                        </table>
+                        {
+                            Object.keys(postErrors).length > 0
+                        && (
+                            <ul>
+                                <li>
+                                    <span className={styles.errorHeading}>
+                                    Please fix the following errors:
+                                    </span>
+                                </li>
+                                {
+                                    Object.keys(postErrors.response).map(errorItem => (
+                                        <li>
+                                            {`${errorItem}: ${postErrors.response[errorItem]}`}
+                                        </li>
+                                    ), // return <li>Please enter valid info in all fields</li>;
+                                    )
                                 }
 
+                            </ul>
+                        )
+                        }
+                        {
+                            !props.annex
+                        && (
+                            <>
+                                {annualBudgetData.length === 0
+                                && (
+                                    <button
+                                        type="button"
+                                        className={styles.savebtn}
+                                        onClick={handleNextClick}
+                                    >
+                                        <Icon
+                                            name="plus"
+                                            className={styles.plusIcon}
+                                        />
+                    Add New Budget
+                                    </button>
+                                )}
+
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                    // disabled={!(annualBudgetData.length > 0)}
+                                />
 
                             </>
+                        )
+                        }
 
-
-                        </tbody>
-                    </table>
-
-                    {
-                        !props.annex
-                    && (
-                        <>
-                            {annualBudgetData.length === 0
-                            && (
-                                <button
-                                    type="button"
-                                    className={styles.savebtn}
-                                    onClick={handleNextClick}
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.plusIcon}
-                                    />
-                  Add New Budget
-                                </button>
-                            )}
-
-                            <NextPrevBtns
-                                handlePrevClick={props.handlePrevClick}
-                                handleNextClick={props.handleNextClick}
-                                disabled={!(annualBudgetData.length > 0)}
-                            />
-
-                        </>
-                    )
-                    }
-
+                    </div>
                 </div>
-            </div>
-        )
-            }
-            {
-                props.previewDetails
+            )
+                            }
+
+
+                            {
+                                props.previewDetails
                     && (
                         <div className={styles.budgetPreviewContainer}>
                             <h2>Budget</h2>
@@ -460,6 +519,9 @@ Other DRR related funding
 
 
                             </div>
+                        </div>
+                    )
+                            }
                         </div>
                     )
             }
