@@ -9,8 +9,8 @@ import styles from './styles.scss';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
-import ReportModal from '../ReportModal';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import ReportModal from '../ReportModal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
 
 import {

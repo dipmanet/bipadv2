@@ -127,6 +127,46 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+    ReliefDataGet: {
+        url: '/incident-relief/',
+        query: ({ params, props }) => ({
+            incident: params.incidentId,
+        }),
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.ReliefData) {
+                params.ReliefData(citizenReportList);
+            }
+            if (params && params.filteredViewRelief) {
+                params.filteredViewRelief(citizenReportList);
+            }
+        },
+    },
+    ReliefDataPost: {
+        url: '/incident-relief/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+
+        onSuccess: ({ response, props, params }) => {
+            console.log('Thiis is response>>>', response);
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                console.log('This is params>>>', params);
+            }
+        },
+        onFatal: ({ params }) => {
+            console.log('This is params>>>', params);
+        },
+    },
 };
 
 const Relief = (props: Props) => {
@@ -136,7 +176,7 @@ const Relief = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
     const {
-        requests: { PalikaReportInventoriesReport },
+        requests: { PalikaReportInventoriesReport, ReliefDataPost, ReliefDataGet },
         provinces,
         districts,
         municipalities,
@@ -148,10 +188,10 @@ const Relief = (props: Props) => {
     const [meta, setMeta] = useState(true);
     const [showRelief, setShowRelief] = useState(false);
 
-    const [familiesBenefited, setfamiliesBenefited] = useState('');
+    const [familiesBenefited, setfamiliesBenefited] = useState();
     const [namesofBeneficiaries, setnamesofBeneficiaries] = useState('');
     const [reliefDate, setreliefDate] = useState('');
-    const [reliefAmount, setreliefAmount] = useState('');
+    const [reliefAmount, setreliefAmount] = useState();
     const [currentRelief, setCurrentRelief] = useState({});
 
     const [incidentCount, setIncidentsCount] = useState(0);
@@ -172,6 +212,25 @@ const Relief = (props: Props) => {
 
     const [houseAffected, setHouseAffected] = useState(0);
     const [houseDamaged, setHouseDamaged] = useState(0);
+    const [maleBenefited, setmaleBenefited] = useState();
+    const [femaleBenefited, setfemaleBenefited] = useState();
+    const [miorities, setmiorities] = useState();
+    const [dalits, setdalits] = useState();
+    const [madhesis, setmadhesis] = useState();
+    const [disabilities, setdisabilities] = useState();
+    const [janajatis, setjanajatis] = useState();
+    const [reliefData, setReliefData] = useState();
+
+
+    const handleReliefData = (response) => {
+        setReliefData(response);
+    };
+
+    ReliefDataGet.setDefaultParams({
+        ReliefData: handleReliefData,
+    });
+    console.log('This is relief data>>>', reliefData);
+    console.log('This is relief data>>>', fetchedData);
 
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
@@ -192,7 +251,34 @@ const Relief = (props: Props) => {
         setShowRelief(true);
         setCurrentRelief(data);
     };
+    const handleFilteredViewRelief = (response) => {
+        setfamiliesBenefited(response[0].numberOfBeneficiaryFamily);
+        setnamesofBeneficiaries(response[0].nameOfBeneficiary);
+        setReliefData(response[0].dateOfReliefDistribution);
+        setreliefAmount(response[0].reliefAmountNpr);
+        setmaleBenefited(response[0].totalMaleBenefited);
+        setfemaleBenefited(response[0].totalFemaleBenefited);
+        setmiorities(response[0].totalMinoritiesBenefited);
+        setdalits(response[0].totalDalitBenefited);
+        setmadhesis(response[0].totalMadhesiBenefited);
+        setdisabilities(response[0].totalDisabledBenefited);
+        setjanajatis(response[0].totalJanjatiBenefited);
 
+        setShowRelief(true);
+    };
+
+    console.log('This is show relief>>>', familiesBenefited);
+    const handleReliefView = (data) => {
+        setShowRelief(true);
+        setCurrentRelief(data);
+        ReliefDataGet.do({
+            incidentId: data.id,
+            filteredViewRelief: handleFilteredViewRelief,
+        });
+    };
+    const handleReliefEdit = (data) => {
+        console.log(data);
+    };
     useEffect(() => {
         if (fetchedData.length > 0) {
             setIncidentsCount(fetchedData.length);
@@ -297,15 +383,6 @@ const Relief = (props: Props) => {
     }, [deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
 
-    const [maleBenefited, setmaleBenefited] = useState('');
-    const [femaleBenefited, setfemaleBenefited] = useState('');
-    const [miorities, setmiorities] = useState('');
-    const [dalits, setdalits] = useState('');
-    const [madhesis, setmadhesis] = useState('');
-    const [disabilities, setdisabilities] = useState('');
-    const [janajatis, setjanajatis] = useState('');
-
-
     const handlemaleBenefited = (data) => {
         setmaleBenefited(data.target.value);
     };
@@ -339,6 +416,26 @@ const Relief = (props: Props) => {
 
     });
 
+    const handleSaveRelief = () => {
+        ReliefDataPost.do({
+            body: {
+                numberOfBeneficiaryFamily: Number(familiesBenefited),
+                nameOfBeneficiary: namesofBeneficiaries,
+                dateOfReliefDistribution: reliefDate,
+                reliefAmountNpr: Number(reliefAmount),
+                totalMaleBenefited: Number(maleBenefited),
+                totalFemaleBenefited: Number(femaleBenefited),
+                totalMinoritiesBenefited: Number(miorities),
+                totalDalitBenefited: Number(dalits),
+                totalMadhesiBenefited: Number(madhesis),
+                totalDisabledBenefited: Number(disabilities),
+                totalJanjatiBenefited: Number(janajatis),
+                incident: currentRelief.id,
+
+            },
+        });
+        setShowRelief(false);
+    };
     return (
         <>
             {!props.previewDetails && !props.hazardwiseImpact
@@ -371,6 +468,7 @@ const Relief = (props: Props) => {
                                     </tr>
 
                                     {fetchedData.map((item, i) => (
+
                                         <tr key={item.id}>
                                             <td>{i + 1}</td>
                                             <td>{item.title}</td>
@@ -391,20 +489,59 @@ const Relief = (props: Props) => {
                                             </td>
                                             <td>{item.loss ? item.loss.infrastructureDestroyedCount : 0}</td>
                                             <td>{item.loss ? item.loss.livestockDestroyedCount : 0}</td>
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleReliefAdd(item)}
-                                                    className={styles.reliefBtn}
-                                                >
-                                                     Add Relief
-                                                </button>
 
-                                            </td>
+
+                                            {reliefData
+                                           && reliefData.find(data => data.incident === item.id)
+
+                                                ? reliefData.filter(data => data.incident === item.id).map(data => (
+                                                    <td>
+                                                        <div className={styles.buttonDiv}>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleReliefView(item)}
+                                                                className={styles.reliefBtn}
+                                                            >
+                                                     VIEW
+                                                            </button>
+
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleReliefEdit(data)}
+                                                                className={styles.reliefBtn}
+                                                            >
+                                                     EDIT
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                ))
+
+
+                                                : (
+                                                    <td>
+                                                        <div className={styles.buttonDiv}>
+                                                            <button
+                                                                type="button"
+
+                                                                className={styles.reliefBtn}
+                                                            >
+                                                     ADD RELIEF
+                                                            </button>
+
+
+                                                        </div>
+                                                    </td>
+                                                )
+
+                                            }
 
                                         </tr>
+
+
                                     ))}
                                 </tbody>
+
+
                             </table>
                         </div>
                         <NextPrevBtns
@@ -436,28 +573,28 @@ const Relief = (props: Props) => {
                                         <th>Infrastructure Destroyed</th>
                                         <th>Livestock Destroyed</th>
                                     </tr>
-                                    {
-                                        <tr key={currentRelief.id}>
-                                            <td>{currentRelief.title}</td>
-                                            <td>{currentRelief.hazard}</td>
-                                            <td>{currentRelief.incidentOn.split('T')[0]}</td>
-                                            <td>{currentRelief.reportedOn.split('T')[0]}</td>
-                                            <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
-                                            <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
-                                            <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
-                                            <td>{currentRelief.loss ? currentRelief.loss.familyAffectedCount : 0}</td>
-                                            <td>
-                                                {Number(currentRelief.loss
-                                                    ? currentRelief.loss.infrastructureAffectedBridgeCount : 0)
+
+                                    <tr key={currentRelief.id}>
+                                        <td>{currentRelief.title}</td>
+                                        <td>{currentRelief.hazard}</td>
+                                        <td>{currentRelief.incidentOn.split('T')[0]}</td>
+                                        <td>{currentRelief.reportedOn.split('T')[0]}</td>
+                                        <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
+                                        <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
+                                        <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
+                                        <td>{currentRelief.loss ? currentRelief.loss.familyAffectedCount : 0}</td>
+                                        <td>
+                                            {Number(currentRelief.loss
+                                                ? currentRelief.loss.infrastructureAffectedBridgeCount : 0)
                                         + Number(currentRelief.loss
                                             ? currentRelief.loss.infrastructureAffectedElectricityCount : 0)
                                         + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedHouseCount : 0)
                                         + Number(currentRelief.loss ? currentRelief.loss.infrastructureAffectedRoadCount : 0)}
-                                            </td>
-                                            <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
-                                            <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
-                                        </tr>
-                                    }
+                                        </td>
+                                        <td>{currentRelief.loss ? currentRelief.loss.infrastructureDestroyedCount : 0}</td>
+                                        <td>{currentRelief.loss ? currentRelief.loss.livestockDestroyedCount : 0}</td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -580,7 +717,8 @@ const Relief = (props: Props) => {
                         <button
                             type="button"
                             className={styles.savebtn}
-                            onClick={() => setShowRelief(false)}
+                            // onClick={() => setShowRelief(false)}
+                            onClick={handleSaveRelief}
                         >
                             Save
                         </button>

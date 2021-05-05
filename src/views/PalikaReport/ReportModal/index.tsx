@@ -210,15 +210,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     console.log(error);
                 });
 
-            // doc.save('file.pdf');
+            doc.save('file.pdf');
         });
     };
-    useEffect(() => {
-        formdata.append('title', 'title');
+    // useEffect(() => {
+    //     formdata.append('title', 'title');
 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     // const handlePreviewBtn = () => {
     //     const divToDisplay = document.getElementById('reportPreview');
