@@ -56,7 +56,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.province,
                     district: params.district,
                     municipality: params.municipality,
-
                 };
             }
 
@@ -195,20 +194,20 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             formdata.append('province', (profileUser.province || ''));
             formdata.append('district', (profileUser.district || ''));
             formdata.append('municipality', (profileUser.municipality || ''));
-            formdata.append('mayorChairperson', generalData.mayor);
-            formdata.append('chiefAdministrativeOfficer', generalData.cao);
-            formdata.append('drrFocalPerson', generalData.focalPerson);
+            // formdata.append('mayorChairperson', generalData.mayor);
+            // formdata.append('chiefAdministrativeOfficer', generalData.cao);
+            // formdata.append('drrFocalPerson', generalData.focalPerson);
 
             axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
                     console.log(response);
+                    doc.save('file.pdf');
+                    alert('Your palika report has been uploaded sucessfully');
                 }).catch((error) => {
                     console.log(error);
                 });
-
-            doc.save('file.pdf');
         });
     };
     // useEffect(() => {
@@ -314,6 +313,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             handlePrevClick={handlePrevClick}
                             handleNextClick={handleNextClick}
                             localMembers={localMembers}
+                            handleShowErr={props.handleShowErr}
+
                         />
                     )
                     : ''

@@ -49,7 +49,11 @@
         list-style: none;
         background: rgb(235,235,235);
         padding: 0;
-    
+        .error{
+            font-size: 10px;
+            color: red;
+            padding-left: 30px;
+        }
         .selected{
             border: none;
             text-align: left !important;

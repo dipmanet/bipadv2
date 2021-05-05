@@ -124,6 +124,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportEdit, setShowReportEdit] = useState(false);
     const [loggedInMunicipality, setLoggedInMunicipality] = useState(null);
     const [selectedTab, setSelectedTab] = useState(0);
+    const [showErr, setShowErr] = useState(false);
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -578,6 +579,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setSelectedTab(menuId);
     };
 
+    const handleShowErr = (data) => {
+        console.log('in main report palika: ', data);
+        setShowErr(data);
+    };
+
     useEffect(() => {
         if (fetchedData && fiscalYear) {
             const finalfetchedData = fetchedData.map((item, i) => {
@@ -646,6 +652,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             selectedTab={selectedTab}
                             handleMenuClick={handleMenuClick}
                             handleMyPalikaSelect={handleMyPalikaSelect}
+                            showErr={showErr}
+                            handleShowErr={handleShowErr}
                         />
 
                     </div>
@@ -670,6 +678,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                             municipality={municipality}
                                             getTabSelected={handleTabSelect}
                                             selectedTab={selectedTab}
+                                            handleShowErr={handleShowErr}
+                                            showErr={showErr}
                                         />
                                     </div>
                                 )
