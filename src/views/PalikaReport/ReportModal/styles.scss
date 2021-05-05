@@ -59,6 +59,7 @@
     }
     .btnContainer{
         width: 100%;
+        border: 1px solid red;
         display: flex;
         justify-content: flex-end;
         margin-top: 10px;
@@ -78,9 +79,17 @@
     border-radius: 3px;
     color: white !important; 
     padding: 5px;
+
 }
 
-
+.reportContainer{
+    margin: 0 auto;
+// border: 1px solid red;
+width: 210mm;
+    .page{
+        border: 1px solid gray;
+    }
+}
 $breakpoint-tablet: 868px;
 $breakpoint-mobile: 450px;
 $breakpoint-laptop: 1466px;

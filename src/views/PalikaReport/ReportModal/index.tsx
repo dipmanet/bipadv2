@@ -204,10 +204,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             } })
                 .then((response) => {
                     console.log(response);
-                    doc.save('file.pdf');
                 }).catch((error) => {
                     console.log(error);
                 });
+            doc.save('file.pdf');
         });
     };
     useEffect(() => {
@@ -463,22 +463,21 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
 
-                            <div id={'reportPreview'}>
-                                <div className={'page'}>
+                            <div id={'reportPreview'} className={styles.reportContainer}>
+                                <div className={styles.page}>
                                     <PreviewPageOne
                                         generalData={getGeneralData()}
                                         url={keyTabUrl}
-
                                     />
                                 </div>
-                                <div className={'page'}>
+                                <div className={styles.page}>
 
                                     <PreviewPageTwo
                                         reportData={[<Budget />, <BudgetActivity />]}
 
                                     />
                                 </div>
-                                <div className={'page'}>
+                                <div className={styles.page}>
 
                                     <Annex
                                         localMembers={localMembers}
