@@ -209,11 +209,7 @@ const Relief = (props: Props) => {
     const [reliefId, setReliefId] = useState();
     const [modalClose, setModalClose] = useState(true);
     const [disableInput, setDisableInput] = useState(false);
-    const handleCloseModal = () => {
-        setModalClose(true);
-        setShowRelief(false);
-        setDisableInput(false);
-    };
+
     const handleReliefData = (response) => {
         setReliefData(response);
     };
@@ -262,7 +258,23 @@ const Relief = (props: Props) => {
 
         setShowRelief(true);
     };
+    const handleCloseModal = () => {
+        setModalClose(true);
+        setShowRelief(false);
+        setDisableInput(false);
+        PalikaReportInventoriesReport.do({
+            organisation: handleFetchedData,
+            url,
+            inventories: defaultQueryParameter,
+            fields,
+            user,
+            meta,
 
+        });
+        ReliefDataGet.do({
+            ReliefData: handleReliefData,
+        });
+    };
     console.log('This is show relief>>>', familiesBenefited);
     const handleReliefView = (data) => {
         setShowRelief(true);
