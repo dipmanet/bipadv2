@@ -22,6 +22,7 @@ import {
     userSelector, budgetIdSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
+import Icon from '#rscg/Icon';
 
 
 interface Props{
@@ -87,6 +88,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             params.budgetId(response);
+            params.callGetApi(response);
         },
 
 
@@ -125,12 +127,14 @@ const Budget = (props: Props) => {
     const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
     const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
+
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest } } = props;
 
 
     const handleSaveAnnualBudgetData = (response) => {
         setAnnualBudgetData(response);
+        console.log('this response>>>', response);
     };
 
     BudgetGetRequest.setDefaultParams({
@@ -178,7 +182,17 @@ const Budget = (props: Props) => {
 
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
-        props.handleNextClick();
+    };
+
+    const handleCallGetApi = (response) => {
+        BudgetGetRequest.do({
+            fiscalYear: generalData.fiscalYear,
+            district: profile.district,
+            municipality: profile.municipality,
+            province: profile.province,
+            finalAnnualBudgetData: handleSaveAnnualBudgetData,
+
+        });
     };
 
     const handleNextClick = () => {
@@ -190,12 +204,13 @@ const Budget = (props: Props) => {
                     totalBudgetNrs: Number(drrFund),
                     disasterBudgetNrs: Number(municipalBudget),
                     otherBudgetNrs: Number(additionalFund),
-                    fiscalYear: fiscal,
+                    fiscalYear: generalData.fiscalYear,
                     province,
                     district,
                     municipality,
                 },
                 budgetId: handleBudgetId,
+                callGetApi: handleCallGetApi,
 
             });
         } else {
@@ -209,7 +224,6 @@ const Budget = (props: Props) => {
                 drrFund: disasterBudgetNrs,
                 additionalFund: otherBudgetNrs,
             });
-            props.handleNextClick();
         }
     };
 
@@ -243,7 +257,7 @@ const Budget = (props: Props) => {
         && (
             <div>
 
-                <h2 className={styles.title}>Please enter Disaster Profile details</h2>
+                <h2>Budget</h2>
                 <div className={styles.palikaTable}>
                     <table id="table-to-xls">
                         <tbody>
@@ -349,11 +363,34 @@ Other DRR related funding
                         </tbody>
                     </table>
 
+                    {
+                        !props.annex
+                    && (
+                        <>
+                            {annualBudgetData.length === 0
+                            && (
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                                    onClick={handleNextClick}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.plusIcon}
+                                    />
+                  Add New Budget
+                                </button>
+                            )}
 
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={handleNextClick}
-                    />
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={props.handleNextClick}
+                                disabled={!(annualBudgetData.length > 0)}
+                            />
+
+                        </>
+                    )
+                    }
 
                 </div>
             </div>

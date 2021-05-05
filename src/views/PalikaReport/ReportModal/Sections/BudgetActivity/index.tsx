@@ -425,7 +425,7 @@ const BudgetActivity = (props: Props) => {
             {!props.previewDetails && !props.monitoringDetails
         && (
             <div className={styles.mainPageDetailsContainer}>
-                <h2 className={styles.title}>Budget Activities</h2>
+                <h2>Budget Activities</h2>
                 <table id="table-to-xls">
                     <tbody>
 
@@ -535,210 +535,210 @@ const BudgetActivity = (props: Props) => {
                                     <td>{data.remarks}</td>
                                 </tr>
                             ))}
+                            { !props.annex
+                            && (
+                                <tr>
+                                    <td />
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            onChange={handleActivityName}
+                                            value={activityName}
+                                            placeholder={'Name of Activity'}
+                                        />
+                                    </td>
 
-                            <tr>
-                                <td />
-                                <td>
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleActivityName}
-                                        value={activityName}
-                                        placeholder={'Name of Activity'}
-                                    />
-                                </td>
+                                    <td>
+                                        <select
+                                            value={priorityArea}
+                                            onChange={handlePriorityArea}
+                                            className={styles.inputElement}
+                                        >
+                                            <option value="">Select Priority Area</option>
+                                            {PriorityArea.map(data => (
+                                                <option value={data.title}>
+                                                    {data.title}
+                                                </option>
+                                            ))}
 
-                                <td>
-                                    <select
-                                        value={priorityArea}
-                                        onChange={handlePriorityArea}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Area</option>
-                                        {PriorityArea.map(data => (
-                                            <option value={data.title}>
-                                                {data.title}
-                                            </option>
-                                        ))}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select
+                                            value={priorityAction}
+                                            onChange={handlePriorityAction}
+                                            className={styles.inputElement}
+                                        >
+                                            <option value="">Select Priority Action</option>
+                                            {PriorityAction.map(data => (
+                                                <option value={data.title}>
+                                                    {data.title}
+                                                </option>
+                                            ))}
 
-                                    </select>
-                                </td>
-                                <td>
-                                    <select
-                                        value={priorityAction}
-                                        onChange={handlePriorityAction}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Action</option>
-                                        {PriorityAction.map(data => (
-                                            <option value={data.title}>
-                                                {data.title}
-                                            </option>
-                                        ))}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select
+                                            value={priorityActivity}
+                                            onChange={handlePriorityActivity}
+                                            className={styles.inputElement}
+                                        >
+                                            <option value="">Select Priority Activity</option>
+                                            {PriorityActivity.map(data => (
+                                                <option value={data.title}>
+                                                    {data.title}
+                                                </option>
+                                            ))}
 
-                                    </select>
-                                </td>
-                                <td>
-                                    <select
-                                        value={priorityActivity}
-                                        onChange={handlePriorityActivity}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="">Select Priority Activity</option>
-                                        {PriorityActivity.map(data => (
-                                            <option value={data.title}>
-                                                {data.title}
-                                            </option>
-                                        ))}
-
-                                    </select>
-                                </td>
-                                <td>
-                                    <select
-                                        value={fundSource}
-                                        onChange={handlefundSource}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="select"> Select Funding Type</option>
-                                        <option value="DRR Fund of Muicipality">
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select
+                                            value={fundSource}
+                                            onChange={handlefundSource}
+                                            className={styles.inputElement}
+                                        >
+                                            <option value="select"> Select Funding Type</option>
+                                            <option value="DRR Fund of Muicipality">
                             DRR Fund of Municipality
 
-                                        </option>
-                                        <option value="Other DRR related funding">
+                                            </option>
+                                            <option value="Other DRR related funding">
                             Other DRR related funding
 
-                                        </option>
-                                    </select>
-                                </td>
-                                {/* <td>
-                                <input
-                                    type="text"
-                                    className={styles.inputElement}
-                                    onChange={handleOtherFund}
-                                    value={fundingType}
-                                    placeholder={'Please specify Other source type'}
-                                />
-                            </td> */}
-                                <td>
-                                    <select
-                                        value={fundingType}
-                                        onChange={handlefundingType}
-                                        className={styles.inputElement}
-                                    >
-                                        <option value="select">Select Source of Funds</option>
-                                        <option value="Federal Government">
+                                            </option>
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <select
+                                            value={fundingType}
+                                            onChange={handlefundingType}
+                                            className={styles.inputElement}
+                                        >
+                                            <option value="select">Select Source of Funds</option>
+                                            <option value="Federal Government">
                                         Federal Government
 
-                                        </option>
-                                        <option value="Provincial Government">
+                                            </option>
+                                            <option value="Provincial Government">
                                         Provincial Government
 
-                                        </option>
-                                        <option value="INGO">I/NGOs</option>
-                                        <option value="Private Sector">Private Sector</option>
-                                        <option value="Academia">Academia</option>
-                                        <option value="Others">Others</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleBudgetCode}
-                                        value={budgetCode}
-                                        placeholder={'Budget Code'}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleOrganisationName}
-                                        value={organisationName}
-                                        placeholder={'Name of Organisation'}
-                                    />
-                                </td>
-                                <td>
-                                    <NepaliDatePicker
-                                        inputClassName="form-control"
-                                        className={styles.datepicker}
-                                        value={projstartDate}
-                                        onChange={date => setStartDate(date)}
-                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                                    />
-                                </td>
-                                <td>
-                                    <NepaliDatePicker
-                                        inputClassName="form-control"
-                                        className={styles.datepicker}
-                                        value={projcompletionDate}
-                                        onChange={date => setprojCompletionDate(date)}
-                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                                    />
-                                </td>
-                                <td>
-                                    <select
-                                        value={projStatus}
-                                        onChange={handleprojStatus}
-                                        className={styles.inputElement}
-                                        placeholder={'Project Status'}
-                                    >
-                                        <option value="select">Select an Option</option>
-                                        <option value="Started">Started</option>
-                                        <option value="Ongoing">Ongoing</option>
-                                        <option value="Completed">Completed</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleAlocBudget}
-                                        value={allocatedBudget}
-                                        placeholder={'Allocated Project Budget'}
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleActualExp}
-                                        value={actualExp}
-                                        placeholder={'Actual Expenditure'}
-                                    />
-                                </td>
-                                <td>
-                                    {' '}
-                                    <input
-                                        type="text"
-                                        className={styles.inputElement}
-                                        onChange={handleRemarks}
-                                        value={remarks}
-                                        placeholder={'Remarks'}
-                                    />
+                                            </option>
+                                            <option value="INGO">I/NGOs</option>
+                                            <option value="Private Sector">Private Sector</option>
+                                            <option value="Academia">Academia</option>
+                                            <option value="Others">Others</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            onChange={handleBudgetCode}
+                                            value={budgetCode}
+                                            placeholder={'Budget Code'}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            onChange={handleOrganisationName}
+                                            value={organisationName}
+                                            placeholder={'Name of Organisation'}
+                                        />
+                                    </td>
+                                    <td>
+                                        <NepaliDatePicker
+                                            inputClassName="form-control"
+                                            className={styles.datepicker}
+                                            value={projstartDate}
+                                            onChange={date => setStartDate(date)}
+                                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                        />
+                                    </td>
+                                    <td>
+                                        <NepaliDatePicker
+                                            inputClassName="form-control"
+                                            className={styles.datepicker}
+                                            value={projcompletionDate}
+                                            onChange={date => setprojCompletionDate(date)}
+                                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                        />
+                                    </td>
+                                    <td>
+                                        <select
+                                            value={projStatus}
+                                            onChange={handleprojStatus}
+                                            className={styles.inputElement}
+                                            placeholder={'Project Status'}
+                                        >
+                                            <option value="select">Select an Option</option>
+                                            <option value="Started">Started</option>
+                                            <option value="Ongoing">Ongoing</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            onChange={handleAlocBudget}
+                                            value={allocatedBudget}
+                                            placeholder={'Allocated Project Budget'}
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            onChange={handleActualExp}
+                                            value={actualExp}
+                                            placeholder={'Actual Expenditure'}
+                                        />
+                                    </td>
+                                    <td>
+                                        {' '}
+                                        <input
+                                            type="text"
+                                            className={styles.inputElement}
+                                            onChange={handleRemarks}
+                                            value={remarks}
+                                            placeholder={'Remarks'}
+                                        />
 
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            )
+                            }
 
                         </>
 
 
                     </tbody>
                 </table>
-                <div className={styles.btns}>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={props.handleNextClick}
-                    />
-                    <button
-                        type="button"
-                        onClick={handleAddNew}
-                        className={styles.newActivityBtn}
-                    >
+                {
+                    !props.annex
+                    && (
+                        <div className={styles.btns}>
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={props.handleNextClick}
+                            />
+                            <button
+                                type="button"
+                                onClick={handleAddNew}
+                                className={styles.newActivityBtn}
+                            >
                             Add New Activity
-                    </button>
+                            </button>
 
-                </div>
+                        </div>
+                    )
+                }
             </div>
         )
 

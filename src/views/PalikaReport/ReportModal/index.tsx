@@ -4,10 +4,6 @@ import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import BulletIcon from '#resources/icons/Bullet.svg';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
 import PreviewPageOne from './Sections/Preview/PageOne';
@@ -34,6 +30,7 @@ import Simulation from './Sections/Simulation';
 import Preparedness from './Sections/Preparedness';
 import NextPrevBtns from './NextPrevBtns';
 import Recovery from './Sections/Recovery';
+import Annex from './Sections/Preview/Annex';
 
 interface Props {
     keyTab: number;
@@ -59,7 +56,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.province,
                     district: params.district,
                     municipality: params.municipality,
-                    limit: -1,
+
                 };
             }
 
@@ -98,17 +95,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
 
         onSuccess: ({ response, props, params }) => {
-            console.log('Thiis is response>>>', response);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
-                console.warn('failure', error);
-                console.log('This is params>>>', params);
             }
         },
         onFatal: ({ params }) => {
-            console.log('This is params>>>', params);
         },
         extras: {
             hasFile: true,
@@ -139,7 +132,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         palikaRedirect,
         requests: { PreviewDataPost },
         generalData,
-        user: { profile },
+        user,
     } = props;
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
@@ -189,14 +182,19 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             // canvas.toBlob((blob) => {
 
             // });
+            let profileUser = {};
+            if (user) {
+                profileUser = user.profile;
+            }
+
             formdata.append('file', blob, 'report.pdf');
             formdata.append('title', 'This is title');
             formdata.append('fiscalYear', generalData.fiscalYear);
             formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
             formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-            formdata.append('province', profile.province);
-            formdata.append('district', profile.district);
-            formdata.append('municipality', profile.municipality);
+            formdata.append('province', (profileUser.province || ''));
+            formdata.append('district', (profileUser.district || ''));
+            formdata.append('municipality', (profileUser.municipality || ''));
             formdata.append('mayorChairperson', generalData.mayor);
             formdata.append('chiefAdministrativeOfficer', generalData.cao);
             formdata.append('drrFocalPerson', generalData.focalPerson);
@@ -205,7 +203,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
-                    console.log('what is response', response);
+                    console.log(response);
                 }).catch((error) => {
                     console.log(error);
                 });
@@ -220,43 +218,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, []);
 
-    // const handlePreviewBtn = () => {
-    //     const divToDisplay = document.getElementById('reportPreview');
-    //     html2canvas(divToDisplay).then((canvas) => {
-    //         const imgData = canvas.toDataURL('image/png');
-
-    //         /*
-    //         Here are the numbers (paper width and height) that I found to work.
-    //         It still creates a little overlap part between the pages, but good enough for me.
-    //         if you can find an official number from jsPDF, use them.
-    //         */
-    //         const imgWidth = 210;
-    //         const pageHeight = 275;
-    //         const imgHeight = canvas.height * imgWidth / canvas.width;
-    //         let heightLeft = imgHeight;
-
-    //         const doc = new JsPDF('p', 'mm');
-    //         let position = 0;
-
-    //         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    //         heightLeft -= pageHeight;
-
-    //         while (heightLeft >= 0) {
-    //             position = heightLeft - imgHeight;
-    //             doc.addPage();
-    //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    //             heightLeft -= pageHeight;
-    //         }
-    //         doc.save('palika-report.pdf');
-    //     });
-    // };
-
 
     const { showForm } = palikaRedirect;
+    console.log('local members:', localMembers);
 
+    useEffect(() => {
+        console.log('local members:', localMembers);
+    }, [localMembers]);
     return (
         <>
-            {!showTabs && !showForm
+            {/* {!showTabs && !showForm
                     && (
                         <div className={styles.firstPageContainer}>
                             <div className={styles.title}>
@@ -329,10 +300,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         </div>
                     )
 
-            }
+            } */}
             {
                 (keyTab === 0
-               && showTabs)
+                )
                     ? (
                         <General
                             mayor={mayor}
@@ -349,7 +320,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 1
-               && showTabs)
+                )
                     ? (
                         <Budget
                             reportData={reportData}
@@ -378,7 +349,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 3
-               && showTabs)
+                )
                     ? (
                         <ProgrammeAndPolicies
                             updateTab={updateTab}
@@ -391,7 +362,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 4
-               && showTabs)
+                )
                     ? (
 
                         <Organisation
@@ -405,7 +376,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 5
-               && showTabs)
+                )
                     ? (
                         <Inventory
                             handlePrevClick={handlePrevClick}
@@ -420,7 +391,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 6
-               && showTabs)
+                )
                     ? (
                         <CriticalInfra
                             handlePrevClick={handlePrevClick}
@@ -435,7 +406,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 7
-               && showTabs)
+                )
                     ? (
                         <>
                             <Contacts
@@ -451,7 +422,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 8
-               && showTabs)
+                )
                     ? (
                         <Relief
                             updateTab={updateTab}
@@ -464,7 +435,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             }
             {
                 (keyTab === 9
-               && showTabs)
+                )
                     ? (
                         <>
                             <Simulation
@@ -477,9 +448,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     )
                     : ''
             }
-,
             {
-                keyTab === (tabsLength - 1) && showTabs
+                keyTab === (tabsLength - 1)
                     ? (
                         <div className={styles.tabsPageContainer}>
                             <div className={styles.buttonContainer}>
@@ -494,18 +464,24 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
 
-                            <div id={'reportPreview'}>
-                                <div className={'page'}>
+                            <div id={'reportPreview'} className={styles.reportContainer}>
+                                <div className={styles.page}>
                                     <PreviewPageOne
                                         generalData={getGeneralData()}
                                         url={keyTabUrl}
-
                                     />
                                 </div>
-                                <div className={'page'}>
+                                <div className={styles.page}>
 
                                     <PreviewPageTwo
                                         reportData={[<Budget />, <BudgetActivity />]}
+
+                                    />
+                                </div>
+                                <div className={styles.page}>
+
+                                    <Annex
+                                        localMembers={localMembers}
 
                                     />
                                 </div>

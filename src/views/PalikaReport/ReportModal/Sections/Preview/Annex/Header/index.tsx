@@ -6,10 +6,6 @@ import govtlogo from '#views/PalikaReport/govtLogo.svg';
 import styles from './styles.scss';
 import {
     generalDataSelector,
-    userSelector,
-    municipalitiesSelector,
-    districtsSelector,
-    provincesSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -21,10 +17,6 @@ import {
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
-    user: userSelector(state),
-    muncipalities: municipalitiesSelector(state),
-    districts: districtsSelector(state),
-    provinces: provincesSelector(state),
 });
 
 interface Props{
@@ -47,40 +39,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 };
 
-let municipality = '';
-
-let district = '';
-let province = '';
-
 const Header = (props: Props) => {
-    const {
-        generalData,
-        requests: { FiscalYearFetch },
-        user,
-        muncipalities,
-        districts,
-        provinces,
-    } = props;
-
+    const { generalData, requests: { FiscalYearFetch } } = props;
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
-
-    if (user && user.profile) {
-        const {
-            municipality: munfromprops,
-            province: provfromprops,
-            district: districtfromprops,
-        } = user.profile;
-
-
-        const m = muncipalities.filter(mun => mun.id === munfromprops);
-        const d = districts.filter(dis => dis.id === districtfromprops);
-        const p = provinces.filter(pro => pro.id === provfromprops);
-
-        municipality = m[0].title;
-        province = p[0].title;
-        district = d[0].title;
-    }
 
     const {
         fiscalYear,
@@ -115,14 +77,8 @@ const Header = (props: Props) => {
 
                     <div className={styles.address}>
                         <ul>
-                            <li className={styles.munTitle}>{`${municipality} Municipality`}</li>
-                            <li className={styles.desc}>
-                                {`${district} District`}
-                                {' '}
-,
-                                {' '}
-                                {`${province}`}
-                            </li>
+                            <li className={styles.munTitle}>Rajapur Municipality</li>
+                            <li className={styles.desc}>Bardiya District, Lumbini Province</li>
 
                         </ul>
 

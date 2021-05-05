@@ -1,5 +1,6 @@
 .budgetPreviewContainer{
   // margin-left: 30px;
+  margin-right: 40px;
   margin-top: 10px;
   h2{
       font-size: 14px;
@@ -13,7 +14,7 @@
   min-height: 400px !important;
   display: flex;
   flex-direction: column;
-  padding: 50px;
+  // padding: 50px;
 
   h2{
       text-align: left;
@@ -27,16 +28,21 @@
   }
   .savebtn{
     position: relative;
-    left: 80%;
-    margin-top: 25px;
+    margin-top: 45px;
     width: fit-content;
-    background-color: rgb(0,105,222) !important;
-    border-radius: 15px;
-    color: white; 
+    // background-color: rgb(54, 132, 216) !important;
+    background-color: transparent;
+    border-radius: 4px;
+    color: rgb(54, 132, 216) !important;
     padding: 8px 18px;
     cursor: pointer;
     // border: none;
     filter: saturate(80%);
+    border: none;
+    margin-right: 10px;
+    .plusIcon{
+        padding-right: 4px;
+    }
 }
   // position: relative;
   // border: 1px solid red;

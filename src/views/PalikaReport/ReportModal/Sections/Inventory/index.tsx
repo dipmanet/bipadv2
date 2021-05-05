@@ -29,6 +29,7 @@ import Loading from '#components/Loading';
 import {
     setPalikaRedirectAction,
 } from '#actionCreators';
+import Icon from '#rscg/Icon';
 
 interface Props{
 
@@ -132,6 +133,17 @@ const Inventory: React.FC<Props> = (props: Props) => {
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
     };
+    // const handleAddInventory = () => {
+    //     const { setPalikaRedirect } = props;
+    //     setPalikaRedirect({
+    //         showForm: true,
+    //         inventoryItem: { resource: '' },
+    //         showModal: 'inventory',
+
+    //     });
+    //     ReachRouter.navigate('/risk-info/#/capacity-and-resources',
+    //         { state: { showForm: true }, replace: true });
+    // };
 
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
@@ -146,13 +158,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     });
 
-    // useEffect(() => {
-    //     PalikaReportInventoriesReport.do({
-    //         offset,
-    //     });
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [offset]);
-    // Finding Header for table data
+
     let count = 0;
 
     const inventoriesData = fetchedData.map(item => (
@@ -201,9 +207,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             && (
                 <div className={styles.tabsPageContainer}>
                     <h2>
-                        <strong>
-               Inventories
-                        </strong>
+                         Inventories
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
@@ -219,6 +223,10 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     <th>Type of Organization</th>
                                     <th>Added Date</th>
                                     <th>Updated Date</th>
+                                    {
+                                        !props.annex
+                                        && <th>Action</th>
+                                    }
 
                                 </tr>
 
@@ -240,47 +248,37 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                         <td>{item.organizationType}</td>
                                         <td>{item.createdOn.split('T')[0]}</td>
                                         <td>{item.modifiedOn.split('T')[0]}</td>
-                                        <td>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleEditInventory(item)}
-                                            >
+                                        {
+                                            !props.annex
+                                            && (
+                                                <td>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleEditInventory(item)}
+                                                    >
                                             Edit
-                                            </button>
-                                        </td>
+                                                    </button>
+                                                </td>
+                                            )
+                                        }
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        {/* {paginationParameters && paginationParameters.count !== 0
-                            && (
-                                <div className={styles.paginationRight}>
-                                    <ReactPaginate
-                                        previousLabel={'prev'}
-                                        nextLabel={'next'}
-                                        breakLabel={'...'}
-                                        breakClassName={'break-me'}
-                                        onPageChange={handlePageClick}
-                                        marginPagesDisplayed={2}
-                                        pageRangeDisplayed={5}
-                                        pageCount={Math.ceil(finalInventoriesData.length
-                                         / 10)}
-                                        containerClassName={styles.pagination}
-                                        subContainerClassName={_cs(styles.pagination)}
-                                        activeClassName={styles.active}
-                                    />
-                                </div>
-                            )} */}
+
                         {finalInventoriesData && finalInventoriesData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                         }
-
-
-                        <NextPrevBtns
-                            handlePrevClick={props.handlePrevClick}
-                            handleNextClick={props.handleNextClick}
-                        />
+                        {
+                            !props.annex
+                            && (
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            )
+                        }
                     </div>
 
                 </div>

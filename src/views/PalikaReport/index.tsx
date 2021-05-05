@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
@@ -120,7 +121,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
+    const [showReportEdit, setShowReportEdit] = useState(false);
     const [loggedInMunicipality, setLoggedInMunicipality] = useState(null);
+    const [selectedTab, setSelectedTab] = useState(0);
+
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
@@ -299,6 +303,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const handleAddbuttonClick = () => {
         setShowReportModal(true);
         setShowTabs(true);
+        setShowReportEdit(true);
     };
     const hideWelcomePage = () => {
         setShowTabs(true);
@@ -561,47 +566,19 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setSortBy(sortBy);
         }
     };
+
+    const handleMyPalikaSelect = () => {
+        setShowReportEdit(false);
+    };
+    const handleTabSelect = (tab: number) => {
+        setSelectedTab(tab);
+    };
+
+    const handleMenuClick = (menuId: number) => {
+        setSelectedTab(menuId);
+    };
+
     useEffect(() => {
-        // if (fetchedData && submenuId === 2 && fiscalYear) {
-        //     const {
-        //         profile: {
-        //             municipality,
-
-        //         },
-        //     } = user;
-        //     const filteredFetchedData = fetchedData
-        //         .filter(data => data.municipality === municipality);
-        //     const finalfetchedData = filteredFetchedData.map((item, i) => {
-        //         const provinceDetails = provinces.find(data => data.id === item.province);
-        //         const districtDetails = districts.find(data => data.id === item.district);
-        //         const fiscalYears = fiscalYear.find(data => data.id === item.fiscalYear);
-        //         const municipalityDetails = municipalities
-        //             .find(data => data.id === item.municipality);
-        //         const createdDate = `${(new Date(item.createdOn)).getFullYear()
-        //         }-${(new Date(item.createdOn)).getMonth() + 1
-        //         }-${new Date(item.createdOn).getDate()}`;
-        //         const modifiedDate = `${(new Date(item.modifiedOn)).getFullYear()
-        //         }-${(new Date(item.modifiedOn)).getMonth() + 1
-        //         }-${new Date(item.modifiedOn).getDate()}`;
-        //         if (municipalityDetails) {
-        //             return { municipality: municipalityDetails.title,
-        //                 province: provinceDetails.title,
-        //                 district: districtDetails.title,
-        //                 fiscalYear: item.fiscalYear && fiscalYears.titleEn,
-        //                 createdDate: item.createdOn && createdDate,
-        //                 modifiedDate: item.modifiedOn && modifiedDate,
-        //                 item };
-        //         }
-        //         if (!provinceDetails) {
-        //             return {
-        //                 item,
-        //             };
-        //         }
-
-        //         return null;
-        //     });
-        //     finalArr = [...new Set(finalfetchedData)];
-        // }
         if (fetchedData && fiscalYear) {
             const finalfetchedData = fetchedData.map((item, i) => {
                 const provinceDetails = provinces.find(data => data.id === item.province);
@@ -645,17 +622,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         <>
             <Page hideMap hideFilter />
 
-            <MainModal
-                showTabs={showTabs}
-                setShowTabs={handleAddbuttonClick}
-                showReportModal={showReportModal}
-                hideWelcomePage={hideWelcomePage}
-                setShowReportModal={setShowReportModal}
-                province={province}
-                district={district}
-                municipality={municipality}
-            />
-
 
             {/* {(menuId === 2 || menuId === 3) && submenuId !== null && showTabs
              && <AddFormModal />} */}
@@ -676,6 +642,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             getmenuId={getMenuId}
                             getsubmenuTitle={getSubmenuTitle}
                             municipalityName={municipalityName}
+                            showReportEdit={showReportEdit}
+                            selectedTab={selectedTab}
+                            handleMenuClick={handleMenuClick}
+                            handleMyPalikaSelect={handleMyPalikaSelect}
                         />
 
                     </div>
@@ -683,61 +653,79 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                 </div>
                 <div className={styles.rightContainer}>
-                    <div className={styles.rightContainerHeading}>
-                        <h1>{subMenuTitle}</h1>
-                    </div>
-                    <div className={styles.rightContainerFilters}>
-                        {/* <FilterModal /> */}
-                        {submenuId === 1
-                        && (
-                            <StepwiseRegionSelectInput
-                                className={
-                                    _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                                faramElementName="region"
-                                wardsHidden
-                                onChange={handleFormRegion}
-                                checkProvince={handleCheckFilterDisableButtonForProvince}
-                                checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                                checkMun={handleCheckFilterDisableButtonForMunicipality}
-                                reset={resetFilterProps}
-                                provinceInputClassName={styles.snprovinceinput}
-                                districtInputClassName={styles.sndistinput}
-                                municipalityInputClassName={styles.snmuniinput}
-                            />
-                        )}
-                        {/* <div className={styles.dateFrom}>
-                            <Label>From: </Label>
-                            <DateInput dateFrom={changeDateFrom} />
-                        </div>
-                        <div className={styles.dateTo}>
-                            <Label>To: </Label>
-                            <DateInput dateTo={changeDateTo} />
-                        </div> */}
+                    <>
 
-                        {submenuId === 1 && filtered ? (
-                            <button
-                                type="submit"
-                                className={styles.submitBut}
-                                onClick={handleSubmit}
-                            >
-                            Reset
-                            </button>
-                        )
-                            : submenuId === 1 && (
-                                <button
-                                    type="submit"
-                                    onClick={handleSubmit}
-                                    className={
-                                        disableFilterButton
-                                            ? styles.submitButDisabled : styles.submitBut}
-                                    disabled={disableFilterButton}
-                                >
-                            Filter
-                                </button>
-                            )
-
+                        {
+                            showReportEdit
+                                && (
+                                    <div className={styles.reportEditingSection}>
+                                        <MainModal
+                                            showTabs={showTabs}
+                                            setShowTabs={handleAddbuttonClick}
+                                            showReportModal={showReportModal}
+                                            hideWelcomePage={hideWelcomePage}
+                                            setShowReportModal={setShowReportModal}
+                                            province={province}
+                                            district={district}
+                                            municipality={municipality}
+                                            getTabSelected={handleTabSelect}
+                                            selectedTab={selectedTab}
+                                        />
+                                    </div>
+                                )
                         }
-                        {municipalityName && submenuId === 2
+
+                        {
+                            !showReportEdit
+                                && (
+                                    <>
+                                        <div className={styles.rightContainerHeading}>
+                                            <h1>{subMenuTitle}</h1>
+                                        </div>
+
+                                        <div className={styles.rightContainerFilters}>
+                                            {submenuId === 1
+                         && (
+                             <StepwiseRegionSelectInput
+                                 className={
+                                     _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                 faramElementName="region"
+                                 wardsHidden
+                                 onChange={handleFormRegion}
+                                 checkProvince={handleCheckFilterDisableButtonForProvince}
+                                 checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                 checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                 reset={resetFilterProps}
+                                 provinceInputClassName={styles.snprovinceinput}
+                                 districtInputClassName={styles.sndistinput}
+                                 municipalityInputClassName={styles.snmuniinput}
+                             />
+                         )}
+
+                                            {!showReportEdit && submenuId === 1 && filtered ? (
+                                                <button
+                                                    type="submit"
+                                                    className={styles.submitBut}
+                                                    onClick={handleSubmit}
+                                                >
+                                    Reset
+                                                </button>
+                                            )
+                                                : !showReportEdit && submenuId === 1 && (
+                                                    <button
+                                                        type="submit"
+                                                        onClick={handleSubmit}
+                                                        className={
+                                                            disableFilterButton
+                                                                ? styles.submitButDisabled : styles.submitBut}
+                                                        disabled={disableFilterButton}
+                                                    >
+                                    Filter
+                                                    </button>
+                                                )
+
+                                            }
+                                            {!showReportEdit && municipalityName && submenuId === 2
                         && (
                             <button
                                 type="submit"
@@ -750,92 +738,35 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             </button>
                         )}
 
-                    </div>
-                    <div className={styles.rightContainerTables}>
+                                        </div>
 
-                        <PalikaReportTable
-                            tableData={finalArr}
-                            paginationData={paginationParameters}
-                            tableHeader={TableHeaderForTable}
-                            tableHeaderDataMatch={TableHeaderForMatchingData}
-                            submenuId={submenuId}
-                            sortTitle={handleSortTitle}
-                            sortProvince={handleSortProvince}
-                            sortDistrict={handleSortDistrict}
-                            sortMunicipality={handleSortMunicipality}
-                            sortFiscalYear={handleSortFiscalYear}
-                            sortCreatedOn={handleSortCreatedOn}
-                            sortModifiedOn={handleSortModifiedOn}
-                            currentPage={currentPageNumber}
-                            pageSize={paginationQueryLimit}
+                                        <div className={styles.rightContainerTables}>
 
-                        />
-                        <div className={styles.paginationDownload}>
-                            {/* {paginationParameters && paginationParameters.count !== 0
-                            && (
-                                <ReactHTMLTableToExcel
-                                    id="test-table-xls-button"
-                                    className={styles.downloadTableXlsButton}
-                                    table="table-to-xls"
-                                    filename="tablexls"
-                                    sheet="tablexls"
-                                    buttonText="DOWNLOAD XLS"
-                                />
-                            )} */}
-                            {/* {paginationParameters && paginationParameters.count !== 0
-                            && (
-                                <div className={styles.paginationRight}>
-                                    <ReactPaginate
-                                        previousLabel={'prev'}
-                                        nextLabel={'next'}
-                                        breakLabel={'...'}
-                                        breakClassName={'break-me'}
-                                        onPageChange={handlePageClick}
-                                        marginPagesDisplayed={2}
-                                        pageRangeDisplayed={5}
-                                        pageCount={Math.ceil(paginationParameters.count
-                                         / paginationQueryLimit)}
-                                        containerClassName={styles.pagination}
-                                        subContainerClassName={_cs(styles.pagination)}
-                                        activeClassName={styles.active}
-                                    />
-                                </div>
-                            )} */}
-                            {paginationParameters && paginationParameters.count !== 0
-&& (
-    <div className={styles.paginationRight}>
+                                            <PalikaReportTable
+                                                tableData={finalArr}
+                                                paginationData={paginationParameters}
+                                                tableHeader={TableHeaderForTable}
+                                                tableHeaderDataMatch={TableHeaderForMatchingData}
+                                                submenuId={submenuId}
+                                                sortTitle={handleSortTitle}
+                                                sortProvince={handleSortProvince}
+                                                sortDistrict={handleSortDistrict}
+                                                sortMunicipality={handleSortMunicipality}
+                                                sortFiscalYear={handleSortFiscalYear}
+                                                sortCreatedOn={handleSortCreatedOn}
+                                                sortModifiedOn={handleSortModifiedOn}
+                                                currentPage={currentPageNumber}
+                                                pageSize={paginationQueryLimit}
+                                            />
 
-        <ReactPaginate
-            previousLabel={'prev'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            breakClassName={'break-me'}
-            onPageChange={handlePageClick}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            pageCount={Math.ceil(paginationParameters.count
-                                        / paginationQueryLimit)}
-            containerClassName={styles.pagination}
-            subContainerClassName={_cs(styles.pagination)}
-            activeClassName={styles.active}
-        />
-    </div>
-)}
+                                        </div>
+                                    </>
+                                )
+                        }
 
-                        </div>
-
-                    </div>
-                    {/* <AddFormModal
-                        data={showReportModal}
-
-                    /> */}
-
+                    </>
                 </div>
-
             </div>
-
-            {}
-
         </>
     );
 };

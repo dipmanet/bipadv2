@@ -52,50 +52,7 @@ const genderWiseDeathData = [
     { name: 'Other DRR related funding', value: 30 },
 ];
 
-const wardwiseData = [
-    {
-        name: 'Ward A',
-        Death: 4000,
-        Missing: 2400,
-        Injured: 2400,
-    },
-    {
-        name: 'Ward B',
-        Death: 3000,
-        Missing: 1398,
-        Injured: 2210,
-    },
-    {
-        name: 'Ward C',
-        Death: 2000,
-        Missing: 9800,
-        Injured: 2290,
-    },
-    {
-        name: 'Ward D',
-        Death: 2780,
-        Missing: 3908,
-        Injured: 2000,
-    },
-    {
-        name: 'Ward E',
-        Death: 1890,
-        Missing: 4800,
-        Injured: 2181,
-    },
-    {
-        name: 'Ward F',
-        Death: 2390,
-        Missing: 3800,
-        Injured: 2500,
-    },
-    {
-        name: 'Ward G',
-        Death: 3490,
-        Missing: 4300,
-        Injured: 2100,
-    },
-];
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
@@ -155,6 +112,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
         onSuccess: ({ response, props, params }) => {
             console.log('Thiis is response>>>', response);
+            params.savedRelief(response);
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setFaramErrors) {
+                // TODO: handle error
+                console.warn('failure', error);
+                console.log('This is params>>>', params);
+            }
+        },
+        onFatal: ({ params }) => {
+            console.log('This is params>>>', params);
+        },
+    },
+    ReliefDataPUT: {
+        url: ({ params }) => `/incident-relief/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+
+        onSuccess: ({ response, props, params }) => {
+            console.log('Thiis is response>>>', response);
+            params.updateAndClose(response);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
@@ -176,7 +154,7 @@ const Relief = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
     const {
-        requests: { PalikaReportInventoriesReport, ReliefDataPost, ReliefDataGet },
+        requests: { PalikaReportInventoriesReport, ReliefDataPost, ReliefDataGet, ReliefDataPUT },
         provinces,
         districts,
         municipalities,
@@ -220,8 +198,9 @@ const Relief = (props: Props) => {
     const [disabilities, setdisabilities] = useState();
     const [janajatis, setjanajatis] = useState();
     const [reliefData, setReliefData] = useState();
-
-
+    const [updateButton, setUpdateButton] = useState(false);
+    const [postButton, setPostButton] = useState(false);
+    const [reliefId, setReliefId] = useState();
     const handleReliefData = (response) => {
         setReliefData(response);
     };
@@ -229,8 +208,9 @@ const Relief = (props: Props) => {
     ReliefDataGet.setDefaultParams({
         ReliefData: handleReliefData,
     });
-    console.log('This is relief data>>>', reliefData);
-    console.log('This is relief data>>>', fetchedData);
+
+
+    const [wardWiseImpact, setWardWiseImpact] = useState([]);
 
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
@@ -250,11 +230,13 @@ const Relief = (props: Props) => {
     const handleReliefAdd = (data) => {
         setShowRelief(true);
         setCurrentRelief(data);
+        setPostButton(true);
+        setUpdateButton(false);
     };
     const handleFilteredViewRelief = (response) => {
         setfamiliesBenefited(response[0].numberOfBeneficiaryFamily);
         setnamesofBeneficiaries(response[0].nameOfBeneficiary);
-        setReliefData(response[0].dateOfReliefDistribution);
+        setreliefDate(response[0].dateOfReliefDistribution);
         setreliefAmount(response[0].reliefAmountNpr);
         setmaleBenefited(response[0].totalMaleBenefited);
         setfemaleBenefited(response[0].totalFemaleBenefited);
@@ -271,13 +253,32 @@ const Relief = (props: Props) => {
     const handleReliefView = (data) => {
         setShowRelief(true);
         setCurrentRelief(data);
+        setPostButton(false);
+        setUpdateButton(false);
         ReliefDataGet.do({
             incidentId: data.id,
             filteredViewRelief: handleFilteredViewRelief,
         });
     };
-    const handleReliefEdit = (data) => {
+    const handleReliefEdit = (data, item) => {
         console.log(data);
+        setReliefId(data.id);
+        setPostButton(false);
+        setUpdateButton(true);
+        setCurrentRelief(item);
+        setfamiliesBenefited(data.numberOfBeneficiaryFamily);
+        setnamesofBeneficiaries(data.nameOfBeneficiary);
+        setreliefDate(data.dateOfReliefDistribution);
+        setreliefAmount(data.reliefAmountNpr);
+        setmaleBenefited(data.totalMaleBenefited);
+        setfemaleBenefited(data.totalFemaleBenefited);
+        setmiorities(data.totalMinoritiesBenefited);
+        setdalits(data.totalDalitBenefited);
+        setmadhesis(data.totalMadhesiBenefited);
+        setdisabilities(data.totalDisabledBenefited);
+        setjanajatis(data.totalJanjatiBenefited);
+
+        setShowRelief(true);
     };
     useEffect(() => {
         if (fetchedData.length > 0) {
@@ -379,6 +380,21 @@ const Relief = (props: Props) => {
                 ],
             );
             sethazardwiseImpact(hazardwiseImpactData);
+
+
+            const wards = [...new Set(fetchedData.map(item => item.wards[0]))]
+                .filter(ward => ward !== undefined);
+
+            const wardWiseImpactData = wards.map(wardItem => fetchedData.filter(e => e.wards[0] !== undefined && e.wards[0] === wardItem)
+                .map(item => item.loss)
+                .filter(iitems => iitems !== undefined)
+                .reduce((a, b) => ({
+                    ward: wardItem,
+                    Death: (a.peopledeathCount || 0) + (b.peopledeathCount || 0),
+                    Injured: (a.peopleInjuredCount || 0) + (b.peopledeathCount || 0),
+                    Missing: (a.peopleMissingCount || 0) + (b.peopledeathCount || 0),
+                })));
+            setWardWiseImpact(wardWiseImpactData);
         }
     }, [deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
@@ -415,7 +431,58 @@ const Relief = (props: Props) => {
         meta,
 
     });
+    const handleBackButton = () => {
+        setShowRelief(false);
+        setfamiliesBenefited(null);
+        setnamesofBeneficiaries('');
+        setreliefDate('');
+        setreliefAmount(null);
+        setmaleBenefited(null);
+        setfemaleBenefited(null);
+        setmiorities(null);
+        setdalits(null);
+        setmadhesis(null);
+        setdisabilities(null);
+        setjanajatis(null);
+        PalikaReportInventoriesReport.do({
+            organisation: handleFetchedData,
+            url,
+            inventories: defaultQueryParameter,
+            fields,
+            user,
+            meta,
 
+        });
+        ReliefDataGet.do({
+            ReliefData: handleReliefData,
+        });
+    };
+    const handleSavedReliefData = (response) => {
+        setShowRelief(false);
+        setfamiliesBenefited(null);
+        setnamesofBeneficiaries('');
+        setreliefDate('');
+        setreliefAmount(null);
+        setmaleBenefited(null);
+        setfemaleBenefited(null);
+        setmiorities(null);
+        setdalits(null);
+        setmadhesis(null);
+        setdisabilities(null);
+        setjanajatis(null);
+        PalikaReportInventoriesReport.do({
+            organisation: handleFetchedData,
+            url,
+            inventories: defaultQueryParameter,
+            fields,
+            user,
+            meta,
+
+        });
+        ReliefDataGet.do({
+            ReliefData: handleReliefData,
+        });
+    };
     const handleSaveRelief = () => {
         ReliefDataPost.do({
             body: {
@@ -433,9 +500,60 @@ const Relief = (props: Props) => {
                 incident: currentRelief.id,
 
             },
+            savedRelief: handleSavedReliefData,
+
         });
-        setShowRelief(false);
     };
+
+    const handleUpdateAndClose = (response) => {
+        setShowRelief(false);
+        setfamiliesBenefited(null);
+        setnamesofBeneficiaries('');
+        setreliefDate('');
+        setreliefAmount(null);
+        setmaleBenefited(null);
+        setfemaleBenefited(null);
+        setmiorities(null);
+        setdalits(null);
+        setmadhesis(null);
+        setdisabilities(null);
+        setjanajatis(null);
+        PalikaReportInventoriesReport.do({
+            organisation: handleFetchedData,
+            url,
+            inventories: defaultQueryParameter,
+            fields,
+            user,
+            meta,
+
+        });
+        ReliefDataGet.do({
+            ReliefData: handleReliefData,
+        });
+    };
+    const handleUpdateRelief = () => {
+        ReliefDataPUT.do({
+            body: {
+                numberOfBeneficiaryFamily: Number(familiesBenefited),
+                nameOfBeneficiary: namesofBeneficiaries,
+                dateOfReliefDistribution: reliefDate,
+                reliefAmountNpr: Number(reliefAmount),
+                totalMaleBenefited: Number(maleBenefited),
+                totalFemaleBenefited: Number(femaleBenefited),
+                totalMinoritiesBenefited: Number(miorities),
+                totalDalitBenefited: Number(dalits),
+                totalMadhesiBenefited: Number(madhesis),
+                totalDisabledBenefited: Number(disabilities),
+                totalJanjatiBenefited: Number(janajatis),
+                incident: currentRelief.id,
+
+            },
+            id: reliefId,
+            updateAndClose: handleUpdateAndClose,
+        });
+    };
+    console.log('This is fetched data>>>', fetchedData);
+    console.log('This is relief data>>>', reliefData);
     return (
         <>
             {!props.previewDetails && !props.hazardwiseImpact
@@ -445,9 +563,7 @@ const Relief = (props: Props) => {
                 && (
                     <>
                         <h2>
-                            <strong>
-                                Incidents
-                            </strong>
+                                Incident and Relief
                         </h2>
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">
@@ -465,9 +581,12 @@ const Relief = (props: Props) => {
                                         <th>Infrastructure Affected</th>
                                         <th>Infrastructure Destroyed</th>
                                         <th>Livestock Destroyed</th>
+                                        { !props.annex
+                                        && <th>Action</th>
+                                        }
                                     </tr>
 
-                                    {fetchedData.map((item, i) => (
+                                    {fetchedData && fetchedData.map((item, i) => (
 
                                         <tr key={item.id}>
                                             <td>{i + 1}</td>
@@ -491,7 +610,7 @@ const Relief = (props: Props) => {
                                             <td>{item.loss ? item.loss.livestockDestroyedCount : 0}</td>
 
 
-                                            {reliefData
+                                            {!props.annex && reliefData
                                            && reliefData.find(data => data.incident === item.id)
 
                                                 ? reliefData.filter(data => data.incident === item.id).map(data => (
@@ -507,7 +626,7 @@ const Relief = (props: Props) => {
 
                                                             <button
                                                                 type="button"
-                                                                onClick={() => handleReliefEdit(data)}
+                                                                onClick={() => handleReliefEdit(data, item)}
                                                                 className={styles.reliefBtn}
                                                             >
                                                      EDIT
@@ -522,7 +641,7 @@ const Relief = (props: Props) => {
                                                         <div className={styles.buttonDiv}>
                                                             <button
                                                                 type="button"
-
+                                                                onClick={() => handleReliefAdd(item)}
                                                                 className={styles.reliefBtn}
                                                             >
                                                      ADD RELIEF
@@ -535,6 +654,7 @@ const Relief = (props: Props) => {
 
                                             }
 
+
                                         </tr>
 
 
@@ -544,10 +664,15 @@ const Relief = (props: Props) => {
 
                             </table>
                         </div>
-                        <NextPrevBtns
-                            handlePrevClick={props.handlePrevClick}
-                            handleNextClick={props.handleNextClick}
-                        />
+                        {
+                            !props.annex
+                            && (
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            )
+                        }
                     </>
                 )
                  }
@@ -714,14 +839,40 @@ const Relief = (props: Props) => {
                             />
                         </div>
 
+
                         <button
                             type="button"
                             className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
-                            onClick={handleSaveRelief}
+                            onClick={handleBackButton}
+
                         >
-                            Save
+                            BACK
                         </button>
+                        {postButton && (
+                            <button
+                                type="button"
+                                className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                onClick={handleSaveRelief}
+                            >
+                            Save
+                            </button>
+                        )
+                        }
+
+                        {updateButton && (
+                            <button
+                                type="button"
+                                className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                onClick={handleUpdateRelief}
+                            >
+                            UPDATE
+                            </button>
+                        )
+
+                        }
+
                     </>
                 )
                  }
@@ -987,7 +1138,7 @@ const Relief = (props: Props) => {
                             <BarChart
                                 width={250}
                                 height={250}
-                                data={wardwiseData}
+                                data={wardWiseImpact}
                                 margin={{ left: 0, right: 5, top: 10, bottom: 20 }}
 
                             >

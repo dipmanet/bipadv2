@@ -26,6 +26,7 @@ import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
 } from '#actionCreators';
+import Icon from '#rscg/Icon';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
@@ -246,9 +247,7 @@ const Contacts = (props: Props) => {
                 && (
                     <div className={styles.tabsPageContainer}>
                         <h2>
-                            <strong>
-                        DRR related Person Contact Info
-                            </strong>
+                                Contacts
                         </h2>
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">
@@ -263,6 +262,7 @@ const Contacts = (props: Props) => {
                                         <th>Training Duration</th>
                                         <th>Contact number</th>
                                         <th>Email</th>
+                                        <th>Action</th>
                                     </tr>
                                     {mergedList
                                         ? mergedList.map((item, i) => (
@@ -302,17 +302,22 @@ const Contacts = (props: Props) => {
                                     }
                                 </tbody>
                             </table>
-                            <NextPrevBtns
-                                handlePrevClick={props.handlePrevClick}
-                                handleNextClick={props.handleNextClick}
-                            />
                             <button
                                 type="button"
                                 onClick={() => handleAddContacts()}
                                 className={styles.savebtn}
                             >
-                            Add
+                                <Icon
+                                    name="plus"
+                                    className={styles.plusIcon}
+                                />
+                            Add Contact
                             </button>
+                            <NextPrevBtns
+                                handlePrevClick={props.handlePrevClick}
+                                handleNextClick={props.handleNextClick}
+                            />
+
                         </div>
                     </div>
                 )

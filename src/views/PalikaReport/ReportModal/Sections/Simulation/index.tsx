@@ -24,6 +24,7 @@ import {
 import NextPrevBtns from '../../NextPrevBtns';
 import priorityData from '#views/PalikaReport/components/priorityDropdownSelectData';
 import Hazard from '#views/RiskInfo/LeftPane/Details/Hazard';
+import Icon from '#rscg/Icon';
 
 interface Props{
     reportTitle: string;
@@ -357,8 +358,8 @@ const Simulation = (props: Props) => {
             {
                 !props.previewDetails
             && (
-                <div>
-                    <h2 className={styles.title}>Please enter Disaster Profile details</h2>
+                <div className={styles.mainDiv}>
+                    <h2>Simulations</h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
                             <tbody>
@@ -405,96 +406,100 @@ const Simulation = (props: Props) => {
                                             <td>{item.HazardName}</td>
                                         </tr>
                                     ))}
+                                    {
+                                        !props.annex
+                                        && (
+                                            <tr>
+                                                <td />
+                                                <td>
+                                                    <input type="text" value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
+                                                    {' '}
+                                                </td>
+                                                <td>
+                                                    <NepaliDatePicker
+                                                        inputClassName="form-control"
+                                                        className={styles.datepicker}
+                                                        value={startDate}
+                                                        onChange={date => setStartDate(date)}
+                                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input type="text" value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
+                                                    {' '}
+                                                </td>
+                                                <td>
+                                                    <select
+                                                        value={priorityArea}
+                                                        onChange={handlePriorityArea}
+                                                        className={styles.inputElement}
+                                                    >
+                                                        <option value="">Select Priority Area</option>
+                                                        {PriorityArea.map(data => (
+                                                            <option value={data.title}>
+                                                                {data.title}
+                                                            </option>
+                                                        ))}
 
-                                    <tr>
-                                        <td />
-                                        <td>
-                                            <input type="text" value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
-                                            {' '}
-                                        </td>
-                                        <td>
-                                            <NepaliDatePicker
-                                                inputClassName="form-control"
-                                                className={styles.datepicker}
-                                                value={startDate}
-                                                onChange={date => setStartDate(date)}
-                                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input type="text" value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
-                                            {' '}
-                                        </td>
-                                        <td>
-                                            <select
-                                                value={priorityArea}
-                                                onChange={handlePriorityArea}
-                                                className={styles.inputElement}
-                                            >
-                                                <option value="">Select Priority Area</option>
-                                                {PriorityArea.map(data => (
-                                                    <option value={data.title}>
-                                                        {data.title}
-                                                    </option>
-                                                ))}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select
+                                                        value={priorityAction}
+                                                        onChange={handlePriorityAction}
+                                                        className={styles.inputElement}
+                                                    >
+                                                        <option value="">Select Priority Action</option>
+                                                        {PriorityAction.map(data => (
+                                                            <option value={data.title}>
+                                                                {data.title}
+                                                            </option>
+                                                        ))}
 
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select
-                                                value={priorityAction}
-                                                onChange={handlePriorityAction}
-                                                className={styles.inputElement}
-                                            >
-                                                <option value="">Select Priority Action</option>
-                                                {PriorityAction.map(data => (
-                                                    <option value={data.title}>
-                                                        {data.title}
-                                                    </option>
-                                                ))}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select
+                                                        value={priorityActivity}
+                                                        onChange={handlePriorityActivity}
+                                                        className={styles.inputElement}
+                                                    >
+                                                        <option value="">Select Priority Activity</option>
+                                                        {PriorityActivity.map(data => (
+                                                            <option value={data.title}>
+                                                                {data.title}
+                                                            </option>
+                                                        ))}
 
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select
-                                                value={priorityActivity}
-                                                onChange={handlePriorityActivity}
-                                                className={styles.inputElement}
-                                            >
-                                                <option value="">Select Priority Activity</option>
-                                                {PriorityActivity.map(data => (
-                                                    <option value={data.title}>
-                                                        {data.title}
-                                                    </option>
-                                                ))}
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
+                                                    {' '}
+                                                </td>
+                                                <td>
+                                                    <input type="number" value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
+                                                    {' '}
+                                                </td>
+                                                <td>
+                                                    <select
+                                                        value={focusHazard}
+                                                        onChange={handleFocusHazard}
+                                                        className={styles.inputElement}
+                                                    >
+                                                        <option value="">Select Priority Activity</option>
+                                                        {hazardType && hazardType.map(data => (
+                                                            <option value={data.id}>
+                                                                {data.titleEn}
+                                                            </option>
+                                                        ))}
 
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
-                                            {' '}
-                                        </td>
-                                        <td>
-                                            <input type="number" value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
-                                            {' '}
-                                        </td>
-                                        <td>
-                                            <select
-                                                value={focusHazard}
-                                                onChange={handleFocusHazard}
-                                                className={styles.inputElement}
-                                            >
-                                                <option value="">Select Priority Activity</option>
-                                                {hazardType && hazardType.map(data => (
-                                                    <option value={data.id}>
-                                                        {data.titleEn}
-                                                    </option>
-                                                ))}
+                                                    </select>
+                                                </td>
 
-                                            </select>
-                                        </td>
-
-                                    </tr>
+                                            </tr>
+                                        )
+                                    }
 
 
                                 </>
@@ -502,20 +507,31 @@ const Simulation = (props: Props) => {
 
                             </tbody>
                         </table>
+                        {
+                            !props.annex
+                          && (
+                              <>
+                                  <button
+                                      type="button"
+                                      onClick={handleAddNew}
+                                      className={styles.savebtn}
+                                  >
+                                      <Icon
+                                          name="plus"
+                                          className={styles.plusIcon}
+                                      />
+                                Add New Simulation
+                                  </button>
+                                  <div className={styles.btns}>
+                                      <NextPrevBtns
+                                          handlePrevClick={props.handlePrevClick}
+                                          handleNextClick={handleNextClick}
+                                      />
 
-                        <div className={styles.btns}>
-                            <NextPrevBtns
-                                handlePrevClick={props.handlePrevClick}
-                                handleNextClick={handleNextClick}
-                            />
-                            <button
-                                type="button"
-                                onClick={handleAddNew}
-                                className={styles.newActivityBtn}
-                            >
-                                Add New Activity
-                            </button>
-                        </div>
+                                  </div>
+                              </>
+                          )
+                        }
                     </div>
                 </div>
             )

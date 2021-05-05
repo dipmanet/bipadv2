@@ -34,6 +34,7 @@ import {
     setPalikaRedirectAction,
     setGeneralDataAction,
 } from '#actionCreators';
+import Icon from '#rscg/Icon';
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
@@ -187,7 +188,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
             && (
                 <div className={styles.tabsPageContainer}>
                     <h2>
-                        <strong>DRR related organizations in Municipal Government</strong>
+                            DRR related Organizations
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
@@ -199,6 +200,10 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     {/* <th>Level (for governmental organization)</th> */}
                                     <th>Number of Male Employee</th>
                                     <th>Number of Female Employee</th>
+                                    {
+                                        !props.annex
+                                        && <th>Action</th>
+                                    }
                                 </tr>
                                 {fetchedData && fetchedData.length > 0
                                     ? fetchedData.map((item, i) => (
@@ -212,14 +217,19 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                             <td>
                                                 {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
                                             </td>
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleEditResource(item)}
-                                                >
+                                            {
+                                                !props.annex
+                                                && (
+                                                    <td>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleEditResource(item)}
+                                                        >
                                             Edit
-                                                </button>
-                                            </td>
+                                                        </button>
+                                                    </td>
+                                                )
+                                            }
                                         </tr>
                                     )) : ''
                                 }
@@ -227,30 +237,30 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                             </tbody>
                         </table>
-                        <button
-                            type="button"
-                            onClick={handleOrnaisationRedirect}
-                            className={styles.savebtn}
-                        >
-
-                                Add Data
-                        </button>
                         {
-                            props.hide !== 1
+                            !props.annex
+                            && (
+                                <button
+                                    type="button"
+                                    onClick={handleOrnaisationRedirect}
+                                    className={styles.savebtn}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.plusIcon}
+                                    />
+                             Add Organisation Data
+                                </button>
+                            )
+                        }
+                        {
+                            !props.annex
                                 ? (
                                     <div className={styles.btnsCont}>
                                         <NextPrevBtns
                                             handlePrevClick={props.handlePrevClick}
                                             handleNextClick={props.handleNextClick}
                                         />
-                                        <button
-                                            type="button"
-                                            onClick={handleOrnaisationRedirect}
-                                            className={styles.savebtn}
-                                        >
-
-                                + Add Data
-                                        </button>
                                     </div>
                                 )
                                 : ''
@@ -271,7 +281,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 </h2>
                 <BarChart
                     width={350}
-                    height={150}
+                    height={200}
                     data={chartData}
                     // layout="vertical"
                     margin={{ left: 10, right: 5, top: 10 }}

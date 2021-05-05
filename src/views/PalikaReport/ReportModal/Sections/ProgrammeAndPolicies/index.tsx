@@ -175,6 +175,7 @@ const ProgramPolicies = (props: Props) => {
             { !props.previewDetails
             && (
                 <div>
+                    <h2>Programmes and Policies </h2>
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
@@ -199,14 +200,21 @@ const ProgramPolicies = (props: Props) => {
 
                         </tbody>
                     </table>
-                    <div className={styles.txtAreadetails}>
-                        <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
-                        <button type="button" onClick={handleSubmit}>Add</button>
-                    </div>
-                    <NextPrevBtns
-                        handlePrevClick={props.handlePrevClick}
-                        handleNextClick={props.handleNextClick}
-                    />
+                    {
+                        !props.annex
+                        && (
+                            <>
+                                <div className={styles.txtAreadetails}>
+                                    <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
+                                    <button type="button" onClick={handleSubmit}>Add</button>
+                                </div>
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            </>
+                        )
+                    }
 
                 </div>
             )}
@@ -215,7 +223,9 @@ const ProgramPolicies = (props: Props) => {
             && (
                 <div className={styles.budgetPreviewContainer}>
                     <h2>
-                    Disaster related topics in Annual Program and policies
+                    Disaster related topics in
+                        <br />
+                    Annual Program and policies
                     </h2>
                     <ul>
                         {finalPolicyData.length > 0

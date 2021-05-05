@@ -202,6 +202,7 @@ const state: PageState = {
         focalPerson: '',
         formationDate: '',
         committeeMembers: 0,
+        localMembers: [],
     },
     budgetData: {
         totMunBudget: 0,

@@ -1,5 +1,5 @@
 /* eslint-disable no-tabs */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 import {
@@ -20,6 +20,7 @@ import Simulation from '../../Simulation';
 import Contacts from '../../Contacts';
 import Relief from '../../Relief';
 import Leadership from './Leadership';
+import General from '../../General';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -67,13 +68,14 @@ export interface BudgetActivityData{
     remarks: string;
 }
 
-const Preview = (props: Props) => {
+const Annex = (props: Props) => {
     const {
         generalData,
         programAndPolicyData,
         budgetData,
         budgetActivityData,
         url,
+        localMembers,
     } = props;
 
     const {
@@ -107,38 +109,112 @@ const Preview = (props: Props) => {
 
     return (
         <div className={styles.previewContainer}>
-            {/* <Header /> */}
+
+            <h1>Annex A</h1>
+            <div className={styles.rowOne}>
+                <General
+                    annex
+                    mayor={mayor}
+                    cao={cao}
+                    focalPerson={focalPerson}
+                    updateTab={() => {}}
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                    localMembers={localMembers}
+                />
+            </div>
+
+            <h1>Annex B</h1>
+            <div className={styles.rowOne}>
+                <Budget
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+
+            <h1>Annex C</h1>
+            <div className={styles.rowOne}>
+                <BudgetActivity
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+
+
+            <h1>Annex D</h1>
+            <div className={styles.rowOne}>
+                <ProgrammeAndPolicies
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+
+            <h1>Annex E</h1>
+            <div className={styles.rowOne}>
+                <Organisation
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+            <h1>Annex F</h1>
+            <div className={styles.rowOne}>
+                <Inventory
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+            <h1>Annex G</h1>
+            <div className={styles.rowOne}>
+                <CriticalInfra
+                    annex
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                />
+
+            </div>
+
+
+            <h1>Annex H</h1>
+
             <div className={styles.rowOne}>
 
                 <Relief
-                    previewDetails
+                    // AnnexDetails
                     reportData={''}
                     tableHeader={() => {}}
                     updateTab={() => {}}
                     page={-1}
                     handlePrevClick={() => {}}
                     handleNextClick={() => {}}
+                    annex
                 />
 
             </div>
-            <div className={styles.rowTwo}>
-                <Relief
-                    hazardwiseImpact
-                    reportData={''}
-                    tableHeader={() => {}}
-                    updateTab={() => {}}
-                    page={-1}
+
+            <h1>Annex I</h1>
+
+            <div className={styles.rowOne}>
+
+                <Simulation
                     handlePrevClick={() => {}}
                     handleNextClick={() => {}}
+                    annex
                 />
+
             </div>
 
-
-            <div className={styles.rowThree}>
-                <Leadership />
-            </div>
         </div>
     );
 };
 
-export default connect(mapStateToProps, undefined)(Preview);
+export default connect(mapStateToProps, undefined)(Annex);

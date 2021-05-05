@@ -82,7 +82,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     // province: params.province,
                     // district: params.district,
                     municipality: params.municipality,
-                    limit: -1,
+
                 };
             }
 
@@ -128,6 +128,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         hideWelcomePage,
         setShowReportModal,
         user,
+        getTabSelected,
     } = props;
 
     const [reportData, setReportData] = useState([]);
@@ -193,7 +194,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         {
             key: 4,
             content: 'Organisation',
-            url: '/resource/',
+            url: '',
         },
         {
             key: 5,
@@ -246,14 +247,19 @@ const MainModal: React.FC<Props> = (props: Props) => {
     }, []);
 
     useEffect(() => {
+        setTabSelected(props.selectedTab);
+    }, [props.selectedTab]);
+
+    useEffect(() => {
         if (reportData && user && user.profile.municipality) {
             const localM = reportData
                 .filter(item => item.committee === 'LDMC' && item.municipality === user.profile.municipality);
             setLocalMembers(localM);
 
-            reportData.filter(item => item.municipality === municipality).map((item) => {
+            reportData.filter(item => item.municipality === user.profile.municipality).map((item) => {
                 if (item.isDrrFocalPerson) {
-                    setfocalPerson(item.name);
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
+                    setfocalPerson(details);
                 }
                 if (item.position && item.position.includes('Mayor')) {
                     const details = `${item.name},${item.email},${item.mobileNumber} `;
@@ -264,7 +270,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     setmayor(details);
                 }
                 if (item.position && item.position.includes('Chief Administrative Officer')) {
-                    setcao(item.name);
+                    const details = `${item.name},${item.email},${item.mobileNumber} `;
+                    setcao(details);
                 }
                 return null;
             });
@@ -299,11 +306,13 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const handleNextClick = () => {
         if (tabSelected < tabs.length - 1) {
             setTabSelected(tabSelected + 1);
+            getTabSelected(tabSelected + 1);
         }
     };
     const handlePrevClick = () => {
         if (tabSelected > 0) {
             setTabSelected(tabSelected - 1);
+            getTabSelected(tabSelected - 1);
         }
     };
 
@@ -335,144 +344,28 @@ const MainModal: React.FC<Props> = (props: Props) => {
     return (
         <>
             <Page hideMap hideFilter />
-            <div className={showReportModal ? styles.containerFaded : styles.mainContainer}>
+            {
+                <ReportModal
+                    keyTabUrl={tabUrlSelected}
+                    keyTab={tabSelected}
+                    showTabs={showTabs}
+                    hideWelcomePage={hideWelcomePage}
+                    reportData={reportData}
+                    tableHeader={tableHeader}
+                    province={province}
+                    district={district}
+                    municipality={municipality}
+                    mayor={mayor}
+                    cao={cao}
+                    focalPerson={focalPerson}
+                    localMembers={localMembers}
+                    updateTab={handleNextClick}
+                    tabsLength={tabs.length}
+                    handlePrevClick={handlePrevClick}
+                    handleNextClick={handleNextClick}
+                />
 
-                {
-                    showReportModal
-                        && (
-                            <Modal
-                                closeOnOutsideClick
-                                className={getModalClass()}
-                                id={'palikaModal'}
-                            >
-
-                                <ModalHeader
-                                    title=" "
-                                    className={showTabs ? styles.modalHeader : styles.modalHeaderFirstPage}
-                                    rightComponent={(
-                                        <>
-                                            {showTabs
-                                         && (
-                                             <div className={styles.tabsMain}>
-                                                 <div
-                                                     className={styles.tabsTitle}
-                                                 >
-                                                     { tabs.map(tab => (
-                                                         <button
-                                                             type="button"
-                                                             className={styles.tabsTexts}
-                                                             style={{
-                                                                 backgroundColor: tabSelected === tab.key
-                                                                     ? '#fff'
-                                                                     : '#e1e1e1',
-                                                                 transform: `translateX(-${getTranslateVal()}px)`,
-                                                             }}
-                                                             onClick={() => handleTabClick(tab.key, tab.url)}
-                                                             key={tab.key}
-                                                         >
-                                                             {tab.content}
-                                                         </button>
-                                                     ))}
-                                                 </div>
-                                                 <div className={styles.closeBtnContainer}>
-                                                     <PrimaryButton
-                                                         type="button"
-                                                         className={styles.closeBtn}
-                                                         onClick={handleCloseModal}
-                                                     >
-                                                         <Icon
-                                                             name="times"
-                                                             className={styles.closeIcon}
-                                                         />
-                                                     </PrimaryButton>
-                                                 </div>
-                                             </div>
-
-                                         )
-                                            }
-                                        </>
-                                    )}
-                                />
-                                <ModalBody className={styles.modalBody}>
-                                    {pending && <LoadingAnimation />}
-                                    <ReportModal
-                                        keyTabUrl={tabUrlSelected}
-                                        keyTab={tabSelected}
-                                        showTabs={showTabs}
-                                        hideWelcomePage={hideWelcomePage}
-                                        reportData={reportData}
-                                        tableHeader={tableHeader}
-                                        province={province}
-                                        district={district}
-                                        municipality={municipality}
-                                        mayor={mayor}
-                                        cao={cao}
-                                        focalPerson={focalPerson}
-                                        localMembers={localMembers}
-                                        updateTab={handleNextClick}
-                                        tabsLength={tabs.length}
-                                        handlePrevClick={handlePrevClick}
-                                        handleNextClick={handleNextClick}
-                                    />
-                                    {showTabs && (
-                                        <div className={styles.btnContainer}>
-                                            {/* <div className={styles.nextPrevBtns}>
-                                                {
-                                                    tabSelected < Object.keys(tabs).length - 1
-                                                    && (
-                                                        <>
-                                                            <PrimaryButton
-                                                                type="button"
-                                                                className={tabSelected > 0
-                                                                    ? styles.agreeBtn
-                                                                    : styles.disabledBtn
-                                                                }
-                                                                onClick={handlePrevClick}
-                                                            >
-                                                        Prev
-
-                                                            </PrimaryButton>
-                                                            <PrimaryButton
-                                                                type="button"
-                                                                className={tabSelected < tabs.length - 1
-                                                                    ? styles.agreeBtn
-                                                                    : styles.disabledBtn
-                                                                }
-                                                                onClick={handleNextClick}
-                                                            >
-                                                        Next
-
-                                                            </PrimaryButton>
-                                                        </>
-                                                    )
-                                                }
-
-                                            </div> */}
-
-
-                                            {/* { tabSelected < Object.keys(tabs).length - 1
-                                            && tabSelected !== 0
-                                               && (
-                                                   <PrimaryButton
-                                                       type="button"
-                                                       className={styles.agreeBtn}
-                                                       onClick={handleDataAdd}
-                                                   >
-                                                       {`Add ${tabs[tabSelected].content} Data`}
-
-                                                   </PrimaryButton>
-                                               )
-                                            } */}
-
-                                        </div>
-                                    )}
-
-                                </ModalBody>
-                            </Modal>
-                        )
-
-                }
-            </div>
+            }
 
 
         </>

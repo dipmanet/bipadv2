@@ -1,5 +1,6 @@
 .previewContainer{
     display:block;
+    margin-top: 80px;
     border: 1px solid #f5f5f5;
     table{
         width: 100%;
@@ -24,23 +25,23 @@
 .rowOne{
     height: 12%;
     display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    h1{
+        margin-bottom: 50px ;
+        position: relative;
+    }
 }
 
 .rowTwo{
    height: 12%;
    display: flex;
-.columnTwoOne{
-    width: calc(50% - 30px);
-    margin-left: 30px;
-}
-
 }
 
 
 .rowThree{
     height: 12%;
     display: flex;
-    justify-content: space-between;
 }
 
 .rowFour{

@@ -48,11 +48,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 let municipality = '';
-
 let district = '';
 let province = '';
 
-const Header = (props: Props) => {
+const Leadership = (props: Props) => {
     const {
         generalData,
         requests: { FiscalYearFetch },
@@ -84,6 +83,9 @@ const Header = (props: Props) => {
 
     const {
         fiscalYear,
+        cao,
+        mayor,
+        focalPerson,
     } = generalData;
 
     const handleFiscalYearList = (response) => {
@@ -96,70 +98,72 @@ const Header = (props: Props) => {
     useEffect(() => {
         if (fiscalYearList.length > 0 && fiscalYear) {
             const FY = fiscalYearList.filter(item => item.id === Number(fiscalYear));
-            console.log('fy obj', FY);
-            console.log('fiscalYearList', fiscalYearList);
-            console.log('fiscalyear', fiscalYear);
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
 
     return (
-        <div className={styles.header}>
-            <div className={styles.leftContainer}>
-                <div className={styles.logoAndAddress}>
-                    <ScalableVectorGraphics
-                        className={styles.logo}
-                        src={govtlogo}
-                        alt="Nepal Government"
-                    />
-
-                    <div className={styles.address}>
-                        <ul>
-                            <li className={styles.munTitle}>{`${municipality} Municipality`}</li>
-                            <li className={styles.desc}>
-                                {`${district} District`}
-                                {' '}
-,
-                                {' '}
-                                {`${province}`}
-                            </li>
-
-                        </ul>
-
-                    </div>
-
-                </div>
-                <div className={styles.titleAndFY}>
+        <div className={styles.leadership}>
+            <h2>Municipal DRR Leadership</h2>
+            <div className={styles.itemRow}>
+                <div className={styles.leaderItem}>
                     <ul>
-                        <li className={styles.title}>
-                    Disaster Risk Reduction
-                    and Management Report
+                        <li>
+                            <span className={styles.darker}>
+                                {mayor.split(',')[0] || 'Name Unavailable'}
+                                (Mayor)
+                            </span>
                         </li>
-                        <li className={styles.fy}>
-                    FY:
-                            {' '}
-                            {fiscalYearTitle && fiscalYearTitle[0].titleEn}
+                        <li>
+                            {mayor.split(',')[1] || 'Email Available'}
+
+                        </li>
+                        <li>
+                            {mayor.split(',')[2] || 'Phone Available'}
+
+                        </li>
+                    </ul>
+                </div>
+                <div className={styles.leaderItem}>
+                    <ul>
+                        <li>
+                            <span className={styles.darker}>
+                                {cao.split(',')[0] || 'Name Unvailable'}
+                                (CAO)
+
+                            </span>
+
+                        </li>
+                        <li>
+                            {cao.split(',')[1] || 'Email Unavailable'}
+
+                        </li>
+                        <li>
+                            {cao.split(',')[2] || 'Phone Unavailable'}
+
+
+                        </li>
+                    </ul>
+                </div>
+                <div className={styles.leaderItem}>
+                    <ul>
+                        <li>
+                            <span className={styles.darker}>
+                                {focalPerson.split(',')[0] || 'Name Unvailable'}
+                            (Focal Person)
+                            </span>
+                        </li>
+                        <li>
+                            {focalPerson.split(',')[1] || 'Email Unvailable'}
+
+                        </li>
+                        <li>
+                            {focalPerson.split(',')[2] || 'Phone Unvailable'}
+
                         </li>
                     </ul>
                 </div>
             </div>
-
-
-            <div className={styles.dates}>
-                <ul>
-                    <li>
-                         Generated on:
-                        {new Date().toISOString().split('T')[0]}
-                    </li>
-                    <li>
-                        Last Modified on:
-                        {new Date().toISOString().split('T')[0]}
-                    </li>
-
-                </ul>
-
-            </div>
-
         </div>
 
     );
@@ -168,7 +172,7 @@ const Header = (props: Props) => {
 export default connect(mapStateToProps, undefined)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
-            Header,
+            Leadership,
         ),
     ),
 );
