@@ -162,16 +162,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             const pageHeight = 295;
             const imgHeight = canvas.height * imgWidth / canvas.width;
             let heightLeft = imgHeight;
-            const doc = new JsPDF('p', 'mm');
+            const doc = new JsPDF('p', 'mm', true);
             let position = 0; // give some top padding to first page
 
-            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, 'FAST');
             heightLeft -= pageHeight;
 
             while (heightLeft >= 0) {
                 position = heightLeft - imgHeight; // top padding for other pages
                 doc.addPage();
-                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, 'FAST');
                 heightLeft -= pageHeight;
             }
             const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
@@ -457,7 +457,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     onClick={handlePreviewBtn}
                                     className={styles.agreeBtn}
                                 >
-                                Download this page
+                                Submit and Download Report
                                 </button>
                                 {/* <NextPrevBtns lastpage /> */}
                             </div>
