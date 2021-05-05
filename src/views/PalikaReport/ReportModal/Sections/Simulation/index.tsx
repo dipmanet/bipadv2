@@ -128,7 +128,7 @@ const Simulation = (props: Props) => {
     const [description, setDescription] = useState('');
     const [simulationName, setSimulationName] = useState('');
     const [organizer, setOrganizer] = useState('');
-    const [participants, setParticipants] = useState(null);
+    const [participants, setParticipants] = useState('');
     const [hazard, setHazard] = useState([]);
     const [drrFund, setdrrFund] = useState(df);
     const [additionalFund, setadditionalFund] = useState(af);
@@ -155,13 +155,14 @@ const Simulation = (props: Props) => {
         setDescription('');
         setSimulationName('');
         setOrganizer('');
-        setParticipants(null);
+        setParticipants('');
         setPriorityAction('');
         setPriorityActivity('');
         setpriorityArea('');
         setFocusHazard(null);
         setStartDate('');
     };
+    console.log('This is data>>>', participants);
     const handleSavesetSimulationData = (response) => {
         setSimulationData(response);
     };

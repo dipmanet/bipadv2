@@ -88,27 +88,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
     },
 
-    PreviewDataPost: {
-        url: '/disaster-profile/',
-        method: methods.POST,
-        body: ({ params }) => params && params.body,
+    // PreviewDataPost: {
+    //     url: '/disaster-profile/',
+    //     method: methods.POST,
+    //     body: ({ params }) => params && params.body,
 
-        onSuccess: ({ response, props, params }) => {
-        },
-        onFailure: ({ error, params }) => {
-            if (params && params.setFaramErrors) {
-                // TODO: handle error
-            }
-        },
-        onFatal: ({ params }) => {
-        },
-        extras: {
-            hasFile: true,
+    //     onSuccess: ({ response, props, params }) => {
+    //     },
+    //     onFailure: ({ error, params }) => {
+    //         if (params && params.setFaramErrors) {
+    //             // TODO: handle error
+    //         }
+    //     },
+    //     onFatal: ({ params }) => {
+    //     },
+    //     extras: {
+    //         hasFile: true,
 
-        },
+    //     },
 
 
-    },
+    // },
 
 };
 const formdata = new FormData();
