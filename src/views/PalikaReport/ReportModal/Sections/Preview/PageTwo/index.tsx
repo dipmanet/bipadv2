@@ -12,7 +12,6 @@ import {
 import Organisation from '../../Organisation';
 import Inventory from '../../Inventory';
 import Budget from '../../Budget';
-import Header from './Header';
 import BudgetActivity from '../../BudgetActivity';
 import CriticalInfra from '../../CriticalInfra';
 import ProgrammeAndPolicies from '../../ProgrammeAndPolicies';
@@ -20,6 +19,7 @@ import Simulation from '../../Simulation';
 import Contacts from '../../Contacts';
 import Relief from '../../Relief';
 import Leadership from './Leadership';
+import Footer from './Footer';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -136,6 +136,9 @@ const Preview = (props: Props) => {
 
             <div className={styles.rowThree}>
                 <Leadership />
+            </div>
+            <div className={styles.rowFour}>
+                <Footer />
             </div>
         </div>
     );

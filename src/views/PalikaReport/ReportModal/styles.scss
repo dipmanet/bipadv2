@@ -59,7 +59,7 @@
     }
     .btnContainer{
         width: 100%;
-        border: 1px solid red;
+        // border: 1px solid red;
         display: flex;
         justify-content: flex-end;
         margin-top: 10px;
@@ -85,9 +85,9 @@
 .reportContainer{
     margin: 0 auto;
 // border: 1px solid red;
-width: 210mm;
+    width: 210mm;
     .page{
-        border: 1px solid gray;
+        border: 1px solid #f5f5f5;
     }
 }
 $breakpoint-tablet: 868px;
