@@ -646,7 +646,6 @@ const Relief = (props: Props) => {
 
                                             {!props.annex && reliefData
                                            && reliefData.find(data => data.incident === item.id)
-
                                                 ? reliefData.filter(data => data.incident === item.id).map(data => (
                                                     <td>
                                                         <div className={styles.buttonDiv}>
@@ -655,7 +654,7 @@ const Relief = (props: Props) => {
                                                                 onClick={() => handleReliefView(item)}
                                                                 className={styles.reliefBtn}
                                                             >
-                                                     VIEW
+                                                            VIEW
                                                             </button>
 
                                                             <button
@@ -663,7 +662,7 @@ const Relief = (props: Props) => {
                                                                 onClick={() => handleReliefEdit(data, item)}
                                                                 className={styles.reliefBtn}
                                                             >
-                                                     EDIT
+                                                            EDIT
                                                             </button>
                                                         </div>
                                                     </td>
@@ -672,17 +671,18 @@ const Relief = (props: Props) => {
 
                                                 : (
                                                     <td>
-                                                        <div className={styles.buttonDiv}>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleReliefAdd(item)}
-                                                                className={styles.reliefBtn}
-                                                            >
+                                                        { !props.annex
+                                                       && (
+                                                           <div className={styles.buttonDiv}>
+                                                               <button
+                                                                   type="button"
+                                                                   onClick={() => handleReliefAdd(item)}
+                                                                   className={styles.reliefBtn}
+                                                               >
                                                      ADD RELIEF
-                                                            </button>
-
-
-                                                        </div>
+                                                               </button>
+                                                           </div>
+                                                       )}
                                                     </td>
                                                 )
 

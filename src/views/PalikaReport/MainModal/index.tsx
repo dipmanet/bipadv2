@@ -129,6 +129,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         setShowReportModal,
         user,
         getTabSelected,
+        showErr,
     } = props;
 
     const [reportData, setReportData] = useState([]);
@@ -363,6 +364,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
                     tabsLength={tabs.length}
                     handlePrevClick={handlePrevClick}
                     handleNextClick={handleNextClick}
+                    showErr={showErr}
+                    handleShowErr={props.handleShowErr}
                 />
 
             }

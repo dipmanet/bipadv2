@@ -98,7 +98,7 @@ const General = (props: Props) => {
     const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
     const [fiscalYearList, setFiscalYearList] = useState([]);
 
-    const [showErr, setShowErr] = useState(false);
+    // const [showErr, setShowErr] = useState(false);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
 
@@ -134,6 +134,7 @@ const General = (props: Props) => {
         generalData,
         updateTab,
         localMembers,
+        showErr,
     } = props;
 
     const validationErrs = () => {
@@ -172,13 +173,15 @@ const General = (props: Props) => {
                 localMembers,
             });
             updateTab();
+            props.handleShowErr(false);
 
             props.handleNextClick();
         } else {
             validationErrs();
-            setShowErr(true);
+            props.handleShowErr(true);
         }
     };
+
 
     const selectStyles = {
         option: (provided, state) => ({
@@ -412,7 +415,7 @@ const General = (props: Props) => {
                                 className={styles.datepicker}
                                 value={formationDate}
                                 onChange={(value: string) => setformationDate(value)}
-                                options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
                             />
                             {showErr && dateErr
                                 ? (

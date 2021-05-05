@@ -3,9 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { _cs, reverseRoute } from '@togglecorp/fujs';
 import * as ReachRouter from '@reach/router';
+import { connect } from 'react-redux';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import { userSelector, palikaRedirectSelector, generalDataSelector } from '#selectors';
 
+const mapStateToProps = (state, props) => ({
+    user: userSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+    generalData: generalDataSelector(state),
+});
 
 const menuItems: {
     key: number;
@@ -77,6 +84,7 @@ const Sidebar = (props) => {
     const [isIndicatorClicked, setIsIndicatorClicked] = useState(true);
     const [selectedSubMenuId, setSelectedSubMenuId] = useState(1);
     const [initialRender, setInitialRender] = useState(true);
+    const [showErr, setShowErr] = useState(false);
     const [menuSlug, setMenuSlug] = useState('');
     const [subMenuSlug, setSubMenuSlug] = useState('');
     // eslint-disable-next-line react/prop-types
@@ -87,10 +95,22 @@ const Sidebar = (props) => {
         showReportEdit,
         handleMenuClick,
         selectedTab,
+        generalData,
     } = props;
 
+    useEffect(() => {
+        setShowErr(props.showErr);
+    }, [props.showErr]);
+
     const handleMenuItemClick = (menuItem: number) => {
-        handleMenuClick(menuItem);
+        if (generalData && generalData.fiscalYear) {
+            handleMenuClick(menuItem);
+            setShowErr(false);
+            props.setShowErr(false);
+        } else {
+            props.handleShowErr(true);
+            setShowErr(true);
+        }
     };
     const Data1 = [{
         id: 1,
@@ -276,12 +296,19 @@ const Sidebar = (props) => {
                                             onClick={() => handleMenuItemClick(item.key)}
                                             type="button"
                                         >
-
                                             {item.content}
                                         </button>
                                     </li>
+
                                 );
                             })}
+                            {
+                                showErr
+                                    && (
+                                        <span className={styles.error}>
+                                            Please Enter Valid Fiscal Year from General Section
+                                        </span>
+                                    )}
                         </ul>
                     </div>
                 )
@@ -291,4 +318,6 @@ const Sidebar = (props) => {
     );
 };
 
-export default Sidebar;
+export default connect(mapStateToProps)(
+    Sidebar,
+);
