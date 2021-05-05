@@ -348,10 +348,10 @@ const Preview = (props: Props) => {
             </div>
 
 
-            <div className={styles.rowThree}>
+            <div className={styles.rowfour}>
                 <Leadership />
             </div>
-            <div className={styles.rowFour}>
+            <div className={styles.rowFive}>
                 <Footer />
             </div>
         </div>
