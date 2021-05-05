@@ -28,6 +28,8 @@ export interface GeneralData{
     focalPerson: string;
     formationDate: string;
     committeeMembers: number;
+    localMembers: [];
+
 }
 
 

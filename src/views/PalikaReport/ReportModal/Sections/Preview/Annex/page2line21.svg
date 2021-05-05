@@ -1,0 +1,52 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="151.5mm" height="95.85mm" viewBox="0 0 429.44 271.69">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #4996d1;
+      }
+
+      .cls-2 {
+        fill: #cbad53;
+      }
+
+      .cls-3 {
+        font-size: 9.41px;
+        fill: #231f20;
+        font-family: FranklinGothic-Demi, Franklin Gothic Demi;
+        font-weight: 300;
+      }
+
+      .cls-4 {
+        fill: none;
+        stroke: #afa5a7;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <title>hazard wise</title>
+  <rect class="cls-1" x="7.85" y="133.03" width="109.07" height="13.81" transform="translate(-77.55 202.32) rotate(-90)"/>
+  <rect class="cls-2" x="66.19" y="170.65" width="33.82" height="13.81" transform="translate(-94.45 260.66) rotate(-90)"/>
+  <rect class="cls-1" x="82.38" y="133.03" width="109.07" height="13.81" transform="translate(-3.02 276.84) rotate(-90)"/>
+  <rect class="cls-2" x="119.43" y="149.36" width="76.4" height="13.81" transform="translate(1.36 313.9) rotate(-90)"/>
+  <rect class="cls-1" x="145.77" y="133.03" width="109.07" height="13.81" transform="translate(60.38 340.24) rotate(-90)"/>
+  <rect class="cls-2" x="147.78" y="114.31" width="146.5" height="13.81" transform="translate(99.81 342.25) rotate(-90)"/>
+  <rect class="cls-1" x="209.17" y="133.03" width="109.07" height="13.81" transform="translate(123.77 403.64) rotate(-90)"/>
+  <rect class="cls-2" x="211.17" y="114.31" width="146.5" height="13.81" transform="translate(163.21 405.64) rotate(-90)"/>
+  <rect class="cls-1" x="272.57" y="133.03" width="109.07" height="13.81" transform="translate(187.17 467.04) rotate(-90)"/>
+  <rect class="cls-2" x="287.72" y="127.46" width="120.2" height="13.81" transform="translate(213.45 482.19) rotate(-90)"/>
+  <text class="cls-3" transform="translate(176.7 240.29)">People Death</text>
+  <text class="cls-3" transform="translate(72.17 240.29)">No. of Incident</text>
+  <text class="cls-3" transform="translate(59.16 211.82)">Fire</text>
+  <text class="cls-3" transform="translate(29.24 165.07) rotate(-90)">Number of Incident/ People</text>
+  <text class="cls-3" transform="translate(400.63 144.57) rotate(-90)">Estimated Loss (NPR)</text>
+  <text class="cls-3" transform="translate(128.25 211.82)">Landslide</text>
+  <text class="cls-3" transform="translate(201.59 211.82)">Flood</text>
+  <text class="cls-3" transform="translate(254.72 211.82)">Lightning</text>
+  <text class="cls-3" transform="translate(314.85 211.82)">Earthquake</text>
+  <rect class="cls-1" x="56.7" y="233.17" width="9.27" height="9.27"/>
+  <rect class="cls-2" x="156.6" y="233.17" width="9.27" height="9.27"/>
+  <text class="cls-3" transform="translate(273.76 240.29)">Estimated Loss</text>
+  <rect class="cls-4" x="253.66" y="237.44" width="9.27" height="0.74"/>
+  <polyline class="cls-4" points="37.79 19.41 37.79 194.47 382.94 194.47 382.94 19.41"/>
+  <polyline class="cls-4" points="62.38 121.22 136.91 176.74 200.31 59.99 264.29 136.99 327.1 54.99 382.94 34.98"/>
+</svg>

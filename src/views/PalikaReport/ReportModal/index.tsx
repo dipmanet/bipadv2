@@ -4,10 +4,6 @@ import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import BulletIcon from '#resources/icons/Bullet.svg';
-import PrimaryButton from '#rsca/Button/PrimaryButton';
-
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
 import PreviewPageOne from './Sections/Preview/PageOne';
@@ -34,6 +30,7 @@ import Simulation from './Sections/Simulation';
 import Preparedness from './Sections/Preparedness';
 import NextPrevBtns from './NextPrevBtns';
 import Recovery from './Sections/Recovery';
+import Annex from './Sections/Preview/Annex';
 
 interface Props {
     keyTab: number;
@@ -222,7 +219,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
 
     const { showForm } = palikaRedirect;
-    console.log('keytab: ', keyTab);
+    console.log('local members:', localMembers);
+
+    useEffect(() => {
+        console.log('local members:', localMembers);
+    }, [localMembers]);
     return (
         <>
             {/* {!showTabs && !showForm
@@ -474,6 +475,13 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                                     <PreviewPageTwo
                                         reportData={[<Budget />, <BudgetActivity />]}
+
+                                    />
+                                </div>
+                                <div className={'page'}>
+
+                                    <Annex
+                                        localMembers={localMembers}
 
                                     />
                                 </div>

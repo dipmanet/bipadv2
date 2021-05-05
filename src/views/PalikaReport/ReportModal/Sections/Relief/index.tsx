@@ -340,7 +340,9 @@ const Relief = (props: Props) => {
                                         <th>Infrastructure Affected</th>
                                         <th>Infrastructure Destroyed</th>
                                         <th>Livestock Destroyed</th>
-                                        <th>Action</th>
+                                        { !props.annex
+                                        && <th>Action</th>
+                                        }
                                     </tr>
 
                                     {fetchedData.map((item, i) => (
@@ -364,26 +366,35 @@ const Relief = (props: Props) => {
                                             </td>
                                             <td>{item.loss ? item.loss.infrastructureDestroyedCount : 0}</td>
                                             <td>{item.loss ? item.loss.livestockDestroyedCount : 0}</td>
-                                            <td>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleReliefAdd(item)}
-                                                    className={styles.reliefBtn}
-                                                >
+                                            {
+                                                !props.annex
+                                                && (
+                                                    <td>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleReliefAdd(item)}
+                                                            className={styles.reliefBtn}
+                                                        >
                                                      Add Relief
-                                                </button>
+                                                        </button>
 
-                                            </td>
+                                                    </td>
+                                                )}
 
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
-                        <NextPrevBtns
-                            handlePrevClick={props.handlePrevClick}
-                            handleNextClick={props.handleNextClick}
-                        />
+                        {
+                            !props.annex
+                            && (
+                                <NextPrevBtns
+                                    handlePrevClick={props.handlePrevClick}
+                                    handleNextClick={props.handleNextClick}
+                                />
+                            )
+                        }
                     </>
                 )
                  }
