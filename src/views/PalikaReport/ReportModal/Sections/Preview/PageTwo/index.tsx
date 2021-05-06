@@ -117,63 +117,63 @@ const Preview = (props: Props) => {
     const data = [
         {
             name: 'Jan',
-            uv: 590,
-            pv: 800,
+            'Relief Amount Distributed': 590,
+            'Number of Beneficiiaries': 800,
         },
         {
             name: 'Feb',
-            uv: 868,
-            pv: 967,
+            'Relief Amount Distributed': 868,
+            'Number of Beneficiiaries': 967,
         },
         {
             name: 'Mar',
-            uv: 1397,
-            pv: 1098,
+            'Relief Amount Distributed': 1397,
+            'Number of Beneficiiaries': 1098,
         },
         {
             name: 'Apr',
-            uv: 1480,
-            pv: 1200,
+            'Relief Amount Distributed': 1480,
+            'Number of Beneficiaries': 1200,
         },
         {
             name: 'May',
-            uv: 1520,
-            pv: 1108,
+            'Relief Amount Distributed': 1520,
+            'Number of Beneficiiaries': 1108,
         },
         {
             name: 'Jun',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 1400,
+            'Number of Beneficiiaries': 680,
         },
         {
             name: 'Jul',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 1100,
+            'Number of Beneficiiaries': 470,
         },
         {
             name: 'Aug',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 800,
+            'Number of Beneficiiaries': 380,
         },
         {
             name: 'Sep',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 1300,
+            'Number of Beneficiiaries': 180,
         },
         {
             name: 'Oct',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 1400,
+            'Number of Beneficiiaries': 200,
         },
         {
             name: 'Nov',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 1400,
+            'Number of Beneficiiaries': 680,
         },
         {
             name: 'Dec',
-            uv: 1400,
-            pv: 680,
+            'Relief Amount Distributed': 1400,
+            'Number of Beneficiiaries': 680,
         },
     ];
 
@@ -221,8 +221,8 @@ const Preview = (props: Props) => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="pv" barSize={20} fill="rgb(0,177,117)" />
-                    <Line type="monotone" dataKey="uv" stroke="rgb(165,0,21)" />
+                    <Bar dataKey="Number of Beneficiiaries" barSize={20} fill="rgb(0,177,117)" />
+                    <Line type="monotone" dataKey="Relief Amount Distributed" stroke="rgb(165,0,21)" />
                 </ComposedChart>
                 <div className={styles.reliefDataMainContainer}>
                     <div className={styles.reliefDistribution}>

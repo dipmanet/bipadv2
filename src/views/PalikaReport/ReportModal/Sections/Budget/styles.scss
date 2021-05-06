@@ -25,186 +25,46 @@
     }
         
     }
-.mainPageDetailsContainer{
-    min-height: 400px !important;
-    display: flex;
-    flex-direction: column;
-    // padding: 50px;
+
+.budgetPreviewContainer{
+    margin-left: 30px;
+    margin-top: 10px;
+    border: 1px solid gray;
     h2{
-        text-align: left;
-        margin-bottom: 15px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-left: 2%;
+        color: #222
     }
-    .formColumn{
-        padding: 0;
-        // border: 1px solid gray;
-        p{
-            font-size: 14px;
-        }
-        .row{
+    .budgetDetailsContainer{
+        // height: 100px;
+        .budgetDetails{
             display: flex;
-            width: 100%;
-            // border: 1px solid red;
-            justify-content: flex-start;
-            flex-direction: column;
-            // table{
-            //     margin: 0;
-            // }
-            table{
-                border-collapse: collapse;
-                width: 100%;
-                border: 1px solid #e6e6e6;
-                margin: 0 0 15px 0;
-            }
-            th{
-                padding: 0.5rem;
-                text-align: left;
+            align-items: center;
+            padding: 0em;
+            .lighter{
                 color: #777;
-                font-weight: 400;
-            }
-            td{
-                border-top: 1px solid #f5f5f5;
-                border-bottom: 1px solid #f5f5f5;
-                padding: 0.5rem;
-                text-align: left;
-            }
-                tr:nth-child(odd) {
-                background-color:#f5f5f5
-            }
-            .inputContainer{
-                display: flex;
-                border-radius: 3px;
-                background-color: rgb(232,232,232);
-                justify-content: flex-start;
-                align-items: center;
-                margin-bottom: 12px;
-                padding-left: 10px;
-                // border: 1px solid blue;
-                width: 40%;
-                padding-right: 10px;
-                cursor: pointer;
-                .labelDate{
-                    padding-left: 10px;
-                    color: #777;
-                    width: 100%;
-                    // margin-top: 15px;
-                }
-                select{
-                    border: none !important;
-                    padding: 0px 10px;
-                    background: transparent;
-                    width: 100%;
-                    padding: 15px 10px !important;
-                    color: #777;
-                }
-                .label{
-                    padding: 12px 18px 0 15px;
-                    width: 100%;
-                    font-size: 10px;
-                    color: #111;
-                }
-                .datepicker{
-                    width: 100%;
-                }
-                .addEditBtn{
-                    background-color: transparent;
-                    border: none;
-                    cursor: pointer;
-                    filter: saturate(100%);
+                padding-left: 2px;
 
-                    .addEditIcon{
-                        font-size: 18px;
-                        padding-right: 10px;
-                        color: rgb(49,158,255);
-                    }
+            }
+            .light{
+                color: #777;
+                font-weight: 600;
+                padding-left: 2px;
+            }
+            ul{
+                list-style: none; 
+                padding-left: 2%;
+                padding-right: 2%;
+                li{
+                    white-space: nowrap;
                 }
-                .inputElement{
-                    padding: 0;
-                }
-            
-                input::-webkit-input-placeholder{
-                    font-size: 10px;
-                    vertical-align:middle !important;
-                    line-height: 25px !important;
-                }
-
-                input{
-                    border: none;
-                    padding: 15px 10px !important;
-                    background: transparent;
-                    width: 100%;
-                }
-                input:focus{
-                    outline: none;
-                }
-                input::placeholder{
-                    font-size: 12px;
-                }
-                .inputIcon{
-                    color: rgb(152,152,152);
-                }
-                }
+            }
+    
         }
-
-        h3{
-            margin-bottom: 15px;
-            // border: 1px solid gray;
-            margin-top: 15px;
-        }
-        .personalDetailsrow{
-            display: flex;
-            flex-direction: column;
-            width: 80%;
-            // margin-bottom: 12px;
-            // margin-top: 10px;
-            .personalDetails{
-                // margin-top: 10px;
-                table{
-                    border-collapse: collapse;
-                    width: 100%;
-                    border: 1px solid #e6e6e6;
-                    margin: 0 0 15px 0;
-                }
-                th{
-                    padding: 0.5rem;
-                    text-align: left;
-                    color: #777;
-                    font-weight: 400;
-                }
-                td{
-                    border-top: 1px solid #f5f5f5;
-                    border-bottom: 1px solid #f5f5f5;
-                    padding: 0.5rem;
-                    text-align: left;
-                }
-                    tr:nth-child(odd) {
-                    background-color:#f5f5f5
-                }
-                .titlePersonal{
-                    font-size: 14px;
-                    margin-right: 10px;
-                }
-                display: flex;
-                ul{
-                    list-style:none;
-                    li{
-                        display: flex;
-                        align-items: center;
-
-                        
-                    }
-                }
-                .addEditBtn{
-                    background: transparent;
-                    border: none;
-                    filter: saturate(100%);
-                    margin-left: 12px;
-                    .addEditIcon{
-                        color: rgb(0,92,230);
-                        font-size: 20px;
-                    }
-                        
-                    }
-            }
-        }
+    }
+    .budgetChartContainer{
+        border: 1px solid red;
     }
 }
+

@@ -13,6 +13,13 @@ import styles from './styles.scss';
 import MainModal from './MainModal';
 import DateInput from '#rsci/DateInput';
 import DropdownMenu from '#rsca/DropdownMenu';
+import Modal from '#rscv/Modal';
+
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+import DangerButton from '#rsca/Button/DangerButton';
+import Icon from '#rscg/Icon';
+
+
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -94,6 +101,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 let finalArr = [];
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
+    const [showModal, setshowModal] = useState(true);
+
     const [showReportModal, setShowReportModal] = useState(true);
     const [newRegionValues, setNewRegionValues] = useState(undefined);
     const [filtered, setFiltered] = useState(false);
@@ -588,15 +597,113 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort, submenuId, fetchedData]);
 
+
+    const closeModal = () => {
+        setshowModal(false);
+    };
+
     return (
         <>
             <Page hideMap hideFilter />
 
 
-            {/* {(menuId === 2 || menuId === 3) && submenuId !== null && showTabs
-             && <AddFormModal />} */}
+            {
+                showModal
+                    && (
+                        <Modal>
+                            {/* <div className={styles.closeBtn}>
+                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                    <Icon
+                                        name="times"
+                                        className={styles.settingsBtn}
+                                    />
+                                </DangerButton>
+                            </div> */}
+                            <div className={styles.firstPageContainer}>
+                                <div className={styles.title}>
+                                Welcome to the DRRM Report Module of the BIPAD Portal
+                                </div>
+                                <div className={styles.description}>
+                                This module in the BIPAD portal will generate Disaster Risk Reduction and Management Report for each fiscal year for all three tiers of the governments.
+                                </div>
+                                <div className={styles.description}>
+                                DRRM Act, 2074 and its regulation, 2076 mandates the government to generate reporting on DRRM. To aid this mandate, the reporting module will include general information of the chosen location, organizations working on disaster management, DRR policy related work, budget allocated for DRRM, and available capacity and resources and other DRR related information.
+                                </div>
+                                <div className={styles.description}>
+                                The report will also monitor and track activities
+                                based on the priorities set by the DRR National
+                                Strategic Action Plan 2018-2030.
+                                </div>
+                                <div className={styles.description}>
+                                Click proceed to generate the report for your region.
+
+                                </div>
+
+                                <div className={styles.subtitle}>
+                                What you can do with palika report.
+                                </div>
+                                {/* <div className={styles.bulletPtRow}>
+                                    <div className={styles.bulletsContainer}>
+                                        <ScalableVectorGraphics
+                                            className={styles.bulletPoint}
+                                            src={BulletIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <div className={styles.bulletText}>
+                                        Know where your palika is in terms of DRR
+                                        </div>
+                                    </div>
+                                    <div className={styles.bulletsContainer}>
+                                        <ScalableVectorGraphics
+                                            className={styles.bulletPoint}
+                                            src={BulletIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <div className={styles.bulletText}>
+                                        Track the progress your palika
+                                        is doing in terms of implementation of DRR
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={styles.bulletPtRow}>
+                                    <div className={styles.bulletsContainer}>
+                                        <ScalableVectorGraphics
+                                            className={styles.bulletPoint}
+                                            src={BulletIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <div className={styles.bulletText}>
+                                        Know the capacities and resources
+                                        you have within the municipality.
+                                        </div>
+                                    </div>
+                                    <div className={styles.bulletsContainer}>
+                                        <ScalableVectorGraphics
+                                            className={styles.bulletPoint}
+                                            src={BulletIcon}
+                                            alt="Bullet Point"
+                                        />
+                                        <div className={styles.bulletText}>
+                                        Check how your palika is spending Budget in DRR
+                                        </div>
+                                    </div>
+                                </div> */}
+                                <div className={styles.btnContainer}>
+                                    <PrimaryButton
+                                        type="button"
+                                        className={styles.agreeBtn}
+                                        onClick={closeModal}
+                                    >
+                                    PROCEED
+                                    </PrimaryButton>
+                                </div>
+
+                            </div>
+                        </Modal>
+                    )
 
 
+            }
             <div className={styles.reportContainer}>
                 <div className={styles.leftContainer}>
                     <div className={styles.heading}>

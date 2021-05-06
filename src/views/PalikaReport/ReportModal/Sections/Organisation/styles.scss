@@ -89,6 +89,27 @@
   flex-direction: column;
   // padding: 50px;
 
+  table{
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #f5f5f5;
+    height: 80%;
+    overflow-y: scroll;
+}
+th{
+    padding: 0.5rem;
+    text-align: left;
+}
+td{
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    padding: 0.5rem;
+    text-align: left;
+}
+tr:nth-child(even) {
+    background-color:#f5f5f5
+}
+
   h2{
       text-align: left;
   }
@@ -117,12 +138,6 @@
         padding-right: 4px;
     }
 }
-  // position: relative;
-  // border: 1px solid red;
-  // width: fit-content;
-
-  
-
 
 .palikaTable{
 
@@ -150,41 +165,30 @@
       text-align: left;
   }
       tr:nth-child(even) {
-      background-color:#f5f5f5
+      background-color:#f5f5f5;
   }
     }
-     
-    .pagination {
-        margin: 15px auto;
-        display: flex;
-        list-style: none;
-        outline: none;
-        justify-content: flex-end;
-      }
-      .pagination > .active > a{
-        background-color: #3498FC ;
-        border-color: #F5F5F5;
-        color: #fff;
-      }
-      .pagination > li > a{
-        border: 1px solid #F5F5F5 ;
-        padding: 5px 10px;
-        outline: none;
-        cursor: pointer;
-      }
-      .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
-        background-color: #3498FC ;
-        border-color: #F5F5F5;
-        outline: none ;
-      }
-      .pagination > li > a, .pagination > li > span{
-        color: black
-      }
-      .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
-        border-radius: unset
-      }
-      .paginationRight{
-          margin-left: auto;
-      }   
-        
+
+   
+  }
+
+  table{
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #f5f5f5;
+    height: 80%;
+    overflow-y: scroll;
+}
+th{
+    padding: 0.5rem;
+    text-align: left;
+}
+td{
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    padding: 0.5rem;
+    text-align: left;
+}
+    tr:nth-child(even) {
+    background-color:#f5f5f5;
 }

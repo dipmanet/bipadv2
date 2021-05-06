@@ -867,7 +867,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
         if (palikaRedirect.showForm) {
             setPalikaRedirect({ showForm: false });
-            ReachRouter.navigate('/palika-report/',
+            ReachRouter.navigate('/drrm-report/',
                 { state: { showForm: true }, replace: true });
         }
     }

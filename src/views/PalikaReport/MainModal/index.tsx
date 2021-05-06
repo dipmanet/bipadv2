@@ -6,12 +6,12 @@ import * as ReachRouter from '@reach/router';
 import Page from '#components/Page';
 import styles from './styles.scss';
 
-import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import ReportModal from '../ReportModal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
+import DangerButton from '#rsca/Button/DangerButton';
 
 import {
     createConnectedRequestCoordinator,
@@ -342,33 +342,34 @@ const MainModal: React.FC<Props> = (props: Props) => {
         return styles.modalContainer;
     };
 
+
     return (
         <>
             <Page hideMap hideFilter />
             {
-                <ReportModal
-                    keyTabUrl={tabUrlSelected}
-                    keyTab={tabSelected}
-                    showTabs={showTabs}
-                    hideWelcomePage={hideWelcomePage}
-                    reportData={reportData}
-                    tableHeader={tableHeader}
-                    province={province}
-                    district={district}
-                    municipality={municipality}
-                    mayor={mayor}
-                    cao={cao}
-                    focalPerson={focalPerson}
-                    localMembers={localMembers}
-                    updateTab={handleNextClick}
-                    tabsLength={tabs.length}
-                    handlePrevClick={handlePrevClick}
-                    handleNextClick={handleNextClick}
-                    showErr={showErr}
-                    handleShowErr={props.handleShowErr}
-                />
 
             }
+            <ReportModal
+                keyTabUrl={tabUrlSelected}
+                keyTab={tabSelected}
+                showTabs={showTabs}
+                hideWelcomePage={hideWelcomePage}
+                reportData={reportData}
+                tableHeader={tableHeader}
+                province={province}
+                district={district}
+                municipality={municipality}
+                mayor={mayor}
+                cao={cao}
+                focalPerson={focalPerson}
+                localMembers={localMembers}
+                updateTab={handleNextClick}
+                tabsLength={tabs.length}
+                handlePrevClick={handlePrevClick}
+                handleNextClick={handleNextClick}
+                showErr={showErr}
+                handleShowErr={props.handleShowErr}
+            />
 
 
         </>

@@ -1,3 +1,25 @@
+.savebtn{
+    position: relative;
+    margin-top: 10px;
+    width: fit-content;
+    // background-color: rgb(54, 132, 216) !important;
+    background-color: transparent;
+    border-radius: 4px;
+    color: rgb(54, 132, 216) !important;
+    padding: 8px 8px;
+    cursor: pointer;
+    // border: none;
+    filter: saturate(80%);
+    border: none;
+    margin-right: 10px;
+    white-space: nowrap;
+    .plusIcon{
+        padding-right: 4px;
+    }
+}
+h2{
+    margin-bottom: 20px !important;
+}
 .inputContainer{
     display: flex;
     border-radius: 3px;
@@ -80,6 +102,8 @@
         // margin-left: 35px;
         color: #222;
         white-space: pre-wrap;
+        margin-bottom: 10px;
+
     }
     ul{
         list-style: square;
@@ -283,6 +307,8 @@ td{
 
         h3{
             margin-top: 20px;
+        margin-bottom: 10px;
+
         }
         .personalDetailsrow{
             display: flex;

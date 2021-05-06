@@ -217,7 +217,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
         setPalikaRedirect({
             showForm: false,
         });
-        ReachRouter.navigate('/palika-report/',
+        ReachRouter.navigate('/drrm-report/',
             { state: { showForm: true }, replace: true });
     };
 

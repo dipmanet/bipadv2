@@ -10,6 +10,8 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import fsdata from '../../data';
+
 import {
     setProgramAndPolicyDataAction,
 } from '#actionCreators';
@@ -170,12 +172,16 @@ const ProgramPolicies = (props: Props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
+    // eslint-disable-next-line max-len
+    const budgetName = fsdata.fiscalYear.filter(item => item.id === Number(generalData.fiscalYear))[0].titleEn;
+
+
     return (
         <>
             { !props.previewDetails
             && (
                 <div>
-                    <h2>Programmes and Policies </h2>
+                    <h2>{`Annual Policy and Programme for FY ${budgetName}`}</h2>
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
@@ -205,8 +211,23 @@ const ProgramPolicies = (props: Props) => {
                         && (
                             <>
                                 <div className={styles.txtAreadetails}>
-                                    <textarea value={point} placeholder="Disaster Budget" onChange={handleChangePoint} rows="4" cols="100" />
-                                    <button type="button" onClick={handleSubmit}>Add</button>
+                                    <textarea
+                                        value={point}
+                                        placeholder="Please enter the DRR related
+                                    points in this fiscal year's Annual Policy and
+                                    Programme of the municipality"
+                                        onChange={handleChangePoint}
+                                        rows="4"
+                                        cols="100"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleSubmit}
+                                        className={styles.savebtn}
+                                    >
+Add
+
+                                    </button>
                                 </div>
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
@@ -228,13 +249,17 @@ const ProgramPolicies = (props: Props) => {
                     Annual Program and policies
                     </h2>
                     <ul>
-                        {finalPolicyData.length > 0
+                        {finalPolicyData.length > 0 && finalPolicyData.length < 3
                             ? finalPolicyData.map(item => (
                                 <li key={item.id}>
                                     {item.point}
                                 </li>
                             ))
-                            : 'No Data'
+                            : finalPolicyData.slice(0, 3).map(item => (
+                                <li key={item.id}>
+                                    {item.point}
+                                </li>
+                            ))
                         }
                     </ul>
                 </div>
