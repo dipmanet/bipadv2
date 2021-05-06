@@ -623,71 +623,23 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 <div className={styles.title}>
                                 Welcome to the DRRM Report Module of the BIPAD Portal
                                 </div>
-                                <div className={styles.description}>
+                                <p className={styles.description}>
                                 This module in the BIPAD portal will generate Disaster Risk Reduction and Management Report for each fiscal year for all three tiers of the governments.
-                                </div>
-                                <div className={styles.description}>
+                                </p>
+                                <p className={styles.description}>
                                 DRRM Act, 2074 and its regulation, 2076 mandates the government to generate reporting on DRRM. To aid this mandate, the reporting module will include general information of the chosen location, organizations working on disaster management, DRR policy related work, budget allocated for DRRM, and available capacity and resources and other DRR related information.
-                                </div>
-                                <div className={styles.description}>
+                                </p>
+                                <p className={styles.description}>
                                 The report will also monitor and track activities
                                 based on the priorities set by the DRR National
                                 Strategic Action Plan 2018-2030.
-                                </div>
-                                <div className={styles.description}>
+                                </p>
+
+                                <p className={styles.description}>
                                 Click proceed to generate the report for your region.
 
-                                </div>
+                                </p>
 
-                                <div className={styles.subtitle}>
-                                What you can do with palika report.
-                                </div>
-                                {/* <div className={styles.bulletPtRow}>
-                                    <div className={styles.bulletsContainer}>
-                                        <ScalableVectorGraphics
-                                            className={styles.bulletPoint}
-                                            src={BulletIcon}
-                                            alt="Bullet Point"
-                                        />
-                                        <div className={styles.bulletText}>
-                                        Know where your palika is in terms of DRR
-                                        </div>
-                                    </div>
-                                    <div className={styles.bulletsContainer}>
-                                        <ScalableVectorGraphics
-                                            className={styles.bulletPoint}
-                                            src={BulletIcon}
-                                            alt="Bullet Point"
-                                        />
-                                        <div className={styles.bulletText}>
-                                        Track the progress your palika
-                                        is doing in terms of implementation of DRR
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={styles.bulletPtRow}>
-                                    <div className={styles.bulletsContainer}>
-                                        <ScalableVectorGraphics
-                                            className={styles.bulletPoint}
-                                            src={BulletIcon}
-                                            alt="Bullet Point"
-                                        />
-                                        <div className={styles.bulletText}>
-                                        Know the capacities and resources
-                                        you have within the municipality.
-                                        </div>
-                                    </div>
-                                    <div className={styles.bulletsContainer}>
-                                        <ScalableVectorGraphics
-                                            className={styles.bulletPoint}
-                                            src={BulletIcon}
-                                            alt="Bullet Point"
-                                        />
-                                        <div className={styles.bulletText}>
-                                        Check how your palika is spending Budget in DRR
-                                        </div>
-                                    </div>
-                                </div> */}
                                 <div className={styles.btnContainer}>
                                     <PrimaryButton
                                         type="button"
