@@ -159,7 +159,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     };
     const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
-        console.log('here: pending', pending);
         setPending(true);
         html2canvas(divToDisplay).then(async (canvas) => {
             // const formData = new FormData();

@@ -211,6 +211,7 @@ const BudgetActivity = (props: Props) => {
 
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
+    const [parent, setParent] = useState(1);
 
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
     const [projstartDate, setStartDate] = useState('');
@@ -242,6 +243,8 @@ const BudgetActivity = (props: Props) => {
     const [showmunGovernment, setshowmunGovernment] = useState(false);
     const [selectedOption, setSelectedOption] = useState({});
     const [budgetActivities, setBudgetActivities] = useState([]);
+    const [priorityActionData, setPData] = useState([]);
+    const [priorityActivityData, setAData] = useState([]);
 
     const handlePending = (data: boolean) => {
         setPending(data);
@@ -388,18 +391,32 @@ const BudgetActivity = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
 
-
+    console.log(priorityData.Data);
     const PriorityArea = priorityData.Data.filter(data => data.level === 0);
-    const PriorityAction = priorityData.Data.filter(data => data.level === 1);
+    const PriorityAction = priorityData.Data.filter(data => data.parent === parent);
     const PriorityActivity = priorityData.Data.filter(data => data.level === 2);
 
     const handlePriorityArea = (e) => {
+        console.log('priorityArea:', e.target.value);
         setpriorityArea(e.target.value);
+        const obj = priorityData.Data.filter(item => item.title === e.target.value);
+        setParent(obj.sn);
+        // console.log('our SN', obj);
+        setPData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
+        // console.log('our obj', priorityData.Data.filter(item => item.parent === obj.sn));
     };
+
     const handlePriorityAction = (e) => {
+        console.log('action:', e.target.value);
+
         setPriorityAction(e.target.value);
+        const obj = priorityData.Data.filter(item => item.title === e.target.value);
+        // setSubParent(obj.sn);
+        setAData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
     };
     const handlePriorityActivity = (e) => {
+        console.log('actvity:', e.target.value);
+
         setPriorityActivity(e.target.value);
     };
     const handlefundingType = (data) => {
@@ -623,7 +640,7 @@ const BudgetActivity = (props: Props) => {
                                                className={styles.inputElement}
                                            >
                                                <option value="">Select Priority Action</option>
-                                               {PriorityAction.map(data => (
+                                               {priorityActionData.map(data => (
                                                    <option value={data.title}>
                                                        {data.title}
                                                    </option>
@@ -638,7 +655,7 @@ const BudgetActivity = (props: Props) => {
                                                className={styles.inputElement}
                                            >
                                                <option value="">Select Priority Activity</option>
-                                               {PriorityActivity.map(data => (
+                                               {priorityActivityData.map(data => (
                                                    <option value={data.title}>
                                                        {data.title}
                                                    </option>

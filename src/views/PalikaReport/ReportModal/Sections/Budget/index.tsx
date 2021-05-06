@@ -159,6 +159,8 @@ const Budget = (props: Props) => {
         municipality: profile.municipality,
         province: profile.province,
         finalAnnualBudgetData: handleSaveAnnualBudgetData,
+        handlePendingState: handlePending,
+
 
     });
 

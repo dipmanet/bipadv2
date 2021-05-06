@@ -139,7 +139,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [pending, setPending] = useState(false);
 
     const [localMembers, setLocalMembers] = useState([]);
-    if (user && user.profile && !user.profile.municipality) {
+    if (user && user.profile && !user.profile.municipality && !user.profile.isSuperuser) {
         const {
             profile: {
                 municipality: municipalityfromProp,
@@ -252,7 +252,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     }, [props.selectedTab]);
 
     useEffect(() => {
-        if (reportData && user && user.profile.municipality) {
+        if (reportData && user && user.profile.municipality && !user.profile.isSuperuser) {
             const localM = reportData
                 .filter(item => item.committee === 'LDMC' && item.municipality === user.profile.municipality);
             setLocalMembers(localM);
