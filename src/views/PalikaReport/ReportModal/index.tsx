@@ -165,11 +165,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [memberCount, setmemberCount] = useState('');
     const [reportData, setReportData] = useState([]);
     const [savePDF, setSavePDF] = useState();
-<<<<<<< HEAD
     const [disasterProfile, setDisasterProfile] = useState([]);
-=======
     const [pending, setPending] = useState(false);
->>>>>>> 8a03c7688b014b51565485af5857de9667c472df
     const getGeneralData = () => ({
         reportTitle,
         datefrom,
