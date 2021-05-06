@@ -248,10 +248,16 @@ const General = (props: Props) => {
                                     onChange={handleSelectChange}
                                     className={styles.inputElement}
                                 >
+                                    {/* objs.sort((a,b) => (a.last_nom > b.last_nom) */}
+
+
                                     <option value="select">Select Fiscal Year</option>
-                                    {fiscalYearList && fiscalYearList.map(item => (
-                                        <option value={item.id}>{item.titleEn}</option>
-                                    ))}
+                                    {fiscalYearList && fiscalYearList
+                                        .sort((a, b) => b.id - a.id)
+                                        .filter(item => item.id < 19 && item.id > 7)
+                                        .map(item => (
+                                            <option value={item.id}>{item.titleEn}</option>
+                                        ))}
 
                                 </select>
 

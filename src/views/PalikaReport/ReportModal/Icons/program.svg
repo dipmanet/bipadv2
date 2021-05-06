@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-program">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="program" clip-path="url(#clip-program)">
+    <path id="Icon_material-insert-drive-file" data-name="Icon material-insert-drive-file" d="M8.227,3A2.224,2.224,0,0,0,6.011,5.227L6,23.041a2.224,2.224,0,0,0,2.216,2.227H21.588a2.233,2.233,0,0,0,2.227-2.227V9.68L17.134,3Zm7.794,7.794V4.67l6.124,6.124Z" transform="translate(1.093 1.866)" fill="#405467"/>
+  </g>
+</svg>

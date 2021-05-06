@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -10,6 +11,7 @@ import { isDefined, _cs } from '@togglecorp/fujs';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend } from 'recharts';
 import Loader from 'react-loader-spinner';
 import priorityData from '#views/PalikaReport/components/priorityDropdownSelectData';
+import fsdata from '../../data';
 
 import styles from './styles.scss';
 import {
@@ -205,6 +207,9 @@ const BudgetActivity = (props: Props) => {
 
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
+    const [parent, setParent] = useState(1);
+    const [otherSubtype, setSubtype] = useState('');
+    const [showInfo, setShowInfo] = useState(false);
 
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
     const [projstartDate, setStartDate] = useState('');
@@ -236,7 +241,12 @@ const BudgetActivity = (props: Props) => {
     const [showmunGovernment, setshowmunGovernment] = useState(false);
     const [selectedOption, setSelectedOption] = useState({});
     const [budgetActivities, setBudgetActivities] = useState([]);
+    const [priorityActionData, setPData] = useState([]);
+    const [priorityActivityData, setAData] = useState([]);
 
+    const handleInfoBtn = () => {
+        setShowInfo(!showInfo);
+    };
     const handlePending = (data: boolean) => {
         setPending(data);
     };
@@ -313,7 +323,9 @@ const BudgetActivity = (props: Props) => {
             setSourceType(true);
         }
     }, [budgetData]);
-
+    const handleOtherSubType = (data) => {
+        setSubtype(data.target.value);
+    };
     const handleNext = () => {
         updateTab();
     };
@@ -382,16 +394,32 @@ const BudgetActivity = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
 
+<<<<<<< HEAD
+    console.log(priorityData.Data);
+=======
     console.log('This priority data', priorityData);
+>>>>>>> fdc11ca32578d6f29d62feea78975872c090c56c
     const PriorityArea = priorityData.Data.filter(data => data.level === 0);
-    const PriorityAction = priorityData.Data.filter(data => data.level === 1);
+    const PriorityAction = priorityData.Data.filter(data => data.parent === parent);
     const PriorityActivity = priorityData.Data.filter(data => data.level === 2);
 
     const handlePriorityArea = (e) => {
+        console.log('priorityArea:', e.target.value);
         setpriorityArea(e.target.value);
+        const obj = priorityData.Data.filter(item => item.title === e.target.value);
+        setParent(obj.sn);
+        // console.log('our SN', obj);
+        setPData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
+        // console.log('our obj', priorityData.Data.filter(item => item.parent === obj.sn));
     };
+
     const handlePriorityAction = (e) => {
+        console.log('action:', e.target.value);
+
         setPriorityAction(e.target.value);
+        const obj = priorityData.Data.filter(item => item.title === e.target.value);
+        // setSubParent(obj.sn);
+        setAData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
     };
     const handlePriorityActivity = (e) => {
         setPriorityActivity(e.target.value);
@@ -399,6 +427,7 @@ const BudgetActivity = (props: Props) => {
     const handlefundingType = (data) => {
         if (data.target.value === 'Others') {
             setSourceTypeOther(true);
+            setfundingType('Others');
         } else {
             setSourceTypeOther(false);
             setfundingType(data.target.value);
@@ -448,6 +477,7 @@ const BudgetActivity = (props: Props) => {
     //         }
     //     }
     // }, [action, priorityAction, selectedOption]);
+    const budgetName = fsdata.fiscalYear.filter(item => item.id === Number(generalData.fiscalYear))[0].titleEn;
 
 
     return (
@@ -471,7 +501,7 @@ const BudgetActivity = (props: Props) => {
                         {!props.previewDetails && !props.monitoringDetails
            && (
                <div className={styles.mainPageDetailsContainer}>
-                   <h2>Budget Activities</h2>
+                   <h2>{`Budget Activities for Fiscal Year 0XX/0YY${budgetName}`}</h2>
                    <table id="table-to-xls">
                        <tbody>
 
@@ -491,6 +521,16 @@ const BudgetActivity = (props: Props) => {
                                    <th>
                                            Priority Area
 
+                                       <button
+                                           type="button"
+                                           className={styles.infoBtn}
+                                           onClick={handleInfoBtn}
+                                       >
+                                           <Icon
+                                               name="info"
+                                               className={styles.infoIcon}
+                                           />
+                                       </button>
 
                                    </th>
                                    <th>
@@ -518,6 +558,15 @@ const BudgetActivity = (props: Props) => {
 
 
                                    </th>
+                                   {
+                                       showSourceTypeOther
+                                    && (
+                                        <th>
+                                           Other Fund Type
+
+                                        </th>
+                                    )
+                                   }
                                    <th>
                                            Budget code
 
@@ -565,14 +614,19 @@ const BudgetActivity = (props: Props) => {
                                    <tr key={data.id}>
                                        <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
                                        <td>{data.activityName}</td>
-                                       <td>{data.priorityArea}</td>
+                                       <td>
+                                           {
+                                               data.priorityArea
+
+                                           }
+                                       </td>
                                        <td>{data.priorityAction}</td>
                                        <td>{data.priorityActivity}</td>
                                        {/* <td>{data.priorityArea}</td> */}
                                        <td>{data.fundType}</td>
                                        <td>{data.fundType}</td>
-                                       <td>{data.budgetCode}</td>
                                        <td>{data.donerOrganization}</td>
+                                       <td>{data.budgetCode}</td>
                                        <td>{data.projectStartDate}</td>
                                        <td>{data.projectEndDate}</td>
                                        <td>{data.status}</td>
@@ -617,7 +671,7 @@ const BudgetActivity = (props: Props) => {
                                                className={styles.inputElement}
                                            >
                                                <option value="">Select Priority Action</option>
-                                               {PriorityAction.map(data => (
+                                               {priorityActionData.map(data => (
                                                    <option value={data.title}>
                                                        {data.title}
                                                    </option>
@@ -632,7 +686,7 @@ const BudgetActivity = (props: Props) => {
                                                className={styles.inputElement}
                                            >
                                                <option value="">Select Priority Activity</option>
-                                               {PriorityActivity.map(data => (
+                                               {priorityActivityData.map(data => (
                                                    <option value={data.title}>
                                                        {data.title}
                                                    </option>
@@ -648,46 +702,66 @@ const BudgetActivity = (props: Props) => {
                                            >
                                                <option value="select"> Select Funding Type</option>
                                                <option value="DRR Fund of Muicipality">
-                               DRR Fund of Municipality
+                                                 DRR Fund of Municipality
 
                                                </option>
                                                <option value="Other DRR related funding">
-                               Other DRR related funding
+                                                 Other DRR related funding
 
                                                </option>
                                            </select>
                                        </td>
 
                                        <td>
-                                           <select
-                                               value={fundingType}
-                                               onChange={handlefundingType}
-                                               className={styles.inputElement}
-                                           >
-                                               <option value="select">Select Source of Funds</option>
-                                               <option value="Federal Government">
-                                           Federal Government
+                                           {
+                                               fundSource === 'DRR Fund of Muicipality'
+                                              && (
+                                                  <input
+                                                      type="text"
+                                                      className={styles.inputElement}
+                                                      value={'Municipal Government'}
+                                                      disabled
+                                                  />
+                                              )}
 
-                                               </option>
-                                               <option value="Provincial Government">
-                                           Provincial Government
+                                           {
+                                               fundSource === 'Other DRR related funding'
+                                                  && (
+                                                      <select
+                                                          value={fundingType}
+                                                          onChange={handlefundingType}
+                                                          className={styles.inputElement}
+                                                      >
+                                                          <option value="select">Select Source of Funds</option>
+                                                          <option value="Federal Government">
+                                                                Federal Government
+                                                          </option>
+                                                          <option value="Provincial Government">
+                                                                Provincial Government
+                                                          </option>
+                                                          <option value="INGO">I/NGOs</option>
+                                                          <option value="Private Sector">Private Sector</option>
+                                                          <option value="Academia">Academia</option>
+                                                          <option value="Others">Others</option>
+                                                      </select>
+                                                  )
+                                           }
 
-                                               </option>
-                                               <option value="INGO">I/NGOs</option>
-                                               <option value="Private Sector">Private Sector</option>
-                                               <option value="Academia">Academia</option>
-                                               <option value="Others">Others</option>
-                                           </select>
                                        </td>
-                                       <td>
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleBudgetCode}
-                                               value={budgetCode}
-                                               placeholder={'Budget Code'}
-                                           />
-                                       </td>
+                                       {
+                                           showSourceTypeOther
+                                           && (
+                                               <td>
+                                                   <input
+                                                       type="text"
+                                                       className={styles.inputElement}
+                                                       value={otherSubtype}
+                                                       onChange={handleOtherSubType}
+                                                       placeholder={'Please Specify'}
+                                                   />
+                                               </td>
+                                           )
+                                       }
                                        <td>
                                            <input
                                                type="text"
@@ -698,12 +772,22 @@ const BudgetActivity = (props: Props) => {
                                            />
                                        </td>
                                        <td>
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleBudgetCode}
+                                               value={budgetCode}
+                                               placeholder={'Budget Code (if available)'}
+                                           />
+                                       </td>
+
+                                       <td>
                                            <NepaliDatePicker
                                                inputClassName="form-control"
                                                className={styles.datepicker}
                                                value={projstartDate}
                                                onChange={date => setStartDate(date)}
-                                               options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                               options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                            />
                                        </td>
                                        <td>
@@ -712,7 +796,7 @@ const BudgetActivity = (props: Props) => {
                                                className={styles.datepicker}
                                                value={projcompletionDate}
                                                onChange={date => setprojCompletionDate(date)}
-                                               options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                               options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                            />
                                        </td>
                                        <td>
@@ -746,17 +830,22 @@ const BudgetActivity = (props: Props) => {
                                                placeholder={'Actual Expenditure'}
                                            />
                                        </td>
-                                       <td>
-                                           {' '}
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleRemarks}
-                                               value={remarks}
-                                               placeholder={'Remarks'}
-                                           />
+                                       {
+                                           !props.annex
+                                            && (
+                                                <td>
+                                                    {' '}
+                                                    <input
+                                                        type="text"
+                                                        className={styles.inputElement}
+                                                        onChange={handleRemarks}
+                                                        value={remarks}
+                                                        placeholder={'Remarks'}
+                                                    />
 
-                                       </td>
+                                                </td>
+                                            )
+                                       }
                                    </tr>
 
                                )
@@ -767,6 +856,34 @@ const BudgetActivity = (props: Props) => {
 
                        </tbody>
                    </table>
+                   <div className={styles.drrsLink}>
+                       {
+                           showInfo
+                           && (
+                               <>
+                                   <p>
+                            The Disaster Risk Reduction
+                            National Strategic
+                            Plan of Action
+                            2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main
+                            guidance, has identified 4 priority areas and 18 priority actions.
+                            The activities will be monitored based on the these priorities set.
+                                   </p>
+                                   <p>
+                            Get the action plan :
+                                       <a
+                                           href="https://bit.ly/3vLWgW4"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                       >
+                                           {'here'}
+                                       </a>
+                                   </p>
+                               </>
+                           )
+                       }
+
+                   </div>
                    {
                        Object.keys(postErrors).length > 0
                         && (

@@ -1,1 +1,13 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25.35 25.35"><defs><style>.cls-1{fill:#66b4c6;}</style></defs><path class="cls-1" d="M6.52,2.13a4.4,4.4,0,1,0,4.4,4.39A4.4,4.4,0,0,0,6.52,2.13Zm0,7.47A.44.44,0,1,1,7,9.16.44.44,0,0,1,6.52,9.6ZM7,7.4a.44.44,0,1,1-.87,0V3.89a.44.44,0,1,1,.87,0Z"/><path class="cls-1" d="M23.15,12.17,16.91,6.63a.43.43,0,0,0-.56,0l-6.23,5.54a.25.25,0,0,0-.08.17V23.22h4.83V18.83a.88.88,0,0,1,.88-.88h1.76a.87.87,0,0,1,.88.88v4.39h4.83V12.34A.28.28,0,0,0,23.15,12.17Z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <clipPath id="clip-house_partial">
+      <rect width="26" height="26"/>
+    </clipPath>
+  </defs>
+  <g id="house_partial" clip-path="url(#clip-house_partial)">
+    <g id="house_partial-2" data-name="house_partial" transform="translate(0.33 0.325)">
+      <path id="Path_665" data-name="Path 665" d="M6.52,2.13a4.4,4.4,0,1,0,4.4,4.39,4.4,4.4,0,0,0-4.4-4.39Zm0,7.47a.44.44,0,1,1,.337-.114A.44.44,0,0,1,6.52,9.6ZM7,7.4a.44.44,0,1,1-.87,0V3.89a.44.44,0,1,1,.87,0Z" fill="#66b4c6"/>
+      <path id="Path_666" data-name="Path 666" d="M23.15,12.17,16.91,6.63a.43.43,0,0,0-.56,0l-6.23,5.54a.25.25,0,0,0-.08.17V23.22h4.83V18.83a.88.88,0,0,1,.88-.88h1.76a.87.87,0,0,1,.88.88v4.39h4.83V12.34a.28.28,0,0,0-.07-.17Z" fill="#66b4c6"/>
+    </g>
+  </g>
+</svg>

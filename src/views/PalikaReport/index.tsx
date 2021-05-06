@@ -263,41 +263,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setOffset((selectedPage - 1) * paginationQueryLimit);
         setCurrentPageNumber(selectedPage);
     };
-    useEffect(() => {
-        if (user && submenuId === 2) {
-            const {
-                profile: {
-                    municipality,
 
-                },
-            } = user;
-            PalikaReportGetRequest.do({
-                offset,
-                municipality,
-                dateFrom,
-                dateTo,
-            });
-        } else if (newRegionValues) {
-            PalikaReportGetRequest.do({
-
-                submitQuery: getRegionDetails(newRegionValues),
-                offset,
-                dateFrom,
-                dateTo,
-
-
-            });
-        } else {
-            PalikaReportGetRequest.do({
-                offset,
-                dateFrom,
-                dateTo,
-                submitQuery: getRegionDetails(),
-            });
-        }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
 
     const handleAddbuttonClick = () => {
         setShowReportModal(true);
