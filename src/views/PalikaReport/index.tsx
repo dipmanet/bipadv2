@@ -143,20 +143,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     } = props;
 
     let municipalityName = '';
-    if (user && user.profile && !user.profile.municipality) {
-        const {
-            profile: {
-                municipality: municipalityfromProp,
-                district: districtfromProp,
-                province: provincefromProp,
-            },
-        } = user;
 
 
-        setMunicipality(municipalityfromProp);
-        setProvince(provincefromProp);
-        setDistrict(districtfromProp);
-    }
     if (user && user.profile && user.profile.municipality) {
         const {
             profile: {

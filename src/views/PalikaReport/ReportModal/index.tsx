@@ -87,7 +87,29 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.fiscalYear(citizenReportList);
         },
     },
+    DisasterProfileGetRequest: {
+        url: '/disaster-profile/',
+        query: ({ params, props }) => ({
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            fiscal_year: params.fiscalYear,
 
+        }),
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.disasterProfile) {
+                params.disasterProfile(citizenReportList);
+            }
+        },
+    },
     // PreviewDataPost: {
     //     url: '/disaster-profile/',
     //     method: methods.POST,
@@ -129,8 +151,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         handleNextClick,
         localMembers,
         palikaRedirect,
-        requests: { PreviewDataPost },
+        requests: { DisasterProfileGetRequest },
         generalData,
+        user: { profile },
         user,
     } = props;
     const [reportTitle, setreportTitle] = useState('');
@@ -140,6 +163,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [memberCount, setmemberCount] = useState('');
     const [reportData, setReportData] = useState([]);
     const [savePDF, setSavePDF] = useState();
+    const [disasterProfile, setDisasterProfile] = useState([]);
     const getGeneralData = () => ({
         reportTitle,
         datefrom,
@@ -151,6 +175,19 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         memberCount,
     });
     const handleWelcomePage = () => hideWelcomePage();
+
+    const handleDisasterProfile = (response) => {
+        setDisasterProfile(response);
+    };
+    console.log('Disaster profile>>>', disasterProfile);
+    DisasterProfileGetRequest.setDefaultParams({
+        province: profile.province,
+        district: profile.district,
+        municipality: profile.municipality,
+        fiscalYear: generalData.fiscalYear,
+        disasterProfile: handleDisasterProfile,
+    });
+
 
     const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
@@ -205,16 +242,28 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             // formdata.append('mayorChairperson', generalData.mayor);
             // formdata.append('chiefAdministrativeOfficer', generalData.cao);
             // formdata.append('drrFocalPerson', generalData.focalPerson);
+            if (disasterProfile) {
+                axios.put(`http://bipaddev.yilab.org.np/api/v1/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
+                    'content-type': 'multipart/form-data',
+                } })
+                    .then((response) => {
+                        console.log(response);
+                        alert('Your palika report has been uploaded sucessfully');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
+                    'content-type': 'multipart/form-data',
+                } })
+                    .then((response) => {
+                        console.log(response);
+                        alert('Your palika report has been uploaded sucessfully');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            }
 
-            axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
-                'content-type': 'multipart/form-data',
-            } })
-                .then((response) => {
-                    console.log(response);
-                    alert('Your palika report has been uploaded sucessfully');
-                }).catch((error) => {
-                    console.log(error);
-                });
             doc.save('file.pdf');
         });
     };
