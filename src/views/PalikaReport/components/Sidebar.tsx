@@ -6,14 +6,40 @@ import * as ReachRouter from '@reach/router';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-import { userSelector, palikaRedirectSelector, generalDataSelector } from '#selectors';
+
+import budgetLogo from '../ReportModal/Icons/budget.svg';
+import budgetActivityLogo from '../ReportModal/Icons/budgetactivity.svg';
+import contactsLogo from '../ReportModal/Icons/general.svg';
+import generalLogo from '../ReportModal/Icons/contacts.svg';
+import programAndPolicyLogo from '../ReportModal/Icons/program.svg';
+import organisationLogo from '../ReportModal/Icons/organisation.svg';
+import inventoriesLogo from '../ReportModal/Icons/inventories.svg';
+import carLogo from '../ReportModal/Icons/resource.svg';
+import incidentLogo from '../ReportModal/Icons/incident.svg';
+import simulationLogo from '../ReportModal/Icons/simulation.svg';
+
+
+import { userSelector, palikaRedirectSelector, generalDataSelector, budgetActivityDataSelector } from '#selectors';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     generalData: generalDataSelector(state),
 });
+const icons = [
+    budgetLogo,
+    budgetActivityLogo,
+    contactsLogo,
+    generalLogo,
+    programAndPolicyLogo,
+    organisationLogo,
+    inventoriesLogo,
+    carLogo,
+    incidentLogo,
+    simulationLogo,
 
+];
 const menuItems: {
     key: number;
     content: TabContent;
@@ -280,6 +306,11 @@ const Sidebar = (props) => {
                                                 type="button"
                                             >
 
+                                                <ScalableVectorGraphics
+                                                    className={styles.bulletPoint}
+                                                    src={icons[item.key]}
+                                                    alt="Bullet Point"
+                                                />
                                                 {item.content}
                                             </button>
                                         </li>
@@ -293,6 +324,7 @@ const Sidebar = (props) => {
                                             onClick={() => handleMenuItemClick(item.key)}
                                             type="button"
                                         >
+
                                             {item.content}
                                         </button>
                                     </li>

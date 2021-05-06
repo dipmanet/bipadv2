@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
-
+import fsdata from '../../data';
 import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
@@ -134,6 +134,7 @@ const Budget = (props: Props) => {
     const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
     const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
+    const [fyTitle, setFYTitle] = useState('');
 
 
     const [pending, setPending] = useState(false);
@@ -176,6 +177,9 @@ const Budget = (props: Props) => {
         setDistrict(profile.district);
         setMunicipality(profile.municipality);
     }, [profile.district, profile.municipality, profile.province]);
+
+
+    const budgetName = fsdata.fiscalYear.filter(item => item.id === Number(generalData.fiscalYear))[0].titleEn;
 
 
     const handleMunicipalBudget = (budgetVal) => {
@@ -264,6 +268,9 @@ const Budget = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annualBudgetData]);
 
+
+    // const FY =
+    // setFYTitle();
     // useEffect(() => {
     //     if (budgetId.id) {
     //         props.handleNextClick();
@@ -296,7 +303,9 @@ const Budget = (props: Props) => {
             && (
                 <div>
 
-                    <h2>Budget</h2>
+                    <h2>
+                        {`Budget for Fiscal Year ${budgetName}`}
+                    </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
                             <tbody>
@@ -307,7 +316,7 @@ const Budget = (props: Props) => {
                                         ? (
                                             <tr>
 
-                                                <th>SN</th>
+                                                {/* <th>SN</th> */}
 
 
                                                 <th>
@@ -341,21 +350,21 @@ const Budget = (props: Props) => {
                                         ) : (
                                             <tr>
 
-                                                <th>SN</th>
+                                                {/* <th>SN</th> */}
 
 
                                                 <th>
-    Total municipal budget
+                                                    Total municipal budget
 
 
                                                 </th>
                                                 <th>
-    DRR fund of municipality
+                                                    DRR fund of municipality
 
 
                                                 </th>
                                                 <th>
-    Other DRR related funding
+                                                    Other DRR related funding
 
 
                                                 </th>
@@ -365,7 +374,7 @@ const Budget = (props: Props) => {
                                         )}
                                     {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
                                         <tr key={item.id}>
-                                            <td>{i + 1}</td>
+                                            {/* <td>{i + 1}</td> */}
                                             <td>{item.totalBudgetNrs}</td>
                                             <td>{item.disasterBudgetNrs}</td>
                                             <td>{item.otherBudgetNrs}</td>
@@ -376,7 +385,7 @@ const Budget = (props: Props) => {
                                         </tr>
                                     )) : (
                                         <tr>
-                                            <td>1</td>
+                                            {/* <td>1</td> */}
                                             <td>
                                                 <input type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
                                                 {' '}

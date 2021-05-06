@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-budget">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="budget" clip-path="url(#clip-budget)">
+    <g id="Icon_ionic-md-cash" data-name="Icon ionic-md-cash" transform="translate(2.274 1.25)">
+      <path id="Path_667" data-name="Path 667" d="M2.25,6.75V19.865H25.2V6.75Zm8.222,11.476H6.354a2.462,2.462,0,0,0-2.464-2.464V11.668A3.282,3.282,0,0,0,7.168,8.389h3.3a7.649,7.649,0,0,0-1.665,4.918A7.649,7.649,0,0,0,10.472,18.226Zm13.089-2.464A2.477,2.477,0,0,0,21.1,18.226H16.979a7.649,7.649,0,0,0,1.665-4.918,7.649,7.649,0,0,0-1.665-4.918h3.3a3.282,3.282,0,0,0,3.279,3.279Z" transform="translate(0)" fill="#405467"/>
+      <path id="Path_668" data-name="Path 668" d="M2.25,27H25.2v1.639H2.25Z" transform="translate(0 -5.496)" fill="#405467"/>
+    </g>
+  </g>
+</svg>
