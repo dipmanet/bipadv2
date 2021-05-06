@@ -21,7 +21,7 @@ import {
 import {
     generalDataSelector,
     budgetDataSelector,
-    userSelector, budgetIdSelector,
+    userSelector, budgetIdSelector, filtersValuesSelectorDP,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import Icon from '#rscg/Icon';
@@ -135,11 +135,14 @@ const Budget = (props: Props) => {
     const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
     const [fyTitle, setFYTitle] = useState('');
-
+    const [showInfo, setShowInfo] = useState(false);
 
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
 
+    const [totalMun, setTotalMun] = useState(false);
+    const [drrfundInfo, setDrrFundInfo] = useState(false);
+    const [otherFunding, setOtherFunding] = useState(false);
 
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest } } = props;
@@ -191,6 +194,21 @@ const Budget = (props: Props) => {
     const handleAddFund = (addFundVal) => {
         setadditionalFund(addFundVal.target.value);
     };
+    const handleinfoClick = (data) => {
+        if (data === 'totalMun') {
+            setTotalMun(true);
+            setDrrFundInfo(false);
+            setOtherFunding(false);
+        } if (data === 'drrFund') {
+            setTotalMun(false);
+            setDrrFundInfo(true);
+            setOtherFunding(false);
+        } if (data === 'otherFunding') {
+            setTotalMun(false);
+            setDrrFundInfo(false);
+            setOtherFunding(true);
+        }
+    };
 
     const handleDataSave = () => {
         setBudgetDatapp({
@@ -218,7 +236,9 @@ const Budget = (props: Props) => {
 
         });
     };
-
+    // const handleinfoClick = () => {
+    //     setShowInfo(!showInfo);
+    // };
     const handleNextClick = () => {
         if (!annualBudgetData.length) {
             BudgetPostRequest.do({
@@ -320,27 +340,62 @@ const Budget = (props: Props) => {
 
 
                                                 <th>
-                                    Total municipal budget
-
-
-                                                </th>
-                                                <th>
-                                    DRR fund of municipality
-
-
-                                                </th>
-                                                <th>
-                                    Other DRR related funding
-
-
-                                                </th>
-                                                <th>
-                                Updated By
-
+                                                 Total municipal budget
+                                                    <button
+                                                        className={styles.infoBtn}
+                                                        onClick={() => handleinfoClick('totalMun')}
+                                                        type="button"
+                                                    >
+                                                        <Icon
+                                                            name="info"
+                                                            className={styles.infoIcon}
+                                                            title="Total municipal budget is the total budget allocated
+                                                            by the municipality for the execution of various
+                                                            activities for this fiscal year"
+                                                        />
+                                                    </button>
 
                                                 </th>
                                                 <th>
-                                    Updated On
+                                                     DRR fund of municipality
+                                                    <button
+                                                        className={styles.infoBtn}
+                                                        onClick={() => handleinfoClick('drrFund')}
+                                                        type="button"
+                                                    >
+                                                        <Icon
+                                                            name="info"
+                                                            className={styles.infoIcon}
+                                                            title=" DRR fund of the municipality is part of the total
+                                                            municipal budget of this fiscal year which is specifically
+                                                            separated for DRRM related
+                                                             activities"
+                                                        />
+                                                    </button>
+
+                                                </th>
+                                                <th>
+                                                    Other DRR related funding
+                                                    <button
+                                                        className={styles.infoBtn}
+                                                        onClick={() => handleinfoClick('otherFunding')}
+                                                        type="button"
+                                                    >
+                                                        <Icon
+                                                            name="info"
+                                                            className={styles.infoIcon}
+                                                            title="Other DRR related funding is the funding received by the
+                                                            municipality from various sources like I/NGOS, the federal
+                                                            government, provincial
+                                                           government, private sectors, etc. for this fiscal year"
+                                                        />
+                                                    </button>
+                                                </th>
+                                                {/* <th>
+                                                    Updated By
+                                                </th> */}
+                                                <th>
+                                                Last updated on
 
 
                                                 </th>
@@ -355,17 +410,44 @@ const Budget = (props: Props) => {
 
                                                 <th>
                                                     Total municipal budget
-
+                                                    <button
+                                                        className={styles.infoBtn}
+                                                        onClick={() => handleinfoClick('totalMun')}
+                                                        type="button"
+                                                    >
+                                                        <Icon
+                                                            name="info"
+                                                            className={styles.infoIcon}
+                                                        />
+                                                    </button>
 
                                                 </th>
                                                 <th>
                                                     DRR fund of municipality
-
+                                                    <button
+                                                        className={styles.infoBtn}
+                                                        onClick={() => handleinfoClick('drrFund')}
+                                                        type="button"
+                                                    >
+                                                        <Icon
+                                                            name="info"
+                                                            className={styles.infoIcon}
+                                                        />
+                                                    </button>
 
                                                 </th>
                                                 <th>
                                                     Other DRR related funding
-
+                                                    <button
+                                                        className={styles.infoBtn}
+                                                        onClick={() => handleinfoClick('otherFunding')}
+                                                        type="button"
+                                                    >
+                                                        <Icon
+                                                            name="info"
+                                                            className={styles.infoIcon}
+                                                        />
+                                                    </button>
 
                                                 </th>
 
@@ -378,8 +460,8 @@ const Budget = (props: Props) => {
                                             <td>{item.totalBudgetNrs}</td>
                                             <td>{item.disasterBudgetNrs}</td>
                                             <td>{item.otherBudgetNrs}</td>
-                                            <td>{item.updatedBy}</td>
-                                            <td>{item.modifiedOn}</td>
+                                            {/* <td>{item.updatedBy}</td> */}
+                                            <td>{item.modifiedOn.split('T')[0]}</td>
 
 
                                         </tr>
@@ -387,15 +469,15 @@ const Budget = (props: Props) => {
                                         <tr>
                                             {/* <td>1</td> */}
                                             <td>
-                                                <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
+                                                <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
                                                 {' '}
                                             </td>
                                             <td>
-                                                <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
+                                                <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
                                                 {' '}
                                             </td>
                                             <td>
-                                                <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
+                                                <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
                                                 {' '}
                                             </td>
 
@@ -454,7 +536,7 @@ const Budget = (props: Props) => {
                                     handlePrevClick={props.handlePrevClick}
                                     // handleNextClick={props.handleNextClick}
                                     handleNextClick={handleNextClick}
-                                    disabled={!(annualBudgetData.length > 0)}
+                                    // disabled={!(annualBudgetData.length > 0)}
                                 />
 
                             </>
@@ -462,6 +544,36 @@ const Budget = (props: Props) => {
                         }
 
                     </div>
+                    {totalMun
+                    && (
+                        <p className={styles.infoText}>
+                        Total municipal budget is the total budget allocated
+                        by the municipality for the execution of various
+                        activities for this fiscal year
+                        </p>
+                    )}
+
+
+                    {drrfundInfo
+                    && (
+                        <p className={styles.infoText}>
+                        DRR fund of the municipality is part of the total
+                        municipal budget of this fiscal year which is specifically
+                        separated for DRRM related
+                         activities
+                        </p>
+                    )}
+                    {otherFunding
+                    && (
+                        <p className={styles.infoText}>
+                        Other DRR related funding is the funding received by the
+                         municipality from various sources like I/NGOS, the federal
+                         government, provincial
+                        government, private sectors, etc. for this fiscal year
+                        </p>
+                    )}
+
+
                 </div>
             )
                             }

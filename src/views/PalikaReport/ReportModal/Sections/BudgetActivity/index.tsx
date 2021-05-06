@@ -498,7 +498,7 @@ const BudgetActivity = (props: Props) => {
                         {!props.previewDetails && !props.monitoringDetails
            && (
                <div className={styles.mainPageDetailsContainer}>
-                   <h2>{`Budget Activities for Fiscal Year 0XX/0YY${budgetName}`}</h2>
+                   <h2>{`Budget Activities for Fiscal Year ${budgetName}`}</h2>
                    <table id="table-to-xls">
                        <tbody>
 
@@ -511,7 +511,7 @@ const BudgetActivity = (props: Props) => {
 
 
                                    <th>
-                                           Name of activity
+                                           Name of Activity
 
 
                                    </th>
@@ -521,11 +521,19 @@ const BudgetActivity = (props: Props) => {
                                        <button
                                            type="button"
                                            className={styles.infoBtn}
-                                           onClick={handleInfoBtn}
+                                           onClick={() => {}}
+                                           title=""
+
                                        >
                                            <Icon
                                                name="info"
                                                className={styles.infoIcon}
+                                               title="The Disaster Risk Reduction
+                                               National Strategic
+                                               Plan of Action
+                                               2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main
+                                               guidance, has identified 4 priority areas and 18 priority actions.
+                                               The activities will be monitored based on the these priorities set."
                                            />
                                        </button>
 
@@ -546,12 +554,12 @@ const BudgetActivity = (props: Props) => {
 
                                </th> */}
                                    <th>
-                                           Funding type
+                                           Funding Type
 
 
                                    </th>
                                    <th>
-                                           Source of fund
+                                           Source of Fund
 
 
                                    </th>
@@ -565,22 +573,18 @@ const BudgetActivity = (props: Props) => {
                                     )
                                    }
                                    <th>
-                                           Budget code
-
+                                           Budget Code
 
                                    </th>
                                    <th>
                                            Organization Name
-
+                                   </th>
+                                   <th>
+                                           Project start Date
 
                                    </th>
                                    <th>
-                                           Project start date
-
-
-                                   </th>
-                                   <th>
-                                           Project Completion date
+                                           Project Completion Date
 
 
                                    </th>
@@ -590,12 +594,12 @@ const BudgetActivity = (props: Props) => {
 
                                    </th>
                                    <th>
-                                           Allocated Project budget
+                                           Allocated Project Budget
 
 
                                    </th>
                                    <th>
-                                           Actual expenditure
+                                           Actual Expenditure
 
 
                                    </th>
@@ -711,6 +715,16 @@ const BudgetActivity = (props: Props) => {
 
                                        <td>
                                            {
+                                               fundSource === ''
+                                              && (
+                                                  <input
+                                                      type="text"
+                                                      className={styles.inputElement}
+                                                      value={'Source of Funds'}
+                                                      disabled
+                                                  />
+                                              )}
+                                           {
                                                fundSource === 'DRR Fund of Muicipality'
                                               && (
                                                   <input
@@ -763,20 +777,21 @@ const BudgetActivity = (props: Props) => {
                                            <input
                                                type="text"
                                                className={styles.inputElement}
-                                               onChange={handleOrganisationName}
-                                               value={organisationName}
-                                               placeholder={'Name of Organisation'}
+                                               onChange={handleBudgetCode}
+                                               value={budgetCode}
+                                               placeholder={'Budget Code (if available)'}
                                            />
                                        </td>
                                        <td>
                                            <input
                                                type="text"
                                                className={styles.inputElement}
-                                               onChange={handleBudgetCode}
-                                               value={budgetCode}
-                                               placeholder={'Budget Code (if available)'}
+                                               onChange={handleOrganisationName}
+                                               value={organisationName}
+                                               placeholder={'Name of Organisation'}
                                            />
                                        </td>
+
 
                                        <td>
                                            <NepaliDatePicker
@@ -906,17 +921,22 @@ const BudgetActivity = (props: Props) => {
                        !props.annex
                        && (
                            <div className={styles.btns}>
+                               <button
+                                   type="button"
+                                   className={styles.savebtn}
+                                   onClick={handleAddNew}
+                               >
+                                   <Icon
+                                       name="plus"
+                                       className={styles.plusIcon}
+                                   />
+                                    Add New Activity
+                               </button>
                                <NextPrevBtns
                                    handlePrevClick={props.handlePrevClick}
                                    handleNextClick={props.handleNextClick}
                                />
-                               <button
-                                   type="button"
-                                   onClick={handleAddNew}
-                                   className={styles.newActivityBtn}
-                               >
-                               Add New Activity
-                               </button>
+
 
                            </div>
                        )
