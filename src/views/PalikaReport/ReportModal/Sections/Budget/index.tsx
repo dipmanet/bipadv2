@@ -79,7 +79,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-            params.handlePendingState(false);
+            // params.handlePendingState(false);
             if (params && params.finalAnnualBudgetData) {
                 params.finalAnnualBudgetData(citizenReportList);
             }
@@ -441,7 +441,8 @@ const Budget = (props: Props) => {
 
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={props.handleNextClick}
+                                    // handleNextClick={props.handleNextClick}
+                                    handleNextClick={handleNextClick}
                                     disabled={!(annualBudgetData.length > 0)}
                                 />
 
