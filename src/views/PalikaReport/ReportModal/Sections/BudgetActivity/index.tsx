@@ -393,12 +393,6 @@ const BudgetActivity = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
-
-<<<<<<< HEAD
-    console.log(priorityData.Data);
-=======
-    console.log('This priority data', priorityData);
->>>>>>> fdc11ca32578d6f29d62feea78975872c090c56c
     const PriorityArea = priorityData.Data.filter(data => data.level === 0);
     const PriorityAction = priorityData.Data.filter(data => data.parent === parent);
     const PriorityActivity = priorityData.Data.filter(data => data.level === 2);
