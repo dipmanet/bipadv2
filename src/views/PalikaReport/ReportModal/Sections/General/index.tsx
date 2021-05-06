@@ -4,11 +4,13 @@ import { isDefined, _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import * as ReachRouter from '@reach/router';
 
+// import { NepaliDatePicker } from 'datepicker-nepali-reactjs';
 import Select from 'react-select';
 import styles from './styles.scss';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import NextPrevBtns from '../../NextPrevBtns';
 import 'nepali-datepicker-reactjs/dist/index.css';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -98,7 +100,7 @@ const General = (props: Props) => {
     const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
     const [fiscalYearList, setFiscalYearList] = useState([]);
 
-    // const [showErr, setShowErr] = useState(false);
+    // const [showFormErr, setShowErr] = useState(true);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
 
@@ -106,7 +108,8 @@ const General = (props: Props) => {
         setreportTitle(title.target.value);
     };
     const handleFormationDate = (date: any) => {
-        setformationDate(date.target.value);
+        console.log(date);
+        // setformationDate(date.target.value);
     };
     const handleMembers = (members: any) => {
         setcommitteeMembers(members.target.value);
@@ -121,6 +124,7 @@ const General = (props: Props) => {
     FiscalYearFetch.setDefaultParams({
         fiscalYearList: handleFiscalYearList,
     });
+
 
     const handleAddContact = () => {
         const { setCarKeys } = props;
@@ -227,6 +231,13 @@ const General = (props: Props) => {
                     </div> */}
 
                             <div className={styles.inputContainer}>
+                                {fyErr
+                                    ? (
+                                        <div className={styles.errorMsg}>
+                                 Please select fiscal year
+                                        </div>
+                                    )
+                                    : ''}
                                 <select
                                     value={fiscalYear}
                                     onChange={handleSelectChange}
@@ -238,13 +249,7 @@ const General = (props: Props) => {
                                     ))}
 
                                 </select>
-                                {showErr && fyErr
-                                    ? (
-                                        <div className={styles.errorMsg}>
-                                 Please select fiscal year
-                                        </div>
-                                    )
-                                    : ''}
+
                             </div>
 
                         </div>
@@ -407,6 +412,13 @@ const General = (props: Props) => {
                 && (
                     <>
                         <div className={styles.inputContainer}>
+                            {dateErr
+                                ? (
+                                    <div className={styles.errorMsg}>
+                                    Please select DRRM committee formation date
+                                    </div>
+                                )
+                                : ''}
                             <span className={styles.labelDate}>
                                 Formation date of DRRM Committee
                             </span>
@@ -417,13 +429,15 @@ const General = (props: Props) => {
                                 onChange={(value: string) => setformationDate(value)}
                                 options={{ calenderLocale: 'en', valueLocale: 'en' }}
                             />
-                            {showErr && dateErr
-                                ? (
-                                    <div className={styles.errorMsg}>
-                                    Please select DRRM committee formation date
-                                    </div>
-                                )
-                                : ''}
+                            {/* <NepaliDatePicker
+                                className={styles.datepicker}
+                                value={formationDate}
+                                placeholder={'Select Date'}
+                                onSelect={val => handleFormationDate(val)}
+                                onChange={val => handleFormationDate(val)}
+                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                            /> */}
+
                         </div>
                         <h3><strong>Committee Members </strong></h3>
                     </>

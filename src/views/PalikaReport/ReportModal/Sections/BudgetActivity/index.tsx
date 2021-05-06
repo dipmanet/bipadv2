@@ -6,9 +6,11 @@ import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import ReactPaginate from 'react-paginate';
-import { _cs } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend } from 'recharts';
+import Loader from 'react-loader-spinner';
 import priorityData from '#views/PalikaReport/components/priorityDropdownSelectData';
+
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
@@ -64,7 +66,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-
+            params.handlePendingState(false);
             if (params && params.budgetActivities) {
                 params.budgetActivities(citizenReportList);
             }
@@ -85,6 +87,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             params.dataSubmitted(response);
+            params.handlePendingState(false);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
         },
 
 
@@ -201,6 +209,9 @@ const BudgetActivity = (props: Props) => {
     } = budgetActivityData;
 
 
+    const [pending, setPending] = useState(false);
+    const [postErrors, setPostErrors] = useState({});
+
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
     const [projstartDate, setStartDate] = useState('');
     const [projcompletionDate, setprojCompletionDate] = useState('');
@@ -232,6 +243,9 @@ const BudgetActivity = (props: Props) => {
     const [selectedOption, setSelectedOption] = useState({});
     const [budgetActivities, setBudgetActivities] = useState([]);
 
+    const handlePending = (data: boolean) => {
+        setPending(data);
+    };
     const handleDataSubmittedResponse = (response) => {
         setDataSubmittedResponse(!dataSubmittedResponse);
         setStartDate('');
@@ -259,7 +273,9 @@ const BudgetActivity = (props: Props) => {
     const handleOrganisationName = (org: string) => {
         setorganisationName(org.target.value);
     };
-
+    const handleErrors = (errors) => {
+        setPostErrors(errors);
+    };
 
     BudgetActivityGetRequest.setDefaultParams({
         province: profile.province,
@@ -270,6 +286,9 @@ const BudgetActivity = (props: Props) => {
         paginationParameters: handlePaginationParameters,
         id: '-id',
         page: paginationQueryLimit,
+        handlePendingState: handlePending,
+        setErrors: handleErrors,
+
 
     });
     const handlePageClick = (e) => {
@@ -277,6 +296,8 @@ const BudgetActivity = (props: Props) => {
         setOffset((selectedPage - 1) * paginationQueryLimit);
         setCurrentPageNumber(selectedPage);
     };
+
+
     useEffect(() => {
         BudgetActivityGetRequest.do({
             offset,
@@ -286,6 +307,9 @@ const BudgetActivity = (props: Props) => {
             municipality: profile.municipality,
             province: profile.province,
             id: '-id',
+            handlePendingState: handlePending,
+            setErrors: handleErrors,
+
 
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -303,6 +327,8 @@ const BudgetActivity = (props: Props) => {
         setareaofImplementation(data.target.value);
     };
     const handleAddNew = () => {
+        setPending(true);
+        setPostErrors({});
         BudgetActivityPostRequest.do({
             body: {
                 activityName,
@@ -319,6 +345,9 @@ const BudgetActivity = (props: Props) => {
                 status: projStatus,
                 remarks,
                 annualBudget: budgetId.id,
+                handlePendingState: handlePending,
+                setErrors: handleErrors,
+
 
             },
             budgetActivities: handleBudgetActivities,
@@ -351,6 +380,9 @@ const BudgetActivity = (props: Props) => {
                 budgetActivities: handleBudgetActivities,
                 page: paginationQueryLimit,
                 id: '-id',
+                handlePendingState: handlePending,
+                setErrors: handleErrors,
+
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -405,6 +437,10 @@ const BudgetActivity = (props: Props) => {
             setPriorityAction(data);
         }
     };
+
+    useEffect(() => {
+        console.log('errs:', postErrors);
+    }, [postErrors]);
     // useEffect(() => {
     //     if (selectedOption && selectedOption.label && priorityAction.length > 0) {
     //         const ourdata = priorityAction
@@ -422,512 +458,552 @@ const BudgetActivity = (props: Props) => {
 
     return (
         <>
-            {!props.previewDetails && !props.monitoringDetails
-        && (
-            <div className={styles.mainPageDetailsContainer}>
-                <h2>Budget Activities</h2>
-                <table id="table-to-xls">
-                    <tbody>
+            {pending
+                ? (
+                    <div className={styles.loaderClass}>
+
+                        <Loader
+                            type="TailSpin"
+                            color="#00BFFF"
+                            height={50}
+                            width={50}
+                            timeout={10000}
+
+                        />
+                    </div>
+                )
+                : (
+                    <div>
+                        {!props.previewDetails && !props.monitoringDetails
+           && (
+               <div className={styles.mainPageDetailsContainer}>
+                   <h2>Budget Activities</h2>
+                   <table id="table-to-xls">
+                       <tbody>
 
 
-                        <>
+                           <>
 
-                            <tr>
+                               <tr>
 
-                                <th>SN</th>
-
-
-                                <th>
-                                        Name of activity
+                                   <th>SN</th>
 
 
-                                </th>
-                                <th>
-                                        Priority Area
+                                   <th>
+                                           Name of activity
 
 
-                                </th>
-                                <th>
-                                        Priority Action
+                                   </th>
+                                   <th>
+                                           Priority Area
 
 
-                                </th>
-                                <th>
-                                        Priority Activity
+                                   </th>
+                                   <th>
+                                           Priority Action
 
 
-                                </th>
-                                {/* <th>
-                                        Area of implementation
+                                   </th>
+                                   <th>
+                                           Priority Activity
 
 
-                            </th> */}
-                                <th>
-                                        Funding type
+                                   </th>
+                                   {/* <th>
+                                           Area of implementation
 
 
-                                </th>
-                                <th>
-                                        Source of fund
+                               </th> */}
+                                   <th>
+                                           Funding type
 
 
-                                </th>
-                                <th>
-                                        Budget code
+                                   </th>
+                                   <th>
+                                           Source of fund
 
 
-                                </th>
-                                <th>
-                                        Organization Name
+                                   </th>
+                                   <th>
+                                           Budget code
 
 
-                                </th>
-                                <th>
-                                        Project start date
+                                   </th>
+                                   <th>
+                                           Organization Name
 
 
-                                </th>
-                                <th>
-                                        Project Completion date
+                                   </th>
+                                   <th>
+                                           Project start date
 
 
-                                </th>
-                                <th>
-                                        Status
+                                   </th>
+                                   <th>
+                                           Project Completion date
 
 
-                                </th>
-                                <th>
-                                        Allocated Project budget
+                                   </th>
+                                   <th>
+                                           Status
 
 
-                                </th>
-                                <th>
-                                        Actual expenditure
+                                   </th>
+                                   <th>
+                                           Allocated Project budget
 
 
-                                </th>
-                                <th>
-                                        Remarks
+                                   </th>
+                                   <th>
+                                           Actual expenditure
 
 
-                                </th>
+                                   </th>
+                                   <th>
+                                           Remarks
 
 
-                            </tr>
-                            {budgetActivities && budgetActivities.map((data, i) => (
-                                <tr key={data.id}>
-                                    <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
-                                    <td>{data.activityName}</td>
-                                    <td>{data.priorityArea}</td>
-                                    <td>{data.priorityAction}</td>
-                                    <td>{data.priorityActivity}</td>
-                                    {/* <td>{data.priorityArea}</td> */}
-                                    <td>{data.fundType}</td>
-                                    <td>{data.fundType}</td>
-                                    <td>{data.budgetCode}</td>
-                                    <td>{data.donerOrganization}</td>
-                                    <td>{data.projectStartDate}</td>
-                                    <td>{data.projectEndDate}</td>
-                                    <td>{data.status}</td>
-                                    <td>{data.annualBudget}</td>
-                                    <td>{data.expenditure}</td>
-                                    <td>{data.remarks}</td>
-                                </tr>
-                            ))}
-                            { !props.annex
-                            && (
-                                <tr>
-                                    <td />
-                                    <td>
-                                        <input
-                                            type="text"
-                                            className={styles.inputElement}
-                                            onChange={handleActivityName}
-                                            value={activityName}
-                                            placeholder={'Name of Activity'}
-                                        />
-                                    </td>
-
-                                    <td>
-                                        <select
-                                            value={priorityArea}
-                                            onChange={handlePriorityArea}
-                                            className={styles.inputElement}
-                                        >
-                                            <option value="">Select Priority Area</option>
-                                            {PriorityArea.map(data => (
-                                                <option value={data.title}>
-                                                    {data.title}
-                                                </option>
-                                            ))}
-
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select
-                                            value={priorityAction}
-                                            onChange={handlePriorityAction}
-                                            className={styles.inputElement}
-                                        >
-                                            <option value="">Select Priority Action</option>
-                                            {PriorityAction.map(data => (
-                                                <option value={data.title}>
-                                                    {data.title}
-                                                </option>
-                                            ))}
-
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select
-                                            value={priorityActivity}
-                                            onChange={handlePriorityActivity}
-                                            className={styles.inputElement}
-                                        >
-                                            <option value="">Select Priority Activity</option>
-                                            {PriorityActivity.map(data => (
-                                                <option value={data.title}>
-                                                    {data.title}
-                                                </option>
-                                            ))}
-
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select
-                                            value={fundSource}
-                                            onChange={handlefundSource}
-                                            className={styles.inputElement}
-                                        >
-                                            <option value="select"> Select Funding Type</option>
-                                            <option value="DRR Fund of Muicipality">
-                            DRR Fund of Municipality
-
-                                            </option>
-                                            <option value="Other DRR related funding">
-                            Other DRR related funding
-
-                                            </option>
-                                        </select>
-                                    </td>
-
-                                    <td>
-                                        <select
-                                            value={fundingType}
-                                            onChange={handlefundingType}
-                                            className={styles.inputElement}
-                                        >
-                                            <option value="select">Select Source of Funds</option>
-                                            <option value="Federal Government">
-                                        Federal Government
-
-                                            </option>
-                                            <option value="Provincial Government">
-                                        Provincial Government
-
-                                            </option>
-                                            <option value="INGO">I/NGOs</option>
-                                            <option value="Private Sector">Private Sector</option>
-                                            <option value="Academia">Academia</option>
-                                            <option value="Others">Others</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            className={styles.inputElement}
-                                            onChange={handleBudgetCode}
-                                            value={budgetCode}
-                                            placeholder={'Budget Code'}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            className={styles.inputElement}
-                                            onChange={handleOrganisationName}
-                                            value={organisationName}
-                                            placeholder={'Name of Organisation'}
-                                        />
-                                    </td>
-                                    <td>
-                                        <NepaliDatePicker
-                                            inputClassName="form-control"
-                                            className={styles.datepicker}
-                                            value={projstartDate}
-                                            onChange={date => setStartDate(date)}
-                                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                                        />
-                                    </td>
-                                    <td>
-                                        <NepaliDatePicker
-                                            inputClassName="form-control"
-                                            className={styles.datepicker}
-                                            value={projcompletionDate}
-                                            onChange={date => setprojCompletionDate(date)}
-                                            options={{ calenderLocale: 'ne', valueLocale: 'en' }}
-                                        />
-                                    </td>
-                                    <td>
-                                        <select
-                                            value={projStatus}
-                                            onChange={handleprojStatus}
-                                            className={styles.inputElement}
-                                            placeholder={'Project Status'}
-                                        >
-                                            <option value="select">Select an Option</option>
-                                            <option value="Started">Started</option>
-                                            <option value="Ongoing">Ongoing</option>
-                                            <option value="Completed">Completed</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            className={styles.inputElement}
-                                            onChange={handleAlocBudget}
-                                            value={allocatedBudget}
-                                            placeholder={'Allocated Project Budget'}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            className={styles.inputElement}
-                                            onChange={handleActualExp}
-                                            value={actualExp}
-                                            placeholder={'Actual Expenditure'}
-                                        />
-                                    </td>
-                                    <td>
-                                        {' '}
-                                        <input
-                                            type="text"
-                                            className={styles.inputElement}
-                                            onChange={handleRemarks}
-                                            value={remarks}
-                                            placeholder={'Remarks'}
-                                        />
-
-                                    </td>
-                                </tr>
-                            )
-                            }
-
-                        </>
+                                   </th>
 
 
-                    </tbody>
-                </table>
-                {
-                    !props.annex
-                    && (
-                        <div className={styles.btns}>
-                            <NextPrevBtns
-                                handlePrevClick={props.handlePrevClick}
-                                handleNextClick={props.handleNextClick}
-                            />
-                            <button
-                                type="button"
-                                onClick={handleAddNew}
-                                className={styles.newActivityBtn}
-                            >
-                            Add New Activity
-                            </button>
+                               </tr>
+                               {budgetActivities && budgetActivities.map((data, i) => (
+                                   <tr key={data.id}>
+                                       <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
+                                       <td>{data.activityName}</td>
+                                       <td>{data.priorityArea}</td>
+                                       <td>{data.priorityAction}</td>
+                                       <td>{data.priorityActivity}</td>
+                                       {/* <td>{data.priorityArea}</td> */}
+                                       <td>{data.fundType}</td>
+                                       <td>{data.fundType}</td>
+                                       <td>{data.budgetCode}</td>
+                                       <td>{data.donerOrganization}</td>
+                                       <td>{data.projectStartDate}</td>
+                                       <td>{data.projectEndDate}</td>
+                                       <td>{data.status}</td>
+                                       <td>{data.annualBudget}</td>
+                                       <td>{data.expenditure}</td>
+                                       <td>{data.remarks}</td>
+                                   </tr>
+                               ))}
+                               { !props.annex
+                               && (
+                                   <tr>
+                                       <td />
+                                       <td>
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleActivityName}
+                                               value={activityName}
+                                               placeholder={'Name of Activity'}
+                                           />
+                                       </td>
 
-                        </div>
-                    )
-                }
-            </div>
-        )
+                                       <td>
+                                           <select
+                                               value={priorityArea}
+                                               onChange={handlePriorityArea}
+                                               className={styles.inputElement}
+                                           >
+                                               <option value="">Select Priority Area</option>
+                                               {PriorityArea.map(data => (
+                                                   <option value={data.title}>
+                                                       {data.title}
+                                                   </option>
+                                               ))}
 
-            }
+                                           </select>
+                                       </td>
+                                       <td>
+                                           <select
+                                               value={priorityAction}
+                                               onChange={handlePriorityAction}
+                                               className={styles.inputElement}
+                                           >
+                                               <option value="">Select Priority Action</option>
+                                               {PriorityAction.map(data => (
+                                                   <option value={data.title}>
+                                                       {data.title}
+                                                   </option>
+                                               ))}
 
-            {props.previewDetails
-            && (
-                <div className={styles.budgetActPreviewContainer}>
-                    <h2>Budget Activity</h2>
-                    <div className={styles.budgetActChartContainer}>
+                                           </select>
+                                       </td>
+                                       <td>
+                                           <select
+                                               value={priorityActivity}
+                                               onChange={handlePriorityActivity}
+                                               className={styles.inputElement}
+                                           >
+                                               <option value="">Select Priority Activity</option>
+                                               {PriorityActivity.map(data => (
+                                                   <option value={data.title}>
+                                                       {data.title}
+                                                   </option>
+                                               ))}
 
-                        <PieChart width={200} height={200}>
-                            <Pie
-                                data={chartdata}
-                                cx={90}
-                                cy={95}
-                                innerRadius={40}
-                                outerRadius={80}
-                                fill="#8884d8"
-                                paddingAngle={1}
-                                dataKey="value"
-                                startAngle={90}
-                                endAngle={450}
-                            >
-                                {chartdata.map((entry, index) => (
-                                    // eslint-disable-next-line react/no-array-index-key
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                        </PieChart>
+                                           </select>
+                                       </td>
+                                       <td>
+                                           <select
+                                               value={fundSource}
+                                               onChange={handlefundSource}
+                                               className={styles.inputElement}
+                                           >
+                                               <option value="select"> Select Funding Type</option>
+                                               <option value="DRR Fund of Muicipality">
+                               DRR Fund of Municipality
 
-                        <div className={styles.legend}>
-                            <div className={styles.activitiesAmt}>
-                                <span className={styles.light}>
-                                    Total no. of activities
-                                    {' '}
-                                </span>
-                                <span className={styles.biggerNum}>
-                                    {budgetActivities.length > 0
-                                        ? budgetActivities.length
-                                        : 0
-                                    }
-                                </span>
-                            </div>
-                            <div className={styles.legenditem}>
+                                               </option>
+                                               <option value="Other DRR related funding">
+                               Other DRR related funding
 
-                                <div className={styles.legendColorContainer}>
-                                    <div
-                                        style={{ backgroundColor: COLORS[0] }}
-                                        className={styles.legendColor}
-                                    />
-                                </div>
-                                <div className={styles.numberRow}>
-                                    <ul>
+                                               </option>
+                                           </select>
+                                       </td>
+
+                                       <td>
+                                           <select
+                                               value={fundingType}
+                                               onChange={handlefundingType}
+                                               className={styles.inputElement}
+                                           >
+                                               <option value="select">Select Source of Funds</option>
+                                               <option value="Federal Government">
+                                           Federal Government
+
+                                               </option>
+                                               <option value="Provincial Government">
+                                           Provincial Government
+
+                                               </option>
+                                               <option value="INGO">I/NGOs</option>
+                                               <option value="Private Sector">Private Sector</option>
+                                               <option value="Academia">Academia</option>
+                                               <option value="Others">Others</option>
+                                           </select>
+                                       </td>
+                                       <td>
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleBudgetCode}
+                                               value={budgetCode}
+                                               placeholder={'Budget Code'}
+                                           />
+                                       </td>
+                                       <td>
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleOrganisationName}
+                                               value={organisationName}
+                                               placeholder={'Name of Organisation'}
+                                           />
+                                       </td>
+                                       <td>
+                                           <NepaliDatePicker
+                                               inputClassName="form-control"
+                                               className={styles.datepicker}
+                                               value={projstartDate}
+                                               onChange={date => setStartDate(date)}
+                                               options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                           />
+                                       </td>
+                                       <td>
+                                           <NepaliDatePicker
+                                               inputClassName="form-control"
+                                               className={styles.datepicker}
+                                               value={projcompletionDate}
+                                               onChange={date => setprojCompletionDate(date)}
+                                               options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                           />
+                                       </td>
+                                       <td>
+                                           <select
+                                               value={projStatus}
+                                               onChange={handleprojStatus}
+                                               className={styles.inputElement}
+                                               placeholder={'Project Status'}
+                                           >
+                                               <option value="select">Select an Option</option>
+                                               <option value="Started">Started</option>
+                                               <option value="Ongoing">Ongoing</option>
+                                               <option value="Completed">Completed</option>
+                                           </select>
+                                       </td>
+                                       <td>
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleAlocBudget}
+                                               value={allocatedBudget}
+                                               placeholder={'Allocated Project Budget'}
+                                           />
+                                       </td>
+                                       <td>
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleActualExp}
+                                               value={actualExp}
+                                               placeholder={'Actual Expenditure'}
+                                           />
+                                       </td>
+                                       <td>
+                                           {' '}
+                                           <input
+                                               type="text"
+                                               className={styles.inputElement}
+                                               onChange={handleRemarks}
+                                               value={remarks}
+                                               placeholder={'Remarks'}
+                                           />
+
+                                       </td>
+                                   </tr>
+
+                               )
+                               }
+
+                           </>
+
+
+                       </tbody>
+                   </table>
+                   {
+                       Object.keys(postErrors).length > 0
+                        && (
+                            <ul>
+                                <li>
+                                    <span className={styles.errorHeading}>
+                                    Please fix the following errors:
+                                    </span>
+                                </li>
+                                {
+                                    Object.keys(postErrors.response).map(errorItem => (
                                         <li>
-                                            <span className={styles.bigerNum}>
-                                                {
-                                                    (Number(drrFund)
-                                                / (Number(drrFund)
-                                                + Number(additionalFund))
-                                                * 100).toFixed(0)
-                                                }
-                                                {
-                                                    '%'
-                                                }
+                                            {`${errorItem}: ${postErrors.response[errorItem]}`}
+                                        </li>
+                                    ), // return <li>Please enter valid info in all fields</li>;
+                                    )
+                                }
 
-                                            </span>
-                                        </li>
-                                        <li className={styles.light}>
-                                            <span>DRR Funding of Municipality</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className={_cs(styles.legenditem, styles.bottomRow)}>
-                                <div className={styles.legendColorContainer}>
-                                    <div
-                                        style={{ backgroundColor: COLORS[1] }}
-                                        className={styles.legendColor}
-                                    />
-                                </div>
+                            </ul>
+                        )
+                   }
+                   {
+                       !props.annex
+                       && (
+                           <div className={styles.btns}>
+                               <NextPrevBtns
+                                   handlePrevClick={props.handlePrevClick}
+                                   handleNextClick={props.handleNextClick}
+                               />
+                               <button
+                                   type="button"
+                                   onClick={handleAddNew}
+                                   className={styles.newActivityBtn}
+                               >
+                               Add New Activity
+                               </button>
 
-                                <div className={styles.numberRow}>
-                                    <ul>
-                                        <li>
-                                            <span className={styles.bigerNum}>
+                           </div>
+                       )
+                   }
+               </div>
+           )
 
-                                                {
-                                                    (Number(additionalFund)
-                                                / (Number(drrFund)
-                                                + Number(additionalFund))
-                                                * 100).toFixed(0)
-                                                }
-                                                {
-                                                    '%'
-                                                }
-                                            </span>
-                                        </li>
-                                        <li className={styles.light}>
-                                            <span>Other DRR related Funding</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        }
+
+                        {props.previewDetails
+               && (
+                   <div className={styles.budgetActPreviewContainer}>
+                       <h2>Budget Activity</h2>
+                       <div className={styles.budgetActChartContainer}>
+
+                           <PieChart width={200} height={200}>
+                               <Pie
+                                   data={chartdata}
+                                   cx={90}
+                                   cy={95}
+                                   innerRadius={40}
+                                   outerRadius={80}
+                                   fill="#8884d8"
+                                   paddingAngle={1}
+                                   dataKey="value"
+                                   startAngle={90}
+                                   endAngle={450}
+                               >
+                                   {chartdata.map((entry, index) => (
+                                       // eslint-disable-next-line react/no-array-index-key
+                                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                   ))}
+                               </Pie>
+                           </PieChart>
+
+                           <div className={styles.legend}>
+                               <div className={styles.activitiesAmt}>
+                                   <span className={styles.light}>
+                                       Total no. of activities
+                                       {' '}
+                                   </span>
+                                   <span className={styles.biggerNum}>
+                                       {budgetActivities.length > 0
+                                           ? budgetActivities.length
+                                           : 0
+                                       }
+                                   </span>
+                               </div>
+                               <div className={styles.legenditem}>
+
+                                   <div className={styles.legendColorContainer}>
+                                       <div
+                                           style={{ backgroundColor: COLORS[0] }}
+                                           className={styles.legendColor}
+                                       />
+                                   </div>
+                                   <div className={styles.numberRow}>
+                                       <ul>
+                                           <li>
+                                               <span className={styles.bigerNum}>
+                                                   {
+                                                       (Number(drrFund)
+                                                   / (Number(drrFund)
+                                                   + Number(additionalFund))
+                                                   * 100).toFixed(0)
+                                                   }
+                                                   {
+                                                       '%'
+                                                   }
+
+                                               </span>
+                                           </li>
+                                           <li className={styles.light}>
+                                               <span>DRR Funding of Municipality</span>
+                                           </li>
+                                       </ul>
+                                   </div>
+                               </div>
+                               <div className={_cs(styles.legenditem, styles.bottomRow)}>
+                                   <div className={styles.legendColorContainer}>
+                                       <div
+                                           style={{ backgroundColor: COLORS[1] }}
+                                           className={styles.legendColor}
+                                       />
+                                   </div>
+
+                                   <div className={styles.numberRow}>
+                                       <ul>
+                                           <li>
+                                               <span className={styles.bigerNum}>
+
+                                                   {
+                                                       (Number(additionalFund)
+                                                   / (Number(drrFund)
+                                                   + Number(additionalFund))
+                                                   * 100).toFixed(0)
+                                                   }
+                                                   {
+                                                       '%'
+                                                   }
+                                               </span>
+                                           </li>
+                                           <li className={styles.light}>
+                                               <span>Other DRR related Funding</span>
+                                           </li>
+                                       </ul>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+
+                   </div>
+               )
+
+                        }
+
+                        {props.monitoringDetails
+               && (
+                   <div className={styles.budgetActPreviewContainer}>
+
+                       <ul>
+                           <li>
+                               <span className={styles.darkerText}>
+                             Monitoring the activities based on the Priority Areas
+                               </span>
+                           </li>
+                           <li>
+                               <span className={styles.smallerText}>
+                               Disaster Risk Reduction National Strategic Plan of Action 2018-2039
+                               </span>
+                           </li>
+                       </ul>
+
+                       <div className={styles.monitoringRow}>
+                           <div className={styles.monitoringItem}>
+                               <span className={styles.monTitle}>Area1</span>
+                               <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                               <div className={styles.scorePatch}>
+                                   {budgetActivities.length > 0
+                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
+                                       : 0
+                                   }
+                               </div>
+                           </div>
+                           <div className={styles.monitoringItem}>
+                               <span className={styles.monTitle}>Area2</span>
+                               <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                               <div className={styles.scorePatch}>
+                                   {budgetActivities.length > 0
+                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
+                                       : 0
+                                   }
+                               </div>
+                           </div>
+                       </div>
+                       <div className={styles.monitoringRow}>
+                           <div className={styles.monitoringItem}>
+                               <span className={styles.monTitle}>Area3</span>
+                               <span className={styles.monDesc}>
+                                       Promoting Comprehensive
+                                       Risk-Informed Private and Public
+                                       Investments in Disaster Risk Reduction
+                                       for Resilience
+                               </span>
+                               <div className={styles.scorePatch}>
+                                   {budgetActivities.length > 0
+
+                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
+                                       : 0
+                                   }
+                               </div>
+                           </div>
+                           <div className={styles.monitoringItem}>
+                               <span className={styles.monTitle}>Area4</span>
+                               <span className={styles.monDesc}>
+                                       Enhancing Disaster Preparedness for
+                                       Effective Response and to &quot; Build Back Better &quot;
+                                       in Recovery, Rehabilitation and Reconstruction
+                               </span>
+                               <div className={styles.scorePatch}>
+                                   {budgetActivities.length > 0
+                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
+                                       : 0
+                                   }
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+               )
+
+                        }
+
                     </div>
-
-                </div>
-            )
-
-            }
-
-            {props.monitoringDetails
-            && (
-                <div className={styles.budgetActPreviewContainer}>
-
-                    <ul>
-                        <li>
-                            <span className={styles.darkerText}>
-                          Monitoring the activities based on the Priority Areas
-                            </span>
-                        </li>
-                        <li>
-                            <span className={styles.smallerText}>
-                            Disaster Risk Reduction National Strategic Plan of Action 2018-2039
-                            </span>
-                        </li>
-                    </ul>
-
-                    <div className={styles.monitoringRow}>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area1</span>
-                            <span className={styles.monDesc}>Understanding Disaster Risk</span>
-                            <div className={styles.scorePatch}>
-                                {budgetActivities.length > 0
-                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
-                                    : 0
-                                }
-                            </div>
-                        </div>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area2</span>
-                            <span className={styles.monDesc}>Understanding Disaster Risk</span>
-                            <div className={styles.scorePatch}>
-                                {budgetActivities.length > 0
-                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
-                                    : 0
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.monitoringRow}>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area3</span>
-                            <span className={styles.monDesc}>
-                                    Promoting Comprehensive
-                                    Risk-Informed Private and Public
-                                    Investments in Disaster Risk Reduction
-                                    for Resilience
-                            </span>
-                            <div className={styles.scorePatch}>
-                                {budgetActivities.length > 0
-
-                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
-                                    : 0
-                                }
-                            </div>
-                        </div>
-                        <div className={styles.monitoringItem}>
-                            <span className={styles.monTitle}>Area4</span>
-                            <span className={styles.monDesc}>
-                                    Enhancing Disaster Preparedness for
-                                    Effective Response and to &quot; Build Back Better &quot;
-                                    in Recovery, Rehabilitation and Reconstruction
-                            </span>
-                            <div className={styles.scorePatch}>
-                                {budgetActivities.length > 0
-                                    ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
-                                    : 0
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            )
-
-            }
-
+                )}
         </>
     );
 };

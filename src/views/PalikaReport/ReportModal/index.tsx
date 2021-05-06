@@ -3,6 +3,7 @@ import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import Loader from 'react-loader-spinner';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
@@ -18,6 +19,7 @@ import CriticalInfra from './Sections/CriticalInfra';
 import WardwiseDeath from './Sections/DamageAndLoss/WardwiseDeath';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -163,7 +165,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [memberCount, setmemberCount] = useState('');
     const [reportData, setReportData] = useState([]);
     const [savePDF, setSavePDF] = useState();
+<<<<<<< HEAD
     const [disasterProfile, setDisasterProfile] = useState([]);
+=======
+    const [pending, setPending] = useState(false);
+>>>>>>> 8a03c7688b014b51565485af5857de9667c472df
     const getGeneralData = () => ({
         reportTitle,
         datefrom,
@@ -189,8 +195,13 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     });
 
 
+    const handlePending = (data) => {
+        setPending(data);
+    };
     const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
+        console.log('here: pending', pending);
+        setPending(true);
         html2canvas(divToDisplay).then(async (canvas) => {
             // const formData = new FormData();
             const imgData = canvas.toDataURL('image/png');
@@ -208,7 +219,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 count += 1;
                 if (count >= 2) {
                     position = heightLeft - imgHeight; // top padding for other pages
-                    doc.addPage('a4', 'landscape');
+                    doc.addPage('a4', 'portrait');
                     doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
                     heightLeft -= pageHeight;
                 } else {
@@ -276,11 +287,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
 
     const { showForm } = palikaRedirect;
-    console.log('local members:', localMembers);
-
-    useEffect(() => {
-        console.log('local members:', localMembers);
-    }, [localMembers]);
     return (
         <>
             {/* {!showTabs && !showForm
@@ -510,6 +516,29 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 keyTab === (tabsLength - 1)
                     ? (
                         <div className={styles.tabsPageContainer}>
+                            <div className={styles.loaderContainer}>
+                                <Loader
+                                    type="TailSpin"
+                                    color="#00BFFF"
+                                    height={50}
+                                    width={50}
+                                    timeout={6000}
+                                />
+                            </div>
+                            {
+                                pending
+                                    && (
+                                        <div className={styles.loaderContainer}>
+                                            <Loader
+                                                type="TailSpin"
+                                                color="#00BFFF"
+                                                height={50}
+                                                width={50}
+                                                timeout={7000}
+                                            />
+                                        </div>
+                                    )
+                            }
                             <div className={styles.buttonContainer}>
                                 <button
                                     type="button"
@@ -517,6 +546,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={styles.agreeBtn}
                                 >
                                 Submit and Download Report
+
                                 </button>
                                 {/* <NextPrevBtns lastpage /> */}
                             </div>
@@ -536,7 +566,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                                     />
                                 </div>
-                                <div className={styles.page}>
+                                <div className={styles.pageAnnex}>
 
                                     <Annex
                                         localMembers={localMembers}
@@ -544,16 +574,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     />
                                 </div>
 
-                            </div>
-                            <div className={styles.buttonContainer}>
-                                <button
-                                    type="button"
-                                    onClick={handlePreviewBtn}
-                                    className={styles.agreeBtn}
-                                >
-                                Submit and Download Report
-                                </button>
-                                {/* <NextPrevBtns lastpage /> */}
                             </div>
 
 

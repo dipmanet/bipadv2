@@ -106,7 +106,7 @@ const Sidebar = (props) => {
         if (generalData && generalData.fiscalYear) {
             handleMenuClick(menuItem);
             setShowErr(false);
-            props.setShowErr(false);
+            props.handleShowErr(false);
         } else {
             props.handleShowErr(true);
             setShowErr(true);
@@ -214,7 +214,7 @@ const Sidebar = (props) => {
                         type="button"
                         onClick={handleMyPalikaClickReport}
                     >
-                    Add a report
+                        Add a report
 
                     </button>
                 </div>
@@ -225,44 +225,41 @@ const Sidebar = (props) => {
             {
                 !showReportEdit
                 && (
-                    <ul className={styles.orderList}>
-                        {Data.map((item, i) => (
-                            <button className={styles.menu} type="button" key={item.id} onClick={() => handleSelectMenu(i, item.id)}>
-                                <div className={styles.menuName}>
-                                    {isSubmenuClicked && item.id === selectedMenuId ? <Icon className={styles.icons} name="arrowDown" /> : <Icon className={styles.icons} name="play" />}
-                                    {item.title}
+                    <div className={styles.reportSidebarMainContainer}>
+                        <ul className={styles.menuList}>
+                            {Data.map((item, i) => (
+                                <li>
+                                    <button className={styles.menu} type="button" key={item.id} onClick={() => handleSelectMenu(i, item.id)}>
 
-                                </div>
-                                {isSubmenuClicked && selectedMenuId === item.id
-                                    ? item.components.map((data, index) => (
-                                        <div className={styles.subMenuDiv} key={data.id}>
-                                            <button
-                                                type="submit"
+                                        {isSubmenuClicked && selectedMenuId === item.id
+                                            ? item.components.map((data, index) => (
+                                                <button
+                                                    type="submit"
 
 
-                                                className={isIndicatorClicked
-                                        && selectedSubMenuId === data.id ? _cs(
-                                                        styles.subMenu, styles.subMenuActive,
-                                                    ) : styles.subMenu}
+                                                    className={
+                                                        isIndicatorClicked
+                                                             && selectedSubMenuId === data.id ? styles.selected : styles.notSelected}
 
-                                                onClick={() => handleSelectSubmenu(data.id,
-                                                    data.url, data.title, data.slug, item.slug)}
-                                            >
+                                                    onClick={() => handleSelectSubmenu(data.id,
+                                                        data.url, data.title, data.slug, item.slug)}
+                                                >
 
-                                                {data.title}
-
-
-                                            </button>
-                                        </div>
-                                    ))
-                                    : ''
-                                }
+                                                    {data.title}
 
 
-                            </button>
-                        ))}
+                                                </button>
+                                            ))
+                                            : ''
+                                        }
 
-                    </ul>
+
+                                    </button>
+                                </li>
+                            ))}
+
+                        </ul>
+                    </div>
                 )
             }
 
