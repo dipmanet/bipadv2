@@ -252,6 +252,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     console.log('That>>>', fiscalYearTitle);
     const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
+
         setPending(true);
         html2canvas(divToDisplay).then(async (canvas) => {
             // const formData = new FormData();
