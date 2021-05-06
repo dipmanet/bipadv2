@@ -89,9 +89,9 @@ export const routeSettings: SomeRoute[] = [
         iconName: 'riskInfoSvg',
     },
     {
-        name: 'palikaReport',
-        title: 'Palika Report',
-        path: '/palika-report/',
+        name: 'DRRM Report',
+        title: 'DRRM Report',
+        path: '/drrm-report/',
         load: () => import('../views/PalikaReport'),
         navbar: true,
         disabled: false,

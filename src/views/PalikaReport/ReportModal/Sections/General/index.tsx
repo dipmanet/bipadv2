@@ -99,7 +99,7 @@ const General = (props: Props) => {
     const [formationDate, setformationDate] = useState<string>(fd);
     const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
     const [fiscalYearList, setFiscalYearList] = useState([]);
-
+    const [showInfo, setShowInfo] = useState(false);
     // const [showFormErr, setShowErr] = useState(true);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
@@ -141,6 +141,11 @@ const General = (props: Props) => {
         showErr,
     } = props;
 
+    useEffect(() => {
+        if (!focalPerson || !mayor || !cao) {
+            setShowInfo(true);
+        }
+    }, [cao, focalPerson, mayor]);
     const validationErrs = () => {
         const e = [fiscalYear, formationDate];
         const f = [setFyErr, setDate];
@@ -210,14 +215,14 @@ const General = (props: Props) => {
         <div className={styles.mainPageDetailsContainer}>
             { props.annex
                 ? <h2> Municipal DRR Leadership</h2>
-                : <h2>General Details</h2>
+                : <h2>General Information</h2>
             }
             {
                 !props.annex
                 && (
                     <div className={styles.formColumn}>
-
-                        <h3><strong>General Information</strong></h3>
+                        <h5>DRRM report will be generated for each fiscal year.</h5>
+                        <h3><strong>Fiscal Year</strong></h3>
                         <div className={styles.row}>
                             {/* <div className={styles.inputContainer}>
                         <input
@@ -286,9 +291,9 @@ const General = (props: Props) => {
                                 </tr>
                                 <tr>
                                     <td>{'Mayor or Nagar Pramukh'}</td>
-                                    <td>{mayor.split(',')[0] || 'No Data'}</td>
-                                    <td>{mayor.split(',')[1] || 'No Data'}</td>
-                                    <td>{mayor.split(',')[2] || 'No Data'}</td>
+                                    <td>{mayor.split(',')[0] || '-'}</td>
+                                    <td>{mayor.split(',')[1] || '-'}</td>
+                                    <td>{mayor.split(',')[2] || '-'}</td>
                                     {
                                         !props.annex
                                         && (
@@ -327,9 +332,9 @@ const General = (props: Props) => {
                                 </tr>
                                 <tr>
                                     <td>{'Chief Administrative Officer'}</td>
-                                    <td>{cao.split(',')[0] || 'No Data'}</td>
-                                    <td>{cao.split(',')[1] || 'No Data'}</td>
-                                    <td>{cao.split(',')[2] || 'No Data'}</td>
+                                    <td>{cao.split(',')[0] || '-'}</td>
+                                    <td>{cao.split(',')[1] || '-'}</td>
+                                    <td>{cao.split(',')[2] || '-'}</td>
 
                                     {
                                         !props.annex
@@ -368,9 +373,9 @@ const General = (props: Props) => {
                                 </tr>
                                 <tr>
                                     <td>{'DRR Focal Person'}</td>
-                                    <td>{focalPerson.split(',')[0] || 'No Data'}</td>
-                                    <td>{focalPerson.split(',')[1] || 'No Data'}</td>
-                                    <td>{focalPerson.split(',')[2] || 'No Data'}</td>
+                                    <td>{focalPerson.split(',')[0] || '-'}</td>
+                                    <td>{focalPerson.split(',')[1] || '-'}</td>
+                                    <td>{focalPerson.split(',')[2] || '-'}</td>
                                     {
                                         !props.annex
                                         && (
@@ -410,8 +415,17 @@ const General = (props: Props) => {
                                 </tr>
                             </tbody>
                         </table>
+                        {showInfo && (
+                            <h5>
+                                <i>
+Please click on the add/edit
+                            button to update the details
+                                </i>
+                            </h5>
+                        )}
                     </div>
                 </div>
+                <h3><strong>Disaster Management Committee</strong></h3>
 
                 <div className={styles.row}>
                     { !props.annex
@@ -426,7 +440,9 @@ const General = (props: Props) => {
                                 )
                                 : ''}
                             <span className={styles.labelDate}>
-                                Formation date of DRRM Committee
+                            Disaster Management Committee formation date
+
+
                             </span>
                             <NepaliDatePicker
                                 inputClassName="form-control"
@@ -443,6 +459,16 @@ const General = (props: Props) => {
                                 onChange={val => handleFormationDate(val)}
                                 options={{ calenderLocale: 'en', valueLocale: 'en' }}
                             /> */}
+
+                        </div>
+                        <div className={styles.inputContainer}>
+
+                            <span className={styles.labelDate}>
+                            Number of members in  Disaster Management Committee
+
+
+                            </span>
+                            <input type="number" placeholder="Enter the number of members" />
 
                         </div>
                         <h3><strong>Committee Members </strong></h3>
@@ -474,14 +500,14 @@ const General = (props: Props) => {
                                             {i + 1}
                                         </td>
                                         <td>
-                                            {item.name || 'No Data'}
+                                            {item.name || '-'}
                                         </td>
                                         <td>
-                                            {item.email || 'No Data'}
+                                            {item.email || '-'}
                                         </td>
 
                                         <td>
-                                            {item.mobileNumber || 'No Data'}
+                                            {item.mobileNumber || '-'}
                                         </td>
 
                                         {
@@ -520,62 +546,33 @@ const General = (props: Props) => {
                                         }
                                     </tr>
                                 ))
-
-                                : localMembersFromRedux.map((item, i) => (
-                                    <tr key={item.name}>
+                                : (
+                                    <tr>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
                                         <td>
-                                            {i + 1}
+                                            <button
+                                                type="button"
+                                                className={styles.addEditBtn}
+                                                onClick={handleAddContact}
+                                            >
+                                                <Icon
+                                                    name="plus"
+                                                    className={styles.addEditIcon}
+                                                />
+                                            </button>
                                         </td>
-                                        <td>
-                                            {item.name || 'No Data'}
-                                        </td>
-                                        <td>
-                                            {item.email || 'No Data'}
-                                        </td>
-                                        <td>
-                                            {item.mobileNumber || 'No Data'}
-                                        </td>
-                                        {
-                                            !props.annex
-                                            && (
-                                                <td>
-                                                    {item.name
-                                                        ? (
-                                                            <button
-                                                                type="button"
-                                                                onClick={handleAddContact}
-                                                                className={styles.addEditBtn}
-                                                            >
-                                                                <Icon
-                                                                    name="edit"
-                                                                    className={styles.addEditIcon}
-                                                                />
-                                                            </button>
-                                                        )
-                                                        : (
-                                                            <button
-                                                                type="button"
-                                                                className={styles.addEditBtn}
-                                                                onClick={handleAddContact}
-                                                            >
-                                                                <Icon
-                                                                    name="plus"
-                                                                    className={styles.addEditIcon}
-                                                                />
-                                                            </button>
-                                                        )
-
-                                                    }
-                                                </td>
-                                            )
-                                        }
                                     </tr>
-                                ))
+                                )
                             }
-
-
                         </tbody>
                     </table>
+                    <h5>
+                        {' '}
+                        <i>Please click on the add/edit button to update the details</i>
+                    </h5>
                 </div>
 
             </div>

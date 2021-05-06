@@ -387,15 +387,15 @@ const Budget = (props: Props) => {
                                         <tr>
                                             {/* <td>1</td> */}
                                             <td>
-                                                <input type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
+                                                <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Total Budget" onChange={handleMunicipalBudget} />
                                                 {' '}
                                             </td>
                                             <td>
-                                                <input type="text" value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
+                                                <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Disaster Budget" onChange={handleDRRFund} />
                                                 {' '}
                                             </td>
                                             <td>
-                                                <input type="text" value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
+                                                <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other Budget" onChange={handleAddFund} />
                                                 {' '}
                                             </td>
 
@@ -453,7 +453,7 @@ const Budget = (props: Props) => {
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
                                     handleNextClick={props.handleNextClick}
-                                    // disabled={!(annualBudgetData.length > 0)}
+                                    disabled={!(annualBudgetData.length > 0)}
                                 />
 
                             </>

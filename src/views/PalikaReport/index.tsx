@@ -106,7 +106,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showTabs, setShowTabs] = useState(false);
     const [menuId, setMenuId] = useState(1);
     const [submenuId, setSubmenuId] = useState(1);
-    const [subMenuTitle, setSubMenuTitle] = useState('All Reports');
+    const [subMenuTitle, setSubMenuTitle] = useState('Disaster Risk Reduction and Management Report');
     const [tableHeader, setTableHeader] = useState([]);
     const [fiscalYear, setFiscalYear] = useState(null);
     const [isFilterButnDisable, setIsFilterButnDisable] = useState(true);
@@ -142,21 +142,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         // filters: { region },
     } = props;
 
+
     let municipalityName = '';
-    if (user && user.profile && !user.profile.municipality) {
-        const {
-            profile: {
-                municipality: municipalityfromProp,
-                district: districtfromProp,
-                province: provincefromProp,
-            },
-        } = user;
 
 
-        setMunicipality(municipalityfromProp);
-        setProvince(provincefromProp);
-        setDistrict(districtfromProp);
-    }
     if (user && user.profile && user.profile.municipality) {
         const {
             profile: {
@@ -167,6 +156,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
         municipalityName = municipalities.find(item => item.id === municipality);
     }
+    //  else if (user && user.profile && !user.profile.municipality && user.profile.district) {
+    //     const {
+    //         profile: {
+    //             district,
+
+    //         },
+    //     } = user;
+    //     loginUserDetails = districts.find(item => item.id === district);
+    // }
 
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
@@ -604,6 +602,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                     <div className={styles.heading}>
                         <div className={styles.bipad}>
                         BIPAD
+
+                        </div>
+                        <div className={styles.report}>
+                        DRRM Report
                         </div>
 
                     </div>
@@ -656,7 +658,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 && (
                                     <>
                                         <div className={styles.rightContainerHeading}>
-                                            <h1>{subMenuTitle}</h1>
+                                            {submenuId === 2 ? <h1>{subMenuTitle}</h1> : <h1>Disaster Risk Reduction and Management Report</h1>}
+
                                         </div>
 
                                         <div className={styles.rightContainerFilters}>

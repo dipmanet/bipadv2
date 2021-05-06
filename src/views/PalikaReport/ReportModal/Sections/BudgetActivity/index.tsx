@@ -78,13 +78,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         } },
     BudgetActivityPostRequest: {
         url: '/annual-budget-activity/',
-        query: ({ params, props }) => ({
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            annual_budget: params.annualBudget,
-            district: params.district,
-            municipality: params.municipality,
-            province: params.province,
-        }),
+
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
@@ -400,7 +394,11 @@ const BudgetActivity = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
 
+<<<<<<< HEAD
     console.log(priorityData.Data);
+=======
+    console.log('This priority data', priorityData);
+>>>>>>> fdc11ca32578d6f29d62feea78975872c090c56c
     const PriorityArea = priorityData.Data.filter(data => data.level === 0);
     const PriorityAction = priorityData.Data.filter(data => data.parent === parent);
     const PriorityActivity = priorityData.Data.filter(data => data.level === 2);

@@ -27,7 +27,9 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { userSelector, palikaRedirectSelector, generalDataSelector } from '#selectors';
+import { userSelector, palikaRedirectSelector,
+    generalDataSelector, provincesSelector,
+    districtsSelector, municipalitiesSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
 import Preparedness from './Sections/Preparedness';
 import NextPrevBtns from './NextPrevBtns';
@@ -47,6 +49,9 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     generalData: generalDataSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -80,16 +85,39 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     FiscalYearFetch: {
         url: '/nepali-fiscal-year/',
         method: methods.GET,
-        onMount: false,
+        onMount: true,
 
         onSuccess: ({ response, params }) => {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-            params.fiscalYear(citizenReportList);
+            params.fiscalYearList(citizenReportList);
+            console.log('Response>>>', response);
         },
     },
+    DisasterProfileGetRequest: {
+        url: '/disaster-profile/',
+        query: ({ params, props }) => ({
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            fiscal_year: params.fiscalYear,
 
+        }),
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.disasterProfile) {
+                params.disasterProfile(citizenReportList);
+            }
+        },
+    },
     // PreviewDataPost: {
     //     url: '/disaster-profile/',
     //     method: methods.POST,
@@ -131,10 +159,18 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         handleNextClick,
         localMembers,
         palikaRedirect,
-        requests: { PreviewDataPost },
+        requests: { DisasterProfileGetRequest, FiscalYearFetch },
         generalData,
+        user: { profile },
         user,
+        provinces,
+        districts,
+        municipalities,
     } = props;
+    const {
+        fiscalYear,
+    } = generalData;
+    const { showForm } = palikaRedirect;
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
     const [dateTo, setdateTo] = useState('');
@@ -142,7 +178,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [memberCount, setmemberCount] = useState('');
     const [reportData, setReportData] = useState([]);
     const [savePDF, setSavePDF] = useState();
+    const [disasterProfile, setDisasterProfile] = useState([]);
     const [pending, setPending] = useState(false);
+    const [totalFiscalYear, setTotalFiscalYear] = useState([]);
+    const [fiscalYearList, setFiscalYearList] = useState([]);
+    const [fiscalYearTitle, setFYTitle] = useState('');
+
     const getGeneralData = () => ({
         reportTitle,
         datefrom,
@@ -153,12 +194,68 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         formationDate,
         memberCount,
     });
+
+    let municipalityName = '';
+
+
+    if (user && user.profile && user.profile.municipality) {
+        const {
+            profile: {
+                municipality,
+            },
+        } = user;
+
+        municipalityName = municipalities.find(item => item.id === municipality);
+    }
+    // if (user && user.profile && !user.profile.municipality && user.profile.district) {
+    //     const {
+    //         profile: {
+    //             district,
+
+    //         },
+    //     } = user;
+    //     loginUserDetails = districts.find(item => item.id === district);
+    // }
+
+
     const handleWelcomePage = () => hideWelcomePage();
+
+    const handleDisasterProfile = (response) => {
+        setDisasterProfile(response);
+    };
+    const handleFiscalYearList = (response) => {
+        setFiscalYearList(response);
+    };
+    console.log('Disaster profile>>>', totalFiscalYear);
+    DisasterProfileGetRequest.setDefaultParams({
+        province: profile.province,
+        district: profile.district,
+        municipality: profile.municipality,
+        fiscalYear: generalData.fiscalYear,
+        disasterProfile: handleDisasterProfile,
+
+    });
+    FiscalYearFetch.setDefaultParams({
+        fiscalYearList: handleFiscalYearList,
+    });
+
     const handlePending = (data) => {
         setPending(data);
     };
+    useEffect(() => {
+        if (fiscalYearList.length > 0 && fiscalYear) {
+            const FY = fiscalYearList.filter(item => item.id === Number(fiscalYear));
+
+            setFYTitle(FY);
+        }
+    }, [fiscalYear, fiscalYearList]);
+    console.log('That>>>', fiscalYearTitle);
     const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
+<<<<<<< HEAD
+=======
+
+>>>>>>> fdc11ca32578d6f29d62feea78975872c090c56c
         setPending(true);
         html2canvas(divToDisplay).then(async (canvas) => {
             // const formData = new FormData();
@@ -200,8 +297,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 profileUser = user.profile;
             }
 
-            formdata.append('file', blob, 'report.pdf');
-            formdata.append('title', 'This is title');
+            formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+            formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
             formdata.append('fiscalYear', generalData.fiscalYear);
             formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
             formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
@@ -211,105 +308,36 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             // formdata.append('mayorChairperson', generalData.mayor);
             // formdata.append('chiefAdministrativeOfficer', generalData.cao);
             // formdata.append('drrFocalPerson', generalData.focalPerson);
-            axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
-                'content-type': 'multipart/form-data',
-            } })
-                .then((response) => {
-                    console.log(response);
-                    setPending(false);
-                    alert('Your palika report has been uploaded sucessfully');
-                }).catch((error) => {
-                    console.log(error);
-                    setPending(false);
-                });
+            if (disasterProfile.length) {
+                axios.put(`http://bipaddev.yilab.org.np/api/v1/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
+                    'content-type': 'multipart/form-data',
+                } })
+                    .then((response) => {
+                        console.log(response);
+                        alert('Your palika report has been uploaded sucessfully');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
+                    'content-type': 'multipart/form-data',
+                } })
+                    .then((response) => {
+                        console.log(response);
+                        alert('Your palika report has been uploaded sucessfully');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            }
+            console.log('here: pending', pending);
             doc.save('file.pdf');
         });
     };
-    // useEffect(() => {
-    //     formdata.append('title', 'title');
 
 
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
-
-
-    const { showForm } = palikaRedirect;
     return (
         <>
-            {/* {!showTabs && !showForm
-                    && (
-                        <div className={styles.firstPageContainer}>
-                            <div className={styles.title}>
-                                GET STARTED
-                            </div>
-                            <div className={styles.description}>
-                                This module will generate disaster risk reduction and
-                                management report for your Municipality.
-                            </div>
 
-                            <div className={styles.subtitle}>
-                                What you can do with palika report.
-                            </div>
-                            <div className={styles.bulletPtRow}>
-                                <div className={styles.bulletsContainer}>
-                                    <ScalableVectorGraphics
-                                        className={styles.bulletPoint}
-                                        src={BulletIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <div className={styles.bulletText}>
-                                        Know where your palika is in terms of DRR
-                                    </div>
-                                </div>
-                                <div className={styles.bulletsContainer}>
-                                    <ScalableVectorGraphics
-                                        className={styles.bulletPoint}
-                                        src={BulletIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <div className={styles.bulletText}>
-                                        Track the progress your palika
-                                        is doing in terms of implementation of DRR
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.bulletPtRow}>
-                                <div className={styles.bulletsContainer}>
-                                    <ScalableVectorGraphics
-                                        className={styles.bulletPoint}
-                                        src={BulletIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <div className={styles.bulletText}>
-                                        Know the capacities and resources
-                                        you have within the municipality.
-                                    </div>
-                                </div>
-                                <div className={styles.bulletsContainer}>
-                                    <ScalableVectorGraphics
-                                        className={styles.bulletPoint}
-                                        src={BulletIcon}
-                                        alt="Bullet Point"
-                                    />
-                                    <div className={styles.bulletText}>
-                                        Check how your palika is spending Budget in DRR
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.btnContainer}>
-                                <PrimaryButton
-                                    type="button"
-                                    className={styles.agreeBtn}
-                                    onClick={handleWelcomePage}
-                                >
-                                    PROCEED
-                                </PrimaryButton>
-                            </div>
-
-                        </div>
-                    )
-
-            } */}
             {
                 (keyTab === 0
                 )

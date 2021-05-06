@@ -123,7 +123,7 @@ const Sidebar = (props) => {
         selectedTab,
         generalData,
     } = props;
-
+    console.log('This municipality>>>', municipalityName);
     useEffect(() => {
         setShowErr(props.showErr);
     }, [props.showErr]);
@@ -143,7 +143,7 @@ const Sidebar = (props) => {
         title: 'Palika Reports',
         slug: 'palika-reports',
         components: [{ id: 1,
-            title: 'All Reports',
+            title: 'Dashboard',
             url: '/disaster-profile/',
             slug: 'all-reports' },
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -158,7 +158,7 @@ const Sidebar = (props) => {
         title: 'Palika Reports',
         slug: 'palika-reports',
         components: [{ id: 1,
-            title: 'All Reports',
+            title: 'Dashboard',
             url: '/disaster-profile/',
             slug: 'all-reports' },
         // eslint-disable-next-line @typescript-eslint/camelcase
