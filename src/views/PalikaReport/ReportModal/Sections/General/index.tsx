@@ -259,8 +259,8 @@ const General = (props: Props) => {
 
                                     <option value="select">Select Fiscal Year</option>
                                     {fiscalYearList && fiscalYearList
-                                        .sort((a, b) => b.id - a.id)
-                                        .filter(item => item.id < 19 && item.id > 7)
+                                        // .sort((a, b) => b.id - a.id)
+                                        // .filter(item => item.id < 19 && item.id > 7)
                                         .map(item => (
                                             <option value={item.id}>{item.titleEn}</option>
                                         ))}
