@@ -7,6 +7,24 @@
   margin-bottom: 12px;
   padding-left: 10px;
   // border: 1px solid blue;
+  textarea{
+    text-align: center;
+    font-size: 11px;
+    margin-left: 10px;
+    padding: 5px;
+    background-color: rgb(228, 228, 228);
+    color: white !important;
+
+    border: none !important;
+  }
+  ::placeholder {
+    /* Firefox 18- */
+    // color: red;
+    text-align: center;
+    padding-top: 5px !important;
+    // color: white;
+}
+
   .labelDate{
   padding-left: 10px;
   color: #777;

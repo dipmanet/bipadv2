@@ -585,8 +585,6 @@ const Relief = (props: Props) => {
             updateAndClose: handleUpdateAndClose,
         });
     };
-    console.log('This is fetched data>>>', fetchedData);
-    console.log('This is relief data>>>', reliefData);
     return (
         <>
 
@@ -1125,7 +1123,7 @@ const Relief = (props: Props) => {
                                         className={styles.datepicker}
                                         value={reliefDate}
                                         onChange={date => setreliefDate(date)}
-                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                        options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                     />
                                 )
 
@@ -1213,7 +1211,7 @@ const Relief = (props: Props) => {
                                     disabled={disableInput}
                                 />
                             </div>
-                            <div className={styles.inputContainer}>
+                            {/* <div className={styles.inputContainer}>
                                 <span className={styles.dpText}>Relief Amount (NPR)</span>
                                 <input
                                     type="number"
@@ -1223,7 +1221,7 @@ const Relief = (props: Props) => {
                                     placeholder={'Kindly specify a number'}
                                     disabled={disableInput}
                                 />
-                            </div>
+                            </div> */}
 
 
                             <button
