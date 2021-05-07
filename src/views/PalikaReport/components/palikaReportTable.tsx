@@ -18,6 +18,9 @@ const PalikaReportTable = (props) => {
 
     const iconName = 'sort';
 
+    const handleEditButtonClick = () => {
+        console.log('clicked');
+    };
 
     const handleSortTitle = () => {
         setIsSort(!isSort);
@@ -266,6 +269,7 @@ Modified On
                                                 <button
                                                     type="button"
                                                     className={styles.downloadTableXlsButton}
+                                                    onClick={handleEditButtonClick}
                                                 >
 Edit
                                                 </button>

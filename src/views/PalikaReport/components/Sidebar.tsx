@@ -269,7 +269,9 @@ const Sidebar = (props) => {
                                                     type="submit"
                                                     className={
                                                         isIndicatorClicked
-                                                             && selectedSubMenuId === data.id ? styles.selected : styles.notSelected}
+                                                             && selectedSubMenuId === data.id
+                                                            ? styles.selected
+                                                            : styles.notSelected}
 
                                                     onClick={() => handleSelectSubmenu(data.id,
                                                         data.url, data.title, data.slug, item.slug)}
