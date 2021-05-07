@@ -868,6 +868,7 @@ const Relief = (props: Props) => {
                         <div className={styles.incidentSection}>
                             <h2>
                              Hazardwise Impact
+                             (Top 5)
                             </h2>
                             <BarChart
                                 width={250}
@@ -1022,6 +1023,7 @@ const Relief = (props: Props) => {
                         <div className={styles.incidentSection}>
                             <h2>
                              Wardwise Human Impact
+                             (Top 5)
                             </h2>
                             <BarChart
                                 width={250}

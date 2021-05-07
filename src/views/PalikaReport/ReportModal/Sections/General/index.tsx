@@ -117,11 +117,8 @@ const General = (props: Props) => {
     };
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
-        console.log('data fs: ', fiscalYearList);
-        console.log('target: ', fiscal.target.value);
         const title = fiscalYearList
             .filter(data => Number(data.id) === Number(fiscal.target.value));
-        console.log('title', title);
         setFiscalYearTitle(title[0].titleEn);
     };
     const handleFiscalYearList = (response) => {
@@ -223,7 +220,7 @@ const General = (props: Props) => {
     return (
         <div className={styles.mainPageDetailsContainer}>
             { props.annex
-                ? <h2> Municipal DRR Leadership</h2>
+                ? ''
                 : <h2>General Information</h2>
             }
             {
@@ -283,28 +280,30 @@ const General = (props: Props) => {
                 }
                 <div className={styles.personalDetailsrow}>
                     <div className={styles.personalDetails}>
+                        {
+                            !props.annex
+                            && (
+                                <table id="table-to-xls">
+                                    <tbody>
+                                        <tr>
 
-                        <table id="table-to-xls">
-                            <tbody>
-                                <tr>
-
-                                    <th>Position</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Phone Number</th>
-                                    { !props.annex
+                                            <th>Position</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            { !props.annex
                                     && <th>{'Add/Edit Details'}</th>
-                                    }
+                                            }
 
 
-                                </tr>
-                                <tr>
-                                    <td>{'Mayor or Nagar Pramukh'}</td>
-                                    <td>{mayor.split(',')[0] || '-'}</td>
-                                    <td>{mayor.split(',')[1] || '-'}</td>
-                                    <td>{mayor.split(',')[2] || '-'}</td>
-                                    {
-                                        !props.annex
+                                        </tr>
+                                        <tr>
+                                            <td>{'Mayor or Nagar Pramukh'}</td>
+                                            <td>{mayor.split(',')[0] || '-'}</td>
+                                            <td>{mayor.split(',')[1] || '-'}</td>
+                                            <td>{mayor.split(',')[2] || '-'}</td>
+                                            {
+                                                !props.annex
                                         && (
                                             <td>
                                                 {mayor
@@ -338,15 +337,15 @@ const General = (props: Props) => {
                                             </td>
                                         )}
 
-                                </tr>
-                                <tr>
-                                    <td>{'Chief Administrative Officer'}</td>
-                                    <td>{cao.split(',')[0] || '-'}</td>
-                                    <td>{cao.split(',')[1] || '-'}</td>
-                                    <td>{cao.split(',')[2] || '-'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{'Chief Administrative Officer'}</td>
+                                            <td>{cao.split(',')[0] || '-'}</td>
+                                            <td>{cao.split(',')[1] || '-'}</td>
+                                            <td>{cao.split(',')[2] || '-'}</td>
 
-                                    {
-                                        !props.annex
+                                            {
+                                                !props.annex
                                         && (
                                             <td>
                                                 {cao
@@ -379,14 +378,14 @@ const General = (props: Props) => {
 
                                             </td>
                                         )}
-                                </tr>
-                                <tr>
-                                    <td>{'DRR Focal Person'}</td>
-                                    <td>{focalPerson.split(',')[0] || '-'}</td>
-                                    <td>{focalPerson.split(',')[1] || '-'}</td>
-                                    <td>{focalPerson.split(',')[2] || '-'}</td>
-                                    {
-                                        !props.annex
+                                        </tr>
+                                        <tr>
+                                            <td>{'DRR Focal Person'}</td>
+                                            <td>{focalPerson.split(',')[0] || '-'}</td>
+                                            <td>{focalPerson.split(',')[1] || '-'}</td>
+                                            <td>{focalPerson.split(',')[2] || '-'}</td>
+                                            {
+                                                !props.annex
                                         && (
                                             <td>
                                                 {focalPerson
@@ -419,22 +418,30 @@ const General = (props: Props) => {
 
                                             </td>
                                         )
-                                    }
+                                            }
 
-                                </tr>
-                            </tbody>
-                        </table>
-                        {showInfo && (
-                            <h5>
-                                <i>
-                                Please click on the add/edit
-                            button to update the details
-                                </i>
-                            </h5>
-                        )}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            )
+
+                        }
+                        {
+                            showInfo && !props.annex && (
+                                <h5>
+                                    <i>
+                            Please click on the add/edit
+                        button to update the details
+                                    </i>
+                                </h5>
+                            )
+                        }
                     </div>
                 </div>
-                <h3><strong>Local Disaster Management Committee</strong></h3>
+                {
+                    !props.annex
+                    && <h3><strong>Local Disaster Management Committee</strong></h3>
+                }
 
                 <div className={styles.row}>
                     { !props.annex
@@ -559,27 +566,37 @@ const General = (props: Props) => {
                                         <td>-</td>
                                         <td>-</td>
                                         <td>-</td>
-                                        <td>
-                                            <button
-                                                type="button"
-                                                className={styles.addEditBtn}
-                                                onClick={handleAddContact}
-                                            >
-                                                <Icon
-                                                    name="plus"
-                                                    className={styles.addEditIcon}
-                                                />
-                                            </button>
-                                        </td>
+                                        {
+                                            !props.annex
+                                            && (
+                                                <td>
+                                                    <button
+                                                        type="button"
+                                                        className={styles.addEditBtn}
+                                                        onClick={handleAddContact}
+                                                    >
+                                                        <Icon
+                                                            name="plus"
+                                                            className={styles.addEditIcon}
+                                                        />
+                                                    </button>
+                                                </td>
+                                            )
+                                        }
                                     </tr>
                                 )
                             }
                         </tbody>
                     </table>
-                    <h5>
-                        {' '}
-                        <i>Please click on the add/edit button to update the details</i>
-                    </h5>
+                    {
+                        !props.annex
+                        && (
+                            <h5>
+                                {' '}
+                                <i>Please click on the add/edit button to update the details</i>
+                            </h5>
+                        )
+                    }
                 </div>
 
             </div>

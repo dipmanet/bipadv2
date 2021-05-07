@@ -39,6 +39,19 @@
 .rowFive{
    height: 12%;
    display: flex;
+   flex-direction: column;
+ ul{
+     color: #777;
+     font-size: 11px;
+     list-style: disc;
+     text-align: left;
+     width: 90%;
+     .smallNote{
+         font-size: 10px;
+         font-style: italic;
+
+     }
+ }
 }
 
 
