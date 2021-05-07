@@ -635,7 +635,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 Strategic Action Plan 2018-2030.
                                 </p>
 
-                                <p className={styles.description}>
+                                <p className={_cs(styles.description, styles.lastLine)}>
                                 Click proceed to generate the report for your region.
 
                                 </p>

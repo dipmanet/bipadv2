@@ -216,8 +216,8 @@ font-size: large;
 
 .firstPageContainer{
     position: relative;
-    top: -60px;
-    padding: 50px;
+    top: -40px;
+    padding: 40px;
     
     .tabsPageContainer{
         width: 100%;
@@ -251,6 +251,11 @@ font-size: large;
         bottom: 30px;
         position: relative;
         margin-bottom: 12px;
+    }
+    .lastLine{
+        position: relative;
+        top: 40px;
+        // border: 1px solid gray;
     }
     .bulletPtRow{
         display: flex;
