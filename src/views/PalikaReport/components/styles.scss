@@ -54,7 +54,7 @@
             color: red;
             padding-left: 30px;
         }
-        .selected{
+       .selected{
             border: none;
             text-align: left !important;
             width: 100%;
@@ -140,7 +140,7 @@
     opacity: 1;
     font-weight: bold;
     width: 100%;
-
+    filter: saturate(100%);
     .icons{
         margin-right: 10px;
     }

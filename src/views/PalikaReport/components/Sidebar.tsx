@@ -17,7 +17,8 @@ import inventoriesLogo from '../ReportModal/Icons/inventories.svg';
 import carLogo from '../ReportModal/Icons/resource.svg';
 import incidentLogo from '../ReportModal/Icons/incident.svg';
 import simulationLogo from '../ReportModal/Icons/simulation.svg';
-
+import dashboardLogo from '../ReportModal/Icons/dashboard.svg';
+import myreport from '../ReportModal/Icons/drrmreport.svg';
 
 import { userSelector, palikaRedirectSelector, generalDataSelector, budgetActivityDataSelector } from '#selectors';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -39,6 +40,11 @@ const icons = [
     incidentLogo,
     simulationLogo,
 
+];
+
+const allRepIcons = [
+    dashboardLogo,
+    myreport,
 ];
 const menuItems: {
     key: number;
@@ -261,8 +267,6 @@ const Sidebar = (props) => {
                                             ? item.components.map((data, index) => (
                                                 <button
                                                     type="submit"
-
-
                                                     className={
                                                         isIndicatorClicked
                                                              && selectedSubMenuId === data.id ? styles.selected : styles.notSelected}
@@ -270,7 +274,11 @@ const Sidebar = (props) => {
                                                     onClick={() => handleSelectSubmenu(data.id,
                                                         data.url, data.title, data.slug, item.slug)}
                                                 >
-
+                                                    <ScalableVectorGraphics
+                                                        className={styles.bulletPoint}
+                                                        src={allRepIcons[data.id - 1]}
+                                                        alt="Bullet Point"
+                                                    />
                                                     {data.title}
 
 
