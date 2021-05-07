@@ -240,9 +240,12 @@ const Budget = (props: Props) => {
     //     setShowInfo(!showInfo);
     // };
     const handleNextClick = () => {
+        console.log('annual budget data when clicked: ', annualBudgetData);
+        console.log(Number(additionalFund),
+            Number(municipalBudget),
+            Number(drrFund));
         if (!annualBudgetData.length) {
             BudgetPostRequest.do({
-
                 body: {
                     title: budgetTitle,
                     totalBudgetNrs: Number(drrFund),
@@ -270,6 +273,7 @@ const Budget = (props: Props) => {
                 drrFund: disasterBudgetNrs,
                 additionalFund: otherBudgetNrs,
             });
+            updateTab();
         }
     };
 
@@ -528,7 +532,7 @@ const Budget = (props: Props) => {
                                             name="plus"
                                             className={styles.plusIcon}
                                         />
-                    Add New Budget
+                                    Add
                                     </button>
                                 )}
 
