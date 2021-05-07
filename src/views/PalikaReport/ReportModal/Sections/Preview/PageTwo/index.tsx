@@ -250,10 +250,12 @@ const Preview = (props: Props) => {
                             />
                             <ul>
                                 <li>
-                                    <span className={styles.biggerText}>Rs 33,00,000</span>
+                                    <span className={styles.biggerText}>35</span>
                                 </li>
                                 <li>
-                                    <span className={styles.smallerText}>Relief Amount</span>
+                                    <span className={styles.smallerText}>
+                                        Number of Beneficiay Families
+                                    </span>
                                 </li>
                             </ul>
                         </div>
@@ -270,10 +272,10 @@ const Preview = (props: Props) => {
                                 />
                                 <ul>
                                     <li>
-                                        <span className={styles.biggerText}>Rs 33,00,000</span>
+                                        <span className={styles.biggerText}>17</span>
                                     </li>
                                     <li>
-                                        <span className={styles.smallerText}>Relief Amount</span>
+                                        <span className={styles.smallerText}>Male</span>
                                     </li>
                                 </ul>
                             </div>
@@ -285,10 +287,10 @@ const Preview = (props: Props) => {
                                 />
                                 <ul>
                                     <li>
-                                        <span className={styles.biggerText}>Rs 33,00,000</span>
+                                        <span className={styles.biggerText}>18</span>
                                     </li>
                                     <li>
-                                        <span className={styles.smallerText}>Relief Amount</span>
+                                        <span className={styles.smallerText}>Female</span>
                                     </li>
                                 </ul>
                             </div>
@@ -297,7 +299,7 @@ const Preview = (props: Props) => {
                             <ul>
                                 <li>
                                     <span className={styles.darkerSmText}>
-                                        500
+                                        3
                                     </span>
                                 </li>
                                 <li>
@@ -309,7 +311,7 @@ const Preview = (props: Props) => {
                             <ul>
                                 <li>
                                     <span className={styles.darkerSmText}>
-                                        25
+                                        2
                                     </span>
                                 </li>
                                 <li>
@@ -321,7 +323,7 @@ const Preview = (props: Props) => {
                             <ul>
                                 <li>
                                     <span className={styles.darkerSmText}>
-                                        33
+                                        15
                                     </span>
                                 </li>
                                 <li>
@@ -333,7 +335,7 @@ const Preview = (props: Props) => {
                             <ul>
                                 <li>
                                     <span className={styles.darkerSmText}>
-                                        2
+                                        15
                                     </span>
                                 </li>
                                 <li>
@@ -362,7 +364,7 @@ const Preview = (props: Props) => {
                         Risk Reduction and Management Authority (NDRRMA)
                     </li>
                     <li className={styles.smallNote}>
-                    Note: Please refer to the Annexes for details on each section
+                         Note: Please refer to the Annexes for details on each section
                     </li>
                 </ul>
 
