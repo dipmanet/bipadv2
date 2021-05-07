@@ -65,6 +65,7 @@ const mapDispatchToProps = dispatch => ({
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+
     BudgetGetRequest: { url: '/annual-budget/',
         query: ({ params, props }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
@@ -328,7 +329,7 @@ const Budget = (props: Props) => {
                 <div>
 
                     <h2>
-                        {`Budget for Fiscal Year ${budgetName}`}
+                        {`Budget for Fiscal Year ${generalData.fiscalYearTitle}`}
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">

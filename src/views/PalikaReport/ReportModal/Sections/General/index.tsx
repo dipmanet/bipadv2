@@ -41,7 +41,7 @@ const mapDispatchToProps = dispatch => ({
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
     FiscalYearFetch: {
-        url: '/nepali-fiscal-year/',
+        url: '/nepali-fiscal-year/?ordering=-id&offset=21',
         method: methods.GET,
         onMount: true,
 
@@ -103,6 +103,7 @@ const General = (props: Props) => {
     // const [showFormErr, setShowErr] = useState(true);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
+    const [fiscalYearTitle, setFiscalYearTitle] = useState('');
 
     const handleReportTitle = (title: any) => {
         setreportTitle(title.target.value);
@@ -116,6 +117,12 @@ const General = (props: Props) => {
     };
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
+        console.log('data fs: ', fiscalYearList);
+        console.log('target: ', fiscal.target.value);
+        const title = fiscalYearList
+            .filter(data => Number(data.id) === Number(fiscal.target.value));
+        console.log('title', title);
+        setFiscalYearTitle(title[0].titleEn);
     };
     const handleFiscalYearList = (response) => {
         setFiscalYearList(response);
@@ -171,6 +178,7 @@ const General = (props: Props) => {
 
     const handleDataSave = () => {
         if (!validationErrs()) {
+            console.log('fiscal year title', fiscalYearTitle);
             props.setGeneralDatapp({
                 reportTitle,
                 fiscalYear,
@@ -180,6 +188,7 @@ const General = (props: Props) => {
                 formationDate,
                 committeeMembers,
                 localMembers,
+                fiscalYearTitle,
             });
             updateTab();
             props.handleShowErr(false);
@@ -418,14 +427,14 @@ const General = (props: Props) => {
                         {showInfo && (
                             <h5>
                                 <i>
-Please click on the add/edit
+                                Please click on the add/edit
                             button to update the details
                                 </i>
                             </h5>
                         )}
                     </div>
                 </div>
-                <h3><strong>Disaster Management Committee</strong></h3>
+                <h3><strong>Local Disaster Management Committee</strong></h3>
 
                 <div className={styles.row}>
                     { !props.annex
@@ -435,14 +444,12 @@ Please click on the add/edit
                             {dateErr
                                 ? (
                                     <div className={styles.errorMsg}>
-                                    Please select DRRM committee formation date
+                                     Please select Local DRRM committee formation date
                                     </div>
                                 )
                                 : ''}
                             <span className={styles.labelDate}>
-                            Disaster Management Committee formation date
-
-
+                                Local Disaster Management Committee formation date
                             </span>
                             <NepaliDatePicker
                                 inputClassName="form-control"
@@ -464,7 +471,7 @@ Please click on the add/edit
                         <div className={styles.inputContainer}>
 
                             <span className={styles.labelDate}>
-                            Number of members in  Disaster Management Committee
+                            Number of members in  Local Disaster Management Committee
 
 
                             </span>
@@ -479,7 +486,7 @@ Please click on the add/edit
                         props.annex
                         && <h3><strong>Local Disaster Management Committee</strong></h3>
                     }
-                    <table id="table-to-xls">
+                    <table className={styles.reportTable} id="table-to-xls">
                         <tbody>
                             <tr>
                                 <th>SN</th>

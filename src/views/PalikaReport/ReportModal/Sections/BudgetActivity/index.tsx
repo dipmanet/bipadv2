@@ -498,7 +498,7 @@ const BudgetActivity = (props: Props) => {
                         {!props.previewDetails && !props.monitoringDetails
            && (
                <div className={styles.mainPageDetailsContainer}>
-                   <h2>{`Budget Activities for Fiscal Year ${budgetName}`}</h2>
+                   <h2>{`Budget Activities for Fiscal Year ${generalData.fiscalYearTitle}`}</h2>
                    <table id="table-to-xls">
                        <tbody>
 
