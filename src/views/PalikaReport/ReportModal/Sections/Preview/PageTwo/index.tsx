@@ -354,6 +354,10 @@ const Preview = (props: Props) => {
                 <Leadership />
             </div>
             <div className={styles.rowFive}>
+
+
+                <Footer />
+
                 <ul>
                     <li>
                         This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/).
@@ -367,8 +371,6 @@ const Preview = (props: Props) => {
                          Note: Please refer to the Annexes for details on each section
                     </li>
                 </ul>
-
-                <Footer />
             </div>
         </div>
     );

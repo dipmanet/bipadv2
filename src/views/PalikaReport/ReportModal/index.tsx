@@ -341,107 +341,110 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
         // new code
         //    var data = document.getElementById('reportPreview');
-        html2canvas(divToDisplay).then((canvas) => {
-            // Few necessary setting options
+        // html2canvas(divToDisplay).then((canvas) => {
+        // Few necessary setting options
 
-            const contentDataURL = canvas.toDataURL('image/png');
-            const margin = 2;
-            const imgWidth = 210 - 2 * margin;
+        // const contentDataURL = canvas.toDataURL('image/png');
+        // const margin = 2;
+        // const imgWidth = 210 - 2 * margin;
+        // const pageHeight = 295;
+        // const imgHeight = canvas.height * imgWidth / canvas.width;
+        // let heightLeft = imgHeight;
+
+        // const doc = new JsPDF('p', 'mm');
+        // let position = 0;
+
+        // doc.addImage(contentDataURL, 'PNG', margin, position, imgWidth, imgHeight);
+
+        // heightLeft -= pageHeight;
+
+        // while (heightLeft >= 0) {
+        //     position = heightLeft - imgHeight;
+        //     doc.addPage();
+        //     doc.addImage(contentDataURL, 'PNG', margin, position, imgWidth, imgHeight);
+        //     heightLeft -= pageHeight;
+        // }
+        // doc.save('file.pdf');
+
+
+        // old code
+        html2canvas(divToDisplay).then(async (canvas) => {
+            // const formData = new FormData();
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210;
             const pageHeight = 295;
             const imgHeight = canvas.height * imgWidth / canvas.width;
             let heightLeft = imgHeight;
+            const doc = new JsPDF('p', 'mm', true);
+            let position = 0; // give some top padding to first page
 
-            const doc = new JsPDF('p', 'mm');
-            let position = 0;
-
-            doc.addImage(contentDataURL, 'PNG', margin, position, imgWidth, imgHeight);
-
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
             heightLeft -= pageHeight;
-
+            let count = 0;
             while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                doc.addPage();
-                doc.addImage(contentDataURL, 'PNG', margin, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
+                count += 1;
+                if (count >= 2) {
+                    position = heightLeft - imgHeight; // top padding for other pages
+                    doc.addPage('a4', 'portrait');
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                    heightLeft -= pageHeight;
+                } else {
+                    position = heightLeft - imgHeight; // top padding for other pages
+                    doc.addPage('a4', 'portrait');
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                    heightLeft -= pageHeight;
+                }
             }
-            doc.save('file.pdf');
+            const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
+            // const file = new File([blob], 'image.pdf');
+            // const blob = await doc.output('blob');
+            // formdata.append('file', blob);
+            // const base64 = doc.output('datauristring');
+            // canvas.toBlob((blob) => {
 
+            // });
+            let profileUser = {};
+            if (user) {
+                profileUser = user.profile;
+            }
 
-            // old code
-            // html2canvas(divToDisplay).then(async (canvas) => {
-            //     // const formData = new FormData();
-            //     const imgData = canvas.toDataURL('image/png');
-            //     const imgWidth = 210;
-            //     const pageHeight = 295;
-            //     const imgHeight = canvas.height * imgWidth / canvas.width;
-            //     let heightLeft = imgHeight;
-            //     const doc = new JsPDF('p', 'mm', 'a4', true);
-            //     let position = 0; // give some top padding to first page
-
-            //     doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-            //     heightLeft -= pageHeight;
-            //     let count = 0;
-            //     while (heightLeft >= 0) {
-            //         count += 1;
-            //         if (count >= 2) {
-            //             position = heightLeft - imgHeight; // top padding for other pages
-            //             doc.addPage('a4', 'portrait');
-            //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-            //             heightLeft -= pageHeight;
-            //         } else {
-            //             position = heightLeft - imgHeight; // top padding for other pages
-            //             doc.addPage('a4', 'portrait');
-            //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-            //             heightLeft -= pageHeight;
-            //         }
-            //     }
-            //     const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
-            //     // const file = new File([blob], 'image.pdf');
-            //     // const blob = await doc.output('blob');
-            //     // formdata.append('file', blob);
-            //     // const base64 = doc.output('datauristring');
-            //     // canvas.toBlob((blob) => {
-
-            //     // });
-            //     let profileUser = {};
-            //     if (user) {
-            //         profileUser = user.profile;
-            //     }
-
-        //     formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-        //     formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
-        //     formdata.append('fiscalYear', generalData.fiscalYear);
-        //     formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
-        //     formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-        //     formdata.append('province', (profileUser.province || ''));
-        //     formdata.append('district', (profileUser.district || ''));
-        //     formdata.append('municipality', (profileUser.municipality || ''));
-        //     // formdata.append('mayorChairperson', generalData.mayor);
-        //     // formdata.append('chiefAdministrativeOfficer', generalData.cao);
-        //     // formdata.append('drrFocalPerson', generalData.focalPerson);
-        //     if (disasterProfile.length) {
-        //         axios.put(`http://bipaddev.yilab.org.np/api/v1/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
-        //             'content-type': 'multipart/form-data',
-        //         } })
-        //             .then((response) => {
-        //                 console.log(response);
-        //                 alert('Your palika report has been uploaded sucessfully');
-        //             }).catch((error) => {
-        //                 console.log(error);
-        //             });
-        //     } else {
-        //         axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
-        //             'content-type': 'multipart/form-data',
-        //         } })
-        //             .then((response) => {
-        //                 console.log(response);
-        //                 alert('Your palika report has been uploaded sucessfully');
-        //             }).catch((error) => {
-        //                 console.log(error);
-        //             });
-        //     }
-        //     console.log('here: pending', pending);
-        //     doc.save('file.pdf');
+            formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+            formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
+            formdata.append('fiscalYear', generalData.fiscalYear);
+            formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
+            formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
+            formdata.append('province', (profileUser.province || ''));
+            formdata.append('district', (profileUser.district || ''));
+            formdata.append('municipality', (profileUser.municipality || ''));
+            // formdata.append('mayorChairperson', generalData.mayor);
+            // formdata.append('chiefAdministrativeOfficer', generalData.cao);
+            // formdata.append('drrFocalPerson', generalData.focalPerson);
+            if (disasterProfile.length) {
+                axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
+                    'content-type': 'multipart/form-data',
+                } })
+                    .then((response) => {
+                        console.log(response);
+                        doc.save('file.pdf');
+                        alert('Your palika report has been uploaded sucessfully');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
+                    'content-type': 'multipart/form-data',
+                } })
+                    .then((response) => {
+                        console.log(response);
+                        doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        alert('Your palika report has been uploaded sucessfully');
+                    }).catch((error) => {
+                        console.log(error);
+                    });
+            }
+            console.log('here: pending', pending);
+            doc.save('DRRM Report.pdf');
+        // });
         });
     };
 
