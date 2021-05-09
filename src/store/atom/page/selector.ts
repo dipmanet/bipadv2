@@ -556,6 +556,7 @@ export const budgetActivityDataSelector = ({ page }: AppState) => page.budgetAct
 export const programAndPolicySelector = ({ page }: AppState) => page.programAndPolicyData;
 export const budgetIdSelector = ({ page }: AppState) => page.budgetId;
 export const palikaRedirectSelector = ({ page }: AppState) => page.palikaRedirect;
+export const palikaLanguageSelector = ({ page }: AppState) => page.palikaLanguage;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

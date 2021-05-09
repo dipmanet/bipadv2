@@ -26,6 +26,7 @@ import {
 } from '#request';
 
 import PalikaReportTable from './RightPane/Dashboard/palikaReportTable';
+import TopBar from './RightPane/TopBar';
 
 interface Props {
 
@@ -628,6 +629,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 </div>
                 <div className={styles.rightContainer}>
                     <>
+                        <TopBar />
 
                         {
                             showReportEdit
@@ -647,6 +649,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                             handleShowErr={handleShowErr}
                                             showErr={showErr}
                                         />
+
                                     </div>
                                 )
                         }

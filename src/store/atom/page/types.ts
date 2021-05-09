@@ -16,6 +16,11 @@ type BBox = [number, number, number, number];
 export interface BudgetId{
     id: string;
 }
+
+export interface PalikaLanguage{
+    language: 'en' | 'np';
+}
+
 export interface PalikaRedirect{
     showForm: boolean;
 }
@@ -547,6 +552,7 @@ export interface PageState {
     generalData: GeneralData;
     palikaRedirect: PalikaRedirect;
     budgetId: BudgetId;
+    palikaLanguage: PalikaLanguage;
     budgetData: BudgetData;
     budgetActivityData: BudgetActivityData;
     programAndPolicyData: ProgramAndPolicyData;
@@ -560,6 +566,7 @@ export enum PageType {
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
     SET_PALIKA_REDIRECT = 'page/SET_PALIKA_REDIRECT',
     SET_BUDGET_ID = 'page/SET_BUDGET_ID',
+    SET_PALIKA_LANGUAGE = 'page/SET_PALIKA_LANGUAGE',
     SET_BUDGET_DATA = 'page/SET_BUDGET_DATA',
     SET_PROGRAM_AND_POLICY_DATA = 'page/SET_PROGRAM_AND_POLICY_DATA',
     SET_BUDGET_ACTIVITY_DATA = 'page/SET_BUDGET_ACTIVITY_DATA',
@@ -661,6 +668,11 @@ export interface SetPalikaRedirect {
 export interface SetBudgetId {
     type: typeof PageType.SET_BUDGET_ID;
     budgetId: BudgetId;
+}
+
+export interface SetPalikaLanguage {
+    type: typeof PageType.SET_PALIKA_LANGUAGE;
+    language: PalikaLanguage;
 }
 
 
@@ -932,7 +944,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
+    SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData |
     SetGeneralData| SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |

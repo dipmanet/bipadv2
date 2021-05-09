@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import * as ReachRouter from '@reach/router';
 import Page from '#components/Page';
-import styles from './styles.scss';
 
 import ReportModal from './ReportGenerate';
 
@@ -19,15 +17,7 @@ import {
 
     carKeysSelector,
 } from '#selectors';
-
-import {
-    setCarKeysAction,
-} from '#actionCreators';
-
-
-const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setCarKeys: params => dispatch(setCarKeysAction(params)),
-});
+import TopBar from './TopBar';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     carKeys: carKeysSelector(state),
@@ -73,11 +63,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     // province: params.province,
                     // district: params.district,
                     municipality: params.municipality,
-
                 };
             }
-
-
             return { limit: params.page, offset: params.offset };
         },
         method: methods.GET,
@@ -115,9 +102,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 const MainModal: React.FC<Props> = (props: Props) => {
     const {
         showTabs,
-        showReportModal,
         hideWelcomePage,
-        setShowReportModal,
         user,
         getTabSelected,
         showErr,
@@ -150,7 +135,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [tabSelected, setTabSelected] = useState(0);
     const [tabUrlSelected, setTabUrlSelected] = useState('');
     const [tableHeader, setTableHeader] = useState([]);
-    const handleCloseModal = () => setShowReportModal(false);
 
 
     const [mayor, setmayor] = useState('');
@@ -291,10 +275,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tabSelected]);
 
-    const handleTabClick = (tab: number, url: string) => {
-        setTabSelected(tab);
-        setTabUrlSelected(url);
-    };
+
     const handleNextClick = () => {
         if (tabSelected < tabs.length - 1) {
             setTabSelected(tabSelected + 1);
@@ -308,38 +289,9 @@ const MainModal: React.FC<Props> = (props: Props) => {
         }
     };
 
-
-    const handleDataAdd = () => {
-        const { setCarKeys } = props;
-        ReachRouter.navigate('/risk-info/#/capacity-and-resources', { state: { showForm: true }, replace: true });
-        setCarKeys(1);
-    };
-
-    const getTranslateVal = () => {
-        // const rect = document.getElementById('palikaModal').getBoundingClientRect();
-        if (tabSelected > 5) {
-            return (500);
-        }
-        return 0;
-    };
-
-    const getModalClass = () => {
-        if (showTabs) {
-            if (tabSelected === tabs.length - 1) {
-                return styles.previewTab;
-            }
-            return styles.tabsContainer;
-        }
-        return styles.modalContainer;
-    };
-
-
     return (
         <>
             <Page hideMap hideFilter />
-            {
-
-            }
             <ReportModal
                 keyTabUrl={tabUrlSelected}
                 keyTab={tabSelected}
@@ -361,8 +313,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
                 showErr={showErr}
                 handleShowErr={props.handleShowErr}
             />
-
-
         </>
     );
 };

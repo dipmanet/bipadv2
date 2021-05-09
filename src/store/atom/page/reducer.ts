@@ -14,6 +14,11 @@ export const setRegionAction = (
     region,
 });
 
+export const setPalikaLanguageAction = palikaLanguage => ({
+    type: Type.PageType.SET_PALIKA_LANGUAGE,
+    palikaLanguage,
+});
+
 export const setGeneralDataAction = generalData => ({
     type: Type.PageType.SET_GENERAL_DATA,
     generalData,
@@ -1262,11 +1267,22 @@ const setPalikaRedirect = (state: Type.PageState, action: Type.SetPalikaRedirect
     return newState;
 };
 
+const setPalikaLanguage = (state: Type.PageState, action: Type.SetPalikaLanguage) => {
+    const { palikaLanguage } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.palikaLanguage = palikaLanguage;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_PALIKA_LANGUAGE:
+            return setPalikaLanguage(state, action);
         case Type.PageType.SET_BUDGET_ID:
             return setBudgetId(state, action);
         case Type.PageType.SET_PALIKA_REDIRECT:

@@ -237,6 +237,9 @@ const state: PageState = {
     palikaRedirect: {
         showForm: false,
     },
+    palikaLanguage: {
+        language: 'en',
+    },
 
 };
 export default state;
