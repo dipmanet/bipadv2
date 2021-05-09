@@ -230,6 +230,7 @@ const Budget = (props: Props) => {
             setErrors: handleErrors,
 
         });
+        props.handleNextClick();
     };
     // const handleinfoClick = () => {
     //     setShowInfo(!showInfo);
@@ -268,6 +269,7 @@ const Budget = (props: Props) => {
                 drrFund: disasterBudgetNrs,
                 additionalFund: otherBudgetNrs,
             });
+            props.handleNextClick();
             updateTab();
         }
     };
@@ -286,16 +288,7 @@ const Budget = (props: Props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annualBudgetData]);
-
-
-    // const FY =
-    // setFYTitle();
-    // useEffect(() => {
-    //     if (budgetId.id) {
-    //         props.handleNextClick();
-    //     }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [budgetId.id]);
+    console.log('this title>>>', drrFund);
     return (
         <>
             {' '}
@@ -516,7 +509,7 @@ const Budget = (props: Props) => {
                             !props.annex
                         && (
                             <>
-                                {annualBudgetData.length === 0
+                                {annualBudgetData.length > 0
                                 && (
                                     <button
                                         type="button"
@@ -527,7 +520,8 @@ const Budget = (props: Props) => {
                                             name="plus"
                                             className={styles.plusIcon}
                                         />
-                                    Add
+                    Edit Budget
+                                        {/* Add */}
                                     </button>
                                 )}
 
@@ -535,6 +529,8 @@ const Budget = (props: Props) => {
                                     handlePrevClick={props.handlePrevClick}
                                     // handleNextClick={props.handleNextClick}
                                     handleNextClick={handleNextClick}
+
+                                    disabled={!((drrFund && municipalBudget && additionalFund))}
                                     // disabled={!(annualBudgetData.length > 0)}
                                 />
 
