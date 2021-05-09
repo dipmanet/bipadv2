@@ -2,32 +2,30 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import { Label } from 'semantic-ui-react';
-import Sidebar from './components/Sidebar';
+import Sidebar from './LeftPane';
 import Page from '#components/Page';
 import styles from './styles.scss';
-import MainModal from './MainModal';
-import DateInput from '#rsci/DateInput';
-import DropdownMenu from '#rsca/DropdownMenu';
+import RightPane from './RightPane';
+import Modal from '#rscv/Modal';
+
+import PrimaryButton from '#rsca/Button/PrimaryButton';
+
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
-import PalikaReportTable from './components/palikaReportTable';
-import FilterModal from '#components/_Filters/FilterModal';
-import DashboardFilter from '#components/_Filters';
+
+import PalikaReportTable from './RightPane/Dashboard/palikaReportTable';
 
 interface Props {
 
@@ -94,6 +92,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 let finalArr = [];
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
+    const [showModal, setshowModal] = useState(true);
+
     const [showReportModal, setShowReportModal] = useState(true);
     const [newRegionValues, setNewRegionValues] = useState(undefined);
     const [filtered, setFiltered] = useState(false);
@@ -588,15 +588,65 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort, submenuId, fetchedData]);
 
+
+    const closeModal = () => {
+        setshowModal(false);
+    };
+
     return (
         <>
             <Page hideMap hideFilter />
 
 
-            {/* {(menuId === 2 || menuId === 3) && submenuId !== null && showTabs
-             && <AddFormModal />} */}
+            {
+                showModal
+                    && (
+                        <Modal>
+                            {/* <div className={styles.closeBtn}>
+                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
+                                    <Icon
+                                        name="times"
+                                        className={styles.settingsBtn}
+                                    />
+                                </DangerButton>
+                            </div> */}
+                            <div className={styles.firstPageContainer}>
+                                <div className={styles.title}>
+                                Welcome to the DRRM Report Module of the BIPAD Portal
+                                </div>
+                                <p className={styles.description}>
+                                This module in the BIPAD portal will generate Disaster Risk Reduction and Management Report for each fiscal year for all three tiers of the governments.
+                                </p>
+                                <p className={styles.description}>
+                                DRRM Act, 2074 and its regulation, 2076 mandates the government to generate reporting on DRRM. To aid this mandate, the reporting module will include general information of the chosen location, organizations working on disaster management, DRR policy related work, budget allocated for DRRM, and available capacity and resources and other DRR related information.
+                                </p>
+                                <p className={styles.description}>
+                                The report will also monitor and track activities
+                                based on the priorities set by the DRR National
+                                Strategic Action Plan 2018-2030.
+                                </p>
+
+                                <p className={_cs(styles.description, styles.lastLine)}>
+                                Click proceed to generate the report for your region.
+
+                                </p>
+
+                                <div className={styles.btnContainer}>
+                                    <PrimaryButton
+                                        type="button"
+                                        className={styles.agreeBtn}
+                                        onClick={closeModal}
+                                    >
+                                    PROCEED
+                                    </PrimaryButton>
+                                </div>
+
+                            </div>
+                        </Modal>
+                    )
 
 
+            }
             <div className={styles.reportContainer}>
                 <div className={styles.leftContainer}>
                     <div className={styles.heading}>
@@ -635,7 +685,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             showReportEdit
                                 && (
                                     <div className={styles.reportEditingSection}>
-                                        <MainModal
+                                        <RightPane
                                             showTabs={showTabs}
                                             setShowTabs={handleAddbuttonClick}
                                             showReportModal={showReportModal}

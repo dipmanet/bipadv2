@@ -1,0 +1,89 @@
+.errorMsg{
+    color: red;
+    font-size: 10px;
+}
+
+.palikaTable{
+    margin-top: 10px;
+    .savebtn{
+        position: relative;
+        margin-top: 20px;
+        width: fit-content;
+        // background-color: rgb(54, 132, 216) !important;
+        background-color: transparent;
+        border-radius: 4px;
+        color: rgb(54, 132, 216) !important;
+        padding: 8px 8px;
+        cursor: pointer;
+        // border: none;
+        filter: saturate(80%);
+        border: none;
+        margin-right: 10px;
+        white-space: nowrap;
+        .plusIcon{
+            padding-right: 4px;
+        }
+    }
+    .infoBtn{
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        .infoIcon{
+            font-size: 16px;      
+        }
+    }
+}
+.addEditBtn{
+    background: transparent;
+    border: none;
+    filter: saturate(100%);
+    margin-left: 12px;
+    .addEditIcon{
+        color: rgb(0,92,230);
+        font-size: 20px;
+    }
+        
+    }
+
+.budgetPreviewContainer{
+    margin-left: 30px;
+    margin-top: 10px;
+    // border: 1px solid gray;
+    h2{
+        font-size: 14px;
+        font-weight: 600;
+        margin-left: 2%;
+        color: #222
+    }
+    .budgetDetailsContainer{
+        // height: 100px;
+        .budgetDetails{
+            display: flex;
+            align-items: center;
+            padding: 0em;
+            .lighter{
+                color: #777;
+                padding-left: 2px;
+
+            }
+            .light{
+                color: #777;
+                font-weight: 600;
+                padding-left: 2px;
+            }
+            ul{
+                list-style: none; 
+                padding-left: 2%;
+                padding-right: 2%;
+                li{
+                    white-space: nowrap;
+                }
+            }
+    
+        }
+    }
+    .budgetChartContainer{
+        border: 1px solid red;
+    }
+}
+
