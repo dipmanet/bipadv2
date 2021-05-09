@@ -2,39 +2,30 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
+import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import { Label } from 'semantic-ui-react';
-import Sidebar from './components/Sidebar';
+import Sidebar from './LeftPane';
 import Page from '#components/Page';
 import styles from './styles.scss';
-import MainModal from './MainModal';
-import DateInput from '#rsci/DateInput';
-import DropdownMenu from '#rsca/DropdownMenu';
+import RightPane from './RightPane';
 import Modal from '#rscv/Modal';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import DangerButton from '#rsca/Button/DangerButton';
-import Icon from '#rscg/Icon';
-
 
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
-import PalikaReportTable from './components/palikaReportTable';
-import FilterModal from '#components/_Filters/FilterModal';
-import DashboardFilter from '#components/_Filters';
+
+import PalikaReportTable from './RightPane/Dashboard/palikaReportTable';
 
 interface Props {
 
@@ -694,7 +685,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             showReportEdit
                                 && (
                                     <div className={styles.reportEditingSection}>
-                                        <MainModal
+                                        <RightPane
                                             showTabs={showTabs}
                                             setShowTabs={handleAddbuttonClick}
                                             showReportModal={showReportModal}
