@@ -37,7 +37,6 @@ const icons = [
     carLogo,
     incidentLogo,
     simulationLogo,
-
 ];
 
 const allRepIcons = [
@@ -127,7 +126,6 @@ const Sidebar = (props) => {
         selectedTab,
         generalData,
     } = props;
-    console.log('This municipality>>>', municipalityName);
     useEffect(() => {
         setShowErr(props.showErr);
     }, [props.showErr]);

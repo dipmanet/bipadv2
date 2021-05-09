@@ -97,7 +97,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportModal, setShowReportModal] = useState(true);
     const [newRegionValues, setNewRegionValues] = useState(undefined);
     const [filtered, setFiltered] = useState(false);
-    const [AnnualBudget, setAnnualBudget] = useState([]);
     const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
     const [url, setUrl] = useState('/disaster-profile/');
@@ -109,7 +108,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [subMenuTitle, setSubMenuTitle] = useState('Disaster Risk Reduction and Management Report');
     const [tableHeader, setTableHeader] = useState([]);
     const [fiscalYear, setFiscalYear] = useState(null);
-    const [isFilterButnDisable, setIsFilterButnDisable] = useState(true);
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
@@ -122,7 +120,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [dateTo, setDateTo] = useState('');
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
     const [showReportEdit, setShowReportEdit] = useState(false);
-    const [loggedInMunicipality, setLoggedInMunicipality] = useState(null);
     const [selectedTab, setSelectedTab] = useState(0);
     const [showErr, setShowErr] = useState(false);
 
@@ -133,7 +130,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setPaginationParameters(response);
     };
 
-    const handleCloseModal = () => setShowReportModal(false);
     const {
         provinces,
         districts,
@@ -156,19 +152,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
         municipalityName = municipalities.find(item => item.id === municipality);
     }
-    //  else if (user && user.profile && !user.profile.municipality && user.profile.district) {
-    //     const {
-    //         profile: {
-    //             district,
-
-    //         },
-    //     } = user;
-    //     loginUserDetails = districts.find(item => item.id === district);
-    // }
 
     const handleFormRegion = (Values) => {
         setNewRegionValues(Values);
-        // setFiltered(false);
         setDisableFilterButton(false);
     };
     const handleFiscalYear = (fiscal) => {
@@ -258,13 +244,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     }, [clearFilter]);
 
 
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected + 1;
-        setOffset((selectedPage - 1) * paginationQueryLimit);
-        setCurrentPageNumber(selectedPage);
-    };
-
-
     const handleAddbuttonClick = () => {
         setShowReportModal(true);
         setShowTabs(true);
@@ -317,20 +296,15 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         function postData(link = `http://bipaddev.yilab.org.np/api/v1${url}`) {
             // Default options are marked with *
             fetch(link, {
-                method: 'OPTIONS', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
+                method: 'OPTIONS',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
-                // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                redirect: 'follow', // manual, *follow, error
+                redirect: 'follow',
                 referrerPolicy: 'no-referrer',
-                // no-referrer, *no-referrer-when-downgrade, origin,
-                // origin-when-cross-origin, same-origin, strict-origin,
-                // strict-origin-when-cross-origin, unsafe-url
-            // body: JSON.stringify(data), // body data type must match "Content-Type" header
             })
                 .then((res) => {
                     const headerData = res.json();
@@ -352,14 +326,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
      && item !== 'Modified on' && item !== 'Remarks'
     && item !== 'Created by'
      && item !== 'Updated by');
-
-    // if (AnnualBudget.length) {
-    //     const test = Object.keys(AnnualBudget[0])
-    //         .filter(item => item !== 'id' && item !== 'createdOn'
-    //     && item !== 'modifiedOn' && item !== 'createdBy'
-    // && item !== 'updatedBy'
-    //     && item !== 'Updated by');
-    // }
 
     const TableHeaderForMatchingData = Object.keys(tableHeader).filter(item => item !== 'id' && item !== 'createdOn'
     && item !== 'modifiedOn' && item !== 'createdBy' && item !== 'updatedBy' && item !== 'remarks');
@@ -388,17 +354,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setFiltered(false);
         }
     };
-    const fetchUrlFromProps = (urlData) => {
-        if (urlData) {
-            setUrl(urlData);
-        }
-        return null;
-    };
 
-    const changeDateFrom = (dateFrom) => {
-        setDateFrom(dateFrom);
-        setDisableFilterButton(false);
-    };
     useEffect(() => {
         if (dateFrom || newRegionValues) {
             setDisableFilterButton(false);
@@ -407,10 +363,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateFrom]);
-
-    const changeDateTo = (dateTo) => {
-        setDateTo(dateTo);
-    };
 
     const handleSortTitle = (isSort) => {
         setFetechedData([]);
@@ -544,7 +496,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
 
     const handleShowErr = (data) => {
-        console.log('in main report palika: ', data);
         setShowErr(data);
     };
 
@@ -596,39 +547,36 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     return (
         <>
             <Page hideMap hideFilter />
-
-
             {
                 showModal
                     && (
                         <Modal>
-                            {/* <div className={styles.closeBtn}>
-                                <DangerButton className={styles.dangerbtn} onClick={closeModal}>
-                                    <Icon
-                                        name="times"
-                                        className={styles.settingsBtn}
-                                    />
-                                </DangerButton>
-                            </div> */}
                             <div className={styles.firstPageContainer}>
                                 <div className={styles.title}>
-                                Welcome to the DRRM Report Module of the BIPAD Portal
+                                     Welcome to the DRRM Report Module of the BIPAD Portal
                                 </div>
                                 <p className={styles.description}>
-                                This module in the BIPAD portal will generate Disaster Risk Reduction and Management Report for each fiscal year for all three tiers of the governments.
+                                    This module in the BIPAD portal will generate
+                                    Disaster Risk Reduction and Management Report
+                                    for each fiscal year for all three tiers of the governments.
                                 </p>
                                 <p className={styles.description}>
-                                DRRM Act, 2074 and its regulation, 2076 mandates the government to generate reporting on DRRM. To aid this mandate, the reporting module will include general information of the chosen location, organizations working on disaster management, DRR policy related work, budget allocated for DRRM, and available capacity and resources and other DRR related information.
+                                    DRRM Act, 2074 and its regulation, 2076 mandates
+                                    the government to generate reporting on DRRM. To
+                                    aid this mandate, the reporting module will include
+                                    general information of the chosen location, organizations
+                                    working on disaster management, DRR policy related work,
+                                    budget allocated for DRRM, and available capacity and
+                                    resources and other DRR related information.
                                 </p>
                                 <p className={styles.description}>
-                                The report will also monitor and track activities
-                                based on the priorities set by the DRR National
-                                Strategic Action Plan 2018-2030.
+                                    The report will also monitor and track activities
+                                    based on the priorities set by the DRR National
+                                    Strategic Action Plan 2018-2030.
                                 </p>
 
                                 <p className={_cs(styles.description, styles.lastLine)}>
-                                Click proceed to generate the report for your region.
-
+                                     Click proceed to generate the report for your region.
                                 </p>
 
                                 <div className={styles.btnContainer}>
@@ -768,9 +716,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                         )}
 
                                         </div>
-
                                         <div className={styles.rightContainerTables}>
-
                                             <PalikaReportTable
                                                 tableData={finalArr}
                                                 paginationData={paginationParameters}
@@ -787,12 +733,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                                 currentPage={currentPageNumber}
                                                 pageSize={paginationQueryLimit}
                                             />
-
                                         </div>
                                     </>
                                 )
                         }
-
                     </>
                 </div>
             </div>
