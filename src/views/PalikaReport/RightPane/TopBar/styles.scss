@@ -1,13 +1,11 @@
 .toBarContainer{
     width: 100%;
     display: flex;
-    // border: 1px solid #f5f5f5;
     justify-content: flex-end;
     margin: 0;
     position: relative;
     margin-right: 80px;
     top: 0;
-    // height: 40px;
     .langBtn{
         background: transparent;
         // border: 1px solid #f5f5f5;
@@ -16,6 +14,7 @@
         padding: 4px;
         display: flex;
         align-items: center;
+        border: none;
         &:hover{
             background-color: #f5f5f5;
         }

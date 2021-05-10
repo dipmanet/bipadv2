@@ -714,7 +714,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                          className={styles.submitBut}
                                          onClick={handleSubmit}
                                      >
-                                    Reset
+                                         <Gt section={Translations.dashboardReset} />
+
                                      </button>
                                  )
                                      : !showReportEdit && submenuId === 1 && (
@@ -726,7 +727,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                                      ? styles.submitButDisabled : styles.submitBut}
                                              disabled={disableFilterButton}
                                          >
-                                    Filter
+                                             <Gt section={Translations.dashboardFilter} />
                                          </button>
                                      )
 

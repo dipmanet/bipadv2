@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Page from '#components/Page';
 
-import ReportModal from './ReportGenerate';
+import ReportModal from './MunicipalityReport';
 import {
     palikaLanguageSelector,
     userSelector,
@@ -104,17 +104,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 const MainModal: React.FC<Props> = (props: Props) => {
     const {
         showTabs,
-        hideWelcomePage,
         user,
         getTabSelected,
         showErr,
-        palikaLanguage,
         palikaRedirect: { redirectTo },
     } = props;
-
-    const {
-        language,
-    } = palikaLanguage;
 
 
     const [reportData, setReportData] = useState([]);
@@ -123,7 +117,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [municipality, setMunicipality] = useState(null);
     const [pending, setPending] = useState(false);
 
-    const [localMembers, setLocalMembers] = useState([]);
     if (user && user.profile && !user.profile.municipality && !user.profile.isSuperuser) {
         const {
             profile: {
@@ -143,16 +136,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
 
     const [tabSelected, setTabSelected] = useState(redirectTo);
-    const [tabUrlSelected, setTabUrlSelected] = useState('');
-    const [tableHeader, setTableHeader] = useState([]);
-
-
-    const [mayor, setmayor] = useState('');
-    const [cao, setcao] = useState('');
-    const [focalPerson, setfocalPerson] = useState('');
 
     const handlePending = (val: boolean) => setPending(val);
-
 
     const tabs: {
         key: number;
@@ -239,35 +224,6 @@ const MainModal: React.FC<Props> = (props: Props) => {
     }, [props.selectedTab]);
 
     useEffect(() => {
-        if (reportData && user && user.profile.municipality && !user.profile.isSuperuser) {
-            const localM = reportData
-                .filter(item => item.committee === 'LDMC' && item.municipality === user.profile.municipality);
-            setLocalMembers(localM);
-
-            reportData.filter(item => item.municipality === user.profile.municipality).map((item) => {
-                if (item.isDrrFocalPerson) {
-                    const details = `${item.name},${item.email},${item.mobileNumber} `;
-                    setfocalPerson(details);
-                }
-                if (item.position && item.position.includes('Mayor')) {
-                    const details = `${item.name},${item.email},${item.mobileNumber} `;
-                    setmayor(details);
-                }
-                if (item.position && item.position.includes('Chairperson')) {
-                    const details = `${item.name},${item.email},${item.mobileNumber} `;
-                    setmayor(details);
-                }
-                if (item.position && item.position.includes('Chief Administrative Officer')) {
-                    const details = `${item.name},${item.email},${item.mobileNumber} `;
-                    setcao(details);
-                }
-                return null;
-            });
-        }
-    }, [municipality, reportData, user]);
-
-
-    useEffect(() => {
         const getURL = (tabValue: number) => {
             if (tabs[tabValue] && tabs[tabValue].url) {
                 return tabs[tabValue].url;
@@ -305,19 +261,11 @@ const MainModal: React.FC<Props> = (props: Props) => {
         <>
             <Page hideMap hideFilter />
             <ReportModal
-                keyTabUrl={tabUrlSelected}
                 keyTab={tabSelected}
-                showTabs={showTabs}
-                hideWelcomePage={hideWelcomePage}
                 reportData={reportData}
-                tableHeader={tableHeader}
                 province={province}
                 district={district}
                 municipality={municipality}
-                mayor={mayor}
-                cao={cao}
-                focalPerson={focalPerson}
-                localMembers={localMembers}
                 updateTab={handleNextClick}
                 tabsLength={tabs.length}
                 handlePrevClick={handlePrevClick}

@@ -1,9 +1,9 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import { Item } from 'semantic-ui-react';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-import { iconNames } from '#constants';
+import Gt from '../../utils';
+import Translations from '#views/PalikaReport/Translations';
 
 const PalikaReportTable = (props) => {
     const [isSort, setIsSort] = useState(false);
@@ -90,9 +90,15 @@ const PalikaReportTable = (props) => {
                                  && tableHeader.map((item, i) => (
                                      <th key={item.i}>{item}</th>
                                  ))} */}
-                                        <th>SN</th>
                                         <th>
- Title
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderSN}
+                                            />
+                                        </th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.dashBoardMainTitle}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -103,7 +109,9 @@ const PalikaReportTable = (props) => {
 
                                         </th>
                                         <th>
-Fiscal Year
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderFiscalYear}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -113,7 +121,9 @@ Fiscal Year
 
                                         </th>
                                         <th>
-Province
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderProvince}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -123,7 +133,9 @@ Province
 
                                         </th>
                                         <th>
-District
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderDistrict}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -133,7 +145,9 @@ District
 
                                         </th>
                                         <th>
-Municipality
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderMunicipality}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -143,7 +157,9 @@ Municipality
 
                                         </th>
                                         <th>
-Published On
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderPublishedOn}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -153,7 +169,9 @@ Published On
 
                                         </th>
                                         <th>
-Last Modified
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderLastModified}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -163,7 +181,9 @@ Last Modified
 
                                         </th>
                                         <th>
-Published by
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderLastPublishedBy}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -172,7 +192,13 @@ Published by
                                             />
 
                                         </th>
-                                        <th>Action</th>
+                                        <th>
+
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderLastAction}
+                                            />
+
+                                        </th>
                                     </tr>
                                     {tableData.length > 0 && tableData.map((item, index) => (
                                         <tr key={item.item.id}>
@@ -195,7 +221,9 @@ Published by
 
                                                         download
                                                     >
-Download
+                                                        <Gt
+                                                            section={Translations.dashboardTblBtnDownload}
+                                                        />
                                                     </a>
                                                 </button>
                                             </td>
@@ -271,7 +299,7 @@ Modified On
                                                     className={styles.downloadTableXlsButton}
                                                     onClick={handleEditButtonClick}
                                                 >
-Edit
+                                                Edit
                                                 </button>
 
                                             </td>

@@ -38,12 +38,12 @@ const TopBar = (props: Props) => {
     const {
         language,
     } = palikaLanguage;
-
+    console.log('lanuagd: ', language);
     const handleLangButton = () => {
-        if (language === 'np') {
-            setPalikaLanguage({ language: 'en' });
-        } else {
+        if (language === 'en') {
             setPalikaLanguage({ language: 'np' });
+        } else {
+            setPalikaLanguage({ language: 'en' });
         }
     };
 
@@ -56,8 +56,8 @@ const TopBar = (props: Props) => {
             >
                 <span className={styles.langText}>
                     {language === 'en'
-                        ? 'US-ENGLISH'
-                        : 'नेपाली'
+                        ? 'नेपाली'
+                        : 'US-ENGLISH'
                     }
                 </span>
                 <Icon

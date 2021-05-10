@@ -17,15 +17,23 @@ import incidentLogo from '#resources/palikaicons/incident.svg';
 import simulationLogo from '#resources/palikaicons/simulation.svg';
 import dashboardLogo from '#resources/palikaicons/dashboard.svg';
 import myreport from '#resources/palikaicons/drrmreport.svg';
+import Gt from '../utils';
 
-import { userSelector, palikaRedirectSelector, generalDataSelector } from '#selectors';
+import {
+    userSelector,
+    palikaRedirectSelector,
+    generalDataSelector,
+    palikaLanguageSelector,
+} from '#selectors';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
+import Translations from '../Translations';
 
 const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     generalData: generalDataSelector(state),
+    palikaLanguage: palikaLanguageSelector(state),
 });
 const icons = [
 
@@ -122,12 +130,13 @@ const Sidebar = (props) => {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const {
         municipalityName,
-        municipalityName: { title_en },
+        municipalityName: { title_en, title_np },
         showReportEdit,
         handleMenuClick,
         selectedTab,
         generalData,
         handleAddButton,
+        palikaLanguage,
     } = props;
     useEffect(() => {
         setShowErr(props.showErr);
@@ -147,24 +156,26 @@ const Sidebar = (props) => {
         id: 1,
         title: 'Palika Reports',
         slug: 'palika-reports',
-        components: [{ id: 1,
-            title: 'Dashboard',
-            url: '/disaster-profile/',
-            slug: 'all-reports' },
+        components: [
+            { id: 1,
+                title: <Gt section={Translations.dashboardSidebarAllTitle} />,
+                url: '/disaster-profile/',
+                slug: 'all-reports' },
         // eslint-disable-next-line @typescript-eslint/camelcase
-        { id: 2,
+            { id: 2,
             // eslint-disable-next-line @typescript-eslint/camelcase
-            title: `${title_en} Municipality Report`,
-            url: '/disaster-profile/',
-            slug: 'my-reports' }],
-    }];
+                title: <Gt section={Translations.dashboardSidebarMunTitle} />,
+                url: '/disaster-profile/',
+                slug: 'my-reports' }],
+    },
+    ];
 
     const Data2 = [{
         id: 1,
-        title: 'Palika Reports',
+        title: <Gt section={Translations.dashboardSidebarMunTitle} />,
         slug: 'palika-reports',
         components: [{ id: 1,
-            title: 'Dashboard',
+            title: <Gt section={Translations.dashboardSidebarAllTitle} />,
             url: '/disaster-profile/',
             slug: 'all-reports' },
         // eslint-disable-next-line @typescript-eslint/camelcase
@@ -265,8 +276,12 @@ const Sidebar = (props) => {
                         <ul className={styles.menuList}>
                             {Data.map((item, i) => (
                                 <li>
-                                    <button className={styles.menu} type="button" key={item.id} onClick={() => handleSelectMenu(i, item.id)}>
-
+                                    <button
+                                        className={styles.menu}
+                                        type="button"
+                                        key={item.id}
+                                        onClick={() => handleSelectMenu(i, item.id)}
+                                    >
                                         {isSubmenuClicked && selectedMenuId === item.id
                                             ? item.components.map((data, index) => (
                                                 <button
@@ -285,9 +300,18 @@ const Sidebar = (props) => {
                                                         src={allRepIcons[data.id - 1]}
                                                         alt="Bullet Point"
                                                     />
+                                                    {
+                                                        data.id === 2 && palikaLanguage.language === 'en'
+                                                            ? title_en
+                                                            : ''
+                                                    }
+                                                    {
+                                                        data.id === 2 && palikaLanguage.language === 'np'
+                                                            ? title_np
+                                                            : ''
+                                                    }
+                                                    {' '}
                                                     {data.title}
-
-
                                                 </button>
                                             ))
                                             : ''
