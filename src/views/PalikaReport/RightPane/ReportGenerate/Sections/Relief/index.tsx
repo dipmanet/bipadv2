@@ -17,6 +17,9 @@ import ModalFooter from '#rscv/Modal/Footer';
 import DangerButton from '#rsca/Button/DangerButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import styles from './styles.scss';
+import programAndPolicyLogo from '#resources/palikaicons/program.svg';
+import editIcon from '#resources/palikaicons/edit.svg';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -29,7 +32,7 @@ import { provincesSelector,
     userSelector,
     hazardTypesSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+
 
 import IncidentIcon from '#resources/palikaicons/incident.svg';
 import EstimatedLossIcon from '#resources/palikaicons/loss.svg';
@@ -652,15 +655,24 @@ const Relief = (props: Props) => {
                                                                 onClick={() => handleReliefView(item)}
                                                                 className={styles.reliefBtn}
                                                             >
-                                                            VIEW
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.bulletPoint}
+                                                                    src={programAndPolicyLogo}
+                                                                    alt="editPoint"
+                                                                />
                                                             </button>
 
                                                             <button
+                                                                // className={styles.editButtn}
                                                                 type="button"
                                                                 onClick={() => handleReliefEdit(data, item)}
                                                                 className={styles.reliefBtn}
                                                             >
-                                                            EDIT
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.bulletPoint}
+                                                                    src={editIcon}
+                                                                    alt="editPoint"
+                                                                />
                                                             </button>
                                                         </div>
                                                     </td>

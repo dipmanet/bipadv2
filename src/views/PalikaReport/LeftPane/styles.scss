@@ -9,13 +9,13 @@
         cursor: pointer;
         bottom: 10px;
         position: relative;
-        margin-left: 30px;
+        margin-left: 20px;
         margin-right: 4px;
         text-align: left !important;
     }
     .rightCrumb{
         position: relative;
-        right: 40px;
+        right: 30px;
     }
 }
 .orderList{
@@ -39,10 +39,18 @@
     }
 }
 .reportSidebarMainContainer{
+    display: flex;
+    flex-direction: column;
+    .infoIcon{
+        font-size: 16px;    
+        float: right;
+        padding-top: 8px;  
+        margin-right: 20px;
+    }
     h2{
         font-size: 24px;
         margin-bottom: 20px;
-        margin-left: 30px !important;
+        margin-left: 22px !important;
     }
     .menuList{
         // border: 1px solid red;
@@ -61,8 +69,9 @@
             padding: 10px 0;
             padding-left: 0;
             background: #e0e7ee;
-            padding-left: 30px;
+            padding-left: 10px;
             font-size: 16px;
+            font-weight: bold;
             color: #5a87b9;
             cursor: pointer;
             display: flex;
@@ -86,7 +95,7 @@
             width: 100%;
             text-align: left !important;
             background: rgb(235,235,235);
-            padding-left: 30px;
+            padding-left: 10px;
             font-size: 16px;
             color: #444;
             cursor: pointer;
@@ -126,6 +135,26 @@
     
     
     }
+    .addButnDiv{
+display: flex;
+justify-content: center;
+    }
+    .addButn{
+        background-color: #297EDF;
+       
+        border: none;
+        cursor: pointer;
+       border-radius: 5px;
+        height: 40px;
+       
+        filter: saturate(100%);
+        color: white;
+        // opacity: 0.87;
+        font-weight: 300;
+      width: 90%;
+        padding: 7px 12px;
+        opacity: 0.67;
+       }
 }
 .menu{
     display: flex;

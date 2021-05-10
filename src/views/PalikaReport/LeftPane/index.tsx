@@ -20,6 +20,7 @@ import myreport from '#resources/palikaicons/drrmreport.svg';
 
 import { userSelector, palikaRedirectSelector, generalDataSelector } from '#selectors';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Icon from '#rscg/Icon';
 
 const mapStateToProps = (state, props) => ({
     user: userSelector(state),
@@ -27,6 +28,7 @@ const mapStateToProps = (state, props) => ({
     generalData: generalDataSelector(state),
 });
 const icons = [
+
     generalLogo,
     budgetLogo,
     budgetActivityLogo,
@@ -125,6 +127,7 @@ const Sidebar = (props) => {
         handleMenuClick,
         selectedTab,
         generalData,
+        handleAddButton,
     } = props;
     useEffect(() => {
         setShowErr(props.showErr);
@@ -151,7 +154,7 @@ const Sidebar = (props) => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         { id: 2,
             // eslint-disable-next-line @typescript-eslint/camelcase
-            title: `${title_en} Municipality Reports`,
+            title: `${title_en} Municipality Report`,
             url: '/disaster-profile/',
             slug: 'my-reports' }],
     }];
@@ -194,6 +197,7 @@ const Sidebar = (props) => {
         setSubMenuSlug(slug);
         // ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
     };
+    console.log('This is what>>>', selectedSubMenuId);
     useEffect(() => {
         if (selectedSubMenuId) {
             props.getsubmenuId(selectedSubMenuId);
@@ -223,7 +227,9 @@ const Sidebar = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedMenuId]);
-
+    const handleAdd = () => {
+        handleAddButton(true, true, true);
+    };
     return (
         <div>
 
@@ -293,6 +299,21 @@ const Sidebar = (props) => {
                             ))}
 
                         </ul>
+                        <div className={styles.addButnDiv}>
+                            {selectedSubMenuId === 2
+&& (
+    <button
+        type="submit"
+        className={styles.addButn}
+        onClick={handleAdd}
+    >
+ + Add New Report
+        {' '}
+
+    </button>
+)
+                            }
+                        </div>
                     </div>
                 )
             }
@@ -301,7 +322,19 @@ const Sidebar = (props) => {
                 showReportEdit
                 && (
                     <div className={styles.reportSidebarMainContainer}>
-                        <h2>Create a Report</h2>
+                        <h2>
+Create a Report
+                            {' '}
+                            <Icon
+                                name="info"
+                                className={styles.infoIcon}
+                                title=" DRR fund of the municipality is part of the total
+                                                            municipal budget of this fiscal year which is specifically
+                                                            separated for DRRM related
+                                                             activities"
+                            />
+
+                        </h2>
                         <ul className={styles.menuList}>
                             {menuItems.map((item) => {
                                 if (item.key < menuItems.length - 1) {
@@ -320,6 +353,17 @@ const Sidebar = (props) => {
                                                     alt="Bullet Point"
                                                 />
                                                 {item.content}
+
+                                                {/* <Icon
+                                                    name="info"
+                                                    // className={styles.infoIcon}
+                                                    title=" DRR fund of the municipality is part of the total
+                                                            municipal budget of this fiscal year which is specifically
+                                                            separated for DRRM related
+                                                             activities"
+                                                /> */}
+
+
                                             </button>
                                         </li>
                                     );
@@ -334,6 +378,16 @@ const Sidebar = (props) => {
                                         >
 
                                             {item.content}
+
+                                            {/* <Icon
+                                                name="info"
+                                                // className={styles.infoIcon}
+                                                title=" DRR fund of the municipality is part of the total
+                                                            municipal budget of this fiscal year which is specifically
+                                                            separated for DRRM related
+                                                             activities"
+                                            /> */}
+
                                         </button>
                                     </li>
 

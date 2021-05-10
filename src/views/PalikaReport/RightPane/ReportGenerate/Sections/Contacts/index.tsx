@@ -26,6 +26,8 @@ import {
     setPalikaRedirectAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import editIcon from '#resources/palikaicons/edit.svg';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
@@ -273,10 +275,16 @@ const Contacts = (props: Props) => {
                                                 <td>{item.email || 'No Data'}</td>
                                                 <td>
                                                     <button
+                                                        className={styles.editButtn}
                                                         type="button"
                                                         onClick={() => handleEditContacts(item)}
                                                     >
-                                                    Edit
+
+                                                        <ScalableVectorGraphics
+                                                            className={styles.bulletPoint}
+                                                            src={editIcon}
+                                                            alt="editPoint"
+                                                        />
                                                     </button>
                                                 </td>
                                             </tr>

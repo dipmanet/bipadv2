@@ -85,6 +85,15 @@
 
 }
 .tabsPageContainer{
+  .bulletPoint{
+    height: 20px;
+    cursor: pointer;
+  }
+  .editButtn{
+    filter: saturate(100%);
+    border: none;
+    background-color: transparent;
+  }
   h2{
     margin-bottom: 15px;
   }

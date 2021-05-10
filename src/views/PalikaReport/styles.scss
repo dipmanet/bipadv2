@@ -7,6 +7,7 @@
     height: 100vh;
     display: flex;
     flex-direction: row;
+    padding-top: 40px;
     .leftContainer{
     flex: 1;
         height: 100vh;
@@ -65,7 +66,8 @@ font-size: large;
         flex: 3;
         min-height: 100vh;
         padding: 20px;
-        background-color: white;
+        background-color: #EBEBEB;
+        
         overflow-y: scroll;
         .reportEditingSection{
             // border: 1px solid gray;
