@@ -8,6 +8,7 @@ import {
     palikaLanguageSelector,
     userSelector,
     carKeysSelector,
+    palikaRedirectSelector,
 } from '#selectors';
 
 
@@ -19,12 +20,11 @@ import {
 } from '#request';
 
 
-import TopBar from './TopBar';
-
 const mapStateToProps = (state: AppState): PropsFromState => ({
     carKeys: carKeysSelector(state),
     user: userSelector(state),
     palikaLanguage: palikaLanguageSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
 });
 
 interface Props {
@@ -109,6 +109,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         getTabSelected,
         showErr,
         palikaLanguage,
+        palikaRedirect: { redirectTo },
     } = props;
 
     const {
@@ -140,7 +141,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
         setReportData(response);
     };
 
-    const [tabSelected, setTabSelected] = useState(0);
+
+    const [tabSelected, setTabSelected] = useState(redirectTo);
     const [tabUrlSelected, setTabUrlSelected] = useState('');
     const [tableHeader, setTableHeader] = useState([]);
 
@@ -150,6 +152,8 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [focalPerson, setfocalPerson] = useState('');
 
     const handlePending = (val: boolean) => setPending(val);
+
+
     const tabs: {
         key: number;
         content: TabContent;

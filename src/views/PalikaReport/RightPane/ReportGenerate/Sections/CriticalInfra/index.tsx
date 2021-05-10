@@ -111,26 +111,16 @@ const CriticalInfra = (props: Props) => {
         setPaginationParameters(response);
     };
 
-    const handleDataSave = () => {
-        props.updateTab();
-    };
-
-
     const handleEditResource = (organisationItem) => {
         const { setPalikaRedirect } = props;
         setPalikaRedirect({
             showForm: true,
             organisationItem,
             showModal: 'addResource',
+            redirectTo: 6,
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
-    };
-
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-
-        setOffset(selectedPage * 2);
     };
 
     const handleCIFilter = (filter) => {
@@ -149,6 +139,8 @@ const CriticalInfra = (props: Props) => {
         setPalikaRedirect({
             showForm: true,
             showModal: 'addResource',
+            redirectTo: 6,
+
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });

@@ -23,6 +23,7 @@ export interface PalikaLanguage{
 
 export interface PalikaRedirect{
     showForm: boolean;
+    redirectTo: number;
 }
 
 export interface GeneralData{

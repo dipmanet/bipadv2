@@ -130,6 +130,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             showForm: true,
             inventoryItem,
             showModal: 'inventory',
+            redirectTo: 5,
 
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',

@@ -111,25 +111,11 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [meta, setMeta] = useState(2);
 
-
-    const handleDataSave = () => {
-        updateTab();
-    };
-
-
     const handleFetchedData = (response) => {
         setFetechedData(response);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
-    };
-
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-        setOffset(selectedPage * 2);
-    };
-    const handleCIButton = (item) => {
-        setCISelected(item);
     };
 
     const handleEditResource = (organisationItem) => {
@@ -138,6 +124,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
             showForm: true,
             organisationItem,
             showModal: 'addResource',
+            redirectTo: 4,
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
@@ -149,6 +136,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
             showForm: true,
             organisationItem: null,
             showModal: 'addResource',
+            redirectTo: 4,
+
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });

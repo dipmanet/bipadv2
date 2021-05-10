@@ -515,7 +515,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                             <ModalFooter className={styles.footer}>
                                 <DangerButton onClick={closeModal}>
                                     {palikaRedirect.showForm
-                                        ? 'Close and return to Palika Report'
+                                        ? 'Close and return to DRRM Report'
                                         : 'Close'
                                     }
                                 </DangerButton>
