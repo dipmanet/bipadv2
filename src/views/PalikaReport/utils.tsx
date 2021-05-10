@@ -16,6 +16,7 @@ interface Section {
     np: string;
     en: string;
 }
+
 interface Props {
     section: Section;
     palikaLanguage: PalikaLanguage;
@@ -23,13 +24,9 @@ interface Props {
 
 const Gt = (props: Props) => {
     const {
-        palikaLanguage,
+        palikaLanguage: { language },
         section,
     } = props;
-
-    const {
-        language,
-    } = palikaLanguage;
 
     if (language === 'en') {
         return section.en;
