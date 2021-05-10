@@ -110,11 +110,6 @@ const CriticalInfra = (props: Props) => {
         setPaginationParameters(response);
     };
 
-    const handleDataSave = () => {
-        props.updateTab();
-    };
-
-
     const handleEditResource = (organisationItem) => {
         const { setPalikaRedirect } = props;
         setPalikaRedirect({
@@ -125,12 +120,6 @@ const CriticalInfra = (props: Props) => {
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
-    };
-
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-
-        setOffset(selectedPage * 2);
     };
 
     const handleCIFilter = (filter) => {

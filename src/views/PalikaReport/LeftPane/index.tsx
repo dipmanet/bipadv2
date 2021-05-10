@@ -7,8 +7,8 @@ import styles from './styles.scss';
 
 import budgetLogo from '#resources/palikaicons/budget.svg';
 import budgetActivityLogo from '#resources/palikaicons/budgetactivity.svg';
-import contactsLogo from '#resources/palikaicons/general.svg';
-import generalLogo from '#resources/palikaicons/contacts.svg';
+import generalLogo from '#resources/palikaicons/general.svg';
+import contactsLogo from '#resources/palikaicons/contacts.svg';
 import programAndPolicyLogo from '#resources/palikaicons/program.svg';
 import organisationLogo from '#resources/palikaicons/organisation.svg';
 import inventoriesLogo from '#resources/palikaicons/inventories.svg';
@@ -27,14 +27,14 @@ const mapStateToProps = (state, props) => ({
     generalData: generalDataSelector(state),
 });
 const icons = [
+    generalLogo,
     budgetLogo,
     budgetActivityLogo,
-    contactsLogo,
-    generalLogo,
     programAndPolicyLogo,
     organisationLogo,
     inventoriesLogo,
     carLogo,
+    contactsLogo,
     incidentLogo,
     simulationLogo,
 ];
@@ -101,7 +101,7 @@ const menuItems: {
     {
         key: 10,
         content: 'Create Report',
-        url: '/simulation/',
+        url: '',
     },
 ];
 
