@@ -138,6 +138,8 @@ const CriticalInfra = (props: Props) => {
         setPalikaRedirect({
             showForm: true,
             showModal: 'addResource',
+            redirectTo: 6,
+
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });

@@ -175,6 +175,7 @@ const Contacts = (props: Props) => {
         setPalikaRedirect({
             showForm: true,
             showModal: 'contact',
+            redirectTo: 7,
         });
         ReachRouter.navigate('/profile/',
             { state: { showForm: true }, replace: true });

@@ -21,6 +21,7 @@ import {
     regionSelector,
     municipalitiesSelector,
     profileContactFiltersSelector,
+    palikaRedirectSelector,
 } from '#selectors';
 import {
     AppState,
@@ -76,6 +77,8 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalityList: municipalitiesSelector(state),
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+
 });
 
 const contactKeySelector = (d: Contact) => d.id;
@@ -312,6 +315,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                     pending = false,
                 } = {},
             },
+            palikaRedirect,
         } = this.props;
 
         const { setProfile } = this.context;
@@ -391,6 +395,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                                 className={styles.button}
                                 iconName="add"
                                 transparent
+                                initialShowModal={palikaRedirect.showModal === 'contact'}
                                 modal={(
                                     <ContactEditForm
                                         onAddSuccess={this.handleContactAdd}
