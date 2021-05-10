@@ -186,8 +186,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
                             <tbody>
                                 <tr>
                                     <th>S.N</th>
-                                    <th>Name of Organization</th>
-                                    <th>Type of organization</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
                                     {/* <th>Level (for governmental organization)</th> */}
                                     <th>Number of Male Employee</th>
                                     <th>Number of Female Employee</th>

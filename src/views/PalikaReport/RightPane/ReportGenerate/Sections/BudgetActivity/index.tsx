@@ -612,7 +612,7 @@ const BudgetActivity = (props: Props) => {
                                { !props.annex
                                && (
                                    <tr>
-                                       <td />
+                                       <td>{budgetActivities.length + 1}</td>
                                        <td>
                                            <input
                                                type="text"

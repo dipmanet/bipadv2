@@ -188,11 +188,21 @@
         cursor: pointer;
         margin-left: 5px;
     }
+    .reliefBtn{
+        white-space: nowrap;
+        filter: saturate(100%) !important;
+        border: none !important;
+        background-color: transparent !important;
+        .bulletPoint{
+          height: 25px;
+          cursor: pointer;
+          opacity: 0.67;
+        }}
     table{
         margin-top: 0px;
         border-collapse: collapse;
         width: 100%;
-
+      
         .downloadTableXlsButton{
             height: 25px;
         
@@ -215,13 +225,13 @@
        
         }
         td{
-        border-top: 1px solid #EBEBEB;
-        border-bottom: 1px solid #EBEBEB;
+        // border-top: 1px solid #EBEBEB;
+        // border-bottom: 1px solid #EBEBEB;
         padding: 0.5rem;
         text-align: left;
         }
         tr:nth-child(even) {
-        background-color:#EBEBEB;
+        background-color:#F6F6F6;
        
         
         }
