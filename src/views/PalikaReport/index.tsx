@@ -17,8 +17,11 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    userSelector } from '#selectors';
+    userSelector,
+    palikaRedirectSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+
+import { setPalikaRedirectAction } from '#actionCreators';
 
 import {
     createConnectedRequestCoordinator,
@@ -38,6 +41,11 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
+    palikaRedirect: palikaRedirectSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -136,6 +144,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         districts,
         municipalities,
         user,
+        setPalikaRedirect,
+        palikaRedirect,
         // filters: { region },
     } = props;
 
@@ -490,15 +500,27 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
     const handleTabSelect = (tab: number) => {
         setSelectedTab(tab);
+        setPalikaRedirect({ redirectTo: tab });
     };
 
     const handleMenuClick = (menuId: number) => {
         setSelectedTab(menuId);
+        setPalikaRedirect({ redirectTo: menuId });
     };
 
     const handleShowErr = (data) => {
         setShowErr(data);
     };
+
+
+    useEffect(() => {
+        if (palikaRedirect.redirectTo) {
+            setSelectedTab(palikaRedirect.redirectTo);
+            setShowReportEdit(true);
+            setshowModal(false);
+        }
+        console.log('redirected ...');
+    }, [palikaRedirect.redirectTo]);
 
     useEffect(() => {
         if (fetchedData && fiscalYear) {
@@ -752,7 +774,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
             PalikaReport,

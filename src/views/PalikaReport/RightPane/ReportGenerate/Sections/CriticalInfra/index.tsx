@@ -121,6 +121,7 @@ const CriticalInfra = (props: Props) => {
             showForm: true,
             organisationItem,
             showModal: 'addResource',
+            redirectTo: 6,
         });
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });

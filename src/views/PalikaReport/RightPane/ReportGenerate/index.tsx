@@ -93,7 +93,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
             params.fiscalYearList(citizenReportList);
-            console.log('Response>>>', response);
         },
     },
     DisasterProfileGetRequest: {
@@ -119,31 +118,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
-    // PreviewDataPost: {
-    //     url: '/disaster-profile/',
-    //     method: methods.POST,
-    //     body: ({ params }) => params && params.body,
-
-    //     onSuccess: ({ response, props, params }) => {
-    //     },
-    //     onFailure: ({ error, params }) => {
-    //         if (params && params.setFaramErrors) {
-    //             // TODO: handle error
-    //         }
-    //     },
-    //     onFatal: ({ params }) => {
-    //     },
-    //     extras: {
-    //         hasFile: true,
-
-    //     },
-
-
-    // },
 
 };
 const formdata = new FormData();
-const config = {};
 const ReportModal: React.FC<Props> = (props: Props) => {
     const {
         keyTab,
@@ -227,7 +204,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const handleFiscalYearList = (response) => {
         setFiscalYearList(response);
     };
-    console.log('Disaster profile>>>', totalFiscalYear);
     DisasterProfileGetRequest.setDefaultParams({
         province: profile.province,
         district: profile.district,
@@ -250,8 +226,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
-    console.log('That>>>', fiscalYearTitle);
-
 
     // const handlePreviewBtn = async () => {
     //     const divToDisplay = document.getElementById('reportPreview');
@@ -312,25 +286,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     //             axios.put(`http://bipaddev.yilab.org.np/api/v1/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
     //                 'content-type': 'multipart/form-data',
     //             } })
-    //                 .then((response) => {
-    //                     console.log(response);
-    //                     alert('Your palika report has been uploaded sucessfully');
-    //                 }).catch((error) => {
-    //                     console.log(error);
-    //                 });
+    //                 .then((response) => {    //                     alert('Your palika report has been uploaded sucessfully');
+    //                 }).catch((error) => {    //                 });
     //         } else {
     //             axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
     //                 'content-type': 'multipart/form-data',
     //             } })
-    //                 .then((response) => {
-    //                     console.log(response);
-    //                     alert('Your palika report has been uploaded sucessfully');
-    //                 }).catch((error) => {
-    //                     console.log(error);
-    //                 });
-    //         }
-    //         console.log('here: pending', pending);
-    //         doc.save('file.pdf');
+    //                 .then((response) => {    //                     alert('Your palika report has been uploaded sucessfully');
+    //                 }).catch((error) => {    //                 });
+    //         }    //         doc.save('file.pdf');
     //     });
     // };
 
@@ -424,26 +388,18 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     'content-type': 'multipart/form-data',
                 } })
                     .then((response) => {
-                        console.log(response);
                         doc.save('file.pdf');
                         alert('Your palika report has been uploaded sucessfully');
-                    }).catch((error) => {
-                        console.log(error);
-                    });
+                    }).catch((error) => { });
             } else {
                 axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
                     'content-type': 'multipart/form-data',
                 } })
                     .then((response) => {
-                        console.log(response);
                         doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                         alert('Your palika report has been uploaded sucessfully');
-                    }).catch((error) => {
-                        console.log(error);
-                    });
-            }
-            console.log('here: pending', pending);
-            doc.save('DRRM Report.pdf');
+                    }).catch((error) => { });
+            } doc.save('DRRM Report.pdf');
         // });
         });
     };

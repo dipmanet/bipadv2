@@ -213,9 +213,11 @@ class InventoriesModal extends React.PureComponent<Props, State> {
     }
 
     private handleReturnToPalika = () => {
-        const { setPalikaRedirect } = this.props;
+        const { setPalikaRedirect, palikaRedirect } = this.props;
+
         setPalikaRedirect({
             showForm: false,
+            redirectTo: palikaRedirect.redirectTo,
         });
         ReachRouter.navigate('/drrm-report/',
             { state: { showForm: true }, replace: true });
@@ -288,7 +290,7 @@ class InventoriesModal extends React.PureComponent<Props, State> {
                                     onClick={this.handleReturnToPalika}
                                     type="button"
                                 >
-                                  Close and return to Palika Report
+                                  Close and return to DRRM Report
 
                                 </button>
                             )

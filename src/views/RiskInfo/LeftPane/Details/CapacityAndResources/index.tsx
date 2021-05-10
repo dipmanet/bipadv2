@@ -864,9 +864,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             setPalikaRedirect,
 
         } = this.props;
-
+        const { redirectTo } = palikaRedirect;
         if (palikaRedirect.showForm) {
-            setPalikaRedirect({ showForm: false });
+            setPalikaRedirect({
+                showForm: false,
+                redirectTo,
+            });
             ReachRouter.navigate('/drrm-report/',
                 { state: { showForm: true }, replace: true });
         }
