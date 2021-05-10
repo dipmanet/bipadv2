@@ -458,6 +458,7 @@ const General = (props: Props) => {
 
 
                                         </tr>
+
                                         <tr>
                                             {
                                                 fetchedData
@@ -521,6 +522,7 @@ const General = (props: Props) => {
 
 
                                         </tr>
+
                                     </tbody>
                                 </table>
                             )
@@ -563,7 +565,8 @@ const General = (props: Props) => {
                                 className={styles.datepicker}
                                 value={formationDate}
                                 onChange={(value: string) => setformationDate(value)}
-                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                placeholder="sdfsdfs"
+                                options={{ closeOnSelect: true, calenderLocale: 'en', valueLocale: 'en' }}
                             />
                             {/* <NepaliDatePicker
                                 className={styles.datepicker}
@@ -606,86 +609,68 @@ const General = (props: Props) => {
                                 }
 
                             </tr>
-                            {localMembers.length > 0
 
-                                ? localMembers.map((item, i) => (
-                                    <tr key={item.name}>
-                                        <td>
-                                            {i + 1}
-                                        </td>
-                                        <td>
-                                            {item.name || '-'}
-                                        </td>
-                                        <td>
-                                            {item.email || '-'}
-                                        </td>
+                            {
+                                fetchedData
+                                    && fetchedData
+                                        .filter(member => member.committee === 'LDMC').length > 0
+                                    ? fetchedData
+                                        .filter(availableMembers => availableMembers.committee === 'LDMC').map((mem, i) => (
+                                            <tr key={mem.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{mem.name || '-'}</td>
+                                                <td>{mem.email || '-'}</td>
+                                                <td>{mem.mobileNumber || '-'}</td>
+                                                {
+                                                    !props.annex
+                                                        && (
+                                                            <td>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleEditContacts(mem)}
+                                                                    className={styles.addEditBtn}
+                                                                >
+                                                                    <Icon
+                                                                        name="edit"
+                                                                        className={styles.addEditIcon}
+                                                                    />
+                                                                </button>
 
-                                        <td>
-                                            {item.mobileNumber || '-'}
-                                        </td>
 
-                                        {
-                                            !props.annex
-                                             && (
-                                                 <td>
-                                                     {item.name
-                                                         ? (
-                                                             <button
-                                                                 type="button"
-                                                                 onClick={handleAddContact}
-                                                                 className={styles.addEditBtn}
-                                                             >
-                                                                 <Icon
-                                                                     name="edit"
-                                                                     className={styles.addEditIcon}
-                                                                 />
-                                                             </button>
-                                                         )
-                                                         : (
-                                                             <button
-                                                                 type="button"
-                                                                 className={styles.addEditBtn}
-                                                                 onClick={handleAddContact}
-                                                             >
-                                                                 <Icon
-                                                                     name="plus"
-                                                                     className={styles.addEditIcon}
-                                                                 />
-                                                             </button>
-                                                         )
+                                                            </td>
+                                                        )
+                                                }
+                                            </tr>
+                                        ))
+                                    : (
+                                        <tr>
+                                            <td>{'-'}</td>
+                                            <td>{'-'}</td>
+                                            <td>{'-'}</td>
+                                            <td>{'-'}</td>
+                                            {
+                                                !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
 
-                                                     }
-                                                 </td>
-                                             )
-                                        }
-                                    </tr>
-                                ))
-                                : (
-                                    <tr>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        {
-                                            !props.annex
-                                            && (
-                                                <td>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.addEditBtn}
-                                                        onClick={handleAddContact}
-                                                    >
-                                                        <Icon
-                                                            name="plus"
-                                                            className={styles.addEditIcon}
-                                                        />
-                                                    </button>
-                                                </td>
-                                            )
-                                        }
-                                    </tr>
-                                )
+                                                                            </td>
+                                                                        )
+                                            }
+                                        </tr>
+                                    )
                             }
+
+
                         </tbody>
                     </table>
                     {
