@@ -1,45 +1,83 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { isDefined, _cs } from '@togglecorp/fujs';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import * as ReachRouter from '@reach/router';
 
 // import { NepaliDatePicker } from 'datepicker-nepali-reactjs';
-import Select from 'react-select';
 import styles from './styles.scss';
-import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import NextPrevBtns from '../../NextPrevBtns';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
 import {
     setCarKeysAction,
     setGeneralDataAction,
+    setPalikaRedirectAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
+    userSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
-import Annex from '../Preview/Annex';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
+    user: userSelector(state),
+
 });
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setCarKeys: params => dispatch(setCarKeysAction(params)),
 
 });
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+    MunContacts: {
+        url: '/municipality-contact/',
+        query: ({ params, props }) => {
+            if (params && params.user) {
+                return {
+                    province: params.user.profile.province,
+                    district: params.user.profile.district,
+                    municipality: params.user.profile.municipality,
+                    limit: params.page,
+                    meta: params.meta,
+
+                };
+            }
+
+
+            return { limit: params.page,
+                offset: params.offset,
+
+
+                meta: params.meta };
+        },
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.organisation) {
+                params.organisation(citizenReportList);
+            }
+            if (params && params.paginationParameters) {
+                params.paginationParameters(response);
+            }
+        },
+    },
     FiscalYearFetch: {
         url: '/nepali-fiscal-year/?ordering=-id&offset=21',
         method: methods.GET,
@@ -52,8 +90,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.fiscalYearList(fiscalYearList);
         },
     },
-
 };
+
+
 export interface GeneralData{
     reportTitle?: string;
     fiscalYear: string;
@@ -81,18 +120,27 @@ interface Location{
     provinceId: number;
 }
 
-const currentFiscalYear = new Date().getFullYear() + 56;
-
 
 const General = (props: Props) => {
+    const {
+        mayor,
+        cao,
+        focalPerson,
+        generalData,
+        updateTab,
+        localMembers,
+        showErr,
+        requests: { FiscalYearFetch, MunContacts },
+        setGeneralDatapp,
+        user,
+    } = props;
+
     const {
         reportTitle: rt,
         fiscalYear: fy,
         formationDate: fd,
         committeeMembers: cm,
-        localMembers: localMembersFromRedux,
-    } = props.generalData;
-    const { requests: { FiscalYearFetch }, setGeneralDatapp } = props;
+    } = generalData;
 
     const [reportTitle, setreportTitle] = useState<string>(rt);
     const [fiscalYear, setfiscalYear] = useState<string>(fy);
@@ -100,21 +148,11 @@ const General = (props: Props) => {
     const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [showInfo, setShowInfo] = useState(false);
-    // const [showFormErr, setShowErr] = useState(true);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
     const [fiscalYearTitle, setFiscalYearTitle] = useState('');
+    const [fetchedData, setFetechedData] = useState([]);
 
-    const handleReportTitle = (title: any) => {
-        setreportTitle(title.target.value);
-    };
-    const handleFormationDate = (date: any) => {
-        console.log(date);
-        // setformationDate(date.target.value);
-    };
-    const handleMembers = (members: any) => {
-        setcommitteeMembers(members.target.value);
-    };
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
         const title = fiscalYearList
@@ -129,27 +167,44 @@ const General = (props: Props) => {
         fiscalYearList: handleFiscalYearList,
     });
 
-
-    const handleAddContact = () => {
-        const { setCarKeys } = props;
-        setCarKeys('contact');
-        ReachRouter.navigate('/profile', { state: { showForm: true }, replace: true });
+    const handleEditContacts = (contactItem) => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            contactItem,
+            showModal: 'contact',
+            contactID: contactItem.id,
+            redirectTo: 0,
+        });
+        ReachRouter.navigate('/profile/',
+            { state: { showForm: true }, replace: true });
     };
-    const {
-        mayor,
-        cao,
-        focalPerson,
-        generalData,
-        updateTab,
-        localMembers,
-        showErr,
-    } = props;
+    const handleAddContact = () => {
+        const { setPalikaRedirect } = props;
+        setPalikaRedirect({
+            showForm: true,
+            showModal: 'contact',
+            redirectTo: 0,
+        });
+        ReachRouter.navigate('/profile/',
+            { state: { showForm: true }, replace: true });
+    };
+
+    const handleFetchedData = (response) => {
+        setFetechedData(response);
+    };
+
+    MunContacts.setDefaultParams({
+        organisation: handleFetchedData,
+        user,
+    });
 
     useEffect(() => {
         if (!focalPerson || !mayor || !cao) {
             setShowInfo(true);
         }
     }, [cao, focalPerson, mayor]);
+
     const validationErrs = () => {
         const e = [fiscalYear, formationDate];
         const f = [setFyErr, setDate];
@@ -195,26 +250,6 @@ const General = (props: Props) => {
             validationErrs();
             props.handleShowErr(true);
         }
-    };
-
-
-    const selectStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: '1px dotted gray',
-            color: state.isSelected ? 'white' : 'gray',
-            padding: 10,
-        }),
-        control: () => ({
-            // none of react-select's styles are passed to <Control />
-            width: 200,
-        }),
-        singleValue: (provided, state) => {
-            const opacity = state.isDisabled ? 0.5 : 1;
-            const transition = 'opacity 900ms';
-
-            return { ...provided, opacity, transition };
-        },
     };
 
     return (
@@ -298,127 +333,192 @@ const General = (props: Props) => {
 
                                         </tr>
                                         <tr>
-                                            <td>{'Mayor or Nagar Pramukh'}</td>
-                                            <td>{mayor.split(',')[0] || '-'}</td>
-                                            <td>{mayor.split(',')[1] || '-'}</td>
-                                            <td>{mayor.split(',')[2] || '-'}</td>
                                             {
-                                                !props.annex
-                                        && (
-                                            <td>
-                                                {mayor
-                                                    ? (
-                                                        <button
-                                                            type="button"
-                                                            onClick={handleAddContact}
-                                                            className={styles.addEditBtn}
-                                                        >
-                                                            <Icon
-                                                                name="edit"
-                                                                className={styles.addEditIcon}
-                                                            />
-                                                        </button>
-                                                    )
+                                                fetchedData
+                                                && fetchedData
+                                                    .filter(item => item.position === 'Mayor').length > 0
+                                                    ? fetchedData
+                                                        .filter(item => item.position === 'Mayor').map(item => (
+                                                            <>
+                                                                <td>{'Mayor or Nagar Pramukh'}</td>
+                                                                <td>{item.name || '-'}</td>
+                                                                <td>{item.email || '-'}</td>
+                                                                <td>{item.mobileNumber || '-'}</td>
+                                                                {
+                                                                    !props.annex
+                                                                                && (
+                                                                                    <td>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => handleEditContacts(item)}
+                                                                                            className={styles.addEditBtn}
+                                                                                        >
+                                                                                            <Icon
+                                                                                                name="edit"
+                                                                                                className={styles.addEditIcon}
+                                                                                            />
+                                                                                        </button>
+
+
+                                                                                    </td>
+                                                                                )
+                                                                }
+                                                            </>
+                                                        ))
                                                     : (
-                                                        <button
-                                                            type="button"
-                                                            className={styles.addEditBtn}
-                                                            onClick={handleAddContact}
-                                                        >
-                                                            <Icon
-                                                                name="plus"
-                                                                className={styles.addEditIcon}
-                                                            />
-                                                        </button>
+                                                        <>
+                                                            <td>{'Mayor or Nagar Pramukh'}</td>
+                                                            <td>{'-'}</td>
+                                                            <td>{'-'}</td>
+                                                            <td>{'-'}</td>
+                                                            {
+                                                                !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
+
+                                                                            </td>
+                                                                        )
+                                                            }
+                                                        </>
                                                     )
-
-                                                }
-
-                                            </td>
-                                        )}
-
-                                        </tr>
-                                        <tr>
-                                            <td>{'Chief Administrative Officer'}</td>
-                                            <td>{cao.split(',')[0] || '-'}</td>
-                                            <td>{cao.split(',')[1] || '-'}</td>
-                                            <td>{cao.split(',')[2] || '-'}</td>
-
-                                            {
-                                                !props.annex
-                                        && (
-                                            <td>
-                                                {cao
-                                                    ? (
-                                                        <button
-                                                            type="button"
-                                                            onClick={handleAddContact}
-                                                            className={styles.addEditBtn}
-                                                        >
-                                                            <Icon
-                                                                name="edit"
-                                                                className={styles.addEditIcon}
-                                                            />
-                                                        </button>
-                                                    )
-                                                    : (
-                                                        <button
-                                                            type="button"
-                                                            className={styles.addEditBtn}
-                                                            onClick={handleAddContact}
-                                                        >
-                                                            <Icon
-                                                                name="plus"
-                                                                className={styles.addEditIcon}
-                                                            />
-                                                        </button>
-                                                    )
-
-                                                }
-
-                                            </td>
-                                        )}
-                                        </tr>
-                                        <tr>
-                                            <td>{'DRR Focal Person'}</td>
-                                            <td>{focalPerson.split(',')[0] || '-'}</td>
-                                            <td>{focalPerson.split(',')[1] || '-'}</td>
-                                            <td>{focalPerson.split(',')[2] || '-'}</td>
-                                            {
-                                                !props.annex
-                                        && (
-                                            <td>
-                                                {focalPerson
-                                                    ? (
-                                                        <button
-                                                            type="button"
-                                                            onClick={handleAddContact}
-                                                            className={styles.addEditBtn}
-                                                        >
-                                                            <Icon
-                                                                name="edit"
-                                                                className={styles.addEditIcon}
-                                                            />
-                                                        </button>
-                                                    )
-                                                    : (
-                                                        <button
-                                                            type="button"
-                                                            className={styles.addEditBtn}
-                                                            onClick={handleAddContact}
-                                                        >
-                                                            <Icon
-                                                                name="plus"
-                                                                className={styles.addEditIcon}
-                                                            />
-                                                        </button>
-                                                    )
-
-                                                }
-
-                                            </td>
-                                        )
                                             }
+
+
+                                        </tr>
+                                        <tr>
+                                            {
+                                                fetchedData
+                                                && fetchedData
+                                                    .filter(item => item.position === 'Chief Administrative Officer').length > 0
+                                                    ? fetchedData
+                                                        .filter(item => item.position === 'Chief Administrative Officer').map(item => (
+                                                            <>
+                                                                <td>{'Chief Administrative Officer'}</td>
+                                                                <td>{item.name || '-'}</td>
+                                                                <td>{item.email || '-'}</td>
+                                                                <td>{item.mobileNumber || '-'}</td>
+                                                                {
+                                                                    !props.annex
+                                                                                && (
+                                                                                    <td>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => handleEditContacts(item)}
+                                                                                            className={styles.addEditBtn}
+                                                                                        >
+                                                                                            <Icon
+                                                                                                name="edit"
+                                                                                                className={styles.addEditIcon}
+                                                                                            />
+                                                                                        </button>
+
+
+                                                                                    </td>
+                                                                                )
+                                                                }
+                                                            </>
+                                                        ))
+                                                    : (
+                                                        <>
+                                                            <td>{'Chief Administrative Officer'}</td>
+                                                            <td>{'-'}</td>
+                                                            <td>{'-'}</td>
+                                                            <td>{'-'}</td>
+                                                            {
+                                                                !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
+
+                                                                            </td>
+                                                                        )
+                                                            }
+                                                        </>
+                                                    )
+                                            }
+
+
+                                        </tr>
+                                        <tr>
+                                            {
+                                                fetchedData
+                                                && fetchedData
+                                                    .filter(item => item.isDrrFocalPerson === true).length > 0
+                                                    ? fetchedData
+                                                        .filter(item => item.isDrrFocalPerson === true).map(item => (
+                                                            <>
+                                                                <td>{'DRR Focal Person'}</td>
+                                                                <td>{item.name || '-'}</td>
+                                                                <td>{item.email || '-'}</td>
+                                                                <td>{item.mobileNumber || '-'}</td>
+                                                                {
+                                                                    !props.annex
+                                                                                && (
+                                                                                    <td>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            onClick={() => handleEditContacts(item)}
+                                                                                            className={styles.addEditBtn}
+                                                                                        >
+                                                                                            <Icon
+                                                                                                name="edit"
+                                                                                                className={styles.addEditIcon}
+                                                                                            />
+                                                                                        </button>
+
+
+                                                                                    </td>
+                                                                                )
+                                                                }
+                                                            </>
+                                                        ))
+                                                    : (
+                                                        <>
+                                                            <td>{'DRR Focal Person'}</td>
+                                                            <td>{'-'}</td>
+                                                            <td>{'-'}</td>
+                                                            <td>{'-'}</td>
+                                                            {
+                                                                !props.annex
+                                                                        && (
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className={styles.addEditBtn}
+                                                                                    onClick={handleAddContact}
+                                                                                >
+                                                                                    <Icon
+                                                                                        name="plus"
+                                                                                        className={styles.addEditIcon}
+                                                                                    />
+                                                                                </button>
+
+                                                                            </td>
+                                                                        )
+                                                            }
+                                                        </>
+                                                    )
+                                            }
+
 
                                         </tr>
                                     </tbody>

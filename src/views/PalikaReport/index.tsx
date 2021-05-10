@@ -512,14 +512,12 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setShowErr(data);
     };
 
-
     useEffect(() => {
-        if (palikaRedirect.redirectTo) {
-            setSelectedTab(palikaRedirect.redirectTo);
-            setShowReportEdit(true);
+        if (palikaRedirect.redirectTo > -1) {
             setshowModal(false);
+            setShowReportEdit(true);
+            setSelectedTab(palikaRedirect.redirectTo);
         }
-        console.log('redirected ...');
     }, [palikaRedirect.redirectTo]);
 
     useEffect(() => {

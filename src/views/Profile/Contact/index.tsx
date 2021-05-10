@@ -399,6 +399,8 @@ class ContactPage extends React.PureComponent<Props, State> {
                                 modal={(
                                     <ContactEditForm
                                         onAddSuccess={this.handleContactAdd}
+                                        contactId={palikaRedirect.contactID}
+                                        details={palikaRedirect.contactItem}
                                     />
                                 )}
                             >

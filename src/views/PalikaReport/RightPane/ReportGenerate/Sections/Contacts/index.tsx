@@ -11,7 +11,6 @@ import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
@@ -55,9 +54,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     district: params.user.profile.district,
                     municipality: params.user.profile.municipality,
                     limit: params.page,
-
                     meta: params.meta,
-
                 };
             }
 
@@ -112,7 +109,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
-const mergedList = [];
 
 const Contacts = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
@@ -125,20 +121,14 @@ const Contacts = (props: Props) => {
     const [mergedData, setMergedData] = useState([]);
     const [trainingsList, setTrainingsList] = useState([]);
     const [url, setUrl] = useState('/municipality-contact/');
+
     const { requests: {
         PalikaReportInventoriesReport,
         OrganisationGetRequest,
         TrainingGetRequest,
     },
-    provinces,
-    districts,
-    municipalities,
     user } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
-    const [fields, setfields] = useState('inventories');
-    const [meta, setMeta] = useState(true);
-
-    const [orgType, setOrgType] = useState('');
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -152,20 +142,15 @@ const Contacts = (props: Props) => {
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected;
-        setOffset(selectedPage * 2);
-    };
-    const handleContactEdit = (contact) => {
 
-    };
     const handleEditContacts = (contactItem) => {
         const { setPalikaRedirect } = props;
         setPalikaRedirect({
             showForm: true,
             contactItem,
             showModal: 'contact',
-
+            contactID: contactItem.id,
+            redirectTo: 7,
         });
         ReachRouter.navigate('/profile/',
             { state: { showForm: true }, replace: true });
@@ -196,12 +181,7 @@ const Contacts = (props: Props) => {
         setTrainedContacts: handletrainedContacts,
     });
 
-    useEffect(() => {
-        PalikaReportInventoriesReport.do({
-            offset,
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
+
     useEffect(() => {
         if (mergedData.length > 0) {
             const arr = [];
@@ -213,11 +193,11 @@ const Contacts = (props: Props) => {
             }).filter(contact => contact !== null).map(e => arr.push(...e));
             setTrainingsList(arr);
         }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mergedData]);
 
     useEffect(() => {
+        const mergedList = [];
         if (fetchedData.length > 0 && orgList.length > 0 && trainedContacts.length > 0) {
             fetchedData.map((item) => {
                 const orgTypeObj = orgList.filter(org => org.id === item.organization);
@@ -232,8 +212,10 @@ const Contacts = (props: Props) => {
                             .map(trainings => trainings.durationDays)),
                     });
                     setMergedData(mergedList);
+                    console.log('contact id? merged list: ', mergedList);
                 } else {
                     mergedList.push({ ...item, orgType: 'No data', orgName: 'No data' });
+                    setMergedData(mergedData);
                 }
                 return null;
             });
@@ -265,8 +247,8 @@ const Contacts = (props: Props) => {
                                         <th>Email</th>
                                         <th>Action</th>
                                     </tr>
-                                    {mergedList
-                                        ? mergedList.map((item, i) => (
+                                    {mergedData
+                                        ? mergedData.map((item, i) => (
                                             <tr key={item.id}>
                                                 <td>{i + 1}</td>
                                                 <td>{item.name || 'No data'}</td>
