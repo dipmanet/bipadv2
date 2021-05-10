@@ -4,6 +4,12 @@ import { connect } from 'react-redux';
 import Page from '#components/Page';
 
 import ReportModal from './ReportGenerate';
+import {
+    palikaLanguageSelector,
+    userSelector,
+    carKeysSelector,
+} from '#selectors';
+
 
 import {
     createConnectedRequestCoordinator,
@@ -12,16 +18,13 @@ import {
     methods,
 } from '#request';
 
-import {
-    userSelector,
 
-    carKeysSelector,
-} from '#selectors';
 import TopBar from './TopBar';
 
 const mapStateToProps = (state: AppState): PropsFromState => ({
     carKeys: carKeysSelector(state),
     user: userSelector(state),
+    palikaLanguage: palikaLanguageSelector(state),
 });
 
 interface Props {
@@ -98,7 +101,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 };
 
-
 const MainModal: React.FC<Props> = (props: Props) => {
     const {
         showTabs,
@@ -106,7 +108,13 @@ const MainModal: React.FC<Props> = (props: Props) => {
         user,
         getTabSelected,
         showErr,
+        palikaLanguage,
     } = props;
+
+    const {
+        language,
+    } = palikaLanguage;
+
 
     const [reportData, setReportData] = useState([]);
     const [province, setProvince] = useState(null);

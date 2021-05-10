@@ -61,7 +61,7 @@ const TopBar = (props: Props) => {
                     }
                 </span>
                 <Icon
-                    name="eye"
+                    name="language"
                     className={styles.langIcon}
                 />
             </button>

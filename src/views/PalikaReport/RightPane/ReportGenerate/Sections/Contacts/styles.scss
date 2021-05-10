@@ -130,7 +130,17 @@
   }
 }  
 .tabsPageContainer{
+ 
   .palikaTable{
+    .bulletPoint{
+      height: 20px;
+      cursor: pointer;
+    }
+    .editButtn{
+      filter: saturate(100%);
+      border: none;
+      background-color: transparent;
+    }
     .dataUnavailable{
         display: flex;
         justify-content: center;

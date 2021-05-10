@@ -94,6 +94,7 @@ const iconNames = {
     info: 'fa  fa-info-circle',
     arrowDown: 'fa fa-caret-down',
     plus: 'fa fa-plus',
+    language: 'fa fa-language',
 };
 
 export default iconNames;

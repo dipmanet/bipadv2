@@ -9,6 +9,8 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import RightPane from './RightPane';
 import Modal from '#rscv/Modal';
+import Translations from './Translations';
+import Gt from './utils';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -52,8 +54,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
                 };
             }
-
-
             // eslint-disable-next-line @typescript-eslint/camelcase
             return { limit: params.page,
                 offset: params.offset,
@@ -245,10 +245,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     }, [clearFilter]);
 
 
-    const handleAddbuttonClick = () => {
-        setShowReportModal(true);
-        setShowTabs(true);
-        setShowReportEdit(true);
+    const handleAddbuttonClick = (ReportModal, showTabs, showReportEdit) => {
+        setShowReportModal(ReportModal);
+        setShowTabs(showTabs);
+        setShowReportEdit(showReportEdit);
     };
     const hideWelcomePage = () => {
         setShowTabs(true);
@@ -621,6 +621,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             handleMyPalikaSelect={handleMyPalikaSelect}
                             showErr={showErr}
                             handleShowErr={handleShowErr}
+                            handleAddButton={handleAddbuttonClick}
                         />
 
                     </div>
@@ -659,66 +660,61 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 && (
                                     <>
                                         <div className={styles.rightContainerHeading}>
-                                            {submenuId === 2 ? <h1>{subMenuTitle}</h1> : <h1>Disaster Risk Reduction and Management Report</h1>}
-
-                                        </div>
-
-                                        <div className={styles.rightContainerFilters}>
-                                            {submenuId === 1
-                         && (
-                             <StepwiseRegionSelectInput
-                                 className={
-                                     _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                                 faramElementName="region"
-                                 wardsHidden
-                                 onChange={handleFormRegion}
-                                 checkProvince={handleCheckFilterDisableButtonForProvince}
-                                 checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                                 checkMun={handleCheckFilterDisableButtonForMunicipality}
-                                 reset={resetFilterProps}
-                                 provinceInputClassName={styles.snprovinceinput}
-                                 districtInputClassName={styles.sndistinput}
-                                 municipalityInputClassName={styles.snmuniinput}
-                             />
-                         )}
-
-                                            {!showReportEdit && submenuId === 1 && filtered ? (
-                                                <button
-                                                    type="submit"
-                                                    className={styles.submitBut}
-                                                    onClick={handleSubmit}
-                                                >
-                                    Reset
-                                                </button>
+                                            {submenuId === 2 ? <h1>{subMenuTitle}</h1> : (
+                                                <h1>
+                                                    <Gt section={Translations.dashBoardMainTitle} />
+                                                </h1>
                                             )
-                                                : !showReportEdit && submenuId === 1 && (
-                                                    <button
-                                                        type="submit"
-                                                        onClick={handleSubmit}
-                                                        className={
-                                                            disableFilterButton
-                                                                ? styles.submitButDisabled : styles.submitBut}
-                                                        disabled={disableFilterButton}
-                                                    >
-                                    Filter
-                                                    </button>
-                                                )
-
                                             }
-                                            {!showReportEdit && municipalityName && submenuId === 2
-                        && (
-                            <button
-                                type="submit"
-                                className={styles.addButn}
-                                onClick={handleAddbuttonClick}
-                            >
-                         + ADD
-                                {' '}
-
-                            </button>
-                        )}
 
                                         </div>
+                                        {submenuId === 1
+                         && (
+                             <div className={styles.rightContainerFilters}>
+
+                                 <StepwiseRegionSelectInput
+                                     className={
+                                         _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                     faramElementName="region"
+                                     wardsHidden
+                                     onChange={handleFormRegion}
+                                     checkProvince={handleCheckFilterDisableButtonForProvince}
+                                     checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                     checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                     reset={resetFilterProps}
+                                     provinceInputClassName={styles.snprovinceinput}
+                                     districtInputClassName={styles.sndistinput}
+                                     municipalityInputClassName={styles.snmuniinput}
+                                 />
+
+
+                                 {!showReportEdit && submenuId === 1 && filtered ? (
+                                     <button
+                                         type="submit"
+                                         className={styles.submitBut}
+                                         onClick={handleSubmit}
+                                     >
+                                    Reset
+                                     </button>
+                                 )
+                                     : !showReportEdit && submenuId === 1 && (
+                                         <button
+                                             type="submit"
+                                             onClick={handleSubmit}
+                                             className={
+                                                 disableFilterButton
+                                                     ? styles.submitButDisabled : styles.submitBut}
+                                             disabled={disableFilterButton}
+                                         >
+                                    Filter
+                                         </button>
+                                     )
+
+                                 }
+
+
+                             </div>
+                         )}
                                         <div className={styles.rightContainerTables}>
                                             <PalikaReportTable
                                                 tableData={finalArr}

@@ -91,6 +91,13 @@ select{
 
 .mainDiv{
     .palikaTable{
+        .inputElement{
+            padding: 0;
+            background-color: #EBEBEB;
+            border: none;
+            height: 30px;
+            padding-left: 10px;
+        }
      .savebtn{
          position: relative;
          margin-top: 45px;

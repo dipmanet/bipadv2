@@ -413,7 +413,7 @@ const Simulation = (props: Props) => {
                                             <tr>
                                                 <td />
                                                 <td>
-                                                    <input type="text" value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
+                                                    <input type="text" className={styles.inputElement} value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
                                                     {' '}
                                                 </td>
                                                 <td>
@@ -426,7 +426,7 @@ const Simulation = (props: Props) => {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <input type="text" value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
+                                                    <input type="text" className={styles.inputElement} value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
                                                     {' '}
                                                 </td>
                                                 <td>
@@ -475,11 +475,11 @@ const Simulation = (props: Props) => {
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
+                                                    <input type="text" className={styles.inputElement} value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
                                                     {' '}
                                                 </td>
                                                 <td>
-                                                    <input type="number" value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
+                                                    <input type="number" className={styles.inputElement} value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
                                                     {' '}
                                                 </td>
                                                 <td>

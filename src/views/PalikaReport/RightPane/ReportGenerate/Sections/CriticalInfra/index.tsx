@@ -17,7 +17,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-
+import editIcon from '#resources/palikaicons/edit.svg';
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
@@ -27,6 +27,7 @@ import {
     setPalikaRedirectAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
 
 interface Props{
@@ -277,10 +278,15 @@ const CriticalInfra = (props: Props) => {
                                         && (
                                             <td>
                                                 <button
+                                                    className={styles.editButtn}
                                                     type="button"
                                                     onClick={() => handleEditResource(item)}
                                                 >
-                                            Edit
+                                                    <ScalableVectorGraphics
+                                                        className={styles.bulletPoint}
+                                                        src={editIcon}
+                                                        alt="editPoint"
+                                                    />
                                                 </button>
                                             </td>
                                         )

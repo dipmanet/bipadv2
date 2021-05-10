@@ -82,6 +82,15 @@
   }
 }
 .tabsPageContainer{
+  .bulletPoint{
+    height: 20px;
+    cursor: pointer;
+  }
+  .editButtn{
+    filter: saturate(100%);
+    border: none;
+    background-color: transparent;
+  }
   .savebtn{
     position: relative;
     margin-top: 45px;

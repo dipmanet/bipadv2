@@ -30,6 +30,8 @@ import {
     setPalikaRedirectAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import editIcon from '#resources/palikaicons/edit.svg';
 
 interface Props{
 
@@ -253,10 +255,15 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                             && (
                                                 <td>
                                                     <button
+                                                        className={styles.editButtn}
                                                         type="button"
                                                         onClick={() => handleEditInventory(item)}
                                                     >
-                                            Edit
+                                                        <ScalableVectorGraphics
+                                                            className={styles.bulletPoint}
+                                                            src={editIcon}
+                                                            alt="editPoint"
+                                                        />
                                                     </button>
                                                 </td>
                                             )

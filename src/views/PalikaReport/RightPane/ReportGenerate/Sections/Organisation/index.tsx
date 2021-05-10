@@ -34,6 +34,8 @@ import {
     setPalikaRedirectAction,
     setGeneralDataAction,
 } from '#actionCreators';
+import editIcon from '#resources/palikaicons/edit.svg';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
 
 const mapDispatchToProps = dispatch => ({
@@ -221,11 +223,17 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                                 !props.annex
                                                 && (
                                                     <td>
+
                                                         <button
+                                                            className={styles.editButtn}
                                                             type="button"
                                                             onClick={() => handleEditResource(item)}
                                                         >
-                                            Edit
+                                                            <ScalableVectorGraphics
+                                                                className={styles.bulletPoint}
+                                                                src={editIcon}
+                                                                alt="editPoint"
+                                                            />
                                                         </button>
                                                     </td>
                                                 )
