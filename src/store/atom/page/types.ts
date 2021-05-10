@@ -552,7 +552,7 @@ export interface PageState {
     generalData: GeneralData;
     palikaRedirect: PalikaRedirect;
     budgetId: BudgetId;
-    palikaLanguage: PalikaLanguage;
+    palikaanguage: PalikaLanguage;
     budgetData: BudgetData;
     budgetActivityData: BudgetActivityData;
     programAndPolicyData: ProgramAndPolicyData;

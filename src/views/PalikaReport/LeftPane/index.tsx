@@ -140,7 +140,7 @@ const Sidebar = (props) => {
             setShowErr(true);
         }
     };
-    const Data1 = palikaLanguage.language === 'en' ? [{
+    const Data1 = [{
         id: 1,
         title: 'Palika Reports',
         slug: 'palika-reports',
@@ -154,22 +154,9 @@ const Sidebar = (props) => {
             title: `${title_en} Municipality Reports`,
             url: '/disaster-profile/',
             slug: 'my-reports' }],
-    }] : [{
-        id: 1,
-        title: 'Palika Reports',
-        slug: 'palika-reports',
-        components: [{ id: 1,
-            title: 'ड्यासबोर्ड',
-            url: '/disaster-profile/',
-            slug: 'all-reports' },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        { id: 2,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            title: `${title_en} नगरपालिकाको प्रतिवेदनहरु`,
-            url: '/disaster-profile/',
-            slug: 'my-reports' }],
     }];
-    const Data2 = palikaLanguage.language === 'en' ? [{
+
+    const Data2 = [{
         id: 1,
         title: 'Palika Reports',
         slug: 'palika-reports',
@@ -180,18 +167,8 @@ const Sidebar = (props) => {
         // eslint-disable-next-line @typescript-eslint/camelcase
         ],
     },
-    ] : [{
-        id: 1,
-        title: 'Palika Reports',
-        slug: 'palika-reports',
-        components: [{ id: 1,
-            title: 'ड्यासबोर्ड',
-            url: '/disaster-profile/',
-            slug: 'all-reports' },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        ],
-    },
     ];
+
     const Data = municipalityName ? Data1 : Data2;
     const handleMyPalikaClick = () => {
         props.handleMyPalikaSelect(true);

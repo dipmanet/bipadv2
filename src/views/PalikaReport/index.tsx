@@ -9,6 +9,8 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import RightPane from './RightPane';
 import Modal from '#rscv/Modal';
+import Translations from './Translations';
+import Gt from './utils';
 
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -52,8 +54,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
                 };
             }
-
-
             // eslint-disable-next-line @typescript-eslint/camelcase
             return { limit: params.page,
                 offset: params.offset,
@@ -659,7 +659,12 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                 && (
                                     <>
                                         <div className={styles.rightContainerHeading}>
-                                            {submenuId === 2 ? <h1>{subMenuTitle}</h1> : <h1>Disaster Risk Reduction and Management Report</h1>}
+                                            {submenuId === 2 ? <h1>{subMenuTitle}</h1> : (
+                                                <h1>
+                                                    <Gt section={Translations.dashBoardMainTitle} />
+                                                </h1>
+                                            )
+                                            }
 
                                         </div>
 
