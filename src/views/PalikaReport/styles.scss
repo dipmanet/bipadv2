@@ -241,7 +241,11 @@
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
+<<<<<<< HEAD
                 // margin: 10px 0 18px 0;
+=======
+                margin: 10px 0 18px 0;
+>>>>>>> d6add1d3... stylings of the filters
 
                 input::-webkit-input-placeholder{
                     font-size: 10px;
@@ -272,7 +276,7 @@
                 input{
                     border: none !important;
                     outline: none !important;
-                    padding: 8px 7px;
+                    padding: 12px 7px;
                     margin-left: 0;
                     background: transparent;
                     width: 100% !important;
@@ -321,6 +325,22 @@
 .active-view {
     flex-grow: 1;
     background-color: #F6F6F6;
+    overflow: auto;
+    border: none !important;
+
+}
+
+.stepwise-region-select-input {
+    display: flex;
+    // flex-direction: column;
+    justify-content: space-around;
+    border: none !important;
+}
+
+
+.active-view {
+    flex-grow: 1;
+    background-color: rgb(235,235,235);
     overflow: auto;
     border: none !important;
 
