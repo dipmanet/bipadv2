@@ -84,6 +84,7 @@ a{
         background-color: transparent;
     .infoIcon{
         font-size: 14px;
+        opacity: 0.33;
     }
 }
 .inputContainer{
@@ -292,7 +293,6 @@ a{
     flex-direction: column;
     .savebtn{
         position: relative;
-        margin-top: 10px;
         width: fit-content;
         // background-color: rgb(54, 132, 216) !important;
         background-color: transparent;
@@ -330,7 +330,7 @@ a{
         width: 60%;
         flex-direction: column;
         align-items: flex-start;
-        padding-top: 30px;
+        padding-top: 10px;
         a{
             color: blue;
         }
@@ -340,6 +340,7 @@ a{
                 background-color: transparent;
             .infoIcon{
                 font-size: 14px;
+                
             }
         }
     }
@@ -374,7 +375,7 @@ a{
         text-align: left;
         }
         tr:nth-child(even) {
-        background-color:#EBEBEB;
+            background-color:#F6F6F6;
        
         
         }

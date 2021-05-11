@@ -19,6 +19,7 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import styles from './styles.scss';
 import programAndPolicyLogo from '#resources/palikaicons/program.svg';
 import editIcon from '#resources/palikaicons/edit.svg';
+import addRelief from '#resources/palikaicons/add.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
     createConnectedRequestCoordinator,
@@ -654,6 +655,7 @@ const Relief = (props: Props) => {
                                                                 type="button"
                                                                 onClick={() => handleReliefView(item)}
                                                                 className={styles.reliefBtn}
+                                                                title="View Relief"
                                                             >
                                                                 <ScalableVectorGraphics
                                                                     className={styles.bulletPoint}
@@ -667,6 +669,7 @@ const Relief = (props: Props) => {
                                                                 type="button"
                                                                 onClick={() => handleReliefEdit(data, item)}
                                                                 className={styles.reliefBtn}
+                                                                title="Edit Relief"
                                                             >
                                                                 <ScalableVectorGraphics
                                                                     className={styles.bulletPoint}
@@ -688,8 +691,14 @@ const Relief = (props: Props) => {
                                                                    type="button"
                                                                    onClick={() => handleReliefAdd(item)}
                                                                    className={styles.reliefBtn}
+                                                                   title="Add Relief"
                                                                >
-                                                     ADD RELIEF
+                                                                   <ScalableVectorGraphics
+                                                                       className={styles.bulletPointaddRelief}
+                                                                       src={addRelief}
+                                                                       alt="editPoint"
+                                                                   />
+
                                                                </button>
                                                            </div>
                                                        )}

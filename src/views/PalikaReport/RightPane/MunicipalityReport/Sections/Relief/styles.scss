@@ -557,4 +557,14 @@ td{
     cursor: pointer;
     opacity: 0.67;
   }
+  .bulletPointaddRelief{
+    height: 25px;
+    cursor: pointer;
+    opacity: 0.67;
+   path{
+     fill: black;
+     fill-opacity: 0.67;
+   }
+
+  }
 }

@@ -223,7 +223,7 @@ const ProgramPolicies = (props: Props) => {
                                         onClick={handleSubmit}
                                         className={styles.savebtn}
                                     >
-Add
++ Add Annual Policy and Programme
 
                                     </button>
                                 </div>

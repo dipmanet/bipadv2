@@ -109,25 +109,7 @@
 
     }
 }
-$breakpoint-tablet: 868px;
-$breakpoint-mobile: 450px;
-$breakpoint-laptop: 1466px;
-@media (max-width: $breakpoint-laptop) {
-    .firstPageContainer{
-    padding: 0 1%;
-    }
-}
-@media (max-width: $breakpoint-tablet) {
-    .firstPageContainer{
-    padding: 0 1%;
 
-    }
-}
-@media (max-width: $breakpoint-mobile) {
-    .firstPageContainer{
-    padding: 0 1%;
 
-    }
 
-}
 

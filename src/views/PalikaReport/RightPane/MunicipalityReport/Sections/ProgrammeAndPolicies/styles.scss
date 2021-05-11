@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    background-color: #EBEBEB;
+    
     border: none;
     button{
         width: fit-content;
@@ -26,7 +26,7 @@ table{
     text-align: left;
     }
     tr:nth-child(even) {
-    background-color:#EBEBEB;
+        background-color:#F6F6F6;
    
     
     }
