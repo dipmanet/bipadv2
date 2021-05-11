@@ -273,6 +273,7 @@ const CriticalInfra = (props: Props) => {
                                                     className={styles.editButtn}
                                                     type="button"
                                                     onClick={() => handleEditResource(item)}
+                                                    title="Edit Resource"
                                                 >
                                                     <ScalableVectorGraphics
                                                         className={styles.bulletPoint}
@@ -297,6 +298,7 @@ const CriticalInfra = (props: Props) => {
                                     type="button"
                                     className={styles.savebtn}
                                     onClick={handleAddResource}
+
                                 >
                                     <Icon
                                         name="plus"

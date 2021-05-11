@@ -217,6 +217,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                                             className={styles.editButtn}
                                                             type="button"
                                                             onClick={() => handleEditResource(item)}
+                                                            title="Edit Organization"
                                                         >
                                                             <ScalableVectorGraphics
                                                                 className={styles.bulletPoint}

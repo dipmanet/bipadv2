@@ -278,6 +278,7 @@ const Contacts = (props: Props) => {
                                                         className={styles.editButtn}
                                                         type="button"
                                                         onClick={() => handleEditContacts(item)}
+                                                        title="Edit Contact"
                                                     >
 
                                                         <ScalableVectorGraphics

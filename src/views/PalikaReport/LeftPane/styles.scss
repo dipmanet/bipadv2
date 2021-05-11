@@ -1,6 +1,7 @@
 .breadcrumbRow{
     display: flex;
     // justify-content: center;
+    margin-top: 20px;
     .breadcrumb{
         background-color: transparent;
         border: none;
@@ -49,14 +50,16 @@
     }
     h2{
         font-size: 24px;
-        margin-bottom: 20px;
+        margin-bottom: 0px !important;
         margin-left: 22px !important;
     }
     .menuList{
         // border: 1px solid red;
         list-style: none;
         background: rgb(235,235,235);
+        margin-bottom: 20px !important;
         padding: 0;
+        margin: 0;
         .error{
             font-size: 10px;
             color: red;
