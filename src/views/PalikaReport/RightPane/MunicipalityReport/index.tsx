@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import JsPDF from 'jspdf';
@@ -5,6 +7,7 @@ import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
+import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
@@ -300,108 +303,140 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
     const handlePreviewBtn = async () => {
         const divToDisplay = document.getElementById('reportPreview');
-
         setPending(true);
+        let pageNumber = 1;
+        const doc = new JsPDF('p', 'mm', 'a4');
+        const ids = document.querySelectorAll('.page');
+        const { length } = ids;
+        console.log('ids:', ids);
+        for (let i = 0; i < length; i += 1) {
+            const reportPage = document.getElementById(ids[i].id);
 
-        // new code
-        //    var data = document.getElementById('reportPreview');
-        // html2canvas(divToDisplay).then((canvas) => {
-        // Few necessary setting options
+            await html2canvas(reportPage).then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                let imgWidth = 210;
+                let pageHeight = 295;
+                if (i < (length - 1) && i > 2) {
+                    imgWidth = 295;
+                    pageHeight = 210;
+                }
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                heightLeft -= pageHeight;
+                while (heightLeft >= 0) {
+                    if (i < (length - 1) && i < 2) {
+                        position = heightLeft - imgHeight; // top padding for other pages
+                        pageNumber += 1;
+                        doc.text(285, 200, `page ${pageNumber}`);
+                        doc.addPage('a4', 'portrait');
+                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                        heightLeft -= pageHeight;
+                    }
+                    if (i < (length - 1) && i > 2) {
+                        position = heightLeft - imgHeight; // top padding for other pages
+                        pageNumber += 1;
+                        doc.text(200, 285, `page ${pageNumber}`);
+                        doc.addPage('a4', 'landscape');
+                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                        heightLeft -= pageHeight;
+                    }
+                }
 
-        // const contentDataURL = canvas.toDataURL('image/png');
-        // const margin = 2;
-        // const imgWidth = 210 - 2 * margin;
-        // const pageHeight = 295;
-        // const imgHeight = canvas.height * imgWidth / canvas.width;
-        // let heightLeft = imgHeight;
-
-        // const doc = new JsPDF('p', 'mm');
-        // let position = 0;
-
-        // doc.addImage(contentDataURL, 'PNG', margin, position, imgWidth, imgHeight);
-
-        // heightLeft -= pageHeight;
-
-        // while (heightLeft >= 0) {
-        //     position = heightLeft - imgHeight;
-        //     doc.addPage();
-        //     doc.addImage(contentDataURL, 'PNG', margin, position, imgWidth, imgHeight);
-        //     heightLeft -= pageHeight;
-        // }
-        // doc.save('file.pdf');
-
+                if (i < (length - 1) && i < 2) {
+                    pageNumber += 1;
+                    doc.text(210, 285, `page ${pageNumber}`);
+                    doc.addPage('a4', 'portrait');
+                }
+                if (i < (length - 1) && i > 2) {
+                    pageNumber += 1;
+                    doc.text(270, 200, `page ${pageNumber}`);
+                    doc.addPage('a4', 'landscape');
+                }
+            });
+        }
+        // download the pdf with all reportPages
+        doc.save(`All_reportPages_${Date.now()}.pdf`);
+        // });
 
         // old code
-        html2canvas(divToDisplay).then(async (canvas) => {
-            // const formData = new FormData();
-            const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 210;
-            const pageHeight = 295;
-            const imgHeight = canvas.height * imgWidth / canvas.width;
-            let heightLeft = imgHeight;
-            const doc = new JsPDF('p', 'mm', true);
-            let position = 0; // give some top padding to first page
+        // async generateAllPdf() {
 
-            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-            heightLeft -= pageHeight;
-            let count = 0;
-            while (heightLeft >= 0) {
-                count += 1;
-                if (count >= 2) {
-                    position = heightLeft - imgHeight; // top padding for other pages
-                    doc.addPage('a4', 'portrait');
-                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                    heightLeft -= pageHeight;
-                } else {
-                    position = heightLeft - imgHeight; // top padding for other pages
-                    doc.addPage('a4', 'portrait');
-                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                    heightLeft -= pageHeight;
-                }
-            }
-            const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
-            // const file = new File([blob], 'image.pdf');
-            // const blob = await doc.output('blob');
-            // formdata.append('file', blob);
-            // const base64 = doc.output('datauristring');
-            // canvas.toBlob((blob) => {
+        // }
 
-            // });
-            let profileUser = {};
-            if (user) {
-                profileUser = user.profile;
-            }
+        // html2canvas(divToDisplay).then(async (canvas) => {
+        //     // const formData = new FormData();
+        //     const imgData = canvas.toDataURL('image/png');
+        //     const imgWidth = 210;
+        //     const pageHeight = 295;
+        //     const imgHeight = canvas.height * imgWidth / canvas.width;
+        //     let heightLeft = imgHeight;
+        //     const doc = new JsPDF('p', 'mm', '', true);
+        //     let position = 0; // give some top padding to first page
 
-            formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-            formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
-            formdata.append('fiscalYear', generalData.fiscalYear);
-            formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
-            formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-            formdata.append('province', (profileUser.province || ''));
-            formdata.append('district', (profileUser.district || ''));
-            formdata.append('municipality', (profileUser.municipality || ''));
-            // formdata.append('mayorChairperson', generalData.mayor);
-            // formdata.append('chiefAdministrativeOfficer', generalData.cao);
-            // formdata.append('drrFocalPerson', generalData.focalPerson);
-            if (disasterProfile.length) {
-                axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
-                    'content-type': 'multipart/form-data',
-                } })
-                    .then((response) => {
-                        doc.save('file.pdf');
-                        alert('Your palika report has been uploaded sucessfully');
-                    }).catch((error) => { });
-            } else {
-                axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
-                    'content-type': 'multipart/form-data',
-                } })
-                    .then((response) => {
-                        doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-                        alert('Your palika report has been uploaded sucessfully');
-                    }).catch((error) => { });
-            } doc.save('DRRM Report.pdf');
+        //     doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+        //     heightLeft -= pageHeight;
+        //     let count = 0;
+        //     while (heightLeft >= 0) {
+        //         count += 1;
+        //         if (count >= 2) {
+        //             const imgHeightL = canvas.width * imgWidth / canvas.height;
+        //             position = heightLeft - imgHeightL; // top padding for other pages
+        //             doc.addPage('a4', 'landscape');
+        //             doc.addImage(imgData, 'PNG', 0, position, 295, imgHeightL, '', 'FAST');
+        //             heightLeft -= 210;
+        //         } else {
+        //             position = heightLeft - imgHeight; // top padding for other pages
+        //             doc.addPage('a4', 'portrait');
+        //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+        //             heightLeft -= pageHeight;
+        //         }
+        //     }
+        //     const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
+        //     // const file = new File([blob], 'image.pdf');
+        //     // const blob = await doc.output('blob');
+        //     // formdata.append('file', blob);
+        //     // const base64 = doc.output('datauristring');
+        //     // canvas.toBlob((blob) => {
+
+        //     // });
+        //     let profileUser = {};
+        //     if (user) {
+        //         profileUser = user.profile;
+        //     }
+
+        //     formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+        //     formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
+        //     formdata.append('fiscalYear', generalData.fiscalYear);
+        //     formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
+        //     formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
+        //     formdata.append('province', (profileUser.province || ''));
+        //     formdata.append('district', (profileUser.district || ''));
+        //     formdata.append('municipality', (profileUser.municipality || ''));
+        //     // formdata.append('mayorChairperson', generalData.mayor);
+        //     // formdata.append('chiefAdministrativeOfficer', generalData.cao);
+        //     // formdata.append('drrFocalPerson', generalData.focalPerson);
+        //     // if (disasterProfile.length) {
+        //     //     axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
+        //     //         'content-type': 'multipart/form-data',
+        //     //     } })
+        //     //         .then((response) => {
+        //     //             doc.save('file.pdf');
+        //     //             alert('Your palika report has been uploaded sucessfully');
+        //     //         }).catch((error) => { });
+        //     // } else {
+        //     //     axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
+        //     //         'content-type': 'multipart/form-data',
+        //     //     } })
+        //     //         .then((response) => {
+        //     //             doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+        //     //             alert('Your palika report has been uploaded sucessfully');
+        //     //         }).catch((error) => { });
+        //     // }
+        //     doc.save('DRRM Report.pdf');
+        // // });
         // });
-        });
     };
 
 
@@ -561,15 +596,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 keyTab === (tabsLength - 1)
                     ? (
                         <div className={styles.tabsPageContainer}>
-                            <div className={styles.loaderContainer}>
-                                <Loader
-                                    type="TailSpin"
-                                    color="#00BFFF"
-                                    height={50}
-                                    width={50}
-                                    timeout={6000}
-                                />
-                            </div>
+
                             {
                                 pending
                                     && (
@@ -597,29 +624,106 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
 
-                            <div id={'reportPreview'} className={styles.reportContainer}>
-                                <div className={styles.page}>
-                                    <PreviewPageOne
-                                        generalData={getGeneralData()}
-                                        url={keyTabUrl}
-                                    />
-                                </div>
-                                <div className={styles.page}>
+                            {/* <div id={'reportPreview'} className={styles.reportContainer}> */}
+                            <div id={'page1'} className={_cs(styles.page, 'page')}>
+                                <PreviewPageOne
+                                    generalData={getGeneralData()}
+                                    url={keyTabUrl}
+                                />
+                            </div>
+                            <div id={'page2'} className={_cs(styles.page, 'page')}>
 
-                                    <PreviewPageTwo
-                                        reportData={[<Budget />, <BudgetActivity />]}
-
-                                    />
-                                </div>
-                                <div className={styles.pageAnnex}>
-
-                                    <Annex
-                                        localMembers={localMembers}
-
-                                    />
-                                </div>
+                                <PreviewPageTwo
+                                    reportData={[<Budget />, <BudgetActivity />]}
+                                />
 
                             </div>
+                            <div id={'page3'} className={_cs(styles.page, 'page')}>
+
+                                <General
+                                    annex
+                                    mayor={mayor}
+                                    cao={cao}
+                                    focalPerson={focalPerson}
+                                    updateTab={() => {}}
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                    localMembers={localMembers}
+                                />
+
+                            </div>
+                            <div id={'page5'} className={_cs(styles.page, 'page')}>
+                                <Budget
+                                    annex
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                />
+                            </div>
+
+                            <div id={'page6'} className={_cs(styles.page, 'page')}>
+
+                                <BudgetActivity
+                                    annex
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                />
+                            </div>
+
+                            <div id={'page7'} className={_cs(styles.page, 'page')}>
+                                <ProgrammeAndPolicies
+                                    annex
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                />
+                            </div>
+
+                            <div id={'page8'} className={_cs(styles.page, 'page')}>
+                                <Organisation
+                                    annex
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                />
+                            </div>
+                            <div id={'page9'} className={_cs(styles.page, 'page')}>
+                                <Inventory
+                                    annex
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                />
+                            </div>
+
+                            <div id={'page10'} className={_cs(styles.page, 'page')}>
+                                <CriticalInfra
+                                    annex
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                />
+                            </div>
+
+
+                            <div id={'page11'} className={_cs(styles.page, 'page')}>
+                                <Relief
+                                // AnnexDetails
+                                    reportData={''}
+                                    tableHeader={() => {}}
+                                    updateTab={() => {}}
+                                    page={-1}
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                    annex
+                                />
+                            </div>
+
+                            <div id={'page12'} className={_cs(styles.page, 'page')}>
+                                <Simulation
+                                    handlePrevClick={() => {}}
+                                    handleNextClick={() => {}}
+                                    annex
+                                />
+                            </div>
+
+
+                            {/* </div> */}
 
 
                         </div>

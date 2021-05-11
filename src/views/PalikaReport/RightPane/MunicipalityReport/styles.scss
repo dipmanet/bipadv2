@@ -3,6 +3,9 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    .page{
+        width: 210mm;
+    }
     .buttonContainer{
         display:flex;
         // border: 1px solid red;
