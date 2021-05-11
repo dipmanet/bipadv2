@@ -123,9 +123,6 @@ interface Location{
 
 const General = (props: Props) => {
     const {
-        mayor,
-        cao,
-        focalPerson,
         generalData,
         updateTab,
         localMembers,
@@ -153,6 +150,10 @@ const General = (props: Props) => {
     const [dateErr, setDate] = useState(false);
     const [fiscalYearTitle, setFiscalYearTitle] = useState('');
     const [fetchedData, setFetechedData] = useState([]);
+
+    const [mayor, setmayor] = useState('');
+    const [cao, setcao] = useState('');
+    const [focalPerson, setfocalPerson] = useState('');
 
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
@@ -193,6 +194,19 @@ const General = (props: Props) => {
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        const mayorData = response.filter(contact => contact.position === 'Mayor');
+        const caoData = response.filter(item => item.position === 'Chief Administrative Officer');
+        const focalPersonData = response.filter(item => item.isDrrFocalPerson === true);
+        if (mayorData.length > 0) {
+            console.log('mayorData: ', mayorData[0]);
+            setmayor(mayorData[0]);
+        }
+        if (caoData.length > 0) {
+            setcao(caoData[0]);
+        }
+        if (focalPersonData.length > 0) {
+            setfocalPerson(focalPersonData[0]);
+        }
     };
 
     MunContacts.setDefaultParams({

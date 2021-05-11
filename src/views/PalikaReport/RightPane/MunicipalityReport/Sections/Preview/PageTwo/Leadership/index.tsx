@@ -107,16 +107,16 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {mayor.split(',')[0] || 'Name Unavailable'}
+                                {mayor.name || 'Name Unavailable'}
                                 (Mayor)
                             </span>
                         </li>
                         <li>
-                            {mayor.split(',')[1] || 'Email Available'}
+                            {mayor.email || 'Email Available'}
 
                         </li>
                         <li>
-                            {mayor.split(',')[2] || 'Phone Available'}
+                            {mayor.mobileNumber || 'Phone Available'}
 
                         </li>
                     </ul>
@@ -125,18 +125,18 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {cao.split(',')[0] || 'Name Unvailable'}
+                                {cao.name || 'Name Unvailable'}
                                 (CAO)
 
                             </span>
 
                         </li>
                         <li>
-                            {cao.split(',')[1] || 'Email Unavailable'}
+                            {cao.email || 'Email Unavailable'}
 
                         </li>
                         <li>
-                            {cao.split(',')[2] || 'Phone Unavailable'}
+                            {cao.mobileNumber || 'Phone Unavailable'}
 
 
                         </li>
@@ -146,16 +146,16 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {focalPerson.split(',')[0] || 'Name Unvailable'}
+                                {focalPerson.name || 'Name Unvailable'}
                             (Focal Person)
                             </span>
                         </li>
                         <li>
-                            {focalPerson.split(',')[1] || 'Email Unvailable'}
+                            {focalPerson.email || 'Email Unvailable'}
 
                         </li>
                         <li>
-                            {focalPerson.split(',')[2] || 'Phone Unvailable'}
+                            {focalPerson.mobileNumber || 'Phone Unvailable'}
 
                         </li>
                     </ul>
