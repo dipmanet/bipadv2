@@ -259,6 +259,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                                         className={styles.editButtn}
                                                         type="button"
                                                         onClick={() => handleEditInventory(item)}
+                                                        title="Edit Inventory"
                                                     >
                                                         <ScalableVectorGraphics
                                                             className={styles.bulletPoint}
