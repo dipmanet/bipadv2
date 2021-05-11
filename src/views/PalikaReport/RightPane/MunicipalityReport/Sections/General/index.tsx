@@ -155,7 +155,11 @@ const General = (props: Props) => {
     const [mayor, setmayor] = useState('');
     const [cao, setcao] = useState('');
     const [focalPerson, setfocalPerson] = useState('');
+<<<<<<< HEAD
     const [loader, setLoader] = useState(true);
+=======
+
+>>>>>>> 89073414... mayor details fixed
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
         const title = fiscalYearList
