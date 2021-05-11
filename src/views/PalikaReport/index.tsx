@@ -691,21 +691,22 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                         {submenuId === 1
                          && (
                              <div className={styles.rightContainerFilters}>
-
-                                 <StepwiseRegionSelectInput
-                                     className={
-                                         _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                                     faramElementName="region"
-                                     wardsHidden
-                                     onChange={handleFormRegion}
-                                     checkProvince={handleCheckFilterDisableButtonForProvince}
-                                     checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                                     checkMun={handleCheckFilterDisableButtonForMunicipality}
-                                     reset={resetFilterProps}
-                                     provinceInputClassName={styles.snprovinceinput}
-                                     districtInputClassName={styles.sndistinput}
-                                     municipalityInputClassName={styles.snmuniinput}
-                                 />
+                                 <div className={styles.inputContainer}>
+                                     <StepwiseRegionSelectInput
+                                         className={
+                                             _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                         faramElementName="region"
+                                         wardsHidden
+                                         onChange={handleFormRegion}
+                                         checkProvince={handleCheckFilterDisableButtonForProvince}
+                                         checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                         checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                         reset={resetFilterProps}
+                                         provinceInputClassName={styles.snprovinceinput}
+                                         districtInputClassName={styles.sndistinput}
+                                         municipalityInputClassName={styles.snmuniinput}
+                                     />
+                                 </div>
 
 
                                  {!showReportEdit && submenuId === 1 && filtered ? (
