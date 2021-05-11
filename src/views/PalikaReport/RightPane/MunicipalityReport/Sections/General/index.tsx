@@ -140,6 +140,7 @@ const General = (props: Props) => {
         fiscalYear: fy,
         formationDate: fd,
         committeeMembers: cm,
+
     } = generalData;
 
     const [reportTitle, setreportTitle] = useState<string>(rt);
@@ -230,7 +231,6 @@ const General = (props: Props) => {
 
     const handleDataSave = () => {
         if (!validationErrs()) {
-            console.log('fiscal year title', fiscalYearTitle);
             props.setGeneralDatapp({
                 reportTitle,
                 fiscalYear,
@@ -251,7 +251,12 @@ const General = (props: Props) => {
             props.handleShowErr(true);
         }
     };
+    console.log('This is fetched data>>>', fetchedData);
+    console.log('This is mayor>>>', generalData);
+    console.log('This is props>>>', props);
+    useEffect(() => {
 
+    }, []);
     return (
         <div className={styles.mainPageDetailsContainer}>
             { props.annex
