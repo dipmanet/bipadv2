@@ -694,13 +694,13 @@ const Budget = (props: Props) => {
                                         </li>
                                     </ul>
                                     <ul>
-                                        <li>
-                                            <span className={styles.lighter}>
-                                                {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
-                                                {'%'}
-                                                {' '}
+                                        <li className={styles.lighter}>
+                                            {/* <span > */}
+                                            {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
+                                            {'%'}
+                                            {' '}
                                             of municipal budget
-                                            </span>
+                                            {/* </span> */}
                                         </li>
                                         <li>
                                             <h2>

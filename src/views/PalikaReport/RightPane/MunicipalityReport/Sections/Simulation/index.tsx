@@ -144,21 +144,17 @@ const Simulation = (props: Props) => {
         drrFund: df,
         additionalFund: af,
     } = budgetData;
+
     const [submittedData, setSubmittedData] = useState();
-    const [municipalBudget, setMunicipalBudget] = useState(mb);
     const [description, setDescription] = useState('');
     const [simulationName, setSimulationName] = useState('');
     const [organizer, setOrganizer] = useState('');
     const [participants, setParticipants] = useState('');
-    const [hazard, setHazard] = useState([]);
-    const [drrFund, setdrrFund] = useState(df);
-    const [additionalFund, setadditionalFund] = useState(af);
+
     const [province, setProvince] = useState(0);
     const [district, setDistrict] = useState(0);
     const [municipality, setMunicipality] = useState(0);
-    const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
-    const [fiscal, setFiscal] = useState(1);
-    const [annualBudgetData, setAnnualBudgetData] = useState([]);
+
     const [simulationData, setSimulationData] = useState([]);
     const [priorityAction, setPriorityAction] = useState('');
     const [priorityActivity, setPriorityActivity] = useState('');
@@ -188,14 +184,11 @@ const Simulation = (props: Props) => {
         setStartDate('');
         setSimulationId(null);
     };
-    console.log('This is data>>>', participants);
     const handleSavesetSimulationData = (response) => {
         setSimulationData(response);
         setLoader(false);
     };
-    const handleHazardData = (response) => {
-        setHazard(response);
-    };
+
     SimulationGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
         district: profile.district,
@@ -209,13 +202,7 @@ const Simulation = (props: Props) => {
     //     hazardData: handleHazardData,
     // });
 
-    const handleSelectedProvince = (response) => {
-        const selectedProvince = response.filter(item => item.id === profile.district);
 
-        setProvince(selectedProvince[0].province);
-        setDistrict(profile.district);
-        setMunicipality(profile.municipality);
-    };
     useEffect(() => {
         setProvince(profile.province);
         setDistrict(profile.district);
@@ -247,35 +234,8 @@ const Simulation = (props: Props) => {
     const handleSimulationDescription = (e) => {
         setDescription(e.target.value);
     };
-    const handleDataSave = () => {
-        setBudgetDatapp({
-            municipalBudget,
-            drrFund,
-            additionalFund,
-        });
-        updateTab();
-    };
-    const selectStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: '1px dotted gray',
-            color: state.isSelected ? 'white' : 'gray',
-            padding: 10,
-        }),
-        control: () => ({
-            // none of react-select's styles are passed to <Control />
-            width: 200,
-        }),
-        singleValue: (provided, state) => {
-            const opacity = state.isDisabled ? 0.5 : 1;
-            const transition = 'opacity 900ms';
 
-            return { ...provided, opacity, transition };
-        },
-    };
-    const handleBudgetId = (response) => {
-        setBudgetId({ id: response.id });
-    };
+
     const handleNextClick = () => {
         // if (!annualBudgetData.length) {
         //     SimulationPostRequest.do({
@@ -312,6 +272,7 @@ const Simulation = (props: Props) => {
                 return null;
             });
             finalArr = [...new Set(finalSimulationData)];
+            console.log('finalARr', finalArr);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationData]);
@@ -774,23 +735,25 @@ const Simulation = (props: Props) => {
                         <div className={styles.simElementsContainer}>
                             <div className={styles.simElements}>
                                 <div className={styles.circlePatch}>
-                            22
+                                    {finalArr.length > 0 ? finalArr.length : '0'}
                                 </div>
                                 <p className={styles.simDesc}>
                             No. of simulation
-                                    {' '}
-                                    <br />
                             conducted
                                 </p>
                             </div>
                             <div className={styles.simElements}>
                                 <div className={styles.circlePatch}>
-                            10
+                                    {
+                                        finalArr.length > 0
+                                            ? finalArr.map(item => item.data).reduce((a, b) => ({
+                                                totalParticipants: a.totalParticipants + b.totalParticipants,
+                                            })).totalParticipants
+                                            : 0
+                                    }
                                 </div>
                                 <p className={styles.simDesc}>
                             No. of people
-                                    {' '}
-                                    <br />
                             trained
                                 </p>
                             </div>

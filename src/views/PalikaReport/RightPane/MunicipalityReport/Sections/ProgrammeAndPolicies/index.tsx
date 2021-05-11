@@ -366,17 +366,13 @@ const ProgramPolicies = (props: Props) => {
                     Annual Program and policies
                     </h2>
                     <ul>
-                        {finalPolicyData.length > 0 && finalPolicyData.length < 3
-                            ? finalPolicyData.map(item => (
-                                <li key={item.id}>
-                                    {item.point}
-                                </li>
-                            ))
-                            : finalPolicyData.slice(0, 3).map(item => (
-                                <li key={item.id}>
-                                    {item.point}
-                                </li>
-                            ))
+                        {finalPolicyData.length > 0
+                        && finalPolicyData.slice(0, 1).map(item => (
+                            <li key={item.id}>
+                                {item.point}
+                            </li>
+                        ))
+
                         }
                     </ul>
                 </div>

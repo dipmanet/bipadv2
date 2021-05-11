@@ -925,7 +925,7 @@ const BudgetActivity = (props: Props) => {
                        <h2>Budget Activity</h2>
                        <div className={styles.budgetActChartContainer}>
 
-                           <PieChart width={200} height={200}>
+                           <PieChart width={150} height={150}>
                                <Pie
                                    data={chartdata}
                                    cx={90}
