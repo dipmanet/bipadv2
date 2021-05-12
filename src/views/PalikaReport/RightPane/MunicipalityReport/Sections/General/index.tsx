@@ -720,7 +720,7 @@ const General = (props: Props) => {
                                         name="plus"
                                         className={styles.plusIcon}
                                     />
-                                         Add Contact
+                                         Add Member
                                     {/* Add */}
                                 </button>
 
