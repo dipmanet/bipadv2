@@ -244,22 +244,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 if (i >= 2) {
                     heightLeft -= pageHeight;
                     while (heightLeft >= 0) {
-                        if (i < (length - 1) && i < 2) {
-                            position = heightLeft - imgHeight; // top padding for other pages
-                            pageNumber += 1;
-                            doc.addPage('a4', 'portrait');
-                            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                            doc.text(285, 200, `page ${pageNumber}`);
-                            heightLeft -= pageHeight;
-                        }
-                        if (i < (length - 1) && i > 2) {
-                            position = heightLeft - imgHeight; // top padding for other pages
-                            pageNumber += 1;
-                            doc.addPage('a4', 'landscape');
-                            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                            doc.text(200, 285, `page ${pageNumber}`);
-                            heightLeft -= pageHeight;
-                        }
+                        position = heightLeft - imgHeight; // top padding for other pages
+                        pageNumber += 1;
+                        doc.addPage('a4', 'landscape');
+                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                        // doc.text(200, 285, `page ${pageNumber}`);
+                        heightLeft -= pageHeight;
                     }
                 }
 
@@ -269,7 +259,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     pageNumber += 1;
                 }
                 if (i < (length - 1) && i >= 1) {
-                    doc.text(270, 10, `page ${pageNumber}`);
+                    // doc.text(270, 10, `page ${pageNumber}`);
                     doc.addPage('a4', 'landscape');
                     pageNumber += 1;
                 }

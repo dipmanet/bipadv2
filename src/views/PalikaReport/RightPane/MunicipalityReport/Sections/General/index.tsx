@@ -193,7 +193,6 @@ const General = (props: Props) => {
         ReachRouter.navigate('/profile/',
             { state: { showForm: true }, replace: true });
     };
-
     const handleFetchedData = (response) => {
         setFetechedData(response);
         setLoader(false);
@@ -707,10 +706,25 @@ const General = (props: Props) => {
                             {
                                 !props.annex
                         && (
-                            <h5>
-                                {' '}
-                                <i>Please click on the add/edit button to update the details</i>
-                            </h5>
+                            <>
+                                <h5>
+                                    {' '}
+                                    <i>Please click on the add/edit button to update the details</i>
+                                </h5>
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                                    onClick={handleAddContact}
+                                >
+                                    <Icon
+                                        name="plus"
+                                        className={styles.plusIcon}
+                                    />
+                                         Add Contact
+                                    {/* Add */}
+                                </button>
+
+                            </>
                         )
                             }
                         </div>
