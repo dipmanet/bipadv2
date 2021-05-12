@@ -8,7 +8,8 @@ import { BarChart,
     XAxis, YAxis,
     CartesianGrid, Tooltip,
     Legend, PieChart,
-    Pie } from 'recharts';
+    Pie, Line,
+    ComposedChart } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
 import Modal from '#rscv/Modal';
@@ -36,7 +37,7 @@ import { provincesSelector,
 import NextPrevBtns from '../../NextPrevBtns';
 
 import IncidentIcon from '#resources/palikaicons/incident.svg';
-import EstimatedLossIcon from '#resources/palikaicons/loss.svg';
+import moneyBag from '#resources/palikaicons/loss.svg';
 import DeathIcon from '#resources/palikaicons/death.svg';
 import MissingIcon from '#resources/palikaicons/missing.svg';
 import InjredIcon from '#resources/palikaicons/injured.svg';
@@ -44,6 +45,10 @@ import InfraIcon from '#resources/palikaicons/infrastructure.svg';
 import LivestockIcon from '#resources/palikaicons/livestock.svg';
 import HouseAffIcon from '#resources/palikaicons/house_partial.svg';
 import HouseDmgIcon from '#resources/palikaicons/house_complete.svg';
+
+import family from '#resources/palikaicons/family.svg';
+import male from '#resources/palikaicons/male.svg';
+import female from '#resources/palikaicons/female.svg';
 
 interface Props{
 
@@ -168,9 +173,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 let finalArr = [];
 const Relief = (props: Props) => {
-    const handleDataSave = () => {
-        props.updateTab();
-    };
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
     const {
@@ -210,6 +212,7 @@ const Relief = (props: Props) => {
 
     const [maleDeath, setMaleDeath] = useState(0);
     const [femaleDeath, setFemaleDeath] = useState(0);
+    const [reliefChartData, setReliefChartData] = useState([]);
 
     const [houseAffected, setHouseAffected] = useState(0);
     const [houseDamaged, setHouseDamaged] = useState(0);
@@ -244,6 +247,64 @@ const Relief = (props: Props) => {
     });
 
     const [wardWiseImpact, setWardWiseImpact] = useState([]);
+
+
+    // here
+
+
+    useEffect(() => {
+        if (reliefData) {
+            // const reliefDateArr = [...new Set(
+            //     reliefData.map(item => getMonthFromDate(item.dateOfReliefDistribution)),
+            // )];
+
+            const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const reliefChart = reliefDateArr.map(d => ({
+                name: d,
+                'Amount-Distributed': reliefData
+                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
+                    ? reliefData
+                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
+                        .reliefAmountNpr
+                    : 0,
+
+                Beneficiaries: reliefData
+                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
+                    ? reliefData
+                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
+                        .numberOfBeneficiaryFamily
+                    : 0,
+            }));
+
+            setReliefChartData(reliefChart);
+        }
+    }, [reliefData]);
+    const handlemaleBenefited = (data) => {
+        setmaleBenefited(data.target.value);
+    };
+    const handlefemaleBenefited = (data) => {
+        setfemaleBenefited(data.target.value);
+    };
+    const handleMinorities = (data) => {
+        setmiorities(data.target.value);
+    };
+    const handleDalit = (data) => {
+        setdalits(data.target.value);
+    };
+    const handleMadhesis = (data) => {
+        setmadhesis(data.target.value);
+    };
+    const handleDisabilities = (data) => {
+        setdisabilities(data.target.value);
+    };
+    const handleJanajaties = (data) => {
+        setjanajatis(data.target.value);
+    };
+
+    // to here
+
 
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
@@ -394,7 +455,7 @@ const Relief = (props: Props) => {
                     .filter(count => count !== undefined)
                     .reduce((a, b) => a + b),
             }));
-            console.log('hid: ', hazardwiseImpactData);
+
             const deathMaleData = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathMaleCount)
@@ -449,27 +510,9 @@ const Relief = (props: Props) => {
         }
     }, [hazardTypes.length, deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
-
-    const handlemaleBenefited = (data) => {
-        setmaleBenefited(data.target.value);
-    };
-    const handlefemaleBenefited = (data) => {
-        setfemaleBenefited(data.target.value);
-    };
-    const handleMinorities = (data) => {
-        setmiorities(data.target.value);
-    };
-    const handleDalit = (data) => {
-        setdalits(data.target.value);
-    };
-    const handleMadhesis = (data) => {
-        setmadhesis(data.target.value);
-    };
-    const handleDisabilities = (data) => {
-        setdisabilities(data.target.value);
-    };
-    const handleJanajaties = (data) => {
-        setjanajatis(data.target.value);
+    const getMonthFromDate = (date: string) => {
+        const dateItem = new Date(date);
+        return dateItem.toLocaleString('default', { month: 'long' });
     };
 
     console.log('This is relief date>>>', hazardTypes);
@@ -861,7 +904,7 @@ const Relief = (props: Props) => {
                                 <div className={styles.lossElement}>
                                     <ScalableVectorGraphics
                                         className={styles.lossIcon}
-                                        src={EstimatedLossIcon}
+                                        src={moneyBag}
                                         alt="Bullet Point"
                                     />
                                     <ul>
@@ -938,229 +981,397 @@ const Relief = (props: Props) => {
             {
                 props.hazardwiseImpact
                 && (
-                    <div className={styles.incidentImpactRow}>
-                        <div className={styles.incidentSection}>
-                            <h2>
+                    <div className={styles.reliefReportSection}>
+                        <div className={styles.incidentImpactRow}>
+                            <div className={styles.incidentSection}>
+                                <h2>
                              Hazardwise Impact
                              (Top 5)
-                            </h2>
-                            <BarChart
-                                width={300}
-                                height={250}
-                                data={hazardwiseImpact
-                                    .sort((a, b) => b.Incidents - a.Incidents)
-                                    .slice(0, 5)
-                                }
-                                margin={{ left: 0, right: 5, top: 10 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis
-                                    tick={{ textAlign: 'left', fontSize: '9' }}
-                                    interval={0}
-                                    height={80}
-                                    angle={50}
-                                    textAnchor="start"
-                                    dataKey="name"
-                                />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend
-                                    verticalAlign="top"
-                                    height={20}
-                                />
-                                <Bar
-                                    fill="rgb(198,233,232)"
-                                    dataKey="People Death"
+                                </h2>
+                                <BarChart
+                                    width={300}
+                                    height={250}
+                                    data={hazardwiseImpact
+                                        .sort((a, b) => b.Incidents - a.Incidents)
+                                        .slice(0, 5)
+                                    }
+                                    margin={{ left: 0, right: 5, top: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis
+                                        tick={{ textAlign: 'left', fontSize: '9' }}
+                                        interval={0}
+                                        height={80}
+                                        angle={70}
+                                        textAnchor="start"
+                                        dataKey="name"
+                                    />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend
+                                        verticalAlign="top"
+                                        height={20}
+                                    />
+                                    <Bar
+                                        fill="rgb(198,233,232)"
+                                        dataKey="People Death"
 
-                                />
-                                <Bar
-                                    dataKey="Incidents"
-                                    fill="rgb(0,173,115)"
+                                    />
+                                    <Bar
+                                        dataKey="Incidents"
+                                        fill="rgb(0,173,115)"
 
-                                />
-                            </BarChart>
-                        </div>
+                                    />
+                                </BarChart>
+                            </div>
 
-                        <div className={styles.incidentMiddleSection}>
-                            <h2>
+                            <div className={styles.incidentMiddleSection}>
+                                <h2>
                              Genderwise Death
-                            </h2>
-                            <div className={styles.chartandlegend}>
+                                </h2>
+                                <div className={styles.chartandlegend}>
 
-                                <PieChart width={200} height={175}>
-                                    <Pie
-                                        data={deathGenderChartData}
-                                        cx={80}
-                                        cy={110}
-                                        innerRadius={40}
-                                        outerRadius={60}
-                                        fill="#8884d8"
-                                        paddingAngle={1}
-                                        dataKey="value"
-                                        startAngle={90}
-                                        endAngle={450}
-                                    >
-                                        {genderWiseDeathData.map((entry, index) => (
+                                    <PieChart width={200} height={175}>
+                                        <Pie
+                                            data={deathGenderChartData}
+                                            cx={80}
+                                            cy={110}
+                                            innerRadius={40}
+                                            outerRadius={60}
+                                            fill="#8884d8"
+                                            paddingAngle={1}
+                                            dataKey="value"
+                                            startAngle={90}
+                                            endAngle={450}
+                                        >
+                                            {genderWiseDeathData.map((entry, index) => (
                                             // eslint-disable-next-line react/no-array-index-key
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                </PieChart>
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                    </PieChart>
 
-                                <div className={styles.legend}>
-                                    <div className={styles.legenditem}>
+                                    <div className={styles.legend}>
+                                        <div className={styles.legenditem}>
 
-                                        <div className={styles.legendColorContainer}>
-                                            <div
-                                                style={{ backgroundColor: COLORS[0] }}
-                                                className={styles.legendColor}
-                                            />
-                                        </div>
-                                        <div className={styles.numberRow}>
-                                            <ul>
-                                                <li>
-                                                    <span className={styles.bigerNum}>
+                                            <div className={styles.legendColorContainer}>
+                                                <div
+                                                    style={{ backgroundColor: COLORS[0] }}
+                                                    className={styles.legendColor}
+                                                />
+                                            </div>
+                                            <div className={styles.numberRow}>
+                                                <ul>
+                                                    <li>
+                                                        <span className={styles.bigerNum}>
 
 
-                                                        {
-                                                            (Number(maleDeath)
+                                                            {
+                                                                (Number(maleDeath)
                                                 / (Number(maleDeath)
                                                 + Number(femaleDeath))
                                                 * 100).toFixed(0)
-                                                        }
-                                                        {
-                                                            '%'
-                                                        }
+                                                            }
+                                                            {
+                                                                '%'
+                                                            }
 
-                                                    </span>
-                                                </li>
-                                                <li className={styles.light}>
-                                                    <span>Male</span>
-                                                </li>
-                                            </ul>
+                                                        </span>
+                                                    </li>
+                                                    <li className={styles.light}>
+                                                        <span>Male</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className={_cs(styles.legenditem, styles.bottomRow)}>
-                                        <div className={styles.legendColorContainer}>
-                                            <div
-                                                style={{ backgroundColor: COLORS[1] }}
-                                                className={styles.legendColor}
-                                            />
-                                        </div>
+                                        <div className={_cs(styles.legenditem, styles.bottomRow)}>
+                                            <div className={styles.legendColorContainer}>
+                                                <div
+                                                    style={{ backgroundColor: COLORS[1] }}
+                                                    className={styles.legendColor}
+                                                />
+                                            </div>
 
-                                        <div className={styles.numberRow}>
-                                            <ul>
-                                                <li>
-                                                    <span className={styles.bigerNum}>
+                                            <div className={styles.numberRow}>
+                                                <ul>
+                                                    <li>
+                                                        <span className={styles.bigerNum}>
 
-                                                        {
-                                                            (Number(femaleDeath)
+                                                            {
+                                                                (Number(femaleDeath)
                                                 / (Number(femaleDeath)
                                                 + Number(maleDeath))
                                                 * 100).toFixed(0)
-                                                        }
-                                                        {
-                                                            '%'
-                                                        }
-                                                    </span>
-                                                </li>
-                                                <li className={styles.light}>
-                                                    <span>Female</span>
-                                                </li>
+                                                            }
+                                                            {
+                                                                '%'
+                                                            }
+                                                        </span>
+                                                    </li>
+                                                    <li className={styles.light}>
+                                                        <span>Female</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div className={styles.houseData}>
+                                    <p>House Damaged</p>
+                                    <div className={styles.houseRow}>
+                                        <div className={styles.houseElement}>
+
+                                            <ScalableVectorGraphics
+                                                className={styles.houseIcon}
+                                                src={HouseAffIcon}
+                                                alt="Bullet Point"
+                                            />
+                                            <ul>
+                                                <span className={styles.darker}>{houseAffected}</span>
+                                                <li>PARTIAL</li>
                                             </ul>
+
+                                        </div>
+                                        <div className={styles.houseElement}>
+
+                                            <ScalableVectorGraphics
+                                                className={styles.houseIcon}
+                                                src={HouseDmgIcon}
+                                                alt="Bullet Point"
+                                            />
+                                            <ul>
+                                                <li><span className={styles.darker}>{houseDamaged}</span></li>
+                                                <li>FULLY</li>
+                                            </ul>
+
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
 
-                            <div className={styles.houseData}>
-                                <p>House Damaged</p>
-                                <div className={styles.houseRow}>
-                                    <div className={styles.houseElement}>
+                            <div className={styles.incidentSection}>
+                                <h2>
+                             Wardwise Human Impact
+                             (Top 5)
+                                </h2>
+                                <BarChart
+                                    width={250}
+                                    height={250}
+                                    data={wardWiseImpact
+                                        .sort((a, b) => -(a.Death + a.Injured + a.Missing) + (b.Death + b.Injured + b.Missing))
+                                        .slice(0, 5)
+                                    }
+                                    margin={{ left: 0, right: 5, top: 10, bottom: 20 }}
 
-                                        <ScalableVectorGraphics
-                                            className={styles.houseIcon}
-                                            src={HouseAffIcon}
-                                            alt="Bullet Point"
-                                        />
-                                        <ul>
-                                            <span className={styles.darker}>{houseAffected}</span>
-                                            <li>PARTIAL</li>
-                                        </ul>
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dx={10} interval={0} angle={40} dataKey="ward" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend
+                                        wrapperStyle={{
+                                            paddingTop: '5px',
+                                            paddingLeft: '5px',
+                                            marginLeft: '15px',
+                                        }}
+                                    />
+                                    <Bar
+                                        dataKey="Death"
+                                        stackId="a"
+                                        fill="rgb(143,212,221)"
+                                        barSize={10}
 
-                                    </div>
-                                    <div className={styles.houseElement}>
+                                    />
+                                    <Bar
+                                        dataKey="Missing"
+                                        stackId="a"
+                                        fill="rgb(0,82,52)"
+                                        barSize={10}
 
-                                        <ScalableVectorGraphics
-                                            className={styles.houseIcon}
-                                            src={HouseDmgIcon}
-                                            alt="Bullet Point"
-                                        />
-                                        <ul>
-                                            <li><span className={styles.darker}>{houseDamaged}</span></li>
-                                            <li>FULLY</li>
-                                        </ul>
-
-                                    </div>
-                                </div>
+                                    />
+                                    <Bar
+                                        dataKey="Injured"
+                                        stackId="a"
+                                        fill="rgb(0,177,117)"
+                                        barSize={10}
+                                    />
+                                </BarChart>
                             </div>
 
                         </div>
-
-                        <div className={styles.incidentSection}>
-                            <h2>
-                             Wardwise Human Impact
-                             (Top 5)
-                            </h2>
-                            <BarChart
-                                width={250}
-                                height={250}
-                                data={wardWiseImpact
-                                    .sort((a, b) => -(a.Death + a.Injured + a.Missing) + (b.Death + b.Injured + b.Missing))
-                                    .slice(0, 5)
-                                }
-                                margin={{ left: 0, right: 5, top: 10, bottom: 20 }}
-
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dx={10} interval={0} angle={40} dataKey="ward" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend
-                                    wrapperStyle={{
-                                        paddingTop: '5px',
-                                        paddingLeft: '5px',
-                                        marginLeft: '15px',
+                        <div className={styles.reliefdistRow}>
+                            <div className={styles.incidentSection}>
+                                <h2>
+                             Relief
+                                </h2>
+                                <ComposedChart
+                                    width={450}
+                                    height={200}
+                                    data={reliefChartData}
+                                    margin={{
+                                        top: 5,
+                                        right: 5,
+                                        bottom: 5,
+                                        left: 5,
                                     }}
-                                />
-                                <Bar
-                                    dataKey="Death"
-                                    stackId="a"
-                                    fill="rgb(143,212,221)"
-                                    barSize={10}
+                                >
+                                    <CartesianGrid stroke="#f5f5f5" />
+                                    <XAxis dataKey="name" scale="auto" />
+                                    <YAxis scale="auto" yAxisId="left" />
+                                    <YAxis width={80} yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar
+                                        dataKey="Beneficiaries"
+                                        barSize={20}
+                                        fill="rgb(0,177,117)"
+                                        label={{ position: 'top', fill: '#222', fontSize: '10px' }}
+                                        yAxisId="left"
+                                    />
 
-                                />
-                                <Bar
-                                    dataKey="Missing"
-                                    stackId="a"
-                                    fill="rgb(0,82,52)"
-                                    barSize={10}
+                                    <Line
+                                        yAxisId="right"
+                                        type="monotone"
+                                        dataKey="Amount-Distributed"
+                                        stroke="rgb(165,0,21)"
+                                    />
+                                </ComposedChart>
+                            </div>
+                            <div className={styles.reliefDataMainContainer}>
+                                <div className={styles.reliefDistribution}>
 
-                                />
-                                <Bar
-                                    dataKey="Injured"
-                                    stackId="a"
-                                    fill="rgb(0,177,117)"
-                                    barSize={10}
-                                />
-                            </BarChart>
+                                    <div className={styles.distItem}>
+                                        <ScalableVectorGraphics
+                                            className={styles.reliefIcon}
+                                            src={moneyBag}
+                                            alt="Relief"
+                                        />
+                                        <ul>
+                                            <li>
+                                                <span className={styles.biggerText}>Rs 33,00,000</span>
+                                            </li>
+                                            <li>
+                                                <span className={styles.smallerText}>Relief Amount</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div className={styles.distItem}>
+                                        <ScalableVectorGraphics
+                                            className={styles.reliefIcon}
+                                            src={family}
+                                            alt="Relief"
+                                        />
+                                        <ul>
+                                            <li>
+                                                <span className={styles.biggerText}>35</span>
+                                            </li>
+                                            <li>
+                                                <span className={styles.smallerText}>
+                                                     Number of Beneficiay Families
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                                <div className={styles.peopleBenefited}>
+
+                                    <div className={styles.benefitedRow}>
+                                        <div className={styles.distItem}>
+                                            <ScalableVectorGraphics
+                                                className={styles.reliefIcon}
+                                                src={male}
+                                                alt="Relief"
+                                            />
+                                            <ul>
+                                                <li>
+                                                    <span className={styles.biggerText}>{maleBenefited}</span>
+
+                                                </li>
+                                                <li>
+                                                    <span className={styles.smallerText}>Male</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className={styles.distItem}>
+                                            <ScalableVectorGraphics
+                                                className={styles.reliefIcon}
+                                                src={female}
+                                                alt="Relief"
+                                            />
+                                            <ul>
+                                                <li>
+                                                    <span className={styles.biggerText}>{femaleBenefited}</span>
+                                                </li>
+
+                                                <li>
+                                                    <span className={styles.smallerText}>Female</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className={styles.lastRow}>
+                                        <ul>
+                                            <li>
+                                                <span className={styles.darkerSmText}>
+                                                    {janajatis}
+
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className={styles.lighterSmText}>
+                                         JANAJATI
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul>
+                                            <li>
+                                                <span className={styles.darkerSmText}>
+
+
+                                                    {madhesis}
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className={styles.lighterSmText}>
+                                         MADEHESI
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul>
+                                            <li>
+                                                <span className={styles.darkerSmText}>
+                                                    {miorities}
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className={styles.lighterSmText}>
+
+                                         MINORITY
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <ul>
+                                            <li>
+                                                <span className={styles.darkerSmText}>
+                                                    {dalits}
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span className={styles.lighterSmText}>
+                                         DALITS
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
-
                 )
-
 
             }
             {modalClose ? ''
