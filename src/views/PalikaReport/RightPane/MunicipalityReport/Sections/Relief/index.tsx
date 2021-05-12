@@ -231,6 +231,17 @@ const Relief = (props: Props) => {
     const [disableInput, setDisableInput] = useState(false);
     const [loader, setLoader] = useState(true);
     const [hazardDetails, setHazardDetails] = useState([]);
+
+    const [totreliefAmt, setTotReliefAmt] = useState(0);
+    const [totBenFam, setTotBenFam] = useState(0);
+    const [totFemale, setTotFemale] = useState(0);
+    const [totMale, setTotMale] = useState(0);
+    const [totJanajatis, setTotJanajatis] = useState(0);
+    const [totMadhesis, setTotMadhesis] = useState(0);
+    const [totMinotiries, setTotMinorities] = useState(0);
+    const [totDalits, setTotDalits] = useState(0);
+    // const [femaleBenefited, handlefemaleBenefited] = useState(0);
+
     const handleReliefData = (response) => {
         setReliefData(response);
     };
@@ -250,7 +261,10 @@ const Relief = (props: Props) => {
 
 
     // here
-
+    const getMonthFromDate = (date: string) => {
+        const dateItem = new Date(date);
+        return dateItem.toLocaleString('default', { month: 'long' });
+    };
 
     useEffect(() => {
         if (reliefData) {
@@ -287,6 +301,7 @@ const Relief = (props: Props) => {
     const handlefemaleBenefited = (data) => {
         setfemaleBenefited(data.target.value);
     };
+
     const handleMinorities = (data) => {
         setmiorities(data.target.value);
     };
@@ -510,12 +525,57 @@ const Relief = (props: Props) => {
         }
     }, [hazardTypes.length, deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
-    const getMonthFromDate = (date: string) => {
-        const dateItem = new Date(date);
-        return dateItem.toLocaleString('default', { month: 'long' });
-    };
 
     console.log('This is relief date>>>', hazardTypes);
+    useEffect(() => {
+        if (reliefData) {
+            const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const reliefChart = reliefDateArr.map(d => ({
+                name: d,
+                'Amount-Distributed': reliefData
+                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
+                    ? reliefData
+                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
+                        .reliefAmountNpr
+                    : 0,
+
+                Beneficiaries: reliefData
+                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
+                    ? reliefData
+                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
+                        .numberOfBeneficiaryFamily
+                    : 0,
+            }));
+            setReliefChartData(reliefChart);
+
+            const totData = reliefData.reduce((a, b) => ({
+                numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily,
+                nameOfBeneficiary: a.nameOfBeneficiary + b.nameOfBeneficiary,
+                dateOfReliefDistribution: a.dateOfReliefDistribution + b.dateOfReliefDistribution,
+                reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr,
+                totalMaleBenefited: a.totalMaleBenefited + b.totalMaleBenefited,
+                totalFemaleBenefited: a.totalFemaleBenefited + b.totalFemaleBenefited,
+                totalMinoritiesBenefited: a.totalMinoritiesBenefited + b.totalMinoritiesBenefited,
+                totalDalitBenefited: a.totalDalitBenefited + b.totalDalitBenefited,
+                totalMadhesiBenefited: a.totalMadhesiBenefited + b.totalMadhesiBenefited,
+                totalDisabledBenefited: a.totalDisabledBenefited + b.totalDisabledBenefited,
+                totalJanjatiBenefited: a.totalJanjatiBenefited + b.totalJanjatiBenefited,
+            }));
+
+            setTotReliefAmt(totData.reliefAmountNpr);
+            setTotBenFam(totData.numberOfBeneficiaryFamily);
+            setTotMale(totData.totalMaleBenefited);
+            setTotFemale(totData.totalFemaleBenefited);
+            setTotJanajatis(totData.totalJanjatiBenefited);
+            setTotMadhesis(totData.totalMadhesiBenefited);
+            setTotMinorities(totData.totalMinoritiesBenefited);
+            setTotDalits(totData.totalDalitBenefited);
+        }
+    }, [reliefData]);
+
+
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
         url,
@@ -580,6 +640,33 @@ const Relief = (props: Props) => {
             ReliefData: handleReliefData,
         });
     };
+    // const handleSavedReliefData = (response) => {
+    //     setShowRelief(false);
+    //     setModalClose(true);
+    //     setfamiliesBenefited(null);
+    //     setnamesofBeneficiaries('');
+    //     setreliefDate('');
+    //     setreliefAmount(null);
+    //     setmaleBenefited(null);
+    //     setfemaleBenefited(null);
+    //     setmiorities(null);
+    //     setdalits(null);
+    //     setmadhesis(null);
+    //     setdisabilities(null);
+    //     setjanajatis(null);
+    //     PalikaReportInventoriesReport.do({
+    //         organisation: handleFetchedData,
+    //         url,
+    //         inventories: defaultQueryParameter,
+    //         fields,
+    //         user,
+    //         meta,
+
+    //     });
+    //     ReliefDataGet.do({
+    //         ReliefData: handleReliefData,
+    //     });
+    // };
     const handleSaveRelief = () => {
         ReliefDataPost.do({
             body: {
@@ -1208,8 +1295,8 @@ const Relief = (props: Props) => {
                              Relief
                                 </h2>
                                 <ComposedChart
-                                    width={450}
-                                    height={200}
+                                    width={500}
+                                    height={300}
                                     data={reliefChartData}
                                     margin={{
                                         top: 5,
@@ -1219,7 +1306,7 @@ const Relief = (props: Props) => {
                                     }}
                                 >
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <XAxis dataKey="name" scale="auto" />
+                                    <XAxis interval={0} angle={90} dataKey="name" scale="auto" />
                                     <YAxis scale="auto" yAxisId="left" />
                                     <YAxis width={80} yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
                                     <Tooltip />
@@ -1228,7 +1315,7 @@ const Relief = (props: Props) => {
                                         dataKey="Beneficiaries"
                                         barSize={20}
                                         fill="rgb(0,177,117)"
-                                        label={{ position: 'top', fill: '#222', fontSize: '10px' }}
+                                        label={{ position: 'top', fill: '#777', fontSize: '10px' }}
                                         yAxisId="left"
                                     />
 
@@ -1237,6 +1324,8 @@ const Relief = (props: Props) => {
                                         type="monotone"
                                         dataKey="Amount-Distributed"
                                         stroke="rgb(165,0,21)"
+                                        label={{ position: 'top', fill: '#777', fontSize: '10px' }}
+
                                     />
                                 </ComposedChart>
                             </div>
@@ -1249,9 +1338,14 @@ const Relief = (props: Props) => {
                                             src={moneyBag}
                                             alt="Relief"
                                         />
+
                                         <ul>
                                             <li>
-                                                <span className={styles.biggerText}>Rs 33,00,000</span>
+                                                <span className={styles.biggerText}>
+Rs
+                                                    {' '}
+                                                    {totreliefAmt}
+                                                </span>
                                             </li>
                                             <li>
                                                 <span className={styles.smallerText}>Relief Amount</span>
@@ -1266,11 +1360,11 @@ const Relief = (props: Props) => {
                                         />
                                         <ul>
                                             <li>
-                                                <span className={styles.biggerText}>35</span>
+                                                <span className={styles.biggerText}>{totBenFam}</span>
                                             </li>
                                             <li>
                                                 <span className={styles.smallerText}>
-                                                     Number of Beneficiay Families
+                                                     Number of Beneficiary Families
                                                 </span>
                                             </li>
                                         </ul>
@@ -1288,7 +1382,7 @@ const Relief = (props: Props) => {
                                             />
                                             <ul>
                                                 <li>
-                                                    <span className={styles.biggerText}>{maleBenefited}</span>
+                                                    <span className={styles.biggerText}>{totMale}</span>
 
                                                 </li>
                                                 <li>
@@ -1304,7 +1398,7 @@ const Relief = (props: Props) => {
                                             />
                                             <ul>
                                                 <li>
-                                                    <span className={styles.biggerText}>{femaleBenefited}</span>
+                                                    <span className={styles.biggerText}>{totFemale}</span>
                                                 </li>
 
                                                 <li>
@@ -1317,7 +1411,7 @@ const Relief = (props: Props) => {
                                         <ul>
                                             <li>
                                                 <span className={styles.darkerSmText}>
-                                                    {janajatis}
+                                                    {totJanajatis}
 
                                                 </span>
                                             </li>
@@ -1332,7 +1426,7 @@ const Relief = (props: Props) => {
                                                 <span className={styles.darkerSmText}>
 
 
-                                                    {madhesis}
+                                                    {totMadhesis}
                                                 </span>
                                             </li>
                                             <li>
@@ -1344,7 +1438,7 @@ const Relief = (props: Props) => {
                                         <ul>
                                             <li>
                                                 <span className={styles.darkerSmText}>
-                                                    {miorities}
+                                                    {totMinotiries}
                                                 </span>
                                             </li>
                                             <li>
@@ -1357,7 +1451,7 @@ const Relief = (props: Props) => {
                                         <ul>
                                             <li>
                                                 <span className={styles.darkerSmText}>
-                                                    {dalits}
+                                                    {totDalits}
                                                 </span>
                                             </li>
                                             <li>
