@@ -1369,11 +1369,9 @@ const Relief = (props: Props) => {
                                     }}
                                 >
                                     <CartesianGrid stroke="#f5f5f5" />
-<<<<<<< HEAD
-                                    <XAxis interval={0} angle={90} dataKey="name" scale="auto" />
-                                    <YAxis scale="auto" yAxisId="left" />
-                                    <YAxis width={80} yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
-=======
+                                    {/* <XAxis interval={0} angle={90} dataKey="name" scale="auto" /> */}
+                                    {/* <YAxis scale="auto" yAxisId="left" />
+                                    <YAxis width={80} yAxisId="right" orientation="right" tick={{ fontSize: 10 }} /> */}
                                     <XAxis
                                         height={35}
                                         // dy={15}
@@ -1397,7 +1395,6 @@ const Relief = (props: Props) => {
                                         // label={{ value: 'Relief Distributed (NPR)', angle: -90, position: 'right' }}
 
                                     />
->>>>>>> 9315b615... page layout done
                                     <Tooltip />
                                     <Legend />
                                     <Bar

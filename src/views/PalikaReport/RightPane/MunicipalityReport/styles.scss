@@ -5,6 +5,24 @@
     flex-direction: column;
     .page{
         width: 210mm;
+        background-color: white;
+    }
+    .annexPage{
+        padding: 30px;
+        margin-top: 10px;
+        width: 297mm;
+        background-color: white;
+        // margin: 0 auto;
+        min-height: 210mm;
+        h2{
+            color: rgb(31,112,227);
+        }
+        h1{
+            color: rgb(31,112,227);
+            font-size: 22px;
+            margin-bottom: 15px;
+            margin-top: 20px;
+        }
     }
     .buttonContainer{
         display:flex;
