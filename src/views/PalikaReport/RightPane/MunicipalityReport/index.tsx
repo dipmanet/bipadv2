@@ -316,11 +316,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 const imgData = canvas.toDataURL('image/png');
                 let imgWidth = 210;
                 let pageHeight = 295;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
                 if (i < (length - 1) && i > 2) {
                     imgWidth = 295;
                     pageHeight = 210;
                 }
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+
                 let heightLeft = imgHeight;
                 let position = 0;
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');

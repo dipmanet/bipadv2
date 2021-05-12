@@ -367,7 +367,7 @@ const ProgramPolicies = (props: Props) => {
                     </h2>
                     <ul>
                         {finalPolicyData.length > 0
-                        && finalPolicyData.slice(0, 1).map(item => (
+                        && finalPolicyData.slice(0, 2).map(item => (
                             <li key={item.id}>
                                 {item.point}
                             </li>

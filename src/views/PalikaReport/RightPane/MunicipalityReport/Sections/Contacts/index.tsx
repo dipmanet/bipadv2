@@ -194,6 +194,7 @@ const Contacts = (props: Props) => {
                 return null;
             }).filter(contact => contact !== null).map(e => arr.push(...e));
             setTrainingsList(arr);
+            console.log('tl:', arr);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mergedData]);

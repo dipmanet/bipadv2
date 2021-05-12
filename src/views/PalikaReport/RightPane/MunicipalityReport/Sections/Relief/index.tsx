@@ -121,18 +121,14 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
 
         onSuccess: ({ response, props, params }) => {
-            console.log('Thiis is response>>>', response);
             params.savedRelief(response);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
-                console.warn('failure', error);
-                console.log('This is params>>>', params);
             }
         },
         onFatal: ({ params }) => {
-            console.log('This is params>>>', params);
         },
     },
     ReliefDataPUT: {
@@ -141,18 +137,14 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
 
         onSuccess: ({ response, props, params }) => {
-            console.log('Thiis is response>>>', response);
             params.updateAndClose(response);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
-                console.warn('failure', error);
-                console.log('This is params>>>', params);
             }
         },
         onFatal: ({ params }) => {
-            console.log('This is params>>>', params);
         },
     },
     HazardDataGet: {
@@ -308,7 +300,6 @@ const Relief = (props: Props) => {
             ReliefData: handleReliefData,
         });
     };
-    console.log('This is show relief>>>', familiesBenefited);
     const handleReliefView = (data) => {
         setShowRelief(true);
         setDisableInput(true);
@@ -322,7 +313,6 @@ const Relief = (props: Props) => {
         });
     };
     const handleReliefEdit = (data, item) => {
-        console.log(data);
         setReliefId(data.id);
         setModalClose(false);
         setPostButton(false);
@@ -394,10 +384,9 @@ const Relief = (props: Props) => {
 
             const hazards = [...new Set(fetchedData.map(item => item.hazard))]
                 .filter(hazar => hazar !== undefined);
-
             const hazardwiseImpactData = hazards.map(item => ({
-                name: hazardTypes[item].titleitem,
-                'No. of Incidents': fetchedData.filter(inc => inc.hazard === item).length,
+                name: hazardTypes[item].title,
+                Incidents: fetchedData.filter(inc => inc.hazard === item).length,
                 'People Death': fetchedData.filter(inc => inc.hazard === item)
                     .map(losses => losses.loss)
                     .filter(a => a !== undefined)
@@ -405,7 +394,7 @@ const Relief = (props: Props) => {
                     .filter(count => count !== undefined)
                     .reduce((a, b) => a + b),
             }));
-
+            console.log('hid: ', hazardwiseImpactData);
             const deathMaleData = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathMaleCount)
@@ -458,7 +447,7 @@ const Relief = (props: Props) => {
                 })));
             setWardWiseImpact(wardWiseImpactData);
         }
-    }, [deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
+    }, [hazardTypes.length, deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
 
     const handlemaleBenefited = (data) => {
@@ -853,88 +842,92 @@ const Relief = (props: Props) => {
             && (
                 <>
                     <div className={styles.budgetPreviewContainer}>
-                        <div className={styles.lossSection}>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={IncidentIcon}
-                                    alt="Bullet Point"
-                                />
+                        <h2>Loss Section</h2>
+                        <div className={styles.lossRow}>
 
-                                <ul>
-                                    <p className={styles.darkerText}>{incidentCount}</p>
-                                    <p className={styles.smallerText}>Incident</p>
-                                </ul>
+                            <div className={styles.lossSection}>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={IncidentIcon}
+                                        alt="Bullet Point"
+                                    />
+
+                                    <ul>
+                                        <p className={styles.darkerText}>{incidentCount}</p>
+                                        <p className={styles.smallerText}>Incident</p>
+                                    </ul>
+                                </div>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={EstimatedLossIcon}
+                                        alt="Bullet Point"
+                                    />
+                                    <ul>
+                                        <p className={styles.darkerText}>{`${(totalEstimatedLoss / 1000000).toFixed(2)}m`}</p>
+                                        <p className={styles.smallerText}>ESTIMATED LOSS (RS)</p>
+                                    </ul>
+                                </div>
                             </div>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={EstimatedLossIcon}
-                                    alt="Bullet Point"
-                                />
-                                <ul>
-                                    <p className={styles.darkerText}>{`${(totalEstimatedLoss / 1000000).toFixed(2)}m`}</p>
-                                    <p className={styles.smallerText}>ESTIMATED LOSS (RS)</p>
-                                </ul>
+                            <div className={styles.lossSection}>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={DeathIcon}
+                                        alt="Bullet Point"
+                                    />
+                                    <ul>
+                                        <p className={styles.darkerText}>{deathCount}</p>
+                                        <p className={styles.smallerText}>DEATH</p>
+                                    </ul>
+                                </div>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={MissingIcon}
+                                        alt="Bullet Point"
+                                    />
+                                    <ul>
+                                        <p className={styles.darkerText}>{missing}</p>
+                                        <p className={styles.smallerText}>MISSING</p>
+                                    </ul>
+                                </div>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={InjredIcon}
+                                        alt="Bullet Point"
+                                    />
+                                    <ul>
+                                        <p className={styles.darkerText}>{injured}</p>
+                                        <p className={styles.smallerText}>INJURED</p>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.lossSection}>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={DeathIcon}
-                                    alt="Bullet Point"
-                                />
-                                <ul>
-                                    <p className={styles.darkerText}>{deathCount}</p>
-                                    <p className={styles.smallerText}>DEATH</p>
-                                </ul>
-                            </div>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={MissingIcon}
-                                    alt="Bullet Point"
-                                />
-                                <ul>
-                                    <p className={styles.darkerText}>{missing}</p>
-                                    <p className={styles.smallerText}>MISSING</p>
-                                </ul>
-                            </div>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={InjredIcon}
-                                    alt="Bullet Point"
-                                />
-                                <ul>
-                                    <p className={styles.darkerText}>{injured}</p>
-                                    <p className={styles.smallerText}>INJURED</p>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className={styles.lossSection}>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={InfraIcon}
-                                    alt="Bullet Point"
-                                />
-                                <ul>
-                                    <p className={styles.darkerText}>{infraDestroyed}</p>
-                                    <p className={styles.smallerText}>INFRASTRUCTURE DESTROYED</p>
-                                </ul>
-                            </div>
-                            <div className={styles.lossElement}>
-                                <ScalableVectorGraphics
-                                    className={styles.lossIcon}
-                                    src={LivestockIcon}
-                                    alt="Bullet Point"
-                                />
-                                <ul>
-                                    <p className={styles.darkerText}>{livestockDestroyed}</p>
-                                    <p className={styles.smallerText}>LIVE STOCK DESTROYED</p>
-                                </ul>
+                            <div className={styles.lossSection}>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={InfraIcon}
+                                        alt="Bullet Point"
+                                    />
+                                    <ul>
+                                        <p className={styles.darkerText}>{infraDestroyed}</p>
+                                        <p className={styles.smallerText}>INFRASTRUCTURE DESTROYED</p>
+                                    </ul>
+                                </div>
+                                <div className={styles.lossElement}>
+                                    <ScalableVectorGraphics
+                                        className={styles.lossIcon}
+                                        src={LivestockIcon}
+                                        alt="Bullet Point"
+                                    />
+                                    <ul>
+                                        <p className={styles.darkerText}>{livestockDestroyed}</p>
+                                        <p className={styles.smallerText}>LIVE STOCK DESTROYED</p>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
 
@@ -952,22 +945,36 @@ const Relief = (props: Props) => {
                              (Top 5)
                             </h2>
                             <BarChart
-                                width={250}
-                                height={200}
-                                data={hazardwiseImpact.slice(0, 5)}
+                                width={300}
+                                height={250}
+                                data={hazardwiseImpact
+                                    .sort((a, b) => b.Incidents - a.Incidents)
+                                    .slice(0, 5)
+                                }
                                 margin={{ left: 0, right: 5, top: 10 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
+                                <XAxis
+                                    tick={{ textAlign: 'left', fontSize: '9' }}
+                                    interval={0}
+                                    height={80}
+                                    angle={50}
+                                    textAnchor="start"
+                                    dataKey="name"
+                                />
                                 <YAxis />
                                 <Tooltip />
-                                <Legend />
+                                <Legend
+                                    verticalAlign="top"
+                                    height={20}
+                                />
                                 <Bar
                                     fill="rgb(198,233,232)"
                                     dataKey="People Death"
+
                                 />
                                 <Bar
-                                    dataKey="No. of Incidents"
+                                    dataKey="Incidents"
                                     fill="rgb(0,173,115)"
 
                                 />
@@ -980,11 +987,11 @@ const Relief = (props: Props) => {
                             </h2>
                             <div className={styles.chartandlegend}>
 
-                                <PieChart width={200} height={200}>
+                                <PieChart width={200} height={175}>
                                     <Pie
                                         data={deathGenderChartData}
                                         cx={80}
-                                        cy={95}
+                                        cy={110}
                                         innerRadius={40}
                                         outerRadius={60}
                                         fill="#8884d8"
@@ -1109,18 +1116,23 @@ const Relief = (props: Props) => {
                             <BarChart
                                 width={250}
                                 height={250}
-                                data={wardWiseImpact}
+                                data={wardWiseImpact
+                                    .sort((a, b) => -(a.Death + a.Injured + a.Missing) + (b.Death + b.Injured + b.Missing))
+                                    .slice(0, 5)
+                                }
                                 margin={{ left: 0, right: 5, top: 10, bottom: 20 }}
 
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
+                                <XAxis dx={10} interval={0} angle={40} dataKey="ward" />
                                 <YAxis />
                                 <Tooltip />
-                                <Legend wrapperStyle={{
-                                    paddingTop: '5px',
-                                    paddingLeft: '5px',
-                                }}
+                                <Legend
+                                    wrapperStyle={{
+                                        paddingTop: '5px',
+                                        paddingLeft: '5px',
+                                        marginLeft: '15px',
+                                    }}
                                 />
                                 <Bar
                                     dataKey="Death"

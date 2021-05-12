@@ -3,11 +3,11 @@ a{
 }
 
 .bapalikaTable{
-table-layout: fixed;
+// table-layout: fixed;
 width: 210mm;
 // word-break: keep-all;
 word-break:break-all;
-font-size: 8px;
+// font-size: 8px;
 td{
     padding: 2px !important;
     vertical-align: top;
@@ -180,16 +180,17 @@ td{
 
 }
 .budgetActPreviewContainer{
-    // margin-left: 30px;
-    margin-top: 10px;
+    margin-left: 30px;
+    margin-top: 20px;
     h2{
         font-size: 14px;
         font-weight: 600;
-        margin-left: 35px;
+        margin-left: 5px;
         color: #222;
     }
     .budgetActChartContainer{
         display: flex;
+        // margin-left: 30px;
         .legend{
         display: flex;
         flex-direction: column;

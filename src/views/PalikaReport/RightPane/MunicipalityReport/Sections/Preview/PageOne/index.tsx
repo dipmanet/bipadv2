@@ -67,9 +67,10 @@ export interface BudgetActivityData{
 const Preview = () => (
     <div className={styles.previewContainer}>
         <Header />
-        <div className={styles.rowOne}>
 
-            <div className={styles.columnOneOne}>
+        <div className={styles.row}>
+            <div className={styles.columnOne}>
+
                 <Budget
                     previewDetails
                     reportData={''}
@@ -86,20 +87,6 @@ const Preview = () => (
                     handleNextClick={() => {}}
                     previewDetails
                 />
-            </div>
-
-            <div className={styles.columnOneTwo}>
-                <CriticalInfra
-                    previewDetails
-                    handleNextClick={() => {}}
-                    updateTab={() => {}}
-
-                />
-
-            </div>
-        </div>
-        <div className={styles.rowTwo}>
-            <div className={styles.columnTwoOne}>
                 <BudgetActivity
                     updateTab={() => {}}
                     page={-1}
@@ -107,22 +94,6 @@ const Preview = () => (
                     handleNextClick={() => {}}
                     monitoringDetails
                 />
-
-            </div>
-
-            <div className={styles.columnTwoTwo}>
-                <Inventory
-                    updateTab={() => {}}
-                    page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
-                    previewDetails
-                />
-            </div>
-        </div>
-
-        <div className={styles.rowThree}>
-            <div className={styles.columnThreeOne}>
                 <ProgrammeAndPolicies
                     updateTab={() => {}}
                     page={-1}
@@ -130,26 +101,37 @@ const Preview = () => (
                     handleNextClick={() => {}}
                     previewDetails
                 />
+
+
             </div>
-            <div className={styles.columnThreeTwo}>
+            <div className={styles.columntwo}>
+
+                <CriticalInfra
+                    previewDetails
+                    handleNextClick={() => {}}
+                    updateTab={() => {}}
+                />
+                <Inventory
+                    updateTab={() => {}}
+                    page={-1}
+                    handlePrevClick={() => {}}
+                    handleNextClick={() => {}}
+                    previewDetails
+                />
+
+
                 <Organisation
                     updateTab={() => {}}
                     handlePrevClick={() => {}}
                     handleNextClick={() => {}}
                     previewDetails
                 />
-            </div>
-        </div>
-        <div className={styles.rowFour}>
-            <div className={styles.columnFourOne}>
                 <Simulation
                     updateTab={() => {}}
                     handlePrevClick={() => {}}
                     handleNextClick={() => {}}
                     previewDetails
                 />
-            </div>
-            <div className={styles.columnFourTwo}>
                 <Contacts
                     updateTab={() => {}}
                     handlePrevClick={() => {}}

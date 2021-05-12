@@ -920,108 +920,111 @@ const BudgetActivity = (props: Props) => {
                         }
 
                         {props.previewDetails
-               && (
-                   <div className={styles.budgetActPreviewContainer}>
-                       <h2>Budget Activity</h2>
-                       <div className={styles.budgetActChartContainer}>
+               && (chartdata.length > 0
+                   ? (
+                       <div className={styles.budgetActPreviewContainer}>
+                           <h2>Budget Activity</h2>
+                           <div className={styles.budgetActChartContainer}>
 
-                           <PieChart width={150} height={150}>
-                               <Pie
-                                   data={chartdata}
-                                   cx={90}
-                                   cy={95}
-                                   innerRadius={40}
-                                   outerRadius={80}
-                                   fill="#8884d8"
-                                   paddingAngle={1}
-                                   dataKey="value"
-                                   startAngle={90}
-                                   endAngle={450}
-                               >
-                                   {chartdata.map((entry, index) => (
+                               <PieChart width={200} height={200}>
+                                   <Pie
+                                       data={chartdata}
+                                       cx={90}
+                                       cy={95}
+                                       innerRadius={40}
+                                       outerRadius={80}
+                                       fill="#8884d8"
+                                       paddingAngle={1}
+                                       dataKey="value"
+                                       startAngle={90}
+                                       endAngle={450}
+                                   >
+                                       {chartdata.map((entry, index) => (
                                        // eslint-disable-next-line react/no-array-index-key
-                                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                   ))}
-                               </Pie>
-                           </PieChart>
+                                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                       ))}
+                                   </Pie>
+                               </PieChart>
 
-                           <div className={styles.legend}>
-                               <div className={styles.activitiesAmt}>
-                                   <span className={styles.light}>
+                               <div className={styles.legend}>
+                                   <div className={styles.activitiesAmt}>
+                                       <span className={styles.light}>
                                        Total no. of activities
-                                       {' '}
-                                   </span>
-                                   <span className={styles.biggerNum}>
-                                       {budgetActivities.length > 0
-                                           ? budgetActivities.length
-                                           : 0
-                                       }
-                                   </span>
-                               </div>
-                               <div className={styles.legenditem}>
-
-                                   <div className={styles.legendColorContainer}>
-                                       <div
-                                           style={{ backgroundColor: COLORS[0] }}
-                                           className={styles.legendColor}
-                                       />
+                                           {' '}
+                                       </span>
+                                       <span className={styles.biggerNum}>
+                                           {budgetActivities.length > 0
+                                               ? budgetActivities.length
+                                               : 0
+                                           }
+                                       </span>
                                    </div>
-                                   <div className={styles.numberRow}>
-                                       <ul>
-                                           <li>
-                                               <span className={styles.bigerNum}>
-                                                   {
-                                                       (Number(drrFund)
+                                   <div className={styles.legenditem}>
+
+                                       <div className={styles.legendColorContainer}>
+                                           <div
+                                               style={{ backgroundColor: COLORS[0] }}
+                                               className={styles.legendColor}
+                                           />
+                                       </div>
+                                       <div className={styles.numberRow}>
+                                           <ul>
+                                               <li>
+                                                   <span className={styles.bigerNum}>
+                                                       {
+                                                           (Number(drrFund)
                                                    / (Number(drrFund)
                                                    + Number(additionalFund))
                                                    * 100).toFixed(0)
-                                                   }
-                                                   {
-                                                       '%'
-                                                   }
+                                                       }
+                                                       {
+                                                           '%'
+                                                       }
 
-                                               </span>
-                                           </li>
-                                           <li className={styles.light}>
-                                               <span>DRR Funding of Municipality</span>
-                                           </li>
-                                       </ul>
+                                                   </span>
+                                               </li>
+                                               <li className={styles.light}>
+                                                   <span>DRR Funding of Municipality</span>
+                                               </li>
+                                           </ul>
+                                       </div>
                                    </div>
-                               </div>
-                               <div className={_cs(styles.legenditem, styles.bottomRow)}>
-                                   <div className={styles.legendColorContainer}>
-                                       <div
-                                           style={{ backgroundColor: COLORS[1] }}
-                                           className={styles.legendColor}
-                                       />
-                                   </div>
+                                   <div className={_cs(styles.legenditem, styles.bottomRow)}>
+                                       <div className={styles.legendColorContainer}>
+                                           <div
+                                               style={{ backgroundColor: COLORS[1] }}
+                                               className={styles.legendColor}
+                                           />
+                                       </div>
 
-                                   <div className={styles.numberRow}>
-                                       <ul>
-                                           <li>
-                                               <span className={styles.bigerNum}>
+                                       <div className={styles.numberRow}>
+                                           <ul>
+                                               <li>
+                                                   <span className={styles.bigerNum}>
 
-                                                   {
-                                                       (Number(additionalFund)
+                                                       {
+                                                           (Number(additionalFund)
                                                    / (Number(drrFund)
                                                    + Number(additionalFund))
                                                    * 100).toFixed(0)
-                                                   }
-                                                   {
-                                                       '%'
-                                                   }
-                                               </span>
-                                           </li>
-                                           <li className={styles.light}>
-                                               <span>Other DRR related Funding</span>
-                                           </li>
-                                       </ul>
+                                                       }
+                                                       {
+                                                           '%'
+                                                       }
+                                                   </span>
+                                               </li>
+                                               <li className={styles.light}>
+                                                   <span>Other DRR related Funding</span>
+                                               </li>
+                                           </ul>
+                                       </div>
                                    </div>
                                </div>
                            </div>
-                       </div>
 
-                   </div>
+                       </div>
+                   )
+                   : <h1>No Data</h1>
                )
 
                         }
@@ -1038,7 +1041,7 @@ const BudgetActivity = (props: Props) => {
                            </li>
                            <li>
                                <span className={styles.smallerText}>
-                               Disaster Risk Reduction National Strategic Plan of Action 2018-2039
+                               Disaster Risk Reduction National Strategic Plan of Action 2018-2030
                                </span>
                            </li>
                        </ul>

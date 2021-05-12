@@ -17,7 +17,10 @@
             justify-content: center;
             align-items: center;
             margin-right: 7px;
-            white-space: no-wrap;
+            ul{
+                list-style: none;
+                padding-left: 0;
+              }
             .circlePatch{
                 width: 30px;
                 height: 30px;
@@ -37,6 +40,7 @@
                 color: #777;
                 white-space: no-wrap;
                 font-weight: 600;
+                text-align: center;
             }
         }
     }

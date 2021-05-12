@@ -344,7 +344,7 @@ const CriticalInfra = (props: Props) => {
                         <h2> Critical Infrastructure</h2>
                         <BarChart
                             width={350}
-                            height={300}
+                            height={200}
                             data={chartData}
                             layout="vertical"
                             margin={{ left: 10, right: 5, top: 10 }}
@@ -369,7 +369,7 @@ const CriticalInfra = (props: Props) => {
                                 tick={{ fill: 'rgb(200,200,200)' }}
                                 cx={90}
                                 cy={105}
-                                barSize={20}
+                                barSize={15}
                             />
                         </BarChart>
 

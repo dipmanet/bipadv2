@@ -739,6 +739,7 @@ const Simulation = (props: Props) => {
                                 </div>
                                 <p className={styles.simDesc}>
                             No. of simulation
+                                    <br />
                             conducted
                                 </p>
                             </div>
@@ -754,6 +755,8 @@ const Simulation = (props: Props) => {
                                 </div>
                                 <p className={styles.simDesc}>
                             No. of people
+                                    <br />
+
                             trained
                                 </p>
                             </div>
