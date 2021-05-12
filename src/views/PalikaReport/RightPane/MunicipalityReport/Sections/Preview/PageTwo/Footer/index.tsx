@@ -93,9 +93,6 @@ const Footer = (props: Props) => {
     useEffect(() => {
         if (fiscalYearList.length > 0 && fiscalYear) {
             const FY = fiscalYearList.filter(item => item.id === Number(fiscalYear));
-            console.log('fy obj', FY);
-            console.log('fiscalYearList', fiscalYearList);
-            console.log('fiscalyear', fiscalYear);
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
@@ -111,16 +108,31 @@ const Footer = (props: Props) => {
                             {`${municipality} Municipality`}
                             ,
                             {' '}
+
+                        </li>
+                        <li className={styles.munTitle}>
+                            {' '}
                             {`${district} District`}
                             ,
                             {' '}
                             {`${province}`}
                         </li>
-                        <li className={styles.munTitle}>POB: 213311</li>
-                        <li className={styles.munTitle}>PHONE: +977-1-449354</li>
+                        {/* <li className={styles.munTitle}>POB: 213311</li> */}
+                        {/* <li className={styles.munTitle}>PHONE: +977-1-449354</li> */}
                         <li className={styles.munTitle}>{`WEB: https://www.${municipality.toLowerCase()}mun.gov.np/en`}</li>
                     </ul>
                 </div>
+            </div>
+            <div className={styles.rightContainer}>
+
+                <ul>
+                    <li>
+                        This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/).
+                    </li>
+                    <li className={styles.smallNote}>
+                         Note: Please refer to the Annexes for details on each section
+                    </li>
+                </ul>
             </div>
         </div>
 

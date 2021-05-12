@@ -133,13 +133,16 @@
       flex-direction: column;
       .benefitedRow{
           display: flex;
-          // border: 3px solid blue;
+              // border: 3px solid blue;
           margin-left: 15px;
           top: 5px;
           position: relative;
+          align-items: center;
+          // justify-content: center;
           .distItem{
               // border: 1px solid gray;
               display: flex;
+              align-items: center;
               ul{list-style: none; padding-left: 0;}
               .reliefIcon{
                   path{fill: rgb(0,177,117)}
@@ -221,21 +224,27 @@
                       padding-top: 17px;
                       padding-right: 2px;
                       .legendColor{
-                          width: 15px;
-                          height: 15px;
+                          width: 25px;
+                          height: 25px;
                           border-radius: 50%;
-                          // display: none;
+                          display: none;
                       }   
                   }
                   .numberRow {
                       display: flex;
-                      justify-content: flex-start;
-                      align-items: flex-start;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
+                      .houseIcon{
+                        width: 30px;
+                        height: 30px;
+
+                      }
                       ul{list-style: none; 
                           padding-left: 1%;
                           padding-top: 0;
                       }
-                    
+                      
                       .bigerNum{
                           font-size: 18px;
                       font-weight: 600;
@@ -252,12 +261,11 @@
     .incidentMiddleSection{
       display: flex;
       flex-direction: column;
-      // height: 300px;
+      height: 200px;
       align-items: center;
       justify-content: flex-start;
       // flex-wrap: wrap;
       position: relative;
-      // border: 1px solid red;
       left: 20px;
       h2{
         font-size: 14px;
@@ -281,7 +289,7 @@
           justify-content: space-around;
           align-items: center;
           // border: 1px solid blue;
-          // height: 60px;
+          height: 100px;
           position: relative;
           // bottom: 30px;
           width: 100%;
@@ -300,16 +308,21 @@
               }
               .legenditem{
                   display: flex;
-                  justify-content: flex-end;
-                  align-items: flex-start;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+          // border: 1px solid red;
+          height: 70px;
+          width: 70px;
+
                   .legendColorContainer{
                       height: 100%;
                       display: flex;
                       justify-content: flex-start;
                       align-items: flex-start;
                       //need to fix this
-                      padding-top: 17px;
-                      padding-right: 2px;
+                      // padding-top: 17px;
+                      // padding-right: 2px;
                       .legendColor{
                           width: 15px;
                           height: 15px;
@@ -319,13 +332,20 @@
                   }
                   .numberRow {
                       display: flex;
-                      justify-content: flex-start;
-                      align-items: flex-start;
+                      justify-content: center;
+                      align-items: center;
+                     flex-direction: column;
+                    //  border: 1px solid gray;
+                     position: relative;
+                     top: 20px;
                       ul{list-style: none; 
                           padding-left: 1%;
                           padding-top: 0;
                       }
-                    
+                      .houseIcon{
+                        width: 50px;
+                        height: 50px;
+                      }
                       .bigerNum{
                           font-size: 18px;
                       font-weight: 600;
@@ -350,6 +370,7 @@
           font-size: 12px;
           color: #222;
           font-weight: 600;
+          margin-left: 10px;
         }
         .houseRow{
           display: flex;
@@ -426,9 +447,22 @@
          height: 50px;
          position: relative;
          top: 18px;
+<<<<<<< HEAD
+=======
+          padding: 0;
+          margin: 0;
+          // border: 1px solid red;
+
+       
+>>>>>>> 9315b615... page layout done
          path{
            fill:rgb(0,177,117);
          }
+        }
+        .deathL{
+          position: relative;
+          right: 7px;
+          // border: 1px solid red;
         }
         ul{
           padding-left: 0;

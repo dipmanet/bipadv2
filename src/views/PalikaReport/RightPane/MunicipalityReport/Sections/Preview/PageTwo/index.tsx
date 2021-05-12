@@ -136,19 +136,6 @@ const Preview = (props: Props) => {
 
                 <Footer />
 
-                <ul>
-                    <li>
-                        This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/).
-                    </li>
-                    <li>
-                        BIPAD portal an integrated Disaster Information Management System of Nepal,
-                        administered by the National Disaster
-                        Risk Reduction and Management Authority (NDRRMA)
-                    </li>
-                    <li className={styles.smallNote}>
-                         Note: Please refer to the Annexes for details on each section
-                    </li>
-                </ul>
             </div>
         </div>
     );

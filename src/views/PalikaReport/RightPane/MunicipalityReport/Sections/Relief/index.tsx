@@ -522,7 +522,10 @@ const Relief = (props: Props) => {
                     Injured: (a.peopleInjuredCount || 0) + (b.peopledeathCount || 0),
                     Missing: (a.peopleMissingCount || 0) + (b.peopledeathCount || 0),
                 })));
-            setWardWiseImpact(wardWiseImpactData);
+
+
+            setWardWiseImpact([]);
+            console.log('wwd', wardWiseImpactData);
         }
     }, [hazardTypes.length, deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
 
@@ -1060,11 +1063,9 @@ const Relief = (props: Props) => {
                                         <p className={styles.smallerText}>ESTIMATED LOSS (RS)</p>
                                     </ul>
                                 </div>
-                            </div>
-                            <div className={styles.lossSection}>
                                 <div className={styles.lossElement}>
                                     <ScalableVectorGraphics
-                                        className={styles.lossIcon}
+                                        className={_cs(styles.lossIcon, styles.deathL)}
                                         src={DeathIcon}
                                         alt="Bullet Point"
                                     />
@@ -1075,7 +1076,7 @@ const Relief = (props: Props) => {
                                 </div>
                                 <div className={styles.lossElement}>
                                     <ScalableVectorGraphics
-                                        className={styles.lossIcon}
+                                        className={_cs(styles.lossIcon, styles.deathL)}
                                         src={MissingIcon}
                                         alt="Bullet Point"
                                     />
@@ -1095,8 +1096,6 @@ const Relief = (props: Props) => {
                                         <p className={styles.smallerText}>INJURED</p>
                                     </ul>
                                 </div>
-                            </div>
-                            <div className={styles.lossSection}>
                                 <div className={styles.lossElement}>
                                     <ScalableVectorGraphics
                                         className={styles.lossIcon}
@@ -1110,7 +1109,7 @@ const Relief = (props: Props) => {
                                 </div>
                                 <div className={styles.lossElement}>
                                     <ScalableVectorGraphics
-                                        className={styles.lossIcon}
+                                        className={_cs(styles.lossIcon, styles.deathL)}
                                         src={LivestockIcon}
                                         alt="Bullet Point"
                                     />
@@ -1120,6 +1119,7 @@ const Relief = (props: Props) => {
                                     </ul>
                                 </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -1179,7 +1179,7 @@ const Relief = (props: Props) => {
                                 </h2>
                                 <div className={styles.chartandlegend}>
 
-                                    <PieChart width={200} height={175}>
+                                    {/* <PieChart width={200} height={175}>
                                         <Pie
                                             data={deathGenderChartData}
                                             cx={80}
@@ -1197,20 +1197,21 @@ const Relief = (props: Props) => {
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                             ))}
                                         </Pie>
-                                    </PieChart>
+                                    </PieChart> */}
 
                                     <div className={styles.legend}>
                                         <div className={styles.legenditem}>
 
-                                            <div className={styles.legendColorContainer}>
-                                                <div
-                                                    style={{ backgroundColor: COLORS[0] }}
-                                                    className={styles.legendColor}
-                                                />
-                                            </div>
+
                                             <div className={styles.numberRow}>
+                                                <ScalableVectorGraphics
+                                                    className={styles.houseIcon}
+                                                    src={male}
+                                                    alt="Bullet Point"
+                                                />
                                                 <ul>
                                                     <li>
+
                                                         <span className={styles.bigerNum}>
 
 
@@ -1233,16 +1234,17 @@ const Relief = (props: Props) => {
                                             </div>
                                         </div>
                                         <div className={_cs(styles.legenditem, styles.bottomRow)}>
-                                            <div className={styles.legendColorContainer}>
-                                                <div
-                                                    style={{ backgroundColor: COLORS[1] }}
-                                                    className={styles.legendColor}
-                                                />
-                                            </div>
+
 
                                             <div className={styles.numberRow}>
+                                                <ScalableVectorGraphics
+                                                    className={styles.houseIcon}
+                                                    src={female}
+                                                    alt="Bullet Point"
+                                                />
                                                 <ul>
                                                     <li>
+
                                                         <span className={styles.bigerNum}>
 
                                                             {
@@ -1367,9 +1369,35 @@ const Relief = (props: Props) => {
                                     }}
                                 >
                                     <CartesianGrid stroke="#f5f5f5" />
+<<<<<<< HEAD
                                     <XAxis interval={0} angle={90} dataKey="name" scale="auto" />
                                     <YAxis scale="auto" yAxisId="left" />
                                     <YAxis width={80} yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
+=======
+                                    <XAxis
+                                        height={35}
+                                        // dy={15}
+                                        interval={0}
+                                        angle={50}
+                                        dataKey="name"
+                                        scale="auto"
+                                        tick={{ textAlign: 'left', fontSize: '10' }}
+                                        textAnchor="start"
+                                    />
+                                    <YAxis
+                                        scale="auto"
+                                        yAxisId="left"
+                                        // label={{ value: 'No of Beneficiaries', angle: -90, position: 'insideLeft' }}
+                                    />
+                                    <YAxis
+                                        width={80}
+                                        yAxisId="right"
+                                        orientation="right"
+                                        tick={{ fontSize: 10 }}
+                                        // label={{ value: 'Relief Distributed (NPR)', angle: -90, position: 'right' }}
+
+                                    />
+>>>>>>> 9315b615... page layout done
                                     <Tooltip />
                                     <Legend />
                                     <Bar
