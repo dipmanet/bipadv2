@@ -123,7 +123,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 
 };
-const formdata = new FormData();
+// const formdata = new FormData();
 const ReportModal: React.FC<Props> = (props: Props) => {
     const {
         keyTab,
@@ -302,10 +302,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     // };
 
     const handlePreviewBtn = async () => {
-        const divToDisplay = document.getElementById('reportPreview');
+        // const divToDisplay = document.getElementById('reportPreview');
         setPending(true);
         let pageNumber = 1;
         const doc = new JsPDF('p', 'mm', 'a4');
+        const docSummary = new JsPDF('p', 'mm', 'a4');
+
         const ids = document.querySelectorAll('.page');
         const { length } = ids;
         console.log('ids:', ids);
@@ -321,10 +323,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     imgWidth = 295;
                     pageHeight = 210;
                 }
-
                 let heightLeft = imgHeight;
                 let position = 0;
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                if (i < 2) {
+                    docSummary.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                }
                 heightLeft -= pageHeight;
                 while (heightLeft >= 0) {
                     if (i < (length - 1) && i < 2) {
@@ -349,6 +353,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     pageNumber += 1;
                     doc.text(210, 285, `page ${pageNumber}`);
                     doc.addPage('a4', 'portrait');
+                    docSummary.addPage('a4', 'portrait');
                 }
                 if (i < (length - 1) && i > 2) {
                     pageNumber += 1;
@@ -357,8 +362,64 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 }
             });
         }
+
+        const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
+        const blobSummary = new Blob([docSummary.output('blob')], { type: 'application/pdf' });
+
+        let profileUser = {};
+        if (user) {
+            profileUser = user.profile;
+        }
+        const formdata = new FormData();
+
+        formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+        formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+
+        formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
+        formdata.append('fiscalYear', generalData.fiscalYear);
+        formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
+        formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
+        formdata.append('province', (profileUser.province || ''));
+        formdata.append('district', (profileUser.district || ''));
+        formdata.append('municipality', (profileUser.municipality || ''));
+
+        if (generalData.mayor) {
+            formdata.append('mayorChairperson', generalData.mayor.id);
+        }
+        if (generalData.cao) {
+            formdata.append('chiefAdministrativeOfficer', generalData.cao.id);
+        }
+        if (generalData.focalPerson) {
+            formdata.append('drrFocalPerson', generalData.focalPerson.id);
+        }
+
+        if (disasterProfile.length) {
+            axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
+                'content-type': 'multipart/form-data',
+            } })
+                .then((response) => {
+                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    alert('Your palika report has been uploaded sucessfully');
+                }).catch((error) => {
+                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                });
+        } else {
+            axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
+                'content-type': 'multipart/form-data',
+            } })
+                .then((response) => {
+                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    alert('Your palika report has been uploaded sucessfully');
+                }).catch((error) => {
+                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                });
+        }
         // download the pdf with all reportPages
-        doc.save(`All_reportPages_${Date.now()}.pdf`);
+        // doc.save(`All_reportPages_${Date.now()}.pdf`);
         // });
 
         // old code
@@ -394,49 +455,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         //             heightLeft -= pageHeight;
         //         }
         //     }
-        //     const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
-        //     // const file = new File([blob], 'image.pdf');
-        //     // const blob = await doc.output('blob');
-        //     // formdata.append('file', blob);
-        //     // const base64 = doc.output('datauristring');
-        //     // canvas.toBlob((blob) => {
 
-        //     // });
-        //     let profileUser = {};
-        //     if (user) {
-        //         profileUser = user.profile;
-        //     }
-
-        //     formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-        //     formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
-        //     formdata.append('fiscalYear', generalData.fiscalYear);
-        //     formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
-        //     formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-        //     formdata.append('province', (profileUser.province || ''));
-        //     formdata.append('district', (profileUser.district || ''));
-        //     formdata.append('municipality', (profileUser.municipality || ''));
-        //     // formdata.append('mayorChairperson', generalData.mayor);
-        //     // formdata.append('chiefAdministrativeOfficer', generalData.cao);
-        //     // formdata.append('drrFocalPerson', generalData.focalPerson);
-        //     // if (disasterProfile.length) {
-        //     //     axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
-        //     //         'content-type': 'multipart/form-data',
-        //     //     } })
-        //     //         .then((response) => {
-        //     //             doc.save('file.pdf');
-        //     //             alert('Your palika report has been uploaded sucessfully');
-        //     //         }).catch((error) => { });
-        //     // } else {
-        //     //     axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
-        //     //         'content-type': 'multipart/form-data',
-        //     //     } })
-        //     //         .then((response) => {
-        //     //             doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-        //     //             alert('Your palika report has been uploaded sucessfully');
-        //     //         }).catch((error) => { });
-        //     // }
-        //     doc.save('DRRM Report.pdf');
-        // // });
+        // });
         // });
     };
 
