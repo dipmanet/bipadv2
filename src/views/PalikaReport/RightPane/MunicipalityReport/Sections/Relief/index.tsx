@@ -242,6 +242,7 @@ const Relief = (props: Props) => {
     const [totDalits, setTotDalits] = useState(0);
     // const [femaleBenefited, handlefemaleBenefited] = useState(0);
 
+
     const handleReliefData = (response) => {
         setReliefData(response);
     };
@@ -688,6 +689,66 @@ const Relief = (props: Props) => {
 
         });
     };
+
+    // const handleUpdateAndClose = (response) => {
+    useEffect(() => {
+        if (reliefData) {
+            const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const reliefChart = reliefDateArr.map(d => ({
+                name: d,
+                'Amount-Distributed': reliefData
+                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
+                    ? reliefData
+                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
+                        .reliefAmountNpr
+                    : 0,
+
+                Beneficiaries: reliefData
+                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
+                    ? reliefData
+                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
+                        .numberOfBeneficiaryFamily
+                    : 0,
+            }));
+            setReliefChartData(reliefChart);
+
+            const totData = reliefData.reduce((a, b) => ({
+                numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily,
+                nameOfBeneficiary: a.nameOfBeneficiary + b.nameOfBeneficiary,
+                dateOfReliefDistribution: a.dateOfReliefDistribution + b.dateOfReliefDistribution,
+                reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr,
+                totalMaleBenefited: a.totalMaleBenefited + b.totalMaleBenefited,
+                totalFemaleBenefited: a.totalFemaleBenefited + b.totalFemaleBenefited,
+                totalMinoritiesBenefited: a.totalMinoritiesBenefited + b.totalMinoritiesBenefited,
+                totalDalitBenefited: a.totalDalitBenefited + b.totalDalitBenefited,
+                totalMadhesiBenefited: a.totalMadhesiBenefited + b.totalMadhesiBenefited,
+                totalDisabledBenefited: a.totalDisabledBenefited + b.totalDisabledBenefited,
+                totalJanjatiBenefited: a.totalJanjatiBenefited + b.totalJanjatiBenefited,
+            }));
+
+            setTotReliefAmt(totData.reliefAmountNpr);
+            setTotBenFam(totData.numberOfBeneficiaryFamily);
+            setTotMale(totData.totalMaleBenefited);
+            setTotFemale(totData.totalFemaleBenefited);
+            setTotJanajatis(totData.totalJanjatiBenefited);
+            setTotMadhesis(totData.totalMadhesiBenefited);
+            setTotMinorities(totData.totalMinoritiesBenefited);
+            setTotDalits(totData.totalDalitBenefited);
+        }
+    }, [reliefData]);
+
+    PalikaReportInventoriesReport.setDefaultParams({
+        organisation: handleFetchedData,
+        url,
+        inventories: defaultQueryParameter,
+        fields,
+        user,
+        meta,
+
+    });
+
 
     const handleUpdateAndClose = (response) => {
         setShowRelief(false);
