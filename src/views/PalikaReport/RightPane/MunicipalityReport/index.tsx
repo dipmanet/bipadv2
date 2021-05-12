@@ -6,9 +6,7 @@ import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import Loader from 'react-loader-spinner';
 import { _cs } from '@togglecorp/fujs';
-import { ProgressBar } from 'react-bootstrap';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
@@ -18,11 +16,8 @@ import PreviewPageTwo from './Sections/Preview/PageTwo';
 import General from './Sections/General';
 import ProgrammeAndPolicies from './Sections/ProgrammeAndPolicies';
 import Contacts from './Sections/Contacts';
-import DRRMembers from './Sections/Contacts/DRRMembers';
 import Inventory from './Sections/Inventory';
-import DamageAndLoss from './Sections/DamageAndLoss';
 import CriticalInfra from './Sections/CriticalInfra';
-import WardwiseDeath from './Sections/DamageAndLoss/WardwiseDeath';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
 import 'react-circular-progressbar/dist/styles.css';
@@ -30,18 +25,14 @@ import 'react-circular-progressbar/dist/styles.css';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
 import { userSelector, palikaRedirectSelector,
     generalDataSelector, provincesSelector,
-    districtsSelector, municipalitiesSelector } from '#selectors';
+    districtsSelector, municipalitiesSelector,
+    palikaLanguageSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
-import Preparedness from './Sections/Preparedness';
-import NextPrevBtns from './NextPrevBtns';
-import Recovery from './Sections/Recovery';
-import Annex from './Sections/Preview/Annex';
 
 interface Props {
     keyTab: number;
@@ -59,6 +50,7 @@ const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    palikaLanguage: palikaLanguageSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -72,8 +64,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     //                 municipality: params.municipality,
     //             };
     //         }
-
-
     //         return { limit: params.page, offset: params.offset };
     //     },
     //     method: methods.GET,
@@ -150,10 +140,14 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         provinces,
         districts,
         municipalities,
+        palikaLanguage,
     } = props;
     const {
         fiscalYear,
     } = generalData;
+    const {
+        language,
+    } = palikaLanguage;
     const { showForm } = palikaRedirect;
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
@@ -161,10 +155,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [formationDate, setformationDate] = useState('');
     const [memberCount, setmemberCount] = useState('');
     const [reportData, setReportData] = useState([]);
-    const [savePDF, setSavePDF] = useState();
     const [disasterProfile, setDisasterProfile] = useState([]);
     const [pending, setPending] = useState(false);
-    const [totalFiscalYear, setTotalFiscalYear] = useState([]);
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
     const [progress, setProgress] = useState(0);
@@ -192,19 +184,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
         municipalityName = municipalities.find(item => item.id === municipality);
     }
-    // if (user && user.profile && !user.profile.municipality && user.profile.district) {
-    //     const {
-    //         profile: {
-    //             district,
-
-    //         },
-    //     } = user;
-    //     loginUserDetails = districts.find(item => item.id === district);
-    // }
-
-
-    const handleWelcomePage = () => hideWelcomePage();
-
     const handleDisasterProfile = (response) => {
         setDisasterProfile(response);
     };
@@ -223,9 +202,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     //     fiscalYearList: handleFiscalYearList,
     // });
 
-    const handlePending = (data) => {
-        setPending(data);
-    };
+
     useEffect(() => {
         if (fiscalYearList.length > 0 && fiscalYear) {
             const FY = fiscalYearList.filter(item => item.id === Number(fiscalYear));
@@ -234,81 +211,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
     }, [fiscalYear, fiscalYearList]);
 
-    // const handlePreviewBtn = async () => {
-    //     const divToDisplay = document.getElementById('reportPreview');
-
-    //     setPending(true);
-    //     html2canvas(divToDisplay).then(async (canvas) => {
-    //         // const formData = new FormData();
-    //         const imgData = canvas.toDataURL('image/png');
-    //         const imgWidth = 210;
-    //         const pageHeight = 295;
-    //         const imgHeight = canvas.height * imgWidth / canvas.width;
-    //         let heightLeft = imgHeight;
-    //         const doc = new JsPDF('p', 'mm', 'a4', true);
-    //         let position = 0; // give some top padding to first page
-
-    //         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-    //         heightLeft -= pageHeight;
-    //         let count = 0;
-    //         while (heightLeft >= 0) {
-    //             count += 1;
-    //             if (count >= 2) {
-    //                 position = heightLeft - imgHeight; // top padding for other pages
-    //                 doc.addPage('a4', 'portrait');
-    //                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-    //                 heightLeft -= pageHeight;
-    //             } else {
-    //                 position = heightLeft - imgHeight; // top padding for other pages
-    //                 doc.addPage('a4', 'portrait');
-    //                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-    //                 heightLeft -= pageHeight;
-    //             }
-    //         }
-    //         const blob = new Blob([doc.output('blob')], { type: 'application/pdf' });
-    //         // const file = new File([blob], 'image.pdf');
-    //         // const blob = await doc.output('blob');
-    //         // formdata.append('file', blob);
-    //         // const base64 = doc.output('datauristring');
-    //         // canvas.toBlob((blob) => {
-
-    //         // });
-    //         let profileUser = {};
-    //         if (user) {
-    //             profileUser = user.profile;
-    //         }
-
-    //         formdata.append('file', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-    //         formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
-    //         formdata.append('fiscalYear', generalData.fiscalYear);
-    //         formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
-    //         formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-    //         formdata.append('province', (profileUser.province || ''));
-    //         formdata.append('district', (profileUser.district || ''));
-    //         formdata.append('municipality', (profileUser.municipality || ''));
-    //         // formdata.append('mayorChairperson', generalData.mayor);
-    //         // formdata.append('chiefAdministrativeOfficer', generalData.cao);
-    //         // formdata.append('drrFocalPerson', generalData.focalPerson);
-    //         if (disasterProfile.length) {
-    //             axios.put(`http://bipaddev.yilab.org.np/api/v1/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
-    //                 'content-type': 'multipart/form-data',
-    //             } })
-    //                 .then((response) => {    //                     alert('Your palika report has been uploaded sucessfully');
-    //                 }).catch((error) => {    //                 });
-    //         } else {
-    //             axios.post('http://bipaddev.yilab.org.np/api/v1/disaster-profile/', formdata, { headers: {
-    //                 'content-type': 'multipart/form-data',
-    //             } })
-    //                 .then((response) => {    //                     alert('Your palika report has been uploaded sucessfully');
-    //                 }).catch((error) => {    //                 });
-    //         }    //         doc.save('file.pdf');
-    //     });
-    // };
-
-    const handlePreviewBtn = async () => {
-        // const divToDisplay = document.getElementById('reportPreview');
+    const handlePreviewBtn = async (reportType: string) => {
         setPending(true);
-
         let pageNumber = 1;
         const doc = new JsPDF('p', 'mm', 'a4');
         const docSummary = new JsPDF('p', 'mm', 'a4');
@@ -333,37 +237,41 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
                 if (i < 2) {
                     docSummary.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                }
-                heightLeft -= pageHeight;
-                while (heightLeft >= 0) {
-                    if (i < (length - 1) && i < 2) {
-                        position = heightLeft - imgHeight; // top padding for other pages
-                        pageNumber += 1;
-                        doc.text(285, 200, `page ${pageNumber}`);
-                        doc.addPage('a4', 'portrait');
-                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                        heightLeft -= pageHeight;
+                    if (i < 1) {
+                        docSummary.addPage('a4', 'portrait');
                     }
-                    if (i < (length - 1) && i > 2) {
-                        position = heightLeft - imgHeight; // top padding for other pages
-                        pageNumber += 1;
-                        doc.text(200, 285, `page ${pageNumber}`);
-                        doc.addPage('a4', 'landscape');
-                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                        heightLeft -= pageHeight;
+                }
+                if (i >= 2) {
+                    heightLeft -= pageHeight;
+                    while (heightLeft >= 0) {
+                        if (i < (length - 1) && i < 2) {
+                            position = heightLeft - imgHeight; // top padding for other pages
+                            pageNumber += 1;
+                            doc.addPage('a4', 'portrait');
+                            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                            doc.text(285, 200, `page ${pageNumber}`);
+                            heightLeft -= pageHeight;
+                        }
+                        if (i < (length - 1) && i > 2) {
+                            position = heightLeft - imgHeight; // top padding for other pages
+                            pageNumber += 1;
+                            doc.addPage('a4', 'landscape');
+                            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                            doc.text(200, 285, `page ${pageNumber}`);
+                            heightLeft -= pageHeight;
+                        }
                     }
                 }
 
-                if (i < (length - 1) && i < 2) {
-                    pageNumber += 1;
-                    doc.text(210, 285, `page ${pageNumber}`);
+                if (i < (length - 1) && i < 1) {
+                    // doc.text(270, 10, `page ${pageNumber}`);
                     doc.addPage('a4', 'portrait');
-                    docSummary.addPage('a4', 'portrait');
-                }
-                if (i < (length - 1) && i > 2) {
                     pageNumber += 1;
-                    doc.text(270, 200, `page ${pageNumber}`);
+                }
+                if (i < (length - 1) && i >= 1) {
+                    doc.text(270, 10, `page ${pageNumber}`);
                     doc.addPage('a4', 'landscape');
+                    pageNumber += 1;
                 }
             });
         }
@@ -376,9 +284,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             profileUser = user.profile;
         }
         const formdata = new FormData();
+        if (language === 'en') {
+            formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+        }
+        if (language === 'np') {
+            formdata.append('fullFileNp', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+        }
 
-        formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-        formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
 
         formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
         formdata.append('fiscalYear', generalData.fiscalYear);
@@ -405,8 +319,22 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 .then((response) => {
                     setPending(false);
                     setProgress(100);
-                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    if (language === 'np') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                    }
+                    if (language === 'en') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName.title_en}DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                    }
                     alert('Your palika report has been uploaded sucessfully');
                 }).catch((error) => {
                     setPending(false);
@@ -423,9 +351,22 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 .then((response) => {
                     setPending(false);
                     setProgress(100);
-
-                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    if (language === 'np') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                    }
+                    if (language === 'en') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName.title_en}DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                        }
+                    }
                     alert('Your palika report has been uploaded sucessfully');
                 }).catch((error) => {
                     setPending(false);
@@ -611,11 +552,20 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             <div className={styles.buttonContainer}>
                                 <button
                                     type="button"
-                                    onClick={handlePreviewBtn}
+                                    onClick={() => handlePreviewBtn('full')}
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Submit and Download Report
+                                Download Full Report
+
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handlePreviewBtn('summary')}
+                                    className={!pending ? styles.agreeBtn : styles.disabled}
+                                    disabled={pending}
+                                >
+                                Download Summary Report
 
                                 </button>
                             </div>

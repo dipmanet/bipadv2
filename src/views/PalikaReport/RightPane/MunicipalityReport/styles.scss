@@ -27,9 +27,9 @@
     .buttonContainer{
         display:flex;
         // border: 1px solid red;
-        justify-content: flex-end;
-        width: 80%;
-        margin: 0 auto;
+        justify-content: center;
+        width: 100%;
+        // margin: 0 auto;
         .agreeBtn{
             filter: saturate(100%);
             border: none;
