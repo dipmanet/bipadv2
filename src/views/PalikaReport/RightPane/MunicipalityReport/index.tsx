@@ -8,6 +8,8 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import Loader from 'react-loader-spinner';
 import { _cs } from '@togglecorp/fujs';
+import { ProgressBar } from 'react-bootstrap';
+import { CircularProgressbar } from 'react-circular-progressbar';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
@@ -23,6 +25,7 @@ import CriticalInfra from './Sections/CriticalInfra';
 import WardwiseDeath from './Sections/DamageAndLoss/WardwiseDeath';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
+import 'react-circular-progressbar/dist/styles.css';
 
 import {
     createConnectedRequestCoordinator,
@@ -164,6 +167,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [totalFiscalYear, setTotalFiscalYear] = useState([]);
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
+    const [progress, setProgress] = useState(0);
 
     const getGeneralData = () => ({
         reportTitle,
@@ -304,16 +308,17 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const handlePreviewBtn = async () => {
         // const divToDisplay = document.getElementById('reportPreview');
         setPending(true);
+
         let pageNumber = 1;
         const doc = new JsPDF('p', 'mm', 'a4');
         const docSummary = new JsPDF('p', 'mm', 'a4');
 
         const ids = document.querySelectorAll('.page');
         const { length } = ids;
-        console.log('ids:', ids);
         for (let i = 0; i < length; i += 1) {
             const reportPage = document.getElementById(ids[i].id);
-
+            setPending(true);
+            setProgress((i + 1) * 100 / (length + 1));
             await html2canvas(reportPage).then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 let imgWidth = 210;
@@ -398,66 +403,39 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
+                    setPending(false);
+                    setProgress(100);
                     docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                     doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                     alert('Your palika report has been uploaded sucessfully');
                 }).catch((error) => {
+                    setPending(false);
+                    setProgress(100);
+
                     docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                     doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    alert('Error occured. Please try again.');
                 });
         } else {
             axios.post(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/`, formdata, { headers: {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {
+                    setPending(false);
+                    setProgress(100);
+
                     docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                     doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                     alert('Your palika report has been uploaded sucessfully');
                 }).catch((error) => {
+                    setPending(false);
+                    setProgress(100);
+
+                    alert('Error occured. Please try again.');
                     docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                     doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
                 });
         }
-        // download the pdf with all reportPages
-        // doc.save(`All_reportPages_${Date.now()}.pdf`);
-        // });
-
-        // old code
-        // async generateAllPdf() {
-
-        // }
-
-        // html2canvas(divToDisplay).then(async (canvas) => {
-        //     // const formData = new FormData();
-        //     const imgData = canvas.toDataURL('image/png');
-        //     const imgWidth = 210;
-        //     const pageHeight = 295;
-        //     const imgHeight = canvas.height * imgWidth / canvas.width;
-        //     let heightLeft = imgHeight;
-        //     const doc = new JsPDF('p', 'mm', '', true);
-        //     let position = 0; // give some top padding to first page
-
-        //     doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-        //     heightLeft -= pageHeight;
-        //     let count = 0;
-        //     while (heightLeft >= 0) {
-        //         count += 1;
-        //         if (count >= 2) {
-        //             const imgHeightL = canvas.width * imgWidth / canvas.height;
-        //             position = heightLeft - imgHeightL; // top padding for other pages
-        //             doc.addPage('a4', 'landscape');
-        //             doc.addImage(imgData, 'PNG', 0, position, 295, imgHeightL, '', 'FAST');
-        //             heightLeft -= 210;
-        //         } else {
-        //             position = heightLeft - imgHeight; // top padding for other pages
-        //             doc.addPage('a4', 'portrait');
-        //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-        //             heightLeft -= pageHeight;
-        //         }
-        //     }
-
-        // });
-        // });
     };
 
 
@@ -621,14 +599,12 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             {
                                 pending
                                     && (
-                                        <div className={styles.loaderContainer}>
-                                            <Loader
-                                                type="TailSpin"
-                                                color="#00BFFF"
-                                                height={50}
-                                                width={50}
-                                                timeout={7000}
-                                            />
+
+                                        <div className={styles.loaderDiv}>
+                                            <div className={styles.loaderContainer}>
+                                                <CircularProgressbar value={progress} />
+;
+                                            </div>
                                         </div>
                                     )
                             }
@@ -636,16 +612,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                 <button
                                     type="button"
                                     onClick={handlePreviewBtn}
-                                    className={styles.agreeBtn}
+                                    className={!pending ? styles.agreeBtn : styles.disabled}
+                                    disabled={pending}
                                 >
                                 Submit and Download Report
 
                                 </button>
-                                {/* <NextPrevBtns lastpage /> */}
                             </div>
 
 
-                            {/* <div id={'reportPreview'} className={styles.reportContainer}> */}
                             <div id={'page1'} className={_cs(styles.page, 'page')}>
                                 <PreviewPageOne
                                     generalData={getGeneralData()}

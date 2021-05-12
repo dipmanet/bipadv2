@@ -40,12 +40,38 @@
             cursor: pointer;
             position: relative;
         }
+        .disabled{
+            // filter: saturate(100%);
+            border: none;
+            background-color: rgb(131, 132, 133) !important;
+            border-radius: 3px;
+            color: white !important; 
+            padding: 7px;
+            cursor: pointer;
+            position: relative;
+        }
     }
-    .loaderContainer{
+    .loaderDiv{
         width: 100%;
-        height: 50%;
-        display: flex;
-        justify-content: center;
+        height: 100%;
+        background: gray;
+        opacity: 0.9;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        .loaderContainer{
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+            left: calc(50% - 25px);
+            top: calc(50% - 25px);
+            // z-index: 99999;
+            position: fixed;
+    
+        }
     }
     .pageAnnex{
         // width: 297mm;
