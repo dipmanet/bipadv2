@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Loader from 'react-loader-spinner';
+// import Loader from 'react-loader-spinner';
+import Loader from 'react-loader';
 import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
@@ -99,6 +100,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 
     },
+    BudgetPutRequest: {
+        url: ({ params }) => `/annual-budget/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            params.budgetId(response);
+            params.callGetApi(response);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+        },
+
+
+    },
 
 };
 
@@ -135,16 +150,16 @@ const Budget = (props: Props) => {
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
     const [fyTitle, setFYTitle] = useState('');
     const [showInfo, setShowInfo] = useState(false);
-
+    const [loader, setLoader] = useState(true);
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
-
+    const [editBudget, setEditBudget] = useState(false);
     const [totalMun, setTotalMun] = useState(false);
     const [drrfundInfo, setDrrFundInfo] = useState(false);
     const [otherFunding, setOtherFunding] = useState(false);
 
     // const [fiscalYear, setFiscalYear] = useState(2);
-    const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest } } = props;
+    const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest, BudgetPutRequest } } = props;
     const handlePending = (data: boolean) => {
         setPending(data);
     };
@@ -154,6 +169,7 @@ const Budget = (props: Props) => {
 
     const handleSaveAnnualBudgetData = (response) => {
         setAnnualBudgetData(response);
+        setLoader(false);
     };
 
     BudgetGetRequest.setDefaultParams({
@@ -217,6 +233,7 @@ const Budget = (props: Props) => {
 
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
+        setEditBudget(false);
     };
 
     const handleCallGetApi = (response) => {
@@ -232,9 +249,22 @@ const Budget = (props: Props) => {
         });
         props.handleNextClick();
     };
+    const handleCallUpdateApi = (response) => {
+        BudgetGetRequest.do({
+            fiscalYear: generalData.fiscalYear,
+            district: profile.district,
+            municipality: profile.municipality,
+            province: profile.province,
+            finalAnnualBudgetData: handleSaveAnnualBudgetData,
+            handlePendingState: handlePending,
+            setErrors: handleErrors,
+
+        });
+    };
     // const handleinfoClick = () => {
     //     setShowInfo(!showInfo);
     // };
+    console.log('This is annual budget data>>>', annualBudgetData);
     const handleNextClick = () => {
         console.log('annual budget data when clicked: ', annualBudgetData);
         console.log(Number(additionalFund),
@@ -244,8 +274,8 @@ const Budget = (props: Props) => {
             BudgetPostRequest.do({
                 body: {
                     title: budgetTitle,
-                    totalBudgetNrs: Number(drrFund),
-                    disasterBudgetNrs: Number(municipalBudget),
+                    totalBudgetNrs: Number(municipalBudget),
+                    disasterBudgetNrs: Number(drrFund),
                     otherBudgetNrs: Number(additionalFund),
                     fiscalYear: generalData.fiscalYear,
                     province,
@@ -269,6 +299,7 @@ const Budget = (props: Props) => {
                 drrFund: disasterBudgetNrs,
                 additionalFund: otherBudgetNrs,
             });
+            setBudgetId({ id: annualBudgetData[0].id });
             props.handleNextClick();
             updateTab();
         }
@@ -283,28 +314,44 @@ const Budget = (props: Props) => {
             setdrrFund(annualBudgetData[0].disasterBudgetNrs);
             setmunicipalBudget(annualBudgetData[0].totalBudgetNrs);
             setadditionalFund(annualBudgetData[0].otherBudgetNrs);
+            setBudgetId({ id: annualBudgetData[0].id });
         }
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annualBudgetData]);
-    console.log('this title>>>', drrFund);
+    const handleEditBudget = () => {
+        setEditBudget(true);
+    };
+    const handleUpdateBudget = () => {
+        setLoader(true);
+        BudgetPutRequest.do({
+            body: {
+                title: budgetTitle,
+                totalBudgetNrs: Number(municipalBudget),
+                disasterBudgetNrs: Number(drrFund),
+                otherBudgetNrs: Number(additionalFund),
+                fiscalYear: generalData.fiscalYear,
+                province,
+                district,
+                municipality,
+                handlePendingState: handlePending,
+                setErrors: handleErrors,
+            },
+            id: budgetId.id,
+            budgetId: handleBudgetId,
+            callGetApi: handleCallUpdateApi,
+        });
+    };
     return (
         <>
-            {' '}
+
             {
                 pending
                     ? (
                         <div className={styles.loaderClass}>
 
-                            <Loader
-                                type="TailSpin"
-                                color="#00BFFF"
-                                height={50}
-                                width={50}
-                                timeout={10000}
-
-                            />
+                            <Loader />
                         </div>
                     )
                     : (
@@ -446,38 +493,70 @@ const Budget = (props: Props) => {
 
                                             </tr>
                                         )}
-                                    {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
-                                        <tr key={item.id}>
-                                            {/* <td>{i + 1}</td> */}
-                                            <td>{item.totalBudgetNrs}</td>
-                                            <td>{item.disasterBudgetNrs}</td>
-                                            <td>{item.otherBudgetNrs}</td>
-                                            {/* <td>{item.updatedBy}</td> */}
-                                            <td>{item.modifiedOn.split('T')[0]}</td>
+                                    {loader ? (
+                                        <>
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
+                                                editBudget ? (
+                                                    <tr>
+                                                        {/* <td>1</td> */}
+                                                        <td>
+                                                            <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
+                                                            {' '}
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
+                                                            {' '}
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
+                                                            {' '}
+                                                        </td>
+                                                        <td>{item.modifiedOn.split('T')[0]}</td>
+
+                                                    </tr>
+                                                )
+                                                    : (
+                                                        <tr key={item.id}>
+                                                            {/* <td>{i + 1}</td> */}
+                                                            <td>{item.totalBudgetNrs}</td>
+                                                            <td>{item.disasterBudgetNrs}</td>
+                                                            <td>{item.otherBudgetNrs}</td>
+                                                            {/* <td>{item.updatedBy}</td> */}
+                                                            <td>{item.modifiedOn.split('T')[0]}</td>
 
 
-                                        </tr>
-                                    )) : (
-                                        <tr>
-                                            {/* <td>1</td> */}
-                                            <td>
-                                                <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
-                                                {' '}
-                                            </td>
-                                            <td>
-                                                <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
-                                                {' '}
-                                            </td>
-                                            <td>
-                                                <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
-                                                {' '}
-                                            </td>
+                                                        </tr>
+                                                    )
+                                            )) : (
+                                                <tr>
+                                                    {/* <td>1</td> */}
+                                                    <td>
+                                                        <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
+                                                        {' '}
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
+                                                        {' '}
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
+                                                        {' '}
+                                                    </td>
 
 
-                                        </tr>
-                                    )
-                                    }
-
+                                                </tr>
+                                            )
+                                            }
+                                        </>
+                                    )}
 
                                 </>
 
@@ -505,24 +584,42 @@ const Budget = (props: Props) => {
                             </ul>
                         )
                         }
-                        {
-                            !props.annex
+                        {!loader && (
+                            <>
+                                {
+                                    !props.annex
                         && (
                             <>
                                 {annualBudgetData.length > 0
-                                && (
-                                    <button
-                                        type="button"
-                                        className={styles.savebtn}
-                                        onClick={handleNextClick}
-                                    >
-                                        <Icon
-                                            name="plus"
-                                            className={styles.plusIcon}
-                                        />
-                    Edit Budget
-                                        {/* Add */}
-                                    </button>
+                                && (editBudget
+                                    ? (
+                                        <button
+                                            type="button"
+                                            className={styles.savebtn}
+                                            onClick={handleUpdateBudget}
+                                        >
+                                            <Icon
+                                                name="plus"
+                                                className={styles.plusIcon}
+                                            />
+                    Update Budget
+                                            {/* Add */}
+                                        </button>
+                                    )
+                                    : (
+                                        <button
+                                            type="button"
+                                            className={styles.savebtn}
+                                            onClick={handleEditBudget}
+                                        >
+                                            <Icon
+                                                name="plus"
+                                                className={styles.plusIcon}
+                                            />
+                   Edit Budget
+                                            {/* Add */}
+                                        </button>
+                                    )
                                 )}
 
                                 <NextPrevBtns
@@ -536,7 +633,9 @@ const Budget = (props: Props) => {
 
                             </>
                         )
-                        }
+                                }
+                            </>
+                        )}
 
                     </div>
                     {totalMun
@@ -644,6 +743,8 @@ const Budget = (props: Props) => {
                         </div>
                     )
             }
+
+
         </>
     );
 };

@@ -86,6 +86,7 @@
         display: flex;
         flex-direction: row;
         padding: 0;
+       
         .leftContainer{
             flex: 1;
             height: 100vh;
@@ -141,9 +142,18 @@
         .rightContainer{
         flex: 3;
         min-height: 100vh;
-        background-color: #EBEBEB;
-        padding: 0 20px;
+        background-color: #F6F6F6;
+       
         overflow-y: scroll;
+        z-index: 2;
+        .loaderInfo{
+            position: absolute;
+            top: 54%;
+            left: 55%;
+        }
+        .mainData{
+            padding: 10px 20px;
+        }
         .reportEditingSection{
         // border: 1px solid gray;
         margin-top: 20px;
@@ -152,7 +162,7 @@
  
         .submitButDisabled {
         background-color: grey;
-        border-radius: 15px;
+        border-radius: 5px;
         border: 1px solid silver;
         width: 80px;
         height: 30px;
@@ -192,7 +202,7 @@
     
         .rightContainerFilters{
             width:100%;
-            margin-top: 30px;
+            
             height: 10%;
             display: flex;
             align-items: center;
@@ -213,15 +223,15 @@
     
             }
             .submitBut {
-            background-color: #3498FC;
-            border-radius: 15px;
+            background-color: #297EDF;
+            border-radius: 5px;
             border: none;
             width: 80px;
             height: 30px;
             margin-left: 30px;
             filter: saturate(100%);
             color: white;
-            opacity: 0.87;
+            opacity: 0.67;
             font-weight: 700;
             cursor: pointer;
             }
@@ -231,7 +241,7 @@
                 background-color: rgb(232,232,232);
                 justify-content: flex-start;
                 align-items: center;
-                margin: 10px 0 18px 0;
+                // margin: 10px 0 18px 0;
 
                 input::-webkit-input-placeholder{
                     font-size: 10px;
@@ -262,7 +272,7 @@
                 input{
                     border: none !important;
                     outline: none !important;
-                    padding: 12px 7px;
+                    padding: 8px 7px;
                     margin-left: 0;
                     background: transparent;
                     width: 100% !important;
@@ -311,7 +321,7 @@
 
 .active-view {
     flex-grow: 1;
-    background-color: rgb(235,235,235);
+    background-color: #F6F6F6;
     overflow: auto;
     border: none !important;
 

@@ -303,7 +303,7 @@ Fiscal Year
                                                     onClick={handleEditButtonClick}
                                                     title="Edit Report"
                                                 >
-                                                Edit
+
                                                     <ScalableVectorGraphics
                                                         className={styles.bulletPoint}
                                                         src={editIcon}

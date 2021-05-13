@@ -10,6 +10,7 @@ import { BarChart,
     Legend, PieChart,
     Pie } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
+import Loader from 'react-loader';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -33,7 +34,6 @@ import { provincesSelector,
     userSelector,
     hazardTypesSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
-
 
 import IncidentIcon from '#resources/palikaicons/incident.svg';
 import EstimatedLossIcon from '#resources/palikaicons/loss.svg';
@@ -155,8 +155,26 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             console.log('This is params>>>', params);
         },
     },
-};
+    HazardDataGet: {
+        url: '/hazard/',
+        query: ({ params, props }) => ({
+            incident: params.incidentId,
+        }),
+        method: methods.GET,
+        onMount: true,
 
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.HazardData) {
+                params.HazardData(citizenReportList);
+            }
+        },
+    },
+};
+let finalArr = [];
 const Relief = (props: Props) => {
     const handleDataSave = () => {
         props.updateTab();
@@ -164,7 +182,10 @@ const Relief = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
     const {
-        requests: { PalikaReportInventoriesReport, ReliefDataPost, ReliefDataGet, ReliefDataPUT },
+        requests: { PalikaReportInventoriesReport,
+            HazardDataGet,
+            ReliefDataPost,
+            ReliefDataGet, ReliefDataPUT },
         provinces,
         districts,
         municipalities,
@@ -213,15 +234,22 @@ const Relief = (props: Props) => {
     const [reliefId, setReliefId] = useState();
     const [modalClose, setModalClose] = useState(true);
     const [disableInput, setDisableInput] = useState(false);
-
+    const [loader, setLoader] = useState(true);
+    const [hazardDetails, setHazardDetails] = useState([]);
     const handleReliefData = (response) => {
         setReliefData(response);
     };
 
+
+    const handleHazardData = (response) => {
+        setHazardDetails(response);
+    };
     ReliefDataGet.setDefaultParams({
         ReliefData: handleReliefData,
     });
-
+    HazardDataGet.setDefaultParams({
+        HazardData: handleHazardData,
+    });
 
     const [wardWiseImpact, setWardWiseImpact] = useState([]);
 
@@ -238,6 +266,7 @@ const Relief = (props: Props) => {
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
     };
 
     const handleReliefAdd = (data) => {
@@ -454,7 +483,7 @@ const Relief = (props: Props) => {
         setjanajatis(data.target.value);
     };
 
-    console.log('This is relief date>>>', reliefDate);
+    console.log('This is relief date>>>', hazardTypes);
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
         url,
@@ -589,6 +618,25 @@ const Relief = (props: Props) => {
             updateAndClose: handleUpdateAndClose,
         });
     };
+
+    useEffect(() => {
+        if (fetchedData && hazardTypes) {
+            const finalfetchedData = fetchedData.map((item, i) => {
+                const hazardName = hazardDetails.find(data => data.id === item.hazard);
+
+                if (hazardName) {
+                    return { hazardName: hazardName.titleEn,
+                        item };
+                }
+
+                return null;
+            });
+
+            finalArr = [...new Set(finalfetchedData)];
+        }
+    }, [fetchedData, hazardDetails, hazardTypes]);
+    console.log('final arr>>', finalArr);
+
     return (
         <>
 
@@ -621,111 +669,123 @@ const Relief = (props: Props) => {
                                         && <th>Action</th>
                                         }
                                     </tr>
+                                    {loader ? (
+                                        <>
+                                            {' '}
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {finalArr && finalArr.map((item, i) => (
 
-                                    {fetchedData && fetchedData.map((item, i) => (
-
-                                        <tr key={item.id}>
-                                            <td>{i + 1}</td>
-                                            <td>{item.title}</td>
-                                            <td>{item.hazard}</td>
-                                            <td>{item.incidentOn.split('T')[0]}</td>
-                                            <td>{item.reportedOn.split('T')[0]}</td>
-                                            <td>{item.loss ? item.loss.peopleDeathCount : 0}</td>
-                                            <td>{item.loss ? item.loss.peopleInjuredCount : 0}</td>
-                                            <td>{item.loss ? item.loss.peopleMissingCount : 0}</td>
-                                            <td>{item.loss ? item.loss.familyAffectedCount : 0}</td>
-                                            <td>
-                                                {Number(item.loss
-                                                    ? item.loss.infrastructureAffectedBridgeCount : 0)
-                                        + Number(item.loss
-                                            ? item.loss.infrastructureAffectedElectricityCount : 0)
-                                        + Number(item.loss ? item.loss.infrastructureAffectedHouseCount : 0)
-                                        + Number(item.loss ? item.loss.infrastructureAffectedRoadCount : 0)}
-                                            </td>
-                                            <td>{item.loss ? item.loss.infrastructureDestroyedCount : 0}</td>
-                                            <td>{item.loss ? item.loss.livestockDestroyedCount : 0}</td>
-
-
-                                            {!props.annex && reliefData
-                                           && reliefData.find(data => data.incident === item.id)
-                                                ? reliefData.filter(data => data.incident === item.id).map(data => (
+                                                <tr key={item.item.id}>
+                                                    <td>{i + 1}</td>
+                                                    <td>{item.item.title}</td>
+                                                    <td>{item.hazardName}</td>
+                                                    <td>{item.item.incidentOn.split('T')[0]}</td>
+                                                    <td>{item.item.reportedOn.split('T')[0]}</td>
+                                                    <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
+                                                    <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
+                                                    <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>
+                                                    <td>{item.item.loss ? item.item.loss.familyAffectedCount : 0}</td>
                                                     <td>
-                                                        <div className={styles.buttonDiv}>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleReliefView(item)}
-                                                                className={styles.reliefBtn}
-                                                                title="View Relief"
-                                                            >
-                                                                <ScalableVectorGraphics
-                                                                    className={styles.bulletPoint}
-                                                                    src={programAndPolicyLogo}
-                                                                    alt="editPoint"
-                                                                />
-                                                            </button>
-
-                                                            <button
-                                                                // className={styles.editButtn}
-                                                                type="button"
-                                                                onClick={() => handleReliefEdit(data, item)}
-                                                                className={styles.reliefBtn}
-                                                                title="Edit Relief"
-                                                            >
-                                                                <ScalableVectorGraphics
-                                                                    className={styles.bulletPoint}
-                                                                    src={editIcon}
-                                                                    alt="editPoint"
-                                                                />
-                                                            </button>
-                                                        </div>
+                                                        {Number(item.item.loss
+                                                            ? item.item.loss.infrastructureAffectedBridgeCount : 0)
+                                        + Number(item.item.loss
+                                            ? item.item.loss.infrastructureAffectedElectricityCount : 0)
+                                        + Number(item.item.loss ? item.item.loss.infrastructureAffectedHouseCount : 0)
+                                        + Number(item.item.loss ? item.item.loss.infrastructureAffectedRoadCount : 0)}
                                                     </td>
-                                                ))
+                                                    <td>{item.item.loss ? item.item.loss.infrastructureDestroyedCount : 0}</td>
+                                                    <td>{item.item.loss ? item.item.loss.livestockDestroyedCount : 0}</td>
 
 
-                                                : (
-                                                    <td>
-                                                        { !props.annex
+                                                    {!props.annex && reliefData
+                                           && reliefData.find(data => data.incident === item.item.id)
+                                                        ? reliefData.filter(data => data.incident === item.item.id).map(data => (
+                                                            <td>
+                                                                <div className={styles.buttonDiv}>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleReliefView(item.item)}
+                                                                        className={styles.reliefBtn}
+                                                                        title="View Relief"
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={programAndPolicyLogo}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
+
+                                                                    <button
+                                                                        // className={styles.editButtn}
+                                                                        type="button"
+                                                                        onClick={() => handleReliefEdit(data, item.item)}
+                                                                        className={styles.reliefBtn}
+                                                                        title="Edit Relief"
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={editIcon}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        ))
+
+
+                                                        : (
+                                                            <td>
+                                                                { !props.annex
                                                        && (
-                                                           <div className={styles.buttonDiv}>
-                                                               <button
-                                                                   type="button"
-                                                                   onClick={() => handleReliefAdd(item)}
-                                                                   className={styles.reliefBtn}
-                                                                   title="Add Relief"
-                                                               >
-                                                                   <ScalableVectorGraphics
-                                                                       className={styles.bulletPointaddRelief}
-                                                                       src={addRelief}
-                                                                       alt="editPoint"
-                                                                   />
 
-                                                               </button>
-                                                           </div>
+                                                           <button
+                                                               type="button"
+                                                               onClick={() => handleReliefAdd(item.item)}
+                                                               className={styles.addReliefBttn}
+                                                               title="Add Relief"
+                                                           >
+                                                                   ADD RELIEF
+
+                                                           </button>
+
                                                        )}
-                                                    </td>
-                                                )
+                                                            </td>
+                                                        )
 
-                                            }
-
-
-                                        </tr>
+                                                    }
 
 
-                                    ))}
+                                                </tr>
+
+
+                                            ))}
+                                        </>
+                                    )}
                                 </tbody>
 
 
                             </table>
                         </div>
-                        {
-                            !props.annex
+                        {!loader && (
+                            <>
+                                {
+                                    !props.annex
                             && (
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
                                     handleNextClick={props.handleNextClick}
                                 />
                             )
-                        }
+                                }
+                            </>
+                        )}
                     </>
                 )
                  }

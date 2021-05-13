@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import Sidebar from './LeftPane';
 import Page from '#components/Page';
 import styles from './styles.scss';
@@ -11,7 +12,6 @@ import RightPane from './RightPane';
 import Modal from '#rscv/Modal';
 import Translations from './Translations';
 import Gt from './utils';
-
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 import { provincesSelector,
@@ -131,9 +131,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showReportEdit, setShowReportEdit] = useState(false);
     const [selectedTab, setSelectedTab] = useState(0);
     const [showErr, setShowErr] = useState(false);
-
+    const [loader, setLoader] = useState(true);
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
@@ -554,11 +555,12 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                 return null;
             });
+
             finalArr = [...new Set(finalfetchedData)];
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSort, submenuId, fetchedData]);
+    }, [isSort, submenuId, fetchedData, fiscalYear]);
 
 
     const closeModal = () => {
@@ -651,9 +653,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 <div className={styles.rightContainer}>
                     <>
                         <TopBar />
-
-                        {
-                            showReportEdit
+                        <div className={styles.mainData}>
+                            {
+                                showReportEdit
                                 && (
                                     <div className={styles.reportEditingSection}>
                                         <RightPane
@@ -673,10 +675,10 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                                     </div>
                                 )
-                        }
+                            }
 
-                        {
-                            !showReportEdit
+                            {
+                                !showReportEdit
                                 && (
                                     <>
                                         <div className={styles.rightContainerHeading}>
@@ -737,27 +739,41 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                              </div>
                          )}
-                                        <div className={styles.rightContainerTables}>
-                                            <PalikaReportTable
-                                                tableData={finalArr}
-                                                paginationData={paginationParameters}
-                                                tableHeader={TableHeaderForTable}
-                                                tableHeaderDataMatch={TableHeaderForMatchingData}
-                                                submenuId={submenuId}
-                                                sortTitle={handleSortTitle}
-                                                sortProvince={handleSortProvince}
-                                                sortDistrict={handleSortDistrict}
-                                                sortMunicipality={handleSortMunicipality}
-                                                sortFiscalYear={handleSortFiscalYear}
-                                                sortCreatedOn={handleSortCreatedOn}
-                                                sortModifiedOn={handleSortModifiedOn}
-                                                currentPage={currentPageNumber}
-                                                pageSize={paginationQueryLimit}
-                                            />
-                                        </div>
+                                        {loader
+                                            ? (
+                                                <>
+                                                    {' '}
+                                                    <Loader
+                                                        top="50%"
+                                                        left="60%"
+                                                    />
+                                                    <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                                </>
+                                            ) : (
+                                                <div className={styles.rightContainerTables}>
+
+                                                    <PalikaReportTable
+                                                        tableData={finalArr}
+                                                        paginationData={paginationParameters}
+                                                        tableHeader={TableHeaderForTable}
+                                                        tableHeaderDataMatch={TableHeaderForMatchingData}
+                                                        submenuId={submenuId}
+                                                        sortTitle={handleSortTitle}
+                                                        sortProvince={handleSortProvince}
+                                                        sortDistrict={handleSortDistrict}
+                                                        sortMunicipality={handleSortMunicipality}
+                                                        sortFiscalYear={handleSortFiscalYear}
+                                                        sortCreatedOn={handleSortCreatedOn}
+                                                        sortModifiedOn={handleSortModifiedOn}
+                                                        currentPage={currentPageNumber}
+                                                        pageSize={paginationQueryLimit}
+                                                    />
+                                                </div>
+                                            )}
                                     </>
                                 )
-                        }
+                            }
+                        </div>
                     </>
                 </div>
             </div>

@@ -81,9 +81,15 @@ select{
         padding: 0.5rem;
         text-align: left;
     }
-        tr:nth-child(even) {
-            background-color:#F6F6F6;
+    tr:nth-child(even) {
+        background-color:#EDEDED;
+   
+    
     }
+    tr:nth-child(odd) {
+        background-color:#FFFFFF;
+        
+        }
  
 
         
@@ -91,6 +97,23 @@ select{
 
 .mainDiv{
     .palikaTable{
+        .bulletPoint{
+            height: 20px;
+            cursor: pointer;
+          }
+          .updateButtn{
+            cursor: pointer;
+        }
+          .editButtn{
+            filter: saturate(100%);
+            border: none;
+            background-color: transparent;
+          }
+        .loaderInfo{
+            position: absolute;
+            top: 54%;
+            left: 55%;
+        }
         .inputElement{
             padding: 0;
             background-color: #EBEBEB;

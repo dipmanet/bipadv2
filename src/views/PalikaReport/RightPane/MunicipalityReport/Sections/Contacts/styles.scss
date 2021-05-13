@@ -1,3 +1,12 @@
+.bulletPoint{
+  height: 20px;
+  cursor: pointer;
+}
+.editButtn{
+  filter: saturate(100%);
+  border: none;
+  background-color: transparent;
+}
 .inputContainer{
   display: flex;
   border-radius: 3px;
@@ -132,6 +141,11 @@
 .tabsPageContainer{
  
   .palikaTable{
+    .loaderInfo{
+      position: absolute;
+      top: 54%;
+      left: 55%;
+  }
     .bulletPoint{
       height: 20px;
       cursor: pointer;
@@ -162,8 +176,14 @@
         text-align: left;
         }
         tr:nth-child(even) {
-          background-color:#F6F6F6;
-        }
+          background-color:#EDEDED;
+     
+      
+      }
+      tr:nth-child(odd) {
+          background-color:#FFFFFF;
+          
+          }
     }
      
     .savebtn{

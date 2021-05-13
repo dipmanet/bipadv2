@@ -1,3 +1,20 @@
+.loaderInfo{
+    position: absolute;
+    top: 54%;
+    left: 55%;
+}
+.updateButtn{
+    cursor: pointer;
+}
+.bulletPoint{
+    height: 20px;
+    cursor: pointer;
+  }
+  .editButtn{
+    filter: saturate(100%);
+    border: none;
+    background-color: transparent;
+  }
 .txtAreadetails{
     display: flex;
     flex-direction: column;
@@ -26,13 +43,12 @@ table{
     text-align: left;
     }
     tr:nth-child(even) {
-        background-color:#F6F6F6;
+        background-color:#EDEDED;
    
     
     }
     tr:nth-child(odd) {
-        background-color:white;
-       
+        background-color:#FFFFFF;
         
         }
 

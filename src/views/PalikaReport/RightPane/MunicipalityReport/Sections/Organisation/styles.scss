@@ -140,6 +140,11 @@ tr:nth-child(even) {
 }
 
 .palikaTable{
+  .loaderInfo{
+    position: absolute;
+    top: 54%;
+    left: 55%;
+}
   .bulletPoint{
     height: 20px;
     cursor: pointer;
@@ -172,9 +177,15 @@ tr:nth-child(even) {
       padding: 0.5rem;
       text-align: left;
   }
-      tr:nth-child(even) {
-        background-color:#F6F6F6;
-  }
+  tr:nth-child(even) {
+    background-color:#EDEDED;
+
+
+}
+tr:nth-child(odd) {
+    background-color:#FFFFFF;
+    
+    }
     }
 
    

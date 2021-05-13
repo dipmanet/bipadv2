@@ -1,3 +1,7 @@
+.addReliefBttn{
+  width: 100px;
+  cursor: pointer;
+}
 .inputContainer{
   display: flex;
   border-radius: 3px;
@@ -459,11 +463,12 @@
         }
 
 .palikaTable{
-  
+
   
   table{
     width: 100%;
     margin-top: 0px;
+  
 }
 th{
     padding: 0.5rem;
@@ -477,11 +482,19 @@ td{
     padding: 0.5rem;
     text-align: left;
     // word-break: break-all;
+  
 
 }
-    tr:nth-child(odd) {
-    background-color:#f5f5f5;
+tr:nth-child(even) {
+  background-color:#EDEDED;
+
+
 }
+tr:nth-child(odd) {
+  background-color:#FFFFFF;
+  
+  }
+ 
     .dataUnavailable{
         display: flex;
         justify-content: center;
@@ -491,6 +504,7 @@ td{
     .reliefButton{
       border: 1px solid red;
     }
+   
    
         
     }
@@ -529,7 +543,11 @@ td{
       }   
         
 }
-
+.loaderInfo{
+  position: absolute;
+  top: 54%;
+  left: 55%;
+}
 .savebtn{
   position: relative;
   margin-top: 45px;

@@ -56,45 +56,45 @@ const mapStateToProps = (state, props) => ({
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
-    PalikaReportGetRequest: {
-        url: ({ params }) => `${params.url}`,
-        query: ({ params, props }) => {
-            if (params) {
-                return {
-                    province: params.province,
-                    district: params.district,
-                    municipality: params.municipality,
-                };
-            }
+    // PalikaReportGetRequest: {
+    //     url: ({ params }) => `${params.url}`,
+    //     query: ({ params, props }) => {
+    //         if (params) {
+    //             return {
+    //                 province: params.province,
+    //                 district: params.district,
+    //                 municipality: params.municipality,
+    //             };
+    //         }
 
 
-            return { limit: params.page, offset: params.offset };
-        },
-        method: methods.GET,
-        onMount: false,
+    //         return { limit: params.page, offset: params.offset };
+    //     },
+    //     method: methods.GET,
+    //     onMount: false,
 
-        onSuccess: ({ response, params }) => {
-            let citizenReportList: CitizenReport[] = [];
-            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-            citizenReportList = citizenReportsResponse.results;
+    //     onSuccess: ({ response, params }) => {
+    //         let citizenReportList: CitizenReport[] = [];
+    //         const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+    //         citizenReportList = citizenReportsResponse.results;
 
-            if (params && params.reportData) {
-                params.reportData(citizenReportList);
-            }
-        },
-    },
-    FiscalYearFetch: {
-        url: '/nepali-fiscal-year/',
-        method: methods.GET,
-        onMount: true,
+    //         if (params && params.reportData) {
+    //             params.reportData(citizenReportList);
+    //         }
+    //     },
+    // },
+    // FiscalYearFetch: {
+    //     url: '/nepali-fiscal-year/',
+    //     method: methods.GET,
+    //     onMount: true,
 
-        onSuccess: ({ response, params }) => {
-            let citizenReportList: CitizenReport[] = [];
-            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-            citizenReportList = citizenReportsResponse.results;
-            params.fiscalYearList(citizenReportList);
-        },
-    },
+    //     onSuccess: ({ response, params }) => {
+    //         let citizenReportList: CitizenReport[] = [];
+    //         const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+    //         citizenReportList = citizenReportsResponse.results;
+    //         params.fiscalYearList(citizenReportList);
+    //     },
+    // },
     DisasterProfileGetRequest: {
         url: '/disaster-profile/',
         query: ({ params, props }) => ({
@@ -201,20 +201,20 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const handleDisasterProfile = (response) => {
         setDisasterProfile(response);
     };
-    const handleFiscalYearList = (response) => {
-        setFiscalYearList(response);
-    };
-    DisasterProfileGetRequest.setDefaultParams({
-        province: profile.province,
-        district: profile.district,
-        municipality: profile.municipality,
-        fiscalYear: generalData.fiscalYear,
-        disasterProfile: handleDisasterProfile,
+    // const handleFiscalYearList = (response) => {
+    //     setFiscalYearList(response);
+    // };
+    // DisasterProfileGetRequest.setDefaultParams({
+    //     province: profile.province,
+    //     district: profile.district,
+    //     municipality: profile.municipality,
+    //     fiscalYear: generalData.fiscalYear,
+    //     disasterProfile: handleDisasterProfile,
 
-    });
-    FiscalYearFetch.setDefaultParams({
-        fiscalYearList: handleFiscalYearList,
-    });
+    // });
+    // FiscalYearFetch.setDefaultParams({
+    //     fiscalYearList: handleFiscalYearList,
+    // });
 
     const handlePending = (data) => {
         setPending(data);

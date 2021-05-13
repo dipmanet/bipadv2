@@ -9,8 +9,8 @@ import {
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
+import Loader from 'react-loader';
 import styles from './styles.scss';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -96,7 +96,7 @@ const CriticalInfra = (props: Props) => {
     const [filteredtData, setFilteredData] = useState([]);
     const [url, setUrl] = useState('/resource/');
     const [chartData, setChartData] = useState([]);
-
+    const [loader, setLoader] = useState(true);
     const { requests: { PalikaResources }, provinces,
         districts,
         municipalities,
@@ -106,6 +106,7 @@ const CriticalInfra = (props: Props) => {
     const [meta, setMeta] = useState(true);
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
@@ -256,17 +257,29 @@ const CriticalInfra = (props: Props) => {
                                     && <th>Action</th>
                                 }
                             </tr>
-                            {filteredtData && filteredtData.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>{i + 1}</td>
-                                    <td>{item.title ? item.title : '-'}</td>
-                                    <td>{item.resourceType ? item.resourceType : '-'}</td>
-                                    <td>{item.operatorType ? item.operatorType : '-'}</td>
-                                    <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
-                                    <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
-                                    <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
-                                    {
-                                        !props.annex
+                            {loader ? (
+                                <>
+                                    {' '}
+                                    <Loader
+                                        top="50%"
+                                        left="60%"
+                                    />
+                                    <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                </>
+                            )
+                                : (
+                                    <>
+                                        {filteredtData && filteredtData.map((item, i) => (
+                                            <tr key={item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{item.title ? item.title : '-'}</td>
+                                                <td>{item.resourceType ? item.resourceType : '-'}</td>
+                                                <td>{item.operatorType ? item.operatorType : '-'}</td>
+                                                <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
+                                                <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
+                                                <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
+                                                {
+                                                    !props.annex
                                         && (
                                             <td>
                                                 <button
@@ -283,15 +296,18 @@ const CriticalInfra = (props: Props) => {
                                                 </button>
                                             </td>
                                         )
-                                    }
-                                </tr>
-                            ))}
-
+                                                }
+                                            </tr>
+                                        ))}
+                                    </>
+                                )}
 
                         </tbody>
                     </table>
-                    {
-                        !props.annex
+                    {!loader && (
+                        <>
+                            {
+                                !props.annex
                         && (
                             <>
                                 <button
@@ -312,7 +328,9 @@ const CriticalInfra = (props: Props) => {
                                 />
                             </>
                         )
-                    }
+                            }
+                        </>
+                    )}
 
                 </div>
 

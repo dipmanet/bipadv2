@@ -82,6 +82,11 @@
   }
 }
 .tabsPageContainer{
+  .loaderInfo{
+    position: absolute;
+    top: 54%;
+    left: 55%;
+}
   .bulletPoint{
     height: 20px;
     cursor: pointer;
@@ -124,9 +129,15 @@
         padding: 0.5rem;
         text-align: left;
     }
-        tr:nth-child(even) {
-          background-color:#F6F6F6;
-    }
+    tr:nth-child(even) {
+      background-color:#EDEDED;
+ 
+  
+  }
+  tr:nth-child(odd) {
+      background-color:#FFFFFF;
+      
+      }
 
     .pagination {
       margin: 15px auto;

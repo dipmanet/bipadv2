@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import Loader from 'react-loader';
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
@@ -14,6 +16,8 @@ import {
 import {
     setProgramAndPolicyDataAction,
 } from '#actionCreators';
+import editIcon from '#resources/palikaicons/edit.svg';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
     programAndPolicySelector, userSelector, generalDataSelector,
 } from '#selectors';
@@ -56,6 +60,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
     },
 
+    PolicyPutRequest: {
+        url: ({ params }) => `/annual-policy-program/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            params.dataSubmitted(response);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+        },
+
+
+    },
+
 };
 const mapStateToProps = state => ({
     programAndPolicyData: programAndPolicySelector(state),
@@ -77,7 +95,7 @@ const ProgramPolicies = (props: Props) => {
         programAndPolicyData,
         setProgramData,
         updateTab, user: { profile }, generalData,
-        requests: { PolicyGetRequest, PolicyPostRequest },
+        requests: { PolicyGetRequest, PolicyPostRequest, PolicyPutRequest },
     } = props;
 
     // const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
@@ -96,16 +114,25 @@ const ProgramPolicies = (props: Props) => {
     const [paginationParameters, setPaginationParameters] = useState();
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
     const [offset, setOffset] = useState(0);
-
+    const [policyId, setPolicyId] = useState();
+    const [policyIndex, setPolicyIndex] = useState();
+    const [editPolicy, setEditPolicy] = useState(false);
+    const [loader, setLoader] = useState(true);
+    const [editBtnClicked, setEditBtnClicked] = useState(false);
     const handleSavefinalPolicyData = (response) => {
         setFinalPolicyData(response);
         setPoint('');
+        setLoader(false);
+        setDataSubmittedResponse(false);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
     const handleDataSubmittedResponse = (response) => {
         setDataSubmittedResponse(!dataSubmittedResponse);
+        setPoint('');
+        setEditPolicy(false);
+        setPolicyId(null);
     };
     PolicyGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
@@ -124,6 +151,7 @@ const ProgramPolicies = (props: Props) => {
         setPoint(e.target.value);
     };
     const handleSubmit = () => {
+        setLoader(true);
         PolicyPostRequest.do({
             body: {
                 province,
@@ -172,6 +200,33 @@ const ProgramPolicies = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataSubmittedResponse]);
     // eslint-disable-next-line max-len
+    const handleEditActivity = (id, index) => {
+        setPolicyId(id);
+        setPolicyIndex(index);
+        setEditPolicy(true);
+        setEditBtnClicked(!editBtnClicked);
+    };
+    const handleUpdateActivity = () => {
+        setLoader(true);
+        PolicyPutRequest.do({
+            body: {
+                province,
+                district,
+                municipality,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                fiscalYear: generalData.fiscalYear,
+                point,
+            },
+            id: policyId,
+            dataSubmitted: handleDataSubmittedResponse,
+        });
+    };
+    useEffect(() => {
+        if (finalPolicyData.length > 0) {
+            setPoint(finalPolicyData[policyIndex].point);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [policyIndex, editBtnClicked]);
 
 
     return (
@@ -185,56 +240,120 @@ const ProgramPolicies = (props: Props) => {
                             <tr>
                                 <th>SN</th>
                                 <th>Points</th>
+                                <th>Action</th>
                             </tr>
-                            {finalPolicyData.length > 0 && finalPolicyData.map((item, i) => (
-                                <tr key={item.id}>
-                                    <td>
-                                        {(currentPageNumber - 1) * paginationQueryLimit + i + 1}
-                                    </td>
-                                    <td>{item.point}</td>
-                                </tr>
-                            ))
-                            }
+                            {loader ? (
+                                <>
+                                    <Loader
+                                        top="50%"
+                                        left="60%"
+                                    />
+                                    <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                </>
+                            ) : (
+                                <>
+                                    {finalPolicyData.length > 0
+                                     && finalPolicyData.map((item, i) => (
+                                         policyId === item.id
+                                             ? (
+                                                 <tr>
+                                                     <td>{policyIndex + 1}</td>
+                                                     <td>
+                                                         <textarea
+                                                             value={point}
+                                                             placeholder="Please enter the DRR related
+                                    points in this fiscal year's Annual Policy and
+                                    Programme of the municipality"
+                                                             onChange={handleChangePoint}
+                                                             rows="4"
+                                                             cols="100"
+                                                         />
+                                                     </td>
+                                                     <td>
+                                                         <button
+                                                             className={styles.updateButtn}
+                                                             type="button"
+                                                             onClick={handleUpdateActivity}
+                                                             title="Update Policy"
+                                                         >
+                                                   Update
+                                                         </button>
+                                                     </td>
 
-                            {/* <td>
-                                {' '}
-                                <input type="Number" placeholder="Disaster Budget" />
-                            </td> */}
+
+                                                 </tr>
+                                             )
+                                             : (
+                                                 <tr key={item.id}>
+                                                     <td>
+                                                         {(currentPageNumber - 1)
+                                                * paginationQueryLimit + i + 1}
+                                                     </td>
+                                                     <td>{item.point}</td>
+                                                     <td>
+                                                         <button
+                                                             className={styles.editButtn}
+                                                             type="button"
+                                                             onClick={() => handleEditActivity(item.id, i)}
+                                                             title="Edit Policy"
+                                                         >
+                                                             <ScalableVectorGraphics
+                                                                 className={styles.bulletPoint}
+                                                                 src={editIcon}
+                                                                 alt="editPoint"
+                                                             />
+                                                         </button>
+
+                                                     </td>
+                                                 </tr>
+                                             )
+                                     ))
+                                    }
+                                </>
+                            )}
 
 
                         </tbody>
                     </table>
-                    {
-                        !props.annex
+                    {!loader && (
+                        <>
+
+                            {
+                                !props.annex
                         && (
                             <>
-                                <div className={styles.txtAreadetails}>
-                                    <textarea
-                                        value={point}
-                                        placeholder="Please enter the DRR related
+                                {editPolicy ? ''
+                                    : (
+                                        <div className={styles.txtAreadetails}>
+                                            <textarea
+                                                value={point}
+                                                placeholder="Please enter the DRR related
                                     points in this fiscal year's Annual Policy and
                                     Programme of the municipality"
-                                        onChange={handleChangePoint}
-                                        rows="4"
-                                        cols="100"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={handleSubmit}
-                                        className={styles.savebtn}
-                                    >
-+ Add Annual Policy and Programme
+                                                onChange={handleChangePoint}
+                                                rows="4"
+                                                cols="100"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleSubmit}
+                                                className={styles.savebtn}
+                                            >
+                                    + Add Annual Policy and Programme
 
-                                    </button>
-                                </div>
+                                            </button>
+                                        </div>
+                                    )
+                                }
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
                                     handleNextClick={props.handleNextClick}
                                 />
                             </>
                         )
-                    }
-
+                            }
+                        </>
+                    )}
                 </div>
             )}
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
+import Loader from 'react-loader';
 import {
     Bar, BarChart,
     CartesianGrid,
@@ -112,9 +113,10 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const [firstSerialNumber, setFirstSerialNumber] = useState(0);
     const [lastSerialNumber, setLastSerialNumber] = useState(10);
     const [chartData, setChartData] = useState([]);
-
+    const [loader, setLoader] = useState(true);
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
     };
     const handleDataSave = () => {
         props.updateTab();
@@ -232,27 +234,37 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     }
 
                                 </tr>
+                                {loader ? (
+                                    <>
+                                        {' '}
+                                        <Loader
+                                            top="50%"
+                                            left="60%"
+                                        />
+                                        <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        {finalInventoriesData && finalInventoriesData.map(item => (
 
-                                {finalInventoriesData && finalInventoriesData.map(item => (
+                                            <tr>
 
-                                    <tr>
+                                                <td>
+                                                    {item.SN}
+                                                </td>
+                                                <td>{item.item.title}</td>
+                                                <td>{item.quantity}</td>
+                                                <td>{item.item.unit}</td>
+                                                <td>{item.item.category}</td>
+                                                <td>
 
-                                        <td>
-                                            {item.SN}
-                                        </td>
-                                        <td>{item.item.title}</td>
-                                        <td>{item.quantity}</td>
-                                        <td>{item.item.unit}</td>
-                                        <td>{item.item.category}</td>
-                                        <td>
-
-                                            {item.resourceName}
-                                        </td>
-                                        <td>{item.organizationType}</td>
-                                        <td>{item.createdOn.split('T')[0]}</td>
-                                        <td>{item.modifiedOn.split('T')[0]}</td>
-                                        {
-                                            !props.annex
+                                                    {item.resourceName}
+                                                </td>
+                                                <td>{item.organizationType}</td>
+                                                <td>{item.createdOn.split('T')[0]}</td>
+                                                <td>{item.modifiedOn.split('T')[0]}</td>
+                                                {
+                                                    !props.annex
                                             && (
                                                 <td>
                                                     <button
@@ -269,25 +281,31 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                                     </button>
                                                 </td>
                                             )
-                                        }
-                                    </tr>
-                                ))}
+                                                }
+                                            </tr>
+                                        ))}
+                                    </>
+                                )}
                             </tbody>
                         </table>
-
-                        {finalInventoriesData && finalInventoriesData.length === 0
+                        {!loader && (
+                            <>
+                                {finalInventoriesData && finalInventoriesData.length === 0
                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
-                        }
-                        {
-                            !props.annex
+                                }
+
+                                {
+                                    !props.annex
                             && (
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
                                     handleNextClick={props.handleNextClick}
                                 />
                             )
-                        }
+                                }
+                            </>
+                        )}
                     </div>
 
                 </div>

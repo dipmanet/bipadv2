@@ -1,14 +1,15 @@
 /* eslint-disable indent */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
+import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
-import { _cs } from '@togglecorp/fujs';
 import { PieChart, Pie, Cell } from 'recharts';
-import Loader from 'react-loader-spinner';
-import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
-
+import Loader from 'react-loader';
 import styles from './styles.scss';
+import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
+import editIcon from '#resources/palikaicons/edit.svg';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -86,6 +87,19 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 
     },
+    BudgetActivityPutRequest: {
+        url: ({ params }) => `/annual-budget-activity/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            params.budgetActivities(response);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+        },
+
+
+    },
 
 };
 
@@ -145,7 +159,9 @@ const BudgetActivity = (props: Props) => {
         budgetActivityData,
         generalData,
         budgetId,
-        requests: { BudgetActivityGetRequest, BudgetActivityPostRequest },
+        requests: { BudgetActivityGetRequest,
+            BudgetActivityPostRequest,
+            BudgetActivityPutRequest },
         user: { profile },
     } = props;
 
@@ -236,12 +252,20 @@ const BudgetActivity = (props: Props) => {
     const [budgetActivities, setBudgetActivities] = useState([]);
     const [priorityActionData, setPData] = useState([]);
     const [priorityActivityData, setAData] = useState([]);
-
+    const [budgetActivityId, setBudgetActivityId] = useState();
+    const [editBudgetActivity, setEditBudgetActivity] = useState(false);
+    const [selectedBudgetActivityIndex, setSelectedBudgetActivityIndex] = useState();
+    const [loader, setLoader] = useState(true);
+    const [editBtnClicked, setEditBtnClicked] = useState(false);
     const handleInfoBtn = () => {
         setShowInfo(!showInfo);
     };
     const handlePending = (data: boolean) => {
         setPending(data);
+        setLoader(data);
+    };
+    const handleErrors = (errors) => {
+        setPostErrors(errors);
     };
     const handleDataSubmittedResponse = (response) => {
         setDataSubmittedResponse(!dataSubmittedResponse);
@@ -262,17 +286,48 @@ const BudgetActivity = (props: Props) => {
     };
     const handleBudgetActivities = (response) => {
         setBudgetActivities(response);
+        setLoader(false);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
+    const handleBudgetActivitiesUpdated = (response) => {
+        setDataSubmittedResponse(!dataSubmittedResponse);
+        setStartDate('');
+        setprojCompletionDate('');
+        setactivityName('');
+        setfundSource('');
+        setfundingType('');
+        setbudgetCode('');
+        setprojStatus('');
+        setallocatedBudget(null);
+        setactualExp(null);
+        setremarks('');
+        setpriorityArea('');
+        setorganisationName('');
+        setPriorityAction('');
+        setPriorityActivity('');
+        setBudgetActivityId(null);
+        BudgetActivityGetRequest.do({
+            province: profile.province,
+            district: profile.district,
+            municipality: profile.municipality,
+            annualBudget: budgetId.id,
+            budgetActivities: handleBudgetActivities,
+            paginationParameters: handlePaginationParameters,
+            id: '-id',
+            page: paginationQueryLimit,
+            handlePendingState: handlePending,
+            setErrors: handleErrors,
+        });
+        setEditBudgetActivity(false);
+    };
+
 
     const handleOrganisationName = (org: string) => {
         setorganisationName(org.target.value);
     };
-    const handleErrors = (errors) => {
-        setPostErrors(errors);
-    };
+
 
     BudgetActivityGetRequest.setDefaultParams({
         province: profile.province,
@@ -327,6 +382,7 @@ const BudgetActivity = (props: Props) => {
     };
     const handleAddNew = () => {
         setPending(true);
+        setLoader(true);
         setPostErrors({});
         BudgetActivityPostRequest.do({
             body: {
@@ -351,6 +407,7 @@ const BudgetActivity = (props: Props) => {
             },
             budgetActivities: handleBudgetActivities,
             dataSubmitted: handleDataSubmittedResponse,
+            id: budgetActivityId,
         });
     };
     const handleActivityName = (data) => {
@@ -449,246 +506,554 @@ const BudgetActivity = (props: Props) => {
             setPriorityAction(data);
         }
     };
+    console.log('This is budget activity>>>', budgetActivities);
+    const handleEditActivity = (id, index) => {
+        setBudgetActivityId(id);
+        setEditBudgetActivity(true);
+        setSelectedBudgetActivityIndex(index);
+        setEditBtnClicked(!editBtnClicked);
+    };
+    const handleUpdateActivity = () => {
+        setLoader(true);
+        BudgetActivityPutRequest.do({
+            body: {
+                activityName,
+                priorityArea,
+                priorityAction,
+                priorityActivity,
+                fundType: fundingType,
+                budgetCode,
+                donerOrganization: organisationName,
+                projectStartDate: projstartDate,
+                projectEndDate: projcompletionDate,
+                amount: allocatedBudget,
+                expenditure: actualExp,
+                status: projStatus,
+                remarks,
+                annualBudget: budgetId.id,
+                handlePendingState: handlePending,
+                setErrors: handleErrors,
+
+
+            },
+            budgetActivities: handleBudgetActivitiesUpdated,
+            dataSubmitted: handleDataSubmittedResponse,
+            id: budgetActivityId,
+        });
+    };
+    useEffect(() => {
+        if (budgetActivities.length > 0) {
+            setactivityName(budgetActivities[selectedBudgetActivityIndex].activityName);
+            setpriorityArea(budgetActivities[selectedBudgetActivityIndex].priorityArea);
+            setPriorityAction(budgetActivities[selectedBudgetActivityIndex].priorityAction);
+            setPriorityActivity(budgetActivities[selectedBudgetActivityIndex].priorityActivity);
+            // setfundSource(budgetActivities[selectedBudgetActivityIndex].priorityActivity)
+            setbudgetCode(budgetActivities[selectedBudgetActivityIndex].budgetCode);
+            setorganisationName(budgetActivities[selectedBudgetActivityIndex].donerOrganization);
+            setStartDate(budgetActivities[selectedBudgetActivityIndex].projectStartDate);
+            setprojCompletionDate(budgetActivities[selectedBudgetActivityIndex].projectEndDate);
+            setprojStatus(budgetActivities[selectedBudgetActivityIndex].status);
+            setallocatedBudget(budgetActivities[selectedBudgetActivityIndex].amount);
+            setactualExp(budgetActivities[selectedBudgetActivityIndex].expenditure);
+            setremarks(budgetActivities[selectedBudgetActivityIndex].remarks);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedBudgetActivityIndex, editBtnClicked]);
 
     return (
         <>
-            {pending
-                ? (
-                    <div className={styles.loaderClass}>
 
-                        <Loader
-                            type="TailSpin"
-                            color="#00BFFF"
-                            height={50}
-                            width={50}
-                            timeout={10000}
-
-                        />
-                    </div>
-                )
-                : (
-                    <div>
-                        {!props.previewDetails && !props.monitoringDetails
-           && (
-               <div className={styles.mainPageDetailsContainer}>
-                   <h2>{`Budget Activities for Fiscal Year ${generalData.fiscalYearTitle}`}</h2>
-                   <table id="table-to-xls">
-                       <tbody>
+            <div>
+                {!props.previewDetails && !props.monitoringDetails
+                && (
+                    <div className={styles.mainPageDetailsContainer}>
+                        <h2>{`Budget Activities for Fiscal Year ${generalData.fiscalYearTitle}`}</h2>
+                        <table id="table-to-xls">
+                            <tbody>
 
 
-                           <>
+                                <>
 
-                               <tr>
+                                    <tr>
 
-                                   <th>SN</th>
+                                        <th>SN</th>
 
 
-                                   <th>
+                                        <th>
                                            Name of Activity
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Priority Area
 
-                                       <button
-                                           type="button"
-                                           className={styles.infoBtn}
-                                           onClick={() => {}}
-                                           title=""
+                                            <button
+                                                type="button"
+                                                className={styles.infoBtn}
+                                                onClick={() => {}}
+                                                title=""
 
-                                       >
-                                           <Icon
-                                               name="info"
-                                               className={styles.infoIcon}
-                                               title="The Disaster Risk Reduction
+                                            >
+                                                <Icon
+                                                    name="info"
+                                                    className={styles.infoIcon}
+                                                    title="The Disaster Risk Reduction
                                                National Strategic
                                                Plan of Action
                                                2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main
                                                guidance, has identified 4 priority areas and 18 priority actions.
                                                The activities will be monitored based on the these priorities set."
-                                           />
-                                       </button>
+                                                />
+                                            </button>
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Priority Action
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Priority Activity
 
 
-                                   </th>
-                                   {/* <th>
+                                        </th>
+                                        {/* <th>
                                            Area of implementation
 
 
                                </th> */}
-                                   <th>
+                                        <th>
                                            Funding Type
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Source of Fund
 
 
-                                   </th>
-                                   {
-                                       showSourceTypeOther
+                                        </th>
+                                        {
+                                            showSourceTypeOther
                                     && (
                                         <th>
                                            Other Fund Type
 
                                         </th>
                                     )
-                                   }
-                                   <th>
+                                        }
+                                        <th>
                                            Budget Code
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Organization Name
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Project start Date
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Project Completion Date
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Status
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Allocated Project Budget
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Actual Expenditure
 
 
-                                   </th>
-                                   <th>
+                                        </th>
+                                        <th>
                                            Remarks
 
 
-                                   </th>
+                                        </th>
+                                        <th>
+                                          Action
 
 
-                               </tr>
-                               {budgetActivities && budgetActivities.map((data, i) => (
-                                   <tr key={data.id}>
-                                       <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
-                                       <td>{data.activityName}</td>
-                                       <td>
-                                           {
-                                               data.priorityArea
+                                        </th>
 
-                                           }
-                                       </td>
-                                       <td>{data.priorityAction}</td>
-                                       <td>{data.priorityActivity}</td>
-                                       {/* <td>{data.priorityArea}</td> */}
-                                       <td>{data.fundType}</td>
-                                       <td>{data.fundType}</td>
-                                       <td>{data.donerOrganization}</td>
-                                       <td>{data.budgetCode}</td>
-                                       <td>{data.projectStartDate}</td>
-                                       <td>{data.projectEndDate}</td>
-                                       <td>{data.status}</td>
-                                       <td>{data.annualBudget}</td>
-                                       <td>{data.expenditure}</td>
-                                       <td>{data.remarks}</td>
-                                   </tr>
-                               ))}
-                               { !props.annex
-                               && (
-                                   <tr>
-                                       <td>{budgetActivities.length + 1}</td>
-                                       <td>
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleActivityName}
-                                               value={activityName}
-                                               placeholder={'Name of Activity'}
-                                           />
-                                       </td>
 
-                                       <td>
-                                           <select
-                                               value={priorityArea}
-                                               onChange={handlePriorityArea}
-                                               className={styles.inputElement}
-                                           >
-                                               <option value="">Select Priority Area</option>
-                                               {PriorityArea.map(data => (
-                                                   <option value={data.title}>
-                                                       {data.title}
-                                                   </option>
-                                               ))}
+                                    </tr>
+                                    {loader ? (
+                                        <>
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {budgetActivities && budgetActivities.map((data, i) => (
+                                                data.id === budgetActivityId ? (
+                                                    <tr>
+                                                        <td>{selectedBudgetActivityIndex + 1}</td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                onChange={handleActivityName}
+                                                                value={activityName}
+                                                                placeholder={'Name of Activity'}
+                                                            />
+                                                        </td>
 
-                                           </select>
-                                       </td>
-                                       <td>
-                                           <select
-                                               value={priorityAction}
-                                               onChange={handlePriorityAction}
-                                               className={styles.inputElement}
-                                           >
-                                               <option value="">Select Priority Action</option>
-                                               {priorityActionData.map(data => (
-                                                   <option value={data.title}>
-                                                       {data.title}
-                                                   </option>
-                                               ))}
+                                                        <td>
+                                                            <select
+                                                                value={priorityArea}
+                                                                onChange={handlePriorityArea}
+                                                                className={styles.inputElement}
+                                                            >
+                                                                <option value="">Select Priority Area</option>
+                                                                {PriorityArea.map(item => (
+                                                                    <option value={item.title}>
+                                                                        {item.title}
+                                                                    </option>
+                                                                ))}
 
-                                           </select>
-                                       </td>
-                                       <td>
-                                           <select
-                                               value={priorityActivity}
-                                               onChange={handlePriorityActivity}
-                                               className={styles.inputElement}
-                                           >
-                                               <option value="">Select Priority Activity</option>
-                                               {priorityActivityData.map(data => (
-                                                   <option value={data.title}>
-                                                       {data.title}
-                                                   </option>
-                                               ))}
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select
+                                                                value={priorityAction}
+                                                                onChange={handlePriorityAction}
+                                                                className={styles.inputElement}
+                                                            >
+                                                                <option value="">Select Priority Action</option>
+                                                                {priorityActionData.map(item => (
+                                                                    <option value={item.title}>
+                                                                        {item.title}
+                                                                    </option>
+                                                                ))}
 
-                                           </select>
-                                       </td>
-                                       <td>
-                                           <select
-                                               value={fundSource}
-                                               onChange={handlefundSource}
-                                               className={styles.inputElement}
-                                           >
-                                               <option value="select"> Select Funding Type</option>
-                                               <option value="DRR Fund of Muicipality">
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select
+                                                                value={priorityActivity}
+                                                                onChange={handlePriorityActivity}
+                                                                className={styles.inputElement}
+                                                            >
+                                                                <option value="">Select Priority Activity</option>
+                                                                {priorityActivityData.map(item => (
+                                                                    <option value={item.title}>
+                                                                        {item.title}
+                                                                    </option>
+                                                                ))}
+
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select
+                                                                value={fundSource}
+                                                                onChange={handlefundSource}
+                                                                className={styles.inputElement}
+                                                            >
+                                                                <option value="select"> Select Funding Type</option>
+                                                                <option value="DRR Fund of Muicipality">
+                                              DRR Fund of Municipality
+
+                                                                </option>
+                                                                <option value="Other DRR related funding">
+                                              Other DRR related funding
+
+                                                                </option>
+                                                            </select>
+                                                        </td>
+
+                                                        <td>
+                                                            {
+                                                                fundSource === ''
+                                           && (
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   value={'Source of Funds'}
+                                                   disabled
+                                               />
+                                           )}
+                                                            {
+                                                                fundSource === 'DRR Fund of Muicipality'
+                                           && (
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   value={'Municipal Government'}
+                                                   disabled
+                                               />
+                                           )}
+
+                                                            {
+                                                                fundSource === 'Other DRR related funding'
+                                               && (
+                                                   <select
+                                                       value={fundingType}
+                                                       onChange={handlefundingType}
+                                                       className={styles.inputElement}
+                                                   >
+                                                       <option value="select">Select Source of Funds</option>
+                                                       <option value="Federal Government">
+                                                             Federal Government
+                                                       </option>
+                                                       <option value="Provincial Government">
+                                                             Provincial Government
+                                                       </option>
+                                                       <option value="INGO">I/NGOs</option>
+                                                       <option value="Private Sector">Private Sector</option>
+                                                       <option value="Academia">Academia</option>
+                                                       <option value="Others">Others</option>
+                                                   </select>
+                                               )
+                                                            }
+
+                                                        </td>
+                                                        {
+                                                            showSourceTypeOther
+                                        && (
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+                                                    value={otherSubtype}
+                                                    onChange={handleOtherSubType}
+                                                    placeholder={'Please Specify'}
+                                                />
+                                            </td>
+                                        )
+                                                        }
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                onChange={handleBudgetCode}
+                                                                value={budgetCode}
+                                                                placeholder={'Budget Code (if available)'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                onChange={handleOrganisationName}
+                                                                value={organisationName}
+                                                                placeholder={'Name of Organisation'}
+                                                            />
+                                                        </td>
+
+
+                                                        <td>
+                                                            <NepaliDatePicker
+                                                                inputClassName="form-control"
+                                                                className={styles.datepicker}
+                                                                value={projstartDate}
+                                                                onChange={date => setStartDate(date)}
+                                                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <NepaliDatePicker
+                                                                inputClassName="form-control"
+                                                                className={styles.datepicker}
+                                                                value={projcompletionDate}
+                                                                onChange={date => setprojCompletionDate(date)}
+                                                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <select
+                                                                value={projStatus}
+                                                                onChange={handleprojStatus}
+                                                                className={styles.inputElement}
+                                                                placeholder={'Project Status'}
+                                                            >
+                                                                <option value="select">Select an Option</option>
+                                                                <option value="Started">Started</option>
+                                                                <option value="Ongoing">Ongoing</option>
+                                                                <option value="Completed">Completed</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                onChange={handleAlocBudget}
+                                                                value={allocatedBudget}
+                                                                placeholder={'Allocated Project Budget'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                onChange={handleActualExp}
+                                                                value={actualExp}
+                                                                placeholder={'Actual Expenditure'}
+                                                            />
+                                                        </td>
+
+                                                        <td>
+                                                            {' '}
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                onChange={handleRemarks}
+                                                                value={remarks}
+                                                                placeholder={'Remarks'}
+                                                            />
+
+                                                        </td>
+                                                        <td>
+                                                            <button
+                                                                className={styles.updateButtn}
+                                                                type="button"
+                                                                onClick={handleUpdateActivity}
+                                                                title="Update Budget Activity"
+                                                            >
+                                                     Update
+                                                            </button>
+                                                        </td>
+
+
+                                                    </tr>
+                                                )
+                                                    : (
+                                                        <tr key={data.id}>
+
+                                                            <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
+
+                                                            <td>{data.activityName}</td>
+
+                                                            <td>
+                                                                {
+                                                                    data.priorityArea
+
+                                                                }
+                                                            </td>
+                                                            <td>{data.priorityAction}</td>
+                                                            <td>{data.priorityActivity}</td>
+                                                            {/* <td>{data.priorityArea}</td> */}
+                                                            <td>{data.fundType}</td>
+                                                            <td>{data.fundType}</td>
+                                                            <td>{data.donerOrganization}</td>
+                                                            <td>{data.budgetCode}</td>
+                                                            <td>{data.projectStartDate}</td>
+                                                            <td>{data.projectEndDate}</td>
+                                                            <td>{data.status}</td>
+                                                            <td>{data.annualBudget}</td>
+                                                            <td>{data.expenditure}</td>
+                                                            <td>{data.remarks}</td>
+                                                            <td>
+
+                                                                <button
+                                                                    className={styles.editButtn}
+                                                                    type="button"
+                                                                    onClick={() => handleEditActivity(data.id, i)}
+                                                                    title="Edit Budget Activity"
+                                                                >
+                                                                    <ScalableVectorGraphics
+                                                                        className={styles.bulletPoint}
+                                                                        src={editIcon}
+                                                                        alt="editPoint"
+                                                                    />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                            ))}
+
+                                            { !props.annex
+                               && (editBudgetActivity ? ''
+                                   : (
+                                       <tr>
+                                           <td>{budgetActivities.length + 1}</td>
+                                           <td>
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   onChange={handleActivityName}
+                                                   value={activityName}
+                                                   placeholder={'Name of Activity'}
+                                               />
+                                           </td>
+
+                                           <td>
+                                               <select
+                                                   value={priorityArea}
+                                                   onChange={handlePriorityArea}
+                                                   className={styles.inputElement}
+                                               >
+                                                   <option value="">Select Priority Area</option>
+                                                   {PriorityArea.map(data => (
+                                                       <option value={data.title}>
+                                                           {data.title}
+                                                       </option>
+                                                   ))}
+
+                                               </select>
+                                           </td>
+                                           <td>
+                                               <select
+                                                   value={priorityAction}
+                                                   onChange={handlePriorityAction}
+                                                   className={styles.inputElement}
+                                               >
+                                                   <option value="">Select Priority Action</option>
+                                                   {priorityActionData.map(data => (
+                                                       <option value={data.title}>
+                                                           {data.title}
+                                                       </option>
+                                                   ))}
+
+                                               </select>
+                                           </td>
+                                           <td>
+                                               <select
+                                                   value={priorityActivity}
+                                                   onChange={handlePriorityActivity}
+                                                   className={styles.inputElement}
+                                               >
+                                                   <option value="">Select Priority Activity</option>
+                                                   {priorityActivityData.map(data => (
+                                                       <option value={data.title}>
+                                                           {data.title}
+                                                       </option>
+                                                   ))}
+
+                                               </select>
+                                           </td>
+                                           <td>
+                                               <select
+                                                   value={fundSource}
+                                                   onChange={handlefundSource}
+                                                   className={styles.inputElement}
+                                               >
+                                                   <option value="select"> Select Funding Type</option>
+                                                   <option value="DRR Fund of Muicipality">
                                                  DRR Fund of Municipality
 
-                                               </option>
-                                               <option value="Other DRR related funding">
+                                                   </option>
+                                                   <option value="Other DRR related funding">
                                                  Other DRR related funding
 
-                                               </option>
-                                           </select>
-                                       </td>
+                                                   </option>
+                                               </select>
+                                           </td>
 
-                                       <td>
-                                           {
-                                               fundSource === ''
+                                           <td>
+                                               {
+                                                   fundSource === ''
                                               && (
                                                   <input
                                                       type="text"
@@ -697,8 +1062,8 @@ const BudgetActivity = (props: Props) => {
                                                       disabled
                                                   />
                                               )}
-                                           {
-                                               fundSource === 'DRR Fund of Muicipality'
+                                               {
+                                                   fundSource === 'DRR Fund of Muicipality'
                                               && (
                                                   <input
                                                       type="text"
@@ -708,8 +1073,8 @@ const BudgetActivity = (props: Props) => {
                                                   />
                                               )}
 
-                                           {
-                                               fundSource === 'Other DRR related funding'
+                                               {
+                                                   fundSource === 'Other DRR related funding'
                                                   && (
                                                       <select
                                                           value={fundingType}
@@ -729,11 +1094,11 @@ const BudgetActivity = (props: Props) => {
                                                           <option value="Others">Others</option>
                                                       </select>
                                                   )
-                                           }
+                                               }
 
-                                       </td>
-                                       {
-                                           showSourceTypeOther
+                                           </td>
+                                           {
+                                               showSourceTypeOther
                                            && (
                                                <td>
                                                    <input
@@ -745,78 +1110,78 @@ const BudgetActivity = (props: Props) => {
                                                    />
                                                </td>
                                            )
-                                       }
-                                       <td>
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleBudgetCode}
-                                               value={budgetCode}
-                                               placeholder={'Budget Code (if available)'}
-                                           />
-                                       </td>
-                                       <td>
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleOrganisationName}
-                                               value={organisationName}
-                                               placeholder={'Name of Organisation'}
-                                           />
-                                       </td>
+                                           }
+                                           <td>
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   onChange={handleBudgetCode}
+                                                   value={budgetCode}
+                                                   placeholder={'Budget Code (if available)'}
+                                               />
+                                           </td>
+                                           <td>
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   onChange={handleOrganisationName}
+                                                   value={organisationName}
+                                                   placeholder={'Name of Organisation'}
+                                               />
+                                           </td>
 
 
-                                       <td>
-                                           <NepaliDatePicker
-                                               inputClassName="form-control"
-                                               className={styles.datepicker}
-                                               value={projstartDate}
-                                               onChange={date => setStartDate(date)}
-                                               options={{ calenderLocale: 'en', valueLocale: 'en' }}
-                                           />
-                                       </td>
-                                       <td>
-                                           <NepaliDatePicker
-                                               inputClassName="form-control"
-                                               className={styles.datepicker}
-                                               value={projcompletionDate}
-                                               onChange={date => setprojCompletionDate(date)}
-                                               options={{ calenderLocale: 'en', valueLocale: 'en' }}
-                                           />
-                                       </td>
-                                       <td>
-                                           <select
-                                               value={projStatus}
-                                               onChange={handleprojStatus}
-                                               className={styles.inputElement}
-                                               placeholder={'Project Status'}
-                                           >
-                                               <option value="select">Select an Option</option>
-                                               <option value="Started">Started</option>
-                                               <option value="Ongoing">Ongoing</option>
-                                               <option value="Completed">Completed</option>
-                                           </select>
-                                       </td>
-                                       <td>
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleAlocBudget}
-                                               value={allocatedBudget}
-                                               placeholder={'Allocated Project Budget'}
-                                           />
-                                       </td>
-                                       <td>
-                                           <input
-                                               type="text"
-                                               className={styles.inputElement}
-                                               onChange={handleActualExp}
-                                               value={actualExp}
-                                               placeholder={'Actual Expenditure'}
-                                           />
-                                       </td>
-                                       {
-                                           !props.annex
+                                           <td>
+                                               <NepaliDatePicker
+                                                   inputClassName="form-control"
+                                                   className={styles.datepicker}
+                                                   value={projstartDate}
+                                                   onChange={date => setStartDate(date)}
+                                                   options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                               />
+                                           </td>
+                                           <td>
+                                               <NepaliDatePicker
+                                                   inputClassName="form-control"
+                                                   className={styles.datepicker}
+                                                   value={projcompletionDate}
+                                                   onChange={date => setprojCompletionDate(date)}
+                                                   options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                               />
+                                           </td>
+                                           <td>
+                                               <select
+                                                   value={projStatus}
+                                                   onChange={handleprojStatus}
+                                                   className={styles.inputElement}
+                                                   placeholder={'Project Status'}
+                                               >
+                                                   <option value="select">Select an Option</option>
+                                                   <option value="Started">Started</option>
+                                                   <option value="Ongoing">Ongoing</option>
+                                                   <option value="Completed">Completed</option>
+                                               </select>
+                                           </td>
+                                           <td>
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   onChange={handleAlocBudget}
+                                                   value={allocatedBudget}
+                                                   placeholder={'Allocated Project Budget'}
+                                               />
+                                           </td>
+                                           <td>
+                                               <input
+                                                   type="text"
+                                                   className={styles.inputElement}
+                                                   onChange={handleActualExp}
+                                                   value={actualExp}
+                                                   placeholder={'Actual Expenditure'}
+                                               />
+                                           </td>
+                                           {
+                                               !props.annex
                                             && (
                                                 <td>
                                                     {' '}
@@ -830,20 +1195,23 @@ const BudgetActivity = (props: Props) => {
 
                                                 </td>
                                             )
-                                       }
-                                   </tr>
+                                           }
+                                       </tr>
+                                   )
 
                                )
-                               }
+                                            }
+                                        </>
+                                    )}
 
-                           </>
+                                </>
 
 
-                       </tbody>
-                   </table>
-                   <div className={styles.drrsLink}>
-                       {
-                           showInfo
+                            </tbody>
+                        </table>
+                        <div className={styles.drrsLink}>
+                            {
+                                showInfo
                            && (
                                <>
                                    <p>
@@ -866,11 +1234,11 @@ const BudgetActivity = (props: Props) => {
                                    </p>
                                </>
                            )
-                       }
+                            }
 
-                   </div>
-                   {
-                       Object.keys(postErrors).length > 0
+                        </div>
+                        {
+                            Object.keys(postErrors).length > 0
                         && (
                             <ul>
                                 <li>
@@ -889,9 +1257,11 @@ const BudgetActivity = (props: Props) => {
 
                             </ul>
                         )
-                   }
-                   {
-                       !props.annex
+                        }
+                        {!loader && (
+                            <>
+                                {
+                                    !props.annex
                        && (
                            <div className={styles.btns}>
                                <button
@@ -913,13 +1283,15 @@ const BudgetActivity = (props: Props) => {
 
                            </div>
                        )
-                   }
-               </div>
-           )
+                                }
+                            </>
+                        )}
+                    </div>
+                )
 
-                        }
+                }
 
-                        {props.previewDetails
+                {props.previewDetails
                && (
                    <div className={styles.budgetActPreviewContainer}>
                        <h2>Budget Activity</h2>
@@ -1024,9 +1396,9 @@ const BudgetActivity = (props: Props) => {
                    </div>
                )
 
-                        }
+                }
 
-                        {props.monitoringDetails
+                {props.monitoringDetails
                && (
                    <div className={styles.budgetActPreviewContainer}>
 
@@ -1101,10 +1473,10 @@ const BudgetActivity = (props: Props) => {
 
                )
 
-                        }
+                }
 
-                    </div>
-                )}
+            </div>
+
         </>
     );
 };

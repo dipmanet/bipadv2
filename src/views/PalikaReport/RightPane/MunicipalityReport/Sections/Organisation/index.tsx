@@ -13,6 +13,8 @@ import {
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
+import Loader from 'react-loader';
+
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
@@ -102,6 +104,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [offset, setOffset] = useState(0);
     const [CIselected, setCISelected] = useState('');
     const [chartData, setChartData] = useState([]);
+    const [loader, setLoader] = useState(true);
 
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
@@ -113,6 +116,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
     };
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
@@ -196,20 +200,31 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                         && <th>Action</th>
                                     }
                                 </tr>
-                                {fetchedData && fetchedData.length > 0
-                                    ? fetchedData.map((item, i) => (
-                                        <tr key={item.id}>
-                                            <td>{i + 1}</td>
-                                            <td>{item.title}</td>
-                                            <td>{item.type}</td>
-                                            <td>
-                                                {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
-                                            </td>
-                                            <td>
-                                                {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
-                                            </td>
-                                            {
-                                                !props.annex
+                                {loader ? (
+                                    <>
+                                        {' '}
+                                        <Loader
+                                            top="50%"
+                                            left="60%"
+                                        />
+                                        <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        {fetchedData && fetchedData.length > 0
+                                            ? fetchedData.map((item, i) => (
+                                                <tr key={item.id}>
+                                                    <td>{i + 1}</td>
+                                                    <td>{item.title}</td>
+                                                    <td>{item.type}</td>
+                                                    <td>
+                                                        {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
+                                                    </td>
+                                                    <td>
+                                                        {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
+                                                    </td>
+                                                    {
+                                                        !props.annex
                                                 && (
                                                     <td>
 
@@ -227,16 +242,19 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                                         </button>
                                                     </td>
                                                 )
-                                            }
-                                        </tr>
-                                    )) : ''
-                                }
-
+                                                    }
+                                                </tr>
+                                            )) : ''
+                                        }
+                                    </>
+                                )}
 
                             </tbody>
                         </table>
-                        {
-                            !props.annex
+                        {!loader && (
+                            <>
+                                {
+                                    !props.annex
                             && (
                                 <button
                                     type="button"
@@ -250,19 +268,22 @@ const Organisation: React.FC<Props> = (props: Props) => {
                              Add Organisation Data
                                 </button>
                             )
-                        }
-                        {
-                            !props.annex
-                                ? (
-                                    <div className={styles.btnsCont}>
-                                        <NextPrevBtns
-                                            handlePrevClick={props.handlePrevClick}
-                                            handleNextClick={props.handleNextClick}
-                                        />
-                                    </div>
-                                )
-                                : ''
-                        }
+                                }
+
+                                {
+                                    !props.annex
+                                        ? (
+                                            <div className={styles.btnsCont}>
+                                                <NextPrevBtns
+                                                    handlePrevClick={props.handlePrevClick}
+                                                    handleNextClick={props.handleNextClick}
+                                                />
+                                            </div>
+                                        )
+                                        : ''
+                                }
+                            </>
+                        )}
 
                     </div>
 

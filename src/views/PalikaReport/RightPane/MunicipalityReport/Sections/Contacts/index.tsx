@@ -6,8 +6,9 @@ import { reverseRoute, _cs } from '@togglecorp/fujs';
 import { useTheme } from '@material-ui/core';
 import { Item } from 'semantic-ui-react';
 import * as ReachRouter from '@reach/router';
+import Loader from 'react-loader';
+import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import styles from './styles.scss';
-
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -109,9 +110,51 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+    NonGovGetRequest: {
+        url: '/nongov-contact/',
+        query: ({ params, props }) => {
+            if (params && params.user) {
+                return {
+                    province: params.user.profile.province,
+                    district: params.user.profile.district,
+                    municipality: params.user.profile.municipality,
+
+                };
+            }
+            return null;
+        },
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            const trainingContacts = response as MultiResponse<CitizenReport>;
+            const { results } = trainingContacts;
+            if (params && params.nonGovContacts) {
+                params.nonGovContacts(results);
+            }
+        },
+
+    },
+    HazardDataGet: {
+        url: '/hazard/',
+        query: ({ params, props }) => ({
+            incident: params.incidentId,
+        }),
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.HazardData) {
+                params.HazardData(citizenReportList);
+            }
+        },
+    },
 };
 
-
+let finalArr = [];
 const Contacts = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
@@ -123,17 +166,36 @@ const Contacts = (props: Props) => {
     const [mergedData, setMergedData] = useState([]);
     const [trainingsList, setTrainingsList] = useState([]);
     const [url, setUrl] = useState('/municipality-contact/');
+    const [loader, setLoader] = useState(true);
+    const [nonGovContacts, setNonGovContacts] = useState([]);
+    const [hazardDetails, setHazardDetails] = useState([]);
+    /** used for non governmental contact data */
+    const [name, setName] = useState('');
+    const [organizationType, setOrganizationType] = useState('');
+    const [organizationName, setOrganizationName] = useState('');
+    const [position, setPosition] = useState('');
+    const [trainedTitle, setTrainedTitle] = useState('');
+    const [focusedHazard, setFocusHazard] = useState();
+    const [trainActivities, setTrainingActivities] = useState('');
+    const [trainingDateFrom, setTrainingDateFrom] = useState('');
+    const [trainingDateTo, setTrainingDateTo] = useState('');
+    const [contactNumber, setContactNumber] = useState('');
+    const [email, setEmail] = useState('');
 
     const { requests: {
         PalikaReportInventoriesReport,
         OrganisationGetRequest,
         TrainingGetRequest,
+        NonGovGetRequest,
+        HazardDataGet,
+
     },
     user } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
     };
     const handleOrg = (response) => {
         setOrgList(response);
@@ -167,7 +229,19 @@ const Contacts = (props: Props) => {
         ReachRouter.navigate('/profile/',
             { state: { showForm: true }, replace: true });
     };
-
+    const handleNonGovContacts = (response) => {
+        setNonGovContacts(response);
+    };
+    const handleHazardData = (response) => {
+        setHazardDetails(response);
+    };
+    HazardDataGet.setDefaultParams({
+        HazardData: handleHazardData,
+    });
+    NonGovGetRequest.setDefaultParams({
+        user,
+        nonGovContacts: handleNonGovContacts,
+    });
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
         paginationParameters: handlePaginationParameters,
@@ -182,7 +256,7 @@ const Contacts = (props: Props) => {
     TrainingGetRequest.setDefaultParams({
         setTrainedContacts: handletrainedContacts,
     });
-
+    console.log('nonGov contact', nonGovContacts);
 
     useEffect(() => {
         if (mergedData.length > 0) {
@@ -207,8 +281,8 @@ const Contacts = (props: Props) => {
                 if (orgTypeObj.length > 0) {
                     mergedList.push({
                         ...item,
-                        orgType: (orgTypeObj[0].title || 'No data'),
-                        orgName: (orgTypeObj[0].longName || 'No data'),
+                        orgType: (orgTypeObj[0].title || '-'),
+                        orgName: (orgTypeObj[0].longName || '-'),
                         trainingTitle: (trainedContactsObj.map(trainings => trainings.title)),
                         trainingDuration: (trainedContactsObj
                             .map(trainings => trainings.durationDays)),
@@ -216,7 +290,7 @@ const Contacts = (props: Props) => {
                     setMergedData(mergedList);
                     console.log('contact id? merged list: ', mergedList);
                 } else {
-                    mergedList.push({ ...item, orgType: 'No data', orgName: 'No data' });
+                    mergedList.push({ ...item, orgType: '-', orgName: '-' });
                     setMergedData(mergedData);
                 }
                 return null;
@@ -224,7 +298,25 @@ const Contacts = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, orgList, trainedContacts]);
+    useEffect(() => {
+        if (nonGovContacts && hazardDetails) {
+            const finalfetchedData = nonGovContacts.map((item, i) => {
+                const hazardName = hazardDetails.find(data => data.id === item.focusedHazard);
 
+                if (hazardName) {
+                    return { hazardName: hazardName.titleEn,
+                        item };
+                }
+
+                return null;
+            });
+
+            finalArr = [...new Set(finalfetchedData)];
+        }
+    }, [nonGovContacts, hazardDetails]);
+
+    console.log('Final array', finalArr);
+    console.log('Final array', nonGovContacts);
     return (
         <>
             {
@@ -244,73 +336,296 @@ const Contacts = (props: Props) => {
                                         <th>Position</th>
                                         <th>Name of Organisation</th>
                                         <th>Trained Title</th>
-                                        <th>Training Duration</th>
+                                        <th>Training Duration(Days)</th>
                                         <th>Contact number</th>
                                         <th>Email</th>
                                         <th>Action</th>
                                     </tr>
-                                    {mergedData
-                                        ? mergedData.map((item, i) => (
-                                            <tr key={item.id}>
-                                                <td>{i + 1}</td>
-                                                <td>{item.name || 'No data'}</td>
-                                                <td>{item.orgType || 'No data'}</td>
-                                                <td>{item.position || 'No data'}</td>
-                                                <td>{item.orgName || 'No data'}</td>
-                                                <td>
-                                                    {
-                                                        item.trainingTitle
-                                                            ? item.trainingTitle.map(training => training)
-                                                            : 'No data'
-                                                    }
-                                                </td>
-                                                <td>
-                                                    {
-                                                        item.trainingDuration
-                                                            ? item.trainingDuration.map(training => training)
-                                                            : 'No data'
-                                                    }
-                                                </td>
-                                                <td>{item.mobileNumber || 'No Data'}</td>
-                                                <td>{item.email || 'No Data'}</td>
-                                                <td>
-                                                    <button
-                                                        className={styles.editButtn}
-                                                        type="button"
-                                                        onClick={() => handleEditContacts(item)}
-                                                        title="Edit Contact"
-                                                    >
+                                    {loader ? (
+                                        <>
+                                            {' '}
+                                            <Loader
+                                                top="50%"
+                                                left="60%"
+                                            />
+                                            <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {mergedData
+                                                ? mergedData.map((item, i) => (
+                                                    <tr key={item.id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{item.name || '-'}</td>
+                                                        <td>{item.orgType || '-'}</td>
+                                                        <td>{item.position || '-'}</td>
+                                                        <td>{item.orgName || '-'}</td>
+                                                        <td>
+                                                            {
+                                                                item.trainingTitle
+                                                                    ? item.trainingTitle.map(training => training)
+                                                                    : '-'
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                item.trainingDuration
+                                                                    ? item.trainingDuration.map(training => training)
+                                                                    : '-'
+                                                            }
+                                                        </td>
+                                                        <td>{item.mobileNumber || '-'}</td>
+                                                        <td>{item.email || '-'}</td>
+                                                        <td>
+                                                            <button
+                                                                className={styles.editButtn}
+                                                                type="button"
+                                                                onClick={() => handleEditContacts(item)}
+                                                                title="Edit Contact"
+                                                            >
 
-                                                        <ScalableVectorGraphics
-                                                            className={styles.bulletPoint}
-                                                            src={editIcon}
-                                                            alt="editPoint"
-                                                        />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                        : 'No Data'
-                                    }
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.bulletPoint}
+                                                                    src={editIcon}
+                                                                    alt="editPoint"
+                                                                />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                                : '-'
+                                            }
+                                        </>
+                                    )}
                                 </tbody>
                             </table>
-                            <button
-                                type="button"
-                                onClick={() => handleAddContacts()}
-                                className={styles.savebtn}
-                            >
-                                <Icon
-                                    name="plus"
-                                    className={styles.plusIcon}
-                                />
+                            {!loader && (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAddContacts()}
+                                        className={styles.savebtn}
+                                    >
+                                        <Icon
+                                            name="plus"
+                                            className={styles.plusIcon}
+                                        />
                             Add Contact
-                            </button>
-                            <NextPrevBtns
-                                handlePrevClick={props.handlePrevClick}
-                                handleNextClick={props.handleNextClick}
-                            />
+                                    </button>
 
+                                </>
+                            )}
                         </div>
+                        {!loader && (
+                            <>
+                                <h2>Non-Governmental Contact</h2>
+                                <table id="table-to-xls">
+                                    <tbody>
+                                        <tr>
+                                            <th>
+                                    SN
+                                            </th>
+                                            <th>
+                                    Name
+                                            </th>
+                                            <th>
+                                    Type of Organization
+                                            </th>
+                                            <th>
+                                    Name of Organization
+                                            </th>
+                                            <th>
+                                    Position
+                                            </th>
+                                            <th>
+                                    Trained Title
+                                            </th>
+                                            <th>
+                                    Focused Hazard
+                                            </th>
+                                            <th>
+                                Activities included in the training
+                                            </th>
+                                            <th>
+                               Training Date(from)
+                                            </th>
+                                            <th>
+                                Training Date(to)
+                                            </th>
+                                            <th>
+                                Contact number
+                                            </th>
+                                            <th>
+                                Email
+                                            </th>
+                                            <th>Action</th>
+
+                                        </tr>
+                                        {finalArr && finalArr.map((data, i) => (
+                                            <tr key={data.item.id}>
+                                                <td>{i + 1}</td>
+                                                <td>{data.item.name}</td>
+                                                <td>{data.item.typeOfOrganization}</td>
+                                                <td>{data.item.nameOfOrganization}</td>
+                                                <td>{data.item.position}</td>
+                                                <td>{data.item.trainedTitle}</td>
+                                                <td>{data.hazardName}</td>
+                                                <td>{data.item.trainingActivities}</td>
+                                                <td>{data.item.trainingDateFrom}</td>
+                                                <td>{data.item.trainingDateTo}</td>
+                                                <td>{data.item.contactNumber}</td>
+                                                <td>{data.item.email}</td>
+                                                <td>
+                                                    <td>
+
+                                                        <button
+                                                            className={styles.editButtn}
+                                                            type="button"
+
+                                                            title="Edit Non Governmental Contact"
+                                                        >
+                                                            <ScalableVectorGraphics
+                                                                className={styles.bulletPoint}
+                                                                src={editIcon}
+                                                                alt="editPoint"
+                                                            />
+                                                        </button>
+                                                    </td>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        <tr>
+                                            <td>{nonGovContacts.length + 1}</td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+                                                    value={name}
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                            <td>
+                                                <select
+                                                    value={organizationType}
+                                                    className={styles.inputElement}
+                                                >
+                                                    <option value="">Select Priority Area</option>
+                                                    <option value="">Federal Governement</option>
+                                                    <option value="">Municipal Government</option>
+                                                    <option value="">Nepal Police </option>
+                                                    <option value="">Armed Police Force</option>
+                                                    <option value="">Army</option>
+                                                    <option value="">I/NGO</option>
+                                                    <option value="">Others</option>
+
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+                                                    value={organizationName}
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+                                                    value={position}
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+                                                    value={trainedTitle}
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                            <td>
+                                                <select
+                                                    value={focusedHazard}
+                                                    className={styles.inputElement}
+                                                >
+                                                    <option value="">Select Priority Area</option>
+                                                    {hazardDetails.map(data => (
+                                                        <option value={data.title}>
+                                                            {data.titleEn}
+                                                        </option>
+                                                    ))}
+
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                            <td>
+                                                <NepaliDatePicker
+                                                    inputClassName="form-control"
+                                                    className={styles.datepicker}
+
+                                                    options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <NepaliDatePicker
+                                                    inputClassName="form-control"
+                                                    className={styles.datepicker}
+
+                                                    options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    className={styles.inputElement}
+
+                                                    placeholder={'Name of Activity'}
+                                                />
+                                            </td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                                {!loader && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAddContacts()}
+                                            className={styles.savebtn}
+                                        >
+                                            <Icon
+                                                name="plus"
+                                                className={styles.plusIcon}
+                                            />
+                            Add Contact
+                                        </button>
+                                        <NextPrevBtns
+                                            handlePrevClick={props.handlePrevClick}
+                                            handleNextClick={props.handleNextClick}
+                                        />
+                                    </>
+                                )}
+                            </>
+                        )}
                     </div>
                 )
             }

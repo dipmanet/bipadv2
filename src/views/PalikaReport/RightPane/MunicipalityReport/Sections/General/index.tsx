@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import * as ReachRouter from '@reach/router';
-
+import Loader from 'react-loader';
 // import { NepaliDatePicker } from 'datepicker-nepali-reactjs';
 import styles from './styles.scss';
 import NextPrevBtns from '../../NextPrevBtns';
@@ -26,6 +26,7 @@ import {
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
+
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -154,7 +155,7 @@ const General = (props: Props) => {
     const [mayor, setmayor] = useState('');
     const [cao, setcao] = useState('');
     const [focalPerson, setfocalPerson] = useState('');
-
+    const [loader, setLoader] = useState(true);
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
         const title = fiscalYearList
@@ -194,6 +195,7 @@ const General = (props: Props) => {
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
+        setLoader(false);
         const mayorData = response.filter(contact => contact.position === 'Mayor');
         const caoData = response.filter(item => item.position === 'Chief Administrative Officer');
         const focalPersonData = response.filter(item => item.isDrrFocalPerson === true);
@@ -272,13 +274,22 @@ const General = (props: Props) => {
 
     }, []);
     return (
+
         <div className={styles.mainPageDetailsContainer}>
-            { props.annex
-                ? ''
-                : <h2>General Information</h2>
-            }
-            {
-                !props.annex
+            {loader ? (
+                <>
+                    <Loader left="60%" top="50%" />
+                    <p className={styles.loaderInfo}>Loading...Please Wait</p>
+                </>
+
+            ) : (
+                <>
+                    { props.annex
+                        ? ''
+                        : <h2>General Information</h2>
+                    }
+                    {
+                        !props.annex
                 && (
                     <div className={styles.formColumn}>
                         <h5>DRRM report will be generated for each fiscal year.</h5>
@@ -327,15 +338,15 @@ const General = (props: Props) => {
                     </div>
                 )}
 
-            <div className={styles.formColumn}>
-                {
-                    !props.annex
-                    && <h3><strong>Municipal DRR Leadership </strong></h3>
-                }
-                <div className={styles.personalDetailsrow}>
-                    <div className={styles.personalDetails}>
+                    <div className={styles.formColumn}>
                         {
                             !props.annex
+                    && <h3><strong>Municipal DRR Leadership </strong></h3>
+                        }
+                        <div className={styles.personalDetailsrow}>
+                            <div className={styles.personalDetails}>
+                                {
+                                    !props.annex
                             && (
                                 <table id="table-to-xls">
                                     <tbody>
@@ -546,26 +557,26 @@ const General = (props: Props) => {
                                 </table>
                             )
 
-                        }
-                        {
-                            showInfo && !props.annex && (
-                                <h5>
-                                    <i>
+                                }
+                                {
+                                    showInfo && !props.annex && (
+                                        <h5>
+                                            <i>
                             Please click on the add/edit
                         button to update the details
-                                    </i>
-                                </h5>
-                            )
-                        }
-                    </div>
-                </div>
-                {
-                    !props.annex
+                                            </i>
+                                        </h5>
+                                    )
+                                }
+                            </div>
+                        </div>
+                        {
+                            !props.annex
                     && <h3><strong>Local Disaster Management Committee</strong></h3>
-                }
+                        }
 
-                <div className={styles.row}>
-                    { !props.annex
+                        <div className={styles.row}>
+                            { !props.annex
                 && (
                     <>
                         <div className={styles.inputContainer}>
@@ -610,38 +621,38 @@ const General = (props: Props) => {
                         <h3><strong>Committee Members </strong></h3>
                     </>
                 )
-                    }
-                    {
-                        props.annex
-                        && <h3><strong>Local Disaster Management Committee</strong></h3>
-                    }
-                    <table className={styles.reportTable} id="table-to-xls">
-                        <tbody>
-                            <tr>
-                                <th>SN</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                {
-                                    !props.annex
-                                    && <th>Add/Edit Details</th>
-                                }
-
-                            </tr>
-
+                            }
                             {
-                                fetchedData
+                                props.annex
+                        && <h3><strong>Local Disaster Management Committee</strong></h3>
+                            }
+                            <table className={styles.reportTable} id="table-to-xls">
+                                <tbody>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone Number</th>
+                                        {
+                                            !props.annex
+                                    && <th>Add/Edit Details</th>
+                                        }
+
+                                    </tr>
+
+                                    {
+                                        fetchedData
                                     && fetchedData
                                         .filter(member => member.committee === 'LDMC').length > 0
-                                    ? fetchedData
-                                        .filter(availableMembers => availableMembers.committee === 'LDMC').map((mem, i) => (
-                                            <tr key={mem.id}>
-                                                <td>{i + 1}</td>
-                                                <td>{mem.name || '-'}</td>
-                                                <td>{mem.email || '-'}</td>
-                                                <td>{mem.mobileNumber || '-'}</td>
-                                                {
-                                                    !props.annex
+                                            ? fetchedData
+                                                .filter(availableMembers => availableMembers.committee === 'LDMC').map((mem, i) => (
+                                                    <tr key={mem.id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{mem.name || '-'}</td>
+                                                        <td>{mem.email || '-'}</td>
+                                                        <td>{mem.mobileNumber || '-'}</td>
+                                                        {
+                                                            !props.annex
                                                         && (
                                                             <td>
                                                                 <button
@@ -658,17 +669,17 @@ const General = (props: Props) => {
 
                                                             </td>
                                                         )
-                                                }
-                                            </tr>
-                                        ))
-                                    : (
-                                        <tr>
-                                            <td>{'-'}</td>
-                                            <td>{'-'}</td>
-                                            <td>{'-'}</td>
-                                            <td>{'-'}</td>
-                                            {
-                                                !props.annex
+                                                        }
+                                                    </tr>
+                                                ))
+                                            : (
+                                                <tr>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    {
+                                                        !props.annex
                                                                         && (
                                                                             <td>
                                                                                 <button
@@ -684,29 +695,29 @@ const General = (props: Props) => {
 
                                                                             </td>
                                                                         )
-                                            }
-                                        </tr>
-                                    )
-                            }
+                                                    }
+                                                </tr>
+                                            )
+                                    }
 
 
-                        </tbody>
-                    </table>
-                    {
-                        !props.annex
+                                </tbody>
+                            </table>
+                            {
+                                !props.annex
                         && (
                             <h5>
                                 {' '}
                                 <i>Please click on the add/edit button to update the details</i>
                             </h5>
                         )
-                    }
-                </div>
+                            }
+                        </div>
 
-            </div>
+                    </div>
 
-            {
-                !props.annex
+                    {
+                        !props.annex
                 && (
                     <NextPrevBtns
                         handlePrevClick={props.handlePrevClick}
@@ -714,8 +725,9 @@ const General = (props: Props) => {
                         firstpage
                     />
                 )
-            }
-
+                    }
+                </>
+            )}
 
         </div>
 
