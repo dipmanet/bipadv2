@@ -29,6 +29,7 @@ import Loading from '#components/Loading';
 
 import {
     setPalikaRedirectAction,
+    setDrrmInventoryAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -49,6 +50,8 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setDrrmInventory: params => dispatch(setDrrmInventoryAction(params)),
+
 });
 
 
@@ -102,10 +105,6 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
     const [offset, setOffset] = useState(0);
     const [url, setUrl] = useState('/resource/');
-    const { requests: { PalikaReportInventoriesReport }, provinces,
-        districts,
-        municipalities,
-        user, rows } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('inventories');
     const [meta, setMeta] = useState(true);
@@ -114,6 +113,18 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const [lastSerialNumber, setLastSerialNumber] = useState(10);
     const [chartData, setChartData] = useState([]);
     const [loader, setLoader] = useState(true);
+
+
+    const [checkedRows, setCheckedRows] = useState([]);
+    const [checkedAll, setCheckedAll] = useState(true);
+    const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
+
+
+    const { requests: { PalikaReportInventoriesReport }, provinces,
+        districts,
+        municipalities,
+        user, rows, setDrrmInventory } = props;
+
     const handleFetchedData = (response) => {
         setFetechedData(response);
         setLoader(false);
@@ -194,17 +205,54 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 name: item,
                 Total: finalInventoriesData.filter(inven => inven.item.category === item).length,
             })));
+
+            const chkArr = Array.from(Array(finalInventoriesData.length).keys());
+            setCheckedRows(chkArr);
+            setDataWithIndex(finalInventoriesData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inventoriesData]);
 
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected + 1;
-        // setOffset((selectedPage - 1) * paginationQueryLimit);
-        // setCurrentPageNumber(selectedPage);
-        setLastSerialNumber(finalInventoriesData.length);
+
+    const handleCheckAll = (e) => {
+        setCheckedAll(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRows(Array.from(Array(fetchedData.length).keys()));
+            setDataWithIndex(finalInventoriesData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRows([]);
+            setDataWithIndex(finalInventoriesData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
     };
 
+    const handleCheck = (idx: number, e) => {
+        setCheckedAll(false);
+
+        if (e.target.checked) {
+            const arr = [...checkedRows, idx];
+            setCheckedRows(arr);
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRows(checkedRows.filter(item => item !== idx));
+
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+
+    const handleNext = () => {
+        setDrrmInventory(dataWithIndex);
+        props.handleNextClick();
+    };
 
     return (
         <>
@@ -218,7 +266,19 @@ const Inventory: React.FC<Props> = (props: Props) => {
                         <table id="table-to-xls">
                             <tbody>
                                 <tr>
-
+                                    {
+                                        !props.annex
+                                        && (
+                                            <th>
+                                                <input
+                                                    type="checkbox"
+                                                    onChange={handleCheckAll}
+                                                    checked={checkedAll}
+                                                    className={styles.checkBox}
+                                                />
+                                            </th>
+                                        )
+                                    }
                                     <th>S.N</th>
                                     <th>Name of Resource</th>
                                     <th>Quantity</th>
@@ -245,10 +305,20 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     </>
                                 ) : (
                                     <>
-                                        {finalInventoriesData && finalInventoriesData.map(item => (
+                                        {finalInventoriesData && finalInventoriesData.map((item, i) => (
 
                                             <tr>
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checkedRows.indexOf(i) !== -1}
 
+                                                            // defaultChecked
+                                                        onChange={e => handleCheck(i, e)}
+                                                        className={styles.checkBox}
+                                                        key={item.id}
+                                                    />
+                                                </td>
                                                 <td>
                                                     {item.SN}
                                                 </td>
@@ -263,6 +333,8 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                                 <td>{item.organizationType}</td>
                                                 <td>{item.createdOn.split('T')[0]}</td>
                                                 <td>{item.modifiedOn.split('T')[0]}</td>
+
+
                                                 {
                                                     !props.annex
                                             && (
@@ -291,7 +363,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                         {!loader && (
                             <>
                                 {finalInventoriesData && finalInventoriesData.length === 0
-                && <p className={styles.dataUnavailable}>Data Unavailable</p>
+                                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
                                 }
 
@@ -300,7 +372,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                             && (
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={props.handleNextClick}
+                                    handleNextClick={handleNext}
                                 />
                             )
                                 }

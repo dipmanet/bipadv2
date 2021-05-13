@@ -6,7 +6,7 @@ import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
@@ -31,7 +31,8 @@ import {
 import { userSelector, palikaRedirectSelector,
     generalDataSelector, provincesSelector,
     districtsSelector, municipalitiesSelector,
-    palikaLanguageSelector, drrmOrgSelecter } from '#selectors';
+    palikaLanguageSelector, drrmOrgSelecter,
+    drrmInventorySelecter } from '#selectors';
 import Simulation from './Sections/Simulation';
 
 interface Props {
@@ -52,6 +53,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     palikaLanguage: palikaLanguageSelector(state),
     drrmOrg: drrmOrgSelecter(state),
+    drrmInventory: drrmInventorySelecter(state),
 
 });
 
@@ -144,6 +146,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         municipalities,
         palikaLanguage,
         drrmOrg,
+        drrmInventory,
     } = props;
     const {
         fiscalYear,
@@ -151,6 +154,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const {
         language,
     } = palikaLanguage;
+    const {
+        data,
+    } = drrmInventory;
     const { showForm } = palikaRedirect;
     const [reportTitle, setreportTitle] = useState('');
     const [datefrom, setdatefrom] = useState('');
@@ -639,8 +645,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                                 .map((item, i) => (
                                                     <tr key={item.id}>
                                                         <td>{i + 1}</td>
-                                                        <td>{item.title}</td>
-                                                        <td>{item.type}</td>
+                                                        <td>{item.title || '-'}</td>
+                                                        <td>{item.type || '-'}</td>
                                                         <td>
                                                             {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
                                                         </td>
@@ -673,11 +679,50 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
                             <div id={'page9'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex F</h1>
-                                <Inventory
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>S.N</th>
+                                            <th>Name of Resource</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th>Category</th>
+                                            <th>Owner Organization Name</th>
+                                            <th>Type of Organization</th>
+                                            <th>Added Date</th>
+                                            <th>Updated Date</th>
+                                        </tr>
+
+                                        {drrmInventory
+                                        && drrmInventory
+                                            .filter(inven => inven.selectedRow === true)
+                                            .map((item, i) => (
+
+                                                <tr>
+                                                    <td>
+                                                        {item.SN}
+                                                    </td>
+                                                    <td>{item.item.title || '-'}</td>
+                                                    <td>{item.quantity || '-'}</td>
+                                                    <td>{item.item.unit || '-'}</td>
+                                                    <td>{item.item.category || '-'}</td>
+                                                    <td>
+
+                                                        {item.resourceName || '-'}
+                                                    </td>
+                                                    <td>{item.organizationType || '-'}</td>
+                                                    <td>{item.createdOn.split('T')[0] || '-'}</td>
+                                                    <td>{item.modifiedOn.split('T')[0] || '-'}</td>
+                                                </tr>
+                                            ))}
+                                    </tbody>
+                                </table>
+
+                                {/* <Inventory
                                     annex
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}
-                                />
+                                /> */}
                             </div>
 
                             <div id={'page10'} className={_cs(styles.annexPage, 'page')}>

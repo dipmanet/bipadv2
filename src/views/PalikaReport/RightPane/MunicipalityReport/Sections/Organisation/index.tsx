@@ -307,7 +307,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                             </tbody>
                         </table>
-                        {!loader && (
+                        {!loader
+                        && (
                             <>
                                 {
                                     !props.annex
@@ -321,21 +322,25 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                         name="plus"
                                         className={styles.plusIcon}
                                     />
-                             Add Organisation Data
+                                     Add Organisation Data
                                 </button>
                             )
-                        }
-                        {
-                            !props.annex
-                                ? (
-                                    <div className={styles.btnsCont}>
-                                        <NextPrevBtns
-                                            handlePrevClick={handleNext}
-                                            handleNextClick={handleNext}
-                                        />
-                                    </div>
-                                )
-                                : ''
+
+                                }
+                                {
+                                    !props.annex
+                                        ? (
+                                            <div className={styles.btnsCont}>
+                                                <NextPrevBtns
+                                                    handlePrevClick={handleNext}
+                                                    handleNextClick={handleNext}
+                                                />
+                                            </div>
+                                        )
+                                        : ''
+                                }
+                            </>
+                        )
                         }
 
                     </div>
@@ -385,6 +390,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
             }
 
         </>
+
     );
 };
 

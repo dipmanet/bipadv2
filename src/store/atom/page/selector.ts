@@ -558,6 +558,7 @@ export const budgetIdSelector = ({ page }: AppState) => page.budgetId;
 export const palikaRedirectSelector = ({ page }: AppState) => page.palikaRedirect;
 export const palikaLanguageSelector = ({ page }: AppState) => page.palikaLanguage;
 export const drrmOrgSelecter = ({ page }: AppState) => page.drrmOrg;
+export const drrmInventorySelecter = ({ page }: AppState) => page.drrmInventory;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

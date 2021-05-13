@@ -19,6 +19,11 @@ export const setDrrmOrgAction = drrmOrg => ({
     drrmOrg,
 });
 
+export const setDrrmInventoryAction = drrmInventory => ({
+    type: Type.PageType.SET_DRRM_INVENTORY,
+    drrmInventory,
+});
+
 export const setPalikaLanguageAction = palikaLanguage => ({
     type: Type.PageType.SET_PALIKA_LANGUAGE,
     palikaLanguage,
@@ -1380,11 +1385,22 @@ const setDrrmOrg = (state: Type.PageState, action: Type.SetDrrmOrg) => {
     return newState;
 };
 
+const setDrrmInventory = (state: Type.PageState, action: Type.SetDrrmInventory) => {
+    const { drrmInventory } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmInventory = drrmInventory;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_DRRM_INVENTORY:
+            return setDrrmInventory(state, action);
         case Type.PageType.SET_DRRM_ORG:
             return setDrrmOrg(state, action);
         case Type.PageType.SET_PALIKA_LANGUAGE:
