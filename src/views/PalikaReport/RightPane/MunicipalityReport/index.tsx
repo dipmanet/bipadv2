@@ -32,7 +32,8 @@ import { userSelector, palikaRedirectSelector,
     generalDataSelector, provincesSelector,
     districtsSelector, municipalitiesSelector,
     palikaLanguageSelector, drrmOrgSelecter,
-    drrmInventorySelecter, drrmCriticalSelecter } from '#selectors';
+    drrmInventorySelecter, drrmCriticalSelecter,
+    drrmContactsSelecter } from '#selectors';
 import Simulation from './Sections/Simulation';
 
 interface Props {
@@ -55,6 +56,7 @@ const mapStateToProps = (state, props) => ({
     drrmOrg: drrmOrgSelecter(state),
     drrmInventory: drrmInventorySelecter(state),
     drrmCritical: drrmCriticalSelecter(state),
+    drrmContacts: drrmContactsSelecter(state),
 
 });
 
@@ -149,6 +151,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         drrmOrg,
         drrmInventory,
         drrmCritical,
+        drrmContacts,
     } = props;
     const {
         fiscalYear,
@@ -587,7 +590,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
                             <div id={'page3'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex A</h1>
-                                <General
+                                {/* <General
                                     annex
                                     mayor={mayor}
                                     cao={cao}
@@ -596,7 +599,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}
                                     localMembers={localMembers}
-                                />
+                                /> */}
 
                             </div>
                             <div id={'page5'} className={_cs(styles.annexPage, 'page')}>
@@ -785,6 +788,59 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                             <div id={'page12'} className={_cs(styles.annexPage, 'page')}>
                                 <h1> Annex I </h1>
+                                <h2>Contacts</h2>
+                                <table id="table-to-xls">
+                                    <tbody>
+                                        <tr>
+                                            <th>S.N</th>
+                                            <th>Name</th>
+                                            <th>Type of Organisation</th>
+                                            <th>Position</th>
+                                            <th>Name of Organisation</th>
+                                            <th>Trained Title</th>
+                                            <th>Training Duration</th>
+                                            <th>Contact number</th>
+                                            <th>Email</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        {drrmContacts
+                                            ? drrmContacts
+                                                .filter(contact => contact.selectedRow === true)
+                                                .map((item, i) => (
+                                                    <tr key={item.id}>
+
+                                                        <td>{i + 1}</td>
+                                                        <td>{item.name || 'No data'}</td>
+                                                        <td>{item.orgType || 'No data'}</td>
+                                                        <td>{item.position || 'No data'}</td>
+                                                        <td>{item.orgName || 'No data'}</td>
+                                                        <td>
+                                                            {
+                                                                item.trainingTitle
+                                                                    ? item.trainingTitle.map(training => training)
+                                                                    : 'No data'
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                item.trainingDuration
+                                                                    ? item.trainingDuration.map(training => training)
+                                                                    : 'No data'
+                                                            }
+                                                        </td>
+                                                        <td>{item.mobileNumber || 'No Data'}</td>
+                                                        <td>{item.email || 'No Data'}</td>
+                                                    </tr>
+                                                ))
+                                            : 'No Data'
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                            <div id={'page13'} className={_cs(styles.annexPage, 'page')}>
+                                <h1> Annex J </h1>
                                 <Simulation
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}

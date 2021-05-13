@@ -24,6 +24,11 @@ export const setDrrmCriticalAction = drrmCritical => ({
     drrmCritical,
 });
 
+export const setDrrmContactsAction = drrmContacts => ({
+    type: Type.PageType.SET_DRRM_CONTACTS,
+    drrmContacts,
+});
+
 export const setDrrmInventoryAction = drrmInventory => ({
     type: Type.PageType.SET_DRRM_INVENTORY,
     drrmInventory,
@@ -1390,6 +1395,15 @@ const setDrrmOrg = (state: Type.PageState, action: Type.SetDrrmOrg) => {
     return newState;
 };
 
+const setDrrmContacts = (state: Type.PageState, action: Type.SetDrrmContacts) => {
+    const { drrmContacts } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmContacts = drrmContacts;
+    });
+    return newState;
+};
+
 const setDrrmInventory = (state: Type.PageState, action: Type.SetDrrmInventory) => {
     const { drrmInventory } = action;
     const newState = produce(state, (deferedState) => {
@@ -1413,6 +1427,8 @@ export default function routeReducer(
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_DRRM_CONTACTS:
+            return setDrrmContacts(state, action);
         case Type.PageType.SET_DRRM_CRITICAL:
             return setDrrmCritical(state, action);
         case Type.PageType.SET_DRRM_INVENTORY:

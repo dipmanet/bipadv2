@@ -24,6 +24,7 @@ import NextPrevBtns from '../../NextPrevBtns';
 
 import {
     setPalikaRedirectAction,
+    setDrrmContactsAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -31,6 +32,7 @@ import editIcon from '#resources/palikaicons/edit.svg';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setDrrmContacts: params => dispatch(setDrrmContactsAction(params)),
 });
 
 interface Props{
@@ -124,12 +126,16 @@ const Contacts = (props: Props) => {
     const [trainingsList, setTrainingsList] = useState([]);
     const [url, setUrl] = useState('/municipality-contact/');
 
+    const [checkedRows, setCheckedRows] = useState([]);
+    const [checkedAll, setCheckedAll] = useState(true);
+    const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
+
     const { requests: {
         PalikaReportInventoriesReport,
         OrganisationGetRequest,
         TrainingGetRequest,
     },
-    user } = props;
+    user, setDrrmContacts } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
     const handleFetchedData = (response) => {
@@ -215,16 +221,62 @@ const Contacts = (props: Props) => {
                             .map(trainings => trainings.durationDays)),
                     });
                     setMergedData(mergedList);
-                    console.log('contact id? merged list: ', mergedList);
+
+                    const chkArr = Array.from(Array(mergedList.length).keys());
+                    setCheckedRows(chkArr);
+                    setDataWithIndex(mergedList.map((cts, i) => ({ ...cts, index: i, selectedRow: true })));
                 } else {
                     mergedList.push({ ...item, orgType: 'No data', orgName: 'No data' });
                     setMergedData(mergedData);
+                    const chkArr = Array.from(Array(mergedList.length).keys());
+                    setCheckedRows(chkArr);
+                    setDataWithIndex(mergedList.map((cts, i) => ({ ...cts, index: i, selectedRow: true })));
                 }
                 return null;
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, orgList, trainedContacts]);
+
+    const handleCheckAll = (e) => {
+        setCheckedAll(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRows(Array.from(Array(mergedData.length).keys()));
+            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRows([]);
+            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
+    };
+
+    const handleCheck = (idx: number, e) => {
+        setCheckedAll(false);
+
+        if (e.target.checked) {
+            const arr = [...checkedRows, idx];
+            setCheckedRows(arr);
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRows(checkedRows.filter(item => item !== idx));
+
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+
+    const handleNext = () => {
+        setDrrmContacts(dataWithIndex);
+        props.handleNextClick();
+    };
 
     return (
         <>
@@ -239,6 +291,15 @@ const Contacts = (props: Props) => {
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
+                                        <th>
+                                            <input
+                                                type="checkbox"
+                                                onChange={handleCheckAll}
+                                                checked={checkedAll}
+                                                defaultChecked
+                                                className={styles.checkBox}
+                                            />
+                                        </th>
                                         <th>S.N</th>
                                         <th>Name</th>
                                         <th>Type of Organisation</th>
@@ -253,6 +314,17 @@ const Contacts = (props: Props) => {
                                     {mergedData
                                         ? mergedData.map((item, i) => (
                                             <tr key={item.id}>
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checkedRows.indexOf(i) !== -1}
+
+                                                            // defaultChecked
+                                                        onChange={e => handleCheck(i, e)}
+                                                        className={styles.checkBox}
+                                                        key={item.id}
+                                                    />
+                                                </td>
                                                 <td>{i + 1}</td>
                                                 <td>{item.name || 'No data'}</td>
                                                 <td>{item.orgType || 'No data'}</td>
@@ -295,6 +367,7 @@ const Contacts = (props: Props) => {
                                     }
                                 </tbody>
                             </table>
+
                             <button
                                 type="button"
                                 onClick={() => handleAddContacts()}
@@ -308,7 +381,7 @@ const Contacts = (props: Props) => {
                             </button>
                             <NextPrevBtns
                                 handlePrevClick={props.handlePrevClick}
-                                handleNextClick={props.handleNextClick}
+                                handleNextClick={handleNext}
                             />
 
                         </div>

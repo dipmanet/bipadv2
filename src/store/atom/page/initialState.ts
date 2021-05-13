@@ -250,6 +250,9 @@ const state: PageState = {
     drrmCritical: {
         data: [],
     },
+    drrmContacts: {
+        data: [],
+    },
 
 };
 export default state;
