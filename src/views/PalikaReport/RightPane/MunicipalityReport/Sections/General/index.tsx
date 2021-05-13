@@ -162,6 +162,7 @@ const General = (props: Props) => {
         const title = fiscalYearList
             .filter(data => Number(data.id) === Number(fiscal.target.value));
         setFiscalYearTitle(title[0].titleEn);
+        console.log('title', title);
     };
     const handleFiscalYearList = (response) => {
         setFiscalYearList(response);
