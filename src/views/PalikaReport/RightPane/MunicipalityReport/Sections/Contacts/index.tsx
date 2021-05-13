@@ -1052,24 +1052,13 @@ const Contacts = (props: Props) => {
                                                     className={styles.plusIcon}
                                                 />
                             Add Contact
-<<<<<<< HEAD
-                                        </button>
-                                        <NextPrevBtns
-                                            handlePrevClick={props.handlePrevClick}
-                                            handleNextClick={handleNext}
-                                        />
-                                    </>
-                                )}
-=======
                                             </button>
                                             <NextPrevBtns
                                                 handlePrevClick={props.handlePrevClick}
-                                                handleNextClick={props.handleNextClick}
+                                                handleNextClick={handleNext}
                                             />
                                         </>
-                                    )
-                                }
->>>>>>> 28a882b2664413a856fd95058d9850a3d3284aca
+                                    )}
                             </>
                         )}
                     </div>
