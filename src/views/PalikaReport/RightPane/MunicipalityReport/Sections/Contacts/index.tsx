@@ -84,6 +84,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 params.paginationParameters(response);
             }
         },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
+        },
     },
     OrganisationGetRequest: {
         url: '/organization/',
@@ -97,6 +102,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 params.setOrgs(results);
             }
         },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
+        },
     },
     TrainingGetRequest: {
         url: '/contact-training/',
@@ -109,6 +119,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.setTrainedContacts) {
                 params.setTrainedContacts(results);
             }
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
         },
     },
     NonGovGetRequest: {
@@ -132,6 +147,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             if (params && params.nonGovContacts) {
                 params.nonGovContacts(results);
             }
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
         },
 
     },
@@ -216,6 +236,7 @@ const Contacts = (props: Props) => {
     const [email, setEmail] = useState('');
     const [nonGovContactId, setNonGovContactId] = useState();
     const [nonGovContactIndex, setNonGovContactIndex] = useState();
+    const [postErrors, setPostErrors] = useState({});
     const [editBtnClicked, setEditBtnClicked] = useState(false);
     const { requests: {
         PalikaReportInventoriesReport,
@@ -232,7 +253,9 @@ const Contacts = (props: Props) => {
     const handleNameChange = (e) => {
         setName(e.target.value);
     };
-
+    const handleErrors = (errors) => {
+        setPostErrors(errors);
+    };
     const OrganizationTypeChange = (e) => {
         setOrganizationType(e.target.value);
     };
@@ -265,6 +288,7 @@ const Contacts = (props: Props) => {
     };
     const handleNonGovContacts = (response) => {
         setNonGovContacts(response);
+        setLoader(false);
     };
     const handleNonGovPostContacts = (response) => {
         setName('');
@@ -283,6 +307,7 @@ const Contacts = (props: Props) => {
         NonGovGetRequest.do({
             user,
             nonGovContacts: handleNonGovContacts,
+            setErrors: handleErrors,
         });
     };
     const handleEditnonGovContact = (id, index) => {
@@ -329,13 +354,18 @@ const Contacts = (props: Props) => {
                 fiscalYear: generalData.fiscalYear,
             },
             nonGovPostContacts: handleNonGovPostContacts,
+            setErrors: handleErrors,
 
         });
     };
-
+    const handleHazardData = (response) => {
+        setHazardDetails(response);
+    };
+    HazardDataGet.setDefaultParams({
+        HazardData: handleHazardData,
+    });
     const handleFetchedData = (response) => {
         setFetechedData(response);
-        // setLoader(false);
     };
     const handleOrg = (response) => {
         setOrgList(response);
@@ -368,6 +398,7 @@ const Contacts = (props: Props) => {
             },
             nonGovPostContacts: handleNonGovPostContacts,
             id: nonGovContactId,
+            setErrors: handleErrors,
 
         });
     };
@@ -396,15 +427,11 @@ const Contacts = (props: Props) => {
             { state: { showForm: true }, replace: true });
     };
 
-    const handleHazardData = (response) => {
-        setHazardDetails(response);
-    };
-    HazardDataGet.setDefaultParams({
-        HazardData: handleHazardData,
-    });
+
     NonGovGetRequest.setDefaultParams({
         user,
         nonGovContacts: handleNonGovContacts,
+        setErrors: handleErrors,
     });
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
@@ -413,12 +440,15 @@ const Contacts = (props: Props) => {
         page: paginationQueryLimit,
         inventories: defaultQueryParameter,
         user,
+        setErrors: handleErrors,
     });
     OrganisationGetRequest.setDefaultParams({
         setOrgs: handleOrg,
+        setErrors: handleErrors,
     });
     TrainingGetRequest.setDefaultParams({
         setTrainedContacts: handletrainedContacts,
+        setErrors: handleErrors,
     });
     console.log('nonGov contact', nonGovContacts);
 
@@ -476,12 +506,13 @@ const Contacts = (props: Props) => {
             });
 
             finalArr = [...new Set(finalfetchedData)];
-            setLoader(false);
+
+            console.log('Final array');
         }
     }, [nonGovContacts, hazardDetails]);
 
+    // console.log('Final array', loader);
     console.log('Final array', finalArr);
-    console.log('Final array', nonGovContacts);
     console.log('hazard', hazardDetails);
     return (
         <>
@@ -627,7 +658,7 @@ const Contacts = (props: Props) => {
                                             <th>Action</th>
 
                                         </tr>
-                                        {finalArr && finalArr.map((data, i) => (
+                                        {finalArr && finalArr.length > 0 && finalArr.map((data, i) => (
                                             nonGovContactId === data.item.id
                                                 ? (
                                                     <tr>
@@ -793,147 +824,174 @@ const Contacts = (props: Props) => {
                                                     </tr>
                                                 )
                                         ))}
-                                        <tr>
-                                            <td>{nonGovContacts.length + 1}</td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={name}
-                                                    placeholder={'Name'}
-                                                    onChange={handleNameChange}
-                                                />
-                                            </td>
-                                            <td>
-                                                <select
-                                                    value={organizationType}
-                                                    className={styles.inputElement}
-                                                    onChange={OrganizationTypeChange}
-                                                >
-                                                    <option value="">Select Organization Type</option>
-                                                    <option value="Federal Governement">Federal Governement</option>
-                                                    <option value="Municipal Government">Municipal Government</option>
-                                                    <option value="Nepal Police">Nepal Police </option>
-                                                    <option value="Armed Police Force">Armed Police Force</option>
-                                                    <option value="Army">Army</option>
-                                                    <option value="I/NGO">I/NGO</option>
-                                                    <option value="Others">Others</option>
+                                        {!nonGovContactId && (
+                                            <>
+                                                <tr>
+                                                    <td>{nonGovContacts.length + 1}</td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={name}
+                                                            placeholder={'Name'}
+                                                            onChange={handleNameChange}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <select
+                                                            value={organizationType}
+                                                            className={styles.inputElement}
+                                                            onChange={OrganizationTypeChange}
+                                                        >
+                                                            <option value="">Select Organization Type</option>
+                                                            <option value="Federal Governement">Federal Governement</option>
+                                                            <option value="Municipal Government">Municipal Government</option>
+                                                            <option value="Nepal Police">Nepal Police </option>
+                                                            <option value="Armed Police Force">Armed Police Force</option>
+                                                            <option value="Army">Army</option>
+                                                            <option value="I/NGO">I/NGO</option>
+                                                            <option value="Others">Others</option>
 
 
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={organizationName}
-                                                    onChange={OrganizationNameChange}
-                                                    placeholder={'Name of Organization'}
-                                                />
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={position}
-                                                    placeholder={'Position'}
-                                                    onChange={handlePositionChange}
-                                                />
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={trainedTitle}
-                                                    onChange={handleTraining}
-                                                    placeholder={'Training Title'}
-                                                />
-                                            </td>
-                                            <td>
-                                                <select
-                                                    value={focusedHazard}
-                                                    className={styles.inputElement}
-                                                    onChange={handleFocusedHazard}
-                                                >
-                                                    <option value="">Select Focused Hazard</option>
-                                                    {hazardDetails.map(data => (
-                                                        <option value={data.id}>
-                                                            {data.titleEn}
-                                                        </option>
-                                                    ))}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={organizationName}
+                                                            onChange={OrganizationNameChange}
+                                                            placeholder={'Name of Organization'}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={position}
+                                                            placeholder={'Position'}
+                                                            onChange={handlePositionChange}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={trainedTitle}
+                                                            onChange={handleTraining}
+                                                            placeholder={'Training Title'}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <select
+                                                            value={focusedHazard}
+                                                            className={styles.inputElement}
+                                                            onChange={handleFocusedHazard}
+                                                        >
+                                                            <option value="">Select Focused Hazard</option>
+                                                            {hazardDetails.map(data => (
+                                                                <option value={data.id}>
+                                                                    {data.titleEn}
+                                                                </option>
+                                                            ))}
 
 
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={trainActivities}
-                                                    onChange={handleActivities}
-                                                    placeholder={'Activities included in training'}
-                                                />
-                                            </td>
-                                            <td>
-                                                <NepaliDatePicker
-                                                    inputClassName="form-control"
-                                                    className={styles.datepicker}
-                                                    value={trainingDateFrom}
-                                                    onChange={date => setTrainingDateFrom(date)}
-                                                    options={{ calenderLocale: 'en', valueLocale: 'en' }}
-                                                />
-                                            </td>
-                                            <td>
-                                                <NepaliDatePicker
-                                                    inputClassName="form-control"
-                                                    className={styles.datepicker}
-                                                    value={trainingDateTo}
-                                                    onChange={date => setTrainingDateTo(date)}
-                                                    options={{ calenderLocale: 'en', valueLocale: 'en' }}
-                                                />
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={contactNumber}
-                                                    onChange={handleContact}
-                                                    placeholder={'Contact Number'}
-                                                />
-                                            </td>
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className={styles.inputElement}
-                                                    value={email}
-                                                    onChange={handleEmail}
-                                                    placeholder={'Email'}
-                                                />
-                                            </td>
-                                        </tr>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={trainActivities}
+                                                            onChange={handleActivities}
+                                                            placeholder={'Activities included in training'}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <NepaliDatePicker
+                                                            inputClassName="form-control"
+                                                            className={styles.datepicker}
+                                                            value={trainingDateFrom}
+                                                            onChange={date => setTrainingDateFrom(date)}
+                                                            options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <NepaliDatePicker
+                                                            inputClassName="form-control"
+                                                            className={styles.datepicker}
+                                                            value={trainingDateTo}
+                                                            onChange={date => setTrainingDateTo(date)}
+                                                            options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={contactNumber}
+                                                            onChange={handleContact}
+                                                            placeholder={'Contact Number'}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputElement}
+                                                            value={email}
+                                                            onChange={handleEmail}
+                                                            placeholder={'Email'}
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </>
+                                        )}
 
 
                                     </tbody>
                                 </table>
-                                {!loader && (
-                                    <>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleAddNonGovContacts()}
-                                            className={styles.savebtn}
-                                        >
-                                            <Icon
-                                                name="plus"
-                                                className={styles.plusIcon}
-                                            />
+                                {
+                                    Object.keys(postErrors).length > 0
+                        && (
+                            <ul>
+                                <li>
+                                    <span className={styles.errorHeading}>
+                                    Please fix the following errors:
+                                    </span>
+                                </li>
+                                {
+                                    Object.keys(postErrors.response).map(errorItem => (
+                                        <li>
+                                            {`${errorItem}: ${postErrors.response[errorItem]}`}
+                                        </li>
+                                    ), // return <li>Please enter valid info in all fields</li>;
+                                    )
+                                }
+
+                            </ul>
+                        )
+                                }
+                                {!loader && !nonGovContactId
+                                    && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAddNonGovContacts()}
+                                                className={styles.savebtn}
+                                            >
+                                                <Icon
+                                                    name="plus"
+                                                    className={styles.plusIcon}
+                                                />
                             Add Contact
-                                        </button>
-                                        <NextPrevBtns
-                                            handlePrevClick={props.handlePrevClick}
-                                            handleNextClick={props.handleNextClick}
-                                        />
-                                    </>
-                                )}
+                                            </button>
+                                            <NextPrevBtns
+                                                handlePrevClick={props.handlePrevClick}
+                                                handleNextClick={props.handleNextClick}
+                                            />
+                                        </>
+                                    )
+                                }
                             </>
                         )}
                     </div>
