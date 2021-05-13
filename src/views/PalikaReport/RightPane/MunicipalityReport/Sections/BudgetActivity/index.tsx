@@ -449,6 +449,12 @@ const BudgetActivity = (props: Props) => {
             setPriorityAction(data);
         }
     };
+    let tableStyle = {};
+    if (props.annex) {
+        tableStyle = { tableLayout: 'fixed' };
+    } else {
+        tableStyle = { tableLayout: 'initial' };
+    }
 
     return (
         <>
@@ -472,7 +478,10 @@ const BudgetActivity = (props: Props) => {
            && (
                <div className={styles.mainPageDetailsContainer}>
                    <h2>{`Budget Activities for Fiscal Year ${generalData.fiscalYearTitle}`}</h2>
-                   <table className={styles.bapalikaTable}>
+                   <table
+                       style={tableStyle}
+                       className={styles.bapalikaTable}
+                   >
                        <tbody>
 
 

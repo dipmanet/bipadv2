@@ -105,6 +105,9 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [CIselected, setCISelected] = useState('');
     const [chartData, setChartData] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [checkedRows, setCheckedRows] = useState([]);
+    const [checkedAll, setCheckedAll] = useState(true);
+    const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
@@ -172,10 +175,52 @@ const Organisation: React.FC<Props> = (props: Props) => {
                 Total: fetchedData.filter(organisation => organisation.operatorType === item).length,
             })));
 
-            console.log('organisation data:', fetchedData);
+            const chkArr = Array.from(Array(fetchedData.length).keys());
+            setCheckedRows(chkArr);
+            setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData]);
+
+    const handleCheckAll = (e) => {
+        setCheckedAll(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRows(Array.from(Array(fetchedData.length).keys()));
+            setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRows([]);
+            setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
+    };
+
+    const handleCheck = (idx: number, e) => {
+        if (e.target.checked) {
+            const arr = [...checkedRows, idx];
+            setCheckedRows(arr);
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRows(checkedRows.filter(item => item !== idx));
+
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+
+    const handleNext = () => {
+        props.handleNextClick();
+        // save data to redux here
+        console.log('final data', dataWithIndex);
+    };
 
     return (
         <>
@@ -189,6 +234,20 @@ const Organisation: React.FC<Props> = (props: Props) => {
                         <table id="table-to-xls">
                             <tbody>
                                 <tr>
+                                    {
+                                        !props.annex
+                                        && (
+                                            <th>
+                                                <input
+                                                    type="checkbox"
+                                                    onChange={handleCheckAll}
+                                                    checked={checkedAll}
+                                                    defaultChecked
+                                                    className={styles.checkBox}
+                                                />
+                                            </th>
+                                        )
+                                    }
                                     <th>S.N</th>
                                     <th>Name</th>
                                     <th>Type</th>
@@ -268,22 +327,19 @@ const Organisation: React.FC<Props> = (props: Props) => {
                              Add Organisation Data
                                 </button>
                             )
-                                }
-
-                                {
-                                    !props.annex
-                                        ? (
-                                            <div className={styles.btnsCont}>
-                                                <NextPrevBtns
-                                                    handlePrevClick={props.handlePrevClick}
-                                                    handleNextClick={props.handleNextClick}
-                                                />
-                                            </div>
-                                        )
-                                        : ''
-                                }
-                            </>
-                        )}
+                        }
+                        {
+                            !props.annex
+                                ? (
+                                    <div className={styles.btnsCont}>
+                                        <NextPrevBtns
+                                            handlePrevClick={handleNext}
+                                            handleNextClick={handleNext}
+                                        />
+                                    </div>
+                                )
+                                : ''
+                        }
 
                     </div>
 

@@ -391,6 +391,13 @@ const Simulation = (props: Props) => {
     }, [simulationIndex, editBtnClicked]);
     console.log('Simulationn data>>>', finalArr);
 
+    let tableStyle = {};
+    if (props.annex) {
+        tableStyle = { tableLayout: 'fixed', width: '100%' };
+    } else {
+        tableStyle = { tableLayout: 'initial' };
+    }
+
 
     return (
         <>
@@ -400,7 +407,10 @@ const Simulation = (props: Props) => {
                 <div className={styles.mainDiv}>
                     <h2>Simulations</h2>
                     <div className={styles.palikaTable}>
-                        <table id="table-to-xls">
+                        <table
+                            style={tableStyle}
+                            id="table-to-xls"
+                        >
                             <tbody>
                                 <>
                                     <tr>
