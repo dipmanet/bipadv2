@@ -2,17 +2,7 @@ a{
     color: blue;
 }
 
-.bapalikaTable{
-// table-layout: fixed;
-width: 210mm;
-// word-break: keep-all;
-word-break:break-all;
-// font-size: 8px;
-td{
-    padding: 2px !important;
-    vertical-align: top;
-}
-//here
+.palikaTable{
     .inputContainer{
         display: flex;
         border-radius: 3px;
@@ -180,17 +170,16 @@ td{
 
 }
 .budgetActPreviewContainer{
-    margin-left: 30px;
-    margin-top: 20px;
+    // margin-left: 30px;
+    margin-top: 10px;
     h2{
         font-size: 14px;
         font-weight: 600;
-        margin-left: 5px;
+        margin-left: 35px;
         color: #222;
     }
     .budgetActChartContainer{
         display: flex;
-        // margin-left: 30px;
         .legend{
         display: flex;
         flex-direction: column;
@@ -239,7 +228,7 @@ td{
                     }
                   
                     .bigerNum{
-                        font-size: 14px;
+                        font-size: 18px;
                     font-weight: 600;
                     }        
                     .light{
@@ -295,7 +284,6 @@ td{
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-bottom: 10px;
             }
         }
     }
@@ -343,7 +331,6 @@ td{
         border: none;
         background-color: transparent;
       }
-    //report dim here
     h2{
         // margin-bottom: 40px !important;
     }

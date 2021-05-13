@@ -154,7 +154,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     let municipalityName = '';
 
 
-    if (user && user.profile && user.profile.municipality) {
+    if (user && !user.isSuperuser && user.profile && user.profile.municipality) {
         const {
             profile: {
                 municipality,

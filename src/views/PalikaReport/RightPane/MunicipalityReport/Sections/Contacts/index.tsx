@@ -88,9 +88,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
-            params.body.handlePendingState(false);
-            params.body.setErrors(error);
+            params.setErrors(error);
         },
     },
     OrganisationGetRequest: {
@@ -106,9 +104,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
-            params.body.handlePendingState(false);
-            params.body.setErrors(error);
+            params.setErrors(error);
         },
     },
     TrainingGetRequest: {
@@ -124,9 +120,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
-            params.body.handlePendingState(false);
-            params.body.setErrors(error);
+            params.setErrors(error);
         },
     },
     NonGovGetRequest: {
@@ -152,9 +146,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
-            params.body.handlePendingState(false);
-            params.body.setErrors(error);
+            params.setErrors(error);
         },
 
     },
@@ -167,9 +159,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.nonGovPostContacts(response);
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
-            params.body.handlePendingState(false);
-            params.body.setErrors(error);
+            params.setErrors(error);
         },
 
 
@@ -183,9 +173,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.nonGovPostContacts(response);
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
-            params.body.handlePendingState(false);
-            params.body.setErrors(error);
+            params.setErrors(error);
         },
 
 
@@ -266,6 +254,7 @@ const Contacts = (props: Props) => {
     };
     const handleErrors = (errors) => {
         setPostErrors(errors);
+        setLoader(false);
     };
     const OrganizationTypeChange = (e) => {
         setOrganizationType(e.target.value);
@@ -510,7 +499,7 @@ const Contacts = (props: Props) => {
     }, [fetchedData, orgList, trainedContacts]);
 
     useEffect(() => {
-        if (nonGovContacts && hazardDetails) {
+        if (nonGovContacts && hazardDetails.length > 0) {
             const finalfetchedData = nonGovContacts.map((item, i) => {
                 const hazardName = hazardDetails.find(data => data.id === item.focusedHazard);
 

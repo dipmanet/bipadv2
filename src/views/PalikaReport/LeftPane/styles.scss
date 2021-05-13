@@ -43,6 +43,17 @@
 .reportSidebarMainContainer{
     display: flex;
     flex-direction: column;
+    .inputContainer{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .stepwiseRegionSelectInput{
+        display: flex;
+        flex-direction: column;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
     .infoIcon{
         font-size: 16px;    
         float: right;
@@ -142,11 +153,17 @@
     
     
     }
-    .addButnDiv{
-display: flex;
-justify-content: center;
-    }
+//     .addButnDiv{
+// display: flex;
+// justify-content: center;
+
+//     }
+.butnDiv{
+    display: flex;
+}
     .addButn{
+        margin-left: auto;
+margin-right: auto;
         background-color: #297EDF;
        
         border: none;

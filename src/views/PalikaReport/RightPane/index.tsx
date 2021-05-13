@@ -9,6 +9,7 @@ import {
     userSelector,
     carKeysSelector,
     palikaRedirectSelector,
+    generalDataSelector,
 } from '#selectors';
 
 
@@ -25,6 +26,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     user: userSelector(state),
     palikaLanguage: palikaLanguageSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    generalData: generalDataSelector(state),
 });
 
 interface Props {
@@ -108,6 +110,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         getTabSelected,
         showErr,
         palikaRedirect: { redirectTo },
+        generalData,
     } = props;
 
 
@@ -117,18 +120,22 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [municipality, setMunicipality] = useState(null);
     const [pending, setPending] = useState(false);
 
-    if (user && user.profile && !user.profile.municipality && !user.profile.isSuperuser) {
-        const {
-            profile: {
-                municipality: municipalityfromProp,
-                district: districtfromProp,
-                province: provincefromProp,
-            },
-        } = user;
+    if (user && user.profile && !user.profile.municipality && !user.isSuperuser) {
+        // const {
+        //     profile: {
+        //         municipality: municipalityfromProp,
+        //         district: districtfromProp,
+        //         province: provincefromProp,
+        //     },
+        // } = user;
 
-        setMunicipality(municipalityfromProp);
-        setProvince(provincefromProp);
-        setDistrict(districtfromProp);
+        setMunicipality(58007);
+        setProvince(5);
+        setDistrict(65);
+    } else {
+        setMunicipality(58007);
+        setProvince(5);
+        setDistrict(65);
     }
     const handleReportData = (response) => {
         setReportData(response);

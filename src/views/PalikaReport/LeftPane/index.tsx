@@ -24,16 +24,33 @@ import {
     palikaRedirectSelector,
     generalDataSelector,
     palikaLanguageSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
 } from '#selectors';
+import {
+    setGeneralDataAction,
+    setBudgetDataAction,
+    setBudgetIdAction,
+} from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
 import Translations from '../Translations';
+import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     generalData: generalDataSelector(state),
     palikaLanguage: palikaLanguageSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+});
+const mapDispatchToProps = dispatch => ({
+    setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+    setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
+    setBudgetId: params => dispatch(setBudgetIdAction(params)),
 });
 const icons = [
 
@@ -126,6 +143,8 @@ const Sidebar = (props) => {
     const [showErr, setShowErr] = useState(false);
     const [menuSlug, setMenuSlug] = useState('');
     const [subMenuSlug, setSubMenuSlug] = useState('');
+    const [newRegionValues, setNewRegionValues] = useState(undefined);
+    const [disableFilterButton, setDisableFilterButton] = useState(true);
     // eslint-disable-next-line react/prop-types
     // eslint-disable-next-line @typescript-eslint/camelcase
     const {
@@ -137,11 +156,17 @@ const Sidebar = (props) => {
         generalData,
         handleAddButton,
         palikaLanguage,
+        provinces,
+        districts,
+        municipalities,
+        user,
+        setGeneralDatapp,
+
     } = props;
     useEffect(() => {
         setShowErr(props.showErr);
     }, [props.showErr]);
-
+    console.log('This is data>>>', generalData);
     const handleMenuItemClick = (menuItem: number) => {
         if (generalData && generalData.fiscalYear) {
             handleMenuClick(menuItem);
@@ -152,6 +177,7 @@ const Sidebar = (props) => {
             setShowErr(true);
         }
     };
+    console.log('This user>>>', user);
     const Data1 = [{
         id: 1,
         title: 'Palika Reports',
@@ -240,6 +266,57 @@ const Sidebar = (props) => {
     }, [selectedMenuId]);
     const handleAdd = () => {
         handleAddButton(true, true, true);
+    };
+    const handleFormRegion = (Values) => {
+        setNewRegionValues(Values);
+        setDisableFilterButton(false);
+    };
+    const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
+        if (adminLevel === 1) {
+            return {
+                province: provinces.find(p => p.id === geoarea).id,
+                district: undefined,
+                municipality: undefined,
+            };
+        }
+
+        if (adminLevel === 2) {
+            const districtObj = districts.find(d => d.id === geoarea);
+            const district = districtObj.id;
+            const { province } = district;
+            return {
+                province,
+                district,
+                municipality: undefined,
+            };
+        }
+
+        if (adminLevel === 3) {
+            const municipalityObj = municipalities.find(m => m.id === geoarea);
+            const municipality = municipalityObj.id;
+            const { district } = municipalityObj;
+            const { province } = districts.find(d => d.id === district);
+            return {
+                province,
+                district,
+                municipality,
+            };
+        }
+        return '';
+    };
+
+    const handleCheckFilterDisableButtonForProvince = (province) => {
+        console.log(province);
+        setGeneralDatapp({ ...generalData,
+            province });
+    };
+    const handleCheckFilterDisableButtonForDistrict = (district) => {
+        setGeneralDatapp({ ...generalData,
+            district });
+    };
+    const handleCheckFilterDisableButtonForMunicipality = (municipality) => {
+        setGeneralDatapp({ ...generalData,
+            municipality });
     };
     return (
         <div>
@@ -335,6 +412,45 @@ const Sidebar = (props) => {
         {' '}
 
     </button>
+)
+                            }
+                            {user && user.isSuperuser
+&& (
+    <>
+
+        <div className={styles.inputContainer}>
+            <StepwiseRegionSelectInput
+
+                className={
+                    styles.stepwiseRegionSelectInput}
+                faramElementName="region"
+                wardsHidden
+                onChange={handleFormRegion}
+                checkProvince={handleCheckFilterDisableButtonForProvince}
+                checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                checkMun={handleCheckFilterDisableButtonForMunicipality}
+                // reset={resetFilterProps}
+                provinceInputClassName={styles.snprovinceinput}
+                districtInputClassName={styles.sndistinput}
+                municipalityInputClassName={styles.snmuniinput}
+            />
+
+
+        </div>
+        <div className={styles.butnDiv}>
+            <button
+                type="submit"
+                className={styles.addButn}
+                onClick={handleAdd}
+            >
+ + Add New Report
+                {' '}
+
+            </button>
+        </div>
+
+
+    </>
 )
                             }
                         </div>
@@ -433,6 +549,6 @@ Create a Report
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     Sidebar,
 );

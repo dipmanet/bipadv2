@@ -268,12 +268,8 @@ const General = (props: Props) => {
             props.handleShowErr(true);
         }
     };
-    console.log('This is fetched data>>>', fetchedData);
-    console.log('This is mayor>>>', generalData);
-    console.log('This is props>>>', props);
-    useEffect(() => {
 
-    }, []);
+
     return (
 
         <div className={styles.mainPageDetailsContainer}>
