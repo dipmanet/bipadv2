@@ -829,9 +829,21 @@ const Relief = (props: Props) => {
                  {!showRelief
                 && (
                     <>
-                        <h2>
-                                Incident and Relief
-                        </h2>
+                        {' '}
+                        {
+                            !props.annex
+
+                                ? (
+                                    <h2>
+                                Incidents and Reliefs
+                                    </h2>
+                                )
+                                : (
+                                    <h2>
+                            Incidents
+                                    </h2>
+                                )
+                        }
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">
                                 <tbody>
@@ -955,6 +967,60 @@ const Relief = (props: Props) => {
 
 
                             </table>
+                            {
+                                props.annex
+                                && (
+                                    <>
+                                        <h2>Reliefs</h2>
+                                        <table
+                                            style={{ tableLayout: 'fixed' }}
+                                            id="table-to-xls"
+                                        >
+                                            <tbody>
+                                                <tr>
+                                                    <th>S.N</th>
+                                                    <th>No. of Beneficiary Family</th>
+                                                    <th>Date of Relief Distribution</th>
+                                                    <th>Relief Amount (NPR)</th>
+                                                    <th>Male</th>
+                                                    <th>Female</th>
+                                                    <th>Dalit</th>
+                                                    <th>Minorities</th>
+                                                    <th>Madhesis</th>
+                                                    <th>Person with Disabilities</th>
+                                                    <th>Janajati</th>
+                                                    <th>Incident Ref.</th>
+
+                                                </tr>
+
+                                                {reliefData && reliefData.map((item, i) => (
+
+                                                    <tr key={item.id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{item.numberOfBeneficiaryFamily}</td>
+                                                        <td>{item.dateOfReliefDistribution}</td>
+                                                        <td>{item.reliefAmountNpr}</td>
+                                                        <td>{item.totalMaleBenefited}</td>
+                                                        <td>{item.totalFemaleBenefited}</td>
+                                                        <td>{item.totalDalitBenefited}</td>
+                                                        <td>{item.totalMinoritiesBenefited}</td>
+                                                        <td>{item.totalMadhesiBenefited}</td>
+                                                        <td>{item.totalDisabledBenefited}</td>
+                                                        <td>{item.totalJanjatiBenefited}</td>
+                                                        <td>{item.incident}</td>
+                                                    </tr>
+
+
+                                                ))}
+                                            </tbody>
+
+
+                                        </table>
+
+                                    </>
+                                )
+
+                            }
                         </div>
                         {!loader && (
                             <>
