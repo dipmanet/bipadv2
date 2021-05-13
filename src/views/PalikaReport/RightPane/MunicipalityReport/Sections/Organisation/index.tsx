@@ -239,7 +239,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                                     type="checkbox"
                                                     onChange={handleCheckAll}
                                                     checked={checkedAll}
-                                                    defaultChecked
+                                                    // defaultChecked
                                                     className={styles.checkBox}
                                                 />
                                             </th>
@@ -270,6 +270,17 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                         {fetchedData && fetchedData.length > 0
                                             ? fetchedData.map((item, i) => (
                                                 <tr key={item.id}>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={checkedRows.indexOf(i) !== -1}
+
+                                                            // defaultChecked
+                                                            onChange={e => handleCheck(i, e)}
+                                                            className={styles.checkBox}
+                                                            key={item.id}
+                                                        />
+                                                    </td>
                                                     <td>{i + 1}</td>
                                                     <td>{item.title}</td>
                                                     <td>{item.type}</td>

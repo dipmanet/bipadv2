@@ -25,6 +25,7 @@ import NextPrevBtns from '../../NextPrevBtns';
 
 import {
     setPalikaRedirectAction,
+    setDrrmContactsAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -32,6 +33,8 @@ import editIcon from '#resources/palikaicons/edit.svg';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setDrrmContacts: params => dispatch(setDrrmContactsAction(params)),
+
 });
 
 interface Props{
@@ -217,6 +220,13 @@ const Contacts = (props: Props) => {
     const [nonGovContactId, setNonGovContactId] = useState();
     const [nonGovContactIndex, setNonGovContactIndex] = useState();
     const [editBtnClicked, setEditBtnClicked] = useState(false);
+
+
+    const [checkedRows, setCheckedRows] = useState([]);
+    const [checkedAll, setCheckedAll] = useState(true);
+    const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
+
+
     const { requests: {
         PalikaReportInventoriesReport,
         OrganisationGetRequest,
@@ -226,6 +236,7 @@ const Contacts = (props: Props) => {
         NonGovPostRequest,
         NonGovPutRequest,
     },
+    setDrrmContacts,
     user, generalData } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
@@ -452,16 +463,22 @@ const Contacts = (props: Props) => {
                             .map(trainings => trainings.durationDays)),
                     });
                     setMergedData(mergedList);
-                    console.log('contact id? merged list: ', mergedList);
+                    const chkArr = Array.from(Array(mergedList.length).keys());
+                    setCheckedRows(chkArr);
+                    setDataWithIndex(mergedList.map((items, i) => ({ ...items, index: i, selectedRow: true })));
                 } else {
                     mergedList.push({ ...item, orgType: '-', orgName: '-' });
                     setMergedData(mergedData);
+                    const chkArr = Array.from(Array(mergedList.length).keys());
+                    setCheckedRows(chkArr);
+                    setDataWithIndex(mergedList.map((it, i) => ({ ...it, index: i, selectedRow: true })));
                 }
                 return null;
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, orgList, trainedContacts]);
+
     useEffect(() => {
         if (nonGovContacts && hazardDetails) {
             const finalfetchedData = nonGovContacts.map((item, i) => {
@@ -480,9 +497,46 @@ const Contacts = (props: Props) => {
         }
     }, [nonGovContacts, hazardDetails]);
 
-    console.log('Final array', finalArr);
-    console.log('Final array', nonGovContacts);
-    console.log('hazard', hazardDetails);
+    const handleCheckAll = (e) => {
+        setCheckedAll(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRows(Array.from(Array(mergedData.length).keys()));
+            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRows([]);
+            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
+    };
+
+    const handleCheck = (idx: number, e) => {
+        setCheckedAll(false);
+
+        if (e.target.checked) {
+            const arr = [...checkedRows, idx];
+            setCheckedRows(arr);
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRows(checkedRows.filter(item => item !== idx));
+
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+
+    const handleNext = () => {
+        setDrrmContacts(dataWithIndex);
+        props.handleNextClick();
+    };
+
     return (
         <>
             {
@@ -521,6 +575,17 @@ const Contacts = (props: Props) => {
                                             {mergedData
                                                 ? mergedData.map((item, i) => (
                                                     <tr key={item.id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={checkedRows.indexOf(i) !== -1}
+
+                                                            // defaultChecked
+                                                                onChange={e => handleCheck(i, e)}
+                                                                className={styles.checkBox}
+                                                                key={item.id}
+                                                            />
+                                                        </td>
                                                         <td>{i + 1}</td>
                                                         <td>{item.name || '-'}</td>
                                                         <td>{item.orgType || '-'}</td>
@@ -930,7 +995,7 @@ const Contacts = (props: Props) => {
                                         </button>
                                         <NextPrevBtns
                                             handlePrevClick={props.handlePrevClick}
-                                            handleNextClick={props.handleNextClick}
+                                            handleNextClick={handleNext}
                                         />
                                     </>
                                 )}

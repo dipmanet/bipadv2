@@ -86,18 +86,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     //         }
     //     },
     // },
-    // FiscalYearFetch: {
-    //     url: '/nepali-fiscal-year/',
-    //     method: methods.GET,
-    //     onMount: true,
+    FiscalYearFetch: {
+        url: '/nepali-fiscal-year/',
+        method: methods.GET,
+        onMount: true,
 
-    //     onSuccess: ({ response, params }) => {
-    //         let citizenReportList: CitizenReport[] = [];
-    //         const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-    //         citizenReportList = citizenReportsResponse.results;
-    //         params.fiscalYearList(citizenReportList);
-    //     },
-    // },
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+            params.fiscalYearList(citizenReportList);
+        },
+    },
     DisasterProfileGetRequest: {
         url: '/disaster-profile/',
         query: ({ params, props }) => ({
@@ -197,24 +197,25 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         } = user;
 
         municipalityName = municipalities.find(item => item.id === municipality);
+        console.log('mun name: ', municipalityName);
     }
     const handleDisasterProfile = (response) => {
         setDisasterProfile(response);
     };
-    // const handleFiscalYearList = (response) => {
-    //     setFiscalYearList(response);
-    // };
-    // DisasterProfileGetRequest.setDefaultParams({
-    //     province: profile.province,
-    //     district: profile.district,
-    //     municipality: profile.municipality,
-    //     fiscalYear: generalData.fiscalYear,
-    //     disasterProfile: handleDisasterProfile,
+    const handleFiscalYearList = (response) => {
+        setFiscalYearList(response);
+    };
+    DisasterProfileGetRequest.setDefaultParams({
+        province: profile.province,
+        district: profile.district,
+        municipality: profile.municipality,
+        fiscalYear: generalData.fiscalYear,
+        disasterProfile: handleDisasterProfile,
 
-    // });
-    // FiscalYearFetch.setDefaultParams({
-    //     fiscalYearList: handleFiscalYearList,
-    // });
+    });
+    FiscalYearFetch.setDefaultParams({
+        fiscalYearList: handleFiscalYearList,
+    });
 
 
     useEffect(() => {
@@ -289,16 +290,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
         const formdata = new FormData();
         if (language === 'en') {
-            formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+            formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${'Fiscal year:'}.pdf`);
+            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
         }
         if (language === 'np') {
-            formdata.append('fullFileNp', blob, `${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+            formdata.append('fullFileNp', blob, `${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
+            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
         }
 
 
-        formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${fiscalYearTitle[0].titleEn}`);
+        formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${'fiscalyear'}`);
         formdata.append('fiscalYear', generalData.fiscalYear);
         formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
         formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
@@ -325,18 +326,18 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     setProgress(100);
                     if (language === 'np') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                     }
                     if (language === 'en') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_en}DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            doc.save(`${municipalityName.title_en}DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                     }
                     alert('Your palika report has been uploaded sucessfully');
@@ -344,8 +345,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     setPending(false);
                     setProgress(100);
 
-                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
                     alert('Error occured. Please try again.');
                 });
         } else {
@@ -357,18 +358,18 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     setProgress(100);
                     if (language === 'np') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                     }
                     if (language === 'en') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_en}DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            doc.save(`${municipalityName.title_en}DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
                         }
                     }
                     alert('Your palika report has been uploaded sucessfully');
@@ -377,8 +378,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     setProgress(100);
 
                     alert('Error occured. Please try again.');
-                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
-                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${fiscalYearTitle[0].titleEn}.pdf`);
+                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
                 });
         }
     };
