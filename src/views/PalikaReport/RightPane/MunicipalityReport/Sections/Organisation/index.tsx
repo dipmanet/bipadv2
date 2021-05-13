@@ -2,15 +2,10 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
-import { useTheme } from '@material-ui/core';
 import * as ReachRouter from '@reach/router';
-import { Table } from 'react-bootstrap';
 import {
     Bar, BarChart,
     CartesianGrid,
-    ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
 import Loader from 'react-loader';
@@ -19,7 +14,6 @@ import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
@@ -29,12 +23,14 @@ import {
     municipalitiesSelector,
     userSelector,
     palikaRedirectSelector,
+    drrmOrgSelecter,
 } from '#selectors';
 
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
     setGeneralDataAction,
+    setDrrmOrgAction,
 } from '#actionCreators';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -43,6 +39,7 @@ import Icon from '#rscg/Icon';
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setDrrmOrg: params => dispatch(setDrrmOrgAction(params)),
 });
 
 interface Props{
@@ -54,6 +51,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    drrmOrg: drrmOrgSelecter(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -113,7 +111,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
         districts,
         municipalities,
         user,
-        updateTab } = props;
+        updateTab, setDrrmOrg } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [meta, setMeta] = useState(2);
 
@@ -217,9 +215,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
     };
 
     const handleNext = () => {
+        setDrrmOrg(dataWithIndex);
         props.handleNextClick();
-        // save data to redux here
-        console.log('final data', dataWithIndex);
     };
 
     return (

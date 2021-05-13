@@ -14,6 +14,11 @@ export const setRegionAction = (
     region,
 });
 
+export const setDrrmOrgAction = drrmOrg => ({
+    type: Type.PageType.SET_DRRM_ORG,
+    drrmOrg,
+});
+
 export const setPalikaLanguageAction = palikaLanguage => ({
     type: Type.PageType.SET_PALIKA_LANGUAGE,
     palikaLanguage,
@@ -313,6 +318,96 @@ export const setRealTimeFiltersAction = (
     faramValues,
     faramErrors,
     pristine,
+});
+
+// data archive action creator
+
+export const setDataArchiveRainListAction = (
+    { dataArchiveRainList }:
+    { dataArchiveRainList: Type.DataArchiveRain[]},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST,
+    dataArchiveRainList,
+});
+
+export const setDataArchiveRiverListAction = (
+    { dataArchiveRiverList }:
+    { dataArchiveRiverList: Type.DataArchiveRiver[]},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST,
+    dataArchiveRiverList,
+});
+
+export const setDataArchivePollutionListAction = (
+    { dataArchivePollutionList }:
+    { dataArchivePollutionList: Type.DataArchivePollution[]},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST,
+    dataArchivePollutionList,
+});
+
+export const setDataArchiveEarthquakeListAction = (
+    { dataArchiveEarthquakeList }:
+    { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[]},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST,
+    dataArchiveEarthquakeList,
+});
+
+export const setDataArchiveEarthquakeFilterAction = (
+    { dataArchiveEarthquakeFilters }:
+    { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS,
+    dataArchiveEarthquakeFilters,
+});
+
+export const setDataArchivePollutionFilterAction = (
+    { dataArchivePollutionFilters }:
+    { dataArchivePollutionFilters: Type.SetDataArchivePollutionFilters['dataArchivePollutionFilters']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS,
+    dataArchivePollutionFilters,
+});
+
+export const setDataArchiveRainFilterAction = (
+    { dataArchiveRainFilters }:
+    { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS,
+    dataArchiveRainFilters,
+});
+
+export const setDataArchiveRiverFilterAction = (
+    { dataArchiveRiverFilters }:
+    { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS,
+    dataArchiveRiverFilters,
+});
+
+export const setDataArchivePollutionStationAction = (
+    { dataArchivePollutionStations }:
+    { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS,
+    dataArchivePollutionStations,
+});
+
+export const setDataArchiveRainStationAction = (
+    { dataArchiveRainStations }:
+    { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS,
+    dataArchiveRainStations,
+});
+
+export const setDataArchiveRiverStationAction = (
+    { dataArchiveRiverStations }:
+    { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations']},
+) => ({
+    type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS,
+    dataArchiveRiverStations,
 });
 
 // loss and damage action creator
@@ -1276,11 +1371,22 @@ const setPalikaLanguage = (state: Type.PageState, action: Type.SetPalikaLanguage
     return newState;
 };
 
+const setDrrmOrg = (state: Type.PageState, action: Type.SetDrrmOrg) => {
+    const { drrmOrg } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmOrg = drrmOrg;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_DRRM_ORG:
+            return setDrrmOrg(state, action);
         case Type.PageType.SET_PALIKA_LANGUAGE:
             return setPalikaLanguage(state, action);
         case Type.PageType.SET_BUDGET_ID:

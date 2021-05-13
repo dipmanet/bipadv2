@@ -241,6 +241,9 @@ const state: PageState = {
     palikaLanguage: {
         language: 'en',
     },
+    drrmOrg: {
+        data: [],
+    },
 
 };
 export default state;

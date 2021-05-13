@@ -31,7 +31,7 @@ import {
 import { userSelector, palikaRedirectSelector,
     generalDataSelector, provincesSelector,
     districtsSelector, municipalitiesSelector,
-    palikaLanguageSelector } from '#selectors';
+    palikaLanguageSelector, drrmOrgSelecter } from '#selectors';
 import Simulation from './Sections/Simulation';
 
 interface Props {
@@ -51,6 +51,8 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     palikaLanguage: palikaLanguageSelector(state),
+    drrmOrg: drrmOrgSelecter(state),
+
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -141,6 +143,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         districts,
         municipalities,
         palikaLanguage,
+        drrmOrg,
     } = props;
     const {
         fiscalYear,
@@ -619,11 +622,54 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                             <div id={'page8'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex E</h1>
-                                <Organisation
+                                <h2>DRR Related Organisations</h2>
+
+                                <table id="table-to-xls">
+                                    <tbody>
+                                        <tr>
+                                            <th>S.N</th>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Number of Male Employee</th>
+                                            <th>Number of Female Employee</th>
+
+                                        </tr>
+                                        {drrmOrg.length > 0
+                                            ? drrmOrg.filter(orgs => orgs.selectedRow === true)
+                                                .map((item, i) => (
+                                                    <tr key={item.id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{item.title}</td>
+                                                        <td>{item.type}</td>
+                                                        <td>
+                                                            {item.noOfMaleEmployee ? item.noOfMaleEmployee : 0}
+                                                        </td>
+                                                        <td>
+                                                            {item.noOfFemaleEmployee ? item.noOfFemaleEmployee : 0}
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            : (
+                                                <tr key={Math.random()}>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                            )
+
+                                        }
+
+
+                                    </tbody>
+                                </table>
+
+                                {/* <Organisation
                                     annex
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}
-                                />
+                                /> */}
                             </div>
                             <div id={'page9'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex F</h1>
