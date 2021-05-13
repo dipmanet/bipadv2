@@ -247,6 +247,9 @@ const state: PageState = {
     drrmInventory: {
         data: [],
     },
+    drrmCritical: {
+        data: [],
+    },
 
 };
 export default state;

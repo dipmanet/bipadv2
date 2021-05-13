@@ -25,6 +25,7 @@ import { provincesSelector,
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
+    setDrrmCriticalAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -37,6 +38,7 @@ interface Props{
 }
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setDrrmCritical: params => dispatch(setDrrmCriticalAction(params)),
 });
 
 const mapStateToProps = (state, props) => ({
@@ -97,13 +99,21 @@ const CriticalInfra = (props: Props) => {
     const [url, setUrl] = useState('/resource/');
     const [chartData, setChartData] = useState([]);
     const [loader, setLoader] = useState(true);
-    const { requests: { PalikaResources }, provinces,
-        districts,
-        municipalities,
-        user } = props;
+
+
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('inventories');
     const [meta, setMeta] = useState(true);
+
+    const [checkedRows, setCheckedRows] = useState([]);
+    const [checkedAll, setCheckedAll] = useState(true);
+    const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
+
+    const { requests: { PalikaResources }, provinces,
+        districts,
+        municipalities,
+        user, setDrrmCritical } = props;
+
     const handleFetchedData = (response) => {
         setFetechedData(response);
         setLoader(false);
@@ -208,8 +218,54 @@ const CriticalInfra = (props: Props) => {
                 ],
 
             );
+
+            const chkArr = Array.from(Array(fetchedData.length).keys());
+            setCheckedRows(chkArr);
+            setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         }
-    }, [chartData.length, fetchedData, filteredSelectData.length]);
+    }, [chartData.length, fetchedData, filteredSelectData.length, filteredtData]);
+
+
+    const handleCheckAll = (e) => {
+        setCheckedAll(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRows(Array.from(Array(fetchedData.length).keys()));
+            setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRows([]);
+            setDataWithIndex(fetchedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
+    };
+
+    const handleCheck = (idx: number, e) => {
+        setCheckedAll(false);
+
+        if (e.target.checked) {
+            const arr = [...checkedRows, idx];
+            setCheckedRows(arr);
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRows(checkedRows.filter(item => item !== idx));
+
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+
+    const handleNext = () => {
+        setDrrmCritical(dataWithIndex);
+        props.handleNextClick();
+    };
+
 
     return (
         <>
@@ -227,7 +283,7 @@ const CriticalInfra = (props: Props) => {
                         && (
                             <>
 
-                Filter by:
+                            Filter by:
                                 <select
                                     value={ciType}
                                     onChange={handleCIFilter}
@@ -245,6 +301,15 @@ const CriticalInfra = (props: Props) => {
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
+                                <th>
+                                    <input
+                                        type="checkbox"
+                                        onChange={handleCheckAll}
+                                        checked={checkedAll}
+                                        defaultChecked
+                                        className={styles.checkBox}
+                                    />
+                                </th>
                                 <th>S.N</th>
                                 <th>Resource Name</th>
                                 <th>Resource Type</th>
@@ -271,6 +336,17 @@ const CriticalInfra = (props: Props) => {
                                     <>
                                         {filteredtData && filteredtData.map((item, i) => (
                                             <tr key={item.id}>
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={checkedRows.indexOf(i) !== -1}
+
+                                                            // defaultChecked
+                                                        onChange={e => handleCheck(i, e)}
+                                                        className={styles.checkBox}
+                                                        key={item.id}
+                                                    />
+                                                </td>
                                                 <td>{i + 1}</td>
                                                 <td>{item.title ? item.title : '-'}</td>
                                                 <td>{item.resourceType ? item.resourceType : '-'}</td>
@@ -320,11 +396,11 @@ const CriticalInfra = (props: Props) => {
                                         name="plus"
                                         className={styles.plusIcon}
                                     />
-                            Add Resources
+                                    Add Resources
                                 </button>
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={props.handleNextClick}
+                                    handleNextClick={handleNext}
                                 />
                             </>
                         )

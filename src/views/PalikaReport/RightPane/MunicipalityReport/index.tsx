@@ -32,7 +32,7 @@ import { userSelector, palikaRedirectSelector,
     generalDataSelector, provincesSelector,
     districtsSelector, municipalitiesSelector,
     palikaLanguageSelector, drrmOrgSelecter,
-    drrmInventorySelecter } from '#selectors';
+    drrmInventorySelecter, drrmCriticalSelecter } from '#selectors';
 import Simulation from './Sections/Simulation';
 
 interface Props {
@@ -54,6 +54,7 @@ const mapStateToProps = (state, props) => ({
     palikaLanguage: palikaLanguageSelector(state),
     drrmOrg: drrmOrgSelecter(state),
     drrmInventory: drrmInventorySelecter(state),
+    drrmCritical: drrmCriticalSelecter(state),
 
 });
 
@@ -147,6 +148,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         palikaLanguage,
         drrmOrg,
         drrmInventory,
+        drrmCritical,
     } = props;
     const {
         fiscalYear,
@@ -679,6 +681,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
                             <div id={'page9'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex F</h1>
+                                <h2>Inventories</h2>
                                 <table>
                                     <tbody>
                                         <tr>
@@ -727,11 +730,42 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                             <div id={'page10'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex G</h1>
-                                <CriticalInfra
+                                <h2>Critical Infrastructure</h2>
+                                <table id="table-to-xls">
+                                    <tbody>
+                                        <tr>
+                                            <th>S.N</th>
+                                            <th>Resource Name</th>
+                                            <th>Resource Type</th>
+                                            <th>Operator Type</th>
+                                            <th>Number Of male Employee</th>
+                                            <th>Number Of female Employee</th>
+                                            <th>Total Employee</th>
+
+                                        </tr>
+                                        {drrmCritical && drrmCritical
+                                            .filter(ci => ci.selectedRow === true)
+                                            .map((item, i) => (
+                                                <tr key={item.id}>
+                                                    <td>{i + 1}</td>
+                                                    <td>{item.title ? item.title : '-'}</td>
+                                                    <td>{item.resourceType ? item.resourceType : '-'}</td>
+                                                    <td>{item.operatorType ? item.operatorType : '-'}</td>
+                                                    <td>{item.noOfMaleEmployee ? item.noOfMaleEmployee : '-'}</td>
+                                                    <td>{item.noOfFemaleEmployee ? item.noOfFemaleEmployee : '-'}</td>
+                                                    <td>{item.noOfEmployee ? item.noOfEmployee : '-'}</td>
+                                                </tr>
+                                            ))}
+
+
+                                    </tbody>
+                                </table>
+
+                                {/* <CriticalInfra
                                     annex
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}
-                                />
+                                /> */}
                             </div>
 
 
