@@ -564,7 +564,7 @@ const Contacts = (props: Props) => {
                                                 <input
                                                     type="text"
                                                     className={styles.inputElement}
-
+                                                    value={trainActivities}
                                                     placeholder={'Name of Activity'}
                                                 />
                                             </td>
