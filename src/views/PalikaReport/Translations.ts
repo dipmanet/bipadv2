@@ -7,7 +7,7 @@ interface LanguageEntry {
 }
 const languageTranslations: LanguageEntry = {
     dashBoardMainTitle: {
-        np: 'प्रकोप जोखिम न्यूनीकरण र व्यवस्थापन रिपोर्ट',
+        np: 'बिपद जोखिम न्यूनीकरण र व्यवस्थापन रिपोर्ट',
         en: 'Disaster Risk Reduction and Management Report',
     },
     dashboardTblHeaderSN: {
@@ -70,6 +70,9 @@ const languageTranslations: LanguageEntry = {
         np: 'रिसेट',
         en: 'Reset',
     },
+    // municipality report listing section
+
+
 };
 
 export default languageTranslations;

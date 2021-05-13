@@ -179,6 +179,12 @@
   }
 }
   }
+  h2{
+    font-size: 14px;
+    color: #222;
+    font-weight: 600;
+    margin-left: 30px !important;
+  }
   .incidentImpactRow{
     display: flex;
     .incidentSection{
@@ -186,9 +192,9 @@
       flex-direction: column;
       h2{
         font-size: 14px;
-        color: #444;
+        color: #222;
         font-weight: 600;
-        margin-left: 30px;
+        margin-left: 30px !important;
       }
       .chartandlegend{
         display: flex;

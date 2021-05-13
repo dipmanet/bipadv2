@@ -244,7 +244,10 @@ const PalikaReportTable = (props) => {
                              ))} */}
                                         <th>SN</th>
                                         <th>
-Report Title
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderTitle}
+                                            />
+
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -254,7 +257,9 @@ Report Title
 
                                         </th>
                                         <th>
-Fiscal Year
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderFiscalYear}
+                                            />
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -265,7 +270,10 @@ Fiscal Year
 
                                         </th>
                                         <th>
-                                        Published On
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderPublishedOn}
+                                            />
+
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -275,7 +283,11 @@ Fiscal Year
 
                                         </th>
                                         <th>
-                                        Last Modified
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderLastModified}
+                                            />
+
+
                                             {' '}
                                             <Icon
                                                 name={iconName}
@@ -284,8 +296,17 @@ Fiscal Year
                                             />
 
                                         </th>
-                                        <th>Published by</th>
-                                        <th>Action </th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderLastPublishedBy}
+                                            />
+
+                                        </th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderLastAction}
+                                            />
+                                        </th>
                                     </tr>
 
                                     {tableData.length > 0 && tableData.map((data, index) => (

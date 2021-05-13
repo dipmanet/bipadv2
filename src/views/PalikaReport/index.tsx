@@ -584,13 +584,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                     for each fiscal year for all three tiers of the governments.
                                 </p>
                                 <p className={styles.description}>
-                                    DRRM Act, 2074 and its regulation, 2076 mandates
-                                    the government to generate reporting on DRRM. To
-                                    aid this mandate, the reporting module will include
-                                    general information of the chosen location, organizations
-                                    working on disaster management, DRR policy related work,
-                                    budget allocated for DRRM, and available capacity and
-                                    resources and other DRR related information.
+                                    DRRM Act, 2074 and its regulation, 2076 mandates the
+                                    Local Disaster Management Committee, Disaster Management
+                                    Committee, Provincial Disaster Management Executive Committee,
+                                    and NDRRMA to prepare an Annual DRRM Report that includes
+                                    information on the activities conducted by the respective
+                                    committees each fiscal year. To aid this mandate, the
+                                    reporting module will include general information of
+                                    the chosen location, organizations working on disaster
+                                    management, DRR policy-related work, the budget allocated
+                                    and activities for DRRM, and available inventories, and
+                                    other DRR related information.
                                 </p>
                                 <p className={styles.description}>
                                     The report will also monitor and track activities

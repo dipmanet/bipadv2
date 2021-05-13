@@ -1102,7 +1102,7 @@ const Relief = (props: Props) => {
             && (
                 <>
                     <div className={styles.budgetPreviewContainer}>
-                        <h2>Loss Section</h2>
+                        <h2>Disaster Incident Summary</h2>
                         <div className={styles.lossRow}>
 
                             <div className={styles.lossSection}>
