@@ -19,7 +19,7 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    palikaRedirectSelector } from '#selectors';
+    palikaRedirectSelector, generalDataSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
 
@@ -39,6 +39,7 @@ interface Props{
 }
 
 const mapStateToProps = (state, props) => ({
+    generalData: generalDataSelector(state),
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -134,6 +135,38 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
 
     },
+    NonGovPostRequest: {
+        url: '/nongov-contact/',
+        method: methods.POST,
+
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            params.nonGovPostContacts(response);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
+        },
+
+
+    },
+    NonGovPutRequest: {
+        url: ({ params }) => `/nongov-contact/${params.id}/`,
+        method: methods.PUT,
+
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props, params }) => {
+            params.nonGovPostContacts(response);
+        },
+        onFailure: ({ error, params }) => {
+            console.log('params:', params);
+            params.body.handlePendingState(false);
+            params.body.setErrors(error);
+        },
+
+
+    },
     HazardDataGet: {
         url: '/hazard/',
         query: ({ params, props }) => ({
@@ -181,17 +214,125 @@ const Contacts = (props: Props) => {
     const [trainingDateTo, setTrainingDateTo] = useState('');
     const [contactNumber, setContactNumber] = useState('');
     const [email, setEmail] = useState('');
-
+    const [nonGovContactId, setNonGovContactId] = useState();
+    const [nonGovContactIndex, setNonGovContactIndex] = useState();
+    const [editBtnClicked, setEditBtnClicked] = useState(false);
     const { requests: {
         PalikaReportInventoriesReport,
         OrganisationGetRequest,
         TrainingGetRequest,
         NonGovGetRequest,
         HazardDataGet,
-
+        NonGovPostRequest,
+        NonGovPutRequest,
     },
-    user } = props;
+    user, generalData } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
+
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    };
+
+    const OrganizationTypeChange = (e) => {
+        setOrganizationType(e.target.value);
+    };
+
+    const OrganizationNameChange = (e) => {
+        setOrganizationName(e.target.value);
+    };
+
+    const handlePositionChange = (e) => {
+        setPosition(e.target.value);
+    };
+
+    const handleTraining = (e) => {
+        setTrainedTitle(e.target.value);
+    };
+
+    const handleFocusedHazard = (e) => {
+        setFocusHazard(e.target.value);
+    };
+
+    const handleActivities = (e) => {
+        setTrainingActivities(e.target.value);
+    };
+
+    const handleContact = (e) => {
+        setContactNumber(e.target.value);
+    };
+    const handleEmail = (e) => {
+        setEmail(e.target.value);
+    };
+    const handleNonGovContacts = (response) => {
+        setNonGovContacts(response);
+        setLoader(false);
+    };
+    const handleNonGovPostContacts = (response) => {
+        setName('');
+        setOrganizationType('');
+        setOrganizationName('');
+        setPosition('');
+        setTrainedTitle('');
+        setTrainingActivities('');
+        setTrainingDateFrom('');
+        setTrainingDateTo('');
+        setContactNumber('');
+        setEmail('');
+        setFocusHazard(null);
+        setNonGovContactId(null);
+
+        NonGovGetRequest.do({
+            user,
+            nonGovContacts: handleNonGovContacts,
+        });
+    };
+    const handleEditnonGovContact = (id, index) => {
+        setNonGovContactId(id);
+        setNonGovContactIndex(index);
+        setEditBtnClicked(!editBtnClicked);
+    };
+    useEffect(() => {
+        if (nonGovContacts.length > 0) {
+            setName(finalArr[nonGovContactIndex].item.name);
+            setOrganizationType(finalArr[nonGovContactIndex].item.typeOfOrganization);
+            setOrganizationName(finalArr[nonGovContactIndex].item.nameOfOrganization);
+            setPosition(finalArr[nonGovContactIndex].item.position);
+            setTrainedTitle(finalArr[nonGovContactIndex].item.trainedTitle);
+            setTrainingActivities(finalArr[nonGovContactIndex].item.trainingActivities);
+            setTrainingDateFrom(finalArr[nonGovContactIndex].item.trainingDateFrom);
+            setTrainingDateTo(finalArr[nonGovContactIndex].item.trainingDateTo);
+            setContactNumber(finalArr[nonGovContactIndex].item.contactNumber);
+            setEmail(finalArr[nonGovContactIndex].item.email);
+            setFocusHazard(finalArr[nonGovContactIndex].item.focusedHazard);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [nonGovContactIndex, editBtnClicked]);
+
+    const handleAddNonGovContacts = () => {
+        setLoader(true);
+        NonGovPostRequest.do({
+            body: {
+                name,
+                typeOfOrganization: organizationType,
+                nameOfOrganization: organizationName,
+                position,
+                trainedTitle,
+                trainingActivities: trainActivities,
+                trainingDateFrom,
+                trainingDateTo,
+                contactNumber,
+                email,
+                focusedHazard,
+                province: user.profile.province,
+                district: user.profile.district,
+                municipality: user.profile.municipality,
+                fiscalYear: generalData.fiscalYear,
+            },
+            nonGovPostContacts: handleNonGovPostContacts,
+
+        });
+    };
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -206,6 +347,32 @@ const Contacts = (props: Props) => {
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
+    const handleUpdateActivity = () => {
+        setLoader(true);
+        NonGovPutRequest.do({
+            body: {
+                name,
+                typeOfOrganization: organizationType,
+                nameOfOrganization: organizationName,
+                position,
+                trainedTitle,
+                trainingActivities: trainActivities,
+                trainingDateFrom,
+                trainingDateTo,
+                contactNumber,
+                email,
+                focusedHazard,
+                province: user.profile.province,
+                district: user.profile.district,
+                municipality: user.profile.municipality,
+                fiscalYear: generalData.fiscalYear,
+            },
+            nonGovPostContacts: handleNonGovPostContacts,
+            id: nonGovContactId,
+
+        });
+    };
+
 
     const handleEditContacts = (contactItem) => {
         const { setPalikaRedirect } = props;
@@ -229,9 +396,7 @@ const Contacts = (props: Props) => {
         ReachRouter.navigate('/profile/',
             { state: { showForm: true }, replace: true });
     };
-    const handleNonGovContacts = (response) => {
-        setNonGovContacts(response);
-    };
+
     const handleHazardData = (response) => {
         setHazardDetails(response);
     };
@@ -317,6 +482,7 @@ const Contacts = (props: Props) => {
 
     console.log('Final array', finalArr);
     console.log('Final array', nonGovContacts);
+    console.log('hazard', hazardDetails);
     return (
         <>
             {
@@ -462,37 +628,170 @@ const Contacts = (props: Props) => {
 
                                         </tr>
                                         {finalArr && finalArr.map((data, i) => (
-                                            <tr key={data.item.id}>
-                                                <td>{i + 1}</td>
-                                                <td>{data.item.name}</td>
-                                                <td>{data.item.typeOfOrganization}</td>
-                                                <td>{data.item.nameOfOrganization}</td>
-                                                <td>{data.item.position}</td>
-                                                <td>{data.item.trainedTitle}</td>
-                                                <td>{data.hazardName}</td>
-                                                <td>{data.item.trainingActivities}</td>
-                                                <td>{data.item.trainingDateFrom}</td>
-                                                <td>{data.item.trainingDateTo}</td>
-                                                <td>{data.item.contactNumber}</td>
-                                                <td>{data.item.email}</td>
-                                                <td>
-                                                    <td>
-
-                                                        <button
-                                                            className={styles.editButtn}
-                                                            type="button"
-
-                                                            title="Edit Non Governmental Contact"
-                                                        >
-                                                            <ScalableVectorGraphics
-                                                                className={styles.bulletPoint}
-                                                                src={editIcon}
-                                                                alt="editPoint"
+                                            nonGovContactId === data.item.id
+                                                ? (
+                                                    <tr>
+                                                        <td>{nonGovContacts.length + 1}</td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={name}
+                                                                placeholder={'Name'}
+                                                                onChange={handleNameChange}
                                                             />
-                                                        </button>
-                                                    </td>
-                                                </td>
-                                            </tr>
+                                                        </td>
+                                                        <td>
+                                                            <select
+                                                                value={organizationType}
+                                                                className={styles.inputElement}
+                                                                onChange={OrganizationTypeChange}
+                                                            >
+                                                                <option value="">Select Organization Type</option>
+                                                                <option value="Federal Governement">Federal Governement</option>
+                                                                <option value="Municipal Government">Municipal Government</option>
+                                                                <option value="Nepal Police">Nepal Police </option>
+                                                                <option value="Armed Police Force">Armed Police Force</option>
+                                                                <option value="Army">Army</option>
+                                                                <option value="I/NGO">I/NGO</option>
+                                                                <option value="Others">Others</option>
+
+
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={organizationName}
+                                                                onChange={OrganizationNameChange}
+                                                                placeholder={'Name of Organization'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={position}
+                                                                placeholder={'Position'}
+                                                                onChange={handlePositionChange}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={trainedTitle}
+                                                                onChange={handleTraining}
+                                                                placeholder={'Training Title'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <select
+                                                                value={focusedHazard}
+                                                                className={styles.inputElement}
+                                                                onChange={handleFocusedHazard}
+                                                            >
+                                                                <option value="">Select Focused Hazard</option>
+                                                                {hazardDetails.map(item => (
+                                                                    <option value={item.id}>
+                                                                        {item.titleEn}
+                                                                    </option>
+                                                                ))}
+
+
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={trainActivities}
+                                                                onChange={handleActivities}
+                                                                placeholder={'Activities included in training'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <NepaliDatePicker
+                                                                inputClassName="form-control"
+                                                                className={styles.datepicker}
+                                                                value={trainingDateFrom}
+                                                                onChange={date => setTrainingDateFrom(date)}
+                                                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <NepaliDatePicker
+                                                                inputClassName="form-control"
+                                                                className={styles.datepicker}
+                                                                value={trainingDateTo}
+                                                                onChange={date => setTrainingDateTo(date)}
+                                                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={contactNumber}
+                                                                onChange={handleContact}
+                                                                placeholder={'Contact Number'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <input
+                                                                type="text"
+                                                                className={styles.inputElement}
+                                                                value={email}
+                                                                onChange={handleEmail}
+                                                                placeholder={'Email'}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            <button
+                                                                className={styles.updateButtn}
+                                                                type="button"
+                                                                onClick={handleUpdateActivity}
+                                                                title="Update Budget Activity"
+                                                            >
+                                                     Update
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                                : (
+                                                    <tr key={data.item.id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{data.item.name}</td>
+                                                        <td>{data.item.typeOfOrganization}</td>
+                                                        <td>{data.item.nameOfOrganization}</td>
+                                                        <td>{data.item.position}</td>
+                                                        <td>{data.item.trainedTitle}</td>
+                                                        <td>{data.hazardName}</td>
+                                                        <td>{data.item.trainingActivities}</td>
+                                                        <td>{data.item.trainingDateFrom}</td>
+                                                        <td>{data.item.trainingDateTo}</td>
+                                                        <td>{data.item.contactNumber}</td>
+                                                        <td>{data.item.email}</td>
+                                                        <td>
+
+
+                                                            <button
+                                                                className={styles.editButtn}
+                                                                type="button"
+                                                                onClick={() => handleEditnonGovContact(data.item.id, i)}
+                                                                title="Edit Non Governmental Contact"
+                                                            >
+                                                                <ScalableVectorGraphics
+                                                                    className={styles.bulletPoint}
+                                                                    src={editIcon}
+                                                                    alt="editPoint"
+                                                                />
+                                                            </button>
+
+                                                        </td>
+                                                    </tr>
+                                                )
                                         ))}
                                         <tr>
                                             <td>{nonGovContacts.length + 1}</td>
@@ -501,22 +800,24 @@ const Contacts = (props: Props) => {
                                                     type="text"
                                                     className={styles.inputElement}
                                                     value={name}
-                                                    placeholder={'Name of Activity'}
+                                                    placeholder={'Name'}
+                                                    onChange={handleNameChange}
                                                 />
                                             </td>
                                             <td>
                                                 <select
                                                     value={organizationType}
                                                     className={styles.inputElement}
+                                                    onChange={OrganizationTypeChange}
                                                 >
-                                                    <option value="">Select Priority Area</option>
-                                                    <option value="">Federal Governement</option>
-                                                    <option value="">Municipal Government</option>
-                                                    <option value="">Nepal Police </option>
-                                                    <option value="">Armed Police Force</option>
-                                                    <option value="">Army</option>
-                                                    <option value="">I/NGO</option>
-                                                    <option value="">Others</option>
+                                                    <option value="">Select Organization Type</option>
+                                                    <option value="Federal Governement">Federal Governement</option>
+                                                    <option value="Municipal Government">Municipal Government</option>
+                                                    <option value="Nepal Police">Nepal Police </option>
+                                                    <option value="Armed Police Force">Armed Police Force</option>
+                                                    <option value="Army">Army</option>
+                                                    <option value="I/NGO">I/NGO</option>
+                                                    <option value="Others">Others</option>
 
 
                                                 </select>
@@ -526,7 +827,8 @@ const Contacts = (props: Props) => {
                                                     type="text"
                                                     className={styles.inputElement}
                                                     value={organizationName}
-                                                    placeholder={'Name of Activity'}
+                                                    onChange={OrganizationNameChange}
+                                                    placeholder={'Name of Organization'}
                                                 />
                                             </td>
                                             <td>
@@ -534,7 +836,8 @@ const Contacts = (props: Props) => {
                                                     type="text"
                                                     className={styles.inputElement}
                                                     value={position}
-                                                    placeholder={'Name of Activity'}
+                                                    placeholder={'Position'}
+                                                    onChange={handlePositionChange}
                                                 />
                                             </td>
                                             <td>
@@ -542,17 +845,19 @@ const Contacts = (props: Props) => {
                                                     type="text"
                                                     className={styles.inputElement}
                                                     value={trainedTitle}
-                                                    placeholder={'Name of Activity'}
+                                                    onChange={handleTraining}
+                                                    placeholder={'Training Title'}
                                                 />
                                             </td>
                                             <td>
                                                 <select
                                                     value={focusedHazard}
                                                     className={styles.inputElement}
+                                                    onChange={handleFocusedHazard}
                                                 >
-                                                    <option value="">Select Priority Area</option>
+                                                    <option value="">Select Focused Hazard</option>
                                                     {hazardDetails.map(data => (
-                                                        <option value={data.title}>
+                                                        <option value={data.id}>
                                                             {data.titleEn}
                                                         </option>
                                                     ))}
@@ -565,14 +870,16 @@ const Contacts = (props: Props) => {
                                                     type="text"
                                                     className={styles.inputElement}
                                                     value={trainActivities}
-                                                    placeholder={'Name of Activity'}
+                                                    onChange={handleActivities}
+                                                    placeholder={'Activities included in training'}
                                                 />
                                             </td>
                                             <td>
                                                 <NepaliDatePicker
                                                     inputClassName="form-control"
                                                     className={styles.datepicker}
-
+                                                    value={trainingDateFrom}
+                                                    onChange={date => setTrainingDateFrom(date)}
                                                     options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                                 />
                                             </td>
@@ -580,7 +887,8 @@ const Contacts = (props: Props) => {
                                                 <NepaliDatePicker
                                                     inputClassName="form-control"
                                                     className={styles.datepicker}
-
+                                                    value={trainingDateTo}
+                                                    onChange={date => setTrainingDateTo(date)}
                                                     options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                                 />
                                             </td>
@@ -588,16 +896,18 @@ const Contacts = (props: Props) => {
                                                 <input
                                                     type="text"
                                                     className={styles.inputElement}
-
-                                                    placeholder={'Name of Activity'}
+                                                    value={contactNumber}
+                                                    onChange={handleContact}
+                                                    placeholder={'Contact Number'}
                                                 />
                                             </td>
                                             <td>
                                                 <input
                                                     type="text"
                                                     className={styles.inputElement}
-
-                                                    placeholder={'Name of Activity'}
+                                                    value={email}
+                                                    onChange={handleEmail}
+                                                    placeholder={'Email'}
                                                 />
                                             </td>
                                         </tr>
@@ -609,7 +919,7 @@ const Contacts = (props: Props) => {
                                     <>
                                         <button
                                             type="button"
-                                            onClick={() => handleAddContacts()}
+                                            onClick={() => handleAddNonGovContacts()}
                                             className={styles.savebtn}
                                         >
                                             <Icon
