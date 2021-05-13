@@ -590,7 +590,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
                             <div id={'page3'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex A</h1>
-                                {/* <General
+                                <h2>Local Disaster Management Committee</h2>
+                                <General
                                     annex
                                     mayor={mayor}
                                     cao={cao}
@@ -599,7 +600,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}
                                     localMembers={localMembers}
-                                /> */}
+                                />
 
                             </div>
                             <div id={'page5'} className={_cs(styles.annexPage, 'page')}>
