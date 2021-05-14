@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Gt from '../../utils';
@@ -8,21 +9,31 @@ import { iconNames } from '#constants';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
+import {
+    setGeneralDataAction,
+} from '#actionCreators';
+
+const mapDispatchToProps = dispatch => ({
+    setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
+});
+
 const PalikaReportTable = (props) => {
     const [isSort, setIsSort] = useState(false);
     const [sortBy, setSortBy] = useState('');
     const { paginationData, tableData, tableHeader,
         tableHeaderDataMatch, submenuId, sortTitle, sortProvince,
         sortDistrict,
-        sortMunicipality,
-        sortFiscalYear,
+        sortMunicipality, setShowTabs,
+        sortFiscalYear, setGeneralDatapp,
         sortCreatedOn, sortModifiedOn, currentPage, pageSize } = props;
 
 
     const iconName = 'sort';
     console.log('tabledata:', tableData);
-    const handleEditButtonClick = () => {
-        console.log('clicked');
+    const handleEditButtonClick = (row) => {
+        console.log('row', row);
+        setGeneralDatapp(row);
+        setShowTabs(false, false, true);
     };
 
     const handleSortTitle = () => {
@@ -321,7 +332,7 @@ const PalikaReportTable = (props) => {
                                                 <button
                                                     type="button"
                                                     className={styles.reliefBtn}
-                                                    onClick={handleEditButtonClick}
+                                                    onClick={() => handleEditButtonClick(data)}
                                                     title="Edit Report"
                                                 >
 
@@ -370,4 +381,6 @@ const PalikaReportTable = (props) => {
     );
 };
 
-export default PalikaReportTable;
+export default connect(undefined, mapDispatchToProps)(
+    PalikaReportTable,
+);

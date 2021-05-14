@@ -772,6 +772,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                                         sortModifiedOn={handleSortModifiedOn}
                                                         currentPage={currentPageNumber}
                                                         pageSize={paginationQueryLimit}
+                                                        setShowTabs={handleAddbuttonClick}
                                                     />
                                                 </div>
                                             )}

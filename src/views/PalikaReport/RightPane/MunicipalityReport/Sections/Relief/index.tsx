@@ -544,7 +544,8 @@ const Relief = (props: Props) => {
             setWardWiseImpact([]);
             console.log('wwd', wardWiseImpactData);
         }
-    }, [hazardTypes.length, deathCount, fetchedData, hazardTypes, incidentCount, infraDestroyed, injured, livestockDestroyed, missing, totalEstimatedLoss]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchedData]);
 
 
     console.log('This is relief date>>>', hazardTypes);
@@ -848,8 +849,8 @@ const Relief = (props: Props) => {
 
             finalArr = [...new Set(tempArr)];
         }
-    }, [fetchedData, hazardDetails, hazardTypes]);
-    console.log('final arr>>', finalArr);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fetchedData, hazardTypes]);
 
     return (
         <>

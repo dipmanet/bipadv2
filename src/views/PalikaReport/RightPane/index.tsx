@@ -111,6 +111,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
         showErr,
         palikaRedirect: { redirectTo },
         generalData,
+        setShowTabs,
     } = props;
 
 
@@ -292,6 +293,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
                 handleNextClick={handleNextClick}
                 showErr={showErr}
                 handleShowErr={props.handleShowErr}
+                setShowTabs={setShowTabs}
             />
         </>
     );

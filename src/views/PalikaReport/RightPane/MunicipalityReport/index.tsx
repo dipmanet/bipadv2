@@ -116,7 +116,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-
+            console.log('disaster profile fetched:', citizenReportList);
             if (params && params.disasterProfile) {
                 params.disasterProfile(citizenReportList);
             }
@@ -216,7 +216,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         province,
         district,
         municipality,
-        fiscalYear: generalData.fiscalYear,
+        fiscalYear: generalData.item ? generalData.item.fiscalYear : generalData.fiscalYear,
         disasterProfile: handleDisasterProfile,
 
     });
@@ -234,6 +234,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     }, [fiscalYear, fiscalYearList]);
 
     const handlePreviewBtn = async (reportType: string) => {
+        console.log('disaster profile', disasterProfile);
         setPending(true);
         let pageNumber = 1;
         const doc = new JsPDF('p', 'mm', 'a4');

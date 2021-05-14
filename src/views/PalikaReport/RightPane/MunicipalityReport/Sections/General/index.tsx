@@ -139,29 +139,45 @@ const General = (props: Props) => {
         drrmRegion,
     } = props;
 
-    const {
-        reportTitle: rt,
-        fiscalYear: fy,
-        formationDate: fd,
-        committeeMembers: cm,
+    // const {
+    //     reportTitle: rt,
+    //     fiscalYear: fy,
+    //     formationDate: fd,
+    //     committeeMembers: cm,
 
-    } = generalData;
+    // } = generalData;
 
-    const [reportTitle, setreportTitle] = useState<string>(rt);
-    const [fiscalYear, setfiscalYear] = useState<string>(fy);
-    const [formationDate, setformationDate] = useState<string>(fd);
-    const [committeeMembers, setcommitteeMembers] = useState<number>(cm);
+
+    const [reportTitle, setreportTitle] = useState<string>('');
+    const [fiscalYear, setfiscalYear] = useState<string>('');
+    const [formationDate, setformationDate] = useState<string>('');
+    const [committeeMembers, setcommitteeMembers] = useState<number>(0);
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [showInfo, setShowInfo] = useState(false);
     const [fyErr, setFyErr] = useState(false);
     const [dateErr, setDate] = useState(false);
     const [fiscalYearTitle, setFiscalYearTitle] = useState('');
     const [fetchedData, setFetechedData] = useState([]);
+    const [disabled, setDisabled] = useState(false);
 
     const [mayor, setmayor] = useState('');
     const [cao, setcao] = useState('');
     const [focalPerson, setfocalPerson] = useState('');
     const [loader, setLoader] = useState(true);
+
+    useEffect(() => {
+        if (generalData && generalData.item) {
+            setfiscalYear(generalData.item.fiscalYear);
+            setDisabled(true);
+            console.log('fs set:', fiscalYear);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    // if (!generalData.data) {
+    //     // we are in edit mode
+    //     setfiscalYear(generalData.item.id);
+    //     setDisabled(true);
+    // }
 
     if (drrmRegion.municipality) {
         municipality = drrmRegion.municipality;
@@ -243,7 +259,9 @@ const General = (props: Props) => {
         district,
         province,
     });
-
+    const handleCommitteeMembers = (members) => {
+        setcommitteeMembers(members.target.value);
+    };
     useEffect(() => {
         if (!focalPerson || !mayor || !cao) {
             setShowInfo(true);
@@ -296,6 +314,12 @@ const General = (props: Props) => {
         }
     };
 
+    const getSelectedOption = (itemRow) => {
+        if (itemRow.id === fiscalYear) {
+            return 'selected';
+        }
+        return '';
+    };
 
     return (
 
@@ -339,9 +363,11 @@ const General = (props: Props) => {
                                     )
                                     : ''}
                                 <select
-                                    value={fiscalYear}
+                                    value={Number(fiscalYear)}
+                                    // defaultValue={fiscalYear}
                                     onChange={handleSelectChange}
                                     className={styles.inputElement}
+                                    disabled={disabled}
                                 >
                                     {/* objs.sort((a,b) => (a.last_nom > b.last_nom) */}
 
@@ -351,7 +377,11 @@ const General = (props: Props) => {
                                         // .sort((a, b) => b.id - a.id)
                                         // .filter(item => item.id < 19 && item.id > 7)
                                         .map(item => (
-                                            <option value={item.id}>{item.titleEn}</option>
+                                            <option
+                                                value={item.id}
+                                            >
+                                                {item.titleEn}
+                                            </option>
                                         ))}
 
                                 </select>
@@ -639,7 +669,12 @@ const General = (props: Props) => {
 
 
                             </span>
-                            <input type="number" placeholder="Enter the number of members" />
+                            <input
+                                onChange={handleCommitteeMembers}
+                                value={committeeMembers}
+                                type="number"
+                                placeholder="Enter the number of members"
+                            />
 
                         </div>
                         <h3><strong>Committee Members </strong></h3>
