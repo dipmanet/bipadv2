@@ -23,7 +23,8 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    palikaRedirectSelector } from '#selectors';
+    palikaRedirectSelector,
+    drrmRegionSelector } from '#selectors';
 import Loading from '#components/Loading';
 
 
@@ -44,6 +45,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 
 });
 
@@ -59,11 +61,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.page,
                     resource_type: params.inventories,
                     expand: params.fields,
@@ -97,6 +99,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 
+let province = 0;
+let district = 0;
+let municipality = 0;
+let inventoriesData = [];
 
 const Inventory: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
@@ -122,16 +128,23 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     const { requests: { PalikaReportInventoriesReport }, provinces,
         districts,
-        municipalities,
+        municipalities, drrmRegion,
         user, rows, setDrrmInventory } = props;
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
         setLoader(false);
     };
-    const handleDataSave = () => {
-        props.updateTab();
-    };
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
+
     const handlePaginationParameters = (response) => {
         setPaginationParameters(response);
     };
@@ -168,7 +181,9 @@ const Inventory: React.FC<Props> = (props: Props) => {
         page: paginationQueryLimit,
         inventories: defaultQueryParameter,
         fields,
-        user,
+        municipality,
+        district,
+        province,
         meta,
         rows,
 
@@ -176,23 +191,26 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
 
     let count = 0;
-
-    const inventoriesData = fetchedData.map(item => (
-        item.inventories.map((data) => {
-            count += 1;
-            return ({
-                ...data,
-                SN: count,
-                resourceName: item.title,
-                organizationType: item.type,
-            }
-            );
-        })
-    ));
+    useEffect(() => {
+        if (fetchedData.length > 0) {
+            inventoriesData = fetchedData.map(item => (
+                item.inventories.map((data) => {
+                    count += 1;
+                    return ({
+                        ...data,
+                        SN: count,
+                        resourceName: item.title,
+                        organizationType: item.type,
+                    }
+                    );
+                })
+            ));
+        }
+    }, [fetchedData]);
 
 
     useEffect(() => {
-        if (finalInventoriesData.length === 0 && inventoriesData.length > 0) {
+        if (fetchedData.length > 0) {
             inventoriesData.map((item) => {
                 if (item.length > 0) {
                     finalInventoriesData.push(...item);
@@ -210,8 +228,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             setCheckedRows(chkArr);
             setDataWithIndex(finalInventoriesData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inventoriesData]);
+    }, [fetchedData.length, finalInventoriesData]);
 
 
     const handleCheckAll = (e) => {

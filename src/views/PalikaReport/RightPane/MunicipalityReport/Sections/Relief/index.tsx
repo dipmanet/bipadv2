@@ -32,7 +32,7 @@ import {
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    userSelector,
+    userSelector, drrmRegionSelector,
     hazardTypesSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
@@ -59,6 +59,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     hazardTypes: hazardTypesSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const COLORS = ['rgb(0,177,117)', 'rgb(198,233,232)'];
@@ -72,11 +73,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.Ward,
                     resource_type: params.inventories,
                     expand: params.fields,
@@ -172,6 +173,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 let finalArr = [];
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const Relief = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
@@ -185,6 +190,7 @@ const Relief = (props: Props) => {
         municipalities,
         user,
         hazardTypes,
+        drrmRegion,
     } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
@@ -242,6 +248,15 @@ const Relief = (props: Props) => {
     const [totDalits, setTotDalits] = useState(0);
     // const [femaleBenefited, handlefemaleBenefited] = useState(0);
 
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const handleReliefData = (response) => {
         setReliefData(response);
@@ -585,7 +600,9 @@ const Relief = (props: Props) => {
         url,
         inventories: defaultQueryParameter,
         fields,
-        user,
+        municipality,
+        district,
+        province,
         meta,
 
     });
@@ -609,7 +626,9 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            municipality,
+            district,
+            province,
             meta,
 
         });
@@ -636,7 +655,9 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            municipality,
+            district,
+            province,
             meta,
 
         });
@@ -747,7 +768,9 @@ const Relief = (props: Props) => {
         url,
         inventories: defaultQueryParameter,
         fields,
-        user,
+        municipality,
+        district,
+        province,
         meta,
 
     });
@@ -772,7 +795,9 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            municipality,
+            district,
+            province,
             meta,
 
         });

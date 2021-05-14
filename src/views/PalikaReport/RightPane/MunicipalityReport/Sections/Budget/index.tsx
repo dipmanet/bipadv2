@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -16,11 +17,12 @@ import {
     setGeneralDataAction,
     setBudgetDataAction,
     setBudgetIdAction,
+    setDrrmRegionAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
     budgetDataSelector,
-    userSelector, budgetIdSelector,
+    userSelector, budgetIdSelector, drrmRegionSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import Icon from '#rscg/Icon';
@@ -56,22 +58,27 @@ const mapStateToProps = state => ({
     budgetData: budgetDataSelector(state),
     user: userSelector(state),
     budgetId: budgetIdSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
+    setdrrmRegion: params => dispatch(setDrrmRegionAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
     BudgetGetRequest: { url: '/annual-budget/',
         query: ({ params, props }) => ({
+            // district: params.district,
+            // municipality: params.municipality,
+            // province: params.province,
             // eslint-disable-next-line @typescript-eslint/camelcase
             fiscal_year: params.fiscalYear,
+            province: params.province,
             district: params.district,
             municipality: params.municipality,
-            province: params.province,
         }),
         method: methods.GET,
         onMount: true,
@@ -123,6 +130,9 @@ const options = Array.from(Array(10).keys()).map(item => ({
     value: currentFiscalYear - item,
 }));
 
+let province = 0;
+let district = 0;
+let municipality = 0;
 
 const Budget = (props: Props) => {
     const {
@@ -131,6 +141,7 @@ const Budget = (props: Props) => {
         updateTab,
         setBudgetDatapp,
         user, budgetId, setBudgetId,
+        drrmRegion,
     } = props;
 
     // setBudgetId({ id: 2 });
@@ -142,9 +153,9 @@ const Budget = (props: Props) => {
     const [municipalBudget, setmunicipalBudget] = useState('');
     const [drrFund, setdrrFund] = useState('');
     const [additionalFund, setadditionalFund] = useState('');
-    const [province, setProvince] = useState(0);
-    const [district, setDistrict] = useState(0);
-    const [municipality, setMunicipality] = useState(0);
+    // const [province, setProvince] = useState(0);
+    // const [district, setDistrict] = useState(0);
+    // const [municipality, setMunicipality] = useState(0);
     const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
     const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
@@ -158,8 +169,30 @@ const Budget = (props: Props) => {
     const [drrfundInfo, setDrrFundInfo] = useState(false);
     const [otherFunding, setOtherFunding] = useState(false);
 
+    const getUserDetails = (userItem) => {
+        const arr = userItem;
+        if (arr.isSuperuser) {
+            arr.profile.municipality = drrmRegion.municipality;
+            arr.profile.province = drrmRegion.province;
+            arr.profile.district = drrmRegion.district;
+        }
+        return arr;
+    };
+
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest, BudgetPutRequest } } = props;
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
+    console.log('drrmRegion', drrmRegion);
+
     const handlePending = (data: boolean) => {
         setPending(data);
     };
@@ -171,30 +204,16 @@ const Budget = (props: Props) => {
         setAnnualBudgetData(response);
         setLoader(false);
     };
-
+    // useEffect(() => {
     BudgetGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
-        district: profile.district,
-        municipality: profile.municipality,
-        province: profile.province,
+        district,
+        municipality,
+        province,
         finalAnnualBudgetData: handleSaveAnnualBudgetData,
         handlePendingState: handlePending,
-
-
     });
-
-    const handleSelectedProvince = (response) => {
-        const selectedProvince = response.filter(item => item.id === profile.district);
-
-        setProvince(selectedProvince[0].province);
-        setDistrict(profile.district);
-        setMunicipality(profile.municipality);
-    };
-    useEffect(() => {
-        setProvince(profile.province);
-        setDistrict(profile.district);
-        setMunicipality(profile.municipality);
-    }, [profile.district, profile.municipality, profile.province]);
+    // }, [municipality]);
 
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
@@ -239,9 +258,9 @@ const Budget = (props: Props) => {
     const handleCallGetApi = (response) => {
         BudgetGetRequest.do({
             fiscalYear: generalData.fiscalYear,
-            district: profile.district,
-            municipality: profile.municipality,
-            province: profile.province,
+            district,
+            municipality,
+            province,
             finalAnnualBudgetData: handleSaveAnnualBudgetData,
             handlePendingState: handlePending,
             setErrors: handleErrors,
@@ -252,9 +271,9 @@ const Budget = (props: Props) => {
     const handleCallUpdateApi = (response) => {
         BudgetGetRequest.do({
             fiscalYear: generalData.fiscalYear,
-            district: profile.district,
-            municipality: profile.municipality,
-            province: profile.province,
+            district,
+            municipality,
+            province,
             finalAnnualBudgetData: handleSaveAnnualBudgetData,
             handlePendingState: handlePending,
             setErrors: handleErrors,
@@ -305,9 +324,7 @@ const Budget = (props: Props) => {
         }
     };
 
-    const handleChange = (e) => {
-        setProvince(e.target.value);
-    };
+
     useEffect(() => {
         if (annualBudgetData.length > 0) {
             setBudgetTitle(annualBudgetData[0].title);

@@ -19,7 +19,10 @@ import {
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
-    programAndPolicySelector, userSelector, generalDataSelector,
+    programAndPolicySelector,
+    userSelector,
+    generalDataSelector,
+    drrmRegionSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
@@ -79,6 +82,7 @@ const mapStateToProps = state => ({
     programAndPolicyData: programAndPolicySelector(state),
     user: userSelector(state),
     generalData: generalDataSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -90,12 +94,17 @@ interface Props{
 
 }
 
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const ProgramPolicies = (props: Props) => {
     const {
         programAndPolicyData,
         setProgramData,
-        updateTab, user: { profile }, generalData,
+        updateTab, user, generalData,
         requests: { PolicyGetRequest, PolicyPostRequest, PolicyPutRequest },
+        drrmRegion,
     } = props;
 
     // const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
@@ -107,9 +116,6 @@ const ProgramPolicies = (props: Props) => {
     const [serialNumber, setSerialNumber] = useState(0);
     const [point, setPoint] = useState('');
     const [finalPolicyData, setFinalPolicyData] = useState([]);
-    const [province, setProvince] = useState(profile.province);
-    const [district, setDistrict] = useState(profile.district);
-    const [municipality, setMunicipality] = useState(profile.municipality);
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(6);
     const [paginationParameters, setPaginationParameters] = useState();
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
@@ -119,6 +125,17 @@ const ProgramPolicies = (props: Props) => {
     const [editPolicy, setEditPolicy] = useState(false);
     const [loader, setLoader] = useState(true);
     const [editBtnClicked, setEditBtnClicked] = useState(false);
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
+
     const handleSavefinalPolicyData = (response) => {
         setFinalPolicyData(response);
         setPoint('');
@@ -136,9 +153,9 @@ const ProgramPolicies = (props: Props) => {
     };
     PolicyGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
-        district: profile.district,
-        municipality: profile.municipality,
-        province: profile.province,
+        district,
+        municipality,
+        province,
         finalPolicyData: handleSavefinalPolicyData,
         paginationParameters: handlePaginationParameters,
         page: paginationQueryLimit,
@@ -174,9 +191,9 @@ const ProgramPolicies = (props: Props) => {
             offset,
             page: paginationQueryLimit,
             fiscalYear: generalData.fiscalYear,
-            district: profile.district,
-            municipality: profile.municipality,
-            province: profile.province,
+            district,
+            municipality,
+            province,
             id: '-id',
 
         });
@@ -186,9 +203,9 @@ const ProgramPolicies = (props: Props) => {
         if (dataSubmittedResponse) {
             PolicyGetRequest.do({
                 fiscalYear: generalData.fiscalYear,
-                district: profile.district,
-                municipality: profile.municipality,
-                province: profile.province,
+                district,
+                municipality,
+                province,
                 page: paginationQueryLimit,
                 finalPolicyData: handleSavefinalPolicyData,
                 paginationParameters: handlePaginationParameters,
@@ -234,7 +251,7 @@ const ProgramPolicies = (props: Props) => {
             { !props.previewDetails
             && (
                 <div>
-                    <h2>{'Annual Policy and Programme for FY TODO'}</h2>
+                    <h2>{`Annual Policy and Programme for FY ${generalData.fiscalYearTitle}`}</h2>
                     <table id="table-to-xls">
                         <tbody>
                             <tr>

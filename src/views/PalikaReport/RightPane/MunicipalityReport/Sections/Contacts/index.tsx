@@ -19,7 +19,9 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    palikaRedirectSelector, generalDataSelector } from '#selectors';
+    palikaRedirectSelector,
+    generalDataSelector,
+    drrmRegionSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
 
@@ -48,6 +50,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 
 });
 
@@ -55,11 +58,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.province) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.page,
                     meta: params.meta,
                 };
@@ -126,11 +129,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     NonGovGetRequest: {
         url: '/nongov-contact/',
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
 
                 };
             }
@@ -199,6 +202,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 let finalArr = [];
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const Contacts = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
@@ -245,9 +252,19 @@ const Contacts = (props: Props) => {
         NonGovPostRequest,
         NonGovPutRequest,
     },
-    setDrrmContacts,
+    setDrrmContacts, drrmRegion,
     user, generalData } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const handleNameChange = (e) => {
         setName(e.target.value);
@@ -305,7 +322,9 @@ const Contacts = (props: Props) => {
         setNonGovContactId(null);
 
         NonGovGetRequest.do({
-            user,
+            municipality,
+            district,
+            province,
             nonGovContacts: handleNonGovContacts,
             setErrors: handleErrors,
         });
@@ -348,9 +367,9 @@ const Contacts = (props: Props) => {
                 contactNumber,
                 email,
                 focusedHazard,
-                province: user.profile.province,
-                district: user.profile.district,
-                municipality: user.profile.municipality,
+                province,
+                district,
+                municipality,
                 fiscalYear: generalData.fiscalYear,
             },
             nonGovPostContacts: handleNonGovPostContacts,
@@ -391,9 +410,9 @@ const Contacts = (props: Props) => {
                 contactNumber,
                 email,
                 focusedHazard,
-                province: user.profile.province,
-                district: user.profile.district,
-                municipality: user.profile.municipality,
+                province,
+                district,
+                municipality,
                 fiscalYear: generalData.fiscalYear,
             },
             nonGovPostContacts: handleNonGovPostContacts,
@@ -439,7 +458,9 @@ const Contacts = (props: Props) => {
         url,
         page: paginationQueryLimit,
         inventories: defaultQueryParameter,
-        user,
+        municipality,
+        district,
+        province,
         setErrors: handleErrors,
     });
     OrganisationGetRequest.setDefaultParams({

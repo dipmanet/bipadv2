@@ -26,7 +26,7 @@ import {
     budgetActivityDataSelector,
     generalDataSelector,
     budgetDataSelector, budgetIdSelector,
-    userSelector,
+    userSelector, drrmRegionSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -38,6 +38,7 @@ const mapStateToProps = state => ({
     budgetData: budgetDataSelector(state),
     budgetId: budgetIdSelector(state),
     user: userSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 
 });
 
@@ -149,6 +150,9 @@ const options = Array.from(Array(10).keys()).map(item => ({
 }));
 const subpriority = [];
 
+let province = 0;
+let district = 0;
+let municipality = 0;
 
 const COLORS = ['rgb(0,117,117)', 'rgb(198,233,232)'];
 const BudgetActivity = (props: Props) => {
@@ -162,7 +166,8 @@ const BudgetActivity = (props: Props) => {
         requests: { BudgetActivityGetRequest,
             BudgetActivityPostRequest,
             BudgetActivityPutRequest },
-        user: { profile },
+        user,
+        drrmRegion,
     } = props;
 
     const {
@@ -213,6 +218,15 @@ const BudgetActivity = (props: Props) => {
 
     } = budgetActivityData;
 
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
@@ -309,9 +323,9 @@ const BudgetActivity = (props: Props) => {
         setPriorityActivity('');
         setBudgetActivityId(null);
         BudgetActivityGetRequest.do({
-            province: profile.province,
-            district: profile.district,
-            municipality: profile.municipality,
+            province,
+            district,
+            municipality,
             annualBudget: budgetId.id,
             budgetActivities: handleBudgetActivities,
             paginationParameters: handlePaginationParameters,
@@ -330,9 +344,9 @@ const BudgetActivity = (props: Props) => {
 
 
     BudgetActivityGetRequest.setDefaultParams({
-        province: profile.province,
-        district: profile.district,
-        municipality: profile.municipality,
+        province,
+        district,
+        municipality,
         annualBudget: budgetId.id,
         budgetActivities: handleBudgetActivities,
         paginationParameters: handlePaginationParameters,
@@ -355,9 +369,9 @@ const BudgetActivity = (props: Props) => {
             offset,
             page: paginationQueryLimit,
             fiscalYear: generalData.fiscalYear,
-            district: profile.district,
-            municipality: profile.municipality,
-            province: profile.province,
+            district,
+            municipality,
+            province,
             id: '-id',
             handlePendingState: handlePending,
             setErrors: handleErrors,
@@ -429,9 +443,9 @@ const BudgetActivity = (props: Props) => {
     useEffect(() => {
         if (dataSubmittedResponse) {
             BudgetActivityGetRequest.do({
-                province: profile.province,
-                district: profile.district,
-                municipality: profile.municipality,
+                province,
+                district,
+                municipality,
                 annualBudget: budgetId.id,
                 budgetActivities: handleBudgetActivities,
                 page: paginationQueryLimit,

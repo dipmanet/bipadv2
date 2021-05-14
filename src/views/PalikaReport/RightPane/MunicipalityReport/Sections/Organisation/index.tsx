@@ -24,6 +24,7 @@ import {
     userSelector,
     palikaRedirectSelector,
     drrmOrgSelecter,
+    drrmRegionSelector,
 } from '#selectors';
 
 import NextPrevBtns from '../../NextPrevBtns';
@@ -52,17 +53,18 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     drrmOrg: drrmOrgSelecter(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportOrganizationReport: {
         url: '/resource/',
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.page,
                     resource_type: params.governance,
                     meta: params.meta,
@@ -94,6 +96,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const Organisation: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
@@ -107,11 +113,24 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const [checkedAll, setCheckedAll] = useState(true);
     const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
+
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
         municipalities,
-        user,
+        user, drrmRegion,
         updateTab, setDrrmOrg } = props;
+
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
+
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [meta, setMeta] = useState(2);
 
@@ -154,7 +173,9 @@ const Organisation: React.FC<Props> = (props: Props) => {
         page: paginationQueryLimit,
         governance: defaultQueryParameter,
         meta,
-        user,
+        municipality,
+        district,
+        province,
     });
 
     useEffect(() => {

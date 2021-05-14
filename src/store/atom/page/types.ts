@@ -21,6 +21,10 @@ export interface DrrmOrg{
     data: [];
 }
 
+export interface DrrmRegion{
+    data: {};
+}
+
 export interface DrrmContacts{
     data: [];
 }
@@ -570,6 +574,7 @@ export interface PageState {
     palikaRedirect: PalikaRedirect;
     budgetId: BudgetId;
     drrmOrg: DrrmOrg;
+    drrmRegion: DrrmRegion;
     drrmInventory: DrrmInventory;
     drrmCritical: DrrmCritical;
     drrmContacts: DrrmContacts;
@@ -588,6 +593,7 @@ export enum PageType {
     SET_PALIKA_REDIRECT = 'page/SET_PALIKA_REDIRECT',
     SET_BUDGET_ID = 'page/SET_BUDGET_ID',
     SET_DRRM_ORG = 'page/SET_DRRM_ORG',
+    SET_DRRM_REGION = 'page/SET_DRRM_REGION',
     SET_DRRM_INVENTORY = 'page/SET_DRRM_INVENTORY',
     SET_DRRM_CRITICAL = 'page/SET_DRRM_CRITICAL',
     SET_DRRM_CONTACTS = 'page/SET_DRRM_CONTACTS',
@@ -698,6 +704,11 @@ export interface SetBudgetId {
 export interface SetDrrmContacts {
     type: typeof PageType.SET_DRRM_CONTACTS;
     drrmContacts: DrrmContacts;
+}
+
+export interface SetDrrmRegion {
+    type: typeof PageType.SET_DRRM_REGION;
+    drrmRegion: DrrmRegion;
 }
 
 export interface SetDrrmInventory {
@@ -985,7 +996,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 
 export type PageActionTypes = (
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
-    SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory |
+    SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData| SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |

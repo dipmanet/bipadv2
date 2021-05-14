@@ -120,23 +120,36 @@ const MainModal: React.FC<Props> = (props: Props) => {
     const [municipality, setMunicipality] = useState(null);
     const [pending, setPending] = useState(false);
 
-    if (user && user.profile && !user.profile.municipality && !user.isSuperuser) {
-        // const {
-        //     profile: {
-        //         municipality: municipalityfromProp,
-        //         district: districtfromProp,
-        //         province: provincefromProp,
-        //     },
-        // } = user;
 
-        setMunicipality(58007);
-        setProvince(5);
-        setDistrict(65);
-    } else {
-        setMunicipality(58007);
-        setProvince(5);
-        setDistrict(65);
-    }
+    // if (user && user.profile && !user.profile.municipality && !user.profile.isSuperuser) {
+    //     const {
+    //         profile: {
+    //             municipality: municipalityfromProp,
+    //             district: districtfromProp,
+    //             province: provincefromProp,
+    //         },
+    //     } = user;
+    //     setMunicipality(municipalityfromProp);
+    //     setProvince(provincefromProp);
+    //     setDistrict(districtfromProp);
+    // }
+    // if (user && user.profile && !user.profile.municipality && !user.isSuperuser) {
+    //     // const {
+    //     //     profile: {
+    //     //         municipality: municipalityfromProp,
+    //     //         district: districtfromProp,
+    //     //         province: provincefromProp,
+    //     //     },
+    //     // } = user;
+
+    //     setMunicipality(58007);
+    //     setProvince(5);
+    //     setDistrict(65);
+    // } else {
+    //     setMunicipality(58007);
+    //     setProvince(5);
+    //     setDistrict(65);
+    // }
     const handleReportData = (response) => {
         setReportData(response);
     };

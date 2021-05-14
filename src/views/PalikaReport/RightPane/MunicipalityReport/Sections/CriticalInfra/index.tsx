@@ -21,7 +21,8 @@ import editIcon from '#resources/palikaicons/edit.svg';
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    userSelector } from '#selectors';
+    userSelector,
+    drrmRegionSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
@@ -46,16 +47,17 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaResources: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.page,
 
                     meta: params.meta,
@@ -87,6 +89,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         },
     },
 };
+
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const CriticalInfra = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
@@ -111,8 +118,18 @@ const CriticalInfra = (props: Props) => {
 
     const { requests: { PalikaResources }, provinces,
         districts,
-        municipalities,
+        municipalities, drrmRegion,
         user, setDrrmCritical } = props;
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -164,7 +181,9 @@ const CriticalInfra = (props: Props) => {
         page: paginationQueryLimit,
         inventories: defaultQueryParameter,
         fields,
-        user,
+        municipality,
+        district,
+        province,
         meta,
 
     });
@@ -278,7 +297,7 @@ const CriticalInfra = (props: Props) => {
                    Critical Infrastructures
                 </h2>
                 <div className={styles.palikaTable}>
-                    {
+                    {/* {
                         !props.annex
                         && (
                             <>
@@ -297,7 +316,7 @@ const CriticalInfra = (props: Props) => {
                                 </select>
                             </>
                         )
-                    }
+                    } */}
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
