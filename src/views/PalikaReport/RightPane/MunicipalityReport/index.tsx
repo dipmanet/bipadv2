@@ -33,7 +33,8 @@ import { userSelector, palikaRedirectSelector,
     districtsSelector, municipalitiesSelector,
     palikaLanguageSelector, drrmOrgSelecter,
     drrmInventorySelecter, drrmCriticalSelecter,
-    drrmContactsSelecter } from '#selectors';
+    drrmContactsSelecter,
+    drrmRegionSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
 
 interface Props {
@@ -57,7 +58,7 @@ const mapStateToProps = (state, props) => ({
     drrmInventory: drrmInventorySelecter(state),
     drrmCritical: drrmCriticalSelecter(state),
     drrmContacts: drrmContactsSelecter(state),
-
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -123,6 +124,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 
 };
+
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 // const formdata = new FormData();
 const ReportModal: React.FC<Props> = (props: Props) => {
     const {
@@ -142,7 +148,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         palikaRedirect,
         requests: { DisasterProfileGetRequest, FiscalYearFetch },
         generalData,
-        user: { profile },
         user,
         provinces,
         districts,
@@ -152,6 +157,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         drrmInventory,
         drrmCritical,
         drrmContacts,
+        drrmRegion,
     } = props;
     const {
         fiscalYear,
@@ -175,6 +181,15 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const [fiscalYearTitle, setFYTitle] = useState('');
     const [progress, setProgress] = useState(0);
 
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
     const getGeneralData = () => ({
         reportTitle,
         datefrom,
@@ -188,17 +203,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
     let municipalityName = '';
 
+    municipalityName = municipalities.find(item => item.id === municipality);
+    console.log('mun name:', municipalityName);
 
-    if (user && user.profile && user.profile.municipality) {
-        const {
-            profile: {
-                municipality,
-            },
-        } = user;
-
-        municipalityName = municipalities.find(item => item.id === municipality);
-        console.log('mun name: ', municipalityName);
-    }
     const handleDisasterProfile = (response) => {
         setDisasterProfile(response);
     };
@@ -206,9 +213,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         setFiscalYearList(response);
     };
     DisasterProfileGetRequest.setDefaultParams({
-        province: profile.province,
-        district: profile.district,
-        municipality: profile.municipality,
+        province,
+        district,
+        municipality,
         fiscalYear: generalData.fiscalYear,
         disasterProfile: handleDisasterProfile,
 
@@ -303,9 +310,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         formdata.append('fiscalYear', generalData.fiscalYear);
         formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
         formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
-        formdata.append('province', (profileUser.province || ''));
-        formdata.append('district', (profileUser.district || ''));
-        formdata.append('municipality', (profileUser.municipality || ''));
+        formdata.append('province', (province || ''));
+        formdata.append('district', (district || ''));
+        formdata.append('municipality', (municipality || ''));
 
         if (generalData.mayor) {
             formdata.append('mayorChairperson', generalData.mayor.id);
@@ -647,7 +654,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                             <th>Number of Female Employee</th>
 
                                         </tr>
-                                        {drrmOrg.length > 0
+                                        {!drrmOrg.data
                                             ? drrmOrg.filter(orgs => orgs.selectedRow === true)
                                                 .map((item, i) => (
                                                     <tr key={item.id}>
@@ -701,7 +708,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                             <th>Updated Date</th>
                                         </tr>
 
-                                        {drrmInventory
+                                        {!drrmInventory.data
                                         && drrmInventory
                                             .filter(inven => inven.selectedRow === true)
                                             .map((item, i) => (
@@ -748,7 +755,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                             <th>Total Employee</th>
 
                                         </tr>
-                                        {drrmCritical && drrmCritical
+                                        {!drrmCritical.data && drrmCritical
                                             .filter(ci => ci.selectedRow === true)
                                             .map((item, i) => (
                                                 <tr key={item.id}>

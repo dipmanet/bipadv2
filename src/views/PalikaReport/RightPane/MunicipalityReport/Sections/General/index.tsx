@@ -251,8 +251,8 @@ const General = (props: Props) => {
     }, [cao, focalPerson, mayor]);
 
     const validationErrs = () => {
-        const e = [fiscalYear, formationDate];
-        const f = [setFyErr, setDate];
+        const e = [fiscalYear];
+        const f = [setFyErr];
         const result = e.map((item) => {
             if (!item) {
                 return true;

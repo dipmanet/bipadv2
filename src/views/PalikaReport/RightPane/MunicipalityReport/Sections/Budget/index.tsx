@@ -644,7 +644,7 @@ const Budget = (props: Props) => {
                                     // handleNextClick={props.handleNextClick}
                                     handleNextClick={handleNextClick}
 
-                                    disabled={!((drrFund && municipalBudget && additionalFund))}
+                                    // disabled={!((drrFund && municipalBudget && additionalFund))}
                                     // disabled={!(annualBudgetData.length > 0)}
                                 />
 

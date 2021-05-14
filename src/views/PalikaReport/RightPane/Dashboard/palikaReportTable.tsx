@@ -20,7 +20,7 @@ const PalikaReportTable = (props) => {
 
 
     const iconName = 'sort';
-
+    console.log('tabledata:', tableData);
     const handleEditButtonClick = () => {
         console.log('clicked');
     };

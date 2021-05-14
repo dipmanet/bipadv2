@@ -431,9 +431,11 @@ const Relief = (props: Props) => {
             const estimatedLoss = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.estimatedLoss)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setTotalEstimatedLoss(estimatedLoss);
+                .filter(item => item !== undefined);
+            if (estimatedLoss.length > 0) {
+                estimatedLoss.reduce((a, b) => a + b);
+                setTotalEstimatedLoss(estimatedLoss);
+            }
 
             const deathTotal = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
@@ -829,18 +831,22 @@ const Relief = (props: Props) => {
 
     useEffect(() => {
         if (fetchedData && hazardTypes) {
+            const tempArr = [];
             const finalfetchedData = fetchedData.map((item, i) => {
                 const hazardName = hazardDetails.find(data => data.id === item.hazard);
 
                 if (hazardName) {
+                    tempArr.push({ hazardName: hazardName.titleEn,
+                        item });
+
                     return { hazardName: hazardName.titleEn,
                         item };
                 }
 
-                return null;
+                return tempArr;
             });
 
-            finalArr = [...new Set(finalfetchedData)];
+            finalArr = [...new Set(tempArr)];
         }
     }, [fetchedData, hazardDetails, hazardTypes]);
     console.log('final arr>>', finalArr);
@@ -904,10 +910,10 @@ const Relief = (props: Props) => {
 
                                                 <tr key={item.item.id}>
                                                     <td>{i + 1}</td>
-                                                    <td>{item.item.title}</td>
-                                                    <td>{item.hazardName}</td>
-                                                    <td>{item.item.incidentOn.split('T')[0]}</td>
-                                                    <td>{item.item.reportedOn.split('T')[0]}</td>
+                                                    <td>{item.item.title || '-'}</td>
+                                                    <td>{item.hazardName || '-'}</td>
+                                                    <td>{item.item.incidentOn.split('T')[0] || '-'}</td>
+                                                    <td>{item.item.reportedOn.split('T')[0] || '-'}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>

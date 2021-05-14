@@ -128,17 +128,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
     NonGovGetRequest: {
         url: '/nongov-contact/',
-        query: ({ params, props }) => {
-            if (params && params.municipality) {
-                return {
-                    province: params.province,
-                    district: params.district,
-                    municipality: params.municipality,
+        query: ({ params, props }) => ({
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
 
-                };
-            }
-            return null;
-        },
+        }),
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, params }) => {
@@ -448,7 +443,9 @@ const Contacts = (props: Props) => {
 
 
     NonGovGetRequest.setDefaultParams({
-        user,
+        municipality,
+        province,
+        district,
         nonGovContacts: handleNonGovContacts,
         setErrors: handleErrors,
     });
