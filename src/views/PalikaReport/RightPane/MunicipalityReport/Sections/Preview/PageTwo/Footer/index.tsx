@@ -7,6 +7,7 @@ import {
     municipalitiesSelector,
     districtsSelector,
     provincesSelector,
+    drrmRegionSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -22,6 +23,7 @@ const mapStateToProps = state => ({
     muncipalities: municipalitiesSelector(state),
     districts: districtsSelector(state),
     provinces: provincesSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 interface Props{
@@ -57,27 +59,30 @@ const Footer = (props: Props) => {
         muncipalities,
         districts,
         provinces,
+        drrmRegion,
     } = props;
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
 
-    if (user && user.profile) {
-        const {
-            municipality: munfromprops,
-            province: provfromprops,
-            district: districtfromprops,
-        } = user.profile;
 
+    const m = muncipalities.filter(mun => mun.id === municipality);
+    const d = districts.filter(dis => dis.id === district);
+    const p = provinces.filter(pro => pro.id === province);
 
-        const m = muncipalities.filter(mun => mun.id === munfromprops);
-        const d = districts.filter(dis => dis.id === districtfromprops);
-        const p = provinces.filter(pro => pro.id === provfromprops);
-
-        municipality = m[0].title;
-        province = p[0].title;
-        district = d[0].title;
-    }
+    const municipalityName = m[0].title;
+    const provinceName = p[0].title;
+    const districtName = d[0].title;
 
     const {
         fiscalYear,
@@ -105,21 +110,21 @@ const Footer = (props: Props) => {
                 <div className={styles.address}>
                     <ul>
                         <li className={styles.munTitle}>
-                            {`${municipality} Municipality`}
+                            {`${municipalityName} Municipality`}
                             ,
                             {' '}
 
                         </li>
                         <li className={styles.munTitle}>
                             {' '}
-                            {`${district} District`}
+                            {`${districtName} District`}
                             ,
                             {' '}
-                            {`${province}`}
+                            {`${provinceName}`}
                         </li>
                         {/* <li className={styles.munTitle}>POB: 213311</li> */}
                         {/* <li className={styles.munTitle}>PHONE: +977-1-449354</li> */}
-                        <li className={styles.munTitle}>{`WEB: https://www.${municipality.toLowerCase()}mun.gov.np/en`}</li>
+                        <li className={styles.munTitle}>{`WEB: https://www.${municipalityName.toLowerCase()}mun.gov.np/en`}</li>
                     </ul>
                 </div>
             </div>

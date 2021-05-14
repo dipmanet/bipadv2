@@ -2,7 +2,7 @@
     display: flex;
  
     padding: 10px 50px;
-    margin-top: 40px;
+    // margin-top: 10px;
     align-items: center;
     // justify-content: center;
     width: 100%;
@@ -16,6 +16,7 @@
         h2{
             font-size: 16px;
             color: white;
+            display: none;
         }
         .horizontalLine{
             color: white;
@@ -25,6 +26,7 @@
             height: 1px;
             width: 70%;
             margin-left: 0;
+            display: none;
         }
         .address{
             ul{

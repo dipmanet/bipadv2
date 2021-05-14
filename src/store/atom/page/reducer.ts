@@ -19,6 +19,11 @@ export const setDrrmOrgAction = drrmOrg => ({
     drrmOrg,
 });
 
+export const setDrrmRegionAction = drrmRegion => ({
+    type: Type.PageType.SET_DRRM_REGION,
+    drrmRegion,
+});
+
 export const setDrrmCriticalAction = drrmCritical => ({
     type: Type.PageType.SET_DRRM_CRITICAL,
     drrmCritical,
@@ -1422,11 +1427,22 @@ const setDrrmCritical = (state: Type.PageState, action: Type.SetDrrmCritical) =>
     return newState;
 };
 
+const setDrrmRegion = (state: Type.PageState, action: Type.SetDrrmRegion) => {
+    const { drrmRegion } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmRegion = drrmRegion;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_DRRM_REGION:
+            return setDrrmRegion(state, action);
         case Type.PageType.SET_DRRM_CONTACTS:
             return setDrrmContacts(state, action);
         case Type.PageType.SET_DRRM_CRITICAL:

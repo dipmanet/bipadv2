@@ -6,6 +6,9 @@ import govtlogo from '#resources/palikaicons/govtLogo.svg';
 import styles from './styles.scss';
 import {
     generalDataSelector,
+    municipalitiesSelector,
+    provincesSelector,
+    districtsSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -17,11 +20,19 @@ import {
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
+    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
 });
 
 interface Props{
 
 }
+
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
     FiscalYearFetch: {
@@ -40,7 +51,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 const Header = (props: Props) => {
-    const { generalData, requests: { FiscalYearFetch } } = props;
+    const {
+        generalData,
+        requests: { FiscalYearFetch },
+        municipalities,
+        provinces,
+        districts,
+    } = props;
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
 
@@ -55,12 +72,28 @@ const Header = (props: Props) => {
         fiscalYearList: handleFiscalYearList,
     });
 
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
+
+
+    const m = municipalities.filter(mun => mun.id === municipality);
+    const d = districts.filter(dis => dis.id === district);
+    const p = provinces.filter(pro => pro.id === province);
+
+    const municipalityName = m[0].title;
+    const provinceName = p[0].title;
+    const districtName = d[0].title;
+
     useEffect(() => {
         if (fiscalYearList.length > 0 && fiscalYear) {
             const FY = fiscalYearList.filter(item => item.id === Number(fiscalYear));
-            console.log('fy obj', FY);
-            console.log('fiscalYearList', fiscalYearList);
-            console.log('fiscalyear', fiscalYear);
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
@@ -77,8 +110,8 @@ const Header = (props: Props) => {
 
                     <div className={styles.address}>
                         <ul>
-                            <li className={styles.munTitle}>Rajapur Municipality</li>
-                            <li className={styles.desc}>Bardiya District, Lumbini Province</li>
+                            <li className={styles.munTitle}>{`${municipalityName} Municipality`}</li>
+                            <li className={styles.desc}>{`${districtName} District, ${provinceName}`}</li>
 
                         </ul>
 

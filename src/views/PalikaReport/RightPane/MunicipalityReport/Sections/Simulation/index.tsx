@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -24,6 +25,7 @@ import {
     budgetDataSelector,
     userSelector, budgetIdSelector,
     hazardTypeListSelector,
+    drrmRegionSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
@@ -61,6 +63,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     budgetId: budgetIdSelector(state),
     hazardType: hazardTypeListSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -128,6 +131,10 @@ const PriorityArea = priorityData.Data.filter(data => data.level === 0);
 const PriorityAction = priorityData.Data.filter(data => data.level === 1);
 const PriorityActivity = priorityData.Data.filter(data => data.level === 2);
 let finalArr = [];
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const Simulation = (props: Props) => {
     const {
         generalData,
@@ -135,7 +142,7 @@ const Simulation = (props: Props) => {
         updateTab,
         setBudgetDatapp,
         user, budgetId, setBudgetId,
-        hazardType,
+        hazardType, drrmRegion,
     } = props;
 
     // setBudgetId({ id: 2 });
@@ -151,9 +158,9 @@ const Simulation = (props: Props) => {
     const [organizer, setOrganizer] = useState('');
     const [participants, setParticipants] = useState('');
 
-    const [province, setProvince] = useState(0);
-    const [district, setDistrict] = useState(0);
-    const [municipality, setMunicipality] = useState(0);
+    // const [province, setProvince] = useState(0);
+    // const [district, setDistrict] = useState(0);
+    // const [municipality, setMunicipality] = useState(0);
 
     const [simulationData, setSimulationData] = useState([]);
     const [priorityAction, setPriorityAction] = useState('');
@@ -166,11 +173,20 @@ const Simulation = (props: Props) => {
     const [simulationIndex, setSimulationIndex] = useState();
     const [editBtnClicked, setEditBtnClicked] = useState(false);
     // const [fiscalYear, setFiscalYear] = useState(2);
-    const { user: { profile },
-        requests: { SimulationPostRequest,
-            SimulationGetRequest, SimulationPutRequest,
+    const { requests: { SimulationPostRequest,
+        SimulationGetRequest, SimulationPutRequest,
 
-            HazardGetRequest } } = props;
+        HazardGetRequest } } = props;
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
     const handleSubmittedData = (response) => {
         setSubmittedData(response);
         setDescription('');
@@ -191,9 +207,9 @@ const Simulation = (props: Props) => {
 
     SimulationGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
-        district: profile.district,
-        municipality: profile.municipality,
-        province: profile.province,
+        district,
+        municipality,
+        province,
         finalsetSimulationData: handleSavesetSimulationData,
         id: '-id',
 
@@ -203,11 +219,11 @@ const Simulation = (props: Props) => {
     // });
 
 
-    useEffect(() => {
-        setProvince(profile.province);
-        setDistrict(profile.district);
-        setMunicipality(profile.municipality);
-    }, [profile.district, profile.municipality, profile.province]);
+    // useEffect(() => {
+    //     setProvince(profile.province);
+    //     setDistrict(profile.district);
+    //     setMunicipality(profile.municipality);
+    // }, []);
 
 
     const handleSimulationName = (e) => {
@@ -277,9 +293,7 @@ const Simulation = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationData]);
 
-    const handleChange = (e) => {
-        setProvince(e.target.value);
-    };
+
     const handleErrorData = (response) => {
         setLoader(false);
     };
@@ -320,9 +334,9 @@ const Simulation = (props: Props) => {
     useEffect(() => {
         SimulationGetRequest.do({
             fiscalYear: generalData.fiscalYear,
-            district: profile.district,
-            municipality: profile.municipality,
-            province: profile.province,
+            district,
+            municipality,
+            province,
             id: '-id',
             finalsetSimulationData: handleSavesetSimulationData,
 

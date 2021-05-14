@@ -19,12 +19,15 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    palikaRedirectSelector, generalDataSelector } from '#selectors';
+    palikaRedirectSelector,
+    generalDataSelector,
+    drrmRegionSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
 
 import {
     setPalikaRedirectAction,
+    setDrrmContactsAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -32,6 +35,8 @@ import editIcon from '#resources/palikaicons/edit.svg';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setDrrmContacts: params => dispatch(setDrrmContactsAction(params)),
+
 });
 
 interface Props{
@@ -45,6 +50,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 
 });
 
@@ -52,11 +58,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.province) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.page,
                     meta: params.meta,
                 };
@@ -122,17 +128,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
     NonGovGetRequest: {
         url: '/nongov-contact/',
-        query: ({ params, props }) => {
-            if (params && params.user) {
-                return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+        query: ({ params, props }) => ({
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
 
-                };
-            }
-            return null;
-        },
+        }),
         method: methods.GET,
         onMount: true,
         onSuccess: ({ response, params }) => {
@@ -196,6 +197,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 };
 
 let finalArr = [];
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const Contacts = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [tableHeader, setTableHeader] = useState([]);
@@ -226,6 +231,13 @@ const Contacts = (props: Props) => {
     const [nonGovContactIndex, setNonGovContactIndex] = useState();
     const [postErrors, setPostErrors] = useState({});
     const [editBtnClicked, setEditBtnClicked] = useState(false);
+
+
+    const [checkedRows, setCheckedRows] = useState([]);
+    const [checkedAll, setCheckedAll] = useState(true);
+    const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
+
+
     const { requests: {
         PalikaReportInventoriesReport,
         OrganisationGetRequest,
@@ -235,8 +247,19 @@ const Contacts = (props: Props) => {
         NonGovPostRequest,
         NonGovPutRequest,
     },
+    setDrrmContacts, drrmRegion,
     user, generalData } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const handleNameChange = (e) => {
         setName(e.target.value);
@@ -294,7 +317,9 @@ const Contacts = (props: Props) => {
         setNonGovContactId(null);
 
         NonGovGetRequest.do({
-            user,
+            municipality,
+            district,
+            province,
             nonGovContacts: handleNonGovContacts,
             setErrors: handleErrors,
         });
@@ -337,9 +362,9 @@ const Contacts = (props: Props) => {
                 contactNumber,
                 email,
                 focusedHazard,
-                province: user.profile.province,
-                district: user.profile.district,
-                municipality: user.profile.municipality,
+                province,
+                district,
+                municipality,
                 fiscalYear: generalData.fiscalYear,
             },
             nonGovPostContacts: handleNonGovPostContacts,
@@ -380,9 +405,9 @@ const Contacts = (props: Props) => {
                 contactNumber,
                 email,
                 focusedHazard,
-                province: user.profile.province,
-                district: user.profile.district,
-                municipality: user.profile.municipality,
+                province,
+                district,
+                municipality,
                 fiscalYear: generalData.fiscalYear,
             },
             nonGovPostContacts: handleNonGovPostContacts,
@@ -418,7 +443,9 @@ const Contacts = (props: Props) => {
 
 
     NonGovGetRequest.setDefaultParams({
-        user,
+        municipality,
+        province,
+        district,
         nonGovContacts: handleNonGovContacts,
         setErrors: handleErrors,
     });
@@ -428,7 +455,9 @@ const Contacts = (props: Props) => {
         url,
         page: paginationQueryLimit,
         inventories: defaultQueryParameter,
-        user,
+        municipality,
+        district,
+        province,
         setErrors: handleErrors,
     });
     OrganisationGetRequest.setDefaultParams({
@@ -471,16 +500,22 @@ const Contacts = (props: Props) => {
                             .map(trainings => trainings.durationDays)),
                     });
                     setMergedData(mergedList);
-                    console.log('contact id? merged list: ', mergedList);
+                    const chkArr = Array.from(Array(mergedList.length).keys());
+                    setCheckedRows(chkArr);
+                    setDataWithIndex(mergedList.map((items, i) => ({ ...items, index: i, selectedRow: true })));
                 } else {
                     mergedList.push({ ...item, orgType: '-', orgName: '-' });
                     setMergedData(mergedData);
+                    const chkArr = Array.from(Array(mergedList.length).keys());
+                    setCheckedRows(chkArr);
+                    setDataWithIndex(mergedList.map((it, i) => ({ ...it, index: i, selectedRow: true })));
                 }
                 return null;
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, orgList, trainedContacts]);
+
     useEffect(() => {
         if (nonGovContacts && hazardDetails.length > 0) {
             const finalfetchedData = nonGovContacts.map((item, i) => {
@@ -499,6 +534,46 @@ const Contacts = (props: Props) => {
             console.log('Final array');
         }
     }, [nonGovContacts, hazardDetails]);
+
+    const handleCheckAll = (e) => {
+        setCheckedAll(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRows(Array.from(Array(mergedData.length).keys()));
+            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRows([]);
+            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
+    };
+
+    const handleCheck = (idx: number, e) => {
+        setCheckedAll(false);
+
+        if (e.target.checked) {
+            const arr = [...checkedRows, idx];
+            setCheckedRows(arr);
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRows(checkedRows.filter(item => item !== idx));
+
+            setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+
+    const handleNext = () => {
+        setDrrmContacts(dataWithIndex);
+        props.handleNextClick();
+    };
 
     // console.log('Final array', loader);
     console.log('Final array', finalArr);
@@ -541,6 +616,17 @@ const Contacts = (props: Props) => {
                                             {mergedData
                                                 ? mergedData.map((item, i) => (
                                                     <tr key={item.id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={checkedRows.indexOf(i) !== -1}
+
+                                                            // defaultChecked
+                                                                onChange={e => handleCheck(i, e)}
+                                                                className={styles.checkBox}
+                                                                key={item.id}
+                                                            />
+                                                        </td>
                                                         <td>{i + 1}</td>
                                                         <td>{item.name || '-'}</td>
                                                         <td>{item.orgType || '-'}</td>
@@ -976,11 +1062,10 @@ const Contacts = (props: Props) => {
                                             </button>
                                             <NextPrevBtns
                                                 handlePrevClick={props.handlePrevClick}
-                                                handleNextClick={props.handleNextClick}
+                                                handleNextClick={handleNext}
                                             />
                                         </>
-                                    )
-                                }
+                                    )}
                             </>
                         )}
                     </div>

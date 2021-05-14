@@ -21,6 +21,7 @@ import {
     setPalikaRedirectAction,
 } from '#actionCreators';
 import {
+    drrmRegionSelector,
     generalDataSelector,
     userSelector,
 } from '#selectors';
@@ -31,6 +32,7 @@ import Icon from '#rscg/Icon';
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     user: userSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 
 });
 
@@ -45,11 +47,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     MunContacts: {
         url: '/municipality-contact/',
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.page,
                     meta: params.meta,
 
@@ -121,6 +123,9 @@ interface Location{
     provinceId: number;
 }
 
+let province = 0;
+let district = 0;
+let municipality = 0;
 
 const General = (props: Props) => {
     const {
@@ -131,6 +136,7 @@ const General = (props: Props) => {
         requests: { FiscalYearFetch, MunContacts },
         setGeneralDatapp,
         user,
+        drrmRegion,
     } = props;
 
     const {
@@ -156,6 +162,16 @@ const General = (props: Props) => {
     const [cao, setcao] = useState('');
     const [focalPerson, setfocalPerson] = useState('');
     const [loader, setLoader] = useState(true);
+
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const handleSelectChange = (fiscal: any) => {
         setfiscalYear(fiscal.target.value);
@@ -211,10 +227,21 @@ const General = (props: Props) => {
             setfocalPerson(focalPersonData[0]);
         }
     };
+    const getUserDetails = (userItem) => {
+        const arr = userItem;
+        if (arr.isSuperuser) {
+            arr.profile.municipality = drrmRegion.municipality;
+            arr.profile.province = drrmRegion.province;
+            arr.profile.district = drrmRegion.district;
+        }
+        return arr;
+    };
 
     MunContacts.setDefaultParams({
         organisation: handleFetchedData,
-        user,
+        municipality,
+        district,
+        province,
     });
 
     useEffect(() => {
@@ -224,8 +251,8 @@ const General = (props: Props) => {
     }, [cao, focalPerson, mayor]);
 
     const validationErrs = () => {
-        const e = [fiscalYear, formationDate];
-        const f = [setFyErr, setDate];
+        const e = [fiscalYear];
+        const f = [setFyErr];
         const result = e.map((item) => {
             if (!item) {
                 return true;

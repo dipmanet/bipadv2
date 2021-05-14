@@ -32,7 +32,7 @@ import {
 import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
-    userSelector,
+    userSelector, drrmRegionSelector,
     hazardTypesSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
@@ -59,6 +59,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     hazardTypes: hazardTypesSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
 
 const COLORS = ['rgb(0,177,117)', 'rgb(198,233,232)'];
@@ -72,11 +73,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
         query: ({ params, props }) => {
-            if (params && params.user) {
+            if (params && params.municipality) {
                 return {
-                    province: params.user.profile.province,
-                    district: params.user.profile.district,
-                    municipality: params.user.profile.municipality,
+                    province: params.province,
+                    district: params.district,
+                    municipality: params.municipality,
                     limit: params.Ward,
                     resource_type: params.inventories,
                     expand: params.fields,
@@ -172,6 +173,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     },
 };
 let finalArr = [];
+let province = 0;
+let district = 0;
+let municipality = 0;
+
 const Relief = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
@@ -185,6 +190,7 @@ const Relief = (props: Props) => {
         municipalities,
         user,
         hazardTypes,
+        drrmRegion,
     } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
@@ -242,6 +248,15 @@ const Relief = (props: Props) => {
     const [totDalits, setTotDalits] = useState(0);
     // const [femaleBenefited, handlefemaleBenefited] = useState(0);
 
+    if (drrmRegion.municipality) {
+        municipality = drrmRegion.municipality;
+        district = drrmRegion.district;
+        province = drrmRegion.province;
+    } else {
+        municipality = user.profile.municipality;
+        district = user.profile.district;
+        province = user.profile.province;
+    }
 
     const handleReliefData = (response) => {
         setReliefData(response);
@@ -416,9 +431,11 @@ const Relief = (props: Props) => {
             const estimatedLoss = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.estimatedLoss)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setTotalEstimatedLoss(estimatedLoss);
+                .filter(item => item !== undefined);
+            if (estimatedLoss.length > 0) {
+                estimatedLoss.reduce((a, b) => a + b);
+                setTotalEstimatedLoss(estimatedLoss);
+            }
 
             const deathTotal = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
@@ -585,7 +602,9 @@ const Relief = (props: Props) => {
         url,
         inventories: defaultQueryParameter,
         fields,
-        user,
+        municipality,
+        district,
+        province,
         meta,
 
     });
@@ -609,7 +628,9 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            municipality,
+            district,
+            province,
             meta,
 
         });
@@ -636,7 +657,9 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            municipality,
+            district,
+            province,
             meta,
 
         });
@@ -747,7 +770,9 @@ const Relief = (props: Props) => {
         url,
         inventories: defaultQueryParameter,
         fields,
-        user,
+        municipality,
+        district,
+        province,
         meta,
 
     });
@@ -772,7 +797,9 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            municipality,
+            district,
+            province,
             meta,
 
         });
@@ -804,18 +831,22 @@ const Relief = (props: Props) => {
 
     useEffect(() => {
         if (fetchedData && hazardTypes) {
+            const tempArr = [];
             const finalfetchedData = fetchedData.map((item, i) => {
                 const hazardName = hazardDetails.find(data => data.id === item.hazard);
 
                 if (hazardName) {
+                    tempArr.push({ hazardName: hazardName.titleEn,
+                        item });
+
                     return { hazardName: hazardName.titleEn,
                         item };
                 }
 
-                return null;
+                return tempArr;
             });
 
-            finalArr = [...new Set(finalfetchedData)];
+            finalArr = [...new Set(tempArr)];
         }
     }, [fetchedData, hazardDetails, hazardTypes]);
     console.log('final arr>>', finalArr);
@@ -879,10 +910,10 @@ const Relief = (props: Props) => {
 
                                                 <tr key={item.item.id}>
                                                     <td>{i + 1}</td>
-                                                    <td>{item.item.title}</td>
-                                                    <td>{item.hazardName}</td>
-                                                    <td>{item.item.incidentOn.split('T')[0]}</td>
-                                                    <td>{item.item.reportedOn.split('T')[0]}</td>
+                                                    <td>{item.item.title || '-'}</td>
+                                                    <td>{item.hazardName || '-'}</td>
+                                                    <td>{item.item.incidentOn.split('T')[0] || '-'}</td>
+                                                    <td>{item.item.reportedOn.split('T')[0] || '-'}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>
@@ -1102,7 +1133,7 @@ const Relief = (props: Props) => {
             && (
                 <>
                     <div className={styles.budgetPreviewContainer}>
-                        <h2>Loss Section</h2>
+                        <h2>Disaster Incident Summary</h2>
                         <div className={styles.lossRow}>
 
                             <div className={styles.lossSection}>

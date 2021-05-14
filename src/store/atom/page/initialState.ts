@@ -253,6 +253,9 @@ const state: PageState = {
     drrmContacts: {
         data: [],
     },
+    drrmRegion: {
+        data: {},
+    },
 
 };
 export default state;

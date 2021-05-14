@@ -27,11 +27,13 @@ import {
     provincesSelector,
     districtsSelector,
     municipalitiesSelector,
+    drrmRegionSelector,
 } from '#selectors';
 import {
     setGeneralDataAction,
     setBudgetDataAction,
     setBudgetIdAction,
+    setDrrmRegionAction,
 } from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
@@ -46,14 +48,17 @@ const mapStateToProps = (state, props) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
+    drrmRegion: drrmRegionSelector(state),
 });
+
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
+    setDrrmRegion: params => dispatch(setDrrmRegionAction(params)),
 });
-const icons = [
 
+const icons = [
     generalLogo,
     budgetLogo,
     budgetActivityLogo,
@@ -161,12 +166,13 @@ const Sidebar = (props) => {
         municipalities,
         user,
         setGeneralDatapp,
+        drrmRegion,
+        setDrrmRegion,
 
     } = props;
     useEffect(() => {
         setShowErr(props.showErr);
     }, [props.showErr]);
-    console.log('This is data>>>', generalData);
     const handleMenuItemClick = (menuItem: number) => {
         if (generalData && generalData.fiscalYear) {
             handleMenuClick(menuItem);
@@ -307,17 +313,24 @@ const Sidebar = (props) => {
 
     const handleCheckFilterDisableButtonForProvince = (province) => {
         console.log(province);
-        setGeneralDatapp({ ...generalData,
-            province });
+        setDrrmRegion({
+            ...drrmRegion,
+            province,
+        });
     };
     const handleCheckFilterDisableButtonForDistrict = (district) => {
-        setGeneralDatapp({ ...generalData,
-            district });
+        setDrrmRegion({
+            ...drrmRegion,
+            district,
+        });
     };
     const handleCheckFilterDisableButtonForMunicipality = (municipality) => {
-        setGeneralDatapp({ ...generalData,
-            municipality });
+        setDrrmRegion({
+            ...drrmRegion,
+            municipality,
+        });
     };
+    console.log('drrm region:', drrmRegion);
     return (
         <div>
 
@@ -362,7 +375,7 @@ const Sidebar = (props) => {
                                         {isSubmenuClicked && selectedMenuId === item.id
                                             ? item.components.map((data, index) => (
                                                 <button
-                                                    type="submit"
+                                                    type="button"
                                                     className={
                                                         isIndicatorClicked
                                                              && selectedSubMenuId === data.id
@@ -442,6 +455,7 @@ const Sidebar = (props) => {
                 type="submit"
                 className={styles.addButn}
                 onClick={handleAdd}
+                disabled={!drrmRegion.municipality}
             >
  + Add New Report
                 {' '}
