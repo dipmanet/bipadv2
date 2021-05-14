@@ -1,6 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable max-len */
 import React, { useEffect, useState, useRef } from 'react';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
