@@ -1,16 +1,23 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Gt from '../../utils';
 import Translations from '#views/PalikaReport/Translations';
 import { iconNames } from '#constants';
 import editIcon from '#resources/palikaicons/edit.svg';
+import fileDownload from '#resources/palikaicons/file-download.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 
+
 const PalikaReportTable = (props) => {
+    const node = useRef();
     const [isSort, setIsSort] = useState(false);
     const [sortBy, setSortBy] = useState('');
+    const [downloadClicked, setDownloadClicked] = useState(false);
+    const [reportId, setReportId] = useState();
     const { paginationData, tableData, tableHeader,
         tableHeaderDataMatch, submenuId, sortTitle, sortProvince,
         sortDistrict,
@@ -79,6 +86,25 @@ const PalikaReportTable = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort]);
+    const handleClick = (e) => {
+        if (node.current.contains(e.target) || e.target.id === 'summaryReport' || e.target.id === 'fullReport') {
+            return;
+        }
+        setDownloadClicked(false);
+        // setReportId(null);
+    };
+    const handleDLReport = (e, id) => {
+        setReportId(id);
+        setDownloadClicked(!downloadClicked);
+    };
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
+    }, []);
+
     return (
         <div>
             {/* <h1>Responsive Table Example</h1> */}
@@ -215,20 +241,29 @@ const PalikaReportTable = (props) => {
                                             <td>{item.modifiedDate}</td>
                                             <td>{item.item.updatedBy.username}</td>
                                             <td>
-                                                <button
-                                                    type="button"
-                                                    className={styles.downloadTableXlsButton}
-                                                >
-                                                    <a
-                                                        href={item.item.file}
+                                                <div ref={node} className={styles.dropdown}>
 
-                                                        download
-                                                    >
-                                                        <Gt
-                                                            section={Translations.dashboardTblBtnDownload}
+
+                                                    <button type="button" onClick={e => handleDLReport(e, item.item.id)} className={styles.dropbtn} title="Download Report">
+                                                        {' '}
+                                                        <ScalableVectorGraphics
+                                                            className={styles.bulletPoint}
+                                                            src={fileDownload}
+                                                            alt="fileDownload"
                                                         />
-                                                    </a>
-                                                </button>
+
+                                                    </button>
+                                                    <div id="myDropdown" className={reportId === item.item.id && downloadClicked ? _cs(styles.dropdownContent, styles.show) : styles.dropdownContent}>
+
+                                                        <a id="summaryReport" href="#summary_report" onClick={() => window.open(item.item.summaryFileEn)}>Summary Report</a>
+                                                        <a id="fullReport" href="#full_report" onClick={() => window.open(item.item.fullFileEn)}>Full Report</a>
+
+                                                    </div>
+
+
+                                                </div>
+
+
                                             </td>
                                         </tr>
                                     ))}

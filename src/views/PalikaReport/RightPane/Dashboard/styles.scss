@@ -176,7 +176,60 @@
         margin-left: 10px;
     }
 }
+.downloadOption{
+    height: auto;
+    background-color: cyan;
+    width: max-content;
+    position: relative;
+    right: 80%;
+    padding: 0;
+    margin: 0;
+    ul{
+        margin: 0;
+    }
 
+}
+
+.dropbtn {
+    background-color: transparent;
+    color: white;
+    
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+//   .dropbtn:hover, .dropbtn:focus {
+//     background-color: #3e8e41;
+//   }
+  
+  .dropdown {
+    float: right;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    right: 0;
+    z-index: 1;
+  }
+  
+  .dropdownContent a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown a:hover {background-color: #ddd;}
+  
+  .show {display: block;}
 .palikaTable{
     .dataUnavailable{
         display: flex;
@@ -198,6 +251,7 @@
           cursor: pointer;
           opacity: 0.67;
         }}
+       
     table{
         margin-top: 0px;
         border-collapse: collapse;
