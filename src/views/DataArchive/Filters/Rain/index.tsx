@@ -16,6 +16,8 @@ import { AppState } from '#store/types';
 import { DARainFiltersElement, RainStation } from '#types';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import StationSelector from './Station';
+import BasinSelector from './Basin';
+
 import { getDateDiff, isValidDate } from '#views/DataArchive/utils';
 import styles from './styles.scss';
 
@@ -132,6 +134,17 @@ class RainFilters extends React.PureComponent<Props, State> {
     }
 
     private views = {
+        basin: {
+            component: () => (
+                <BasinSelector
+                    className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                    faramElementName="basin"
+                    wardsHidden
+                    stations={this.props.rainStations}
+                    // autoFocus
+                />
+            ),
+        },
         station: {
             component: () => (
                 <StationSelector

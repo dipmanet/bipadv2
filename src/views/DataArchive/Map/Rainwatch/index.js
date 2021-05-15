@@ -16,9 +16,35 @@ import {
 import { rainFiltersSelector } from '#selectors';
 import styles from './styles.scss';
 
+import { httpGet } from '#utils/common';
+
 const mapStateToProps = state => ({
     rainFilters: rainFiltersSelector(state),
 });
+
+const GIS_URL = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    'service=WFS',
+    '&version=1.0.0',
+    '&request=GetFeature',
+    '&typeName=Bipad:watershed-area',
+    '&outputFormat=application/json',
+].join('');
+
+const tileUrl = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    '&version=1.1.1',
+    '&service=WMS',
+    '&request=GetMap',
+    '&layers=Bipad:watershed-area',
+    '&tiled=true',
+    '&width=256',
+    '&height=256',
+    '&srs=EPSG:3857',
+    '&bbox={bbox-epsg-3857}',
+    '&transparent=true',
+    '&format=image/png',
+].join('');
 
 const RainToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -66,7 +92,18 @@ class RainMap extends React.PureComponent {
             coordinates: undefined,
             tooltipParams: null,
             showModal: false,
+            gis: undefined,
         };
+    }
+
+    componentDidMount() {
+        let result = '';
+        try {
+            result = JSON.parse(httpGet(GIS_URL));
+            this.setState({ gis: result });
+        } catch (error) {
+            this.setState({ gis: undefined });
+        }
     }
 
     getRainFeatureCollection = memoize(rainToGeojson);
@@ -170,6 +207,7 @@ class RainMap extends React.PureComponent {
             tooltipRenderer,
             tooltipParams,
             coordinates,
+            gis,
         } = this.state;
 
         // sorting to get latest value on map
@@ -211,6 +249,27 @@ class RainMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
+
+                <MapSource
+                    key={'basin-layer'}
+                    sourceKey={'basin-key'}
+                    sourceOptions={{
+                        type: 'raster',
+                        tiles: [tileUrl],
+                        tileSize: 256,
+                    }}
+                >
+                    <MapLayer
+                        layerKey="raster-layer"
+                        layerOptions={{
+                            type: 'raster',
+                            paint: {
+                                'raster-opacity': 0.5,
+                            },
+                        }}
+                    />
+                </MapSource>
+
                 <MapSource
                     sourceKey="real-time-rain-points"
                     geoJson={rainFeatureCollection}
