@@ -27,7 +27,11 @@ const compare = (a: RainStation, b: RainStation) => {
 };
 
 const BasinSelector = (props: Props) => {
-    const { onChange: onChangeFromProps, stations: stationsFromProps, value: { id } } = props;
+    console.log('basin station: ', props);
+    const { onChange: onChangeFromProps,
+        stations: stationsFromProps } = props;
+
+    const id = 1;
     const [selectedStation, setSelectedStation] = useState(id);
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);

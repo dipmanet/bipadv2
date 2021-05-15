@@ -56,11 +56,12 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     ),
 });
 
-type TabKey = 'station' | 'dataRange' | 'others';
+type TabKey = 'basin' | 'station' | 'dataRange' | 'others';
 
 const iconNames: {
     [key in TabKey]: string;
 } = {
+    basin: 'eye',
     station: 'gps',
     dataRange: 'dataRange',
     others: 'filter',
@@ -91,6 +92,7 @@ const rainFilterSchema = {
     fields: {
         dataDateRange: [],
         station: [],
+        basin: [],
     },
 };
 
@@ -101,17 +103,23 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARainFiltersElement) =
     const tabKeyToFilterMap: {
         [key in Exclude<TabKey, 'others'>]: keyof DARainFiltersElement;
     } = {
+        basin: 'basin',
         station: 'station',
         dataRange: 'dataDateRange',
     };
-
+    console.log('filter map obj', tabKeyToFilterMap);
     const filter = filters[tabKeyToFilterMap[key]];
+    console.log('filter', filter);
+
     if (Array.isArray(filter)) {
         return filter.length !== 0;
     }
-
-    const filterKeys = Object.keys(filter);
-    return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
+    // issue here
+    if (filter) {
+        const filterKeys = Object.keys(filter);
+        return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
+    }
+    return false;
 };
 
 class RainFilters extends React.PureComponent<Props, State> {
@@ -124,6 +132,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                 endDate: undefined,
             },
             station: {},
+            basin: {},
         },
         error: '',
     };
@@ -203,6 +212,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                     endDate: undefined,
                 },
                 station: {},
+                basin: {},
             } });
 
         const { setDataArchiveRainFilter } = this.props;
@@ -261,6 +271,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                 station: 'Stations',
                 dataRange: 'Data range',
                 others: 'Others',
+                basin: 'Basin',
             };
 
             if (!extraContent) {
