@@ -19,6 +19,7 @@ import {
     setCarKeysAction,
     setGeneralDataAction,
     setPalikaRedirectAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import {
     drrmRegionSelector,
@@ -40,6 +41,7 @@ const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setCarKeys: params => dispatch(setCarKeysAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 
 });
 
@@ -137,6 +139,7 @@ const General = (props: Props) => {
         setGeneralDatapp,
         user,
         drrmRegion,
+        setProgress,
     } = props;
 
     // const {
@@ -306,7 +309,7 @@ const General = (props: Props) => {
             });
             updateTab();
             props.handleShowErr(false);
-
+            setProgress(0);
             props.handleNextClick();
         } else {
             validationErrs();

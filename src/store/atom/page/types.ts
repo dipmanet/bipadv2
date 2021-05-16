@@ -1,4 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
+import { number } from 'prop-types';
 import { FiltersElement, ResourceTypeKeys, ModelEnum, KeyValue } from '#types';
 
 export interface Field {
@@ -12,6 +13,7 @@ interface Centroid {
 }
 type BBox = [number, number, number, number];
 
+type DrrmProgress = number;
 
 export interface BudgetId{
     id: string;
@@ -573,6 +575,7 @@ export interface PageState {
     generalData: GeneralData;
     palikaRedirect: PalikaRedirect;
     budgetId: BudgetId;
+    drrmProgress: DrrmProgress;
     drrmOrg: DrrmOrg;
     drrmRegion: DrrmRegion;
     drrmInventory: DrrmInventory;
@@ -591,6 +594,7 @@ export enum PageType {
     SET_REGION = 'page/SET_REGION',
     SET_GENERAL_DATA = 'page/SET_GENERAL_DATA',
     SET_PALIKA_REDIRECT = 'page/SET_PALIKA_REDIRECT',
+    SET_DRRM_PROGRESS = 'page/SET_DRRM_PROGRESS',
     SET_BUDGET_ID = 'page/SET_BUDGET_ID',
     SET_DRRM_ORG = 'page/SET_DRRM_ORG',
     SET_DRRM_REGION = 'page/SET_DRRM_REGION',
@@ -701,6 +705,10 @@ export interface SetBudgetId {
     budgetId: BudgetId;
 }
 
+export interface SetDrrmProgress {
+    type: typeof PageType.SET_DRRM_PROGRESS;
+    drrmProgress: number;
+}
 export interface SetDrrmContacts {
     type: typeof PageType.SET_DRRM_CONTACTS;
     drrmContacts: DrrmContacts;
@@ -998,7 +1006,7 @@ export type PageActionTypes = (
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData| SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
-    SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
+    SetHazardType | SetMapStyles | SetMapStyle | SetProvinces | SetDrrmProgress |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |

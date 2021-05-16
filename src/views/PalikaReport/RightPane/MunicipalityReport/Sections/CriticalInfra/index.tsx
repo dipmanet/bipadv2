@@ -27,6 +27,7 @@ import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
     setDrrmCriticalAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -40,6 +41,7 @@ interface Props{
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmCritical: params => dispatch(setDrrmCriticalAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 const mapStateToProps = (state, props) => ({
@@ -117,7 +119,7 @@ const CriticalInfra = (props: Props) => {
     const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
     const { requests: { PalikaResources }, provinces,
-        districts,
+        districts, setProgress,
         municipalities, drrmRegion,
         user, setDrrmCritical } = props;
 
@@ -282,6 +284,7 @@ const CriticalInfra = (props: Props) => {
 
     const handleNext = () => {
         setDrrmCritical(dataWithIndex);
+        setProgress(6);
         props.handleNextClick();
     };
 

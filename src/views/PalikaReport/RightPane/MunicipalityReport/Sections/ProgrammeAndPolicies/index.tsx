@@ -15,6 +15,7 @@ import {
 
 import {
     setProgramAndPolicyDataAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -87,6 +88,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     setProgramData: params => dispatch(setProgramAndPolicyDataAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 
@@ -100,18 +102,13 @@ let municipality = 0;
 
 const ProgramPolicies = (props: Props) => {
     const {
-        programAndPolicyData,
-        setProgramData,
-        updateTab, user, generalData,
+        user,
+        generalData,
         requests: { PolicyGetRequest, PolicyPostRequest, PolicyPutRequest },
         drrmRegion,
+        setProgress,
     } = props;
 
-    // const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
-    // const [policies, setpolicies] = useState('');
-    // const handlePolicies = (data) => {
-    //     setpolicies(data.target.value);
-    // };
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
     const [serialNumber, setSerialNumber] = useState(0);
     const [point, setPoint] = useState('');
@@ -160,7 +157,6 @@ const ProgramPolicies = (props: Props) => {
         paginationParameters: handlePaginationParameters,
         page: paginationQueryLimit,
         id: '-id',
-
     });
 
 
@@ -181,24 +177,7 @@ const ProgramPolicies = (props: Props) => {
             dataSubmitted: handleDataSubmittedResponse,
         });
     };
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected + 1;
-        setOffset((selectedPage - 1) * paginationQueryLimit);
-        setCurrentPageNumber(selectedPage);
-    };
-    useEffect(() => {
-        PolicyGetRequest.do({
-            offset,
-            page: paginationQueryLimit,
-            fiscalYear: generalData.fiscalYear,
-            district,
-            municipality,
-            province,
-            id: '-id',
 
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
     useEffect(() => {
         if (dataSubmittedResponse) {
             PolicyGetRequest.do({
@@ -245,6 +224,10 @@ const ProgramPolicies = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [policyIndex, editBtnClicked]);
 
+    const handleNext = () => {
+        setProgress(3);
+        props.handleNextClick();
+    };
 
     return (
         <>
@@ -364,7 +347,7 @@ const ProgramPolicies = (props: Props) => {
                                 }
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={props.handleNextClick}
+                                    handleNextClick={handleNext}
                                 />
                             </>
                         )

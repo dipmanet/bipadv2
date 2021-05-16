@@ -28,6 +28,7 @@ import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
     setDrrmContactsAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -36,6 +37,7 @@ import editIcon from '#resources/palikaicons/edit.svg';
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmContacts: params => dispatch(setDrrmContactsAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 
 });
 
@@ -248,7 +250,7 @@ const Contacts = (props: Props) => {
         NonGovPutRequest,
     },
     setDrrmContacts, drrmRegion,
-    user, generalData } = props;
+    user, generalData, setProgress } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
     if (drrmRegion.municipality) {
@@ -572,6 +574,7 @@ const Contacts = (props: Props) => {
 
     const handleNext = () => {
         setDrrmContacts(dataWithIndex);
+        setProgress(7);
         props.handleNextClick();
     };
 

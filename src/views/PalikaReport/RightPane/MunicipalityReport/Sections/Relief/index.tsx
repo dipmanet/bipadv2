@@ -35,7 +35,9 @@ import { provincesSelector,
     userSelector, drrmRegionSelector,
     hazardTypesSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
-
+import {
+    setDrrmProgressAction,
+} from '#actionCreators';
 import IncidentIcon from '#resources/palikaicons/incident.svg';
 import moneyBag from '#resources/palikaicons/loss.svg';
 import DeathIcon from '#resources/palikaicons/death.svg';
@@ -60,6 +62,10 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     hazardTypes: hazardTypesSelector(state),
     drrmRegion: drrmRegionSelector(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 const COLORS = ['rgb(0,177,117)', 'rgb(198,233,232)'];
@@ -191,6 +197,7 @@ const Relief = (props: Props) => {
         user,
         hazardTypes,
         drrmRegion,
+        setProgress,
     } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
@@ -852,6 +859,11 @@ const Relief = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData, hazardTypes]);
 
+    const handleNext = () => {
+        setProgress(8);
+        props.handleNextClick();
+    };
+
     return (
         <>
 
@@ -1061,7 +1073,7 @@ const Relief = (props: Props) => {
                             && (
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={props.handleNextClick}
+                                    handleNextClick={handleNext}
                                 />
                             )
                                 }
@@ -1849,7 +1861,7 @@ Rs
 };
 
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<PropsWithRedux>()(
         createRequestClient(requests)(
             Relief,

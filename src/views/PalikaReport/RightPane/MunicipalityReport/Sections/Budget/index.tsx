@@ -18,6 +18,7 @@ import {
     setBudgetDataAction,
     setBudgetIdAction,
     setDrrmRegionAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
@@ -66,6 +67,7 @@ const mapDispatchToProps = dispatch => ({
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
     setdrrmRegion: params => dispatch(setDrrmRegionAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
@@ -142,6 +144,7 @@ const Budget = (props: Props) => {
         setBudgetDatapp,
         user, budgetId, setBudgetId,
         drrmRegion,
+        setProgress,
     } = props;
 
     // setBudgetId({ id: 2 });
@@ -169,15 +172,6 @@ const Budget = (props: Props) => {
     const [drrfundInfo, setDrrFundInfo] = useState(false);
     const [otherFunding, setOtherFunding] = useState(false);
 
-    const getUserDetails = (userItem) => {
-        const arr = userItem;
-        if (arr.isSuperuser) {
-            arr.profile.municipality = drrmRegion.municipality;
-            arr.profile.province = drrmRegion.province;
-            arr.profile.district = drrmRegion.district;
-        }
-        return arr;
-    };
 
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest, BudgetPutRequest } } = props;
@@ -322,6 +316,7 @@ const Budget = (props: Props) => {
             props.handleNextClick();
             updateTab();
         }
+        setProgress(1);
     };
 
 

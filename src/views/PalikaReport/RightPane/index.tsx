@@ -244,25 +244,25 @@ const MainModal: React.FC<Props> = (props: Props) => {
         setTabSelected(props.selectedTab);
     }, [props.selectedTab]);
 
-    useEffect(() => {
-        const getURL = (tabValue: number) => {
-            if (tabs[tabValue] && tabs[tabValue].url) {
-                return tabs[tabValue].url;
-            }
-            return null;
-        };
-        if (getURL(tabSelected) !== null) {
-            props.requests.PalikaReportGetRequest.do({
-                municipality,
-                url: getURL(tabSelected),
-                reportData: handleReportData,
-                handlePending,
-                pending,
+    // useEffect(() => {
+    //     const getURL = (tabValue: number) => {
+    //         if (tabs[tabValue] && tabs[tabValue].url) {
+    //             return tabs[tabValue].url;
+    //         }
+    //         return null;
+    //     };
+    //     if (getURL(tabSelected) !== null) {
+    //         props.requests.PalikaReportGetRequest.do({
+    //             municipality,
+    //             url: getURL(tabSelected),
+    //             reportData: handleReportData,
+    //             handlePending,
+    //             pending,
 
-            });
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tabSelected]);
+    //         });
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [tabSelected]);
 
 
     const handleNextClick = () => {

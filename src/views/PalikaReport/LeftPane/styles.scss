@@ -73,6 +73,7 @@
         margin-bottom: 20px !important;
         padding: 0;
         margin: 0;
+        
         .error{
             font-size: 10px;
             color: red;
@@ -93,6 +94,23 @@
             display: flex;
             align-items: center;
             filter: saturate(100%);
+            justify-content: space-between;
+            padding-right: 20px;
+            .iconandMenu{
+                display: flex;
+            }
+            .progressDone{
+                color: green;
+                font-size: 14px;
+            }
+            .progressNotDone{
+                color: rgb(172, 74, 74);
+                font-size: 9px;
+            }
+            .progressOngoing{
+                color: rgb(247, 176, 45);
+                font-size: 9px;
+            }
             .bulletPoint{
                 width : 50px;
                 height: 25px;
@@ -103,12 +121,15 @@
 
 
         }
+
+        
         .notSelected{
             border: none;
             width: 100%;
             padding: 10px 0;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             width: 100%;
             text-align: left !important;
             background: rgb(235,235,235);
@@ -117,7 +138,24 @@
             color: #444;
             cursor: pointer;
             filter: saturate(100%);
+            padding-right: 20px;
+             
+            .iconandMenu{
+                display: flex;
+            }
+            .progressDone{
+                color: green;
+                font-size: 14px;
+            }
+            .progressOngoing{
+                color: orange;
+                font-size: 9px;
+            }
+            .progressNotDone{
+                color: rgb(214, 73, 73);
 
+                font-size: 9px;
+            }
             .bulletPoint{
                 width : 50px;
                 height: 25px;
@@ -138,6 +176,22 @@
             border: none;
             width: calc(100% - 60px);
             padding: 10px 0;
+            background: rgb(0,91,230);
+            // padding-left: 30px;
+            font-size: 16px;
+            color: white;
+            margin-left: 30px;
+            margin-top: 15px;
+            border-radius: 4px;
+            text-align: center !important;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+        }
+        .createReportDisabled{
+            border: none;
+            width: calc(100% - 60px);
+            padding: 10px 0;
             background: rgb(134, 134, 134);
             // padding-left: 30px;
             font-size: 16px;
@@ -150,6 +204,7 @@
             display: flex;
             justify-content: center;
         }
+
     
     
     }

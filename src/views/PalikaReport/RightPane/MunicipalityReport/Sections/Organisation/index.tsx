@@ -32,6 +32,7 @@ import {
     setPalikaRedirectAction,
     setGeneralDataAction,
     setDrrmOrgAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -41,6 +42,7 @@ const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmOrg: params => dispatch(setDrrmOrgAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 interface Props{
@@ -117,7 +119,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
         municipalities,
-        user, drrmRegion,
+        user, drrmRegion, setProgress,
         updateTab, setDrrmOrg } = props;
 
 
@@ -237,6 +239,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     const handleNext = () => {
         setDrrmOrg(dataWithIndex);
+        setProgress(4);
         props.handleNextClick();
     };
 

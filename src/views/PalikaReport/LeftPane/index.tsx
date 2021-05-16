@@ -28,6 +28,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 import {
     setGeneralDataAction,
@@ -49,6 +50,7 @@ const mapStateToProps = (state, props) => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -168,6 +170,7 @@ const Sidebar = (props) => {
         setGeneralDatapp,
         drrmRegion,
         setDrrmRegion,
+        drrmProgress,
 
     } = props;
     useEffect(() => {
@@ -499,23 +502,39 @@ Create a Report
                                                 className={selectedTab === item.key ? styles.selected : styles.notSelected}
                                                 onClick={() => handleMenuItemClick(item.key)}
                                                 type="button"
+                                                disabled={drrmProgress < item.key}
                                             >
+                                                <span className={styles.iconandMenu}>
 
-                                                <ScalableVectorGraphics
-                                                    className={styles.bulletPoint}
-                                                    src={icons[item.key]}
-                                                    alt="Bullet Point"
-                                                />
-                                                {item.content}
+                                                    <ScalableVectorGraphics
+                                                        className={styles.bulletPoint}
+                                                        src={icons[item.key]}
+                                                        alt="Bullet Point"
+                                                    />
+                                                    {item.content}
+                                                </span>
+                                                <span>
+                                                    {
+                                                        drrmProgress >= item.key
 
-                                                {/* <Icon
-                                                    name="info"
-                                                    // className={styles.infoIcon}
-                                                    title=" DRR fund of the municipality is part of the total
-                                                            municipal budget of this fiscal year which is specifically
-                                                            separated for DRRM related
-                                                             activities"
-                                                /> */}
+                                                            ? (
+                                                                <Icon
+                                                                    name="check"
+                                                                    className={styles.progressDone}
+                                                                />
+                                                            )
+                                                            : (
+                                                                <Icon
+                                                                    name="circle"
+                                                                    className={drrmProgress + 1 === item.key
+                                                                        ? styles.progressOngoing
+                                                                        : styles.progressNotDone}
+                                                                />
+                                                            )
+                                                    }
+
+
+                                                </span>
 
 
                                             </button>
@@ -526,9 +545,14 @@ Create a Report
                                     <li>
                                         <button
                                             key={item.key}
-                                            className={styles.createReport}
+                                            className={
+                                                drrmProgress === item.key
+                                                    ? styles.createReport
+                                                    : styles.createReportDisabled
+                                            }
                                             onClick={() => handleMenuItemClick(item.key)}
                                             type="button"
+                                            disabled={drrmProgress < item.key}
                                         >
 
                                             {item.content}
