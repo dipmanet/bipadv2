@@ -289,41 +289,45 @@ const Budget = (props: Props) => {
         console.log(Number(additionalFund),
             Number(municipalBudget),
             Number(drrFund));
-        if (!annualBudgetData.length) {
-            BudgetPostRequest.do({
-                body: {
-                    title: budgetTitle,
-                    totalBudgetNrs: Number(municipalBudget),
-                    disasterBudgetNrs: Number(drrFund),
-                    otherBudgetNrs: Number(additionalFund),
-                    fiscalYear: generalData.fiscalYear,
-                    province,
-                    district,
-                    municipality,
-                    handlePendingState: handlePending,
-                    setErrors: handleErrors,
-                },
-                budgetId: handleBudgetId,
-                callGetApi: handleCallGetApi,
+        if (municipalBudget && drrFund && additionalFund) {
+            if (!annualBudgetData.length) {
+                BudgetPostRequest.do({
+                    body: {
+                        title: budgetTitle,
+                        totalBudgetNrs: Number(municipalBudget),
+                        disasterBudgetNrs: Number(drrFund),
+                        otherBudgetNrs: Number(additionalFund),
+                        fiscalYear: generalData.fiscalYear,
+                        province,
+                        district,
+                        municipality,
+                        handlePendingState: handlePending,
+                        setErrors: handleErrors,
+                    },
+                    budgetId: handleBudgetId,
+                    callGetApi: handleCallGetApi,
 
-            });
+                });
+            } else {
+                const {
+                    totalBudgetNrs,
+                    disasterBudgetNrs,
+                    otherBudgetNrs,
+                } = annualBudgetData[0];
+                setBudgetDatapp({
+                    municipalBudget: totalBudgetNrs,
+                    drrFund: disasterBudgetNrs,
+                    additionalFund: otherBudgetNrs,
+                });
+                setBudgetId({ id: annualBudgetData[0].id });
+                props.handleNextClick();
+                updateTab();
+            }
         } else {
-            const {
-                totalBudgetNrs,
-                disasterBudgetNrs,
-                otherBudgetNrs,
-            } = annualBudgetData[0];
-            setBudgetDatapp({
-                municipalBudget: totalBudgetNrs,
-                drrFund: disasterBudgetNrs,
-                additionalFund: otherBudgetNrs,
-            });
-            setBudgetId({ id: annualBudgetData[0].id });
             props.handleNextClick();
-            updateTab();
         }
     };
-
+    console.log('This is budget id>>>', budgetId);
 
     useEffect(() => {
         if (annualBudgetData.length > 0) {

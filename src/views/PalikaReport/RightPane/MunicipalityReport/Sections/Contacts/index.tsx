@@ -585,7 +585,7 @@ const Contacts = (props: Props) => {
                 && (
                     <div className={styles.tabsPageContainer}>
                         <h2>
-                                Contacts
+                              Government Contacts
                         </h2>
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">
@@ -671,6 +671,10 @@ const Contacts = (props: Props) => {
                                     )}
                                 </tbody>
                             </table>
+                            {!loader && mergedData.length === 0
+                                 && <h2>Data Unavailable</h2>
+
+                            }
                             {!loader && (
                                 <>
                                     <button

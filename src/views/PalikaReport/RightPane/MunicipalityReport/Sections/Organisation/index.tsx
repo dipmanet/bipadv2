@@ -339,6 +339,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                             </tbody>
                         </table>
+                        {!loader && fetchedData.length === 0 && <h2>Data Unavailable</h2>}
                         {!loader
                         && (
                             <>

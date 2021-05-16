@@ -74,19 +74,26 @@
 .budgetPreviewContainer{
   // margin-left: 30px;
   margin-top: 10px;
-  h2{
-      font-size: 14px;
-      font-weight: 600;
-      margin-left: 2%;
-      color: #222
-  }
+  // h2{
+  //     font-size: 14px;
+  //     font-weight: 600;
+  //     margin-left: 2%;
+  //     color: #222
+  // }
 }
 .tabsPageContainer{
+  .palikaTable{
+    h2{
+      text-align: center;
+      margin-top: 50px;
+    }
+  }
   .loaderInfo{
     position: absolute;
     top: 54%;
     left: 55%;
 }
+
   .bulletPoint{
     height: 20px;
     cursor: pointer;

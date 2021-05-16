@@ -125,6 +125,7 @@ const ProgramPolicies = (props: Props) => {
     const [editPolicy, setEditPolicy] = useState(false);
     const [loader, setLoader] = useState(true);
     const [editBtnClicked, setEditBtnClicked] = useState(false);
+    const [postErrors, setPostErrors] = useState('');
 
     if (drrmRegion.municipality) {
         municipality = drrmRegion.municipality;
@@ -169,17 +170,23 @@ const ProgramPolicies = (props: Props) => {
     };
     const handleSubmit = () => {
         setLoader(true);
-        PolicyPostRequest.do({
-            body: {
-                province,
-                district,
-                municipality,
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                fiscalYear: generalData.fiscalYear,
-                point,
-            },
-            dataSubmitted: handleDataSubmittedResponse,
-        });
+        if (point) {
+            setPostErrors('');
+            PolicyPostRequest.do({
+                body: {
+                    province,
+                    district,
+                    municipality,
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    fiscalYear: generalData.fiscalYear,
+                    point,
+                },
+                dataSubmitted: handleDataSubmittedResponse,
+            });
+        } else {
+            setLoader(false);
+            setPostErrors("Please Enter DRR related points for this fiscal year's annual policy and program of the municipality");
+        }
     };
     const handlePageClick = (e) => {
         const selectedPage = e.selected + 1;
@@ -225,18 +232,24 @@ const ProgramPolicies = (props: Props) => {
     };
     const handleUpdateActivity = () => {
         setLoader(true);
-        PolicyPutRequest.do({
-            body: {
-                province,
-                district,
-                municipality,
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                fiscalYear: generalData.fiscalYear,
-                point,
-            },
-            id: policyId,
-            dataSubmitted: handleDataSubmittedResponse,
-        });
+        if (point) {
+            setPostErrors('');
+            PolicyPutRequest.do({
+                body: {
+                    province,
+                    district,
+                    municipality,
+                    // eslint-disable-next-line @typescript-eslint/camelcase
+                    fiscalYear: generalData.fiscalYear,
+                    point,
+                },
+                id: policyId,
+                dataSubmitted: handleDataSubmittedResponse,
+            });
+        } else {
+            setLoader(false);
+            setPostErrors("Please Enter DRR related points for this fiscal year's annual policy and program of the municipality");
+        }
     };
     useEffect(() => {
         if (finalPolicyData.length > 0) {
@@ -257,7 +270,8 @@ const ProgramPolicies = (props: Props) => {
                             <tr>
                                 <th>SN</th>
                                 <th>Points</th>
-                                <th>Action</th>
+                                {finalPolicyData.length > 0 ? <th>Action</th> : ''}
+
                             </tr>
                             {loader ? (
                                 <>
@@ -332,6 +346,7 @@ const ProgramPolicies = (props: Props) => {
 
                         </tbody>
                     </table>
+
                     {!loader && (
                         <>
 
@@ -361,6 +376,24 @@ const ProgramPolicies = (props: Props) => {
                                             </button>
                                         </div>
                                     )
+                                }
+                                {
+                                    (postErrors)
+                            && (
+                                <ul>
+                                    <li>
+                                        <span className={styles.errorHeading}>
+                                    Please fix the following errors:
+                                        </span>
+                                    </li>
+
+                                    <li>
+                                        {postErrors}
+                                    </li>
+
+
+                                </ul>
+                            )
                                 }
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
