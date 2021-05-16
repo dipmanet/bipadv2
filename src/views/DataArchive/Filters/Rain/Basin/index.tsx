@@ -13,23 +13,25 @@ interface Props {
     stations: RainStation[];
 }
 
-const stationKeySelector = (r: RainStation) => r.id;
-const StationLabelSelector = (r: RainStation) => r.title;
+// const stationKeySelector = (r: RainStation) => r.id;
+// const StationLabelSelector = (r: RainStation) => r.title;
+const BasinKeySelector = (r: sampleBasinData) => r.title;
+const BasinLabelSelector = (r: sampleBasinData) => r.title;
 
 const mapStateToProps = (state: AppState) => ({
     rainStations: dataArchiveRainListSelector(state),
 });
 
-const compare = (a: RainStation, b: RainStation) => {
-    const sortKey = 'title';
-    if (a[sortKey] < b[sortKey]) {
-        return -1;
-    }
-    if (a[sortKey] > b[sortKey]) {
-        return 1;
-    }
-    return 0;
-};
+// const compare = (a: RainStation, b: RainStation) => {
+//     const sortKey = 'title';
+//     if (a[sortKey] < b[sortKey]) {
+//         return -1;
+//     }
+//     if (a[sortKey] > b[sortKey]) {
+//         return 1;
+//     }
+//     return 0;
+// };
 
 const BasinSelector = (props: Props) => {
     console.log('basin station: ', props);
@@ -38,51 +40,57 @@ const BasinSelector = (props: Props) => {
         // value: { id } ,
         rainStations } = props;
 
-    const id = 1;
-    const [selectedStation, setSelectedStation] = useState(id);
+    const [selectedBasin, setSelectedBasin] = useState();
+    // const id = 1;
+    // const [selectedStation, setSelectedStation] = useState(id);
 
 
-    const sortedStations = stationsFromProps.sort(compare);
+    // const sortedStations = stationsFromProps.sort(compare);
 
-    const handleStationChange = (stationId: number) => {
-        setSelectedStation(stationId);
-        console.log('handle ma ke aauch:', stationId);
-        // const station = stationsFromProps.filter(s => s.id === stationId)[0];
-        const station = stationsFromProps[0];
-        console.log('handle ma ke aauch:', station);
+    // const handleStationChange = (stationId: number) => {
+    //     setSelectedStation(stationId);
+    //     console.log('handle ma ke aauch:', stationId);
+    //     // const station = stationsFromProps.filter(s => s.id === stationId)[0];
+    //     const station = stationsFromProps[0];
+    //     console.log('handle ma ke aauch:', station);
 
-        onChangeFromProps(station || {});
+    //     onChangeFromProps(station || {});
 
-        console.log('sorted rain', rainStations);
-        console.log('key selector rain', stationKeySelector);
-        console.log('key label rain', StationLabelSelector);
+    //     console.log('sorted rain', rainStations);
+    //     console.log('key selector rain', stationKeySelector);
+    //     console.log('key label rain', StationLabelSelector);
+    // };
+
+    const handleBasinChange = (basinName: string) => {
+        setSelectedBasin(basinName);
+        const station = stationsFromProps.filter(s => s.basin === basinName)[0];
+        console.log(basinName);
     };
-
     const uniqueBasins = [...new Set(rainStations.map(item => item.basin))];
 
     const sampleBasinData = uniqueBasins.map((item, i) => ({
         id: i + 1,
         title: item,
     }));
-    if (!sortedStations || sortedStations.length < 1) {
-        return (
-            <div className={styles.stationSelector}>
-                <span className={styles.stationInput}>
-                    No station filters
-                </span>
-            </div>
-        );
-    }
+    // if (!sortedStations || sortedStations.length < 1) {
+    //     return (
+    //         <div className={styles.stationSelector}>
+    //             <span className={styles.stationInput}>
+    //                 No station filters
+    //             </span>
+    //         </div>
+    //     );
+    // }
     return (
         <div className={styles.basinSelector}>
             <SelectInput
                 className={styles.basinInput}
                 label="Station Name"
                 options={sampleBasinData}
-                keySelector={stationKeySelector}
-                labelSelector={StationLabelSelector}
-                value={selectedStation}
-                onChange={handleStationChange}
+                keySelector={BasinKeySelector}
+                labelSelector={BasinLabelSelector}
+                value={selectedBasin}
+                onChange={handleBasinChange}
                 placeholder="All Basins"
                 autoFocus
             />
