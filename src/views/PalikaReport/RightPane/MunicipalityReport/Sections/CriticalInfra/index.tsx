@@ -22,7 +22,8 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    drrmRegionSelector } from '#selectors';
+    drrmRegionSelector,
+    drrmProgresSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
@@ -50,6 +51,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaResources: {
@@ -119,7 +121,7 @@ const CriticalInfra = (props: Props) => {
     const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
     const { requests: { PalikaResources }, provinces,
-        districts, setProgress,
+        districts, setProgress, drrmProgress,
         municipalities, drrmRegion,
         user, setDrrmCritical } = props;
 
@@ -284,7 +286,9 @@ const CriticalInfra = (props: Props) => {
 
     const handleNext = () => {
         setDrrmCritical(dataWithIndex);
-        setProgress(6);
+        if (drrmProgress < 6) {
+            setProgress(6);
+        }
         props.handleNextClick();
     };
 

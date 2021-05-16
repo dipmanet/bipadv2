@@ -23,7 +23,10 @@ import {
 import {
     generalDataSelector,
     budgetDataSelector,
-    userSelector, budgetIdSelector, drrmRegionSelector,
+    userSelector,
+    budgetIdSelector,
+    drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import Icon from '#rscg/Icon';
@@ -60,6 +63,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     budgetId: budgetIdSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -145,6 +149,7 @@ const Budget = (props: Props) => {
         user, budgetId, setBudgetId,
         drrmRegion,
         setProgress,
+        drrmProgress,
     } = props;
 
     // setBudgetId({ id: 2 });
@@ -279,7 +284,6 @@ const Budget = (props: Props) => {
     // };
     console.log('This is annual budget data>>>', annualBudgetData);
     const handleNextClick = () => {
-        console.log('annual budget data when clicked: ', annualBudgetData);
         console.log(Number(additionalFund),
             Number(municipalBudget),
             Number(drrFund));
@@ -316,7 +320,9 @@ const Budget = (props: Props) => {
             props.handleNextClick();
             updateTab();
         }
-        setProgress(1);
+        if (drrmProgress < 1) {
+            setProgress(1);
+        }
     };
 
 

@@ -24,6 +24,7 @@ import {
     userSelector,
     generalDataSelector,
     drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
@@ -84,6 +85,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     generalData: generalDataSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -107,6 +109,7 @@ const ProgramPolicies = (props: Props) => {
         requests: { PolicyGetRequest, PolicyPostRequest, PolicyPutRequest },
         drrmRegion,
         setProgress,
+        drrmProgress,
     } = props;
 
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
@@ -225,7 +228,9 @@ const ProgramPolicies = (props: Props) => {
     }, [policyIndex, editBtnClicked]);
 
     const handleNext = () => {
-        setProgress(3);
+        if (drrmProgress < 3) {
+            setProgress(3);
+        }
         props.handleNextClick();
     };
 

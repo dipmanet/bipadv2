@@ -21,7 +21,8 @@ import { provincesSelector,
     userSelector,
     palikaRedirectSelector,
     generalDataSelector,
-    drrmRegionSelector } from '#selectors';
+    drrmRegionSelector,
+    drrmProgresSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
 
@@ -53,6 +54,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 
 });
 
@@ -249,7 +251,7 @@ const Contacts = (props: Props) => {
         NonGovPostRequest,
         NonGovPutRequest,
     },
-    setDrrmContacts, drrmRegion,
+    setDrrmContacts, drrmRegion, drrmProgress,
     user, generalData, setProgress } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
@@ -574,7 +576,9 @@ const Contacts = (props: Props) => {
 
     const handleNext = () => {
         setDrrmContacts(dataWithIndex);
-        setProgress(7);
+        if (drrmProgress < 7) {
+            setProgress(7);
+        }
         props.handleNextClick();
     };
 

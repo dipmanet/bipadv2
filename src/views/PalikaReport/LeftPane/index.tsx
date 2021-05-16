@@ -546,13 +546,13 @@ Create a Report
                                         <button
                                             key={item.key}
                                             className={
-                                                drrmProgress === item.key
-                                                    ? styles.createReport
-                                                    : styles.createReportDisabled
+                                                drrmProgress === 9
+                                                    ? styles.createReportDisabled
+                                                    : styles.createReport
                                             }
                                             onClick={() => handleMenuItemClick(item.key)}
                                             type="button"
-                                            disabled={drrmProgress < item.key}
+                                            disabled={drrmProgress === item.key}
                                         >
 
                                             {item.content}

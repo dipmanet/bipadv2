@@ -22,6 +22,7 @@ import {
     setDrrmProgressAction,
 } from '#actionCreators';
 import {
+    drrmProgresSelector,
     drrmRegionSelector,
     generalDataSelector,
     userSelector,
@@ -34,6 +35,7 @@ const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 
 });
 
@@ -140,6 +142,7 @@ const General = (props: Props) => {
         user,
         drrmRegion,
         setProgress,
+        drrmProgress,
     } = props;
 
     // const {
@@ -173,6 +176,9 @@ const General = (props: Props) => {
             setfiscalYear(generalData.item.fiscalYear);
             setDisabled(true);
             console.log('fs set:', fiscalYear);
+        }
+        if (!generalData.item && generalData.fiscalYear) {
+            setfiscalYear(generalData.fiscalYear);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -246,15 +252,6 @@ const General = (props: Props) => {
             setfocalPerson(focalPersonData[0]);
         }
     };
-    const getUserDetails = (userItem) => {
-        const arr = userItem;
-        if (arr.isSuperuser) {
-            arr.profile.municipality = drrmRegion.municipality;
-            arr.profile.province = drrmRegion.province;
-            arr.profile.district = drrmRegion.district;
-        }
-        return arr;
-    };
 
     MunContacts.setDefaultParams({
         organisation: handleFetchedData,
@@ -272,6 +269,10 @@ const General = (props: Props) => {
     }, [cao, focalPerson, mayor]);
 
     const validationErrs = () => {
+        if (!generalData.item && generalData.fiscalYear) {
+            setfiscalYear(generalData.fiscalYear);
+            return false;
+        }
         const e = [fiscalYear];
         const f = [setFyErr];
         const result = e.map((item) => {
@@ -309,19 +310,14 @@ const General = (props: Props) => {
             });
             updateTab();
             props.handleShowErr(false);
-            setProgress(0);
+            if (drrmProgress < 0) {
+                setProgress(0);
+            }
             props.handleNextClick();
         } else {
             validationErrs();
             props.handleShowErr(true);
         }
-    };
-
-    const getSelectedOption = (itemRow) => {
-        if (itemRow.id === fiscalYear) {
-            return 'selected';
-        }
-        return '';
     };
 
     return (

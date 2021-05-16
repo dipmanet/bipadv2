@@ -177,6 +177,8 @@
             width: calc(100% - 60px);
             padding: 10px 0;
             background: rgb(0,91,230);
+            background: rgb(140, 140, 141);
+
             // padding-left: 30px;
             font-size: 16px;
             color: white;
@@ -187,12 +189,16 @@
             cursor: pointer;
             display: flex;
             justify-content: center;
+            filter: saturate(100%);
         }
         .createReportDisabled{
             border: none;
             width: calc(100% - 60px);
             padding: 10px 0;
-            background: rgb(134, 134, 134);
+            background: rgb(140, 140, 141);
+            background: rgb(31,112,227);
+            filter: saturate(100%);
+
             // padding-left: 30px;
             font-size: 16px;
             color: white;

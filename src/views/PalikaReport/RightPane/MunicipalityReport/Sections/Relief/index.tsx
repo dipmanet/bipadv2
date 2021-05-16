@@ -33,7 +33,8 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector, drrmRegionSelector,
-    hazardTypesSelector } from '#selectors';
+    hazardTypesSelector,
+    drrmProgresSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setDrrmProgressAction,
@@ -62,6 +63,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     hazardTypes: hazardTypesSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -198,6 +200,7 @@ const Relief = (props: Props) => {
         hazardTypes,
         drrmRegion,
         setProgress,
+        drrmProgress,
     } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
@@ -860,7 +863,9 @@ const Relief = (props: Props) => {
     }, [fetchedData, hazardTypes]);
 
     const handleNext = () => {
-        setProgress(8);
+        if (drrmProgress < 8) {
+            setProgress(8);
+        }
         props.handleNextClick();
     };
 

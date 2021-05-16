@@ -25,6 +25,7 @@ import {
     palikaRedirectSelector,
     drrmOrgSelecter,
     drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 
 import NextPrevBtns from '../../NextPrevBtns';
@@ -56,6 +57,7 @@ const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
     drrmOrg: drrmOrgSelecter(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -118,7 +120,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
         districts,
-        municipalities,
+        municipalities, drrmProgress,
         user, drrmRegion, setProgress,
         updateTab, setDrrmOrg } = props;
 
@@ -239,7 +241,9 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     const handleNext = () => {
         setDrrmOrg(dataWithIndex);
-        setProgress(4);
+        if (drrmProgress < 4) {
+            setProgress(4);
+        }
         props.handleNextClick();
     };
 

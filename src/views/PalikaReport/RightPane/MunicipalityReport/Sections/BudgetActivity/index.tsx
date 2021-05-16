@@ -28,6 +28,7 @@ import {
     generalDataSelector,
     budgetDataSelector, budgetIdSelector,
     userSelector, drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -40,6 +41,7 @@ const mapStateToProps = state => ({
     budgetId: budgetIdSelector(state),
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 
 });
 
@@ -171,6 +173,7 @@ const BudgetActivity = (props: Props) => {
         user,
         drrmRegion,
         setProgress,
+        drrmProgress,
     } = props;
 
     const {
@@ -574,7 +577,9 @@ const BudgetActivity = (props: Props) => {
     }, [selectedBudgetActivityIndex, editBtnClicked]);
 
     const handleNext = () => {
-        setProgress(2);
+        if (drrmProgress < 2) {
+            setProgress(2);
+        }
         props.handleNextClick();
     };
 
