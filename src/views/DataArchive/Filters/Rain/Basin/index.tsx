@@ -74,16 +74,16 @@ const BasinSelector = (props: Props) => {
         );
     }
     return (
-        <div className={styles.stationSelector}>
+        <div className={styles.basinSelector}>
             <SelectInput
-                className={styles.stationInput}
+                className={styles.basinInput}
                 label="Station Name"
                 options={sampleBasinData}
                 keySelector={stationKeySelector}
                 labelSelector={StationLabelSelector}
                 value={selectedStation}
                 onChange={handleStationChange}
-                placeholder="All Stations"
+                placeholder="All Basins"
                 autoFocus
             />
         </div>

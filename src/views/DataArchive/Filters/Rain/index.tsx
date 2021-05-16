@@ -25,6 +25,7 @@ interface ComponentProps {
     className?: string;
     extraContent?: React.ReactNode;
     extraContentContainerClassName?: string;
+    hideBasinFilter?: boolean;
     hideLocationFilter?: boolean;
     hideDataRangeFilter?: boolean;
 }
@@ -90,9 +91,9 @@ const FilterIcon = ({
 
 const rainFilterSchema = {
     fields: {
+        basin: [],
         dataDateRange: [],
         station: [],
-        basin: [],
     },
 };
 
@@ -107,9 +108,9 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARainFiltersElement) =
         station: 'station',
         dataRange: 'dataDateRange',
     };
-    console.log('filter map obj', tabKeyToFilterMap);
+    // console.log('filter map obj', tabKeyToFilterMap);
     const filter = filters[tabKeyToFilterMap[key]];
-    console.log('filter', filter);
+    // console.log('filter', filter);
 
     if (Array.isArray(filter)) {
         return filter.length !== 0;
@@ -262,20 +263,25 @@ class RainFilters extends React.PureComponent<Props, State> {
     private getTabs = memoize(
         (
             extraContent: React.ReactNode,
+            hideBasinFilter,
             hideLocationFilter,
             hideDataRangeFilter,
         ): {
             [key in TabKey]?: string;
         } => {
             const tabs = {
+                basin: 'Basin',
                 station: 'Stations',
                 dataRange: 'Data range',
                 others: 'Others',
-                basin: 'Basin',
             };
 
             if (!extraContent) {
                 delete tabs.others;
+            }
+
+            if (hideBasinFilter) {
+                delete tabs.basin;
             }
 
             if (hideLocationFilter) {
@@ -296,12 +302,14 @@ class RainFilters extends React.PureComponent<Props, State> {
             extraContent,
             hideDataRangeFilter,
             hideLocationFilter,
+            hideBasinFilter,
         } = this.props;
 
         const { faramValues: fv } = this.state;
 
         const tabs = this.getTabs(
             extraContent,
+            hideBasinFilter,
             hideLocationFilter,
             hideDataRangeFilter,
         );

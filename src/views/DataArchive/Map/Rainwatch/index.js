@@ -264,7 +264,7 @@ class RainMap extends React.PureComponent {
                         layerOptions={{
                             type: 'raster',
                             paint: {
-                                'raster-opacity': 0.5,
+                                'raster-opacity': 0.9,
                             },
                         }}
                     />
