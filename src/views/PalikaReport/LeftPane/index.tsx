@@ -388,23 +388,26 @@ const Sidebar = (props) => {
                                                     onClick={() => handleSelectSubmenu(data.id,
                                                         data.url, data.title, data.slug, item.slug)}
                                                 >
-                                                    <ScalableVectorGraphics
-                                                        className={styles.bulletPoint}
-                                                        src={allRepIcons[data.id - 1]}
-                                                        alt="Bullet Point"
-                                                    />
-                                                    {
-                                                        data.id === 2 && palikaLanguage.language === 'en'
-                                                            ? title_en
-                                                            : ''
-                                                    }
-                                                    {
-                                                        data.id === 2 && palikaLanguage.language === 'np'
-                                                            ? title_np
-                                                            : ''
-                                                    }
-                                                    {' '}
-                                                    {data.title}
+                                                    <span className={styles.iconandMenu}>
+
+                                                        <ScalableVectorGraphics
+                                                            className={styles.bulletPoint}
+                                                            src={allRepIcons[data.id - 1]}
+                                                            alt="Bullet Point"
+                                                        />
+                                                        {
+                                                            data.id === 2 && palikaLanguage.language === 'en'
+                                                                ? title_en
+                                                                : ''
+                                                        }
+                                                        {
+                                                            data.id === 2 && palikaLanguage.language === 'np'
+                                                                ? title_np
+                                                                : ''
+                                                        }
+                                                        {' '}
+                                                        {data.title}
+                                                    </span>
                                                 </button>
                                             ))
                                             : ''

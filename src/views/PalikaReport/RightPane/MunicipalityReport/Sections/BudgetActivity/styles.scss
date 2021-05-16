@@ -375,32 +375,7 @@ a{
     }
 
   
-    table{
-        margin-top: 0px;
-        border-collapse: collapse;
-        width: 100%;
-        }
-        th{
-        padding: 0.5rem;
-        text-align: left;
-       
-        }
-        td{
-        border-top: 1px solid #EBEBEB;
-        border-bottom: 1px solid #EBEBEB;
-        padding: 0.5rem;
-        text-align: left;
-        }
-        tr:nth-child(even) {
-            background-color:#EDEDED;
-       
-        
-        }
-        tr:nth-child(odd) {
-            background-color:#FFFFFF;
-           
-            
-            }
+    
 .pagination {
     margin: 15px auto;
     display: flex;
@@ -445,7 +420,6 @@ a{
         }
         .row{
             display: flex;
-            width: 61%;
             justify-content: flex-start;
             flex-direction: column;
             .ndrrsaContainer{
@@ -532,7 +506,6 @@ a{
         .personalDetailsrow{
             display: flex;
             flex-direction: column;
-            width: 61%;
             margin-bottom: 12px;
             margin-top: 10px;
             .personalDetails{

@@ -10,8 +10,9 @@ import { BarChart,
     Legend, PieChart,
     Pie, Line,
     ComposedChart } from 'recharts';
-import { _cs } from '@togglecorp/fujs';
+import { encodeDate, _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
+import NepaliDate from 'nepali-date-converter';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -34,7 +35,8 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector, drrmRegionSelector,
     hazardTypesSelector,
-    drrmProgresSelector } from '#selectors';
+    drrmProgresSelector,
+    generalDataSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setDrrmProgressAction,
@@ -53,6 +55,7 @@ import family from '#resources/palikaicons/family.svg';
 import male from '#resources/palikaicons/male.svg';
 import female from '#resources/palikaicons/female.svg';
 
+
 interface Props{
 
 }
@@ -64,6 +67,7 @@ const mapStateToProps = (state, props) => ({
     hazardTypes: hazardTypesSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    generalData: generalDataSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -89,6 +93,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     limit: params.Ward,
                     resource_type: params.inventories,
                     expand: params.fields,
+                    incident_on__gt: params.date[0],
+                    incident_on__lt: params.date[1],
                 };
             }
             return { limit: params.Ward,
@@ -201,7 +207,18 @@ const Relief = (props: Props) => {
         drrmRegion,
         setProgress,
         drrmProgress,
+        generalData,
     } = props;
+
+    const getdateTimeFromFs = (date) => {
+        const stDate = new NepaliDate(date, 4, 1).toJsDate().toLocaleDateString().split('/');
+        const endDate = new NepaliDate(Number(date) + 1, 3, 31).toJsDate().toLocaleDateString().split('/');
+        return [
+            `${stDate[2]}-${stDate[0]}-${stDate[1]}T00:00:01+05:45`,
+            `${endDate[2]}-${endDate[0]}-${endDate[1]}T23:59:59+05:45`,
+        ];
+    };
+
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
     const [meta, setMeta] = useState(true);
@@ -394,8 +411,11 @@ const Relief = (props: Props) => {
             url,
             inventories: defaultQueryParameter,
             fields,
-            user,
+            province,
+            district,
+            municipality,
             meta,
+            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
 
         });
         ReliefDataGet.do({
@@ -434,6 +454,8 @@ const Relief = (props: Props) => {
 
         setShowRelief(true);
     };
+
+
     useEffect(() => {
         if (fetchedData.length > 0) {
             setIncidentsCount(fetchedData.length);
@@ -552,13 +574,11 @@ const Relief = (props: Props) => {
 
 
             setWardWiseImpact([]);
-            console.log('wwd', wardWiseImpactData);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchedData]);
 
 
-    console.log('This is relief date>>>', hazardTypes);
     useEffect(() => {
         if (reliefData) {
             const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -617,6 +637,8 @@ const Relief = (props: Props) => {
         district,
         province,
         meta,
+        date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+
 
     });
     const handleBackButton = () => {
@@ -643,6 +665,8 @@ const Relief = (props: Props) => {
             district,
             province,
             meta,
+            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+
 
         });
         ReliefDataGet.do({
@@ -672,6 +696,8 @@ const Relief = (props: Props) => {
             district,
             province,
             meta,
+            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+
 
         });
         ReliefDataGet.do({
@@ -785,6 +811,8 @@ const Relief = (props: Props) => {
         district,
         province,
         meta,
+        date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+
 
     });
 
@@ -812,6 +840,8 @@ const Relief = (props: Props) => {
             district,
             province,
             meta,
+            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+
 
         });
         ReliefDataGet.do({

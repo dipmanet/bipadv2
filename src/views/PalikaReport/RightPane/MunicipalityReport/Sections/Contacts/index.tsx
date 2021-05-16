@@ -598,6 +598,15 @@ const Contacts = (props: Props) => {
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
+                                        <th>
+                                            <input
+                                                type="checkbox"
+                                                onChange={handleCheckAll}
+                                                checked={checkedAll}
+                                                    // defaultChecked
+                                                className={styles.checkBox}
+                                            />
+                                        </th>
                                         <th>S.N</th>
                                         <th>Name</th>
                                         <th>Type of Organisation</th>
@@ -702,6 +711,15 @@ const Contacts = (props: Props) => {
                                     <tbody>
                                         <tr>
                                             <th>
+                                                <input
+                                                    type="checkbox"
+                                                    onChange={handleCheckAll}
+                                                    checked={checkedAll}
+                                                    // defaultChecked
+                                                    className={styles.checkBox}
+                                                />
+                                            </th>
+                                            <th>
                                     SN
                                             </th>
                                             <th>
@@ -744,6 +762,17 @@ const Contacts = (props: Props) => {
                                             nonGovContactId === data.item.id
                                                 ? (
                                                     <tr>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={checkedRows.indexOf(i) !== -1}
+
+                                                            // defaultChecked
+                                                                onChange={e => handleCheck(i, e)}
+                                                                className={styles.checkBox}
+                                                                key={data.id}
+                                                            />
+                                                        </td>
                                                         <td>{nonGovContacts.length + 1}</td>
                                                         <td>
                                                             <input

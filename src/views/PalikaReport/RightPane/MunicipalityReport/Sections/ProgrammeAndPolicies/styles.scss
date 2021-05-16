@@ -26,34 +26,34 @@
         margin-top: 10px;
     }
 }
-table{
-    margin-top: 0px;
-    border-collapse: collapse;
-    width: 100%;
-    // table-layout: fixed;
-    // word-break: break-all;
-    // word-break: keep-all;
-    }
-    th{
-    padding: 0.5rem;
-    text-align: left;
+// table{
+//     margin-top: 0px;
+//     border-collapse: collapse;
+//     width: 100%;
+//     // table-layout: fixed;
+//     // word-break: break-all;
+//     // word-break: keep-all;
+//     }
+//     th{
+//     padding: 0.5rem;
+//     text-align: left;
    
-    }
-    td{
-    border-top: 1px solid #EBEBEB;
-    border-bottom: 1px solid #EBEBEB;
-    padding: 0.5rem;
-    text-align: left;
-    }
-    tr:nth-child(even) {
-        background-color:#EDEDED;
+//     }
+//     td{
+//     border-top: 1px solid #EBEBEB;
+//     border-bottom: 1px solid #EBEBEB;
+//     padding: 0.5rem;
+//     text-align: left;
+//     }
+//     tr:nth-child(even) {
+//         background-color:#EDEDED;
    
     
-    }
-    tr:nth-child(odd) {
-        background-color:#FFFFFF;
+//     }
+//     tr:nth-child(odd) {
+//         background-color:#FFFFFF;
         
-        }
+//         }
 
 
 .savebtn{
@@ -256,7 +256,6 @@ h2{
                 align-items: center;
                 margin-top: 10px;
                 padding-left: 10px;
-                width: 61%;
                 .view{
                     width: 100%;
                     // border: 1px solid red;
@@ -342,7 +341,6 @@ h2{
         .personalDetailsrow{
             display: flex;
             flex-direction: column;
-            width: 61%;
             margin-bottom: 12px;
             margin-top: 10px;
             .personalDetails{

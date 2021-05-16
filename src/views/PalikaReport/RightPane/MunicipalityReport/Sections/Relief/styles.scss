@@ -533,7 +533,6 @@
         align-items: center;
         margin-top: 10px;
         padding-left: 10px;
-        width: 61%;
         .view{
             width: 100%;
             // border: 1px solid red;
@@ -616,36 +615,7 @@
     margin-top: 10px;
   }
   
-  table{
-    width: 100%;
-    margin-top: 0px;
-  
-    // table-layout: fixed;
-}
-th{
-    padding: 0.5rem;
-    text-align: left;
-    color: #777;
-    font-weight: 400;
-    // word-break: break-all;
-
-}
-td{
-    padding: 0.5rem;
-    text-align: left;
-    // word-break: break-all;
-  
-
-}
-tr:nth-child(even) {
-  background-color:#EDEDED;
-
-
-}
-tr:nth-child(odd) {
-  background-color:#FFFFFF;
-  
-  }
+ 
  
     .dataUnavailable{
         display: flex;

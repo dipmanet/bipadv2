@@ -83,33 +83,7 @@
       .buttonDiv{
         display: flex;
       }
-    table{
-        margin-top: 0px;
-        border-collapse: collapse;
-        width: 100%;
-        }
-        th{
-        padding: 0.5rem;
-        text-align: left;
-       
-        }
-        td{
-        border-top: 1px solid #EBEBEB;
-        border-bottom: 1px solid #EBEBEB;
-        padding: 0.5rem;
-        text-align: left;
-        }
-        tr:nth-child(even) {
-            background-color:#EDEDED;
-       
-        
-        }
-        tr:nth-child(odd) {
-            background-color:#FFFFFF;
-            
-           
-            
-            }
+  
     margin-top: 10px;
     .savebtn{
         position: relative;
