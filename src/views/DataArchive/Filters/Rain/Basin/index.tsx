@@ -63,8 +63,9 @@ const BasinSelector = (props: Props) => {
 
     const handleBasinChange = (basinName: string) => {
         setSelectedBasin(basinName);
-        const station = stationsFromProps.filter(s => s.basin === basinName)[0];
-        console.log(basinName);
+        const stations = rainStations.filter(s => s.basin === basinName);
+        onChangeFromProps(stations || {});
+        console.log('stations filtered:', stations);
     };
     const uniqueBasins = [...new Set(rainStations.map(item => item.basin))];
 

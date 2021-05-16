@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { compose, Dispatch } from 'redux';
 import * as PageType from '#store/atom/page/types';
@@ -135,6 +135,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const Rain = (props: Props) => {
     const [sortKey, setSortKey] = useState('key');
+    const [basins, setBasins] = useState([]);
     const { rainList, requests, rainFilters } = props;
     const pending = isAnyRequestPending(requests);
     const { setDataArchive } = useContext(TitleContext);
@@ -143,14 +144,45 @@ const Rain = (props: Props) => {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
 
+
     useEffect(() => {
         if (setData) {
             setData(rainList);
         }
     }, [rainList, setData]);
+
+    useEffect(() => {
+        if (rainFilters.basin) {
+            setData(rainFilters.basin);
+        }
+    }, [rainFilters, setData]);
+    useEffect(() => {
+        console.log('basinsdata:', basins);
+    }, [basins]);
+
     const { station: { title: location } } = rainFilters;
     const [startDate, endDate] = getDatesFromFilters(rainFilters);
+    const compare = useCallback((a: any, b: any) => {
+        if (a[sortKey] < b[sortKey]) {
+            return -1;
+        }
+        if (a[sortKey] > b[sortKey]) {
+            return 1;
+        }
+        return 0;
+    });
+    useEffect(() => {
+        // eslint-disable-next-line max-len
+        if (Object.keys(rainFilters.basin).length > 0 && basins.length === 0) {
+            console.log('data has come');
+            const groupedBasinList = groupList(
+                rainFilters.basin.filter(e => e.title),
+                rain => rain.title || 'N/A',
+            ).sort(compare);
 
+            setBasins(groupedBasinList);
+        }
+    }, [basins.length, compare, rainFilters.basin]);
     if (setDataArchive) {
         setDataArchive((prevState: DataArchive) => {
             if (prevState.mainModule !== 'Rain'
@@ -176,20 +208,15 @@ const Rain = (props: Props) => {
         );
     }
 
-    const compare = (a: any, b: any) => {
-        if (a[sortKey] < b[sortKey]) {
-            return -1;
-        }
-        if (a[sortKey] > b[sortKey]) {
-            return 1;
-        }
-        return 0;
-    };
 
     const groupedRainList = groupList(
         rainList.filter(e => e.title),
         rain => rain.title || 'N/A',
     ).sort(compare);
+
+
+    // console.log('gbl:', groupedBasinList);
+
     return (
         <div className={styles.rain}>
             <Loading pending={pending} />
@@ -206,7 +233,25 @@ const Rain = (props: Props) => {
                     {!pending && <Note />}
                 </div>
             </div>
-            { groupedRainList.map((group) => {
+
+            {
+
+                basins.length > 0
+                && basins.map((group) => {
+                    const { key, value } = group;
+                    if (value.length > 1) {
+                        return (
+                            <RainGroup
+                                title={key}
+                                data={value}
+                                key={key}
+                            />
+                        );
+                    }
+                    return <RainItem key={key} data={value[0]} />;
+                })
+            }
+            {/* { groupedRainList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {
                     return (
@@ -218,7 +263,7 @@ const Rain = (props: Props) => {
                     );
                 }
                 return <RainItem key={key} data={value[0]} />;
-            })}
+            })} */}
         </div>
     );
 };
