@@ -823,13 +823,6 @@ const Relief = (props: Props) => {
             fiscalYear: generalData.fiscalYear,
         });
     };
-    console.log('loss data:', incidentCount,
-        totalEstimatedLoss,
-        deathCount,
-        missing,
-        injured,
-        infraDestroyed,
-        livestockDestroyed);
 
     useEffect(() => {
         if (Array.isArray(incidentCount) && incidentCount.length > 0) {
@@ -853,13 +846,24 @@ const Relief = (props: Props) => {
         if (Array.isArray(livestockDestroyed) && livestockDestroyed.length > 0) {
             setLivestockDestroyed(livestockDestroyed.reduce((a, b) => a + b));
         }
+        if (Array.isArray(livestockDestroyed) && livestockDestroyed.length > 0) {
+            setLivestockDestroyed(livestockDestroyed.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(houseAffected) && houseAffected.length > 0) {
+            setHouseAffected(houseAffected.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(houseDamaged) && houseDamaged.length > 0) {
+            setHouseDamaged(houseDamaged.reduce((a, b) => a + b));
+        }
     }, [incidentCount,
         totalEstimatedLoss,
         deathCount,
         missing,
         injured,
         infraDestroyed,
-        livestockDestroyed]);
+        livestockDestroyed,
+        houseAffected,
+        houseDamaged]);
     const handleSaveRelief = () => {
         setLoader(true);
         if (reliefAmount) {

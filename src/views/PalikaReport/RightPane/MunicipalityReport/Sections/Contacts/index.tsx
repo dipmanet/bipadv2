@@ -1162,12 +1162,13 @@ const Contacts = (props: Props) => {
                                 <div className={styles.simElements}>
                                     <div className={styles.circlePatch}>
                                         {mergedData.length > 0
-                                        && mergedData.map((item) => {
-                                            if (item.trainingTitle) {
-                                                return item;
-                                            }
-                                            return null;
-                                        }).filter(contact => contact !== null).length
+                                            ? mergedData.map((item) => {
+                                                if (item.trainingTitle) {
+                                                    return item;
+                                                }
+                                                return null;
+                                            }).filter(contact => contact !== null).length
+                                            : '0'
                                         }
                                     </div>
                                     <p className={styles.simDesc}>
