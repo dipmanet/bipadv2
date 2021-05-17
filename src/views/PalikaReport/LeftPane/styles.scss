@@ -218,13 +218,15 @@
     .addButnDiv{
 display: flex;
 justify-content: center;
+flex-direction: column;
 
     }
 .butnDiv{
     display: flex;
     justify-content: center;
-    padding-left: 30px;
-    border: 1px solid red;
+    // flex-direction: column;
+    // padding-left: 30px;
+    // border: 1px solid red;
 }
     .addButn{
         margin-left: auto;
