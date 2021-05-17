@@ -74,7 +74,7 @@ const languageTranslations: LanguageEntry = {
         np: 'रिसेट',
         en: 'Reset',
     },
-    // municipality report listing section
+    // General section
 
 
 };

@@ -256,6 +256,7 @@ const state: PageState = {
     drrmRegion: {
         data: {},
     },
+    drrmProgress: -1,
 
 };
 export default state;

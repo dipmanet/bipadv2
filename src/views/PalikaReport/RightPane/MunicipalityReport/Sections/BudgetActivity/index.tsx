@@ -24,12 +24,14 @@ import NextPrevBtns from '../../NextPrevBtns';
 
 import {
     setBudgetActivityDataAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import {
     budgetActivityDataSelector,
     generalDataSelector,
     budgetDataSelector, budgetIdSelector,
     userSelector, drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -42,11 +44,13 @@ const mapStateToProps = state => ({
     budgetId: budgetIdSelector(state),
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 
 });
 
 const mapDispatchToProps = dispatch => ({
     setBudgetActivityDatapp: params => dispatch(setBudgetActivityDataAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     BudgetActivityGetRequest: { url: '/annual-budget-activity/',
@@ -171,6 +175,8 @@ const BudgetActivity = (props: Props) => {
             BudgetActivityPutRequest },
         user,
         drrmRegion,
+        setProgress,
+        drrmProgress,
     } = props;
 
     const {
@@ -411,12 +417,7 @@ const BudgetActivity = (props: Props) => {
     const handleOtherSubType = (data) => {
         setSubtype(data.target.value);
     };
-    const handleNext = () => {
-        updateTab();
-    };
-    const handleAreaOfImplementation = (data) => {
-        setareaofImplementation(data.target.value);
-    };
+
     const handleAddNew = () => {
         setPending(true);
         setLoader(true);
@@ -609,6 +610,13 @@ const BudgetActivity = (props: Props) => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedBudgetActivityIndex, editBtnClicked]);
+
+    const handleNext = () => {
+        if (drrmProgress < 2) {
+            setProgress(2);
+        }
+        props.handleNextClick();
+    };
 
     return (
         <>
@@ -1343,7 +1351,7 @@ const BudgetActivity = (props: Props) => {
                                    </button>
                                    <NextPrevBtns
                                        handlePrevClick={props.handlePrevClick}
-                                       handleNextClick={props.handleNextClick}
+                                       handleNextClick={handleNext}
                                    />
 
 

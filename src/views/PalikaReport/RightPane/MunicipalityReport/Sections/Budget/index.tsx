@@ -18,11 +18,15 @@ import {
     setBudgetDataAction,
     setBudgetIdAction,
     setDrrmRegionAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
     budgetDataSelector,
-    userSelector, budgetIdSelector, drrmRegionSelector,
+    userSelector,
+    budgetIdSelector,
+    drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import Icon from '#rscg/Icon';
@@ -59,6 +63,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     budgetId: budgetIdSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -66,6 +71,7 @@ const mapDispatchToProps = dispatch => ({
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
     setdrrmRegion: params => dispatch(setDrrmRegionAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
@@ -142,25 +148,15 @@ const Budget = (props: Props) => {
         setBudgetDatapp,
         user, budgetId, setBudgetId,
         drrmRegion,
+        setProgress,
+        drrmProgress,
     } = props;
 
-    // setBudgetId({ id: 2 });
-    const {
-        municipalBudget: mb,
-        drrFund: df,
-        additionalFund: af,
-    } = budgetData;
     const [municipalBudget, setmunicipalBudget] = useState('');
     const [drrFund, setdrrFund] = useState('');
     const [additionalFund, setadditionalFund] = useState('');
-    // const [province, setProvince] = useState(0);
-    // const [district, setDistrict] = useState(0);
-    // const [municipality, setMunicipality] = useState(0);
     const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
-    const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
-    const [fyTitle, setFYTitle] = useState('');
-    const [showInfo, setShowInfo] = useState(false);
     const [loader, setLoader] = useState(true);
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
@@ -169,15 +165,6 @@ const Budget = (props: Props) => {
     const [drrfundInfo, setDrrFundInfo] = useState(false);
     const [otherFunding, setOtherFunding] = useState(false);
 
-    const getUserDetails = (userItem) => {
-        const arr = userItem;
-        if (arr.isSuperuser) {
-            arr.profile.municipality = drrmRegion.municipality;
-            arr.profile.province = drrmRegion.province;
-            arr.profile.district = drrmRegion.district;
-        }
-        return arr;
-    };
 
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { user: { profile }, requests: { BudgetPostRequest, BudgetGetRequest, BudgetPutRequest } } = props;
@@ -191,7 +178,6 @@ const Budget = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
-    console.log('drrmRegion', drrmRegion);
 
     const handlePending = (data: boolean) => {
         setPending(data);
@@ -204,7 +190,7 @@ const Budget = (props: Props) => {
         setAnnualBudgetData(response);
         setLoader(false);
     };
-    // useEffect(() => {
+
     BudgetGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
         district,
@@ -213,7 +199,6 @@ const Budget = (props: Props) => {
         finalAnnualBudgetData: handleSaveAnnualBudgetData,
         handlePendingState: handlePending,
     });
-    // }, [municipality]);
 
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
@@ -240,16 +225,6 @@ const Budget = (props: Props) => {
         }
     };
 
-    const handleDataSave = () => {
-        setBudgetDatapp({
-            municipalBudget,
-            drrFund,
-            additionalFund,
-        });
-        updateTab();
-    };
-
-
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
         setEditBudget(false);
@@ -268,6 +243,7 @@ const Budget = (props: Props) => {
         });
         props.handleNextClick();
     };
+
     const handleCallUpdateApi = (response) => {
         BudgetGetRequest.do({
             fiscalYear: generalData.fiscalYear,
@@ -280,10 +256,7 @@ const Budget = (props: Props) => {
 
         });
     };
-    // const handleinfoClick = () => {
-    //     setShowInfo(!showInfo);
-    // };
-    console.log('This is annual budget data>>>', annualBudgetData);
+
     const handleNextClick = () => {
         console.log('annual budget data when clicked: ', annualBudgetData);
         console.log(Number(additionalFund),
@@ -325,6 +298,9 @@ const Budget = (props: Props) => {
             }
         } else {
             props.handleNextClick();
+        }
+        if (drrmProgress < 1) {
+            setProgress(1);
         }
     };
     console.log('This is budget id>>>', budgetId);

@@ -562,6 +562,7 @@ export const drrmInventorySelecter = ({ page }: AppState) => page.drrmInventory;
 export const drrmCriticalSelecter = ({ page }: AppState) => page.drrmCritical;
 export const drrmContactsSelecter = ({ page }: AppState) => page.drrmContacts;
 export const drrmRegionSelector = ({ page }: AppState) => page.drrmRegion;
+export const drrmProgresSelector = ({ page }: AppState) => page.drrmProgress;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

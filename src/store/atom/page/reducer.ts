@@ -14,6 +14,11 @@ export const setRegionAction = (
     region,
 });
 
+export const setDrrmProgressAction = drrmProgress => ({
+    type: Type.PageType.SET_DRRM_PROGRESS,
+    drrmProgress,
+});
+
 export const setDrrmOrgAction = drrmOrg => ({
     type: Type.PageType.SET_DRRM_ORG,
     drrmOrg,
@@ -1436,11 +1441,22 @@ const setDrrmRegion = (state: Type.PageState, action: Type.SetDrrmRegion) => {
     return newState;
 };
 
+const setDrrmProgress = (state: Type.PageState, action: Type.SetDrrmProgress) => {
+    const { drrmProgress } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmProgress = drrmProgress;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_DRRM_PROGRESS:
+            return setDrrmProgress(state, action);
         case Type.PageType.SET_DRRM_REGION:
             return setDrrmRegion(state, action);
         case Type.PageType.SET_DRRM_CONTACTS:

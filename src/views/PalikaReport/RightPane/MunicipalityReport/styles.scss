@@ -1,8 +1,34 @@
 
+  table{
+    border-collapse: collapse;
+    border: 1px solid #f5f5f5;
+    width: 100%;
+}
+th{
+    padding: 0.5rem;
+    text-align: left;
+    color: #333 !important;
+    font-weight: 600 !important;
+}
+td{
+    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    padding: 0.5rem;
+    text-align: left;
+}
+tr:nth-child(even) {
+    background-color:#EDEDED;
+}
+tr:nth-child(odd) {
+    background-color:#FFFFFF;
+    }
   .tabsPageContainer{
+    //   margin-left: 25%;
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    // border: 1px solid gray;
     .page{
         width: 210mm;
         background-color: white;
@@ -27,8 +53,7 @@
     }
     .buttonContainer{
         display:flex;
-        // border: 1px solid red;
-        justify-content: center;
+        justify-content: flex-start;
         width: 100%;
         // margin: 0 auto;
         .agreeBtn{
@@ -59,7 +84,7 @@
     .loaderDiv{
         width: 100%;
         height: 100%;
-        background: gray;
+        background: rgb(255, 255, 255);
         opacity: 0.9;
         position: fixed;
         top: 0;
@@ -77,10 +102,6 @@
             position: fixed;
     
         }
-    }
-    .pageAnnex{
-        // width: 297mm;
-        // border: 1px solid blue;
     }
 
 }

@@ -549,7 +549,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                 keyTab === (tabsLength - 1)
                     ? (
                         <div className={styles.tabsPageContainer}>
-
                             {
                                 pending
                                     && (
@@ -557,7 +556,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         <div className={styles.loaderDiv}>
                                             <div className={styles.loaderContainer}>
                                                 <CircularProgressbar value={progress} />
-;
                                             </div>
                                         </div>
                                     )
@@ -569,7 +567,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Download Full Report
+                                Submit and Download Full Report
 
                                 </button>
                                 <button
@@ -578,7 +576,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Download Summary Report
+                                Submit and Download Summary Report
 
                                 </button>
                             </div>
@@ -590,6 +588,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     url={keyTabUrl}
                                 />
                             </div>
+
                             <div id={'page2'} className={_cs(styles.page, 'page')}>
 
                                 <PreviewPageTwo
@@ -597,6 +596,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                 />
 
                             </div>
+
                             <div id={'page3'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex A</h1>
                                 <h2>Local Disaster Management Committee</h2>
@@ -612,6 +612,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                 />
 
                             </div>
+
                             <div id={'page5'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex B</h1>
 
@@ -685,13 +686,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                                     </tbody>
                                 </table>
-
-                                {/* <Organisation
-                                    annex
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
-                                /> */}
                             </div>
+
                             <div id={'page9'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex F</h1>
                                 <h2>Inventories</h2>
@@ -733,12 +729,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                             ))}
                                     </tbody>
                                 </table>
-
-                                {/* <Inventory
-                                    annex
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
-                                /> */}
                             </div>
 
                             <div id={'page10'} className={_cs(styles.annexPage, 'page')}>
@@ -773,14 +763,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                                     </tbody>
                                 </table>
-
-                                {/* <CriticalInfra
-                                    annex
-                                    handlePrevClick={() => {}}
-                                    handleNextClick={() => {}}
-                                /> */}
                             </div>
-
 
                             <div id={'page11'} className={_cs(styles.annexPage, 'page')}>
                                 <h1>Annex H</h1>
@@ -798,7 +781,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
                             <div id={'page12'} className={_cs(styles.annexPage, 'page')}>
                                 <h1> Annex I </h1>
-                                <h2>Contacts</h2>
+                                <h2>Governmental Contacts</h2>
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
@@ -813,12 +796,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                             <th>Email</th>
                                             <th>Action</th>
                                         </tr>
-                                        {drrmContacts
-                                            ? drrmContacts
+                                        {drrmContacts.gContacts.length > 0
+                                            ? drrmContacts.gContacts
                                                 .filter(contact => contact.selectedRow === true)
                                                 .map((item, i) => (
                                                     <tr key={item.id}>
-
                                                         <td>{i + 1}</td>
                                                         <td>{item.name || 'No data'}</td>
                                                         <td>{item.orgType || 'No data'}</td>
@@ -846,6 +828,88 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         }
                                     </tbody>
                                 </table>
+                                <h2>NonGovernmental Contacts</h2>
+                                <table id="table-to-xls">
+                                    <tbody>
+                                        <tr>
+                                            <th>
+                                    SN
+                                            </th>
+                                            <th>
+                                    Name
+                                            </th>
+                                            <th>
+                                    Type of Organization
+                                            </th>
+                                            <th>
+                                    Name of Organization
+                                            </th>
+                                            <th>
+                                    Position
+                                            </th>
+                                            <th>
+                                    Trained Title
+                                            </th>
+                                            <th>
+                                    Focused Hazard
+                                            </th>
+                                            <th>
+                                Activities included in the training
+                                            </th>
+                                            <th>
+                               Training Date(from)
+                                            </th>
+                                            <th>
+                                Training Date(to)
+                                            </th>
+                                            <th>
+                                Contact number
+                                            </th>
+                                            <th>
+                                Email
+                                            </th>
+                                            <th>Action</th>
+
+                                        </tr>
+
+                                        {drrmContacts.ngContacts.length > 0
+                                            ? drrmContacts.ngContacts
+                                                .map((cts, i) => (
+                                                    <tr key={cts.item.id}>
+                                                        <td>{i + 1}</td>
+                                                        <td>{cts.item.name}</td>
+                                                        <td>{cts.item.typeOfOrganization}</td>
+                                                        <td>{cts.item.nameOfOrganization}</td>
+                                                        <td>{cts.item.position}</td>
+                                                        <td>{cts.item.trainedTitle}</td>
+                                                        <td>{cts.hazardName}</td>
+                                                        <td>{cts.item.trainingActivities}</td>
+                                                        <td>{cts.item.trainingDateFrom}</td>
+                                                        <td>{cts.item.trainingDateTo}</td>
+                                                        <td>{cts.item.contactNumber}</td>
+                                                        <td>{cts.item.email}</td>
+                                                    </tr>
+                                                ))
+                                            : (
+                                                <tr>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                    <td>{'-'}</td>
+                                                </tr>
+                                            )
+
+                                        }
+                                    </tbody>
+                                </table>
 
                             </div>
 
@@ -857,11 +921,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     annex
                                 />
                             </div>
-
-
-                            {/* </div> */}
-
-
                         </div>
                     ) : ''
             }

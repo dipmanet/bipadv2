@@ -31,6 +31,7 @@ import Loading from '#components/Loading';
 import {
     setPalikaRedirectAction,
     setDrrmInventoryAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -53,6 +54,7 @@ const mapStateToProps = (state, props) => ({
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmInventory: params => dispatch(setDrrmInventoryAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 
 });
 
@@ -128,7 +130,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     const { requests: { PalikaReportInventoriesReport }, provinces,
         districts,
-        municipalities, drrmRegion,
+        municipalities, drrmRegion, setProgress,
         user, rows, setDrrmInventory } = props;
 
     const handleFetchedData = (response) => {
@@ -268,6 +270,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     const handleNext = () => {
         setDrrmInventory(dataWithIndex);
+        setProgress(5);
         props.handleNextClick();
     };
 

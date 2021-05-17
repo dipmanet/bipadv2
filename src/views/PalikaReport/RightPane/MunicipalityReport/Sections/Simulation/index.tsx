@@ -20,6 +20,7 @@ import {
     setGeneralDataAction,
     setBudgetDataAction,
     setBudgetIdAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import {
     generalDataSelector,
@@ -27,6 +28,7 @@ import {
     userSelector, budgetIdSelector,
     hazardTypeListSelector,
     drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
@@ -65,12 +67,14 @@ const mapStateToProps = state => ({
     budgetId: budgetIdSelector(state),
     hazardType: hazardTypeListSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     SimulationGetRequest: { url: '/simulation/',
@@ -144,6 +148,9 @@ const Simulation = (props: Props) => {
         setBudgetDatapp,
         user, budgetId, setBudgetId,
         hazardType, drrmRegion,
+        setProgress,
+        drrmProgress,
+
     } = props;
 
     // setBudgetId({ id: 2 });
@@ -261,26 +268,10 @@ const Simulation = (props: Props) => {
 
 
     const handleNextClick = () => {
-        // if (!annualBudgetData.length) {
-        //     SimulationPostRequest.do({
-
-        //         body: {
-        //             title: budgetTitle,
-        //             totalBudgetNrs: Number(drrFund),
-        //             disasterBudgetNrs: Number(municipalBudget),
-        //             otherBudgetNrs: Number(additionalFund),
-        //             fiscalYear: fiscal,
-        //             province,
-        //             district,
-        //             municipality,
-        //         },
-        //         budgetId: handleBudgetId,
-
-        //     });
-        // } else {
-        //     setBudgetId({ id: annualBudgetData[0].id });
-        // }
         props.handleNextClick();
+        if (drrmProgress < 9) {
+            setProgress(9);
+        }
     };
 
     useEffect(() => {

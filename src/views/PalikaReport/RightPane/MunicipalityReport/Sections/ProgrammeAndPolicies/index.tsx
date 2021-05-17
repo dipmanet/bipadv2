@@ -15,6 +15,7 @@ import {
 
 import {
     setProgramAndPolicyDataAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -23,6 +24,7 @@ import {
     userSelector,
     generalDataSelector,
     drrmRegionSelector,
+    drrmProgresSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
@@ -83,10 +85,12 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     generalData: generalDataSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setProgramData: params => dispatch(setProgramAndPolicyDataAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 
@@ -100,18 +104,14 @@ let municipality = 0;
 
 const ProgramPolicies = (props: Props) => {
     const {
-        programAndPolicyData,
-        setProgramData,
-        updateTab, user, generalData,
+        user,
+        generalData,
         requests: { PolicyGetRequest, PolicyPostRequest, PolicyPutRequest },
         drrmRegion,
+        setProgress,
+        drrmProgress,
     } = props;
 
-    // const [inputList, setInputList] = useState([{ firstName: '', lastName: '' }]);
-    // const [policies, setpolicies] = useState('');
-    // const handlePolicies = (data) => {
-    //     setpolicies(data.target.value);
-    // };
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
     const [serialNumber, setSerialNumber] = useState(0);
     const [point, setPoint] = useState('');
@@ -161,7 +161,6 @@ const ProgramPolicies = (props: Props) => {
         paginationParameters: handlePaginationParameters,
         page: paginationQueryLimit,
         id: '-id',
-
     });
 
 
@@ -188,24 +187,7 @@ const ProgramPolicies = (props: Props) => {
             setPostErrors("Please Enter DRR related points for this fiscal year's annual policy and program of the municipality");
         }
     };
-    const handlePageClick = (e) => {
-        const selectedPage = e.selected + 1;
-        setOffset((selectedPage - 1) * paginationQueryLimit);
-        setCurrentPageNumber(selectedPage);
-    };
-    useEffect(() => {
-        PolicyGetRequest.do({
-            offset,
-            page: paginationQueryLimit,
-            fiscalYear: generalData.fiscalYear,
-            district,
-            municipality,
-            province,
-            id: '-id',
 
-        });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [offset]);
     useEffect(() => {
         if (dataSubmittedResponse) {
             PolicyGetRequest.do({
@@ -258,6 +240,12 @@ const ProgramPolicies = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [policyIndex, editBtnClicked]);
 
+    const handleNext = () => {
+        if (drrmProgress < 3) {
+            setProgress(3);
+        }
+        props.handleNextClick();
+    };
 
     return (
         <>
@@ -397,7 +385,7 @@ const ProgramPolicies = (props: Props) => {
                                 }
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={props.handleNextClick}
+                                    handleNextClick={handleNext}
                                 />
                             </>
                         )

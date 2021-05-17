@@ -70,35 +70,7 @@
 select{
     width: 190px;
 }
-.tabsPageContainer{
-    table{
-        border-collapse: collapse;
-        width: 60%;
-        border: 1px solid #f5f5f5;
-    }
-    th{
-        padding: 0.5rem;
-        text-align: left;
-    }
-    td{
-        border-top: 1px solid #f5f5f5;
-        border-bottom: 1px solid #f5f5f5;
-        padding: 0.5rem;
-        text-align: left;
-    }
-    tr:nth-child(even) {
-        background-color:#EDEDED;
-   
-    
-    }
-    tr:nth-child(odd) {
-        background-color:#FFFFFF;
-        
-        }
- 
 
-        
-}
 
 .mainDiv{
     .palikaTable{

@@ -21,13 +21,15 @@ import { provincesSelector,
     userSelector,
     palikaRedirectSelector,
     generalDataSelector,
-    drrmRegionSelector } from '#selectors';
+    drrmRegionSelector,
+    drrmProgresSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
 
 import {
     setPalikaRedirectAction,
     setDrrmContactsAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -36,6 +38,7 @@ import editIcon from '#resources/palikaicons/edit.svg';
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmContacts: params => dispatch(setDrrmContactsAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 
 });
 
@@ -51,6 +54,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 
 });
 
@@ -237,6 +241,10 @@ const Contacts = (props: Props) => {
     const [checkedAll, setCheckedAll] = useState(true);
     const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
+    const [checkedRowsNg, setCheckedRowsNg] = useState([]);
+    const [checkedAllNg, setCheckedAllNg] = useState(true);
+    const [dataWithIndexNg, setDataWithIndexNg] = useState<number[]>([]);
+
 
     const { requests: {
         PalikaReportInventoriesReport,
@@ -247,8 +255,8 @@ const Contacts = (props: Props) => {
         NonGovPostRequest,
         NonGovPutRequest,
     },
-    setDrrmContacts, drrmRegion,
-    user, generalData } = props;
+    setDrrmContacts, drrmRegion, drrmProgress,
+    user, generalData, setProgress } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
     if (drrmRegion.municipality) {
@@ -530,8 +538,9 @@ const Contacts = (props: Props) => {
             });
 
             finalArr = [...new Set(finalfetchedData)];
-
-            console.log('Final array');
+            const chkArr = Array.from(Array(finalArr.length).keys());
+            setCheckedRowsNg(chkArr);
+            setDataWithIndexNg(finalArr.map((items, i) => ({ ...items, index: i, selectedRow: true })));
         }
     }, [nonGovContacts, hazardDetails]);
 
@@ -543,6 +552,16 @@ const Contacts = (props: Props) => {
         } else {
             setCheckedRows([]);
             setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+        }
+    };
+    const handleCheckAllNg = (e) => {
+        setCheckedAllNg(e.target.checked);
+        if (e.target.checked) {
+            setCheckedRowsNg(Array.from(Array(mergedData.length).keys()));
+            setDataWithIndexNg(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+        } else {
+            setCheckedRowsNg([]);
+            setDataWithIndexNg(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
         }
     };
 
@@ -560,8 +579,29 @@ const Contacts = (props: Props) => {
             }));
         } else {
             setCheckedRows(checkedRows.filter(item => item !== idx));
-
             setDataWithIndex(dataWithIndex.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: false });
+                }
+                return item;
+            }));
+        }
+    };
+    const handleCheckNg = (idx: number, e) => {
+        setCheckedAllNg(false);
+
+        if (e.target.checked) {
+            const arr = [...checkedRowsNg, idx];
+            setCheckedRowsNg(arr);
+            setDataWithIndexNg(dataWithIndexNg.map((item) => {
+                if (item.index === idx) {
+                    return Object.assign({}, item, { selectedRow: true });
+                }
+                return item;
+            }));
+        } else {
+            setCheckedRowsNg(checkedRowsNg.filter(item => item !== idx));
+            setDataWithIndexNg(dataWithIndexNg.map((item) => {
                 if (item.index === idx) {
                     return Object.assign({}, item, { selectedRow: false });
                 }
@@ -571,13 +611,18 @@ const Contacts = (props: Props) => {
     };
 
     const handleNext = () => {
-        setDrrmContacts(dataWithIndex);
+        setDrrmContacts({
+            gContacts: dataWithIndex,
+            ngContacts: dataWithIndexNg,
+
+        });
+        if (drrmProgress < 7) {
+            setProgress(7);
+        }
         props.handleNextClick();
     };
 
     // console.log('Final array', loader);
-    console.log('Final array', finalArr);
-    console.log('hazard', hazardDetails);
     return (
         <>
             {
@@ -585,12 +630,21 @@ const Contacts = (props: Props) => {
                 && (
                     <div className={styles.tabsPageContainer}>
                         <h2>
-                              Government Contacts
+                                Governmental Contacts
                         </h2>
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
+                                        <th>
+                                            <input
+                                                type="checkbox"
+                                                onChange={handleCheckAll}
+                                                checked={checkedAll}
+                                                    // defaultChecked
+                                                className={styles.checkBox}
+                                            />
+                                        </th>
                                         <th>S.N</th>
                                         <th>Name</th>
                                         <th>Type of Organisation</th>
@@ -699,6 +753,15 @@ const Contacts = (props: Props) => {
                                     <tbody>
                                         <tr>
                                             <th>
+                                                <input
+                                                    type="checkbox"
+                                                    onChange={handleCheckAllNg}
+                                                    checked={checkedAllNg}
+                                                    // defaultChecked
+                                                    className={styles.checkBox}
+                                                />
+                                            </th>
+                                            <th>
                                     SN
                                             </th>
                                             <th>
@@ -741,6 +804,7 @@ const Contacts = (props: Props) => {
                                             nonGovContactId === data.item.id
                                                 ? (
                                                     <tr>
+                                                        <td>{''}</td>
                                                         <td>{nonGovContacts.length + 1}</td>
                                                         <td>
                                                             <input
@@ -871,6 +935,15 @@ const Contacts = (props: Props) => {
                                                 )
                                                 : (
                                                     <tr key={data.item.id}>
+                                                        <td>
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={checkedRowsNg.indexOf(i) !== -1}
+                                                                onChange={e => handleCheckNg(i, e)}
+                                                                className={styles.checkBox}
+                                                                key={data.id}
+                                                            />
+                                                        </td>
                                                         <td>{i + 1}</td>
                                                         <td>{data.item.name}</td>
                                                         <td>{data.item.typeOfOrganization}</td>
@@ -906,6 +979,8 @@ const Contacts = (props: Props) => {
                                         {!nonGovContactId && (
                                             <>
                                                 <tr>
+                                                    <td>{''}</td>
+
                                                     <td>{nonGovContacts.length + 1}</td>
                                                     <td>
                                                         <input

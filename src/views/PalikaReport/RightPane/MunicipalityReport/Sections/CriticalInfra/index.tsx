@@ -22,11 +22,13 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    drrmRegionSelector } from '#selectors';
+    drrmRegionSelector,
+    drrmProgresSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
     setDrrmCriticalAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -40,6 +42,7 @@ interface Props{
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmCritical: params => dispatch(setDrrmCriticalAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 const mapStateToProps = (state, props) => ({
@@ -48,6 +51,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaResources: {
@@ -117,7 +121,7 @@ const CriticalInfra = (props: Props) => {
     const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
     const { requests: { PalikaResources }, provinces,
-        districts,
+        districts, setProgress, drrmProgress,
         municipalities, drrmRegion,
         user, setDrrmCritical } = props;
 
@@ -282,6 +286,9 @@ const CriticalInfra = (props: Props) => {
 
     const handleNext = () => {
         setDrrmCritical(dataWithIndex);
+        if (drrmProgress < 6) {
+            setProgress(6);
+        }
         props.handleNextClick();
     };
 
