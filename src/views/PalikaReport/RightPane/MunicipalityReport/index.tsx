@@ -567,7 +567,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Download Full Report
+                                Submit and Download Full Report
 
                                 </button>
                                 <button
@@ -576,7 +576,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Download Summary Report
+                                Submit and Download Summary Report
 
                                 </button>
                             </div>

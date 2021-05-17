@@ -152,23 +152,11 @@ const Budget = (props: Props) => {
         drrmProgress,
     } = props;
 
-    // setBudgetId({ id: 2 });
-    const {
-        municipalBudget: mb,
-        drrFund: df,
-        additionalFund: af,
-    } = budgetData;
     const [municipalBudget, setmunicipalBudget] = useState('');
     const [drrFund, setdrrFund] = useState('');
     const [additionalFund, setadditionalFund] = useState('');
-    // const [province, setProvince] = useState(0);
-    // const [district, setDistrict] = useState(0);
-    // const [municipality, setMunicipality] = useState(0);
     const [budgetTitle, setBudgetTitle] = useState('Demo Budget Title');
-    const [fiscal, setFiscal] = useState(1);
     const [annualBudgetData, setAnnualBudgetData] = useState([]);
-    const [fyTitle, setFYTitle] = useState('');
-    const [showInfo, setShowInfo] = useState(false);
     const [loader, setLoader] = useState(true);
     const [pending, setPending] = useState(false);
     const [postErrors, setPostErrors] = useState({});
@@ -190,7 +178,6 @@ const Budget = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
-    console.log('drrmRegion', drrmRegion);
 
     const handlePending = (data: boolean) => {
         setPending(data);
@@ -203,7 +190,7 @@ const Budget = (props: Props) => {
         setAnnualBudgetData(response);
         setLoader(false);
     };
-    // useEffect(() => {
+
     BudgetGetRequest.setDefaultParams({
         fiscalYear: generalData.fiscalYear,
         district,
@@ -212,7 +199,6 @@ const Budget = (props: Props) => {
         finalAnnualBudgetData: handleSaveAnnualBudgetData,
         handlePendingState: handlePending,
     });
-    // }, [municipality]);
 
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
@@ -239,16 +225,6 @@ const Budget = (props: Props) => {
         }
     };
 
-    const handleDataSave = () => {
-        setBudgetDatapp({
-            municipalBudget,
-            drrFund,
-            additionalFund,
-        });
-        updateTab();
-    };
-
-
     const handleBudgetId = (response) => {
         setBudgetId({ id: response.id });
         setEditBudget(false);
@@ -267,6 +243,7 @@ const Budget = (props: Props) => {
         });
         props.handleNextClick();
     };
+
     const handleCallUpdateApi = (response) => {
         BudgetGetRequest.do({
             fiscalYear: generalData.fiscalYear,
@@ -279,14 +256,8 @@ const Budget = (props: Props) => {
 
         });
     };
-    // const handleinfoClick = () => {
-    //     setShowInfo(!showInfo);
-    // };
-    console.log('This is annual budget data>>>', annualBudgetData);
+
     const handleNextClick = () => {
-        console.log(Number(additionalFund),
-            Number(municipalBudget),
-            Number(drrFund));
         if (!annualBudgetData.length) {
             BudgetPostRequest.do({
                 body: {

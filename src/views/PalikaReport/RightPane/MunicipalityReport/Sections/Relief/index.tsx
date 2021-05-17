@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { BarChart,
@@ -102,7 +102,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                 expand: params.fields };
         },
         method: methods.GET,
-        onMount: true,
+        onMount: false,
 
         onSuccess: ({ response, params }) => {
             let citizenReportList: CitizenReport[] = [];
@@ -118,6 +118,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         url: '/incident-relief/',
         query: ({ params, props }) => ({
             incident: params.incidentId,
+            municipality: params.municipality,
+            district: params.district,
+            province: params.province,
+            fiscalYear: params.fiscalYear,
         }),
         method: methods.GET,
         onMount: true,
@@ -126,7 +130,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             let citizenReportList: CitizenReport[] = [];
             const citizenReportsResponse = response as MultiResponse<CitizenReport>;
             citizenReportList = citizenReportsResponse.results;
-
             if (params && params.ReliefData) {
                 params.ReliefData(citizenReportList);
             }
@@ -185,6 +188,21 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+    NepaliFiscalYearGet: {
+        url: '/nepali-fiscal-year/',
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.setNepaliFiscalYear) {
+                params.setNepaliFiscalYear(citizenReportList);
+            }
+        },
+    },
 };
 let finalArr = [];
 let province = 0;
@@ -195,13 +213,14 @@ const Relief = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
     const [url, setUrl] = useState('/incident/');
     const {
-        requests: { PalikaReportInventoriesReport,
+        requests: {
+            PalikaReportInventoriesReport,
             HazardDataGet,
             ReliefDataPost,
-            ReliefDataGet, ReliefDataPUT },
-        provinces,
-        districts,
-        municipalities,
+            ReliefDataGet,
+            ReliefDataPUT,
+            NepaliFiscalYearGet,
+        },
         user,
         hazardTypes,
         drrmRegion,
@@ -210,14 +229,6 @@ const Relief = (props: Props) => {
         generalData,
     } = props;
 
-    const getdateTimeFromFs = (date) => {
-        const stDate = new NepaliDate(date, 4, 1).toJsDate().toLocaleDateString().split('/');
-        const endDate = new NepaliDate(Number(date) + 1, 3, 31).toJsDate().toLocaleDateString().split('/');
-        return [
-            `${stDate[2]}-${stDate[0]}-${stDate[1]}T00:00:01+05:45`,
-            `${endDate[2]}-${endDate[0]}-${endDate[1]}T23:59:59+05:45`,
-        ];
-    };
 
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [fields, setfields] = useState('loss');
@@ -265,6 +276,9 @@ const Relief = (props: Props) => {
     const [loader, setLoader] = useState(true);
     const [hazardDetails, setHazardDetails] = useState([]);
 
+    const [incidentTitle, setincidentTitle] = useState('-');
+    const [incidentOn, setincidentOn] = useState('-');
+
     const [totreliefAmt, setTotReliefAmt] = useState(0);
     const [totBenFam, setTotBenFam] = useState(0);
     const [totFemale, setTotFemale] = useState(0);
@@ -273,7 +287,21 @@ const Relief = (props: Props) => {
     const [totMadhesis, setTotMadhesis] = useState(0);
     const [totMinotiries, setTotMinorities] = useState(0);
     const [totDalits, setTotDalits] = useState(0);
+
+    const [fiscalYearObj, setFiscalYearObj] = useState([]);
     // const [femaleBenefited, handlefemaleBenefited] = useState(0);
+
+
+    const getdateTimeFromFs = (fs: string) => {
+        const fsFiltered = fiscalYearObj.filter(i => String(i.titleEn) === String(fs));
+        console.log('fs filtered', fsFiltered);
+        console.log('fs recieved from redux', fs);
+        return [
+            `${fsFiltered[0].startDateAd}T00:00:00+05:45`,
+            `${fsFiltered[0].endDateAd}T23:59:59+05:45`,
+        ];
+    };
+
 
     if (drrmRegion.municipality) {
         municipality = drrmRegion.municipality;
@@ -295,6 +323,10 @@ const Relief = (props: Props) => {
     };
     ReliefDataGet.setDefaultParams({
         ReliefData: handleReliefData,
+        municipality,
+        district,
+        province,
+        fiscalYear: generalData.fiscalYear,
     });
     HazardDataGet.setDefaultParams({
         HazardData: handleHazardData,
@@ -311,10 +343,6 @@ const Relief = (props: Props) => {
 
     useEffect(() => {
         if (reliefData) {
-            // const reliefDateArr = [...new Set(
-            //     reliefData.map(item => getMonthFromDate(item.dateOfReliefDistribution)),
-            // )];
-
             const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const reliefChart = reliefDateArr.map(d => ({
                 name: d,
@@ -360,9 +388,6 @@ const Relief = (props: Props) => {
     const handleJanajaties = (data) => {
         setjanajatis(data.target.value);
     };
-
-    // to here
-
 
     const handleFamiliesBenefited = (data) => {
         setfamiliesBenefited(data.target.value);
@@ -415,11 +440,16 @@ const Relief = (props: Props) => {
             district,
             municipality,
             meta,
-            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+            date: getdateTimeFromFs(generalData.fiscalYearTitle),
 
         });
         ReliefDataGet.do({
             ReliefData: handleReliefData,
+            municipality,
+            district,
+            province,
+            fiscalYear: generalData.fiscalYear,
+
         });
     };
     const handleReliefView = (data) => {
@@ -432,8 +462,46 @@ const Relief = (props: Props) => {
         ReliefDataGet.do({
             incidentId: data.id,
             filteredViewRelief: handleFilteredViewRelief,
+            municipality,
+            district,
+            province,
+            fiscalYear: generalData.fiscalYear,
+
         });
     };
+
+
+    useEffect(() => {
+        if (fiscalYearObj && fiscalYearObj.length > 0) {
+            console.log('fs obj in state', fiscalYearObj);
+            console.log('setting prarams, date:', getdateTimeFromFs(generalData.fiscalYearTitle));
+            PalikaReportInventoriesReport.setDefaultParams({
+                organisation: handleFetchedData,
+                url,
+                inventories: defaultQueryParameter,
+                fields,
+                municipality,
+                district,
+                province,
+                meta,
+                date: getdateTimeFromFs(generalData.fiscalYearTitle),
+            });
+            PalikaReportInventoriesReport.do({
+                organisation: handleFetchedData,
+                url,
+                inventories: defaultQueryParameter,
+                fields,
+                municipality,
+                district,
+                province,
+                meta,
+                date: getdateTimeFromFs(generalData.fiscalYearTitle),
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fiscalYearObj]);
+
+
     const handleReliefEdit = (data, item) => {
         setReliefId(data.id);
         setModalClose(false);
@@ -601,20 +669,34 @@ const Relief = (props: Props) => {
                     : 0,
             }));
             setReliefChartData(reliefChart);
-
-            const totData = reliefData.reduce((a, b) => ({
-                numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily,
-                nameOfBeneficiary: a.nameOfBeneficiary + b.nameOfBeneficiary,
-                dateOfReliefDistribution: a.dateOfReliefDistribution + b.dateOfReliefDistribution,
-                reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr,
-                totalMaleBenefited: a.totalMaleBenefited + b.totalMaleBenefited,
-                totalFemaleBenefited: a.totalFemaleBenefited + b.totalFemaleBenefited,
-                totalMinoritiesBenefited: a.totalMinoritiesBenefited + b.totalMinoritiesBenefited,
-                totalDalitBenefited: a.totalDalitBenefited + b.totalDalitBenefited,
-                totalMadhesiBenefited: a.totalMadhesiBenefited + b.totalMadhesiBenefited,
-                totalDisabledBenefited: a.totalDisabledBenefited + b.totalDisabledBenefited,
-                totalJanjatiBenefited: a.totalJanjatiBenefited + b.totalJanjatiBenefited,
-            }));
+            let totData = {
+                numberOfBeneficiaryFamily: 0,
+                nameOfBeneficiary: 0,
+                dateOfReliefDistribution: 0,
+                reliefAmountNpr: 0,
+                totalMaleBenefited: 0,
+                totalFemaleBenefited: 0,
+                totalMinoritiesBenefited: 0,
+                totalDalitBenefited: 0,
+                totalMadhesiBenefited: 0,
+                totalDisabledBenefited: 0,
+                totalJanjatiBenefited: 0,
+            };
+            if (reliefData.length > 0) {
+                totData = reliefData.reduce((a, b) => ({
+                    numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily,
+                    nameOfBeneficiary: a.nameOfBeneficiary + b.nameOfBeneficiary,
+                    dateOfReliefDistribution: a.dateOfReliefDistribution + b.dateOfReliefDistribution,
+                    reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr,
+                    totalMaleBenefited: a.totalMaleBenefited + b.totalMaleBenefited,
+                    totalFemaleBenefited: a.totalFemaleBenefited + b.totalFemaleBenefited,
+                    totalMinoritiesBenefited: a.totalMinoritiesBenefited + b.totalMinoritiesBenefited,
+                    totalDalitBenefited: a.totalDalitBenefited + b.totalDalitBenefited,
+                    totalMadhesiBenefited: a.totalMadhesiBenefited + b.totalMadhesiBenefited,
+                    totalDisabledBenefited: a.totalDisabledBenefited + b.totalDisabledBenefited,
+                    totalJanjatiBenefited: a.totalJanjatiBenefited + b.totalJanjatiBenefited,
+                }));
+            }
 
             setTotReliefAmt(totData.reliefAmountNpr);
             setTotBenFam(totData.numberOfBeneficiaryFamily);
@@ -628,19 +710,17 @@ const Relief = (props: Props) => {
     }, [reliefData]);
 
 
-    PalikaReportInventoriesReport.setDefaultParams({
-        organisation: handleFetchedData,
-        url,
-        inventories: defaultQueryParameter,
-        fields,
-        municipality,
-        district,
-        province,
-        meta,
-        date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+    const setNepaliFiscalYear = (fiscalYearObject) => {
+        console.log('setting fiscal year...');
+        setFiscalYearObj(fiscalYearObject);
+        console.log('nepali fiscal year obj:', fiscalYearObj);
+    };
 
-
+    NepaliFiscalYearGet.setDefaultParams({
+        setNepaliFiscalYear,
     });
+
+
     const handleBackButton = () => {
         setShowRelief(false);
         setModalClose(true);
@@ -665,12 +745,14 @@ const Relief = (props: Props) => {
             district,
             province,
             meta,
-            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
-
-
+            date: getdateTimeFromFs(generalData.fiscalYearTitle),
         });
         ReliefDataGet.do({
             ReliefData: handleReliefData,
+            municipality,
+            district,
+            province,
+            fiscalYear: generalData.fiscalYear,
         });
     };
     const handleSavedReliefData = (response) => {
@@ -696,41 +778,19 @@ const Relief = (props: Props) => {
             district,
             province,
             meta,
-            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+            date: getdateTimeFromFs(generalData.fiscalYearTitle),
 
 
         });
         ReliefDataGet.do({
             ReliefData: handleReliefData,
+            municipality,
+            district,
+            province,
+            fiscalYear: generalData.fiscalYear,
         });
     };
-    // const handleSavedReliefData = (response) => {
-    //     setShowRelief(false);
-    //     setModalClose(true);
-    //     setfamiliesBenefited(null);
-    //     setnamesofBeneficiaries('');
-    //     setreliefDate('');
-    //     setreliefAmount(null);
-    //     setmaleBenefited(null);
-    //     setfemaleBenefited(null);
-    //     setmiorities(null);
-    //     setdalits(null);
-    //     setmadhesis(null);
-    //     setdisabilities(null);
-    //     setjanajatis(null);
-    //     PalikaReportInventoriesReport.do({
-    //         organisation: handleFetchedData,
-    //         url,
-    //         inventories: defaultQueryParameter,
-    //         fields,
-    //         user,
-    //         meta,
 
-    //     });
-    //     ReliefDataGet.do({
-    //         ReliefData: handleReliefData,
-    //     });
-    // };
     const handleSaveRelief = () => {
         ReliefDataPost.do({
             body: {
@@ -746,6 +806,10 @@ const Relief = (props: Props) => {
                 totalDisabledBenefited: Number(disabilities),
                 totalJanjatiBenefited: Number(janajatis),
                 incident: currentRelief.id,
+                municipality,
+                district,
+                province,
+                fiscalYear: generalData.fiscalYear,
 
             },
             savedRelief: handleSavedReliefData,
@@ -755,7 +819,7 @@ const Relief = (props: Props) => {
 
     // const handleUpdateAndClose = (response) => {
     useEffect(() => {
-        if (reliefData) {
+        if (reliefData && reliefData.length > 0) {
             const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const reliefChart = reliefDateArr.map(d => ({
                 name: d,
@@ -802,21 +866,19 @@ const Relief = (props: Props) => {
         }
     }, [reliefData]);
 
-    PalikaReportInventoriesReport.setDefaultParams({
-        organisation: handleFetchedData,
-        url,
-        inventories: defaultQueryParameter,
-        fields,
-        municipality,
-        district,
-        province,
-        meta,
-        date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+    const getIncidentTitle = (item) => {
+        if (fetchedData.length > 0) {
+            console.log('recieved item:', item);
+            console.log('fetched data:', fetchedData);
+            // console.log('filtered data:', fetchedData.filter(incidentObj => incidentObj.id === item.incident));
+            return [
+                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
+                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn || '-'),
+            ];
+        }
 
-
-    });
-
-
+        return ['-', '-'];
+    };
     const handleUpdateAndClose = (response) => {
         setShowRelief(false);
         setModalClose(true);
@@ -840,12 +902,17 @@ const Relief = (props: Props) => {
             district,
             province,
             meta,
-            date: getdateTimeFromFs(generalData.fiscalYearTitle.split('/')[0]),
+            date: getdateTimeFromFs(generalData.fiscalYearTitle),
 
 
         });
         ReliefDataGet.do({
             ReliefData: handleReliefData,
+            municipality,
+            district,
+            province,
+            fiscalYear: generalData.fiscalYear,
+
         });
     };
     const handleUpdateRelief = () => {
@@ -1068,7 +1135,8 @@ const Relief = (props: Props) => {
                                                     <th>Madhesis</th>
                                                     <th>Person with Disabilities</th>
                                                     <th>Janajati</th>
-                                                    <th>Incident Ref.</th>
+                                                    <th>Incident</th>
+                                                    <th>Incident On</th>
 
                                                 </tr>
 
@@ -1086,7 +1154,13 @@ const Relief = (props: Props) => {
                                                         <td>{item.totalMadhesiBenefited}</td>
                                                         <td>{item.totalDisabledBenefited}</td>
                                                         <td>{item.totalJanjatiBenefited}</td>
-                                                        <td>{item.incident}</td>
+                                                        <td>
+                                                            {getIncidentTitle(item)[0]}
+                                                        </td>
+                                                        <td>
+                                                            {getIncidentTitle(item)[1]}
+
+                                                        </td>
                                                     </tr>
 
 
