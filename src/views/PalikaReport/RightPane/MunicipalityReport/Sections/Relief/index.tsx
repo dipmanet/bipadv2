@@ -541,7 +541,7 @@ const Relief = (props: Props) => {
                 .map(item => item.estimatedLoss)
                 .filter(item => item !== undefined);
             if (estimatedLoss.length > 0) {
-                estimatedLoss.reduce((a, b) => a + b);
+                estimatedLoss.reduce((a, b) => Number(a) + Number(b));
                 setTotalEstimatedLoss(estimatedLoss);
             }
 
@@ -550,7 +550,7 @@ const Relief = (props: Props) => {
                 .map(item => item.peopleDeathCount)
                 .filter(item => item !== undefined);
             if (deathTotal.length > 0) {
-                deathTotal.reduce((a, b) => a + b);
+                deathTotal.reduce((a, b) => Number(a) + Number(b));
                 setDeathCount(deathTotal);
             }
 
@@ -560,7 +560,7 @@ const Relief = (props: Props) => {
                 .map(item => item.peopleMissingCount)
                 .filter(item => item !== undefined);
             if (missingTotal.length > 0) {
-                missingTotal.reduce((a, b) => a + b);
+                missingTotal.reduce((a, b) => Number(a) + Number(b));
                 setMissing(missingTotal);
             }
 
@@ -570,7 +570,7 @@ const Relief = (props: Props) => {
                 .map(item => item.peopleInjuredCount)
                 .filter(item => item !== undefined);
             if (injuredTotal.length > 0) {
-                injuredTotal.reduce((a, b) => a + b);
+                injuredTotal.reduce((a, b) => Number(a) + Number(b));
                 setInjured(injuredTotal);
             }
 
@@ -580,7 +580,7 @@ const Relief = (props: Props) => {
                 .map(item => item.infrastructureDestroyedCount)
                 .filter(item => item !== undefined);
             if (infra.length > 0) {
-                infra.reduce((a, b) => a + b);
+                infra.reduce((a, b) => Number(a) + Number(b));
                 setInfraDestroyed(infra);
             }
 
@@ -590,7 +590,7 @@ const Relief = (props: Props) => {
                 .map(item => item.livestockDestroyedCount)
                 .filter(item => item !== undefined);
             if (livestock.length > 0) {
-                livestock.reduce((a, b) => a + b);
+                livestock.reduce((a, b) => Number(a) + Number(b));
                 setLivestockDestroyed(livestock);
             }
 
@@ -606,7 +606,7 @@ const Relief = (props: Props) => {
                     .map(lose => lose.peopleDeathCount)
                     .filter(count => count !== undefined);
                 if (PeopleDeath.length > 0) {
-                    PeopleDeath.reduce((a, b) => a + b);
+                    PeopleDeath.reduce((a, b) => Number(a) + Number(b));
                 }
                 return {
                     name, Incidents, PeopleDeath,
@@ -618,7 +618,7 @@ const Relief = (props: Props) => {
                 .map(item => item.peopleDeathMaleCount)
                 .filter(item => item !== undefined);
             if (deathMaleData.length > 0) {
-                deathMaleData.reduce((a, b) => a + b);
+                deathMaleData.reduce((a, b) => Number(a) + Number(b));
 
                 setMaleDeath(deathMaleData);
             }
@@ -629,7 +629,7 @@ const Relief = (props: Props) => {
                 .map(item => item.peopleDeathFemaleCount)
                 .filter(item => item !== undefined);
             if (deathFemaleData.length > 0) {
-                deathFemaleData.reduce((a, b) => a + b);
+                deathFemaleData.reduce((a, b) => Number(a) + Number(b));
                 setFemaleDeath(deathFemaleData);
             }
 
@@ -639,7 +639,7 @@ const Relief = (props: Props) => {
                 .map(item => item.infrastructureAffectedHouseCount)
                 .filter(item => item !== undefined);
             if (houseAffectedData.length > 0) {
-                houseAffectedData.reduce((a, b) => a + b);
+                houseAffectedData.reduce((a, b) => Number(a) + Number(b));
                 setHouseAffected(houseAffectedData);
             }
 
@@ -649,7 +649,7 @@ const Relief = (props: Props) => {
                 .map(item => item.infrastructureDestroyedHouseCount)
                 .filter(item => item !== undefined);
             if (houseDamagedData.length > 0) {
-                houseDamagedData.reduce((a, b) => a + b);
+                houseDamagedData.reduce((a, b) => Number(a) + Number(b));
                 setHouseDamaged(houseDamagedData);
             }
 
@@ -671,16 +671,15 @@ const Relief = (props: Props) => {
                 .filter(iitems => iitems !== undefined)
                 .reduce((a, b) => ({
                     ward: wardItem,
-                    Death: (a.peopledeathCount || 0) + (b.peopledeathCount || 0),
-                    Injured: (a.peopleInjuredCount || 0) + (b.peopledeathCount || 0),
-                    Missing: (a.peopleMissingCount || 0) + (b.peopledeathCount || 0),
+                    Death: (Number(a.peopledeathCount) || 0) + (Number(b.peopledeathCount) || 0),
+                    Injured: (Number(a.peopleInjuredCount) || 0) + (Number(b.peopledeathCount) || 0),
+                    Missing: (Number(a.peopleMissingCount) || 0) + (Number(b.peopledeathCount) || 0),
                 })));
 
 
             setWardWiseImpact([]);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchedData]);
+    }, [fetchedData, hazardTypes]);
 
 
     useEffect(() => {
@@ -824,7 +823,43 @@ const Relief = (props: Props) => {
             fiscalYear: generalData.fiscalYear,
         });
     };
+    console.log('loss data:', incidentCount,
+        totalEstimatedLoss,
+        deathCount,
+        missing,
+        injured,
+        infraDestroyed,
+        livestockDestroyed);
 
+    useEffect(() => {
+        if (Array.isArray(incidentCount) && incidentCount.length > 0) {
+            setIncidentsCount(incidentCount.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(totalEstimatedLoss) && totalEstimatedLoss.length > 0) {
+            setTotalEstimatedLoss(totalEstimatedLoss.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(deathCount) && deathCount.length > 0) {
+            setDeathCount(deathCount.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(missing) && missing.length > 0) {
+            setMissing(missing.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(injured) && injured.length > 0) {
+            setInjured(injured.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(infraDestroyed) && infraDestroyed.length > 0) {
+            setInfraDestroyed(infraDestroyed.reduce((a, b) => a + b));
+        }
+        if (Array.isArray(livestockDestroyed) && livestockDestroyed.length > 0) {
+            setLivestockDestroyed(livestockDestroyed.reduce((a, b) => a + b));
+        }
+    }, [incidentCount,
+        totalEstimatedLoss,
+        deathCount,
+        missing,
+        injured,
+        infraDestroyed,
+        livestockDestroyed]);
     const handleSaveRelief = () => {
         setLoader(true);
         if (reliefAmount) {
@@ -1312,7 +1347,7 @@ const Relief = (props: Props) => {
                                     />
 
                                     <ul>
-                                        <p className={styles.darkerText}>{incidentCount}</p>
+                                        <p className={styles.darkerText}>{Number(incidentCount)}</p>
                                         <p className={styles.smallerText}>Incident</p>
                                     </ul>
                                 </div>
@@ -1323,7 +1358,7 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{`${(totalEstimatedLoss / 1000000).toFixed(2)}m`}</p>
+                                        <p className={styles.darkerText}>{`${(Number(totalEstimatedLoss) / 1000000).toFixed(2)}m`}</p>
                                         <p className={styles.smallerText}>ESTIMATED LOSS (RS)</p>
                                     </ul>
                                 </div>
@@ -1334,7 +1369,7 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{deathCount}</p>
+                                        <p className={styles.darkerText}>{Number(deathCount)}</p>
                                         <p className={styles.smallerText}>DEATH</p>
                                     </ul>
                                 </div>
@@ -1345,7 +1380,7 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{missing}</p>
+                                        <p className={styles.darkerText}>{Number(missing)}</p>
                                         <p className={styles.smallerText}>MISSING</p>
                                     </ul>
                                 </div>
@@ -1356,7 +1391,7 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{injured}</p>
+                                        <p className={styles.darkerText}>{Number(injured)}</p>
                                         <p className={styles.smallerText}>INJURED</p>
                                     </ul>
                                 </div>
@@ -1367,7 +1402,7 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{infraDestroyed}</p>
+                                        <p className={styles.darkerText}>{Number(infraDestroyed)}</p>
                                         <p className={styles.smallerText}>INFRASTRUCTURE DESTROYED</p>
                                     </ul>
                                 </div>
@@ -1378,7 +1413,7 @@ const Relief = (props: Props) => {
                                         alt="Bullet Point"
                                     />
                                     <ul>
-                                        <p className={styles.darkerText}>{livestockDestroyed}</p>
+                                        <p className={styles.darkerText}>{Number(livestockDestroyed)}</p>
                                         <p className={styles.smallerText}>LIVE STOCK DESTROYED</p>
                                     </ul>
                                 </div>
