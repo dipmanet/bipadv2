@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import Loader from 'react-loader';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import editIcon from '#resources/palikaicons/edit.svg';
@@ -179,6 +180,7 @@ const Simulation = (props: Props) => {
     const [simulationId, setSimulationId] = useState();
     const [simulationIndex, setSimulationIndex] = useState();
     const [editBtnClicked, setEditBtnClicked] = useState(false);
+    const [simulationDateAD, setSimulationDateAD] = useState('');
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { requests: { SimulationPostRequest,
         SimulationGetRequest, SimulationPutRequest,
@@ -221,6 +223,12 @@ const Simulation = (props: Props) => {
         id: '-id',
 
     });
+    useEffect(() => {
+        if (startDate) {
+            const bsToAd = BSToAD(startDate);
+            setSimulationDateAD(bsToAd);
+        }
+    }, [startDate]);
     // HazardGetRequest.setDefaultParams({
     //     hazardData: handleHazardData,
     // });
@@ -309,7 +317,7 @@ const Simulation = (props: Props) => {
                 priorityActivity,
                 organizer,
                 totalParticipants: participants,
-                date: startDate,
+                date: simulationDateAD,
                 fiscalYear: generalData.fiscalYear,
                 province,
                 district,
@@ -368,7 +376,7 @@ const Simulation = (props: Props) => {
                 priorityActivity,
                 organizer,
                 totalParticipants: participants,
-                date: startDate,
+                date: simulationDateAD,
                 fiscalYear: generalData.fiscalYear,
                 province,
                 district,
@@ -390,7 +398,7 @@ const Simulation = (props: Props) => {
             setPriorityActivity(finalArr[simulationIndex].data.priorityActivity);
             setpriorityArea(finalArr[simulationIndex].data.priorityArea);
             setFocusHazard(finalArr[simulationIndex].data.focusHazard);
-            setStartDate(finalArr[simulationIndex].data.date);
+            setStartDate(ADToBS(finalArr[simulationIndex].data.date));
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationIndex, editBtnClicked]);
@@ -478,7 +486,7 @@ const Simulation = (props: Props) => {
                                                                     className={styles.datepicker}
                                                                     value={startDate}
                                                                     onChange={date => setStartDate(date)}
-                                                                    options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                                                    options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                                                 />
                                                             </td>
                                                             <td>
@@ -569,7 +577,7 @@ const Simulation = (props: Props) => {
                                                         <tr key={item.data.id}>
                                                             <td>{i + 1}</td>
                                                             <td>{item.data.title}</td>
-                                                            <td>{item.data.date}</td>
+                                                            <td>{ADToBS(item.data.date)}</td>
                                                             <td>{item.data.description}</td>
                                                             <td>{item.data.priorityArea}</td>
                                                             <td>{item.data.priorityAction}</td>
@@ -613,7 +621,7 @@ const Simulation = (props: Props) => {
                                                         className={styles.datepicker}
                                                         value={startDate}
                                                         onChange={date => setStartDate(date)}
-                                                        options={{ calenderLocale: 'ne', valueLocale: 'en' }}
+                                                        options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                                     />
                                                 </td>
                                                 <td>

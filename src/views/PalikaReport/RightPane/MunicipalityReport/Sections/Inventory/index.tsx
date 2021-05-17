@@ -380,12 +380,13 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                 )}
                             </tbody>
                         </table>
+                        {!loader && finalInventoriesData.length === 0
+                                 && <h2>Data Unavailable</h2>
+
+                        }
                         {!loader && (
                             <>
-                                {finalInventoriesData && finalInventoriesData.length === 0
-                                 && <p className={styles.dataUnavailable}>Data Unavailable</p>
 
-                                }
 
                                 {
                                     !props.annex

@@ -307,7 +307,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
 
 
-        formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${'fiscalyear'}`);
+        formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${generalData.fiscalYearTitle}`);
         formdata.append('fiscalYear', generalData.fiscalYear);
         formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
         formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
@@ -891,7 +891,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                                     </tr>
                                                 ))
                                             : (
-                                                <tr key={data.item.id}>
+                                                <tr>
                                                     <td>{'-'}</td>
                                                     <td>{'-'}</td>
                                                     <td>{'-'}</td>

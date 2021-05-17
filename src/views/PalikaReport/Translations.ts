@@ -6,9 +6,13 @@ interface LanguageEntry {
     [key: string]: Section;
 }
 const languageTranslations: LanguageEntry = {
-    dashBoardMainTitle: {
+    dashBoardHeading: {
         np: 'बिपद जोखिम न्यूनीकरण र व्यवस्थापन रिपोर्ट',
         en: 'Disaster Risk Reduction and Management Report',
+    },
+    dashBoardMainTitle: {
+        np: 'शीर्षक',
+        en: 'Title',
     },
     dashboardTblHeaderSN: {
         np: 'क्रम संख्या',

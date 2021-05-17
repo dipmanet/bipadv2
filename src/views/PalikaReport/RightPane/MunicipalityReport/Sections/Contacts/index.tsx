@@ -725,6 +725,10 @@ const Contacts = (props: Props) => {
                                     )}
                                 </tbody>
                             </table>
+                            {!loader && mergedData.length === 0
+                                 && <h2>Data Unavailable</h2>
+
+                            }
                             {!loader && (
                                 <>
                                     <button

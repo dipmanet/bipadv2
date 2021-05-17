@@ -97,11 +97,12 @@ const PalikaReportTable = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort]);
     const handleClick = (e) => {
-        if (node.current.contains(e.target) || e.target.id === 'summaryReport' || e.target.id === 'fullReport') {
+        console.log(e.target.id);
+        if (e.target.id === 'summaryReport' || e.target.id === 'fullReport') {
             return;
         }
+
         setDownloadClicked(false);
-        // setReportId(null);
     };
     const handleDLReport = (e, id) => {
         setReportId(id);
@@ -113,8 +114,9 @@ const PalikaReportTable = (props) => {
         return () => {
             document.removeEventListener('mousedown', handleClick);
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    console.log('This table data>>>', tableData);
     return (
         <div>
             {/* <h1>Responsive Table Example</h1> */}
@@ -255,11 +257,12 @@ const PalikaReportTable = (props) => {
 
 
                                                     <button type="button" onClick={e => handleDLReport(e, item.item.id)} className={styles.dropbtn} title="Download Report">
-                                                        {' '}
+
                                                         <ScalableVectorGraphics
                                                             className={styles.bulletPoint}
                                                             src={fileDownload}
                                                             alt="fileDownload"
+
                                                         />
 
                                                     </button>

@@ -689,7 +689,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                         <div className={styles.rightContainerHeading}>
                                             {submenuId === 2 ? <h1>{subMenuTitle}</h1> : (
                                                 <h1>
-                                                    <Gt section={Translations.dashBoardMainTitle} />
+                                                    <Gt section={Translations.dashBoardHeading} />
                                                 </h1>
                                             )
                                             }

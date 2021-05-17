@@ -12,7 +12,7 @@ import { BarChart,
     ComposedChart } from 'recharts';
 import { encodeDate, _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
-import NepaliDate from 'nepali-date-converter';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -238,6 +238,7 @@ const Relief = (props: Props) => {
     const [familiesBenefited, setfamiliesBenefited] = useState();
     const [namesofBeneficiaries, setnamesofBeneficiaries] = useState('');
     const [reliefDate, setreliefDate] = useState('');
+    const [reliefDateAD, setReliefDateAD] = useState('');
     const [reliefAmount, setreliefAmount] = useState();
     const [currentRelief, setCurrentRelief] = useState({});
 
@@ -268,6 +269,7 @@ const Relief = (props: Props) => {
     const [disabilities, setdisabilities] = useState();
     const [janajatis, setjanajatis] = useState();
     const [reliefData, setReliefData] = useState();
+
     const [updateButton, setUpdateButton] = useState(false);
     const [postButton, setPostButton] = useState(false);
     const [reliefId, setReliefId] = useState();
@@ -287,6 +289,7 @@ const Relief = (props: Props) => {
     const [totMadhesis, setTotMadhesis] = useState(0);
     const [totMinotiries, setTotMinorities] = useState(0);
     const [totDalits, setTotDalits] = useState(0);
+    const [postErrors, setPostErrors] = useState('');
 
     const [fiscalYearObj, setFiscalYearObj] = useState([]);
     // const [femaleBenefited, handlefemaleBenefited] = useState(0);
@@ -340,6 +343,13 @@ const Relief = (props: Props) => {
         const dateItem = new Date(date);
         return dateItem.toLocaleString('default', { month: 'long' });
     };
+
+    useEffect(() => {
+        if (reliefDate) {
+            const bsToAd = BSToAD(reliefDate);
+            setReliefDateAD(bsToAd);
+        }
+    }, [reliefDate]);
 
     useEffect(() => {
         if (reliefData) {
@@ -415,7 +425,7 @@ const Relief = (props: Props) => {
     const handleFilteredViewRelief = (response) => {
         setfamiliesBenefited(response[0].numberOfBeneficiaryFamily);
         setnamesofBeneficiaries(response[0].nameOfBeneficiary);
-        setreliefDate(response[0].dateOfReliefDistribution);
+        setreliefDate(ADToBS(response[0].dateOfReliefDistribution));
         setreliefAmount(response[0].reliefAmountNpr);
         setmaleBenefited(response[0].totalMaleBenefited);
         setfemaleBenefited(response[0].totalFemaleBenefited);
@@ -503,6 +513,7 @@ const Relief = (props: Props) => {
 
 
     const handleReliefEdit = (data, item) => {
+        setLoader(false);
         setReliefId(data.id);
         setModalClose(false);
         setPostButton(false);
@@ -510,7 +521,7 @@ const Relief = (props: Props) => {
         setCurrentRelief(item);
         setfamiliesBenefited(data.numberOfBeneficiaryFamily);
         setnamesofBeneficiaries(data.nameOfBeneficiary);
-        setreliefDate(data.dateOfReliefDistribution);
+        setreliefDate(ADToBS(data.dateOfReliefDistribution));
         setreliefAmount(data.reliefAmountNpr);
         setmaleBenefited(data.totalMaleBenefited);
         setfemaleBenefited(data.totalFemaleBenefited);
@@ -540,83 +551,111 @@ const Relief = (props: Props) => {
             const deathTotal = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setDeathCount(deathTotal);
+                .filter(item => item !== undefined);
+            if (deathTotal.length > 0) {
+                deathTotal.reduce((a, b) => a + b);
+                setDeathCount(deathTotal);
+            }
+
 
             const missingTotal = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleMissingCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setMissing(missingTotal);
+                .filter(item => item !== undefined);
+            if (missingTotal.length > 0) {
+                missingTotal.reduce((a, b) => a + b);
+                setMissing(missingTotal);
+            }
 
 
             const injuredTotal = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleInjuredCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setInjured(injuredTotal);
+                .filter(item => item !== undefined);
+            if (injuredTotal.length > 0) {
+                injuredTotal.reduce((a, b) => a + b);
+                setInjured(injuredTotal);
+            }
 
 
             const infra = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.infrastructureDestroyedCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setInfraDestroyed(infra);
+                .filter(item => item !== undefined);
+            if (infra.length > 0) {
+                infra.reduce((a, b) => a + b);
+                setInfraDestroyed(infra);
+            }
 
 
             const livestock = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.livestockDestroyedCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setLivestockDestroyed(livestock);
+                .filter(item => item !== undefined);
+            if (livestock.length > 0) {
+                livestock.reduce((a, b) => a + b);
+                setLivestockDestroyed(livestock);
+            }
 
 
             const hazards = [...new Set(fetchedData.map(item => item.hazard))]
                 .filter(hazar => hazar !== undefined);
-            const hazardwiseImpactData = hazards.map(item => ({
-                name: hazardTypes[item].title,
-                Incidents: fetchedData.filter(inc => inc.hazard === item).length,
-                'People Death': fetchedData.filter(inc => inc.hazard === item)
+            const hazardwiseImpactData = hazards.map((item) => {
+                const name = hazardTypes[item].title;
+                const Incidents = fetchedData.filter(inc => inc.hazard === item).length;
+                const PeopleDeath = fetchedData.filter(inc => inc.hazard === item)
                     .map(losses => losses.loss)
                     .filter(a => a !== undefined)
                     .map(lose => lose.peopleDeathCount)
-                    .filter(count => count !== undefined)
-                    .reduce((a, b) => a + b),
-            }));
+                    .filter(count => count !== undefined);
+                if (PeopleDeath.length > 0) {
+                    PeopleDeath.reduce((a, b) => a + b);
+                }
+                return {
+                    name, Incidents, PeopleDeath,
+                };
+            });
 
             const deathMaleData = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathMaleCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
+                .filter(item => item !== undefined);
+            if (deathMaleData.length > 0) {
+                deathMaleData.reduce((a, b) => a + b);
 
-            setMaleDeath(deathMaleData);
+                setMaleDeath(deathMaleData);
+            }
+
 
             const deathFemaleData = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.peopleDeathFemaleCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setFemaleDeath(deathFemaleData);
+                .filter(item => item !== undefined);
+            if (deathFemaleData.length > 0) {
+                deathFemaleData.reduce((a, b) => a + b);
+                setFemaleDeath(deathFemaleData);
+            }
+
 
             const houseAffectedData = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.infrastructureAffectedHouseCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setHouseAffected(houseAffectedData);
+                .filter(item => item !== undefined);
+            if (houseAffectedData.length > 0) {
+                houseAffectedData.reduce((a, b) => a + b);
+                setHouseAffected(houseAffectedData);
+            }
+
 
             const houseDamagedData = fetchedData.map(item => item.loss)
                 .filter(item => item !== undefined)
                 .map(item => item.infrastructureDestroyedHouseCount)
-                .filter(item => item !== undefined)
-                .reduce((a, b) => a + b);
-            setHouseDamaged(houseDamagedData);
+                .filter(item => item !== undefined);
+            if (houseDamagedData.length > 0) {
+                houseDamagedData.reduce((a, b) => a + b);
+                setHouseDamaged(houseDamagedData);
+            }
+
 
             setdeathGenderChartData(
                 [
@@ -792,29 +831,37 @@ const Relief = (props: Props) => {
     };
 
     const handleSaveRelief = () => {
-        ReliefDataPost.do({
-            body: {
-                numberOfBeneficiaryFamily: Number(familiesBenefited),
-                nameOfBeneficiary: namesofBeneficiaries,
-                dateOfReliefDistribution: reliefDate,
-                reliefAmountNpr: Number(reliefAmount),
-                totalMaleBenefited: Number(maleBenefited),
-                totalFemaleBenefited: Number(femaleBenefited),
-                totalMinoritiesBenefited: Number(miorities),
-                totalDalitBenefited: Number(dalits),
-                totalMadhesiBenefited: Number(madhesis),
-                totalDisabledBenefited: Number(disabilities),
-                totalJanjatiBenefited: Number(janajatis),
-                incident: currentRelief.id,
-                municipality,
-                district,
-                province,
-                fiscalYear: generalData.fiscalYear,
+        setLoader(true);
+        if (reliefAmount) {
+            setPostErrors('');
+            ReliefDataPost.do({
+                body: {
+                    numberOfBeneficiaryFamily: Number(familiesBenefited),
+                    nameOfBeneficiary: namesofBeneficiaries,
+                    dateOfReliefDistribution: reliefDateAD,
+                    reliefAmountNpr: Number(reliefAmount),
+                    totalMaleBenefited: Number(maleBenefited),
+                    totalFemaleBenefited: Number(femaleBenefited),
+                    totalMinoritiesBenefited: Number(miorities),
+                    totalDalitBenefited: Number(dalits),
+                    totalMadhesiBenefited: Number(madhesis),
+                    totalDisabledBenefited: Number(disabilities),
+                    totalJanjatiBenefited: Number(janajatis),
+                    incident: currentRelief.id,
+                    municipality,
+                    district,
+                    province,
+                    fiscalYear: generalData.fiscalYear,
 
-            },
-            savedRelief: handleSavedReliefData,
 
-        });
+                },
+                savedRelief: handleSavedReliefData,
+
+
+            });
+        } else {
+            setPostErrors('Please Enter Relief Amount');
+        }
     };
 
     // const handleUpdateAndClose = (response) => {
@@ -916,25 +963,31 @@ const Relief = (props: Props) => {
         });
     };
     const handleUpdateRelief = () => {
-        ReliefDataPUT.do({
-            body: {
-                numberOfBeneficiaryFamily: Number(familiesBenefited),
-                nameOfBeneficiary: namesofBeneficiaries,
-                dateOfReliefDistribution: reliefDate,
-                reliefAmountNpr: Number(reliefAmount),
-                totalMaleBenefited: Number(maleBenefited),
-                totalFemaleBenefited: Number(femaleBenefited),
-                totalMinoritiesBenefited: Number(miorities),
-                totalDalitBenefited: Number(dalits),
-                totalMadhesiBenefited: Number(madhesis),
-                totalDisabledBenefited: Number(disabilities),
-                totalJanjatiBenefited: Number(janajatis),
-                incident: currentRelief.id,
+        setLoader(true);
+        if (reliefAmount) {
+            setPostErrors('');
+            ReliefDataPUT.do({
+                body: {
+                    numberOfBeneficiaryFamily: Number(familiesBenefited),
+                    nameOfBeneficiary: namesofBeneficiaries,
+                    dateOfReliefDistribution: reliefDateAD,
+                    reliefAmountNpr: Number(reliefAmount),
+                    totalMaleBenefited: Number(maleBenefited),
+                    totalFemaleBenefited: Number(femaleBenefited),
+                    totalMinoritiesBenefited: Number(miorities),
+                    totalDalitBenefited: Number(dalits),
+                    totalMadhesiBenefited: Number(madhesis),
+                    totalDisabledBenefited: Number(disabilities),
+                    totalJanjatiBenefited: Number(janajatis),
+                    incident: currentRelief.id,
 
-            },
-            id: reliefId,
-            updateAndClose: handleUpdateAndClose,
-        });
+                },
+                id: reliefId,
+                updateAndClose: handleUpdateAndClose,
+            });
+        } else {
+            setPostErrors('Please Enter Relief Amount');
+        }
     };
 
     useEffect(() => {
@@ -1027,8 +1080,8 @@ const Relief = (props: Props) => {
                                                     <td>{i + 1}</td>
                                                     <td>{item.item.title || '-'}</td>
                                                     <td>{item.hazardName || '-'}</td>
-                                                    <td>{item.item.incidentOn.split('T')[0] || '-'}</td>
-                                                    <td>{item.item.reportedOn.split('T')[0] || '-'}</td>
+                                                    <td>{ADToBS(item.item.incidentOn.split('T')[0]) || '-'}</td>
+                                                    <td>{ADToBS(item.item.reportedOn.split('T')[0]) || '-'}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>
@@ -1145,7 +1198,7 @@ const Relief = (props: Props) => {
                                                     <tr key={item.id}>
                                                         <td>{i + 1}</td>
                                                         <td>{item.numberOfBeneficiaryFamily}</td>
-                                                        <td>{item.dateOfReliefDistribution}</td>
+                                                        <td>{ADToBS(item.dateOfReliefDistribution)}</td>
                                                         <td>{item.reliefAmountNpr}</td>
                                                         <td>{item.totalMaleBenefited}</td>
                                                         <td>{item.totalFemaleBenefited}</td>
@@ -1217,8 +1270,8 @@ const Relief = (props: Props) => {
                                           <tr key={currentRelief.id}>
                                               <td>{currentRelief.title}</td>
                                               <td>{currentRelief.hazard}</td>
-                                              <td>{currentRelief.incidentOn.split('T')[0]}</td>
-                                              <td>{currentRelief.reportedOn.split('T')[0]}</td>
+                                              <td>{ADToBS(currentRelief.incidentOn.split('T')[0])}</td>
+                                              <td>{ADToBS(currentRelief.reportedOn.split('T')[0])}</td>
                                               <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
                                               <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
                                               <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
@@ -1807,7 +1860,8 @@ Rs
                                     onChange={handleNameofBeneficiaries}
                                     value={namesofBeneficiaries}
                                     placeholder={'Kindly specify the names of beneficiaries'}
-                                    rows={5}
+                                    rows={3}
+                                    // cols={7}
                                     disabled={disableInput}
                                 />
                             </div>
@@ -1927,7 +1981,20 @@ Rs
                                     disabled={disableInput}
                                 />
                             </div> */}
+                            {
+                                (postErrors)
+                            && (
+                                <ul>
 
+
+                                    <li>
+                                        {postErrors}
+                                    </li>
+
+
+                                </ul>
+                            )
+                            }
 
                             <button
                                 type="button"

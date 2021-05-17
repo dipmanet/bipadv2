@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 
 import {
@@ -49,7 +50,7 @@ const TopBar = (props: Props) => {
 
     return (
         <div className={styles.toBarContainer}>
-            <button
+            {/* <button
                 type="button"
                 onClick={handleLangButton}
                 className={styles.langBtn}
@@ -64,7 +65,27 @@ const TopBar = (props: Props) => {
                     name="language"
                     className={styles.langIcon}
                 />
-            </button>
+            </button> */}
+            <div className={styles.languageButton}>
+                <button
+                    onClick={handleLangButton}
+                    className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}
+                    type="button"
+
+
+                >
+                      EN
+                </button>
+                <button
+                    onClick={handleLangButton}
+                    className={language === 'np' ? _cs(styles.nepButton, styles.selectedLanguage) : styles.nepButton}
+
+                    type="button"
+                >
+                      ने
+                </button>
+            </div>
+
         </div>
     );
 };

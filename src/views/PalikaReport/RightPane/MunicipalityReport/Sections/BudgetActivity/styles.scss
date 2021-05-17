@@ -2,82 +2,82 @@ a{
     color: blue;
 }
 
-.palikaTable{
-    .inputContainer{
-        display: flex;
-        border-radius: 3px;
-        background-color: rgb(232,232,232);
-        justify-content: flex-start;
-        align-items: center;
-        margin-bottom: 12px;
-        padding-left: 10px;
-        // border: 1px solid blue;
-        .labelDate{
-        padding-left: 10px;
-        color: #777;
-        width: 100%;
-        // margin-top: 15px;
-        }
-        select{
-        border: none !important;
-        padding: 0px 10px;
-        background: transparent;
-        width: 100%;
-        padding: 15px 10px !important;
-        color: #777;
-        }
-        .label{
-        padding: 12px 18px 0 15px;
-        width: 100%;
-        font-size: 10px;
-        color: #111;
-        }
-        .datepicker{
-        width: 100%;
-        }
-        .addEditBtn{
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        filter: saturate(100%);
+// .palikaTable{
+//     .inputContainer{
+//         display: flex;
+//         border-radius: 3px;
+//         background-color: rgb(232,232,232);
+//         justify-content: flex-start;
+//         align-items: center;
+//         margin-bottom: 12px;
+//         padding-left: 10px;
+//         // border: 1px solid blue;
+//         .labelDate{
+//         padding-left: 10px;
+//         color: #777;
+//         width: 100%;
+//         // margin-top: 15px;
+//         }
+//         select{
+//         border: none !important;
+//         padding: 0px 10px;
+//         background: transparent;
+//         width: 100%;
+//         padding: 15px 10px !important;
+//         color: #777;
+//         }
+//         .label{
+//         padding: 12px 18px 0 15px;
+//         width: 100%;
+//         font-size: 10px;
+//         color: #111;
+//         }
+//         .datepicker{
+//         width: 100%;
+//         }
+//         .addEditBtn{
+//         background-color: transparent;
+//         border: none;
+//         cursor: pointer;
+//         filter: saturate(100%);
         
-        .addEditIcon{
-        font-size: 18px;
-        padding-right: 10px;
-        color: rgb(49,158,255);
-        }
-        }
-        .inputElement{
-        padding: 0;
-        background-color: green;
-        }
+//         .addEditIcon{
+//         font-size: 18px;
+//         padding-right: 10px;
+//         color: rgb(49,158,255);
+//         }
+//         }
+//         .inputElement{
+//         padding: 0;
+//         background-color: green;
+//         }
         
-        input::-webkit-input-placeholder{
-        font-size: 10px;
-        vertical-align:middle !important;
-        line-height: 25px !important;
-        }
+//         input::-webkit-input-placeholder{
+//         font-size: 10px;
+//         vertical-align:middle !important;
+//         line-height: 25px !important;
+//         }
         
-        input{
-        border: none;
-        padding: 15px 10px !important;
-        background: transparent;
-        width: 100%;
-        }
-        input:focus{
-        outline: none;
-        }
-        input::placeholder{
-        font-size: 12px;
-        }
-        .inputIcon{
-        color: rgb(152,152,152);
-        }
-        }
-      .buttonDiv{
-        display: flex;
-      }
-}
+//         input{
+//         border: none;
+//         padding: 15px 10px !important;
+//         background: transparent;
+//         width: 100%;
+//         }
+//         input:focus{
+//         outline: none;
+//         }
+//         input::placeholder{
+//         font-size: 12px;
+//         }
+//         .inputIcon{
+//         color: rgb(152,152,152);
+//         }
+//         }
+//       .buttonDiv{
+//         display: flex;
+//       }
+// }
 .infoBtn{
     border: none;
     cursor: pointer;
@@ -87,76 +87,76 @@ a{
         opacity: 0.33;
     }
 }
-.inputContainer{
-    display: flex;
-    border-radius: 3px;
-    background-color: rgb(232,232,232);
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-left: 10px;
-    // border: 1px solid blue;
-    .labelDate{
-    padding-left: 10px;
-    color: #777;
-    width: 100%;
-    // margin-top: 15px;
-    }
-    select{
-    border: none !important;
-    padding: 0px 10px;
-    background: transparent;
-    width: 100%;
-    padding: 15px 10px !important;
-    color: #777;
-    }
-    .label{
-    padding: 12px 18px 0 15px;
-    width: 100%;
-    font-size: 10px;
-    color: #111;
-    }
-    .datepicker{
-    width: 100%;
-    }
-    .addEditBtn{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    filter: saturate(100%);
+// .inputContainer{
+//     display: flex;
+//     border-radius: 3px;
+//     background-color: rgb(232,232,232);
+//     justify-content: flex-start;
+//     align-items: center;
+//     margin-bottom: 12px;
+//     padding-left: 10px;
+//     // border: 1px solid blue;
+//     .labelDate{
+//     padding-left: 10px;
+//     color: #777;
+//     width: 100%;
+//     // margin-top: 15px;
+//     }
+//     select{
+//     border: none !important;
+//     padding: 0px 10px;
+//     background: transparent;
+//     width: 100%;
+//     padding: 15px 10px !important;
+//     color: #777;
+//     }
+//     .label{
+//     padding: 12px 18px 0 15px;
+//     width: 100%;
+//     font-size: 10px;
+//     color: #111;
+//     }
+//     .datepicker{
+//     width: 100%;
+//     }
+//     .addEditBtn{
+//     background-color: transparent;
+//     border: none;
+//     cursor: pointer;
+//     filter: saturate(100%);
     
-    .addEditIcon{
-    font-size: 18px;
-    padding-right: 10px;
-    color: rgb(49,158,255);
-    }
-    }
-    .inputElement{
-    padding: 0;
-    }
+//     .addEditIcon{
+//     font-size: 18px;
+//     padding-right: 10px;
+//     color: rgb(49,158,255);
+//     }
+//     }
+//     .inputElement{
+//     padding: 0;
+//     }
     
-    input::-webkit-input-placeholder{
-    font-size: 10px;
-    vertical-align:middle !important;
-    line-height: 25px !important;
-    }
+//     input::-webkit-input-placeholder{
+//     font-size: 10px;
+//     vertical-align:middle !important;
+//     line-height: 25px !important;
+//     }
     
-    input{
-    border: none;
-    padding: 15px 10px !important;
-    background: transparent;
-    width: 100%;
-    }
-    input:focus{
-    outline: none;
-    }
-    input::placeholder{
-    font-size: 12px;
-    }
-    .inputIcon{
-    color: rgb(152,152,152);
-    }
-    }
+//     input{
+//     border: none;
+//     padding: 15px 10px !important;
+//     background: transparent;
+//     width: 100%;
+//     }
+//     input:focus{
+//     outline: none;
+//     }
+//     input::placeholder{
+//     font-size: 12px;
+//     }
+//     .inputIcon{
+//     color: rgb(152,152,152);
+//     }
+//     }
   .buttonDiv{
     display: flex;
   }
@@ -311,7 +311,10 @@ a{
     }
 
 }
-
+.emptyTable {
+    text-align: center !important;
+    margin-top: 50px;
+}
 .mainPageDetailsContainer{
     // border: 1px solid gray;
     .updateButtn{
@@ -334,13 +337,14 @@ a{
     h2{
         // margin-bottom: 40px !important;
     }
-    .inputElement{
-        padding: 0;
-        background-color: #EBEBEB;
-        border: none;
-        height: 30px;
-        padding-left: 10px;
-    }
+   
+    // .inputElement{
+    //     padding: 0;
+    //     background-color: #EBEBEB;
+    //     border: none;
+    //     height: 30px;
+    //     padding-left: 10px;
+    // }
     .drrsLink{
         display: flex;
         // border: 1px solid gray;
