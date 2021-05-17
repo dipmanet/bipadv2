@@ -109,7 +109,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             interface Response { results: PageType.DataArchiveRain[] }
             const { results: dataArchiveRainList = [] } = response as Response;
             setDataArchiveRainList({ dataArchiveRainList });
-            params.setDataArchiveBasinRainList({ dataArchiveRainList });
+            // params.setDataArchiveBasinRainList({ dataArchiveRainList });
         },
         onPropsChanged: {
             rainFilters: true,
@@ -136,7 +136,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const Rain = (props: Props) => {
     const [sortKey, setSortKey] = useState('key');
-    const { rainList, requests, rainFilters } = props;
+    const { rainList, requests, rainFilters, setDataArchiveRainList } = props;
     const pending = isAnyRequestPending(requests);
     const { setDataArchive } = useContext(TitleContext);
 
@@ -144,20 +144,26 @@ const Rain = (props: Props) => {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
 
-    const setDataArchiveBasinRainList = (rainBasinList) => {
-        // eslint-disable-next-line max-len
-        // const filteredRain = rainBasinList.filter(item => item.basin === rainFilters.basin.title);
-        // console.log('Filter basin', filteredRain);
-        // Send this to redux
-    };
-
-    requests.dataArchiveRainRequest.setDefaultParams({ setDataArchiveBasinRainList });
+    // requests.dataArchiveRainRequest.setDefaultParams({ setDataArchiveBasinRainList });
 
     useEffect(() => {
         if (setData) {
             setData(rainList);
         }
-    }, [rainList, setData]);
+    }, [setData, rainList]);
+    useEffect(() => {
+        if (rainFilters.basin) {
+            // set data is for map stuff
+            // setData(rainList[0]);
+            if (rainList && rainList.length > 0) {
+                props.setDataArchiveRainList({ dataArchiveRainList:
+                    rainList.filter(item => item.basin === 'Narayani') });
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rainFilters.basin]);
+
+
     const { station: { title: location } } = rainFilters;
     const [startDate, endDate] = getDatesFromFilters(rainFilters);
 
@@ -172,8 +178,11 @@ const Rain = (props: Props) => {
             return prevState;
         });
     }
+    useEffect(() => {
+        console.log('rain list:', rainList);
+    }, [rainList]);
 
-    if (!pending && rainList.length < 1) {
+    if (!pending && rainList && rainList.length < 1) {
         return (
             <div
                 className={styles.message}
@@ -210,12 +219,14 @@ const Rain = (props: Props) => {
             />
             <div className={styles.header}>
                 <Header
-                    dataCount={rainList.length || 0}
+                    dataCount={rainList && rainList.length}
                 />
                 <div className={styles.note}>
                     {!pending && <Note />}
                 </div>
             </div>
+            {/* {rainList && rainList.length > 0 && rainList.map(item => item.id)} */}
+            {/* the rain stuff need to be here */}
             { groupedRainList.map((group) => {
                 const { key, value } = group;
                 if (value.length > 1) {
