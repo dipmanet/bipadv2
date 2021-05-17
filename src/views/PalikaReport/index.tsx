@@ -520,7 +520,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setSelectedTab(palikaRedirect.redirectTo);
         }
     }, [palikaRedirect.redirectTo]);
-    console.log('fetched table data:', fetchedData);
+
 
     useEffect(() => {
         if (fetchedData && fiscalYear) {

@@ -35,9 +35,8 @@ const PalikaReportTable = (props) => {
 
 
     const iconName = 'sort';
-    console.log('tabledata:', tableData);
+
     const handleEditButtonClick = (row) => {
-        console.log('row', row);
         setGeneralDatapp(row);
         setShowTabs(false, false, true);
     };
@@ -97,7 +96,6 @@ const PalikaReportTable = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSort]);
     const handleClick = (e) => {
-        console.log(e.target.id);
         if (e.target.id === 'summaryReport' || e.target.id === 'fullReport') {
             return;
         }
@@ -116,7 +114,7 @@ const PalikaReportTable = (props) => {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log('This table data>>>', tableData);
+
     return (
         <div>
             {/* <h1>Responsive Table Example</h1> */}

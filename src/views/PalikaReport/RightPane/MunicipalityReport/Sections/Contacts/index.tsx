@@ -476,7 +476,7 @@ const Contacts = (props: Props) => {
         setTrainedContacts: handletrainedContacts,
         setErrors: handleErrors,
     });
-    console.log('nonGov contact', nonGovContacts);
+
 
     useEffect(() => {
         if (mergedData.length > 0) {
@@ -622,7 +622,7 @@ const Contacts = (props: Props) => {
         props.handleNextClick();
     };
 
-    // console.log('Final array', loader);
+
     return (
         <>
             {

@@ -186,7 +186,7 @@ const Sidebar = (props) => {
             setShowErr(true);
         }
     };
-    console.log('This user>>>', user);
+
     const Data1 = [{
         id: 1,
         title: 'Palika Reports',
@@ -243,7 +243,7 @@ const Sidebar = (props) => {
         setSubMenuSlug(slug);
         // ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
     };
-    console.log('This is what>>>', selectedSubMenuId);
+
     useEffect(() => {
         if (selectedSubMenuId) {
             props.getsubmenuId(selectedSubMenuId);
@@ -315,7 +315,6 @@ const Sidebar = (props) => {
     };
 
     const handleCheckFilterDisableButtonForProvince = (province) => {
-        console.log(province);
         setDrrmRegion({
             ...drrmRegion,
             province,
@@ -333,7 +332,7 @@ const Sidebar = (props) => {
             municipality,
         });
     };
-    console.log('drrm region:', drrmRegion);
+
     return (
         <div>
 
