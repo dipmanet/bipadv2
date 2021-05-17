@@ -151,6 +151,7 @@
         "@turf/turf": "^5.1.6",
         "@types/mapbox-gl": "^1.7.0",
         "axios": "^0.21.1",
+        "bikram-sambat-js": "^1.0.1",
         "bootstrap": "^4.6.0",
         "core-js": "3",
         "d3-array": "^2.3.1",

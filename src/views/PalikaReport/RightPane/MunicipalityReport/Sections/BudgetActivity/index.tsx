@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import { PieChart, Pie, Cell } from 'recharts';
 import Loader from 'react-loader';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
 import editIcon from '#resources/palikaicons/edit.svg';
@@ -273,6 +274,9 @@ const BudgetActivity = (props: Props) => {
     const [selectedBudgetActivityIndex, setSelectedBudgetActivityIndex] = useState();
     const [loader, setLoader] = useState(true);
     const [editBtnClicked, setEditBtnClicked] = useState(false);
+
+    const [projectStartDateAD, setProjectStartDate] = useState('');
+    const [projectEndDateAD, setProjectEndDate] = useState('');
     const handleInfoBtn = () => {
         setShowInfo(!showInfo);
     };
@@ -344,7 +348,24 @@ const BudgetActivity = (props: Props) => {
         setorganisationName(org.target.value);
     };
 
+    useEffect(() => {
+        if (projstartDate) {
+            const bsToAd = BSToAD(projstartDate);
+            console.log('changed date', bsToAd);
+            setProjectStartDate(bsToAd);
+        }
+    }, [projstartDate]);
+    useEffect(() => {
+        if (projcompletionDate) {
+            const bsToAd = BSToAD(projcompletionDate);
+            console.log('changed date', bsToAd);
+            setProjectEndDate(bsToAd);
+        }
+    }, [projcompletionDate]);
+    console.log('Project start Date,', projectStartDateAD);
 
+    console.log('date', projstartDate);
+    console.log('date', projcompletionDate);
     BudgetActivityGetRequest.setDefaultParams({
         province,
         district,
@@ -400,6 +421,7 @@ const BudgetActivity = (props: Props) => {
         setPending(true);
         setLoader(true);
         setPostErrors({});
+
         BudgetActivityPostRequest.do({
             body: {
                 activityName,
@@ -410,8 +432,8 @@ const BudgetActivity = (props: Props) => {
                 otherFundType: fundingType,
                 budgetCode,
                 donerOrganization: organisationName,
-                projectStartDate: projstartDate,
-                projectEndDate: projcompletionDate,
+                projectStartDate: projectStartDateAD,
+                projectEndDate: projectEndDateAD,
                 amount: allocatedBudget,
                 expenditure: actualExp,
                 status: projStatus,
@@ -550,8 +572,8 @@ const BudgetActivity = (props: Props) => {
                 otherFundType: fundingType,
                 budgetCode,
                 donerOrganization: organisationName,
-                projectStartDate: projstartDate,
-                projectEndDate: projcompletionDate,
+                projectStartDate: projectStartDateAD,
+                projectEndDate: projectEndDateAD,
                 amount: allocatedBudget,
                 expenditure: actualExp,
                 status: projStatus,
@@ -577,8 +599,8 @@ const BudgetActivity = (props: Props) => {
             setfundingType(budgetActivities[selectedBudgetActivityIndex].otherFundType);
             setbudgetCode(budgetActivities[selectedBudgetActivityIndex].budgetCode);
             setorganisationName(budgetActivities[selectedBudgetActivityIndex].donerOrganization);
-            setStartDate(budgetActivities[selectedBudgetActivityIndex].projectStartDate);
-            setprojCompletionDate(budgetActivities[selectedBudgetActivityIndex].projectEndDate);
+            setStartDate(ADToBS(budgetActivities[selectedBudgetActivityIndex].projectStartDate));
+            setprojCompletionDate(ADToBS(budgetActivities[selectedBudgetActivityIndex].projectEndDate));
             setprojStatus(budgetActivities[selectedBudgetActivityIndex].status);
             setallocatedBudget(budgetActivities[selectedBudgetActivityIndex].amount);
             setactualExp(budgetActivities[selectedBudgetActivityIndex].expenditure);
@@ -978,8 +1000,8 @@ const BudgetActivity = (props: Props) => {
                                                                      <td>{data.otherFundType}</td>
                                                                      <td>{data.donerOrganization}</td>
                                                                      <td>{data.budgetCode}</td>
-                                                                     <td>{data.projectStartDate}</td>
-                                                                     <td>{data.projectEndDate}</td>
+                                                                     <td>{ADToBS(data.projectStartDate)}</td>
+                                                                     <td>{ADToBS(data.projectEndDate)}</td>
                                                                      <td>{data.status}</td>
                                                                      <td>{data.amount}</td>
                                                                      <td>{data.expenditure}</td>
@@ -1166,6 +1188,7 @@ const BudgetActivity = (props: Props) => {
                                                                  inputClassName="form-control"
                                                                  className={styles.datepicker}
                                                                  value={projstartDate}
+
                                                                  onChange={date => setStartDate(date)}
                                                                  options={{ calenderLocale: 'en', valueLocale: 'en' }}
                                                              />

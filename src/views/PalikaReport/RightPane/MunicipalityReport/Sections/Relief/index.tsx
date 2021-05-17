@@ -12,6 +12,7 @@ import { BarChart,
     ComposedChart } from 'recharts';
 import { _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -200,6 +201,7 @@ const Relief = (props: Props) => {
     const [familiesBenefited, setfamiliesBenefited] = useState();
     const [namesofBeneficiaries, setnamesofBeneficiaries] = useState('');
     const [reliefDate, setreliefDate] = useState('');
+    const [reliefDateAD, setReliefDateAD] = useState('');
     const [reliefAmount, setreliefAmount] = useState();
     const [currentRelief, setCurrentRelief] = useState({});
 
@@ -230,6 +232,7 @@ const Relief = (props: Props) => {
     const [disabilities, setdisabilities] = useState();
     const [janajatis, setjanajatis] = useState();
     const [reliefData, setReliefData] = useState();
+
     const [updateButton, setUpdateButton] = useState(false);
     const [postButton, setPostButton] = useState(false);
     const [reliefId, setReliefId] = useState();
@@ -282,6 +285,13 @@ const Relief = (props: Props) => {
         const dateItem = new Date(date);
         return dateItem.toLocaleString('default', { month: 'long' });
     };
+
+    useEffect(() => {
+        if (reliefDate) {
+            const bsToAd = BSToAD(reliefDate);
+            setReliefDateAD(bsToAd);
+        }
+    }, [reliefDate]);
 
     useEffect(() => {
         if (reliefData) {
@@ -364,7 +374,7 @@ const Relief = (props: Props) => {
     const handleFilteredViewRelief = (response) => {
         setfamiliesBenefited(response[0].numberOfBeneficiaryFamily);
         setnamesofBeneficiaries(response[0].nameOfBeneficiary);
-        setreliefDate(response[0].dateOfReliefDistribution);
+        setreliefDate(ADToBS(response[0].dateOfReliefDistribution));
         setreliefAmount(response[0].reliefAmountNpr);
         setmaleBenefited(response[0].totalMaleBenefited);
         setfemaleBenefited(response[0].totalFemaleBenefited);
@@ -406,6 +416,7 @@ const Relief = (props: Props) => {
         });
     };
     const handleReliefEdit = (data, item) => {
+        setLoader(false);
         setReliefId(data.id);
         setModalClose(false);
         setPostButton(false);
@@ -413,7 +424,7 @@ const Relief = (props: Props) => {
         setCurrentRelief(item);
         setfamiliesBenefited(data.numberOfBeneficiaryFamily);
         setnamesofBeneficiaries(data.nameOfBeneficiary);
-        setreliefDate(data.dateOfReliefDistribution);
+        setreliefDate(ADToBS(data.dateOfReliefDistribution));
         setreliefAmount(data.reliefAmountNpr);
         setmaleBenefited(data.totalMaleBenefited);
         setfemaleBenefited(data.totalFemaleBenefited);
@@ -725,13 +736,14 @@ const Relief = (props: Props) => {
     //     });
     // };
     const handleSaveRelief = () => {
+        setLoader(true);
         if (reliefAmount) {
             setPostErrors('');
             ReliefDataPost.do({
                 body: {
                     numberOfBeneficiaryFamily: Number(familiesBenefited),
                     nameOfBeneficiary: namesofBeneficiaries,
-                    dateOfReliefDistribution: reliefDate,
+                    dateOfReliefDistribution: reliefDateAD,
                     reliefAmountNpr: Number(reliefAmount),
                     totalMaleBenefited: Number(maleBenefited),
                     totalFemaleBenefited: Number(femaleBenefited),
@@ -843,13 +855,14 @@ const Relief = (props: Props) => {
         });
     };
     const handleUpdateRelief = () => {
+        setLoader(true);
         if (reliefAmount) {
             setPostErrors('');
             ReliefDataPUT.do({
                 body: {
                     numberOfBeneficiaryFamily: Number(familiesBenefited),
                     nameOfBeneficiary: namesofBeneficiaries,
-                    dateOfReliefDistribution: reliefDate,
+                    dateOfReliefDistribution: reliefDateAD,
                     reliefAmountNpr: Number(reliefAmount),
                     totalMaleBenefited: Number(maleBenefited),
                     totalFemaleBenefited: Number(femaleBenefited),
@@ -952,8 +965,8 @@ const Relief = (props: Props) => {
                                                     <td>{i + 1}</td>
                                                     <td>{item.item.title || '-'}</td>
                                                     <td>{item.hazardName || '-'}</td>
-                                                    <td>{item.item.incidentOn.split('T')[0] || '-'}</td>
-                                                    <td>{item.item.reportedOn.split('T')[0] || '-'}</td>
+                                                    <td>{ADToBS(item.item.incidentOn.split('T')[0]) || '-'}</td>
+                                                    <td>{ADToBS(item.item.reportedOn.split('T')[0]) || '-'}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleInjuredCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleMissingCount : 0}</td>
@@ -1069,7 +1082,7 @@ const Relief = (props: Props) => {
                                                     <tr key={item.id}>
                                                         <td>{i + 1}</td>
                                                         <td>{item.numberOfBeneficiaryFamily}</td>
-                                                        <td>{item.dateOfReliefDistribution}</td>
+                                                        <td>{ADToBS(item.dateOfReliefDistribution)}</td>
                                                         <td>{item.reliefAmountNpr}</td>
                                                         <td>{item.totalMaleBenefited}</td>
                                                         <td>{item.totalFemaleBenefited}</td>
@@ -1135,8 +1148,8 @@ const Relief = (props: Props) => {
                                           <tr key={currentRelief.id}>
                                               <td>{currentRelief.title}</td>
                                               <td>{currentRelief.hazard}</td>
-                                              <td>{currentRelief.incidentOn.split('T')[0]}</td>
-                                              <td>{currentRelief.reportedOn.split('T')[0]}</td>
+                                              <td>{ADToBS(currentRelief.incidentOn.split('T')[0])}</td>
+                                              <td>{ADToBS(currentRelief.reportedOn.split('T')[0])}</td>
                                               <td>{currentRelief.loss ? currentRelief.loss.peopleDeathCount : 0}</td>
                                               <td>{currentRelief.loss ? currentRelief.loss.peopleInjuredCount : 0}</td>
                                               <td>{currentRelief.loss ? currentRelief.loss.peopleMissingCount : 0}</td>
