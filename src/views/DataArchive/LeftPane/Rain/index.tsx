@@ -109,7 +109,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             interface Response { results: PageType.DataArchiveRain[] }
             const { results: dataArchiveRainList = [] } = response as Response;
             setDataArchiveRainList({ dataArchiveRainList });
-            // params.setDataArchiveBasinRainList({ dataArchiveRainList });
+            params.setDataArchiveBasinRainList({ dataArchiveRainList });
         },
         onPropsChanged: {
             rainFilters: true,
@@ -144,25 +144,14 @@ const Rain = (props: Props) => {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
 
-    // const setDataArchiveBasinRainList = (rainBasinList) => {
-    //     console.log('Rain filter:', rainFilters);
-    //     console.log('Data:', rainBasinList);
-    //     // eslint-disable-next-line max-len
+    const setDataArchiveBasinRainList = (rainBasinList) => {
+        // eslint-disable-next-line max-len
+        // const filteredRain = rainBasinList.filter(item => item.basin === rainFilters.basin.title);
+        // console.log('Filter basin', filteredRain);
+        // Send this to redux
+    };
 
-
-    //     // Send this to redux
-    // };
-
-    useEffect(() => {
-        if (rainList.length > 0 && rainFilters.basin) {
-            const filteredRain = rainList.filter(item => item.basin === rainFilters.basin);
-            console.log('Filtered basin', filteredRain);
-            props.setDataArchiveRainList({ filteredRain });
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rainList, rainFilters.basin]);
-
-    // requests.dataArchiveRainRequest.setDefaultParams({ setDataArchiveBasinRainList });
+    requests.dataArchiveRainRequest.setDefaultParams({ setDataArchiveBasinRainList });
 
     useEffect(() => {
         if (setData) {
