@@ -140,6 +140,7 @@ class RainFilters extends React.PureComponent<Props, State> {
 
     public componentDidMount() {
         const { rainFilters: faramValues } = this.props;
+        console.log('filtertest:', faramValues);
         this.setState({ faramValues });
     }
 
@@ -218,6 +219,7 @@ class RainFilters extends React.PureComponent<Props, State> {
 
         const { setDataArchiveRainFilter } = this.props;
         const { faramValues } = this.state;
+        console.log('Faram:', faramValues);
         if (faramValues) {
             setDataArchiveRainFilter({ dataArchiveRainFilters: faramValues });
         }

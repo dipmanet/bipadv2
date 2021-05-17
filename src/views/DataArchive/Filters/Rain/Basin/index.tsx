@@ -63,6 +63,7 @@ const BasinSelector = (props: Props) => {
 
     const handleBasinChange = (basinName: string) => {
         setSelectedBasin(basinName);
+        onChangeFromProps(basinName || {});
         const station = stationsFromProps.filter(s => s.basin === basinName)[0];
         console.log(basinName);
     };

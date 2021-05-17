@@ -65,6 +65,7 @@ export interface DAPollutionFiltersElement {
 }
 
 export interface DARainFiltersElement {
+    basin: Basin;
     station: RainStation;
     dataDateRange: DataDateRangeValueElement;
 }
