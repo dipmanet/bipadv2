@@ -105,7 +105,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.submittedData(response);
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
             params.error(error);
         },
 
@@ -287,7 +286,6 @@ const Simulation = (props: Props) => {
                 return null;
             });
             finalArr = [...new Set(finalSimulationData)];
-            console.log('finalARr', finalArr);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationData]);
@@ -402,7 +400,7 @@ const Simulation = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationIndex, editBtnClicked]);
-    console.log('Simulationn data>>>', finalArr);
+
 
     let tableStyle = {};
     if (props.annex) {

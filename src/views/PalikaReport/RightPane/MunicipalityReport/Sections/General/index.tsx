@@ -175,7 +175,6 @@ const General = (props: Props) => {
         if (generalData && generalData.item) {
             setfiscalYear(generalData.item.fiscalYear);
             setDisabled(true);
-            console.log('fs set:', fiscalYear);
         }
         if (!generalData.item && generalData.fiscalYear) {
             setfiscalYear(generalData.fiscalYear);
@@ -203,7 +202,6 @@ const General = (props: Props) => {
         const title = fiscalYearList
             .filter(data => Number(data.id) === Number(fiscal.target.value));
         setFiscalYearTitle(title[0].titleEn);
-        console.log('title', title);
     };
     const handleFiscalYearList = (response) => {
         setFiscalYearList(response);
@@ -242,7 +240,6 @@ const General = (props: Props) => {
         const caoData = response.filter(item => item.position === 'Chief Administrative Officer');
         const focalPersonData = response.filter(item => item.isDrrFocalPerson === true);
         if (mayorData.length > 0) {
-            console.log('mayorData: ', mayorData[0]);
             setmayor(mayorData[0]);
         }
         if (caoData.length > 0) {

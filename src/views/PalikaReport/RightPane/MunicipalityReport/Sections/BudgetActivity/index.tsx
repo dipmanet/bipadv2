@@ -88,7 +88,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.handlePendingState(false);
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
             params.body.handlePendingState(false);
             params.body.setErrors(error);
         },
@@ -357,21 +356,18 @@ const BudgetActivity = (props: Props) => {
     useEffect(() => {
         if (projstartDate) {
             const bsToAd = BSToAD(projstartDate);
-            console.log('changed date', bsToAd);
+
             setProjectStartDate(bsToAd);
         }
     }, [projstartDate]);
     useEffect(() => {
         if (projcompletionDate) {
             const bsToAd = BSToAD(projcompletionDate);
-            console.log('changed date', bsToAd);
+
             setProjectEndDate(bsToAd);
         }
     }, [projcompletionDate]);
-    console.log('Project start Date,', projectStartDateAD);
 
-    console.log('date', projstartDate);
-    console.log('date', projcompletionDate);
     BudgetActivityGetRequest.setDefaultParams({
         province,
         district,
@@ -502,17 +498,14 @@ const BudgetActivity = (props: Props) => {
         setpriorityArea(e.target.value);
         const obj = priorityData.Data.filter(item => item.title === e.target.value);
         setParent(obj.sn);
-        // console.log('our SN', obj);
+
         setPData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
-        // console.log('our obj', priorityData.Data.filter(item => item.parent === obj.sn));
     };
 
     const handlePriorityAction = (e) => {
-        console.log('action:', e.target.value);
-
         setPriorityAction(e.target.value);
         const obj = priorityData.Data.filter(item => item.title === e.target.value);
-        // setSubParent(obj.sn);
+
         setAData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
     };
     const handlePriorityActivity = (e) => {
@@ -554,7 +547,7 @@ const BudgetActivity = (props: Props) => {
             setPriorityAction(data);
         }
     };
-    console.log('This is budget activity>>>', budgetActivities);
+
     const handleEditActivity = (id, index) => {
         setBudgetActivityId(id);
         setEditBudgetActivity(true);

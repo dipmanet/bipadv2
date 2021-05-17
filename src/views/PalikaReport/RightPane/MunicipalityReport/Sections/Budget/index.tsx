@@ -106,7 +106,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.callGetApi(response);
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
             params.body.handlePendingState(false);
             params.body.setErrors(error);
         },
@@ -258,10 +257,6 @@ const Budget = (props: Props) => {
     };
 
     const handleNextClick = () => {
-        console.log('annual budget data when clicked: ', annualBudgetData);
-        console.log(Number(additionalFund),
-            Number(municipalBudget),
-            Number(drrFund));
         if (municipalBudget && drrFund && additionalFund) {
             if (!annualBudgetData.length) {
                 BudgetPostRequest.do({
@@ -303,7 +298,7 @@ const Budget = (props: Props) => {
             setProgress(1);
         }
     };
-    console.log('This is budget id>>>', budgetId);
+
 
     useEffect(() => {
         if (annualBudgetData.length > 0) {

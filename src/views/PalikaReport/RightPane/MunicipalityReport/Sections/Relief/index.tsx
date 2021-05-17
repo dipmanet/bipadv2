@@ -297,8 +297,7 @@ const Relief = (props: Props) => {
 
     const getdateTimeFromFs = (fs: string) => {
         const fsFiltered = fiscalYearObj.filter(i => String(i.titleEn) === String(fs));
-        console.log('fs filtered', fsFiltered);
-        console.log('fs recieved from redux', fs);
+
         return [
             `${fsFiltered[0].startDateAd}T00:00:00+05:45`,
             `${fsFiltered[0].endDateAd}T23:59:59+05:45`,
@@ -483,8 +482,6 @@ const Relief = (props: Props) => {
 
     useEffect(() => {
         if (fiscalYearObj && fiscalYearObj.length > 0) {
-            console.log('fs obj in state', fiscalYearObj);
-            console.log('setting prarams, date:', getdateTimeFromFs(generalData.fiscalYearTitle));
             PalikaReportInventoriesReport.setDefaultParams({
                 organisation: handleFetchedData,
                 url,
@@ -750,9 +747,7 @@ const Relief = (props: Props) => {
 
 
     const setNepaliFiscalYear = (fiscalYearObject) => {
-        console.log('setting fiscal year...');
         setFiscalYearObj(fiscalYearObject);
-        console.log('nepali fiscal year obj:', fiscalYearObj);
     };
 
     NepaliFiscalYearGet.setDefaultParams({
@@ -915,9 +910,6 @@ const Relief = (props: Props) => {
 
     const getIncidentTitle = (item) => {
         if (fetchedData.length > 0) {
-            console.log('recieved item:', item);
-            console.log('fetched data:', fetchedData);
-            // console.log('filtered data:', fetchedData.filter(incidentObj => incidentObj.id === item.incident));
             return [
                 (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
                 (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn || '-'),
