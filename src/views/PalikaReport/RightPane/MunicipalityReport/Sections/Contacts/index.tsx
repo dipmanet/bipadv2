@@ -555,13 +555,13 @@ const Contacts = (props: Props) => {
         }
     };
     const handleCheckAllNg = (e) => {
-        setCheckedAll(e.target.checked);
+        setCheckedAllNg(e.target.checked);
         if (e.target.checked) {
-            setCheckedRows(Array.from(Array(mergedData.length).keys()));
-            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
+            setCheckedRowsNg(Array.from(Array(mergedData.length).keys()));
+            setDataWithIndexNg(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         } else {
-            setCheckedRows([]);
-            setDataWithIndex(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
+            setCheckedRowsNg([]);
+            setDataWithIndexNg(mergedData.map((item, i) => ({ ...item, index: i, selectedRow: false })));
         }
     };
 
@@ -591,7 +591,7 @@ const Contacts = (props: Props) => {
         setCheckedAllNg(false);
 
         if (e.target.checked) {
-            const arr = [...checkedRows, idx];
+            const arr = [...checkedRowsNg, idx];
             setCheckedRowsNg(arr);
             setDataWithIndexNg(dataWithIndexNg.map((item) => {
                 if (item.index === idx) {
@@ -600,7 +600,7 @@ const Contacts = (props: Props) => {
                 return item;
             }));
         } else {
-            setCheckedRowsNg(checkedRows.filter(item => item !== idx));
+            setCheckedRowsNg(checkedRowsNg.filter(item => item !== idx));
             setDataWithIndexNg(dataWithIndexNg.map((item) => {
                 if (item.index === idx) {
                     return Object.assign({}, item, { selectedRow: false });
@@ -752,7 +752,7 @@ const Contacts = (props: Props) => {
                                                 <input
                                                     type="checkbox"
                                                     onChange={handleCheckAllNg}
-                                                    checked={checkedAll}
+                                                    checked={checkedAllNg}
                                                     // defaultChecked
                                                     className={styles.checkBox}
                                                 />
@@ -934,9 +934,7 @@ const Contacts = (props: Props) => {
                                                         <td>
                                                             <input
                                                                 type="checkbox"
-                                                                checked={checkedRows.indexOf(i) !== -1}
-
-                                                            // defaultChecked
+                                                                checked={checkedRowsNg.indexOf(i) !== -1}
                                                                 onChange={e => handleCheckNg(i, e)}
                                                                 className={styles.checkBox}
                                                                 key={data.id}
