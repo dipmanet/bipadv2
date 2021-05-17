@@ -233,11 +233,13 @@ class RainFilters extends React.PureComponent<Props, State> {
         // const { setFilters } = this.props;
         // setFilters({ filters: faramValues });
         this.setState({ faramValues });
+        console.log('setting fv:', faramValues);
     }
 
     private handleSubmitClick = () => {
         const { setDataArchiveRainFilter } = this.props;
         const { faramValues } = this.state;
+        console.log('fv', faramValues);
         const { dataDateRange } = faramValues || {};
         const { rangeInDays, startDate = '', endDate = '' } = dataDateRange || {};
         let faramError = '';
