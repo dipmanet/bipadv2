@@ -731,7 +731,7 @@ const General = (props: Props) => {
                                 className={styles.datepicker}
                                 value={formationDate}
                                 onChange={(value: string) => setformationDate(value)}
-                                placeholder="sdfsdfs"
+                                // placeholder="sdfsdfs"
                                 options={{
                                     closeOnSelect: true,
                                     calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',

@@ -169,14 +169,14 @@ const languageTranslations: LanguageEntry = {
     },
     GeneralPosition: {
         en: 'Position',
-        np: 'काम भूमिका',
+        np: 'पद',
     },
     AddEdit: {
         en: 'Add/Edit Details',
         np: 'विवरणहरू थप्नुहोस् वा सम्पादन गर्नुहोस्',
     },
     GeneralPleaseClick: {
-        np: 'विवरण अपडेट गर्न कृपया बटनमा क्लिक गर्नुहोस्',
+        np: 'विवरण अपडेट गर्न कृपया थप्नुहोस् / सम्पादन गर्नुहोस् बटनमा क्लिक गर्नुहोस्',
         en: 'Please click on the add/edit button to update the details',
     },
     SaveContinue: {
