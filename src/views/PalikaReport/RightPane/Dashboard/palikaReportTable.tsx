@@ -11,11 +11,20 @@ import { iconNames } from '#constants';
 import editIcon from '#resources/palikaicons/edit.svg';
 import fileDownload from '#resources/palikaicons/file-download.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 import {
     setGeneralDataAction,
 } from '#actionCreators';
+import { palikaLanguageSelector } from '#selectors';
 
+const mapStateToProps = (state, props) => ({
+    drrmLanguage: palikaLanguageSelector(state),
+});
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
 });
@@ -31,7 +40,7 @@ const PalikaReportTable = (props) => {
         sortDistrict,
         sortMunicipality, setShowTabs,
         sortFiscalYear, setGeneralDatapp,
-        sortCreatedOn, sortModifiedOn, currentPage, pageSize } = props;
+        sortCreatedOn, sortModifiedOn, currentPage, pageSize, drrmLanguage } = props;
 
 
     const iconName = 'sort';
@@ -254,7 +263,14 @@ const PalikaReportTable = (props) => {
                                                 <div ref={node} className={styles.dropdown}>
 
 
-                                                    <button type="button" onClick={e => handleDLReport(e, item.item.id)} className={styles.dropbtn} title="Download Report">
+                                                    <button
+                                                        type="button"
+                                                        onClick={e => handleDLReport(e, item.item.id)}
+                                                        className={styles.dropbtn}
+                                                        title={drrmLanguage.language === 'np'
+                                                            ? Translations.dashboardTableDownloadTooltip.np
+                                                            : Translations.dashboardTableDownloadTooltip.en}
+                                                    >
 
                                                         <ScalableVectorGraphics
                                                             className={styles.bulletPoint}
@@ -368,7 +384,9 @@ const PalikaReportTable = (props) => {
                                                     type="button"
                                                     className={styles.reliefBtn}
                                                     onClick={() => handleEditButtonClick(data)}
-                                                    title="Edit Report"
+                                                    title={drrmLanguage.language === 'np'
+                                                        ? Translations.dashboardTableEditTooltip.np
+                                                        : Translations.dashboardTableEditTooltip.en}
                                                 >
 
                                                     <ScalableVectorGraphics
@@ -416,6 +434,6 @@ const PalikaReportTable = (props) => {
     );
 };
 
-export default connect(undefined, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     PalikaReportTable,
 );

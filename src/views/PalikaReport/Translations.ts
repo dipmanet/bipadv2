@@ -98,6 +98,14 @@ const languageTranslations: LanguageEntry = {
         np: 'डाउनलोड',
         en: 'Download',
     },
+    dashboardTableDownloadTooltip: {
+        np: 'डाउनलोड रिपोर्ट',
+        en: 'Download Report',
+    },
+    dashboardTableEditTooltip: {
+        np: 'रिपोर्ट सम्पादन गर्नुहोस्',
+        en: 'Edit Report',
+    },
     dashboardFilter: {
         np: 'फिल्टर',
         en: 'Filter',
@@ -390,6 +398,55 @@ const languageTranslations: LanguageEntry = {
         en: 'Rs.',
         np: 'रु',
     },
+    ResourcesHeading: {
+        en: 'Critical Infrastructures',
+        np: 'भौतिक पूर्वाधारहरू',
+    },
+    ResourcesSerialNumber: {
+        np: 'क्रम संख्या',
+        en: 'SN',
+    },
+    ResourcesName: {
+        np: 'स्रोतको नाम',
+        en: 'Resource Name',
+    },
+    ResourcesType: {
+        np: 'स्रोतको प्रकार',
+        en: 'Resource Type',
+    },
+    ResourcesOperatorType: {
+        np: 'अपरेटरको प्रकार',
+        en: 'Operator Type',
+    },
+    ResourcesNumberOfMaleEmployee: {
+        np: 'पुरुष कर्मचारी संख्या',
+        en: 'Number of Male Employee',
+    },
+    ResourcesNumberOfFemaleEmployee: {
+        np: 'महिला कर्मचारी संख्या',
+        en: 'Number of Female Employee',
+    },
+    ResourcesNumberOfTotalEmployee: {
+        np: 'कुल कर्मचारी संख्या',
+        en: 'Total Employee',
+    },
+    ResourcesAction: {
+        np: 'कार्य',
+        en: 'Action',
+    },
+    ResourcesAddButton: {
+        np: 'स्रोतहरू थप्नुहोस्',
+        en: 'Add Resources',
+    },
+    ResourcesNoDataMessage: {
+        np: 'डाटा उपलब्ध छैन',
+        en: 'Data Unavailable',
+    },
+    ResourcesEditTooltip: {
+        np: 'स्रोतको डाटा सम्पादन गर्नुहोस्',
+        en: 'Edit Resource Data',
+    },
+
 
 };
 

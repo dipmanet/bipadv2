@@ -23,7 +23,8 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector,
     drrmRegionSelector,
-    drrmProgresSelector } from '#selectors';
+    drrmProgresSelector,
+    palikaLanguageSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setPalikaRedirectAction,
@@ -32,7 +33,8 @@ import {
 } from '#actionCreators';
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 
 interface Props{
     width: string;
@@ -43,6 +45,7 @@ const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmCritical: params => dispatch(setDrrmCriticalAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
+
 });
 
 const mapStateToProps = (state, props) => ({
@@ -52,6 +55,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaResources: {
@@ -123,7 +127,7 @@ const CriticalInfra = (props: Props) => {
     const { requests: { PalikaResources }, provinces,
         districts, setProgress, drrmProgress,
         municipalities, drrmRegion,
-        user, setDrrmCritical } = props;
+        user, setDrrmCritical, drrmLanguage } = props;
 
     if (drrmRegion.municipality) {
         municipality = drrmRegion.municipality;
@@ -301,7 +305,7 @@ const CriticalInfra = (props: Props) => {
         && (
             <div className={styles.tabsPageContainer}>
                 <h2>
-                   Critical Infrastructures
+                    <Gt section={Translations.ResourcesHeading} />
                 </h2>
                 <div className={styles.palikaTable}>
                     {/* {
@@ -336,16 +340,42 @@ const CriticalInfra = (props: Props) => {
                                         className={styles.checkBox}
                                     />
                                 </th>
-                                <th>S.N</th>
-                                <th>Resource Name</th>
-                                <th>Resource Type</th>
-                                <th>Operator Type</th>
-                                <th>Number Of male Employee</th>
-                                <th>Number Of female Employee</th>
-                                <th>Total Employee</th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesSerialNumber} />
+                                </th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesName} />
+                                </th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesType} />
+                                </th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesOperatorType} />
+                                </th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesNumberOfMaleEmployee} />
+                                </th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesNumberOfFemaleEmployee} />
+                                </th>
+                                <th>
+                                    {' '}
+                                    <Gt section={Translations.ResourcesNumberOfTotalEmployee} />
+                                </th>
                                 {
                                     !props.annex
-                                    && <th>Action</th>
+                                    && (
+                                        <th>
+                                            {' '}
+                                            <Gt section={Translations.ResourcesAction} />
+                                        </th>
+                                    )
                                 }
                             </tr>
                             {loader ? (
@@ -388,7 +418,9 @@ const CriticalInfra = (props: Props) => {
                                                     className={styles.editButtn}
                                                     type="button"
                                                     onClick={() => handleEditResource(item)}
-                                                    title="Edit Resource"
+                                                    title={drrmLanguage.language === 'np'
+                                                        ? Translations.ResourcesEditTooltip.np
+                                                        : Translations.ResourcesEditTooltip.en}
                                                 >
                                                     <ScalableVectorGraphics
                                                         className={styles.bulletPoint}
@@ -406,6 +438,10 @@ const CriticalInfra = (props: Props) => {
 
                         </tbody>
                     </table>
+                    {!loader && filteredtData.length === 0
+                                 && <h2><Gt section={Translations.ResourcesNoDataMessage} /></h2>
+
+                    }
                     {!loader && (
                         <>
                             {
@@ -422,7 +458,7 @@ const CriticalInfra = (props: Props) => {
                                         name="plus"
                                         className={styles.plusIcon}
                                     />
-                                    Add Resources
+                                    <Gt section={Translations.ResourcesAddButton} />
                                 </button>
                                 <NextPrevBtns
                                     handlePrevClick={props.handlePrevClick}
