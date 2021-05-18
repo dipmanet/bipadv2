@@ -1636,86 +1636,84 @@ const BudgetActivity = (props: Props) => {
                 }
 
                 {props.monitoringDetails
-               && (
-                   <div className={styles.budgetActPreviewContainer}>
+                  && (
+                      <div className={styles.budgetActPreviewContainer}>
 
 
-                       <ul>
-                           <li>
-                               <span className={styles.darkerText}>
-                                   <Gt section={Translations.MonitoringAct} />
-                               </span>
-                           </li>
-                           <li>
-                               <span className={styles.smallerText}>
-                                   <Gt section={Translations.DisasterRiskStrategic} />
-                                   <Gt section={Translations.DisasterRiskStrategic} />
-                               </span>
-                           </li>
-                       </ul>
+                          <ul>
+                              <li>
+                                  <span className={styles.darkerText}>
+                                      <Gt section={Translations.MonitoringAct} />
+                                  </span>
+                              </li>
+                              <li>
+                                  <span className={styles.smallerText}>
+                                      <Gt section={Translations.DisasterRiskStrategic} />
+                                      <Gt section={Translations.DisasterRiskStrategic} />
+                                  </span>
+                              </li>
+                          </ul>
 
-                       <div className={styles.monitoringRow}>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}><Gt section={Translations.Area1} /></span>
-                               <span className={styles.monDesc}>
-                                   {' '}
-                                   <Gt section={Translations.PA1} />
-                               </span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}><Gt section={Translations.Area2} /></span>
-                               <span className={styles.monDesc}>
-                                   {' '}
-                                   <Gt section={Translations.PA2} />
-                               </span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                       </div>
-                       <div className={styles.monitoringRow}>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}><Gt section={Translations.Area3} /></span>
-                               <span className={styles.monDesc}>
-                                   <Gt section={Translations.PA3} />
-                               </span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
+                          <div className={styles.monitoringRow}>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}><Gt section={Translations.Area1} /></span>
+                                  <span className={styles.monDesc}>
+                                      {' '}
+                                      <Gt section={Translations.PA1} />
+                                  </span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}><Gt section={Translations.Area2} /></span>
+                                  <span className={styles.monDesc}>
+                                      {' '}
+                                      <Gt section={Translations.PA2} />
+                                  </span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                          </div>
+                          <div className={styles.monitoringRow}>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}><Gt section={Translations.Area3} /></span>
+                                  <span className={styles.monDesc}>
+                                      <Gt section={Translations.PA3} />
+                                  </span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
 
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>
-Are
-                                   <Gt section={Translations.Area4} />
-a4
-                               </span>
-                               <span className={styles.monDesc}>
-                                   <Gt section={Translations.PA4} />
-                               </span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                       </div>
-                   </div>
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}>
+                                      <Gt section={Translations.Area4} />
+                                  </span>
+                                  <span className={styles.monDesc}>
+                                      <Gt section={Translations.PA4} />
+                                  </span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-               )
+                  )
 
                 }
 

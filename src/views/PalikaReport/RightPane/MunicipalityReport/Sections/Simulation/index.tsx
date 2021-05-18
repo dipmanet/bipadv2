@@ -9,6 +9,8 @@ import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -29,6 +31,7 @@ import {
     hazardTypeListSelector,
     drrmRegionSelector,
     drrmProgresSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
@@ -68,6 +71,7 @@ const mapStateToProps = state => ({
     hazardType: hazardTypeListSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -149,6 +153,7 @@ const Simulation = (props: Props) => {
         hazardType, drrmRegion,
         setProgress,
         drrmProgress,
+        drrmLanguage,
 
     } = props;
 
@@ -416,7 +421,7 @@ const Simulation = (props: Props) => {
                 !props.previewDetails
             && (
                 <div className={styles.mainDiv}>
-                    <h2>Simulations</h2>
+                    <h2><Gt section={Translations.SimulationHeading} /></h2>
                     <div className={styles.palikaTable}>
                         <table
                             style={tableStyle}
@@ -425,32 +430,36 @@ const Simulation = (props: Props) => {
                             <tbody>
                                 <>
                                     <tr>
-                                        <th>SN</th>
+                                        <th><Gt section={Translations.SimulationSerialNumber} /></th>
                                         <th>
-                                            Name of Simulation excerise
-                                        </th>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th>
-                                            Priority Area
+                                            <Gt section={Translations.SimulationExercise} />
                                         </th>
                                         <th>
-                                            Priority Action
+                                            <Gt section={Translations.SimulationDate} />
                                         </th>
                                         <th>
-                                            Priority Acitivity
+                                            <Gt section={Translations.SimulationDescription} />
                                         </th>
                                         <th>
-                                            Organizer
+                                            <Gt section={Translations.SimulationPriorityArea} />
                                         </th>
                                         <th>
-                                            Number of Participants
+                                            <Gt section={Translations.SimulationPriorityAction} />
                                         </th>
                                         <th>
-                                            Focused Hazard
+                                            <Gt section={Translations.SimulationPriorityActivity} />
                                         </th>
                                         <th>
-                                            Action
+                                            <Gt section={Translations.SimulationOrganizer} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.SimulationParticipants} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.SimulationHazards} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.SimulationAction} />
                                         </th>
 
 
@@ -484,7 +493,7 @@ const Simulation = (props: Props) => {
                                                                     className={styles.datepicker}
                                                                     value={startDate}
                                                                     onChange={date => setStartDate(date)}
-                                                                    options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                    options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                                                 />
                                                             </td>
                                                             <td>
@@ -564,9 +573,12 @@ const Simulation = (props: Props) => {
                                                                     className={styles.updateButtn}
                                                                     type="button"
                                                                     onClick={handleUpdateSimulation}
-                                                                    title="Update Simulation"
+                                                                    title={drrmLanguage.language === 'np'
+                                                                        ? Translations.SimulationUpdateButtonTooltip.np
+                                                                        : Translations.SimulationUpdateButtonTooltip.en
+                                                                    }
                                                                 >
-                                                                  Update
+                                                                    <Gt section={Translations.SimulationUpdateButton} />
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -589,7 +601,10 @@ const Simulation = (props: Props) => {
                                                                     className={styles.editButtn}
                                                                     type="button"
                                                                     onClick={() => handleEditSimulation(item.data.id, i)}
-                                                                    title="Edit Simulation"
+                                                                    title={drrmLanguage.language === 'np'
+                                                                        ? Translations.SimulationEditTooltip.np
+                                                                        : Translations.SimulationEditTooltip.en
+                                                                    }
                                                                 >
                                                                     <ScalableVectorGraphics
                                                                         className={styles.bulletPoint}
@@ -619,7 +634,7 @@ const Simulation = (props: Props) => {
                                                         className={styles.datepicker}
                                                         value={startDate}
                                                         onChange={date => setStartDate(date)}
-                                                        options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                        options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                                     />
                                                 </td>
                                                 <td>
@@ -725,7 +740,7 @@ const Simulation = (props: Props) => {
                                           name="plus"
                                           className={styles.plusIcon}
                                       />
-                                Add New Simulation
+                                      <Gt section={Translations.SimulationAddButton} />
                                   </button>
                                   <div className={styles.btns}>
                                       <NextPrevBtns
@@ -786,6 +801,7 @@ const Simulation = (props: Props) => {
                         </div>
                     </div>
                 )}
+
         </>
     );
 };
