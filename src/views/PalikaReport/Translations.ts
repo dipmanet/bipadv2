@@ -75,7 +75,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Published By',
     },
     dashboardTblHeaderLastAction: {
-        np: 'डाउनलोड गर्नुहोस्',
+        np: 'कार्य',
         en: 'Action',
     },
     dashboardSidebarSelectMunicipalityHeader: {
@@ -243,6 +243,99 @@ const languageTranslations: LanguageEntry = {
         np: 'सदस्य थप्नुहोस्',
         en: 'Add Member',
     },
+    OrganizationHeading: {
+        np: 'विपद् जोखिम न्यूनीकरण सम्बन्धित संस्था',
+        en: 'DRR related Organizations',
+    },
+    OrganizationSerialNumber: {
+        np: 'क्रम संख्या',
+        en: 'SN',
+    },
+    OrganizationName: {
+        np: 'नाम ',
+        en: 'Name',
+    },
+    OrganizationType: {
+        np: 'प्रकार',
+        en: 'Type',
+    },
+    OrganizationMaleEmployee: {
+        np: 'पुरुष कर्मचारीहरूको संख्या',
+        en: 'Number of Male employees',
+    },
+    OrganizationFemaleEmployee: {
+        np: 'महिला कर्मचारीहरूको संख्या',
+        en: 'Number of female employees',
+    },
+    OrganizationAction: {
+        np: 'कार्य',
+        en: 'Action',
+    },
+    OrganizationNoDataMessage: {
+        np: 'डाटा उपलब्ध छैन',
+        en: 'Data Unavailable',
+    },
+    OrganizationDataAddButton: {
+        np: 'संस्थाको डाटा थप्नुहोस्',
+        en: 'Add Organization Data',
+    },
+    OrganizationEditTooltip: {
+        np: 'संस्थाको डाटा सम्पादन गर्नुहोस्',
+        en: 'Edit Organization Data',
+    },
+    InventoryHeading: {
+        np: 'सूची',
+        en: 'Inventories',
+    },
+    InventorySerialNumber: {
+        np: 'क्रम संख्या',
+        en: 'SN',
+    },
+    InventoryResourceName: {
+        np: 'स्रोतको नाम',
+        en: 'Name of Resource',
+    },
+    InventoryResourceQuantity: {
+        np: 'मात्रा',
+        en: 'Quantity',
+    },
+    InventoryResourceUnit: {
+        np: 'एकाइ',
+        en: 'Unit',
+    },
+    InventoryResourceCategory: {
+        np: 'श्रेणी',
+        en: 'Category',
+    },
+    InventoryResourceOwnerOrganization: {
+        np: 'सम्बंदित संस्था',
+        en: 'Owner Organization Name',
+    },
+    InventoryResourceOwnerOrganizationType: {
+        np: 'संस्थाको प्रकार',
+        en: 'Type of Organization',
+    },
+    InventoryResourceAddedDate: {
+        np: 'थपिएको मिति',
+        en: 'Added date',
+    },
+    InventoryResourceUpdatedDate: {
+        np: 'अद्यावधिक मिति',
+        en: 'Updated date',
+    },
+    InventoryAction: {
+        np: 'कार्य',
+        en: 'Action',
+    },
+    InventoryNoDataMessage: {
+        np: 'डाटा उपलब्ध छैन',
+        en: 'Data Unavailable',
+    },
+    InventoryEditTooltip: {
+        np: 'सूचीको डाटा सम्पादन गर्नुहोस्',
+        en: 'Edit Inventory Data',
+    },
+
 
 };
 

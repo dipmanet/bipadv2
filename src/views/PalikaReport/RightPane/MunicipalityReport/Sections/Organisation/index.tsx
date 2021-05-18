@@ -26,6 +26,7 @@ import {
     drrmOrgSelecter,
     drrmRegionSelector,
     drrmProgresSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 
 import NextPrevBtns from '../../NextPrevBtns';
@@ -38,12 +39,15 @@ import {
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmOrg: params => dispatch(setDrrmOrgAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
+
 });
 
 interface Props{
@@ -58,6 +62,7 @@ const mapStateToProps = (state, props) => ({
     drrmOrg: drrmOrgSelecter(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -122,7 +127,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
         districts,
         municipalities, drrmProgress,
         user, drrmRegion, setProgress,
-        updateTab, setDrrmOrg } = props;
+        updateTab, setDrrmOrg, drrmLanguage } = props;
 
 
     if (drrmRegion.municipality) {
@@ -253,7 +258,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
             && (
                 <div className={styles.tabsPageContainer}>
                     <h2>
-                            DRR related Organizations
+                        <Gt section={Translations.OrganizationHeading} />
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
@@ -273,15 +278,15 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                             </th>
                                         )
                                     }
-                                    <th>S.N</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
+                                    <th><Gt section={Translations.OrganizationSerialNumber} /></th>
+                                    <th><Gt section={Translations.OrganizationName} /></th>
+                                    <th><Gt section={Translations.OrganizationType} /></th>
                                     {/* <th>Level (for governmental organization)</th> */}
-                                    <th>Number of Male Employee</th>
-                                    <th>Number of Female Employee</th>
+                                    <th><Gt section={Translations.OrganizationMaleEmployee} /></th>
+                                    <th><Gt section={Translations.OrganizationFemaleEmployee} /></th>
                                     {
                                         !props.annex
-                                        && <th>Action</th>
+                                        && <th><Gt section={Translations.OrganizationAction} /></th>
                                     }
                                 </tr>
                                 {loader ? (
@@ -327,7 +332,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                                             className={styles.editButtn}
                                                             type="button"
                                                             onClick={() => handleEditResource(item)}
-                                                            title="Edit Organization"
+                                                            title={drrmLanguage.language === 'np' ? Translations.OrganizationEditTooltip.np : Translations.OrganizationEditTooltip.en}
                                                         >
                                                             <ScalableVectorGraphics
                                                                 className={styles.bulletPoint}
@@ -346,7 +351,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
                             </tbody>
                         </table>
-                        {!loader && fetchedData.length === 0 && <h2>Data Unavailable</h2>}
+                        {!loader && fetchedData.length === 0 && <h2><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
                         {!loader
                         && (
                             <>
@@ -362,7 +367,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                         name="plus"
                                         className={styles.plusIcon}
                                     />
-                                     Add Organisation Data
+                                    <Gt section={Translations.OrganizationDataAddButton} />
                                 </button>
                             )
 

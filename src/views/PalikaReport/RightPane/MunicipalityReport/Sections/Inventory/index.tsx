@@ -24,7 +24,8 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector,
     palikaRedirectSelector,
-    drrmRegionSelector } from '#selectors';
+    drrmRegionSelector,
+    palikaLanguageSelector } from '#selectors';
 import Loading from '#components/Loading';
 
 
@@ -36,6 +37,8 @@ import {
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 
 interface Props{
 
@@ -47,6 +50,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 
 });
 
@@ -131,7 +135,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
     const { requests: { PalikaReportInventoriesReport }, provinces,
         districts,
         municipalities, drrmRegion, setProgress,
-        user, rows, setDrrmInventory } = props;
+        user, rows, setDrrmInventory, drrmLanguage } = props;
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
@@ -280,7 +284,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             && (
                 <div className={styles.tabsPageContainer}>
                     <h2>
-                         Inventories
+                        <Gt section={Translations.InventoryHeading} />
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
@@ -299,18 +303,21 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                             </th>
                                         )
                                     }
-                                    <th>S.N</th>
-                                    <th>Name of Resource</th>
-                                    <th>Quantity</th>
-                                    <th>Unit</th>
-                                    <th>Category</th>
-                                    <th>Owner Organization Name</th>
-                                    <th>Type of Organization</th>
-                                    <th>Added Date</th>
-                                    <th>Updated Date</th>
+                                    <th>
+                                        {' '}
+                                        <Gt section={Translations.InventorySerialNumber} />
+                                    </th>
+                                    <th><Gt section={Translations.InventoryResourceName} /></th>
+                                    <th><Gt section={Translations.InventoryResourceQuantity} /></th>
+                                    <th><Gt section={Translations.InventoryResourceUnit} /></th>
+                                    <th><Gt section={Translations.InventoryResourceCategory} /></th>
+                                    <th><Gt section={Translations.InventoryResourceOwnerOrganization} /></th>
+                                    <th><Gt section={Translations.InventoryResourceOwnerOrganizationType} /></th>
+                                    <th><Gt section={Translations.InventoryResourceAddedDate} /></th>
+                                    <th><Gt section={Translations.InventoryResourceUpdatedDate} /></th>
                                     {
                                         !props.annex
-                                        && <th>Action</th>
+                                        && <th><Gt section={Translations.InventoryAction} /></th>
                                     }
 
                                 </tr>
@@ -363,7 +370,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                                         className={styles.editButtn}
                                                         type="button"
                                                         onClick={() => handleEditInventory(item)}
-                                                        title="Edit Inventory"
+                                                        title={drrmLanguage.language === 'np' ? Translations.InventoryEditTooltip.np : Translations.InventoryEditTooltip.en}
                                                     >
                                                         <ScalableVectorGraphics
                                                             className={styles.bulletPoint}
@@ -381,7 +388,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                             </tbody>
                         </table>
                         {!loader && finalInventoriesData.length === 0
-                                 && <h2>Data Unavailable</h2>
+                                 && <h2><Gt section={Translations.InventoryNoDataMessage} /></h2>
 
                         }
                         {!loader && (
