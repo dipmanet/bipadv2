@@ -82,6 +82,10 @@ const languageTranslations: LanguageEntry = {
         np: 'कृपया रिपोर्ट उत्पन्न गर्न मनाहानगरपालिका/नगरपालिका/गाउँपालिका चयन गर्नुहोस्',
         en: 'Please select a municipality to generate report.',
     },
+    PleaseSelect: {
+        np: 'कृपया चयन गर्नुहोस्',
+        en: 'Please Select',
+    },
     dashboardReportGenerateButton: {
         np: '+ नयाँ रिपोर्ट थप्नुहोस्',
         en: '+ Add New Report',
@@ -469,7 +473,7 @@ const languageTranslations: LanguageEntry = {
     },
     Drrrelatedpoints: {
         en: 'Please enter the DRR related points in this fiscal years Annual Policy and Programme of the municipality',
-        np: 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा विपद् जोखिम न्यूनीकरण सम्बन्धित  कार्यक्रमहरू उल्लेख गर्नुहोस् l',
+        np: 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा विपद् जोखिम न्यूनीकरण सम्बन्धित कार्यक्रमहरू उल्लेख गर्नुहोस् l',
     },
     points: {
         en: 'Points',
@@ -506,6 +510,255 @@ const languageTranslations: LanguageEntry = {
         np: 'अशक्त मानिस',
     },
 
+    // Budget Activities
+    PriorityArea: {
+        en: 'Priority Area',
+        np: 'प्राथमिकता प्राप्त क्षेत्र ',
+    },
+    PriorityAction: {
+        en: 'Priority Action',
+        np: 'प्राथमिकता प्राप्त कार्य ',
+    },
+    PriorityActivity: {
+        en: 'Priority Activity',
+        np: 'प्राथमिकता प्राप्त क्रियाकलाप ',
+    },
+    AreaofImp: {
+        en: 'Area of implementation',
+        np: 'कार्यान्वयनको क्षेत्र',
+    },
+    Fundingtype: {
+        en: 'Funding type',
+        np: 'बजेटको प्रकार',
+    },
+    Sourceof: {
+        en: 'Source of fund',
+        np: 'बजेटको स्रोत',
+    },
+    SelectSourceof: {
+        en: 'Source of fund',
+        np: 'बजेटको स्रोत चयन गर्नुहोस्',
+    },
+    Budgetcode: {
+        en: 'Budget code (if available)',
+        np: 'बजेट कोड',
+    },
+    OrganizationNm: {
+        en: 'Organization Name',
+        np: 'संस्थाको नाम',
+    },
+    Projectstart: {
+        en: 'Project start date',
+        np: 'परियोजना सुरू मिति',
+    },
+    ProjectCompletion: {
+        en: 'Project Completion date',
+        np: 'परियोजना पूरा हुने मिति',
+    },
+    Status: {
+        en: 'Status',
+        np: 'परियोजनाको स्थिति',
+    },
+    AllocatedProject: {
+        en: 'Allocated Project budget',
+        np: 'परियोजना बजेट विनियोजित',
+    },
+    Actualexpenditure: {
+        en: 'Actual expenditure',
+        np: 'वास्तविक खर्च',
+    },
+    Remarks: {
+        en: 'Remarks',
+        np: 'कुनै टिप्पणीभए जानकारी दिनुहोस्',
+    },
+    FederalGovernment: {
+        en: 'Federal Government',
+        np: 'संघीय सरकार',
+    },
+    ProvincialGovernment: {
+        en: 'Provincial Government',
+        np: 'प्रदेशीय सरकार',
+    },
+    District: {
+        en: 'District',
+        np: 'जिल्ला',
+    },
+    Municipalgovernment: {
+        en: 'Municipal government',
+        np: 'मनाहानगरपालिका/नगरपालिका/गाउँपालिका',
+    },
+    INGO: {
+        en: 'I/NGO',
+        np: 'अन्तर्राष्ट्रिय/राष्ट्रिय गैर-सरकारी संगठन',
+    },
+    PrivateSector: {
+        en: 'Private Sector',
+        np: 'निजी क्षेत्र',
+    },
+    Academia: {
+        en: 'Academia',
+        np: 'शैक्षिक संस्था',
+    },
+    Others: {
+        np: 'अन्य',
+        en: 'Others',
+    },
+    started: {
+        en: 'Started',
+        np: 'सुरु भएको',
+    },
+    ongoing: {
+        en: 'Ongoing',
+        np: 'चलिरहेको',
+    },
+    completed: {
+        en: 'Completed',
+        np: 'पूरा भयोको',
+    },
+    NameofActivity: {
+        en: 'Name of Activity',
+        np: 'गतिविधि को नाम',
+    },
+    SelectFundingType: {
+        en: 'Select Funding Type',
+        np: 'बजेटको प्रकार चयन गर्नुहोस्',
+    },
+    BudgetActivity: {
+        en: 'Budget Activity',
+        np: 'बजेट गतिविधि',
+    },
+    TotalActivities: {
+        en: 'Total number of activities',
+        np: 'गतिविधिहरूको कुल संख्या',
+    },
+    DRRRelatedAct: {
+        en: 'DRR related activities',
+        np: 'विपद् जोखिम न्यूनीकरण संग सम्बन्धित गतिविधिहरू',
+    },
+    OtherDRRRelatedAct: {
+        en: 'Other DRR related funding',
+        np: 'अन्य विपद् जोखिम न्यूनीकरण संग सम्बन्धित बजेट',
+    },
+
+    // Generated report
+
+    MonitoringAct: {
+        en: 'Monitoring the activities based on the Priority Areas',
+        np: 'प्राथमिकता क्षेत्रहरूमा आधारित गतिविधिहरू उल्लेख गर्दै',
+    },
+    DisasterRiskStrategic: {
+        en: 'Disaster Risk Reduction National Strategic Plan of Action 2018-2030',
+        np: 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८-२०३०',
+    },
+    Organizationsworking: {
+        en: 'Organizations workingon DRRM in Rajapur',
+        np: 'विपद् जोखिम न्यूनीकरण र व्यवस्थापनमा राजापुर नगरपालिकामा कम गर्ने संस्थाहरु ',
+    },
+    Hazardwiseimpact: {
+        en: 'Hazardwise impact (top 5)',
+        np: 'घटनागत  प्रभाव (शीर्ष पाँच)',
+    },
+    Wardwiseimpact: {
+        en: 'Wardwise impact (top5)',
+        np: 'वडागत प्रभाव (शिर्ष पाँच)',
+    },
+    Genderwiseimpact: {
+        en: 'Genderwise impact death',
+        np: 'लिङ्गको आधारमा मृत्यु',
+    },
+    NOftrainedPeople: {
+        en: 'No. of trained people',
+        np: 'प्रशिक्षित व्यक्तिको संख्या',
+    },
+    Trainingactivities: {
+        en: 'Training activities',
+        np: 'प्रशिक्षण गतिविधिहरु',
+    },
+    ListofTrActs: {
+        en: 'List of training activiities',
+        np: 'प्रशिक्षण गतिविधिहरूको सूची',
+    },
+    NoofSimConducted: {
+        en: 'No of simulation conducted',
+        np: 'सिमुलेशन गतिविधिहरू',
+    },
+    DisasterIncidentSummary: {
+        en: 'Disaster Incident Summary',
+        np: 'विपद् घटना सारांश',
+    },
+    Contctus: {
+        en: 'CONTACT US',
+        np: 'हामीलाई सम्पर्क गर्नुहोस',
+    },
+    Phone: {
+        en: 'Phone:',
+        np: 'सम्पर्क',
+    },
+    Website: {
+        en: 'Website',
+        np: 'वेबसाइट',
+    },
+
+    PA1: {
+        np: 'Understanding Disaster Risk',
+        en: 'वपद् जोखिम बारे बुझाई',
+    },
+    PA2: {
+        np: 'संघ, प्रदेश र स्थानीय तहमा विपद् जोखिम शासकीय पद्धतिको सुदृढीकरण',
+        en: 'Strengthening Disaster Risk Governance at Federal, Provincial andLocalLevels',
+    },
+    PA3: {
+        np: 'विपद् जोखिम न्यूनीकरणका लागि उत्थानशीलता वृद्धि गर्न बृहत्तर जोखिम जानकारीमा आधारित निजी तथा सार्वजनिक लगानी प्रवर्धन',
+        en: 'Promoting Comprehensive Risk-Informed Private and Public Investments in Disaster Risk Reduction for Resilience',
+    },
+    PA4: {
+        np: 'प्रभावकारी प्रतिकार्य र पूनर्लाभ, पुनस्र्थापना तथा पुर्ननिर्माणमा “अझ राम्रो र बलियो निर्माण” का लागि विपद् पूर्वतयारीको सुदृढीकरण',
+        en: 'Enhancing Disaster Preparedness for Effective Response and to "Build Back Better" in Recovery, Rehabilitation and Reconstruction',
+    },
+    Area1: {
+        en: 'Area 1',
+        np: 'प्राथमिकता प्राप्त क्षेत्र १',
+    },
+    Area2: {
+        en: 'Area 2',
+        np: 'प्राथमिकता प्राप्त क्षेत्र २',
+    },
+    Area3: {
+        en: 'Area 3',
+        np: 'प्राथमिकता प्राप्त क्षेत्र ३',
+    },
+    Area4: {
+        en: 'Area 4',
+        np: 'प्राथमिकता प्राप्त क्षेत्र ४',
+    },
+    SelectPA: {
+        en: 'Select Priority Area',
+        np: 'प्राथमिकता प्राप्त क्षेत्र चयन गर्नुहोस्',
+    },
+    selectPAct: {
+        en: 'Select Priority Action',
+        np: 'प्राथमिकता प्राप्त कार्य चयन गर्नुहोस्',
+    },
+    selectPActivity: {
+        en: 'Select Priority Activity',
+        np: 'प्राथमिकता प्राप्त क्रियाकलाप चयन गर्नुहोस्',
+    },
+    AddnewAct: {
+        en: '+ Add new activity',
+        np: '+ नयाँ गतिविधि थप्नुहोस्',
+    },
+    BaTitlePart1: {
+        np: 'आर्थिक वर्ष',
+        en: 'Budget Activities for Fiscal Year',
+    },
+    BaTitlePart2: {
+        np: 'को बजेट गतिविधि',
+        en: '',
+    },
+    EnterBudget: {
+        np: 'कृपया बजेट सेक्सनमा डाटा प्रविष्ट गर्नुहोस्',
+        en: 'Please enter data in Budget section',
+    },
 
 };
 

@@ -10,6 +10,8 @@ import { PieChart, Pie, Cell } from 'recharts';
 import Loader from 'react-loader';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
+import Gt from '#views/PalikaReport/utils';
+import Translations from '#views/PalikaReport/Translations';
 import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -32,6 +34,7 @@ import {
     budgetDataSelector, budgetIdSelector,
     userSelector, drrmRegionSelector,
     drrmProgresSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -45,6 +48,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 
 });
 
@@ -176,6 +180,7 @@ const BudgetActivity = (props: Props) => {
         drrmRegion,
         setProgress,
         drrmProgress,
+        drrmLanguage,
     } = props;
 
     const {
@@ -614,11 +619,20 @@ const BudgetActivity = (props: Props) => {
     return (
         <>
 
+
             <div>
                 {!props.previewDetails && !props.monitoringDetails
                 && (
                     <div className={styles.mainPageDetailsContainer}>
-                        <h2>{`Budget Activities for Fiscal Year ${generalData.fiscalYearTitle}`}</h2>
+                        <h2>
+                            <Gt section={Translations.BaTitlePart1} />
+                            {
+                                `
+                        ${generalData.fiscalYearTitle}`
+                            }
+                            <Gt section={Translations.BaTitlePart2} />
+
+                        </h2>
                         <table id="table-to-xls">
                             <tbody>
 
@@ -627,44 +641,38 @@ const BudgetActivity = (props: Props) => {
 
                                     <tr>
 
-                                        <th>SN</th>
+                                        <th>
+                                            <Gt section={Translations.dashboardTblHeaderSN} />
+
+                                        </th>
 
 
                                         <th>
-                                           Name of Activity
+                                            <Gt section={Translations.NameofActivity} />
 
 
                                         </th>
                                         <th>
-                                           Priority Area
+                                            <Gt section={Translations.PriorityArea} />
 
-                                            <button
-                                                type="button"
-                                                className={styles.infoBtn}
-                                                onClick={() => {}}
-                                                title=""
 
-                                            >
-                                                <Icon
-                                                    name="info"
-                                                    className={styles.infoIcon}
-                                                    title="The Disaster Risk Reduction
-                                               National Strategic
-                                               Plan of Action
-                                               2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main
-                                               guidance, has identified 4 priority areas and 18 priority actions.
-                                               The activities will be monitored based on the these priorities set."
-                                                />
-                                            </button>
+                                            <Icon
+                                                name="info"
+                                                className={styles.infoIcon}
+                                                placeholder={drrmLanguage.language === 'en'
+                                                    ? 'The Disaster Risk Reduction National Strategic Plan of Action 2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main guidance, has identified 4 priority areas and 18 priority actions. The activities will be monitored based on the these priorities set. Get the action plan here: '
+                                                    : 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८ – २०३०मा विपद् जोखिम न्यूनीकरणका लागि सेन्डाइ कार्य ढाँचालाई मूल मार्गदर्शनको रुपमा लिई चार प्राथमिकता प्राप्त क्षेत्रहरू र अठार प्राथमिकता प्राप्त कार्यहरू निर्धारण गरेको छ । यी प्राथमिकताहरूको आधारमा क्रियाकलापहरुको अनुगमन गरिनेछ'
+                                                }
+                                            />
 
                                         </th>
                                         <th>
-                                           Priority Action
+                                            <Gt section={Translations.PriorityAction} />
 
 
                                         </th>
                                         <th>
-                                           Priority Activity
+                                            <Gt section={Translations.PriorityActivity} />
 
 
                                         </th>
@@ -674,12 +682,13 @@ const BudgetActivity = (props: Props) => {
 
                                </th> */}
                                         <th>
-                                           Funding Type
+
+                                            <Gt section={Translations.Fundingtype} />
 
 
                                         </th>
                                         <th>
-                                           Source of Fund
+                                            <Gt section={Translations.Sourceof} />
 
 
                                         </th>
@@ -693,45 +702,41 @@ const BudgetActivity = (props: Props) => {
                                     )
                                         }
                                         <th>
-                                           Budget Code
-
-                                        </th>
-                                        <th>
-                                           Organization Name
-                                        </th>
-                                        <th>
-                                           Project start Date
-
-                                        </th>
-                                        <th>
-                                           Project Completion Date
+                                            <Gt section={Translations.Budgetcode} />
 
 
                                         </th>
                                         <th>
-                                           Status
+                                            <Gt section={Translations.OrganizationNm} />
+
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.Projectstart} />
 
 
                                         </th>
                                         <th>
-                                           Allocated Project Budget
+                                            <Gt section={Translations.ProjectCompletion} />
 
 
                                         </th>
                                         <th>
-                                           Actual Expenditure
+                                            <Gt section={Translations.Status} />
 
 
                                         </th>
                                         <th>
-                                           Remarks
-
+                                            <Gt section={Translations.AllocatedProject} />
 
                                         </th>
                                         <th>
-                                          Action
-
-
+                                            <Gt section={Translations.Actualexpenditure} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.Remarks} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.ResourcesAction} />
                                         </th>
 
 
@@ -758,7 +763,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.inputElement}
                                                                          onChange={handleActivityName}
                                                                          value={activityName}
-                                                                         placeholder={'Name of Activity'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Name of Activity'
+                                                                             : 'कार्यक्रमको नाम'
+                                                                         }
                                                                      />
                                                                  </td>
 
@@ -768,7 +776,12 @@ const BudgetActivity = (props: Props) => {
                                                                          onChange={handlePriorityArea}
                                                                          className={styles.inputElement}
                                                                      >
-                                                                         <option value="">Select Priority Area</option>
+                                                                         <option value="">
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Select Priority Area'
+                                                                                 : 'प्राथमिकता प्राप्त क्षेत्र चयन गर्नुहोस्'
+                                                                             }
+                                                                         </option>
                                                                          {PriorityArea.map(item => (
                                                                              <option value={item.title}>
                                                                                  {item.title}
@@ -783,7 +796,13 @@ const BudgetActivity = (props: Props) => {
                                                                          onChange={handlePriorityAction}
                                                                          className={styles.inputElement}
                                                                      >
-                                                                         <option value="">Select Priority Action</option>
+                                                                         <option value="">
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Select Priority Action'
+                                                                                 : 'प्राथमिकता प्राप्त कार्य चयन गर्नुहोस्'
+                                                                             }
+
+                                                                         </option>
                                                                          {priorityActionData.map(item => (
                                                                              <option value={item.title}>
                                                                                  {item.title}
@@ -798,7 +817,12 @@ const BudgetActivity = (props: Props) => {
                                                                          onChange={handlePriorityActivity}
                                                                          className={styles.inputElement}
                                                                      >
-                                                                         <option value="">Select Priority Activity</option>
+                                                                         <option value="">
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Select Priority Activity'
+                                                                                 : 'प्राथमिकता प्राप्त क्रियाकलाप चयन गर्नुहोस्'
+                                                                             }
+                                                                         </option>
                                                                          {priorityActivityData.map(item => (
                                                                              <option value={item.title}>
                                                                                  {item.title}
@@ -813,14 +837,20 @@ const BudgetActivity = (props: Props) => {
                                                                          onChange={handlefundSource}
                                                                          className={styles.inputElement}
                                                                      >
-                                                                         <option value="select"> Select Funding Type</option>
+                                                                         <option value="select">
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Select Funding Type'
+                                                                                 : 'बजेटको प्रकार चयन गर्नुहोस्'
+                                                                             }
+                                                                         </option>
                                                                          <option value="DRR Fund of Muicipality">
-                                              DRR Fund of Municipality
+
+                                                                             <Gt section={Translations.DRRFundMun} />
+
 
                                                                          </option>
                                                                          <option value="Other DRR related funding">
-                                              Other DRR related funding
-
+                                                                             <Gt section={Translations.OtherDrrFund} />
                                                                          </option>
                                                                      </select>
                                                                  </td>
@@ -832,7 +862,10 @@ const BudgetActivity = (props: Props) => {
                                                         <input
                                                             type="text"
                                                             className={styles.inputElement}
-                                                            value={'Source of Funds'}
+                                                            value={drrmLanguage.language === 'en'
+                                                                ? 'Source of Funds'
+                                                                : 'बजेटको स्रोत'
+                                                            }
                                                             disabled
                                                         />
                                                     )}
@@ -856,17 +889,31 @@ const BudgetActivity = (props: Props) => {
                                                              onChange={handlefundingType}
                                                              className={styles.inputElement}
                                                          >
-                                                             <option value="select">Select Source of Funds</option>
+                                                             <option value="select">
+                                                                 <Gt section={Translations.SelectSourceof} />
+                                                             </option>
                                                              <option value="Federal Government">
-                                                             Federal Government
+                                                                 <Gt section={Translations.FederalGovernment} />
                                                              </option>
                                                              <option value="Provincial Government">
-                                                             Provincial Government
+                                                                 <Gt section={Translations.ProvincialGovernment} />
+
                                                              </option>
-                                                             <option value="INGO">I/NGOs</option>
-                                                             <option value="Private Sector">Private Sector</option>
-                                                             <option value="Academia">Academia</option>
-                                                             <option value="Others">Others</option>
+                                                             <option value="INGO">
+                                                                 <Gt section={Translations.INGO} />
+                                                             </option>
+                                                             <option value="Private Sector">
+                                                                 <Gt section={Translations.PrivateSector} />
+
+                                                             </option>
+                                                             <option value="Academia">
+                                                                 <Gt section={Translations.Academia} />
+
+                                                             </option>
+                                                             <option value="Others">
+                                                                 <Gt section={Translations.Others} />
+
+                                                             </option>
                                                          </select>
                                                      )
                                                                      }
@@ -881,7 +928,10 @@ const BudgetActivity = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 value={otherSubtype}
                                                                 onChange={handleOtherSubType}
-                                                                placeholder={'Please Specify'}
+                                                                placeholder={drrmLanguage.language === 'en'
+                                                                    ? 'Please Specify'
+                                                                    : 'कृपया निर्दिष्ट गर्नुहोस्'
+                                                                }
                                                             />
                                                         </td>
                                                     )
@@ -892,7 +942,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.inputElement}
                                                                          onChange={handleBudgetCode}
                                                                          value={budgetCode}
-                                                                         placeholder={'Budget Code (if available)'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Budget Code (if available)'
+                                                                             : 'बजेट कोड (यदि उपलब्ध छ भने)'
+                                                                         }
                                                                      />
                                                                  </td>
                                                                  <td>
@@ -901,7 +954,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.inputElement}
                                                                          onChange={handleOrganisationName}
                                                                          value={organisationName}
-                                                                         placeholder={'Name of Organisation'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Name of Organisation'
+                                                                             : 'संस्थाको नाम'
+                                                                         }
                                                                      />
                                                                  </td>
 
@@ -912,7 +968,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.datepicker}
                                                                          value={projstartDate}
                                                                          onChange={date => setStartDate(date)}
-                                                                         options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                         options={{
+                                                                             calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                             valueLocale: 'en',
+                                                                         }}
                                                                      />
                                                                  </td>
                                                                  <td>
@@ -921,7 +980,11 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.datepicker}
                                                                          value={projcompletionDate}
                                                                          onChange={date => setprojCompletionDate(date)}
-                                                                         options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                         options={{
+                                                                             calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                             valueLocale: 'en',
+
+                                                                         }}
                                                                      />
                                                                  </td>
                                                                  <td>
@@ -929,12 +992,37 @@ const BudgetActivity = (props: Props) => {
                                                                          value={projStatus}
                                                                          onChange={handleprojStatus}
                                                                          className={styles.inputElement}
-                                                                         placeholder={'Project Status'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Project Status'
+                                                                             : 'परियोजनाको स्थिति'
+                                                                         }
                                                                      >
-                                                                         <option value="select">Select an Option</option>
-                                                                         <option value="Started">Started</option>
-                                                                         <option value="Ongoing">Ongoing</option>
-                                                                         <option value="Completed">Completed</option>
+                                                                         <option value="select">
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Select an Option'
+                                                                                 : 'कृपया चयन गर्नुहोस्'
+                                                                             }
+                                                                         </option>
+                                                                         <option value="Started">
+
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Started'
+                                                                                 : 'सुरु भएको'
+                                                                             }
+                                                                         </option>
+                                                                         <option value="Ongoing">
+
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Ongoing'
+                                                                                 : 'चलिरहेको'
+                                                                             }
+                                                                         </option>
+                                                                         <option value="Completed">
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? 'Completed'
+                                                                                 : 'पूरा भयोको'
+                                                                             }
+                                                                         </option>
                                                                      </select>
                                                                  </td>
                                                                  <td>
@@ -943,7 +1031,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.inputElement}
                                                                          onChange={handleAlocBudget}
                                                                          value={allocatedBudget}
-                                                                         placeholder={'Allocated Project Budget'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Allocated Project Budget'
+                                                                             : 'परियोजना बजेट विनियोजित'
+                                                                         }
                                                                      />
                                                                  </td>
                                                                  <td>
@@ -952,7 +1043,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.inputElement}
                                                                          onChange={handleActualExp}
                                                                          value={actualExp}
-                                                                         placeholder={'Actual Expenditure'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Actual Expenditure'
+                                                                             : 'परियोजना बजेट विनियोजित'
+                                                                         }
                                                                      />
                                                                  </td>
 
@@ -963,7 +1057,10 @@ const BudgetActivity = (props: Props) => {
                                                                          className={styles.inputElement}
                                                                          onChange={handleRemarks}
                                                                          value={remarks}
-                                                                         placeholder={'Remarks'}
+                                                                         placeholder={drrmLanguage.language === 'en'
+                                                                             ? 'Remarks'
+                                                                             : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
+                                                                         }
                                                                      />
 
                                                                  </td>
@@ -974,7 +1071,7 @@ const BudgetActivity = (props: Props) => {
                                                                          onClick={handleUpdateActivity}
                                                                          title="Update Budget Activity"
                                                                      >
-                                                     Update
+                                                                         <Gt section={Translations.Update} />
                                                                      </button>
                                                                  </td>
 
@@ -1037,7 +1134,10 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.inputElement}
                                                                  onChange={handleActivityName}
                                                                  value={activityName}
-                                                                 placeholder={'Name of Activity'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Name of Activity'
+                                                                     : 'कार्यक्रमको नाम'
+                                                                 }
                                                              />
                                                          </td>
 
@@ -1047,10 +1147,15 @@ const BudgetActivity = (props: Props) => {
                                                                  onChange={handlePriorityArea}
                                                                  className={styles.inputElement}
                                                              >
-                                                                 <option value="">Select Priority Area</option>
-                                                                 {PriorityArea.map(data => (
-                                                                     <option value={data.title}>
-                                                                         {data.title}
+                                                                 <option value="">
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Select Priority Area'
+                                                                         : 'प्राथमिकता प्राप्त क्षेत्र चयन गर्नुहोस्'
+                                                                     }
+                                                                 </option>
+                                                                 {PriorityArea.map(item => (
+                                                                     <option value={item.title}>
+                                                                         {item.title}
                                                                      </option>
                                                                  ))}
 
@@ -1062,10 +1167,16 @@ const BudgetActivity = (props: Props) => {
                                                                  onChange={handlePriorityAction}
                                                                  className={styles.inputElement}
                                                              >
-                                                                 <option value="">Select Priority Action</option>
-                                                                 {priorityActionData.map(data => (
-                                                                     <option value={data.title}>
-                                                                         {data.title}
+                                                                 <option value="">
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Select Priority Action'
+                                                                         : 'प्राथमिकता प्राप्त कार्य चयन गर्नुहोस्'
+                                                                     }
+
+                                                                 </option>
+                                                                 {priorityActionData.map(item => (
+                                                                     <option value={item.title}>
+                                                                         {item.title}
                                                                      </option>
                                                                  ))}
 
@@ -1077,10 +1188,15 @@ const BudgetActivity = (props: Props) => {
                                                                  onChange={handlePriorityActivity}
                                                                  className={styles.inputElement}
                                                              >
-                                                                 <option value="">Select Priority Activity</option>
-                                                                 {priorityActivityData.map(data => (
-                                                                     <option value={data.title}>
-                                                                         {data.title}
+                                                                 <option value="">
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Select Priority Activity'
+                                                                         : 'प्राथमिकता प्राप्त क्रियाकलाप चयन गर्नुहोस्'
+                                                                     }
+                                                                 </option>
+                                                                 {priorityActivityData.map(item => (
+                                                                     <option value={item.title}>
+                                                                         {item.title}
                                                                      </option>
                                                                  ))}
 
@@ -1092,14 +1208,20 @@ const BudgetActivity = (props: Props) => {
                                                                  onChange={handlefundSource}
                                                                  className={styles.inputElement}
                                                              >
-                                                                 <option value="select"> Select Funding Type</option>
+                                                                 <option value="select">
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Select Funding Type'
+                                                                         : 'बजेटको प्रकार चयन गर्नुहोस्'
+                                                                     }
+                                                                 </option>
                                                                  <option value="DRR Fund of Muicipality">
-                                                 DRR Fund of Municipality
+
+                                                                     <Gt section={Translations.DRRFundMun} />
+
 
                                                                  </option>
                                                                  <option value="Other DRR related funding">
-                                                 Other DRR related funding
-
+                                                                     <Gt section={Translations.OtherDrrFund} />
                                                                  </option>
                                                              </select>
                                                          </td>
@@ -1111,7 +1233,10 @@ const BudgetActivity = (props: Props) => {
                                                        <input
                                                            type="text"
                                                            className={styles.inputElement}
-                                                           value={'Source of Funds'}
+                                                           value={drrmLanguage.language === 'en'
+                                                               ? 'Source of Funds'
+                                                               : 'बजेटको स्रोत'
+                                                           }
                                                            disabled
                                                        />
                                                    )}
@@ -1121,7 +1246,10 @@ const BudgetActivity = (props: Props) => {
                                                          <input
                                                              type="text"
                                                              className={styles.inputElement}
-                                                             value={'Municipal Government'}
+                                                             value={drrmLanguage.language === 'en'
+                                                                 ? 'Municipal Government'
+                                                                 : 'मनाहानगरपालिका/नगरपालिका/गाउँपालिका'
+                                                             }
                                                              disabled
                                                          />
                                                      )}
@@ -1134,17 +1262,31 @@ const BudgetActivity = (props: Props) => {
                                                                  onChange={handlefundingType}
                                                                  className={styles.inputElement}
                                                              >
-                                                                 <option value="select">Select Source of Funds</option>
+                                                                 <option value="select">
+                                                                     <Gt section={Translations.SelectSourceof} />
+                                                                 </option>
                                                                  <option value="Federal Government">
-                                                                Federal Government
+                                                                     <Gt section={Translations.FederalGovernment} />
                                                                  </option>
                                                                  <option value="Provincial Government">
-                                                                Provincial Government
+                                                                     <Gt section={Translations.ProvincialGovernment} />
+
                                                                  </option>
-                                                                 <option value="INGO">I/NGOs</option>
-                                                                 <option value="Private Sector">Private Sector</option>
-                                                                 <option value="Academia">Academia</option>
-                                                                 <option value="Others">Others</option>
+                                                                 <option value="INGO">
+                                                                     <Gt section={Translations.INGO} />
+                                                                 </option>
+                                                                 <option value="Private Sector">
+                                                                     <Gt section={Translations.PrivateSector} />
+
+                                                                 </option>
+                                                                 <option value="Academia">
+                                                                     <Gt section={Translations.Academia} />
+
+                                                                 </option>
+                                                                 <option value="Others">
+                                                                     <Gt section={Translations.Others} />
+
+                                                                 </option>
                                                              </select>
                                                          )
                                                              }
@@ -1159,7 +1301,10 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.inputElement}
                                                                  value={otherSubtype}
                                                                  onChange={handleOtherSubType}
-                                                                 placeholder={'Please Specify'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Please Specify'
+                                                                     : 'कृपया निर्दिष्ट गर्नुहोस्'
+                                                                 }
                                                              />
                                                          </td>
                                                      )
@@ -1170,7 +1315,10 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.inputElement}
                                                                  onChange={handleBudgetCode}
                                                                  value={budgetCode}
-                                                                 placeholder={'Budget Code (if available)'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Budget Code (if available)'
+                                                                     : 'बजेट कोड (यदि उपलब्ध छ भने)'
+                                                                 }
                                                              />
                                                          </td>
                                                          <td>
@@ -1179,7 +1327,10 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.inputElement}
                                                                  onChange={handleOrganisationName}
                                                                  value={organisationName}
-                                                                 placeholder={'Name of Organisation'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Name of Organisation'
+                                                                     : 'संस्थाको नाम'
+                                                                 }
                                                              />
                                                          </td>
 
@@ -1191,7 +1342,11 @@ const BudgetActivity = (props: Props) => {
                                                                  value={projstartDate}
 
                                                                  onChange={date => setStartDate(date)}
-                                                                 options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                 options={{
+                                                                     calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                     valueLocale: 'en',
+
+                                                                 }}
                                                              />
                                                          </td>
                                                          <td>
@@ -1200,7 +1355,11 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.datepicker}
                                                                  value={projcompletionDate}
                                                                  onChange={date => setprojCompletionDate(date)}
-                                                                 options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                 options={{
+                                                                     calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                                                     valueLocale: 'en',
+
+                                                                 }}
                                                              />
                                                          </td>
                                                          <td>
@@ -1208,12 +1367,37 @@ const BudgetActivity = (props: Props) => {
                                                                  value={projStatus}
                                                                  onChange={handleprojStatus}
                                                                  className={styles.inputElement}
-                                                                 placeholder={'Project Status'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Project Status'
+                                                                     : 'परियोजनाको स्थिति'
+                                                                 }
                                                              >
-                                                                 <option value="select">Select an Option</option>
-                                                                 <option value="Started">Started</option>
-                                                                 <option value="Ongoing">Ongoing</option>
-                                                                 <option value="Completed">Completed</option>
+                                                                 <option value="select">
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Select an Option'
+                                                                         : 'कृपया चयन गर्नुहोस्'
+                                                                     }
+                                                                 </option>
+                                                                 <option value="Started">
+
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Started'
+                                                                         : 'सुरु भएको'
+                                                                     }
+                                                                 </option>
+                                                                 <option value="Ongoing">
+
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Ongoing'
+                                                                         : 'चलिरहेको'
+                                                                     }
+                                                                 </option>
+                                                                 <option value="Completed">
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? 'Completed'
+                                                                         : 'पूरा भयोको'
+                                                                     }
+                                                                 </option>
                                                              </select>
                                                          </td>
                                                          <td>
@@ -1222,7 +1406,10 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.inputElement}
                                                                  onChange={handleAlocBudget}
                                                                  value={allocatedBudget}
-                                                                 placeholder={'Allocated Project Budget'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Allocated Project Budget'
+                                                                     : 'परियोजना बजेट विनियोजित'
+                                                                 }
                                                              />
                                                          </td>
                                                          <td>
@@ -1231,7 +1418,10 @@ const BudgetActivity = (props: Props) => {
                                                                  className={styles.inputElement}
                                                                  onChange={handleActualExp}
                                                                  value={actualExp}
-                                                                 placeholder={'Actual Expenditure'}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Actual Expenditure'
+                                                                     : 'परियोजना बजेट विनियोजित'
+                                                                 }
                                                              />
                                                          </td>
                                                          {
@@ -1244,7 +1434,10 @@ const BudgetActivity = (props: Props) => {
                                                              className={styles.inputElement}
                                                              onChange={handleRemarks}
                                                              value={remarks}
-                                                             placeholder={'Remarks'}
+                                                             placeholder={drrmLanguage.language === 'en'
+                                                                 ? 'Remarks'
+                                                                 : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
+                                                             }
                                                          />
 
                                                      </td>
@@ -1264,35 +1457,12 @@ const BudgetActivity = (props: Props) => {
                             </tbody>
 
                         </table>
-                        {!loader && !budgetId.id && <h2 className={styles.emptyTable}>Please Enter Budget to add Budget Activities</h2>}
-                        <div className={styles.drrsLink}>
-                            {
-                                showInfo
-                           && (
-                               <>
-                                   <p>
-                            The Disaster Risk Reduction
-                            National Strategic
-                            Plan of Action
-                            2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main
-                            guidance, has identified 4 priority areas and 18 priority actions.
-                            The activities will be monitored based on the these priorities set.
-                                   </p>
-                                   <p>
-                            Get the action plan :
-                                       <a
-                                           href="https://bit.ly/3vLWgW4"
-                                           target="_blank"
-                                           rel="noopener noreferrer"
-                                       >
-                                           {'here'}
-                                       </a>
-                                   </p>
-                               </>
-                           )
-                            }
+                        {!loader && !budgetId.id && (
+                            <h2 className={styles.emptyTable}>
+                                <Gt section={Translations.EnterBudget} />
+                            </h2>
+                        )}
 
-                        </div>
                         {
                             Object.keys(postErrors).length > 0
                             && (
@@ -1336,11 +1506,8 @@ const BudgetActivity = (props: Props) => {
                                        className={styles.savebtn}
                                        onClick={handleAddNew}
                                    >
-                                       <Icon
-                                           name="plus"
-                                           className={styles.plusIcon}
-                                       />
-                                    Add New Activity
+
+                                       <Gt section={Translations.AddnewAct} />
                                    </button>
                                    <NextPrevBtns
                                        handlePrevClick={props.handlePrevClick}
@@ -1362,7 +1529,7 @@ const BudgetActivity = (props: Props) => {
                 {props.previewDetails
                && (
                    <div className={styles.budgetActPreviewContainer}>
-                       <h2>Budget Activity</h2>
+                       <h2><Gt section={Translations.BudgetActivity} /></h2>
                        <div className={styles.budgetActChartContainer}>
 
                            <PieChart width={200} height={200}>
@@ -1423,7 +1590,7 @@ const BudgetActivity = (props: Props) => {
                                                </span>
                                            </li>
                                            <li className={styles.light}>
-                                               <span>DRR Funding of Municipality</span>
+                                               <span><Gt section={Translations.DRRRelatedAct} /></span>
                                            </li>
                                        </ul>
                                    </div>
@@ -1453,7 +1620,9 @@ const BudgetActivity = (props: Props) => {
                                                </span>
                                            </li>
                                            <li className={styles.light}>
-                                               <span>Other DRR related Funding</span>
+                                               <span>
+                                                   <Gt section={Translations.OtherDRRRelatedAct} />
+                                               </span>
                                            </li>
                                        </ul>
                                    </div>
@@ -1470,23 +1639,28 @@ const BudgetActivity = (props: Props) => {
                && (
                    <div className={styles.budgetActPreviewContainer}>
 
+
                        <ul>
                            <li>
                                <span className={styles.darkerText}>
-                             Monitoring the activities based on the Priority Areas
+                                   <Gt section={Translations.MonitoringAct} />
                                </span>
                            </li>
                            <li>
                                <span className={styles.smallerText}>
-                               Disaster Risk Reduction National Strategic Plan of Action 2018-2039
+                                   <Gt section={Translations.DisasterRiskStrategic} />
+                                   <Gt section={Translations.DisasterRiskStrategic} />
                                </span>
                            </li>
                        </ul>
 
                        <div className={styles.monitoringRow}>
                            <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area1</span>
-                               <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                               <span className={styles.monTitle}><Gt section={Translations.Area1} /></span>
+                               <span className={styles.monDesc}>
+                                   {' '}
+                                   <Gt section={Translations.PA1} />
+                               </span>
                                <div className={styles.scorePatch}>
                                    {budgetActivities.length > 0
                                        ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
@@ -1495,8 +1669,11 @@ const BudgetActivity = (props: Props) => {
                                </div>
                            </div>
                            <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area2</span>
-                               <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                               <span className={styles.monTitle}><Gt section={Translations.Area2} /></span>
+                               <span className={styles.monDesc}>
+                                   {' '}
+                                   <Gt section={Translations.PA2} />
+                               </span>
                                <div className={styles.scorePatch}>
                                    {budgetActivities.length > 0
                                        ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
@@ -1507,12 +1684,9 @@ const BudgetActivity = (props: Props) => {
                        </div>
                        <div className={styles.monitoringRow}>
                            <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area3</span>
+                               <span className={styles.monTitle}><Gt section={Translations.Area3} /></span>
                                <span className={styles.monDesc}>
-                                       Promoting Comprehensive
-                                       Risk-Informed Private and Public
-                                       Investments in Disaster Risk Reduction
-                                       for Resilience
+                                   <Gt section={Translations.PA3} />
                                </span>
                                <div className={styles.scorePatch}>
                                    {budgetActivities.length > 0
@@ -1523,11 +1697,13 @@ const BudgetActivity = (props: Props) => {
                                </div>
                            </div>
                            <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area4</span>
+                               <span className={styles.monTitle}>
+Are
+                                   <Gt section={Translations.Area4} />
+a4
+                               </span>
                                <span className={styles.monDesc}>
-                                       Enhancing Disaster Preparedness for
-                                       Effective Response and to &quot; Build Back Better &quot;
-                                       in Recovery, Rehabilitation and Reconstruction
+                                   <Gt section={Translations.PA4} />
                                </span>
                                <div className={styles.scorePatch}>
                                    {budgetActivities.length > 0

@@ -253,7 +253,7 @@ const ProgramPolicies = (props: Props) => {
                         <Gt section={Translations.PapTitlePart1} />
                         {''}
                         {
-                            `${generalData.fiscalYearTitle}`
+                            ` ${generalData.fiscalYearTitle} `
                         }
                         {''}
                         <Gt section={Translations.PapTitlePart2} />
