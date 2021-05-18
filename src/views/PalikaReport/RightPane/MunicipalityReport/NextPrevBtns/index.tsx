@@ -1,6 +1,8 @@
 import React from 'react';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
+import Gt from '../../../utils';
+import Translations from '../../../Translations';
 
 const NextPrevBtns = (props) => {
     const { handlePrevClick, handleNextClick, lastpage, firstpage, disabled } = props;
@@ -36,7 +38,10 @@ const NextPrevBtns = (props) => {
                         name="plus"
                         className={styles.plusIcon}
                     />
-                Save and Continue
+                    <Gt
+                        section={Translations.SaveContinue}
+                    />
+
                 </button>
             )}
         </div>

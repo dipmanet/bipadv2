@@ -6,6 +6,8 @@ import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
 // import { NepaliDatePicker } from 'datepicker-nepali-reactjs';
 import styles from './styles.scss';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 import NextPrevBtns from '../../NextPrevBtns';
 import 'nepali-datepicker-reactjs/dist/index.css';
 
@@ -26,6 +28,7 @@ import {
     drrmRegionSelector,
     generalDataSelector,
     userSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 
 import Icon from '#rscg/Icon';
@@ -36,6 +39,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 
 });
 
@@ -143,6 +147,7 @@ const General = (props: Props) => {
         drrmRegion,
         setProgress,
         drrmProgress,
+        drrmLanguage,
     } = props;
 
     // const {
@@ -330,31 +335,39 @@ const General = (props: Props) => {
                 <>
                     { props.annex
                         ? ''
-                        : <h2>General Information</h2>
+                        : (
+                            <h2>
+                                <Gt
+                                    section={Translations.GeneralInformation}
+                                />
+                            </h2>
+                        )
                     }
                     {
                         !props.annex
                 && (
                     <div className={styles.formColumn}>
-                        <h5>DRRM report will be generated for each fiscal year.</h5>
-                        <h3><strong>Fiscal Year</strong></h3>
+                        <h5>
+                            <Gt
+                                section={Translations.GeneralSubtitleFirst}
+                            />
+                        </h5>
+                        <h3>
+                            <strong>
+                                <Gt
+                                    section={Translations.Fiscalyear}
+                                />
+                            </strong>
+                        </h3>
                         <div className={styles.row}>
-                            {/* <div className={styles.inputContainer}>
-                        <input
-                            type="text"
-                            className={styles.inputElement}
-                            placeholder="Disaster Risk Reduction and Management Report"
-                            onChange={handleReportTitle}
-                            value={reportTitle || ''}
-                            disabled
-                        />
-                    </div> */}
-
                             <div className={styles.inputContainer}>
                                 {fyErr
                                     ? (
                                         <div className={styles.errorMsg}>
-                                 Please select fiscal year
+                                            <Gt
+                                                section={Translations.GeneralSelectFiscalYear}
+                                            />
+
                                         </div>
                                     )
                                     : ''}
@@ -365,13 +378,13 @@ const General = (props: Props) => {
                                     className={styles.inputElement}
                                     disabled={disabled}
                                 >
-                                    {/* objs.sort((a,b) => (a.last_nom > b.last_nom) */}
-
-
-                                    <option value="select">Select Fiscal Year</option>
+                                    <option value="select">
+                                        {drrmLanguage.language === 'np'
+                                            ? 'आर्थिक वर्ष चयन गर्नुहोस्'
+                                            : 'Select Fiscal Year'
+                                        }
+                                    </option>
                                     {fiscalYearList && fiscalYearList
-                                        // .sort((a, b) => b.id - a.id)
-                                        // .filter(item => item.id < 19 && item.id > 7)
                                         .map(item => (
                                             <option
                                                 value={item.id}
@@ -391,7 +404,15 @@ const General = (props: Props) => {
                     <div className={styles.formColumn}>
                         {
                             !props.annex
-                    && <h3><strong>Municipal DRR Leadership </strong></h3>
+                    && (
+                        <h3>
+                            <strong>
+                                <Gt
+                                    section={Translations.MunicipalDRR}
+                                />
+                            </strong>
+                        </h3>
+                    )
                         }
                         <div className={styles.personalDetailsrow}>
                             <div className={styles.personalDetails}>
@@ -402,15 +423,37 @@ const General = (props: Props) => {
                                     <tbody>
                                         <tr>
 
-                                            <th>Position</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone Number</th>
+                                            <th>
+                                                <Gt
+                                                    section={Translations.GeneralPosition}
+                                                />
+                                            </th>
+                                            <th>
+                                                <Gt
+                                                    section={Translations.Name}
+                                                />
+                                            </th>
+                                            <th>
+                                                <Gt
+                                                    section={Translations.Email}
+                                                />
+                                            </th>
+                                            <th>
+                                                <Gt
+                                                    section={Translations.PhoneNumber}
+                                                />
+                                            </th>
                                             { !props.annex
-                                    && <th>{'Add/Edit Details'}</th>
+                                    && (
+                                        <th>
+                                            {
+                                                <Gt
+                                                    section={Translations.AddEdit}
+                                                />
                                             }
-
-
+                                        </th>
+                                    )
+                                            }
                                         </tr>
                                         <tr>
                                             {
@@ -420,7 +463,15 @@ const General = (props: Props) => {
                                                     ? fetchedData
                                                         .filter(item => item.position === 'Mayor').map(item => (
                                                             <>
-                                                                <td>{'Mayor or Nagar Pramukh'}</td>
+                                                                <td>
+                                                                    {
+                                                                        <Gt
+                                                                            section={Translations.MayororChairperson}
+                                                                        />
+
+                                                                    }
+
+                                                                </td>
                                                                 <td>{item.name || '-'}</td>
                                                                 <td>{item.email || '-'}</td>
                                                                 <td>{item.mobileNumber || '-'}</td>
@@ -447,7 +498,14 @@ const General = (props: Props) => {
                                                         ))
                                                     : (
                                                         <>
-                                                            <td>{'Mayor or Nagar Pramukh'}</td>
+                                                            <td>
+                                                                {
+                                                                    <Gt
+                                                                        section={Translations.MayororChairperson}
+                                                                    />
+                                                                }
+
+                                                            </td>
                                                             <td>{'-'}</td>
                                                             <td>{'-'}</td>
                                                             <td>{'-'}</td>
@@ -483,7 +541,15 @@ const General = (props: Props) => {
                                                     ? fetchedData
                                                         .filter(item => item.position === 'Chief Administrative Officer').map(item => (
                                                             <>
-                                                                <td>{'Chief Administrative Officer'}</td>
+                                                                <td>
+                                                                    {
+                                                                        <Gt
+                                                                            section={Translations.ChiefAdminstrative}
+                                                                        />
+
+                                                                    }
+
+                                                                </td>
                                                                 <td>{item.name || '-'}</td>
                                                                 <td>{item.email || '-'}</td>
                                                                 <td>{item.mobileNumber || '-'}</td>
@@ -510,7 +576,14 @@ const General = (props: Props) => {
                                                         ))
                                                     : (
                                                         <>
-                                                            <td>{'Chief Administrative Officer'}</td>
+                                                            <td>
+                                                                {
+                                                                    <Gt
+                                                                        section={Translations.ChiefAdminstrative}
+                                                                    />
+                                                                }
+
+                                                            </td>
                                                             <td>{'-'}</td>
                                                             <td>{'-'}</td>
                                                             <td>{'-'}</td>
@@ -574,7 +647,15 @@ const General = (props: Props) => {
                                                         ))
                                                     : (
                                                         <>
-                                                            <td>{'DRR Focal Person'}</td>
+                                                            <td>
+                                                                {
+                                                                    <Gt
+                                                                        section={Translations.DRRfocal}
+                                                                    />
+
+                                                                }
+
+                                                            </td>
                                                             <td>{'-'}</td>
                                                             <td>{'-'}</td>
                                                             <td>{'-'}</td>
@@ -612,8 +693,9 @@ const General = (props: Props) => {
                                     showInfo && !props.annex && (
                                         <h5>
                                             <i>
-                            Please click on the add/edit
-                        button to update the details
+                                                <Gt
+                                                    section={Translations.GeneralPleaseClick}
+                                                />
                                             </i>
                                         </h5>
                                     )
@@ -622,7 +704,15 @@ const General = (props: Props) => {
                         </div>
                         {
                             !props.annex
-                    && <h3><strong>Local Disaster Management Committee</strong></h3>
+                    && (
+                        <h3>
+                            <strong>
+                                <Gt
+                                    section={Translations.LocalDisaster}
+                                />
+                            </strong>
+                        </h3>
+                    )
                         }
 
                         <div className={styles.row}>
@@ -630,15 +720,11 @@ const General = (props: Props) => {
                 && (
                     <>
                         <div className={styles.inputContainer}>
-                            {dateErr
-                                ? (
-                                    <div className={styles.errorMsg}>
-                                     Please select Local DRRM committee formation date
-                                    </div>
-                                )
-                                : ''}
+
                             <span className={styles.labelDate}>
-                                Local Disaster Management Committee formation date
+                                <Gt
+                                    section={Translations.FormationDateTitle}
+                                />
                             </span>
                             <NepaliDatePicker
                                 inputClassName="form-control"
@@ -646,24 +732,21 @@ const General = (props: Props) => {
                                 value={formationDate}
                                 onChange={(value: string) => setformationDate(value)}
                                 placeholder="sdfsdfs"
-                                options={{ closeOnSelect: true, calenderLocale: 'en', valueLocale: 'en' }}
+                                options={{
+                                    closeOnSelect: true,
+                                    calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                    valueLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                }}
                             />
-                            {/* <NepaliDatePicker
-                                className={styles.datepicker}
-                                value={formationDate}
-                                placeholder={'Select Date'}
-                                onSelect={val => handleFormationDate(val)}
-                                onChange={val => handleFormationDate(val)}
-                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
-                            /> */}
+
 
                         </div>
                         <div className={styles.inputContainer}>
 
                             <span className={styles.labelDate}>
-                            Number of members in  Local Disaster Management Committee
-
-
+                                <Gt
+                                    section={Translations.Numberofmembers}
+                                />
                             </span>
                             <input
                                 onChange={handleCommitteeMembers}
@@ -673,24 +756,62 @@ const General = (props: Props) => {
                             />
 
                         </div>
-                        <h3><strong>Committee Members </strong></h3>
+                        <h3>
+                            <strong>
+                                <Gt
+                                    section={Translations.Committeemembers}
+                                />
+                            </strong>
+
+                        </h3>
                     </>
                 )
                             }
                             {
                                 props.annex
-                        && <h3><strong>Local Disaster Management Committee</strong></h3>
+                        && (
+                            <h3>
+                                <strong>
+                            Local Disaster Management Committee
+                                    <Gt
+                                        section={Translations.FormationDateTitle}
+                                    />
+                                </strong>
+                            </h3>
+                        )
                             }
                             <table className={styles.reportTable} id="table-to-xls">
                                 <tbody>
                                     <tr>
-                                        <th>SN</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone Number</th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderSN}
+                                            />
+                                        </th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.Name}
+                                            />
+                                        </th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.Email}
+                                            />
+                                        </th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.PhoneNumber}
+                                            />
+                                        </th>
                                         {
                                             !props.annex
-                                    && <th>Add/Edit Details</th>
+                                    && (
+                                        <th>
+                                            <Gt
+                                                section={Translations.AddEdit}
+                                            />
+                                        </th>
+                                    )
                                         }
 
                                     </tr>
@@ -764,7 +885,11 @@ const General = (props: Props) => {
                             <>
                                 <h5>
                                     {' '}
-                                    <i>Please click on the add/edit button to update the details</i>
+                                    <i>
+                                        <Gt
+                                            section={Translations.GeneralPleaseClick}
+                                        />
+                                    </i>
                                 </h5>
                                 <button
                                     type="button"
@@ -775,7 +900,9 @@ const General = (props: Props) => {
                                         name="plus"
                                         className={styles.plusIcon}
                                     />
-                                         Add Member
+                                    <Gt
+                                        section={Translations.AddMember}
+                                    />
                                     {/* Add */}
                                 </button>
 
