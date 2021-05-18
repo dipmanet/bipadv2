@@ -505,6 +505,158 @@ const languageTranslations: LanguageEntry = {
         en: 'Person with Disabilities ',
         np: 'अशक्त मानिस',
     },
+    ContactGovernmentContact: {
+        en: 'Governmental Contacts',
+        np: 'सरकारी सम्पर्कहरू',
+    },
+    ContactNonGovernmentalContact: {
+        en: 'Non-Governmental Contacts',
+        np: 'गैर सरकारी सम्पर्कहरू',
+    },
+    ContactsSerialNumber: {
+        np: 'क्रम संख्या',
+        en: 'SN',
+    },
+    ContactsName: {
+        np: 'नाम',
+        en: 'Name',
+    },
+    ContactTypeOfOrganization: {
+        np: 'संस्थाको प्रकार',
+        en: 'Type of Organization',
+    },
+    ContactPosition: {
+        np: 'स्थिति',
+        en: 'Position',
+    },
+    ContactNameOfOrganization: {
+        np: 'संस्थाको नाम',
+        en: 'Name of Organization',
+    },
+    ContactTrainingTitle: {
+        np: 'प्रशिक्षित शीर्षक',
+        en: 'Training Title',
+    },
+    ContactTrainingDuration: {
+        np: 'प्रशिक्षण अवधि(दिन)',
+        en: 'Training Duration(Days)',
+    },
+    ContactContactNumber: {
+        np: 'सम्पर्क नम्बर',
+        en: 'Contact Number',
+    },
+    ContactContactEmail: {
+        np: 'ईमेल',
+        en: 'Email',
+    },
+    ContactAction: {
+        np: 'कार्य',
+        en: 'Action',
+    },
+    ContactEditTooltip: {
+        np: 'सम्पर्क सम्पादन गर्नुहोस्',
+        en: 'Edit Contact Data',
+    },
+    ContactAddButton: {
+        np: 'सम्पर्क थप्नुहोस्',
+        en: 'Add Contact',
+    },
+    ContactFocusHazard: {
+        np: 'केन्द्रित जोखिम',
+        en: 'Focused Hazard',
+    },
+    ContactTrainingActivities: {
+        np: 'तालिममा समावेश गतिविधिहरू',
+        en: 'Activities included in the training',
+    },
+    ContactTrainingDateFrom: {
+        np: 'प्रशिक्षण मिति (बाट)',
+        en: 'Training Date (from)',
+    },
+    ContactTrainingDateTo: {
+        np: 'प्रशिक्षण मिति (सम्म)',
+        en: 'Training Date (to)',
+    },
+    ContactNoDataMessage: {
+        np: 'डाटा उपलब्ध छैन',
+        en: 'Data Unavailable',
+    },
+    ContactUpdateButton: {
+        np: 'अद्यावधिक',
+        en: 'UPDATE',
+    },
+    ContactUpdateButtonTooltip: {
+        np: 'सम्पर्क अद्यावधिक गर्नुहोस्',
+        en: 'Update Contact',
+    },
+    ContactErrorHeading: {
+        np: 'कृपया निम्न त्रुटिहरू ठीक गर्नुहोस्',
+        en: 'Please fix the following errors',
+    },
+    SimulationHeading: {
+        np: 'अनुकरण',
+        en: 'Simulations',
+    },
+    SimulationSerialNumber: {
+        np: 'क्रम संख्या',
+        en: 'SN',
+    },
+    SimulationExercise: {
+        np: 'अनुकरण अभ्यासको नाम',
+        en: 'Name of Simulation excerise',
+    },
+    SimulationDate: {
+        np: 'मिति',
+        en: 'Date',
+    },
+    SimulationDescription: {
+        np: 'वर्णन',
+        en: 'Description',
+    },
+    SimulationPriorityArea: {
+        np: 'प्राथमिकता क्षेत्र',
+        en: 'Priority Area',
+    },
+    SimulationPriorityAction: {
+        np: 'प्राथमिकता कार्य',
+        en: 'Priority Action',
+    },
+    SimulationPriorityActivity: {
+        np: 'प्राथमिकता गतिविधि',
+        en: 'Priority Acitivity',
+    },
+    SimulationOrganizer: {
+        np: 'आयोजक',
+        en: 'Organizer',
+    },
+    SimulationParticipants: {
+        np: 'सहभागीहरूको संख्या',
+        en: 'Number of Participants',
+    },
+    SimulationHazards: {
+        np: 'केन्द्रित प्रकोप',
+        en: 'Focused Hazard',
+    },
+    SimulationAction: {
+        np: 'कार्य',
+        en: 'Action',
+    },
+    SimulationEditTooltip: {
+        np: 'अनुकरण सम्पादन गर्नुहोस्',
+        en: 'Edit Simulation Data',
+    },
+    SimulationUpdateButton: {
+        np: 'अद्यावधिक',
+        en: 'UPDATE',
+    },
+    SimulationAddButton: {
+        np: 'नयाँ अनुकरण थप्नुहोस्',
+        en: 'Add New Simulation',
+    },
+    SimulationUpdateButtonTooltip: {
+        np: 'अनुकरण अद्यावधिक गर्नुहोस्',
+        en: 'Update Simulation',
+    },
 
 
 };

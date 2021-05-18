@@ -22,7 +22,8 @@ import { provincesSelector,
     palikaRedirectSelector,
     generalDataSelector,
     drrmRegionSelector,
-    drrmProgresSelector } from '#selectors';
+    drrmProgresSelector,
+    palikaLanguageSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
 
@@ -34,6 +35,8 @@ import {
 import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
@@ -55,6 +58,7 @@ const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 
 });
 
@@ -256,7 +260,7 @@ const Contacts = (props: Props) => {
         NonGovPutRequest,
     },
     setDrrmContacts, drrmRegion, drrmProgress,
-    user, generalData, setProgress } = props;
+    user, generalData, setProgress, drrmLanguage } = props;
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
 
     if (drrmRegion.municipality) {
@@ -630,7 +634,7 @@ const Contacts = (props: Props) => {
                 && (
                     <div className={styles.tabsPageContainer}>
                         <h2>
-                                Governmental Contacts
+                            <Gt section={Translations.ContactGovernmentContact} />
                         </h2>
                         <div className={styles.palikaTable}>
                             <table id="table-to-xls">
@@ -645,16 +649,16 @@ const Contacts = (props: Props) => {
                                                 className={styles.checkBox}
                                             />
                                         </th>
-                                        <th>S.N</th>
-                                        <th>Name</th>
-                                        <th>Type of Organisation</th>
-                                        <th>Position</th>
-                                        <th>Name of Organisation</th>
-                                        <th>Trained Title</th>
-                                        <th>Training Duration(Days)</th>
-                                        <th>Contact number</th>
-                                        <th>Email</th>
-                                        <th>Action</th>
+                                        <th><Gt section={Translations.ContactsSerialNumber} /></th>
+                                        <th><Gt section={Translations.ContactsName} /></th>
+                                        <th><Gt section={Translations.ContactTypeOfOrganization} /></th>
+                                        <th><Gt section={Translations.ContactPosition} /></th>
+                                        <th><Gt section={Translations.ContactNameOfOrganization} /></th>
+                                        <th><Gt section={Translations.ContactTrainingTitle} /></th>
+                                        <th><Gt section={Translations.ContactTrainingDuration} /></th>
+                                        <th><Gt section={Translations.ContactContactNumber} /></th>
+                                        <th><Gt section={Translations.ContactContactEmail} /></th>
+                                        <th><Gt section={Translations.ContactAction} /></th>
                                     </tr>
                                     {loader ? (
                                         <>
@@ -707,7 +711,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.editButtn}
                                                                 type="button"
                                                                 onClick={() => handleEditContacts(item)}
-                                                                title="Edit Contact"
+                                                                title={drrmLanguage.language === 'np' ? Translations.ContactEditTooltip.np : Translations.ContactEditTooltip.en}
                                                             >
 
                                                                 <ScalableVectorGraphics
@@ -726,7 +730,7 @@ const Contacts = (props: Props) => {
                                 </tbody>
                             </table>
                             {!loader && mergedData.length === 0
-                                 && <h2>Data Unavailable</h2>
+                                 && <h2><Gt section={Translations.ContactNoDataMessage} /></h2>
 
                             }
                             {!loader && (
@@ -740,7 +744,7 @@ const Contacts = (props: Props) => {
                                             name="plus"
                                             className={styles.plusIcon}
                                         />
-                            Add Contact
+                                        <Gt section={Translations.ContactAddButton} />
                                     </button>
 
                                 </>
@@ -748,7 +752,10 @@ const Contacts = (props: Props) => {
                         </div>
                         {!loader && (
                             <>
-                                <h2>Non-Governmental Contact</h2>
+                                <h2 style={{ marginTop: '20px' }}>
+                                    {' '}
+                                    <Gt section={Translations.ContactNonGovernmentalContact} />
+                                </h2>
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
@@ -762,42 +769,42 @@ const Contacts = (props: Props) => {
                                                 />
                                             </th>
                                             <th>
-                                    SN
+                                                <Gt section={Translations.ContactsSerialNumber} />
                                             </th>
                                             <th>
-                                    Name
+                                                <Gt section={Translations.ContactsName} />
                                             </th>
                                             <th>
-                                    Type of Organization
+                                                <Gt section={Translations.ContactTypeOfOrganization} />
                                             </th>
                                             <th>
-                                    Name of Organization
+                                                <Gt section={Translations.ContactNameOfOrganization} />
                                             </th>
                                             <th>
-                                    Position
+                                                <Gt section={Translations.ContactPosition} />
                                             </th>
                                             <th>
-                                    Trained Title
+                                                <Gt section={Translations.ContactTrainingTitle} />
                                             </th>
                                             <th>
-                                    Focused Hazard
+                                                <Gt section={Translations.ContactFocusHazard} />
                                             </th>
                                             <th>
-                                Activities included in the training
+                                                <Gt section={Translations.ContactTrainingActivities} />
                                             </th>
                                             <th>
-                               Training Date(from)
+                                                <Gt section={Translations.ContactTrainingDateFrom} />
                                             </th>
                                             <th>
-                                Training Date(to)
+                                                <Gt section={Translations.ContactTrainingDateTo} />
                                             </th>
                                             <th>
-                                Contact number
+                                                <Gt section={Translations.ContactContactNumber} />
                                             </th>
                                             <th>
-                                Email
+                                                <Gt section={Translations.ContactContactEmail} />
                                             </th>
-                                            <th>Action</th>
+                                            <th><Gt section={Translations.ContactAction} /></th>
 
                                         </tr>
                                         {finalArr && finalArr.length > 0 && finalArr.map((data, i) => (
@@ -805,7 +812,8 @@ const Contacts = (props: Props) => {
                                                 ? (
                                                     <tr>
                                                         <td>{''}</td>
-                                                        <td>{nonGovContacts.length + 1}</td>
+                                                        <td>{nonGovContactIndex + 1}</td>
+
                                                         <td>
                                                             <input
                                                                 type="text"
@@ -891,7 +899,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.datepicker}
                                                                 value={trainingDateFrom}
                                                                 onChange={date => setTrainingDateFrom(date)}
-                                                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                                             />
                                                         </td>
                                                         <td>
@@ -900,7 +908,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.datepicker}
                                                                 value={trainingDateTo}
                                                                 onChange={date => setTrainingDateTo(date)}
-                                                                options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                                options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                                             />
                                                         </td>
                                                         <td>
@@ -926,9 +934,11 @@ const Contacts = (props: Props) => {
                                                                 className={styles.updateButtn}
                                                                 type="button"
                                                                 onClick={handleUpdateActivity}
-                                                                title="Update Budget Activity"
+                                                                title={drrmLanguage.language === 'np'
+                                                                    ? Translations.ContactUpdateButtonTooltip.np
+                                                                    : Translations.ContactUpdateButtonTooltip.en}
                                                             >
-                                                     Update
+                                                                <Gt section={Translations.ContactUpdateButton} />
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -963,7 +973,9 @@ const Contacts = (props: Props) => {
                                                                 className={styles.editButtn}
                                                                 type="button"
                                                                 onClick={() => handleEditnonGovContact(data.item.id, i)}
-                                                                title="Edit Non Governmental Contact"
+                                                                title={drrmLanguage.language === 'np'
+                                                                    ? Translations.ContactEditTooltip.np
+                                                                    : Translations.ContactEditTooltip.en}
                                                             >
                                                                 <ScalableVectorGraphics
                                                                     className={styles.bulletPoint}
@@ -1067,7 +1079,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.datepicker}
                                                             value={trainingDateFrom}
                                                             onChange={date => setTrainingDateFrom(date)}
-                                                            options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                            options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                                         />
                                                     </td>
                                                     <td>
@@ -1076,7 +1088,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.datepicker}
                                                             value={trainingDateTo}
                                                             onChange={date => setTrainingDateTo(date)}
-                                                            options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                                            options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                                         />
                                                     </td>
                                                     <td>
@@ -1110,7 +1122,7 @@ const Contacts = (props: Props) => {
                             <ul>
                                 <li>
                                     <span className={styles.errorHeading}>
-                                    Please fix the following errors:
+                                        <Gt section={Translations.ContactErrorHeading} />
                                     </span>
                                 </li>
                                 {
@@ -1137,7 +1149,7 @@ const Contacts = (props: Props) => {
                                                     name="plus"
                                                     className={styles.plusIcon}
                                                 />
-                            Add Contact
+                                                <Gt section={Translations.ContactAddButton} />
                                             </button>
                                             <NextPrevBtns
                                                 handlePrevClick={props.handlePrevClick}

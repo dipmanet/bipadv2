@@ -1467,79 +1467,79 @@ const BudgetActivity = (props: Props) => {
                 }
 
                 {props.monitoringDetails
-               && (
-                   <div className={styles.budgetActPreviewContainer}>
+                  && (
+                      <div className={styles.budgetActPreviewContainer}>
 
-                       <ul>
-                           <li>
-                               <span className={styles.darkerText}>
+                          <ul>
+                              <li>
+                                  <span className={styles.darkerText}>
                              Monitoring the activities based on the Priority Areas
-                               </span>
-                           </li>
-                           <li>
-                               <span className={styles.smallerText}>
+                                  </span>
+                              </li>
+                              <li>
+                                  <span className={styles.smallerText}>
                                Disaster Risk Reduction National Strategic Plan of Action 2018-2039
-                               </span>
-                           </li>
-                       </ul>
+                                  </span>
+                              </li>
+                          </ul>
 
-                       <div className={styles.monitoringRow}>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area1</span>
-                               <span className={styles.monDesc}>Understanding Disaster Risk</span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area2</span>
-                               <span className={styles.monDesc}>Understanding Disaster Risk</span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                       </div>
-                       <div className={styles.monitoringRow}>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area3</span>
-                               <span className={styles.monDesc}>
+                          <div className={styles.monitoringRow}>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}>Area1</span>
+                                  <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}>Area2</span>
+                                  <span className={styles.monDesc}>Understanding Disaster Risk</span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                          </div>
+                          <div className={styles.monitoringRow}>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}>Area3</span>
+                                  <span className={styles.monDesc}>
                                        Promoting Comprehensive
                                        Risk-Informed Private and Public
                                        Investments in Disaster Risk Reduction
                                        for Resilience
-                               </span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
+                                  </span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
 
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                           <div className={styles.monitoringItem}>
-                               <span className={styles.monTitle}>Area4</span>
-                               <span className={styles.monDesc}>
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                              <div className={styles.monitoringItem}>
+                                  <span className={styles.monTitle}>Area4</span>
+                                  <span className={styles.monDesc}>
                                        Enhancing Disaster Preparedness for
                                        Effective Response and to &quot; Build Back Better &quot;
                                        in Recovery, Rehabilitation and Reconstruction
-                               </span>
-                               <div className={styles.scorePatch}>
-                                   {budgetActivities.length > 0
-                                       ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
-                                       : 0
-                                   }
-                               </div>
-                           </div>
-                       </div>
-                   </div>
+                                  </span>
+                                  <div className={styles.scorePatch}>
+                                      {budgetActivities.length > 0
+                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
+                                          : 0
+                                      }
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
 
-               )
+                  )
 
                 }
 
