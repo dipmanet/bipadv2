@@ -216,8 +216,8 @@ const languageTranslations: LanguageEntry = {
     },
 
     GeneralSelectFiscalYear: {
-        en: 'Please select fiscal year',
-        np: 'कृपया आर्थिक वर्ष चयन गर्नुहोस्',
+        en: 'Please select fiscal year from General Section',
+        np: 'कृपया सामान्य सेक्सनबाट मान्य आर्थिक वर्ष प्रविष्ट गर्नुहोस्',
     },
     GeneralSelectorPlaceholder: {
         en: 'Select Fiscal Year',
@@ -336,6 +336,60 @@ const languageTranslations: LanguageEntry = {
         en: 'Edit Inventory Data',
     },
 
+    // Annual Budget
+    TotalMunBudget: {
+        en: 'Total municipal budget',
+        np: 'नगरपालिकाको कुल बजेट',
+    },
+    DRRFundMun: {
+        en: 'DRR fund of municipality',
+        np: 'नगरपालिकाको विपद् कोष',
+    },
+    OtherDrrFund: {
+        en: 'Other DRR related funding',
+        np: 'अन्य विपद् सम्बन्धित बजेट',
+    },
+    BudgetDescription: {
+        en: 'Total municipal budget is the total budget allocated by the municipality for the execution of various activities for this fiscal year',
+        np: 'कुल बजेट भन्नाले यस आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको कुल बजेट',
+    },
+    DRRMunFundDescriptio: {
+        en: 'DRR fund of the municipality is part of the total municipal budget of this fiscal year which is specifically separated for DRRM related activities',
+        np: 'नगरपालिकाको विपद कोष भनेको  यस आर्थिक वर्षको कुल बजेटको हिस्सा हो जुन विशेष रूपमा विपद  सम्बन्धित गतिविधिहरूको लागि छुट्याइएको छ',
+    },
+    OtherDrrRelatedFund: {
+        en: 'Other DRR related funding is the funding received by the municipality from various sources like I/NGOS, the federal government, provincial government, private sectors, etc. for this fiscal year',
+        np: 'अन्य विपद् सम्बन्धित बजेट भनेको यस आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि जस्ता विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम हो।',
+    },
+    BudgetEditBtn: {
+        en: 'Edit Budget',
+        np: 'बजेट सम्पादन गर्नुहोस्',
+    },
+    BudgetAddBtn: {
+        en: 'Add Budget',
+        np: 'बजेट थप्नुहोस्',
+    },
+    BudgetTitlePart1: {
+        en: 'Budget for Fiscal Year ',
+        np: 'आर्थिक वर्ष',
+    },
+    BudgetTitlePart2: {
+        en: '',
+        np: 'को बजेट',
+    },
+    // Budget Preview
+    OfMunBudget: {
+        en: 'of Municipal Budget',
+        np: 'नगरपालिकाको कुल बजेट को',
+    },
+    Budget: {
+        en: 'Budget',
+        np: 'बजेट',
+    },
+    Rupees: {
+        en: 'Rs.',
+        np: 'रु',
+    },
 
 };
 

@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 
 import {
     createConnectedRequestCoordinator,
@@ -27,6 +29,7 @@ import {
     budgetIdSelector,
     drrmRegionSelector,
     drrmProgresSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import Icon from '#rscg/Icon';
@@ -64,6 +67,7 @@ const mapStateToProps = state => ({
     budgetId: budgetIdSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -149,6 +153,7 @@ const Budget = (props: Props) => {
         drrmRegion,
         setProgress,
         drrmProgress,
+        drrmLanguage,
     } = props;
 
     const [municipalBudget, setmunicipalBudget] = useState('');
@@ -355,7 +360,12 @@ const Budget = (props: Props) => {
                 <div>
 
                     <h2>
-                        {`Budget for Fiscal Year ${generalData.fiscalYearTitle}`}
+                        <Gt section={Translations.BudgetTitlePart1} />
+                        {`
+                                ${generalData.fiscalYearTitle}
+                            `
+                        }
+                        <Gt section={Translations.BudgetTitlePart2} />
                     </h2>
                     <div className={styles.palikaTable}>
                         <table id="table-to-xls">
@@ -371,64 +381,49 @@ const Budget = (props: Props) => {
 
 
                                                 <th>
-                                                 Total municipal budget
-                                                    <button
-                                                        className={styles.infoBtn}
-                                                        onClick={() => handleinfoClick('totalMun')}
-                                                        type="button"
-                                                    >
-                                                        <Icon
-                                                            name="info"
-                                                            className={styles.infoIcon}
-                                                            title="Total municipal budget is the total budget allocated
-                                                            by the municipality for the execution of various
-                                                            activities for this fiscal year"
-                                                        />
-                                                    </button>
+                                                    <Gt section={Translations.TotalMunBudget} />
+
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                        title={drrmLanguage.language === 'en'
+                                                            ? 'Total municipal budget is the total budget allocated by the municipality for the execution of various activities for this fiscal year'
+                                                            : 'कुल बजेट भन्नाले यस आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको कुल बजेट'
+                                                        }
+                                                    />
+
+                                                </th>
+
+                                                <th>
+                                                    <Gt section={Translations.DRRFundMun} />
+
+
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                        title={drrmLanguage.language === 'en'
+                                                            ? 'DRR fund of the municipality is part of the total municipal budget of this fiscal year which is specifically separated for DRRM related activities'
+                                                            : 'नगरपालिकाको विपद कोष भनेको  यस आर्थिक वर्षको कुल बजेटको हिस्सा हो जुन विशेष रूपमा विपद  सम्बन्धित गतिविधिहरूको लागि छुट्याइएको छ'
+                                                        }
+                                                    />
 
                                                 </th>
                                                 <th>
-                                                     DRR fund of municipality
-                                                    <button
-                                                        className={styles.infoBtn}
-                                                        onClick={() => handleinfoClick('drrFund')}
-                                                        type="button"
-                                                    >
-                                                        <Icon
-                                                            name="info"
-                                                            className={styles.infoIcon}
-                                                            title=" DRR fund of the municipality is part of the total
-                                                            municipal budget of this fiscal year which is specifically
-                                                            separated for DRRM related
-                                                             activities"
-                                                        />
-                                                    </button>
-
-                                                </th>
-                                                <th>
-                                                    Other DRR related funding
-                                                    <button
-                                                        className={styles.infoBtn}
-                                                        onClick={() => handleinfoClick('otherFunding')}
-                                                        type="button"
-                                                    >
-                                                        <Icon
-                                                            name="info"
-                                                            className={styles.infoIcon}
-                                                            title="Other DRR related funding is the funding received by the
-                                                            municipality from various sources like I/NGOS, the federal
-                                                            government, provincial
-                                                           government, private sectors, etc. for this fiscal year"
-                                                        />
-                                                    </button>
+                                                    <Gt section={Translations.OtherDrrFund} />
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                        title={drrmLanguage.language === 'en'
+                                                            ? 'Other DRR related funding is the funding received by the municipality from various sources like I/NGOS, the federal government, provincial government, private sectors, etc. for this fiscal year'
+                                                            : 'अन्य विपद् सम्बन्धित बजेट भनेको यस आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि जस्ता विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम हो।'
+                                                        }
+                                                    />
                                                 </th>
                                                 {/* <th>
                                                     Updated By
                                                 </th> */}
                                                 <th>
-                                                Last updated on
-
-
+                                                    <Gt section={Translations.dashboardTblHeaderLastModified} />
                                                 </th>
 
 
@@ -440,45 +435,46 @@ const Budget = (props: Props) => {
 
 
                                                 <th>
-                                                    Total municipal budget
-                                                    <button
-                                                        className={styles.infoBtn}
-                                                        onClick={() => handleinfoClick('totalMun')}
-                                                        type="button"
-                                                    >
-                                                        <Icon
-                                                            name="info"
-                                                            className={styles.infoIcon}
-                                                        />
-                                                    </button>
+
+
+                                                    <Gt section={Translations.TotalMunBudget} />
+
+
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                        title={drrmLanguage.language === 'en'
+                                                            ? 'Total municipal budget is the total budget allocated by the municipality for the execution of various activities for this fiscal year'
+                                                            : 'कुल बजेट भन्नाले यस आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको कुल बजेट'
+                                                        }
+                                                    />
+
 
                                                 </th>
                                                 <th>
-                                                    DRR fund of municipality
-                                                    <button
-                                                        className={styles.infoBtn}
-                                                        onClick={() => handleinfoClick('drrFund')}
-                                                        type="button"
-                                                    >
-                                                        <Icon
-                                                            name="info"
-                                                            className={styles.infoIcon}
-                                                        />
-                                                    </button>
+                                                    <Gt section={Translations.DRRFundMun} />
+
+
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                        title={drrmLanguage.language === 'en'
+                                                            ? 'DRR fund of the municipality is part of the total municipal budget of this fiscal year which is specifically separated for DRRM related activities'
+                                                            : 'नगरपालिकाको विपद कोष भनेको  यस आर्थिक वर्षको कुल बजेटको हिस्सा हो जुन विशेष रूपमा विपद  सम्बन्धित गतिविधिहरूको लागि छुट्याइएको छ'
+                                                        }
+                                                    />
 
                                                 </th>
                                                 <th>
-                                                    Other DRR related funding
-                                                    <button
-                                                        className={styles.infoBtn}
-                                                        onClick={() => handleinfoClick('otherFunding')}
-                                                        type="button"
-                                                    >
-                                                        <Icon
-                                                            name="info"
-                                                            className={styles.infoIcon}
-                                                        />
-                                                    </button>
+                                                    <Gt section={Translations.OtherDrrFund} />
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                        title={drrmLanguage.language === 'en'
+                                                            ? 'Other DRR related funding is the funding received by the municipality from various sources like I/NGOS, the federal government, provincial government, private sectors, etc. for this fiscal year'
+                                                            : 'अन्य विपद् सम्बन्धित बजेट भनेको यस आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि जस्ता विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम हो।'
+                                                        }
+                                                    />
 
                                                 </th>
 
@@ -531,15 +527,43 @@ const Budget = (props: Props) => {
                                                 <tr>
                                                     {/* <td>1</td> */}
                                                     <td>
-                                                        <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
+                                                        <input
+
+                                                            className={styles.inputContainer}
+                                                            type="text"
+                                                            value={municipalBudget}
+                                                            placeholder={drrmLanguage.language === 'en'
+                                                                ? 'Please Enter Total Municipal Budget'
+                                                                : 'कृपया गरपालिकाको कुल बजेट  प्रविष्ट गर्नुहोस्'
+                                                            }
+                                                            onChange={handleMunicipalBudget}
+                                                        />
                                                         {' '}
                                                     </td>
                                                     <td>
-                                                        <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputContainer}
+                                                            value={drrFund}
+                                                            placeholder={drrmLanguage.language === 'en'
+                                                                ? 'Please Enter DRR Fund of the Municipality'
+                                                                : 'कृपया नगरपालिकाको विपद् कोष प्रविष्ट गर्नुहोस्'
+                                                            }
+                                                            onChange={handleDRRFund}
+                                                        />
                                                         {' '}
                                                     </td>
                                                     <td>
-                                                        <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
+                                                        <input
+                                                            type="text"
+                                                            className={styles.inputContainer}
+                                                            value={additionalFund}
+                                                            placeholder={drrmLanguage.language === 'en'
+                                                                ? 'Please Enter Other DRR Related Funding'
+                                                                : 'कृपया अन्य विपद् सम्बन्धित बजेट प्रविष्ट गर्नुहोस्'
+                                                            }
+                                                            onChange={handleAddFund}
+                                                        />
                                                         {' '}
                                                     </td>
 
@@ -594,8 +618,7 @@ const Budget = (props: Props) => {
                                                 name="plus"
                                                 className={styles.plusIcon}
                                             />
-                    Update Budget
-                                            {/* Add */}
+                                            <Gt section={Translations.BudgetEditBtn} />
                                         </button>
                                     )
                                     : (
@@ -608,8 +631,7 @@ const Budget = (props: Props) => {
                                                 name="plus"
                                                 className={styles.plusIcon}
                                             />
-                   Edit Budget
-                                            {/* Add */}
+                                            <Gt section={Translations.BudgetAddBtn} />
                                         </button>
                                     )
                                 )}
@@ -630,36 +652,6 @@ const Budget = (props: Props) => {
                         )}
 
                     </div>
-                    {totalMun
-                    && (
-                        <p className={styles.infoText}>
-                        Total municipal budget is the total budget allocated
-                        by the municipality for the execution of various
-                        activities for this fiscal year
-                        </p>
-                    )}
-
-
-                    {drrfundInfo
-                    && (
-                        <p className={styles.infoText}>
-                        DRR fund of the municipality is part of the total
-                        municipal budget of this fiscal year which is specifically
-                        separated for DRRM related
-                         activities
-                        </p>
-                    )}
-                    {otherFunding
-                    && (
-                        <p className={styles.infoText}>
-                        Other DRR related funding is the funding received by the
-                         municipality from various sources like I/NGOS, the federal
-                         government, provincial
-                        government, private sectors, etc. for this fiscal year
-                        </p>
-                    )}
-
-
                 </div>
             )
                             }
@@ -669,16 +661,18 @@ const Budget = (props: Props) => {
                                 props.previewDetails
                     && (
                         <div className={styles.budgetPreviewContainer}>
-                            <h2>Budget</h2>
+                            <h2>
+                                <Gt section={Translations.Budget} />
+                            </h2>
                             <div className={styles.budgetDetailsContainer}>
 
                                 <div className={styles.budgetDetails}>
                                     <ul>
                                         <li>
                                             <h2>
-                                                Rs.
+                                                <Gt section={Translations.Rupees} />
                                                 {' '}
-                                                {municipalBudget || 'No data'}
+                                                {municipalBudget || '-'}
                                             </h2>
                                         </li>
                                         <li>
@@ -691,7 +685,8 @@ const Budget = (props: Props) => {
                                             {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
                                             {'%'}
                                             {' '}
-                                            of municipal budget
+                                            <Gt section={Translations.OfMunBudget} />
+
                                             {/* </span> */}
                                         </li>
                                         <li>
@@ -704,7 +699,7 @@ const Budget = (props: Props) => {
                                         </li>
                                         <li>
                                             <span className={styles.light}>
-                                             DRR Fund of Municipality
+                                                <Gt section={Translations.DRRFundMun} />
                                             </span>
 
                                         </li>
@@ -721,7 +716,7 @@ const Budget = (props: Props) => {
                                         </li>
                                         <li>
                                             <span className={styles.light}>
-                                            Other sources of DRR funding
+                                                <Gt section={Translations.OtherDrrFund} />
                                             </span>
                                         </li>
                                     </ul>
