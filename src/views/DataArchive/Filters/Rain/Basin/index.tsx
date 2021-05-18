@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { FaramInputElement } from '@togglecorp/faram';
 import SelectInput from '#rsci/SelectInput';
-import { dataArchiveRainListSelector } from '#selectors';
+import { dataArchiveRainListSelector, rainStationsSelector } from '#selectors';
 import styles from './styles.scss';
 
 import { RainStation } from '#types';
+
 
 interface Props {
     onChange: Function;
@@ -20,6 +21,7 @@ const BasinLabelSelector = (r: sampleBasinData) => r.title;
 
 const mapStateToProps = (state: AppState) => ({
     rainStations: dataArchiveRainListSelector(state),
+    basinStations: rainStationsSelector(state),
 });
 
 // const compare = (a: RainStation, b: RainStation) => {
@@ -38,7 +40,8 @@ const BasinSelector = (props: Props) => {
     const { onChange: onChangeFromProps,
         stations: stationsFromProps,
         // value: { id } ,
-        rainStations } = props;
+        rainStations,
+        basinStations } = props;
 
     const [selectedBasin, setSelectedBasin] = useState();
     // const id = 1;
@@ -67,7 +70,7 @@ const BasinSelector = (props: Props) => {
         const station = stationsFromProps.filter(s => s.basin === basinName)[0];
         console.log(basinName);
     };
-    const uniqueBasins = [...new Set(rainStations.map(item => item.basin))];
+    const uniqueBasins = [...new Set(basinStations.map(item => item.basin))];
 
     const sampleBasinData = uniqueBasins.map((item, i) => ({
         id: i + 1,
