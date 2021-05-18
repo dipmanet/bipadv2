@@ -1,14 +1,11 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Table } from 'react-bootstrap';
-import ReactPaginate from 'react-paginate';
 import Loader from 'react-loader';
 import styles from './styles.scss';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
@@ -17,6 +14,7 @@ import {
     setProgramAndPolicyDataAction,
     setDrrmProgressAction,
 } from '#actionCreators';
+import Gt from '../../../../utils';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {
@@ -25,8 +23,10 @@ import {
     generalDataSelector,
     drrmRegionSelector,
     drrmProgresSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
+import Translations from '#views/PalikaReport/Translations';
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PolicyGetRequest: { url: '/annual-policy-program/',
@@ -86,6 +86,7 @@ const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -110,16 +111,13 @@ const ProgramPolicies = (props: Props) => {
         drrmRegion,
         setProgress,
         drrmProgress,
+        drrmLanguage,
     } = props;
 
     const [dataSubmittedResponse, setDataSubmittedResponse] = useState(false);
-    const [serialNumber, setSerialNumber] = useState(0);
     const [point, setPoint] = useState('');
     const [finalPolicyData, setFinalPolicyData] = useState([]);
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(6);
-    const [paginationParameters, setPaginationParameters] = useState();
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
-    const [offset, setOffset] = useState(0);
     const [policyId, setPolicyId] = useState();
     const [policyIndex, setPolicyIndex] = useState();
     const [editPolicy, setEditPolicy] = useState(false);
@@ -144,7 +142,7 @@ const ProgramPolicies = (props: Props) => {
         setDataSubmittedResponse(false);
     };
     const handlePaginationParameters = (response) => {
-        setPaginationParameters(response);
+        // setPaginationParameters(response);
     };
     const handleDataSubmittedResponse = (response) => {
         setDataSubmittedResponse(!dataSubmittedResponse);
@@ -159,7 +157,6 @@ const ProgramPolicies = (props: Props) => {
         province,
         finalPolicyData: handleSavefinalPolicyData,
         paginationParameters: handlePaginationParameters,
-        page: paginationQueryLimit,
         id: '-id',
     });
 
@@ -195,7 +192,7 @@ const ProgramPolicies = (props: Props) => {
                 district,
                 municipality,
                 province,
-                page: paginationQueryLimit,
+                // page: paginationQueryLimit,
                 finalPolicyData: handleSavefinalPolicyData,
                 paginationParameters: handlePaginationParameters,
                 id: '-id',
@@ -252,13 +249,31 @@ const ProgramPolicies = (props: Props) => {
             { !props.previewDetails
             && (
                 <div>
-                    <h2>{`Annual Policy and Programme for FY ${generalData.fiscalYearTitle}`}</h2>
+                    <h2>
+                        <Gt section={Translations.PapTitlePart1} />
+                        {''}
+                        {
+                            `${generalData.fiscalYearTitle}`
+                        }
+                        {''}
+                        <Gt section={Translations.PapTitlePart2} />
+
+                    </h2>
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
-                                <th>SN</th>
-                                <th>Points</th>
-                                {finalPolicyData.length > 0 ? <th>Action</th> : ''}
+
+
+                                <th><Gt section={Translations.dashboardTblHeaderSN} /></th>
+                                <th><Gt section={Translations.points} /></th>
+
+                                {finalPolicyData.length > 0
+                                    ? (
+                                        <th>
+                                            <Gt section={Translations.dashboardTblHeaderLastAction} />
+                                        </th>
+                                    )
+                                    : ''}
 
                             </tr>
                             {loader ? (
@@ -280,9 +295,12 @@ const ProgramPolicies = (props: Props) => {
                                                      <td>
                                                          <textarea
                                                              value={point}
-                                                             placeholder="Please enter the DRR related
-                                    points in this fiscal year's Annual Policy and
-                                    Programme of the municipality"
+                                                             placeholder={drrmLanguage.language === 'en'
+                                                                 ? 'DRR programmes listed in the annual policy and programme'
+                                                                 : 'विपद् जोखिम न्यूनीकरण सम्बन्धि  वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू'
+                                                             }
+
+
                                                              onChange={handleChangePoint}
                                                              rows="4"
                                                              cols="100"
@@ -295,7 +313,8 @@ const ProgramPolicies = (props: Props) => {
                                                              onClick={handleUpdateActivity}
                                                              title="Update Policy"
                                                          >
-                                                   Update
+                                                             <Gt section={Translations.Update} />
+
                                                          </button>
                                                      </td>
 
@@ -306,7 +325,7 @@ const ProgramPolicies = (props: Props) => {
                                                  <tr key={item.id}>
                                                      <td>
                                                          {(currentPageNumber - 1)
-                                                * paginationQueryLimit + i + 1}
+                                                * i + 1}
                                                      </td>
                                                      <td>{item.point}</td>
                                                      <td>
@@ -347,9 +366,10 @@ const ProgramPolicies = (props: Props) => {
                                         <div className={styles.txtAreadetails}>
                                             <textarea
                                                 value={point}
-                                                placeholder="Please enter the DRR related
-                                    points in this fiscal year's Annual Policy and
-                                    Programme of the municipality"
+                                                placeholder={drrmLanguage.language === 'en'
+                                                    ? 'DRR programmes listed in the annual policy and programme'
+                                                    : 'विपद् जोखिम न्यूनीकरण सम्बन्धि  वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू'
+                                                }
                                                 onChange={handleChangePoint}
                                                 rows="4"
                                                 cols="100"
@@ -359,7 +379,7 @@ const ProgramPolicies = (props: Props) => {
                                                 onClick={handleSubmit}
                                                 className={styles.savebtn}
                                             >
-                                    + Add Annual Policy and Programme
+                                                <Gt section={Translations.PaPAddbtn} />
 
                                             </button>
                                         </div>
@@ -399,9 +419,8 @@ const ProgramPolicies = (props: Props) => {
             && (
                 <div className={styles.budgetPreviewContainer}>
                     <h2>
-                    Disaster related topics in
-                        <br />
-                    Annual Program and policies
+                        <Gt section={Translations.DRRprogrammeslisted} />
+
                     </h2>
                     <ul>
                         {finalPolicyData.length > 0

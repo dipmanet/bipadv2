@@ -235,6 +235,10 @@ const languageTranslations: LanguageEntry = {
         np: 'विवरण अपडेट गर्न कृपया थप्नुहोस् / सम्पादन गर्नुहोस् बटनमा क्लिक गर्नुहोस्',
         en: 'Please click on the add/edit button to update the details',
     },
+    Update: {
+        np: 'सम्पादन गर्नुहोस्',
+        en: 'Update',
+    },
     SaveContinue: {
         np: 'सुरक्षित  र जारी राख्नुहोस्',
         en: 'Save and Continue',
@@ -390,6 +394,62 @@ const languageTranslations: LanguageEntry = {
         en: 'Rs.',
         np: 'रु',
     },
+    // programmes and policies
+    PapTitlePart1: {
+        en: 'Annual Policy and Programme for FY',
+        np: 'आर्थिक वर्ष',
+    },
+    PapTitlePart2: {
+        en: '',
+        np: 'को वार्षिक नीति तथा कार्यक्रमहरू',
+    },
+    DRRprogrammeslisted: {
+        en: 'DRR programmes listed in the annual policy and programme',
+        np: 'विपद् जोखिम न्यूनीकरण सम्बन्धि वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू',
+    },
+    PaPAddbtn: {
+        en: '+ Add Annual Policy and Programme',
+        np: '+ वार्षिक नीति तथा कार्यक्रम थप्नुहोस्',
+    },
+    Drrrelatedpoints: {
+        en: 'Please enter the DRR related points in this fiscal years Annual Policy and Programme of the municipality',
+        np: 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा विपद् जोखिम न्यूनीकरण सम्बन्धित  कार्यक्रमहरू उल्लेख गर्नुहोस् l',
+    },
+    points: {
+        en: 'Points',
+        np: 'कार्यक्रमहरू',
+    },
+
+    // incidents and relief
+    distribution: {
+        en: 'Population benefited from the relief distribution ',
+        np: 'राहत वितरणबाट लाभान्वित जनसंख्या ',
+    },
+    Male: {
+        en: 'Male ',
+        np: 'पुरुष',
+    },
+    Female: {
+        en: 'Female ',
+        np: 'महिला',
+    },
+    Minorities: {
+        en: 'Minorities',
+        np: 'अल्पसंख्यकहरू',
+    },
+    Dalit: {
+        en: 'Dalit ',
+        np: 'दलित',
+    },
+    Madhesis: {
+        en: 'Madhesis',
+        np: 'मधेशी',
+    },
+    Disabilities: {
+        en: 'Person with Disabilities ',
+        np: 'अशक्त मानिस',
+    },
+
 
 };
 
