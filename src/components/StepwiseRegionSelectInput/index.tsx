@@ -4,12 +4,14 @@ import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
-
+import Gt from '../../views/PalikaReport/utils';
+import Translations from '../../views/PalikaReport/Translations';
 import SelectInput from '#rsci/SelectInput';
 
 import {
     districtsSelector,
     municipalitiesSelector,
+    palikaLanguageSelector,
     provincesSelector,
     selectedProvinceIdSelector,
     wardsSelector,
@@ -67,6 +69,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districtList: districtsSelector(state),
     municipalityList: municipalitiesSelector(state),
     wardList: wardsSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -332,6 +335,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             wardsHidden,
             autoFocus,
             showHintAndError,
+            drrmLanguage,
         } = this.props;
 
         if (reset) {
@@ -372,7 +376,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             <div className={_cs(className, styles.stepwiseRegionSelectInput)}>
                 <SelectInput
                     className={_cs(provinceInputClassName, styles.provinceInput)}
-                    label="Province"
+                    label={<Gt section={Translations.dashboardFilterProvinceLabel} />}
                     options={provinceOptions}
                     keySelector={regionKeySelector}
                     labelSelector={regionLabelSelector}
@@ -380,12 +384,12 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleProvinceChange}
                     disabled={shouldDisableProvinceInput}
                     showHintAndError={showHintAndError}
-                    placeholder="All provinces"
+                    placeholder={drrmLanguage.language === 'np' ? Translations.dashboardFilterProvincePlaceholder.np : Translations.dashboardFilterProvincePlaceholder.en}
                     autoFocus={autoFocus}
                 />
                 <SelectInput
                     className={_cs(districtInputClassName, styles.districtInput)}
-                    label="District"
+                    label={<Gt section={Translations.dashboardFilterDistrictLabel} />}
                     options={districtOptions}
                     keySelector={regionKeySelector}
                     labelSelector={regionLabelSelector}
@@ -393,11 +397,11 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleDistrictChange}
                     disabled={shouldDisableDistrictInput}
                     showHintAndError={showHintAndError}
-                    placeholder="All districts"
+                    placeholder={drrmLanguage.language === 'np' ? Translations.dashboardFilterDistrictPlaceholder.np : Translations.dashboardFilterDistrictPlaceholder.en}
                 />
                 <SelectInput
                     className={_cs(municipalityInputClassName, styles.municipalityInput)}
-                    label="Municipality"
+                    label={<Gt section={Translations.dashboardFilterMunicipalityLabel} />}
                     options={municipalityOptions}
                     keySelector={regionKeySelector}
                     labelSelector={regionLabelSelector}
@@ -405,7 +409,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     onChange={this.handleMunicipalityChange}
                     disabled={shouldDisableMunicipalityInput}
                     showHintAndError={showHintAndError}
-                    placeholder="All municipalities"
+                    placeholder={drrmLanguage.language === 'np' ? Translations.dashboardFilterMunicipalityPlaceholder.np : Translations.dashboardFilterMunicipalityPlaceholder.en}
                 />
                 {!wardsHidden && (
                     <SelectInput

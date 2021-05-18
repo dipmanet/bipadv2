@@ -426,7 +426,7 @@ const Sidebar = (props) => {
         className={styles.addButn}
         onClick={handleAdd}
     >
- + Add New Report
+        <Gt section={Translations.dashboardReportGenerateButton} />
         {' '}
 
     </button>
@@ -437,7 +437,7 @@ const Sidebar = (props) => {
     <>
 
         <div className={styles.inputContainer}>
-            <h5>Please select a municipality to generate report.</h5>
+            <h5><Gt section={Translations.dashboardSidebarSelectMunicipalityHeader} /></h5>
             <StepwiseRegionSelectInput
 
                 className={
@@ -463,7 +463,7 @@ const Sidebar = (props) => {
                 onClick={handleAdd}
                 disabled={!drrmRegion.municipality}
             >
- + Add New Report
+                <Gt section={Translations.dashboardReportGenerateButton} />
                 {' '}
 
             </button>

@@ -18,10 +18,11 @@ import { provincesSelector,
     districtsSelector,
     municipalitiesSelector,
     userSelector,
-    palikaRedirectSelector } from '#selectors';
+    palikaRedirectSelector,
+    palikaLanguageSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
-import { setPalikaRedirectAction } from '#actionCreators';
+import { setPalikaLanguageAction, setPalikaRedirectAction } from '#actionCreators';
 
 import {
     createConnectedRequestCoordinator,
@@ -42,10 +43,12 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
+    palikaLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+    setPalikaLanguage: params => dispatch(setPalikaLanguageAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -147,9 +150,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         user,
         setPalikaRedirect,
         palikaRedirect,
+        palikaLanguage,
+        setPalikaLanguage,
         // filters: { region },
-    } = props;
 
+    } = props;
+    const {
+        language,
+    } = palikaLanguage;
 
     let municipalityName = '';
 
@@ -567,7 +575,13 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const closeModal = () => {
         setshowModal(false);
     };
-
+    const handleLangButton = () => {
+        if (language === 'en') {
+            setPalikaLanguage({ language: 'np' });
+        } else {
+            setPalikaLanguage({ language: 'en' });
+        }
+    };
     return (
         <>
             <Page hideMap hideFilter />
@@ -576,35 +590,40 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                     && (
                         <Modal>
                             <div className={styles.firstPageContainer}>
+                                <div className={styles.languageButton}>
+                                    <button
+                                        onClick={handleLangButton}
+                                        className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}
+                                        type="button"
+
+
+                                    >
+                      EN
+                                    </button>
+                                    <button
+                                        onClick={handleLangButton}
+                                        className={language === 'np' ? _cs(styles.nepButton, styles.selectedLanguage) : styles.nepButton}
+
+                                        type="button"
+                                    >
+                      ने
+                                    </button>
+                                </div>
                                 <div className={styles.title}>
-                                     Welcome to the DRRM Report Module of the BIPAD Portal
+                                    <Gt section={Translations.welcomeNoteparagraph1} />
                                 </div>
                                 <p className={styles.description}>
-                                    This module in the BIPAD portal will generate
-                                    Disaster Risk Reduction and Management Report
-                                    for each fiscal year for all three tiers of the governments.
+                                    <Gt section={Translations.welcomeNoteparagraph2} />
                                 </p>
                                 <p className={styles.description}>
-                                    DRRM Act, 2074 and its regulation, 2076 mandates the
-                                    Local Disaster Management Committee, Disaster Management
-                                    Committee, Provincial Disaster Management Executive Committee,
-                                    and NDRRMA to prepare an Annual DRRM Report that includes
-                                    information on the activities conducted by the respective
-                                    committees each fiscal year. To aid this mandate, the
-                                    reporting module will include general information of
-                                    the chosen location, organizations working on disaster
-                                    management, DRR policy-related work, the budget allocated
-                                    and activities for DRRM, and available inventories, and
-                                    other DRR related information.
+                                    <Gt section={Translations.welcomeNoteparagraph3} />
                                 </p>
                                 <p className={styles.description}>
-                                    The report will also monitor and track activities
-                                    based on the priorities set by the DRR National
-                                    Strategic Action Plan 2018-2030.
+                                    <Gt section={Translations.welcomeNoteparagraph4} />
                                 </p>
 
                                 <p className={_cs(styles.description, styles.lastLine)}>
-                                     Click proceed to generate the report for your region.
+                                    <Gt section={Translations.welcomeNoteparagraph5} />
                                 </p>
 
                                 <div className={styles.btnContainer}>
@@ -613,7 +632,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                         className={styles.agreeBtn}
                                         onClick={closeModal}
                                     >
-                                    PROCEED
+                                        <Gt section={Translations.proceedButton} />
                                     </PrimaryButton>
                                 </div>
 
