@@ -108,8 +108,12 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         onSuccess: ({ params, response, props: { setDataArchiveRainList } }) => {
             interface Response { results: PageType.DataArchiveRain[] }
             const { results: dataArchiveRainList = [] } = response as Response;
-            setDataArchiveRainList({ dataArchiveRainList });
-            // params.setDataArchiveBasinRainList({ dataArchiveRainList });
+            if (typeof params.basinFilter !== 'object') {
+                setDataArchiveRainList({ dataArchiveRainList:
+                    dataArchiveRainList.filter(item => item.basin === params.basinFilter) });
+            } else {
+                setDataArchiveRainList({ dataArchiveRainList });
+            }
         },
         onPropsChanged: {
             rainFilters: true,
@@ -136,7 +140,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const Rain = (props: Props) => {
     const [sortKey, setSortKey] = useState('key');
-    const { rainList, requests, rainFilters, setDataArchiveRainList } = props;
+    const { rainList, requests, rainFilters } = props;
     const pending = isAnyRequestPending(requests);
     const { setDataArchive } = useContext(TitleContext);
 
@@ -144,20 +148,23 @@ const Rain = (props: Props) => {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
 
-    // requests.dataArchiveRainRequest.setDefaultParams({ setDataArchiveBasinRainList });
+
+    requests.dataArchiveRainRequest.setDefaultParams({
+        basinFilter: rainFilters.basin,
+    });
+
 
     useEffect(() => {
         if (setData) {
             setData(rainList);
         }
     }, [setData, rainList]);
+
     useEffect(() => {
         if (rainFilters.basin) {
-            // set data is for map stuff
-            // setData(rainList[0]);
             if (rainList && rainList.length > 0) {
                 props.setDataArchiveRainList({ dataArchiveRainList:
-                    rainList.filter(item => item.basin === 'Narayani') });
+                    rainList.filter(item => item.basin === rainFilters.basin) });
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps

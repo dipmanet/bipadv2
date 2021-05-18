@@ -31,7 +31,6 @@ const StationSelector = (props: Props) => {
         stations: stationsFromProps,
         value: { id } } = props;
 
-    console.log('props station: ', props);
     const [selectedStation, setSelectedStation] = useState(id);
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
