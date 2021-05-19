@@ -6,6 +6,22 @@ interface LanguageEntry {
     [key: string]: Section;
 }
 const languageTranslations: LanguageEntry = {
+    breadcrumb1: {
+        np: 'प्रतिवेदनहरु',
+        en: 'DRRM Reports',
+    },
+    breadcrumb2: {
+        np: 'प्रतिवेदन बनाउनुहोस्',
+        en: 'Add a Report',
+    },
+    sidebarTitle: {
+        np: 'प्रतिवेदन बनाउनुहोस्',
+        en: 'Create a Report',
+    },
+    validationErrSidebar: {
+        np: 'कृपया सामान्य सेक्सनबाट मान्य वित्तीय वर्ष प्रविष्ट गर्नुहोस्',
+        en: 'Please Enter Valid Fiscal Year from General Section',
+    },
     welcomeNoteparagraph1: {
         np: 'यहाँहरु लाई विपद् पोर्टलको विपद् सम्बन्धित प्रतिवेदन मोड्युलमा स्वागत छ ।',
         en: 'Welcome to the DRRM Report Module of the BIPAD Portal',
