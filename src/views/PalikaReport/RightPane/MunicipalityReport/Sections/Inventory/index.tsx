@@ -10,6 +10,7 @@ import {
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
+import { ADToBS } from 'bikram-sambat-js';
 import NextPrevBtns from '../../NextPrevBtns';
 import styles from './styles.scss';
 
@@ -27,7 +28,6 @@ import { provincesSelector,
     drrmRegionSelector,
     palikaLanguageSelector } from '#selectors';
 import Loading from '#components/Loading';
-
 
 import {
     setPalikaRedirectAction,
@@ -349,17 +349,17 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                                 <td>
                                                     {item.SN}
                                                 </td>
-                                                <td>{item.item.title}</td>
+                                                <td>{drrmLanguage.language === 'np' ? item.item.titleNp : item.item.title}</td>
                                                 <td>{item.quantity}</td>
-                                                <td>{item.item.unit}</td>
+                                                <td>{drrmLanguage.language === 'np' ? item.item.unitNp : item.item.unit}</td>
                                                 <td>{item.item.category}</td>
                                                 <td>
 
                                                     {item.resourceName}
                                                 </td>
                                                 <td>{item.organizationType}</td>
-                                                <td>{item.createdOn.split('T')[0]}</td>
-                                                <td>{item.modifiedOn.split('T')[0]}</td>
+                                                <td>{ADToBS(item.createdOn.split('T')[0])}</td>
+                                                <td>{ADToBS(item.modifiedOn.split('T')[0])}</td>
 
 
                                                 {

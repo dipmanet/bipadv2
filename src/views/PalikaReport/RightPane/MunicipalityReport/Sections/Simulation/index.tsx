@@ -285,6 +285,7 @@ const Simulation = (props: Props) => {
                 if (FinalHazard) {
                     return {
                         HazardName: FinalHazard.titleEn,
+                        HazardNameNp: FinalHazard.titleNe,
                         data,
                     };
                 }
@@ -622,7 +623,7 @@ const Simulation = (props: Props) => {
                                                             <td>{item.data.priorityActivity}</td>
                                                             <td>{item.data.organizer}</td>
                                                             <td>{item.data.totalParticipants}</td>
-                                                            <td>{item.HazardName}</td>
+                                                            <td>{drrmLanguage.language === 'np' ? item.HazardNameNp : item.HazardName}</td>
                                                             <td>
                                                                 {' '}
                                                                 <button
@@ -771,7 +772,7 @@ const Simulation = (props: Props) => {
                                                         <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
                                                         {hazardType && hazardType.map(data => (
                                                             <option value={data.id}>
-                                                                {data.titleEn}
+                                                                {drrmLanguage.language === 'np' ? data.titleNe : data.titleEn}
                                                             </option>
                                                         ))}
 
@@ -834,7 +835,7 @@ const Simulation = (props: Props) => {
                 && (
                     <div className={styles.budgetPreviewContainer}>
                         <h2>
-                             Simulations
+                            <Gt section={Translations.SimulationHeading} />
                         </h2>
                         <div className={styles.simElementsContainer}>
                             <div className={styles.simElements}>
@@ -842,9 +843,7 @@ const Simulation = (props: Props) => {
                                     {finalArr.length > 0 ? finalArr.length : '0'}
                                 </div>
                                 <p className={styles.simDesc}>
-                            No. of simulation
-                                    <br />
-                            conducted
+                                    <Gt section={Translations.NumberOfSimulationConducted} />
                                 </p>
                             </div>
                             <div className={styles.simElements}>
@@ -858,10 +857,7 @@ const Simulation = (props: Props) => {
                                     }
                                 </div>
                                 <p className={styles.simDesc}>
-                            No. of people
-                                    <br />
-
-                            trained
+                                    <Gt section={Translations.NumberOfPeopleTrained} />
                                 </p>
                             </div>
 

@@ -16,6 +16,8 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import Gt from '../../../../../../utils';
+import Translations from '../../../../../../Translations';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -105,7 +107,7 @@ const Footer = (props: Props) => {
     return (
         <div className={styles.footer}>
             <div className={styles.leftContainer}>
-                <h2>Contact Us</h2>
+                <h2><Gt section={Translations.ContactUs} /></h2>
                 <hr className={styles.horizontalLine} />
                 <div className={styles.address}>
                     <ul>
@@ -132,10 +134,10 @@ const Footer = (props: Props) => {
 
                 <ul>
                     <li>
-                        This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/).
+                        <Gt section={Translations.ContactMessageGenerated} />
                     </li>
                     <li className={styles.smallNote}>
-                         Note: Please refer to the Annexes for details on each section
+                        <Gt section={Translations.ContactNote} />
                     </li>
                 </ul>
             </div>

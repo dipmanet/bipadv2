@@ -22,6 +22,10 @@ const languageTranslations: LanguageEntry = {
         np: 'कृपया सामान्य सेक्सनबाट मान्य वित्तीय वर्ष प्रविष्ट गर्नुहोस्',
         en: 'Please Enter Valid Fiscal Year from General Section',
     },
+    CreateReportInformationButtom: {
+        np: 'विपद् पोर्टलको यो मोड्युलले सबै तहका सरकारले प्रत्येक आर्थिक वर्षमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको प्रतिवेदन प्रकाशन गर्दछ ।',
+        en: 'This module in the BIPAD portal will generate a Disaster Risk Reduction and Management (DRRM) Report for each fiscal year for all tiers of the government.',
+    },
     welcomeNoteparagraph1: {
         np: 'यहाँहरु लाई विपद् पोर्टलको विपद् सम्बन्धित प्रतिवेदन मोड्युलमा स्वागत छ ।',
         en: 'Welcome to the DRRM Report Module of the BIPAD Portal',
@@ -46,6 +50,10 @@ const languageTranslations: LanguageEntry = {
         np: 'अगाडि बढ्नुहोस्',
         en: 'PROCEED',
     },
+    DashBoardNoDataMessage: {
+        np: 'डाटा उपलब्ध छैन',
+        en: 'Data Unavailable',
+    },
     dashBoardHeading: {
         np: 'बिपद जोखिम न्यूनीकरण र व्यवस्थापन रिपोर्ट',
         en: 'Disaster Risk Reduction and Management Report',
@@ -53,6 +61,14 @@ const languageTranslations: LanguageEntry = {
     dashBoardMainTitle: {
         np: 'शीर्षक',
         en: 'Title',
+    },
+    dashboardTableSummaryReportDownload: {
+        np: 'सारांश रिपोर्ट',
+        en: 'Summary Report',
+    },
+    dashboardTableFullReportDownload: {
+        np: 'पूरा रिपोर्ट',
+        en: 'Full Report',
     },
     dashboardTblHeaderSN: {
         np: 'क्रम संख्या',
@@ -183,7 +199,10 @@ const languageTranslations: LanguageEntry = {
         en: 'Mayor or Chairperson',
         np: 'मेयर वा अध्यक्ष',
     },
-
+    Mayor: {
+        en: 'Mayor',
+        np: 'मेयर',
+    },
     ChiefAdminstrative: {
         en: 'Chief Adminstrative Officer',
         np: 'मुख्य प्रशासनिक अधिकारी',
@@ -613,6 +632,22 @@ const languageTranslations: LanguageEntry = {
         np: 'कृपया निम्न त्रुटिहरू ठीक गर्नुहोस्',
         en: 'Please fix the following errors',
     },
+    TrainingRelatedContact: {
+        np: 'विपद् जोखिम न्यूनीकरण सम्बन्धित प्रशिक्षण',
+        en: 'DRR Related Training',
+    },
+    TrainingRelatedNoofTrainedPeople: {
+        np: 'प्रशिक्षित व्यक्तिको संख्या',
+        en: 'No. of trained people',
+    },
+    TrainingRelatedActivities: {
+        np: 'प्रशिक्षण गतिविधिहरू',
+        en: 'Training Activities',
+    },
+    TrainingRelatedActivitiesList: {
+        np: 'प्रशिक्षण गतिविधिहरूको सूची',
+        en: 'List of training activities',
+    },
     SimulationHeading: {
         np: 'अनुकरण',
         en: 'Simulations',
@@ -677,7 +712,14 @@ const languageTranslations: LanguageEntry = {
         np: 'अनुकरण अद्यावधिक गर्नुहोस्',
         en: 'Update Simulation',
     },
-
+    NumberOfSimulationConducted: {
+        np: 'आयोजित अनुकरणको संख्या',
+        en: 'No of Simulation Conducted',
+    },
+    NumberOfPeopleTrained: {
+        np: 'प्रशिक्षित व्यक्तिहरूको संख्या',
+        en: 'No of people trained',
+    },
     // Budget Activities
     PriorityArea: {
         en: 'Priority Area',
@@ -1084,6 +1126,54 @@ const languageTranslations: LanguageEntry = {
     Industries: {
         en: 'Industries',
         np: 'उद्योगहरू',
+    },
+    ContactUs: {
+        en: 'Contact Us',
+        np: 'हामीलाई सम्पर्क गर्नुहोस',
+    },
+    ContactMessageGenerated: {
+        en: 'This report has been generated in the BIPAD Portal (https://bipadportal.gov.np/). ',
+        np: 'यो रिपोर्ट BIPAD पोर्टल मा उत्पन्न गरिएको छ (https://bipadportal.gov.np/)',
+    },
+    ContactNote: {
+        en: 'Note: Please refer to the Annexes for details on each section',
+        np: 'नोट: कृपया प्रत्येक सेक्सनमा विवरणहरूको लागि एनेक्सिसलाई सन्दर्भ गर्नुहोस्',
+    },
+    MayorNameUnavailable: {
+        en: 'Name Unavailable',
+        np: 'नाम उपलब्ध छैन',
+    },
+    MayorEmailUnavailable: {
+        en: 'Mayor Email Unavailable',
+        np: 'मेयरको ईमेल उपलब्ध छैन',
+    },
+    MayorPhoneUnavailable: {
+        en: ' Phone No Unavailable',
+        np: ' फोन नम्बर उपलब्ध छैन',
+    },
+    CaoNameUnavailable: {
+        en: 'Name Unavailable',
+        np: ' नाम उपलब्ध छैन',
+    },
+    CaoEmailUnavailable: {
+        en: 'Email Unavailable',
+        np: ' ईमेल उपलब्ध छैन',
+    },
+    CaoPhoneUnavailable: {
+        en: 'Phone No Unavailable',
+        np: ' फोन नम्बर उपलब्ध छैन',
+    },
+    FocalPersonNameUnavailable: {
+        en: ' Name Unavailable',
+        np: 'नाम उपलब्ध छैन',
+    },
+    FocalPersonEmailUnavailable: {
+        en: ' Email Unavailable',
+        np: ' ईमेल उपलब्ध छैन',
+    },
+    FocalPersonPhoneUnavailable: {
+        en: ' Phone No Unavailable',
+        np: ' फोन नम्बर उपलब्ध छैन',
     },
 
 };

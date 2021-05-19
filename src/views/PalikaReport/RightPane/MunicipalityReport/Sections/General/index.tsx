@@ -269,7 +269,7 @@ const General = (props: Props) => {
             setShowInfo(true);
         }
     }, [cao, focalPerson, mayor]);
-
+    console.log('This fiscal year', (fiscalYear));
     const validationErrs = () => {
         if (!generalData.item && generalData.fiscalYear) {
             setfiscalYear(generalData.fiscalYear);
@@ -298,7 +298,7 @@ const General = (props: Props) => {
     };
 
     const handleDataSave = () => {
-        if (!validationErrs()) {
+        if (!validationErrs() && fiscalYear !== '') {
             props.setGeneralDatapp({
                 reportTitle,
                 fiscalYear,
@@ -308,7 +308,9 @@ const General = (props: Props) => {
                 formationDate,
                 committeeMembers,
                 localMembers,
-                fiscalYearTitle,
+                fiscalYearTitle: !generalData.fiscalYearTitle
+                    ? fiscalYearTitle
+                    : generalData.fiscalYearTitle,
             });
             updateTab();
             props.handleShowErr(false);
@@ -378,7 +380,7 @@ const General = (props: Props) => {
                                     className={styles.inputElement}
                                     disabled={disabled}
                                 >
-                                    <option value="select">
+                                    <option value="">
                                         {drrmLanguage.language === 'np'
                                             ? 'आर्थिक वर्ष चयन गर्नुहोस्'
                                             : 'Select Fiscal Year'

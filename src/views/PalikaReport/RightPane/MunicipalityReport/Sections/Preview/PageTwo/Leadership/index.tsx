@@ -15,6 +15,8 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import Gt from '../../../../../../utils';
+import Translations from '../../../../../../Translations';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
@@ -105,22 +107,29 @@ const Leadership = (props: Props) => {
 
     return (
         <div className={styles.leadership}>
-            <h2>Municipal DRR Leadership</h2>
+
+            <h2>
+                {' '}
+                <Gt section={Translations.MunicipalDRR} />
+            </h2>
             <div className={styles.itemRow}>
                 <div className={styles.leaderItem}>
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {mayor.name || 'Name Unavailable'}
-                                (Mayor)
+                                {mayor.name || <Gt section={Translations.MayorNameUnavailable} />}
+                                (
+                                <Gt section={Translations.Mayor} />
+)
                             </span>
                         </li>
                         <li>
-                            {mayor.email || 'Email Available'}
+                            {mayor.email || <Gt section={Translations.MayorEmailUnavailable} />}
 
                         </li>
                         <li>
-                            {mayor.mobileNumber || 'Phone Available'}
+                            {mayor.mobileNumber
+                            || <Gt section={Translations.MayorPhoneUnavailable} />}
 
                         </li>
                     </ul>
@@ -129,18 +138,20 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {cao.name || 'Name Unvailable'}
-                                (CAO)
+                                {cao.name || <Gt section={Translations.CaoNameUnavailable} />}
+                                (
+                                <Gt section={Translations.ChiefAdminstrative} />
+)
 
                             </span>
 
                         </li>
                         <li>
-                            {cao.email || 'Email Unavailable'}
+                            {cao.email || <Gt section={Translations.CaoEmailUnavailable} />}
 
                         </li>
                         <li>
-                            {cao.mobileNumber || 'Phone Unavailable'}
+                            {cao.mobileNumber || <Gt section={Translations.CaoPhoneUnavailable} />}
 
 
                         </li>
@@ -150,16 +161,21 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {focalPerson.name || 'Name Unvailable'}
-                            (Focal Person)
+                                {focalPerson.name
+                                || <Gt section={Translations.FocalPersonNameUnavailable} />}
+                                (
+                                <Gt section={Translations.DRRfocal} />
+)
                             </span>
                         </li>
                         <li>
-                            {focalPerson.email || 'Email Unvailable'}
+                            {focalPerson.email
+                            || <Gt section={Translations.FocalPersonEmailUnavailable} />}
 
                         </li>
                         <li>
-                            {focalPerson.mobileNumber || 'Phone Unvailable'}
+                            {focalPerson.mobileNumber
+                            || <Gt section={Translations.FocalPersonPhoneUnavailable} />}
 
                         </li>
                     </ul>
