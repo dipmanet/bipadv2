@@ -691,7 +691,7 @@ const Budget = (props: Props) => {
                                         </li>
                                         <li>
                                             <h2>
-                                            Rs.
+                                                <Gt section={Translations.Rupees} />
                                                 {' '}
                                                 {drrFund}
                                             </h2>
@@ -709,7 +709,7 @@ const Budget = (props: Props) => {
                                     <ul>
                                         <li>
                                             <h2>
-                                                Rs.
+                                                <Gt section={Translations.Rupees} />
                                                 {' '}
                                                 {additionalFund || 0}
                                             </h2>

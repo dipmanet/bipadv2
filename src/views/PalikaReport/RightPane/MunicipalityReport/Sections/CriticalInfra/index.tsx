@@ -214,32 +214,40 @@ const CriticalInfra = (props: Props) => {
         if (fetchedData.length > 0 && chartData.length === 0) {
             setChartData(
                 [
+
                     {
                         name: 'Educational Institutions',
+                        nameNp: 'शैक्षिक संस्थानहरू',
                         Total: fetchedData.filter(item => item.resourceType === 'education').length,
                     },
                     {
                         name: 'Banks',
+                        nameNp: 'बैंकहरू',
                         Total: fetchedData.filter(item => item.resourceType === 'finance').length,
                     },
                     {
                         name: 'Hospitals',
+                        nameNp: 'अस्पतालहरू',
                         Total: fetchedData.filter(item => item.resourceType === 'health').length,
                     },
                     {
                         name: 'Cultural Sites',
+                        nameNp: 'सांस्कृतिक साइटहरू',
                         Total: fetchedData.filter(item => item.resourceType === 'cultural').length,
                     },
                     {
                         name: 'Hotels or Restaurants',
+                        nameNp: 'होटल वा रेस्टुरेन्ट',
                         Total: fetchedData.filter(item => item.resourceType === 'tourism').length,
                     },
                     {
                         name: 'Government Buildings',
+                        nameNp: 'सरकारी भवनहरू',
                         Total: fetchedData.filter(item => item.resourceType === 'governance').length,
                     },
                     {
                         name: 'Industries',
+                        nameNp: 'उद्योगहरू',
                         Total: fetchedData.filter(item => item.resourceType === 'industry').length,
                     },
                 ],
@@ -479,7 +487,9 @@ const CriticalInfra = (props: Props) => {
                 props.previewDetails
                 && (
                     <div className={styles.budgetPreviewContainer}>
-                        <h2> Critical Infrastructure</h2>
+                        <h2>
+                            <Gt section={Translations.ResourcesHeading} />
+                        </h2>
                         <BarChart
                             width={350}
                             height={200}
@@ -495,7 +505,7 @@ const CriticalInfra = (props: Props) => {
                             />
                             <YAxis
                                 type="category"
-                                dataKey="name"
+                                dataKey={drrmLanguage.language === 'en' ? 'name' : 'nameNp'}
                                 tick={{ fill: '#777', fontSize: '10px' }}
                             />
                             <Bar

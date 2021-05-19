@@ -51,6 +51,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -79,63 +80,64 @@ const allRepIcons = [
 ];
 const menuItems: {
     key: number;
-    content: TabContent;
+    content: string;
+    contentNp: string;
     url?: string;
 }[] = [
     {
         key: 0,
         content: 'General',
-        url: '/municipality-contact/',
+        contentNp: 'सामान्य',
     },
     {
         key: 1,
         content: 'Budget',
-        url: '/annual-budget/',
+        contentNp: 'बजेट',
     },
     {
         key: 2,
         content: 'Budget Activity',
-        url: '/annual-budget-activity/',
+        contentNp: 'बजेट गतिविधि',
     },
     {
         key: 3,
         content: 'Programme and Policies',
-        url: '/annual-policy-program/',
+        contentNp: 'नीति तथा कार्यक्रमहरू',
     },
     {
         key: 4,
         content: 'Organisation',
-        url: '/resource/',
+        contentNp: 'संस्था',
     },
     {
         key: 5,
         content: 'Inventories',
-        url: '',
+        contentNp: 'सूची',
     },
     {
         key: 6,
         content: 'Resources',
-        url: '',
+        contentNp: 'स्रोतहरू',
     },
     {
         key: 7,
         content: 'Contacts',
-        url: '',
+        contentNp: 'सम्पर्क',
     },
     {
         key: 8,
         content: 'Incident and Relief',
-        url: '',
+        contentNp: 'घटना तथा राहत',
     },
     {
         key: 9,
         content: 'Simulation',
-        url: '/simulation/',
+        contentNp: 'अनुकरण',
     },
     {
         key: 10,
         content: 'Create Report',
-        url: '',
+        contentNp: 'प्रतिवेदन बनाउनुहोस्',
     },
 ];
 
@@ -171,6 +173,7 @@ const Sidebar = (props) => {
         drrmRegion,
         setDrrmRegion,
         drrmProgress,
+        drrmLanguage,
 
     } = props;
     useEffect(() => {
@@ -345,7 +348,9 @@ const Sidebar = (props) => {
                         type="button"
                         onClick={handleMyPalikaClick}
                     >
-                        My Palika Report &gt;
+                        <Gt section={Translations.breadcrumb1} />
+
+                         &gt;
 
                     </button>
                     <button
@@ -353,7 +358,8 @@ const Sidebar = (props) => {
                         type="button"
                         onClick={handleMyPalikaClickReport}
                     >
-                        Add a report
+                        <Gt section={Translations.breadcrumb2} />
+
 
                     </button>
                 </div>
@@ -483,7 +489,8 @@ const Sidebar = (props) => {
                 && (
                     <div className={styles.reportSidebarMainContainer}>
                         <h2>
-Create a Report
+                            <Gt section={Translations.sidebarTitle} />
+
                             {' '}
                             <Icon
                                 name="info"
@@ -531,7 +538,11 @@ Create a Report
                                                         src={icons[item.key]}
                                                         alt="Bullet Point"
                                                     />
-                                                    {item.content}
+                                                    {
+                                                        drrmLanguage.language === 'en'
+                                                            ? item.content
+                                                            : item.contentNp
+                                                    }
                                                 </span>
                                                 <span>
                                                     {
@@ -575,7 +586,11 @@ Create a Report
                                             disabled={drrmProgress === item.key}
                                         >
 
-                                            {item.content}
+                                            {
+                                                drrmLanguage.language === 'en'
+                                                    ? item.content
+                                                    : item.contentNp
+                                            }
 
                                             {/* <Icon
                                                 name="info"
@@ -595,7 +610,7 @@ Create a Report
                                 showErr
                                     && (
                                         <span className={styles.error}>
-                                            Please Enter Valid Fiscal Year from General Section
+                                            <Gt section={Translations.validationErrSidebar} />
                                         </span>
                                     )}
                         </ul>

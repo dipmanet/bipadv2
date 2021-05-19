@@ -967,6 +967,7 @@ const Relief = (props: Props) => {
 
     const getIncidentTitle = (item) => {
         if (fetchedData.length > 0) {
+            console.log('fetchedData.length ', fetchedData);
             return [
                 (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
                 (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn || '-'),

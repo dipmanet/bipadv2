@@ -19,6 +19,9 @@ import {
     methods,
 } from '#request';
 
+import Gt from '#views/PalikaReport/utils';
+import Translations from '#views/PalikaReport/Translations';
+
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     user: userSelector(state),
@@ -76,14 +79,6 @@ const Header = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
-
-    // if (user && user.profile) {
-    //     const {
-    //         municipality: munfromprops,
-    //         province: provfromprops,
-    //         district: districtfromprops,
-    //     } = user.profile;
-
 
     const m = muncipalities.filter(mun => mun.id === municipality);
     const d = districts.filter(dis => dis.id === district);
@@ -144,11 +139,11 @@ const Header = (props: Props) => {
                 <div className={styles.titleAndFY}>
                     <ul>
                         <li className={styles.title}>
-                    Disaster Risk Reduction
-                    and Management Report
+                            <Gt section={Translations.dashBoardHeading} />
+
                         </li>
                         <li className={styles.fy}>
-                    FY:
+                            <Gt section={Translations.FY} />
                             {' '}
                             {fiscalYearTitle && fiscalYearTitle[0].titleEn}
                         </li>
@@ -160,11 +155,13 @@ const Header = (props: Props) => {
             <div className={styles.dates}>
                 <ul>
                     <li>
-                         Generated on:
+                        <Gt section={Translations.dashboardTblHeaderPublishedOn} />
+                        {':'}
                         {new Date().toISOString().split('T')[0]}
                     </li>
                     <li>
-                        Last Modified on:
+                        <Gt section={Translations.dashboardTblHeaderLastModified} />
+                        {':'}
                         {new Date().toISOString().split('T')[0]}
                     </li>
 

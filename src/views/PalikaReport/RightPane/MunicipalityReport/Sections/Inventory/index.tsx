@@ -224,7 +224,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 return null;
             });
             const chatData = [...new Set(finalInventoriesData.map(inventory => inventory.item.category))];
-
+            console.log('inven chart dat:', finalInventoriesData);
             setChartData(chatData.slice(0, 4).map(item => ({
                 name: item,
                 Total: finalInventoriesData.filter(inven => inven.item.category === item).length,
@@ -415,7 +415,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             && (
                 <div className={styles.budgetPreviewContainer}>
                     <h2>
-                        Disaster Inventories
+                        <Gt section={Translations.InventoryHeading} />
                     </h2>
                     <BarChart
                         width={350}
