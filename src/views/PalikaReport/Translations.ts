@@ -1178,6 +1178,7 @@ const languageTranslations: LanguageEntry = {
     ReliefBen: {
         np: 'लाभान्वित परिवारको संख्या',
         en: 'Number of benificiaries family',
+    },
     ContactUs: {
         en: 'Contact Us',
         np: 'हामीलाई सम्पर्क गर्नुहोस',
