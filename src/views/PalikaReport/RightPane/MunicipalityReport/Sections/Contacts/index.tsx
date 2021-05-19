@@ -819,7 +819,7 @@ const Contacts = (props: Props) => {
                                                                 type="text"
                                                                 className={styles.inputElement}
                                                                 value={name}
-                                                                placeholder={'Name'}
+                                                                placeholder={drrmLanguage.language === 'np' ? Translations.ContactsName.np : Translations.ContactsName.en}
                                                                 onChange={handleNameChange}
                                                             />
                                                         </td>
@@ -829,7 +829,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 onChange={OrganizationTypeChange}
                                                             >
-                                                                <option value="">Select Organization Type</option>
+                                                                <option value="">{drrmLanguage.language === 'np' ? Translations.ContactTypeOfOrganization.np : 'Select Organization Type'}</option>
                                                                 <option value="Federal Governement">Federal Governement</option>
                                                                 <option value="Municipal Government">Municipal Government</option>
                                                                 <option value="Nepal Police">Nepal Police </option>
@@ -847,7 +847,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 value={organizationName}
                                                                 onChange={OrganizationNameChange}
-                                                                placeholder={'Name of Organization'}
+                                                                placeholder={drrmLanguage.language === 'np' ? Translations.ContactNameOfOrganization.np : Translations.ContactNameOfOrganization.en}
                                                             />
                                                         </td>
                                                         <td>
@@ -855,7 +855,7 @@ const Contacts = (props: Props) => {
                                                                 type="text"
                                                                 className={styles.inputElement}
                                                                 value={position}
-                                                                placeholder={'Position'}
+                                                                placeholder={drrmLanguage.language === 'np' ? Translations.ContactPosition.np : Translations.ContactPosition.en}
                                                                 onChange={handlePositionChange}
                                                             />
                                                         </td>
@@ -865,7 +865,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 value={trainedTitle}
                                                                 onChange={handleTraining}
-                                                                placeholder={'Training Title'}
+                                                                placeholder={drrmLanguage.language === 'np' ? Translations.ContactTrainingTitle.np : Translations.ContactTrainingTitle.en}
                                                             />
                                                         </td>
                                                         <td>
@@ -874,7 +874,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 onChange={handleFocusedHazard}
                                                             >
-                                                                <option value="">Select Focused Hazard</option>
+                                                                <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित जोखिम चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
                                                                 {hazardDetails.map(item => (
                                                                     <option value={item.id}>
                                                                         {item.titleEn}
@@ -890,7 +890,8 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 value={trainActivities}
                                                                 onChange={handleActivities}
-                                                                placeholder={'Activities included in training'}
+                                                                placeholder={drrmLanguage.language === 'np' ? ' प्रशिक्षणमा सामेल गतिविधि' : 'Activities included in training'}
+
                                                             />
                                                         </td>
                                                         <td>
@@ -917,7 +918,8 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 value={contactNumber}
                                                                 onChange={handleContact}
-                                                                placeholder={'Contact Number'}
+
+                                                                placeholder={drrmLanguage.language === 'np' ? 'सम्पर्क नम्बर' : 'Contact Number'}
                                                             />
                                                         </td>
                                                         <td>
@@ -926,7 +928,7 @@ const Contacts = (props: Props) => {
                                                                 className={styles.inputElement}
                                                                 value={email}
                                                                 onChange={handleEmail}
-                                                                placeholder={'Email'}
+                                                                placeholder={drrmLanguage.language === 'np' ? 'ईमेल' : 'Email'}
                                                             />
                                                         </td>
                                                         <td>
@@ -999,7 +1001,7 @@ const Contacts = (props: Props) => {
                                                             type="text"
                                                             className={styles.inputElement}
                                                             value={name}
-                                                            placeholder={'Name'}
+                                                            placeholder={drrmLanguage.language === 'np' ? Translations.ContactsName.np : Translations.ContactsName.en}
                                                             onChange={handleNameChange}
                                                         />
                                                     </td>
@@ -1009,7 +1011,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             onChange={OrganizationTypeChange}
                                                         >
-                                                            <option value="">Select Organization Type</option>
+                                                            <option value="">{drrmLanguage.language === 'np' ? Translations.ContactTypeOfOrganization.np : 'Select Organization Type'}</option>
                                                             <option value="Federal Governement">Federal Governement</option>
                                                             <option value="Municipal Government">Municipal Government</option>
                                                             <option value="Nepal Police">Nepal Police </option>
@@ -1027,7 +1029,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             value={organizationName}
                                                             onChange={OrganizationNameChange}
-                                                            placeholder={'Name of Organization'}
+                                                            placeholder={drrmLanguage.language === 'np' ? Translations.ContactNameOfOrganization.np : Translations.ContactNameOfOrganization.en}
                                                         />
                                                     </td>
                                                     <td>
@@ -1035,7 +1037,7 @@ const Contacts = (props: Props) => {
                                                             type="text"
                                                             className={styles.inputElement}
                                                             value={position}
-                                                            placeholder={'Position'}
+                                                            placeholder={drrmLanguage.language === 'np' ? Translations.ContactPosition.np : Translations.ContactPosition.en}
                                                             onChange={handlePositionChange}
                                                         />
                                                     </td>
@@ -1045,7 +1047,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             value={trainedTitle}
                                                             onChange={handleTraining}
-                                                            placeholder={'Training Title'}
+                                                            placeholder={drrmLanguage.language === 'np' ? Translations.ContactTrainingTitle.np : Translations.ContactTrainingTitle.en}
                                                         />
                                                     </td>
                                                     <td>
@@ -1054,7 +1056,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             onChange={handleFocusedHazard}
                                                         >
-                                                            <option value="">Select Focused Hazard</option>
+                                                            <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित जोखिम चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
                                                             {hazardDetails.map(data => (
                                                                 <option value={data.id}>
                                                                     {data.titleEn}
@@ -1070,7 +1072,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             value={trainActivities}
                                                             onChange={handleActivities}
-                                                            placeholder={'Activities included in training'}
+                                                            placeholder={drrmLanguage.language === 'np' ? 'प्रशिक्षणमा सामेल गतिविधि' : 'Activities included in training'}
                                                         />
                                                     </td>
                                                     <td>
@@ -1097,7 +1099,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             value={contactNumber}
                                                             onChange={handleContact}
-                                                            placeholder={'Contact Number'}
+                                                            placeholder={drrmLanguage.language === 'np' ? 'सम्पर्क नम्बर' : 'Contact Number'}
                                                         />
                                                     </td>
                                                     <td>
@@ -1106,7 +1108,7 @@ const Contacts = (props: Props) => {
                                                             className={styles.inputElement}
                                                             value={email}
                                                             onChange={handleEmail}
-                                                            placeholder={'Email'}
+                                                            placeholder={drrmLanguage.language === 'np' ? 'ईमेल' : 'Email'}
                                                         />
                                                     </td>
                                                 </tr>

@@ -12,7 +12,7 @@ const languageTranslations: LanguageEntry = {
     },
     welcomeNoteparagraph2: {
         np: 'विपद् पोर्टलको यो मोड्युलले सबै तहका सरकारले प्रत्येक आर्थिक वर्षमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको प्रतिवेदन प्रकाशन गर्दछ ।',
-        en: 'Welcome to the DRRM Report Module of the BIPAD Portal',
+        en: 'This module in the BIPAD portal will generate a Disaster Risk Reduction and Management (DRRM) Report for each fiscal year for all tiers of the government.',
     },
     welcomeNoteparagraph3: {
         np: 'विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन ऐन २०७४ र सोको नियमावली २०७६ को नियम १६ को व्यवस्था बमोजिम स्थानिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, जिल्ला विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, प्रदेश विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, र राष्ट्रिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्राधिकरणले प्रत्येक आर्थिक बर्षमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको वार्षिक प्रतिवेदन तयार गरी आर्थिक वर्ष समाप्त भएपछि पेश गर्नु पदर्छ । विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन ऐन २०७४ र सोको नियमावली २०७६ को नियम १६ को प्राबधानलाई सहयोग गर्न प्रतिवेदन मोड्युलमा छनौट गरिएको भौगोलिक स्थान वा क्षेत्रको सामान्य जानकारी, सो स्थानमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन क्षेत्रमा कार्यरत संघ—संस्था, विपद् सम्बन्धित ऐन, नीति, निर्देशन, कार्यविधि, विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन गर्न तय गरिएका वार्षिक योजना, विनियोजित बजेट तथा विपद् सम्बन्धित विभिन्न जानकारी समाबेश गरिएको छ ।',
@@ -911,6 +911,131 @@ const languageTranslations: LanguageEntry = {
         np: 'कृपया बजेट सेक्सनमा डाटा प्रविष्ट गर्नुहोस्',
         en: 'Please enter data in Budget section',
     },
+    IncidentReliefHeading: {
+        np: 'घटना र राहतहरु',
+        en: 'Incidents and Reliefs',
+    },
+    IncidentHeading: {
+        np: 'घटनाहरु',
+        en: 'Incidents',
+    },
+    IncidentSerialNumber: {
+        np: 'क्रम संख्या',
+        en: 'SN',
+    },
+    IncidentTitle: {
+        np: 'शीर्षक',
+        en: 'Title',
+    },
+    IncidentHazard: {
+        np: 'प्रकोप',
+        en: 'Hazard',
+    },
+    IncidentOn: {
+        np: 'घटना भएको',
+        en: 'Incident On',
+    },
+    IncidentReportedOn: {
+        np: 'रिपोर्ट गरिएको',
+        en: 'Reported on ',
+    },
+    IncidentTotalDeath: {
+        np: 'कुल मृत्यु संख्या ',
+        en: 'Total Death',
+    },
+    IncidentTotalInjured: {
+        np: 'कुल घाइते संख्या',
+        en: 'Total Injured',
+    },
+    IncidentTotalMissing: {
+        np: 'कुल घाइते संख्या',
+        en: 'Total Missing',
+    },
+    IncidentFamilyAffected: {
+        np: 'प्रभावित परिवार संख्या',
+        en: 'Family Affected',
+    },
+    IncidentInfrastructureAffected: {
+        np: 'प्रभावित पूर्वाधार संख्या',
+        en: 'Infrastructure Affected',
+    },
+    IncidentInfrastructureDestroyed: {
+        np: 'नष्टभएको पूर्वाधार संख्या',
+        en: 'Infrastructure Destroyed',
+    },
+    IncidentLiveStockLoss: {
+        np: 'पशुधन हानि',
+        en: 'Livestock Loss',
+    },
+    IncidentAction: {
+        np: 'कार्य',
+        en: 'Action',
+    },
+    IncidentAddReliefTooltip: {
+        np: 'राहत थप्नुहोस्',
+        en: 'Add Relief',
+    },
+    ReliefHeading: {
+        np: 'कृपया माथिको घटनाको लागि राहत थप्नुहोस्',
+        en: 'Please add relief detail for the above incident',
+    },
+    ReliefBeneficiary: {
+        np: 'लाभान्वित परिवारको संख्या(संख्या उल्लेख गर्नुहोस्)',
+        en: 'Number of benificiaries family(specify the number) ',
+    },
+    ReliefBeneficiaryName: {
+        np: 'लाभार्थीहरूको नाम सूची गर्नुहोस्(अनिवार्य छैन)',
+        en: 'List down the name of beneficiaries(not mandatory) ',
+    },
+    ReliefDistributionDate: {
+        np: 'राहत वितरणको मिति',
+        en: 'Date of relief distribution',
+    },
+    ReliefAmount: {
+        np: 'राहत रकम (अनुमानित)',
+        en: 'Relief amount (estimated)',
+    },
+    ReliefBenefitedPeopleHeading: {
+        np: 'राहत वितरणबाट लाभान्वित जनसंख्या ',
+        en: 'Population benefited from the relief distribution ',
+    },
+    ReliefBenefitedPeopleMale: {
+        np: 'पुरुष',
+        en: 'Male  ',
+    },
+    ReliefBenefitedPeopleFemale: {
+        np: 'महिला',
+        en: 'Female ',
+    },
+    ReliefBenefitedPeopleMinorities: {
+        np: 'अल्पसंख्यकहरू',
+        en: 'Minorities ',
+    },
+    ReliefBenefitedPeopleDalit: {
+        np: 'दलित',
+        en: 'Dalit ',
+    },
+    ReliefBenefitedPeopleMadhesi: {
+        np: 'मधेशी',
+        en: 'Madhesis',
+    },
+    ReliefBenefitedPeopleDisable: {
+        np: 'अशक्त मानिस',
+        en: 'Person with Disabilities',
+    },
+    ReliefDataSaveButton: {
+        np: 'पेश गर्नुहोस्',
+        en: 'SAVE',
+    },
+    ReliefDataBackButton: {
+        np: 'फिर्ता जानुहोस्',
+        en: 'BACK',
+    },
+    ReliefDataUpdateButton: {
+        np: 'अद्यावधिक गर्नुहोस्',
+        en: 'UPDATE',
+    },
+
 
 };
 

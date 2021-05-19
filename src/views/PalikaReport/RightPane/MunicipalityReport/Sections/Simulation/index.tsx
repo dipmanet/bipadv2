@@ -484,7 +484,14 @@ const Simulation = (props: Props) => {
                                                         <tr>
                                                             <td>{simulationIndex + 1}</td>
                                                             <td>
-                                                                <input type="text" className={styles.inputElement} value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.inputElement}
+                                                                    value={simulationName}
+
+                                                                    placeholder={drrmLanguage.language === 'np' ? 'अनुकरणको नाम' : 'Simulation Name'}
+                                                                    onChange={handleSimulationName}
+                                                                />
                                                                 {' '}
                                                             </td>
                                                             <td>
@@ -497,7 +504,13 @@ const Simulation = (props: Props) => {
                                                                 />
                                                             </td>
                                                             <td>
-                                                                <input type="text" className={styles.inputElement} value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.inputElement}
+                                                                    value={description}
+                                                                    placeholder={drrmLanguage.language === 'np' ? 'अनुकरणको वर्णन' : 'Simulation Description'}
+                                                                    onChange={handleSimulationDescription}
+                                                                />
                                                                 {' '}
                                                             </td>
                                                             <td>
@@ -506,7 +519,7 @@ const Simulation = (props: Props) => {
                                                                     onChange={handlePriorityArea}
                                                                     className={styles.inputElement}
                                                                 >
-                                                                    <option value="">Select Priority Area</option>
+                                                                    <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
                                                                     {PriorityArea.map(data => (
                                                                         <option value={data.title}>
                                                                             {data.title}
@@ -521,7 +534,7 @@ const Simulation = (props: Props) => {
                                                                     onChange={handlePriorityAction}
                                                                     className={styles.inputElement}
                                                                 >
-                                                                    <option value="">Select Priority Action</option>
+                                                                    <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
                                                                     {PriorityAction.map(data => (
                                                                         <option value={data.title}>
                                                                             {data.title}
@@ -536,7 +549,7 @@ const Simulation = (props: Props) => {
                                                                     onChange={handlePriorityActivity}
                                                                     className={styles.inputElement}
                                                                 >
-                                                                    <option value="">Select Priority Activity</option>
+                                                                    <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
                                                                     {PriorityActivity.map(data => (
                                                                         <option value={data.title}>
                                                                             {data.title}
@@ -546,11 +559,25 @@ const Simulation = (props: Props) => {
                                                                 </select>
                                                             </td>
                                                             <td>
-                                                                <input type="text" className={styles.inputElement} value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.inputElement}
+                                                                    value={organizer}
+                                                                    placeholder={drrmLanguage.language === 'np' ? 'आयोजक' : 'Organizer'}
+                                                                    onChange={handleOrganizer}
+                                                                />
                                                                 {' '}
                                                             </td>
                                                             <td>
-                                                                <input type="number" className={styles.inputElement} value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
+                                                                <input
+                                                                    type="number"
+                                                                    className={styles.inputElement}
+                                                                    value={participants}
+                                                                    placeholder={drrmLanguage.language === 'np'
+                                                                        ? 'सहभागीहरूको संख्या'
+                                                                        : 'Number of Participants'}
+                                                                    onChange={handleNumberOfParticipants}
+                                                                />
                                                                 {' '}
                                                             </td>
                                                             <td>
@@ -559,7 +586,8 @@ const Simulation = (props: Props) => {
                                                                     onChange={handleFocusHazard}
                                                                     className={styles.inputElement}
                                                                 >
-                                                                    <option value="">Select Priority Activity</option>
+                                                                    <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
+
                                                                     {hazardType && hazardType.map(data => (
                                                                         <option value={data.id}>
                                                                             {data.titleEn}
@@ -625,7 +653,15 @@ const Simulation = (props: Props) => {
                                             <tr>
                                                 <td>{simulationData.length + 1}</td>
                                                 <td>
-                                                    <input type="text" className={styles.inputElement} value={simulationName} placeholder="Simulation Name" onChange={handleSimulationName} />
+                                                    <input
+                                                        type="text"
+                                                        className={styles.inputElement}
+                                                        value={simulationName}
+                                                        placeholder={drrmLanguage.language === 'np'
+                                                            ? 'अनुकरणको नाम'
+                                                            : 'Simulation Name'}
+                                                        onChange={handleSimulationName}
+                                                    />
                                                     {' '}
                                                 </td>
                                                 <td>
@@ -638,7 +674,15 @@ const Simulation = (props: Props) => {
                                                     />
                                                 </td>
                                                 <td>
-                                                    <input type="text" className={styles.inputElement} value={description} placeholder="Simulation Description" onChange={handleSimulationDescription} />
+                                                    <input
+                                                        type="text"
+                                                        className={styles.inputElement}
+                                                        value={description}
+                                                        placeholder={drrmLanguage.language === 'np'
+                                                            ? 'अनुकरणको वर्णन'
+                                                            : 'Simulation Description'}
+                                                        onChange={handleSimulationDescription}
+                                                    />
                                                     {' '}
                                                 </td>
                                                 <td>
@@ -647,7 +691,12 @@ const Simulation = (props: Props) => {
                                                         onChange={handlePriorityArea}
                                                         className={styles.inputElement}
                                                     >
-                                                        <option value="">Select Priority Area</option>
+                                                        <option value="">
+                                                            {drrmLanguage.language === 'np'
+                                                                ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्'
+                                                                : 'Select Priority Area'}
+
+                                                        </option>
                                                         {PriorityArea.map(data => (
                                                             <option value={data.title}>
                                                                 {data.title}
@@ -662,7 +711,12 @@ const Simulation = (props: Props) => {
                                                         onChange={handlePriorityAction}
                                                         className={styles.inputElement}
                                                     >
-                                                        <option value="">Select Priority Action</option>
+                                                        <option value="">
+                                                            {drrmLanguage.language === 'np'
+                                                                ? 'प्राथमिकता कार्य चयन गर्नुहोस्'
+                                                                : 'Select Priority Action'}
+
+                                                        </option>
                                                         {PriorityAction.map(data => (
                                                             <option value={data.title}>
                                                                 {data.title}
@@ -677,7 +731,7 @@ const Simulation = (props: Props) => {
                                                         onChange={handlePriorityActivity}
                                                         className={styles.inputElement}
                                                     >
-                                                        <option value="">Select Priority Activity</option>
+                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
                                                         {PriorityActivity.map(data => (
                                                             <option value={data.title}>
                                                                 {data.title}
@@ -687,11 +741,25 @@ const Simulation = (props: Props) => {
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" className={styles.inputElement} value={organizer} placeholder="Organizer" onChange={handleOrganizer} />
+                                                    <input
+                                                        type="text"
+                                                        className={styles.inputElement}
+                                                        value={organizer}
+                                                        placeholder={drrmLanguage.language === 'np' ? 'आयोजक' : 'Organizer'}
+                                                        onChange={handleOrganizer}
+                                                    />
                                                     {' '}
                                                 </td>
                                                 <td>
-                                                    <input type="number" className={styles.inputElement} value={participants} placeholder="Participants" onChange={handleNumberOfParticipants} />
+                                                    <input
+                                                        type="number"
+                                                        className={styles.inputElement}
+                                                        value={participants}
+                                                        placeholder={drrmLanguage.language === 'np'
+                                                            ? 'सहभागीहरूको संख्या'
+                                                            : 'Number of Participants'}
+                                                        onChange={handleNumberOfParticipants}
+                                                    />
                                                     {' '}
                                                 </td>
                                                 <td>
@@ -700,7 +768,7 @@ const Simulation = (props: Props) => {
                                                         onChange={handleFocusHazard}
                                                         className={styles.inputElement}
                                                     >
-                                                        <option value="">Select Priority Activity</option>
+                                                        <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित प्रकोप चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
                                                         {hazardType && hazardType.map(data => (
                                                             <option value={data.id}>
                                                                 {data.titleEn}

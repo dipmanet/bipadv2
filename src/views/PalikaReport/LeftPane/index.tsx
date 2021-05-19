@@ -488,7 +488,7 @@ Create a Report
                             <Icon
                                 name="info"
                                 className={styles.infoIcon}
-                                title="  This module in the BIPAD portal will generate
+                                title="This module in the BIPAD portal will generate
                                 Disaster Risk Reduction and Management Report
                                 for each fiscal year for all three tiers of the governments.
 

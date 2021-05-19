@@ -24,6 +24,8 @@ import programAndPolicyLogo from '#resources/palikaicons/program.svg';
 import editIcon from '#resources/palikaicons/edit.svg';
 import addRelief from '#resources/palikaicons/add.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Gt from '../../../../utils';
+import Translations from '../../../../Translations';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -36,7 +38,8 @@ import { provincesSelector,
     userSelector, drrmRegionSelector,
     hazardTypesSelector,
     drrmProgresSelector,
-    generalDataSelector } from '#selectors';
+    generalDataSelector,
+    palikaLanguageSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 import {
     setDrrmProgressAction,
@@ -68,6 +71,7 @@ const mapStateToProps = (state, props) => ({
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
     generalData: generalDataSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -227,6 +231,7 @@ const Relief = (props: Props) => {
         setProgress,
         drrmProgress,
         generalData,
+        drrmLanguage,
     } = props;
 
 
@@ -422,17 +427,18 @@ const Relief = (props: Props) => {
         setModalClose(false);
     };
     const handleFilteredViewRelief = (response) => {
-        setfamiliesBenefited(response[0].numberOfBeneficiaryFamily);
-        setnamesofBeneficiaries(response[0].nameOfBeneficiary);
-        setreliefDate(ADToBS(response[0].dateOfReliefDistribution));
-        setreliefAmount(response[0].reliefAmountNpr);
-        setmaleBenefited(response[0].totalMaleBenefited);
-        setfemaleBenefited(response[0].totalFemaleBenefited);
-        setmiorities(response[0].totalMinoritiesBenefited);
-        setdalits(response[0].totalDalitBenefited);
-        setmadhesis(response[0].totalMadhesiBenefited);
-        setdisabilities(response[0].totalDisabledBenefited);
-        setjanajatis(response[0].totalJanjatiBenefited);
+        console.log('response', response);
+        setfamiliesBenefited(response[0].numberOfBeneficiaryFamily ? response[0].numberOfBeneficiaryFamily : '-');
+        setnamesofBeneficiaries(response[0].nameOfBeneficiary ? response[0].nameOfBeneficiary : '-');
+        setreliefDate(response[0].dateOfReliefDistribution ? ADToBS(response[0].dateOfReliefDistribution) : '-');
+        setreliefAmount(response[0].reliefAmountNpr ? response[0].reliefAmountNpr : '-');
+        setmaleBenefited(response[0].totalMaleBenefited ? response[0].totalMaleBenefited : '-');
+        setfemaleBenefited(response[0].totalFemaleBenefited ? response[0].totalFemaleBenefited : '-');
+        setmiorities(response[0].totalMinoritiesBenefited ? response[0].totalMinoritiesBenefited : '-');
+        setdalits(response[0].totalDalitBenefited ? response[0].totalDalitBenefited : '-');
+        setmadhesis(response[0].totalMadhesiBenefited ? response[0].totalMadhesiBenefited : '-');
+        setdisabilities(response[0].totalDisabledBenefited ? response[0].totalDisabledBenefited : '-');
+        setjanajatis(response[0].totalJanjatiBenefited ? response[0].totalJanjatiBenefited : '-');
 
         setShowRelief(true);
     };
@@ -440,6 +446,17 @@ const Relief = (props: Props) => {
         setModalClose(true);
         setShowRelief(false);
         setDisableInput(false);
+        setfamiliesBenefited(null);
+        setnamesofBeneficiaries('');
+        setreliefDate('');
+        setreliefAmount(null);
+        setmaleBenefited(null);
+        setfemaleBenefited(null);
+        setmiorities(null);
+        setdalits(null);
+        setmadhesis(null);
+        setdisabilities(null);
+        setjanajatis(null);
         PalikaReportInventoriesReport.do({
             organisation: handleFetchedData,
             url,
@@ -510,6 +527,7 @@ const Relief = (props: Props) => {
 
 
     const handleReliefEdit = (data, item) => {
+        console.log('This data', data);
         setLoader(false);
         setReliefId(data.id);
         setModalClose(false);
@@ -1065,12 +1083,12 @@ const Relief = (props: Props) => {
 
                                 ? (
                                     <h2>
-                                Incidents and Reliefs
+                                        <Gt section={Translations.IncidentReliefHeading} />
                                     </h2>
                                 )
                                 : (
                                     <h2>
-                            Incidents
+                                        <Gt section={Translations.IncidentHeading} />
                                     </h2>
                                 )
                         }
@@ -1078,20 +1096,48 @@ const Relief = (props: Props) => {
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
-                                        <th>S.N</th>
-                                        <th>Title</th>
-                                        <th>Hazard</th>
-                                        <th>Incident On</th>
-                                        <th>Reported On</th>
-                                        <th>Total Death</th>
-                                        <th>Total Injured</th>
-                                        <th>Total Missing</th>
-                                        <th>Family Affected</th>
-                                        <th>Infrastructure Affected</th>
-                                        <th>Infrastructure Destroyed</th>
-                                        <th>Livestock Destroyed</th>
+                                        <th>
+                                            <Gt section={Translations.IncidentSerialNumber} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentTitle} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentHazard} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentOn} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentReportedOn} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentTotalDeath} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentTotalInjured} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentTotalMissing} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentFamilyAffected} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentInfrastructureAffected} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentInfrastructureDestroyed} />
+                                        </th>
+                                        <th>
+                                            <Gt section={Translations.IncidentLiveStockLoss} />
+                                        </th>
                                         { !props.annex
-                                        && <th>Action</th>
+                                        && (
+                                            <th>
+                                                <Gt section={Translations.IncidentAction} />
+                                            </th>
+                                        )
                                         }
                                     </tr>
                                     {loader ? (
@@ -1138,7 +1184,8 @@ const Relief = (props: Props) => {
                                                                         type="button"
                                                                         onClick={() => handleReliefView(item.item)}
                                                                         className={styles.reliefBtn}
-                                                                        title="View Relief"
+
+                                                                        title={drrmLanguage.language === 'np' ? 'राहत हेर्नुहोस्' : 'View Relief'}
                                                                     >
                                                                         <ScalableVectorGraphics
                                                                             className={styles.bulletPoint}
@@ -1152,7 +1199,8 @@ const Relief = (props: Props) => {
                                                                         type="button"
                                                                         onClick={() => handleReliefEdit(data, item.item)}
                                                                         className={styles.reliefBtn}
-                                                                        title="Edit Relief"
+
+                                                                        title={drrmLanguage.language === 'np' ? 'राहत सम्पादन गर्नुहोस्' : 'Edit Relief'}
                                                                     >
                                                                         <ScalableVectorGraphics
                                                                             className={styles.bulletPoint}
@@ -1174,9 +1222,9 @@ const Relief = (props: Props) => {
                                                                type="button"
                                                                onClick={() => handleReliefAdd(item.item)}
                                                                className={styles.addReliefBttn}
-                                                               title="Add Relief"
+                                                               title={drrmLanguage.language === 'np' ? Translations.IncidentAddReliefTooltip.np : Translations.IncidentAddReliefTooltip.en}
                                                            >
-                                                                   ADD RELIEF
+                                                               <Gt section={Translations.IncidentAddReliefTooltip} />
 
                                                            </button>
 
@@ -1872,32 +1920,36 @@ Rs
                             )}
                         />
                         <ModalBody>
-                            <h3>Please add relief detail for the above incident</h3>
+                            <h3>
+                                {' '}
+                                <Gt section={Translations.ReliefHeading} />
+                            </h3>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Number of Beneficiary Families</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBeneficiary} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handleFamiliesBenefited}
                                     value={familiesBenefited}
-                                    placeholder={'Kindly specify number of families benefited'}
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया लाभान्वित भएका परिवारहरूको संख्या निर्दिष्ट गर्नुहोस्' : 'Kindly specify number of families benefited'}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Names of beneficiaries</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBeneficiaryName} /></span>
                                 <textarea
                                     className={styles.inputElement}
                                     onChange={handleNameofBeneficiaries}
                                     value={namesofBeneficiaries}
-                                    placeholder={'Kindly specify the names of beneficiaries'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया लाभार्थीहरूको नाम निर्दिष्ट गर्नुहोस्' : 'Kindly specify the names of beneficiaries'}
                                     rows={3}
                                     // cols={7}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Date of relief distribution</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefDistributionDate} /></span>
                                 {disableInput ? (
                                     <input
                                         type="text"
@@ -1913,7 +1965,7 @@ Rs
                                         className={styles.datepicker}
                                         value={reliefDate}
                                         onChange={date => setreliefDate(date)}
-                                        options={{ calenderLocale: 'en', valueLocale: 'en' }}
+                                        options={{ calenderLocale: drrmLanguage.language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                                     />
                                 )
 
@@ -1922,82 +1974,89 @@ Rs
 
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Relief Amount (NPR)</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefAmount} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handleReliefAmount}
                                     value={reliefAmount}
-                                    placeholder={'Kindly specify Relief amount'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया राहत राशि निर्दिष्ट गर्नुहोस्' : 'Kindly specify Relief amount'}
                                     disabled={disableInput}
                                 />
                             </div>
 
 
-                            <h3><strong>People benefited from the relief Distribution</strong></h3>
+                            <h3><strong><Gt section={Translations.ReliefBenefitedPeopleHeading} /></strong></h3>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Male</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleMale} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handlemaleBenefited}
                                     value={maleBenefited}
-                                    placeholder={'Kindly specify a number'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया नम्बर निर्दिष्ट गर्नुहोस्' : 'Kindly specify number'}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Female</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleFemale} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handlefemaleBenefited}
                                     value={femaleBenefited}
-                                    placeholder={'Kindly specify a number'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया नम्बर निर्दिष्ट गर्नुहोस्' : 'Kindly specify number'}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Minorities</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleMinorities} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handleMinorities}
                                     value={miorities}
-                                    placeholder={'Kindly specify a number'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया नम्बर निर्दिष्ट गर्नुहोस्' : 'Kindly specify number'}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Dalit</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleDalit} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handleDalit}
                                     value={dalits}
-                                    placeholder={'Kindly specify a number'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया नम्बर निर्दिष्ट गर्नुहोस्' : 'Kindly specify number'}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Madhesis</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleMadhesi} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handleMadhesis}
                                     value={madhesis}
-                                    placeholder={'Kindly specify a number'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया नम्बर निर्दिष्ट गर्नुहोस्' : 'Kindly specify number'}
                                     disabled={disableInput}
                                 />
                             </div>
                             <div className={styles.inputContainer}>
-                                <span className={styles.dpText}>Person with disabilities</span>
+                                <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleDisable} /></span>
                                 <input
                                     type="number"
                                     className={styles.inputElement}
                                     onChange={handleDisabilities}
                                     value={disabilities}
-                                    placeholder={'Kindly specify a number'}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया नम्बर निर्दिष्ट गर्नुहोस्' : 'Kindly specify number'}
                                     disabled={disableInput}
                                 />
                             </div>
@@ -2033,7 +2092,7 @@ Rs
                                 onClick={handleBackButton}
 
                             >
-                            BACK
+                                <Gt section={Translations.ReliefDataBackButton} />
                             </button>
                             {postButton && (
                                 <button
@@ -2042,7 +2101,7 @@ Rs
                             // onClick={() => setShowRelief(false)}
                                     onClick={handleSaveRelief}
                                 >
-                            Save
+                                    <Gt section={Translations.ReliefDataSaveButton} />
                                 </button>
                             )
                             }
@@ -2054,7 +2113,7 @@ Rs
                             // onClick={() => setShowRelief(false)}
                                     onClick={handleUpdateRelief}
                                 >
-                            UPDATE
+                                    <Gt section={Translations.ReliefDataUpdateButton} />
                                 </button>
                             )}
                         </ModalBody>
