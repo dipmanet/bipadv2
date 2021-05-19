@@ -5,6 +5,7 @@ import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
 // import { NepaliDatePicker } from 'datepicker-nepali-reactjs';
+import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import Gt from '../../../../utils';
 import Translations from '../../../../Translations';
@@ -391,7 +392,7 @@ const General = (props: Props) => {
                                             <option
                                                 value={item.id}
                                             >
-                                                {item.titleEn}
+                                                {drrmLanguage.language === 'np' ? item.titleNp : item.titleEn}
                                             </option>
                                         ))}
 
@@ -421,7 +422,7 @@ const General = (props: Props) => {
                                 {
                                     !props.annex
                             && (
-                                <table id="table-to-xls">
+                                <table className={drrmLanguage.language === 'np' && styles.nep} id="table-to-xls">
                                     <tbody>
                                         <tr>
 
@@ -781,7 +782,7 @@ const General = (props: Props) => {
                             </h3>
                         )
                             }
-                            <table className={styles.reportTable} id="table-to-xls">
+                            <table className={drrmLanguage.language === 'np' ? _cs(styles.reportTable, styles.nep) : styles.reportTable} id="table-to-xls">
                                 <tbody>
                                     <tr>
                                         <th>

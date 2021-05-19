@@ -1,4 +1,11 @@
-
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../Kalimati\ Regular.ttf") format("truetype");
+    }
+    
+  .nep{
+    font-family: "Kalimati Regular"!important;
+   }
   table{
     border-collapse: collapse;
     border: 1px solid #f5f5f5;

@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Kalimati Regular";
+  src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+  }
+  .nep{
+    font-family: "Kalimati Regular"!important;
+   }
 
  ul{
   list-style: none;
@@ -154,14 +161,16 @@
     }
   }
 }  
+
 .tabsPageContainer{
- 
+  
   .palikaTable{
     .loaderInfo{
       position: absolute;
       top: 54%;
       left: 55%;
   }
+  
   h2{
     text-align: center;
     margin-top: 50px;

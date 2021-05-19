@@ -417,7 +417,7 @@ const Simulation = (props: Props) => {
 
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
             {
                 !props.previewDetails
             && (
@@ -866,7 +866,7 @@ const Simulation = (props: Props) => {
                     </div>
                 )}
 
-        </>
+        </div>
     );
 };
 

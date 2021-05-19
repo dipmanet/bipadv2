@@ -124,7 +124,7 @@ const PalikaReportTable = (props) => {
         <div>
             {/* <h1>Responsive Table Example</h1> */}
             <div className={styles.palikaTable}>
-                <table id="table-to-xls">
+                <table className={drrmLanguage.language === 'np' && styles.nep} id="table-to-xls">
                     <tbody>
                         {submenuId === 1
                             ? (

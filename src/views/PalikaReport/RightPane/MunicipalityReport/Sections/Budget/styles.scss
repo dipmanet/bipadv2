@@ -1,3 +1,11 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+    }
+    
+.nep{
+    font-family: "Kalimati Regular"!important;
+   }
 .errorMsg{
     color: red;
     font-size: 10px;

@@ -1,3 +1,7 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+    }
 .calendar-wrapper{
     width: fit-content;
 }
@@ -29,6 +33,9 @@ h5{
     display: flex;
     flex-direction: column;
     // padding: 50px;
+    .nep{
+        font-family: "Kalimati Regular"!important;
+       }
     .loaderInfo{
         position: absolute;
         top: 54%;
@@ -186,6 +193,9 @@ h5{
                 display: flex;
                 flex-direction: column;
                 margin-bottom: 20px;
+                .nep{
+                    font-family: "Kalimati Regular"!important;
+                   }
                 h5{
                     opacity: 0.67;
                 }

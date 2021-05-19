@@ -629,7 +629,7 @@ const Contacts = (props: Props) => {
 
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
             {
                 !props.previewDetails
                 && (
@@ -1220,7 +1220,7 @@ const Contacts = (props: Props) => {
                         </div>
                     </div>
                 )}
-        </>
+        </div>
     );
 };
 

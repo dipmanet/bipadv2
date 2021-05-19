@@ -965,14 +965,25 @@ const Relief = (props: Props) => {
     }, [reliefData]);
 
     const getIncidentTitle = (item) => {
-        if (fetchedData.length > 0) {
+        if (fetchedData.length > 0 && item.incident) {
+            console.log('item', item);
             console.log('fetchedData.length ', fetchedData);
+            let title = '-';
+            const incident = '-';
+            title = fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0];
+
+            // if (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title !== undefined) {
+            //     title = fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title;
+            // }
+            // if (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn) {
+            //     incident = fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn;
+            // }
+
             return [
-                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
-                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn || '-'),
+                title,
+                incident,
             ];
         }
-
         return ['-', '-'];
     };
     const handleUpdateAndClose = (response) => {
@@ -1071,7 +1082,7 @@ const Relief = (props: Props) => {
     };
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
 
             {!props.previewDetails && !props.hazardwiseImpact
          && (
@@ -2123,7 +2134,7 @@ Rs
                     </Modal>
                 )
             }
-        </>
+        </div>
 
     );
 };

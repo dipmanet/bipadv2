@@ -306,7 +306,7 @@ const CriticalInfra = (props: Props) => {
 
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
             {
                 !props.previewDetails
 
@@ -525,7 +525,7 @@ const CriticalInfra = (props: Props) => {
                 )
             }
 
-        </>
+        </div>
     );
 };
 export default connect(mapStateToProps, mapDispatchToProps)(
