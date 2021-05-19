@@ -772,7 +772,6 @@ const General = (props: Props) => {
                         && (
                             <h3>
                                 <strong>
-                            Local Disaster Management Committee
                                     <Gt
                                         section={Translations.FormationDateTitle}
                                     />

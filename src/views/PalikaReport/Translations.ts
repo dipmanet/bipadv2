@@ -868,20 +868,20 @@ const languageTranslations: LanguageEntry = {
     },
 
     PA1: {
-        np: 'Understanding Disaster Risk',
-        en: 'वपद् जोखिम बारे बुझाई',
+        en: 'Understanding Disaster Risk',
+        np: 'वपद् जोखिम बारे बुझाई',
     },
     PA2: {
-        np: 'संघ, प्रदेश र स्थानीय तहमा विपद् जोखिम शासकीय पद्धतिको सुदृढीकरण',
         en: 'Strengthening Disaster Risk Governance at Federal, Provincial andLocalLevels',
+        np: 'संघ, प्रदेश र स्थानीय तहमा विपद् जोखिम शासकीय पद्धतिको सुदृढीकरण',
     },
     PA3: {
-        np: 'विपद् जोखिम न्यूनीकरणका लागि उत्थानशीलता वृद्धि गर्न बृहत्तर जोखिम जानकारीमा आधारित निजी तथा सार्वजनिक लगानी प्रवर्धन',
         en: 'Promoting Comprehensive Risk-Informed Private and Public Investments in Disaster Risk Reduction for Resilience',
+        np: 'विपद् जोखिम न्यूनीकरणका लागि उत्थानशीलता वृद्धि गर्न बृहत्तर जोखिम जानकारीमा आधारित निजी तथा सार्वजनिक लगानी प्रवर्धन',
     },
     PA4: {
-        np: 'प्रभावकारी प्रतिकार्य र पूनर्लाभ, पुनस्र्थापना तथा पुर्ननिर्माणमा “अझ राम्रो र बलियो निर्माण” का लागि विपद् पूर्वतयारीको सुदृढीकरण',
         en: 'Enhancing Disaster Preparedness for Effective Response and to "Build Back Better" in Recovery, Rehabilitation and Reconstruction',
+        np: 'प्रभावकारी प्रतिकार्य र पूनर्लाभ, पुनस्र्थापना तथा पुर्ननिर्माणमा “अझ राम्रो र बलियो निर्माण” का लागि विपद् पूर्वतयारीको सुदृढीकरण',
     },
     Area1: {
         en: 'Area 1',
@@ -926,6 +926,39 @@ const languageTranslations: LanguageEntry = {
     EnterBudget: {
         np: 'कृपया बजेट सेक्सनमा डाटा प्रविष्ट गर्नुहोस्',
         en: 'Please enter data in Budget section',
+    },
+    FY: {
+        en: 'FY:',
+        np: 'आव:',
+    },
+    EducationalInstitutions: {
+        en: 'Educational Institutions',
+        np: 'शैक्षिक संस्था',
+    },
+
+    Banks: {
+        en: 'Banks',
+        np: 'बैंकहरू',
+    },
+    Hospitals: {
+        en: 'Hospitals',
+        np: 'अस्पतालहरू',
+    },
+    CulturalSites: {
+        en: 'Cultural Sites',
+        np: 'सांस्कृतिक साइटहरू',
+    },
+    HotelsorRestaurants: {
+        en: 'Hotels or Restaurants',
+        np: 'होटल वा रेस्टुरेन्ट',
+    },
+    GovernmentBuildings: {
+        en: 'Government Buildings',
+        np: 'सरकारी भवनहरू',
+    },
+    Industries: {
+        en: 'Industries',
+        np: 'उद्योगहरू',
     },
 
 };

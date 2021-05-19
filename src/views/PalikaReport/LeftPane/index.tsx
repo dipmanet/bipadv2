@@ -127,7 +127,7 @@ const menuItems: {
     {
         key: 8,
         content: 'Incident and Relief',
-        contentNp: 'घटना/राहत',
+        contentNp: 'घटना तथा राहत',
     },
     {
         key: 9,
