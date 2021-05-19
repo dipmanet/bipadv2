@@ -1227,6 +1227,75 @@ const languageTranslations: LanguageEntry = {
         en: ' Phone No Unavailable',
         np: ' फोन नम्बर उपलब्ध छैन',
     },
+    OrgsWorkingIn: {
+        en: 'Organizations working on DRRM activities in',
+        np: 'DRRM गतिविधिहरु मा काम गर्दै गरेका संगठनहरू',
+    },
+    MunicipalitySingle: {
+        en: 'Municipality',
+        np: 'नगरपालिका',
+    },
+    SubmitFull: {
+        en: 'सबमिट गर्नुहोस् र पूर्ण रिपोर्ट डाउनलोड गर्नुहोस्',
+        np: 'Submit and Download Full Report',
+    },
+    SubmitPart: {
+        en: 'सबमिट गर्नुहोस् र सारांश रिपोर्ट डाउनलोड गर्नुहोस्',
+        np: 'Submit and Download Summary Report',
+    },
+    LDMC: {
+        en: 'Local Disaster Management Committee',
+        np: 'स्थानीय विपद् व्यवस्थापन समिति',
+    },
+    AnnexA: {
+        en: 'Annex A',
+        np: 'अनुसूची क',
+    },
+    AnnexC: {
+        en: 'Annex C',
+        np: 'अनुसूची ग',
+    },
+    AnnexB: {
+        en: 'Annex B',
+        np: 'अनुसूची ख',
+    },
+    AnnexD: {
+        en: 'Annex D',
+        np: 'अनुसूची घ',
+    },
+    AnnexE: {
+        en: 'Annex E',
+        np: 'अनुसूची ङ',
+    },
+    AnnexF: {
+        en: 'Annex F',
+        np: 'अनुसूची च',
+    },
+    AnnexG: {
+        en: 'Annex G',
+        np: 'अनुसूची छ',
+    },
+    AnnexH: {
+        en: 'Annex H',
+        np: 'अनुसूची ज',
+    },
+    AnnexI: {
+        en: 'Annex I',
+        np: 'अनुसूची झ',
+    },
+    AnnexJ: {
+        en: 'Annex J',
+        np: 'अनुसूची ञ',
+    },
+    AnnexK: {
+        en: 'Annex K',
+        np: 'अनुसूची ट',
+    },
+    AnnexL: {
+        en: 'Annex L',
+        np: 'अनुसूची ठ',
+    },
+
 
 };
 

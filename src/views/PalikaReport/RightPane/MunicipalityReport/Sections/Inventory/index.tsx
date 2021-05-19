@@ -283,7 +283,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
             { !props.previewDetails
             && (
                 <div className={styles.tabsPageContainer}>
-                    <h2>
+                    <h2 className={styles.InvenTitle}>
                         <Gt section={Translations.InventoryHeading} />
                     </h2>
                     <div className={styles.palikaTable}>

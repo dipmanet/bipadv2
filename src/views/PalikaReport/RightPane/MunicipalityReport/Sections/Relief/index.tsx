@@ -302,6 +302,7 @@ const Relief = (props: Props) => {
 
     const getdateTimeFromFs = (fs: string) => {
         const fsFiltered = fiscalYearObj.filter(i => String(i.titleEn) === String(fs));
+
         return [
             `${fsFiltered[0].startDateAd}T00:00:00+05:45`,
             `${fsFiltered[0].endDateAd}T23:59:59+05:45`,
@@ -942,25 +943,14 @@ const Relief = (props: Props) => {
     }, [reliefData]);
 
     const getIncidentTitle = (item) => {
-        if (fetchedData.length > 0 && item.incident) {
-            console.log('item', item);
+        if (fetchedData.length > 0) {
             console.log('fetchedData.length ', fetchedData);
-            let title = '-';
-            const incident = '-';
-            title = fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0];
-
-            // if (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title !== undefined) {
-            //     title = fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title;
-            // }
-            // if (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn) {
-            //     incident = fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn;
-            // }
-
             return [
-                title,
-                incident,
+                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
+                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn || '-'),
             ];
         }
+
         return ['-', '-'];
     };
     const handleUpdateAndClose = (response) => {
@@ -1035,11 +1025,9 @@ const Relief = (props: Props) => {
 
                 if (hazardName) {
                     tempArr.push({ hazardName: hazardName.titleEn,
-                        hazardNameNp: hazardName.titleNe,
                         item });
 
                     return { hazardName: hazardName.titleEn,
-                        hazardNameNp: hazardName.titleNe,
                         item };
                 }
 
@@ -1059,7 +1047,7 @@ const Relief = (props: Props) => {
     };
 
     return (
-        <div className={drrmLanguage.language === 'np' && styles.nep}>
+        <>
 
             {!props.previewDetails && !props.hazardwiseImpact
          && (
@@ -1146,7 +1134,7 @@ const Relief = (props: Props) => {
                                                 <tr key={item.item.id}>
                                                     <td>{i + 1}</td>
                                                     <td>{item.item.title || '-'}</td>
-                                                    <td>{drrmLanguage.language === 'np' ? item.hazardNameNp : item.hazardName || '-'}</td>
+                                                    <td>{item.hazardName || '-'}</td>
                                                     <td>{ADToBS(item.item.incidentOn.split('T')[0]) || '-'}</td>
                                                     <td>{ADToBS(item.item.reportedOn.split('T')[0]) || '-'}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
@@ -1929,6 +1917,7 @@ const Relief = (props: Props) => {
                                             <li>
                                                 <span className={styles.darkerSmText}>
                                                     {totJanajatis || 0}
+
                                                 </span>
                                             </li>
                                             <li>
@@ -1941,6 +1930,8 @@ const Relief = (props: Props) => {
                                         <ul>
                                             <li>
                                                 <span className={styles.darkerSmText}>
+
+
                                                     {totMadhesis}
                                                 </span>
                                             </li>
@@ -2201,7 +2192,7 @@ const Relief = (props: Props) => {
                     </Modal>
                 )
             }
-        </div>
+        </>
 
     );
 };

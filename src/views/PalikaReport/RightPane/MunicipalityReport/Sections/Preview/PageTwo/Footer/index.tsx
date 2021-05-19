@@ -8,6 +8,7 @@ import {
     districtsSelector,
     provincesSelector,
     drrmRegionSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -22,10 +23,11 @@ import Translations from '../../../../../../Translations';
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     user: userSelector(state),
-    muncipalities: municipalitiesSelector(state),
+    municipalities: municipalitiesSelector(state),
     districts: districtsSelector(state),
     provinces: provincesSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 interface Props{
@@ -52,16 +54,20 @@ let municipality = '';
 
 let district = '';
 let province = '';
+let municipalityName = '';
+let provinceName = '';
+let districtName = '';
 
 const Footer = (props: Props) => {
     const {
         generalData,
         requests: { FiscalYearFetch },
         user,
-        muncipalities,
+        municipalities,
         districts,
         provinces,
         drrmRegion,
+        drrmLanguage,
     } = props;
 
     if (drrmRegion.municipality) {
@@ -77,14 +83,20 @@ const Footer = (props: Props) => {
     const [fiscalYearList, setFiscalYearList] = useState([]);
     const [fiscalYearTitle, setFYTitle] = useState('');
 
-
-    const m = muncipalities.filter(mun => mun.id === municipality);
+    console.log();
+    const m = municipalities.filter(mun => mun.id === municipality);
     const d = districts.filter(dis => dis.id === district);
     const p = provinces.filter(pro => pro.id === province);
 
-    const municipalityName = m[0].title;
-    const provinceName = p[0].title;
-    const districtName = d[0].title;
+    if (drrmLanguage.language === 'en') {
+        municipalityName = m[0].title;
+        provinceName = p[0].title;
+        districtName = d[0].title;
+    } else {
+        municipalityName = m[0].title_ne;
+        provinceName = p[0].title_ne;
+        districtName = d[0].title_ne;
+    }
 
     const {
         fiscalYear,
@@ -113,16 +125,20 @@ const Footer = (props: Props) => {
                     <ul>
                         <li className={styles.munTitle}>
                             {`${municipalityName} Municipality`}
-                            ,
                             {' '}
-
+                            <Gt section={Translations.MunicipalitySingle} />
+                            ,
                         </li>
                         <li className={styles.munTitle}>
                             {' '}
-                            {`${districtName} District`}
+                            {`${districtName}`}
+                            {' '}
+                            <Gt section={Translations.dashboardTblHeaderDistrict} />
                             ,
                             {' '}
                             {`${provinceName}`}
+                            {' '}
+                            <Gt section={Translations.dashboardTblHeaderProvince} />
                         </li>
                         {/* <li className={styles.munTitle}>POB: 213311</li> */}
                         {/* <li className={styles.munTitle}>PHONE: +977-1-449354</li> */}

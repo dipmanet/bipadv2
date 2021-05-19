@@ -20,6 +20,8 @@ import Inventory from './Sections/Inventory';
 import CriticalInfra from './Sections/CriticalInfra';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
+import Gt from '#views/PalikaReport/utils';
+import Translations from '#views/PalikaReport/Translations';
 import 'react-circular-progressbar/dist/styles.css';
 
 import {
@@ -568,7 +570,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Submit and Download Full Report
+                                    <Gt section={Translations.SubmitFull} />
+
 
                                 </button>
                                 <button
@@ -577,7 +580,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                     className={!pending ? styles.agreeBtn : styles.disabled}
                                     disabled={pending}
                                 >
-                                Submit and Download Summary Report
+                                    <Gt section={Translations.SubmitPart} />
+
 
                                 </button>
                             </div>
@@ -599,8 +603,13 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page3'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex A</h1>
-                                <h2>Local Disaster Management Committee</h2>
+                                <h1>
+                                    {' '}
+                                    <Gt section={Translations.AnnexA} />
+                                </h1>
+                                <h2>
+                                    <Gt section={Translations.LDMC} />
+                                </h2>
                                 <General
                                     annex
                                     mayor={mayor}
@@ -615,7 +624,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page5'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex B</h1>
+                                <h1>
+                                    <Gt section={Translations.AnnexB} />
+
+
+                                </h1>
 
                                 <Budget
                                     annex
@@ -625,7 +638,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page6'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex C</h1>
+                                <h1>
+                                    <Gt section={Translations.AnnexC} />
+                                </h1>
 
                                 <BudgetActivity
                                     annex
@@ -635,7 +650,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page7'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex D</h1>
+                                <h1>
+                                    <Gt section={Translations.AnnexD} />
+                                </h1>
                                 <ProgrammeAndPolicies
                                     annex
                                     handlePrevClick={() => {}}
@@ -644,17 +661,31 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page8'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex E</h1>
-                                <h2>DRR Related Organisations</h2>
+                                <h1>
+                                    <Gt section={Translations.AnnexE} />
+                                </h1>
+                                <h2>
+                                    <Gt section={Translations.OrganizationHeading} />
+                                </h2>
 
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
-                                            <th>S.N</th>
-                                            <th>Name</th>
-                                            <th>Type</th>
-                                            <th>Number of Male Employee</th>
-                                            <th>Number of Female Employee</th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationSerialNumber} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationName} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationType} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationMaleEmployee} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationFemaleEmployee} />
+                                            </th>
 
                                         </tr>
                                         {!drrmOrg.data
@@ -690,20 +721,47 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page9'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex F</h1>
-                                <h2>Inventories</h2>
+                                <h1>
+                                    {' '}
+                                    <Gt section={Translations.AnnexF} />
+                                </h1>
+                                <h2>
+                                    <Gt section={Translations.InventoryHeading} />
+                                </h2>
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <th>S.N</th>
-                                            <th>Name of Resource</th>
-                                            <th>Quantity</th>
-                                            <th>Unit</th>
-                                            <th>Category</th>
-                                            <th>Owner Organization Name</th>
-                                            <th>Type of Organization</th>
-                                            <th>Added Date</th>
-                                            <th>Updated Date</th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationSerialNumber} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceName} />
+                                            </th>
+                                            <th>
+
+
+                                                <Gt section={Translations.InventoryResourceQuantity} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceUnit} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceCategory} />
+                                            </th>
+
+
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceOwnerOrganization} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceOwnerOrganizationType} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceAddedDate} />
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.InventoryResourceUpdatedDate} />
+                                            </th>
                                         </tr>
 
                                         {!drrmInventory.data
@@ -715,9 +773,10 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                                     <td>
                                                         {item.SN}
                                                     </td>
-                                                    <td>{item.item.title || '-'}</td>
+
+                                                    <td>{drrmLanguage.language === 'np' ? item.item.titleNp : item.item.title}</td>
                                                     <td>{item.quantity || '-'}</td>
-                                                    <td>{item.item.unit || '-'}</td>
+                                                    <td>{drrmLanguage.language === 'np' ? item.item.unitNp : item.item.unit}</td>
                                                     <td>{item.item.category || '-'}</td>
                                                     <td>
 
@@ -733,18 +792,45 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page10'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex G</h1>
-                                <h2>Critical Infrastructure</h2>
+                                <h1>
+                                    {' '}
+                                    <Gt section={Translations.AnnexG} />
+                                </h1>
+                                <h2>
+                                    <Gt section={Translations.ResourcesHeading} />
+
+                                </h2>
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
-                                            <th>S.N</th>
-                                            <th>Resource Name</th>
-                                            <th>Resource Type</th>
-                                            <th>Operator Type</th>
-                                            <th>Number Of male Employee</th>
-                                            <th>Number Of female Employee</th>
-                                            <th>Total Employee</th>
+                                            <th>
+                                                <Gt section={Translations.OrganizationSerialNumber} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ResourcesName} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ResourcesType} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ResourcesOperatorType} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ResourcesNumberOfMaleEmployee} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ResourcesNumberOfFemaleEmployee} />
+
+                                            </th>
+                                            <th>
+                                                <Gt section={Translations.ResourcesNumberOfTotalEmployee} />
+
+                                            </th>
 
                                         </tr>
                                         {!drrmCritical.data && drrmCritical
@@ -767,7 +853,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page11'} className={_cs(styles.annexPage, 'page')}>
-                                <h1>Annex H</h1>
+                                <h1>
+                                    <Gt section={Translations.AnnexH} />
+                                </h1>
                                 <Relief
                                 // AnnexDetails
                                     reportData={''}
@@ -781,21 +869,25 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page12'} className={_cs(styles.annexPage, 'page')}>
-                                <h1> Annex I </h1>
-                                <h2>Governmental Contacts</h2>
+                                <h1>
+                                    <Gt section={Translations.AnnexI} />
+                                </h1>
+                                <h2>
+                                    <Gt section={Translations.ContactGovernmentContact} />
+                                </h2>
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
-                                            <th>S.N</th>
-                                            <th>Name</th>
-                                            <th>Type of Organisation</th>
-                                            <th>Position</th>
-                                            <th>Name of Organisation</th>
-                                            <th>Trained Title</th>
-                                            <th>Training Duration</th>
-                                            <th>Contact number</th>
-                                            <th>Email</th>
-                                            <th>Action</th>
+                                            <th><Gt section={Translations.ContactsSerialNumber} /></th>
+                                            <th><Gt section={Translations.ContactsName} /></th>
+                                            <th><Gt section={Translations.ContactTypeOfOrganization} /></th>
+                                            <th><Gt section={Translations.ContactPosition} /></th>
+                                            <th><Gt section={Translations.ContactNameOfOrganization} /></th>
+                                            <th><Gt section={Translations.ContactTrainingTitle} /></th>
+                                            <th><Gt section={Translations.ContactTrainingDuration} /></th>
+                                            <th><Gt section={Translations.ContactContactNumber} /></th>
+                                            <th><Gt section={Translations.ContactContactEmail} /></th>
+                                            <th><Gt section={Translations.ContactAction} /></th>
                                         </tr>
                                         {drrmContacts.gContacts.length > 0
                                             ? drrmContacts.gContacts
@@ -829,47 +921,48 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                         }
                                     </tbody>
                                 </table>
-                                <h2>NonGovernmental Contacts</h2>
+                                <h2>
+                                    <Gt section={Translations.ContactNonGovernmentalContact} />
+                                </h2>
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
                                             <th>
-                                    SN
+                                                <Gt section={Translations.ContactsSerialNumber} />
                                             </th>
                                             <th>
-                                    Name
+                                                <Gt section={Translations.ContactsName} />
                                             </th>
                                             <th>
-                                    Type of Organization
+                                                <Gt section={Translations.ContactTypeOfOrganization} />
                                             </th>
                                             <th>
-                                    Name of Organization
+                                                <Gt section={Translations.ContactNameOfOrganization} />
                                             </th>
                                             <th>
-                                    Position
+                                                <Gt section={Translations.ContactPosition} />
                                             </th>
                                             <th>
-                                    Trained Title
+                                                <Gt section={Translations.ContactTrainingTitle} />
                                             </th>
                                             <th>
-                                    Focused Hazard
+                                                <Gt section={Translations.ContactFocusHazard} />
                                             </th>
                                             <th>
-                                Activities included in the training
+                                                <Gt section={Translations.ContactTrainingActivities} />
                                             </th>
                                             <th>
-                               Training Date(from)
+                                                <Gt section={Translations.ContactTrainingDateFrom} />
                                             </th>
                                             <th>
-                                Training Date(to)
+                                                <Gt section={Translations.ContactTrainingDateTo} />
                                             </th>
                                             <th>
-                                Contact number
+                                                <Gt section={Translations.ContactContactNumber} />
                                             </th>
                                             <th>
-                                Email
+                                                <Gt section={Translations.ContactContactEmail} />
                                             </th>
-                                            <th>Action</th>
 
                                         </tr>
 
@@ -915,7 +1008,9 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                             </div>
 
                             <div id={'page13'} className={_cs(styles.annexPage, 'page')}>
-                                <h1> Annex J </h1>
+                                <h1>
+                                    <Gt section={Translations.AnnexJ} />
+                                </h1>
                                 <Simulation
                                     handlePrevClick={() => {}}
                                     handleNextClick={() => {}}

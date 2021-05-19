@@ -129,6 +129,8 @@ ul{
     .reliefDataMainContainer{
       display:flex;
       flex-direction: column;
+      position: relative;
+      top: 30px;
       .reliefDistribution{
           display: flex;
           flex-direction: column;
@@ -441,12 +443,13 @@ ul{
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-
+  width: 100%;
   margin-bottom: 25px;
+  justify-content: center;
   h2{
       font-size: 14px;
       font-weight: 600;
-      margin-left: 10%;
+      margin-left: 30px;
       color: #222;
       // bottom: 25px;
       position: relative;
@@ -454,7 +457,12 @@ ul{
   .lossRow{
     display: flex;
     // border: 1px solid red;
-    margin-left: 2%;
+    // margin-left: 5%;
+  justify-content: center;
+
+    margin-bottom: 20px;
+    // border: 1px solid red;
+    // width: 100%;
     .lossSection{
       display: flex;
       // flex: 1;
@@ -482,7 +490,7 @@ ul{
          height: 50px;
          width: 50px;
          position: relative;
-         top: 10px;
+        //  top: 10px;
           padding: 0;
           margin: 0;
           // border: 1px solid red;
@@ -504,8 +512,10 @@ ul{
           text-align: center;
           line-height: 0.9em;
           height: 0;
+          bottom: 20px;
+          position: relative;
           .darkerText{
-            font-size: 18px;
+            font-size: 16px;
             color: #222;
             font-weight: 600;
           }

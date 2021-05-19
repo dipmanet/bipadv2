@@ -108,6 +108,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 let province = 0;
 let district = 0;
 let municipality = 0;
+let municipalityName = 0;
 
 const Organisation: React.FC<Props> = (props: Props) => {
     const [fetchedData, setFetechedData] = useState([]);
@@ -124,10 +125,10 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
 
     const { requests: { PalikaReportOrganizationReport }, url, provinces,
-        districts,
-        municipalities, drrmProgress,
+        drrmProgress,
         user, drrmRegion, setProgress,
-        updateTab, setDrrmOrg, drrmLanguage } = props;
+        updateTab, setDrrmOrg, drrmLanguage,
+        municipalities } = props;
 
 
     if (drrmRegion.municipality) {
@@ -139,6 +140,18 @@ const Organisation: React.FC<Props> = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
+
+    const m = municipalities.filter(mun => mun.id === municipality);
+    // const d = districts.filter(dis => dis.id === district);
+    // const p = provinces.filter(pro => pro.id === province);
+    if (drrmLanguage.language === 'en') {
+        municipalityName = m[0].title;
+    } else {
+        municipalityName = m[0].title_ne;
+    }
+
+    // const provinceName = p[0].title;
+    // const districtName = d[0].title;
 
     const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
     const [meta, setMeta] = useState(2);
@@ -198,6 +211,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     useEffect(() => {
         if (fetchedData.length > 0 && chartData.length === 0) {
             const chartDataArr = [...new Set(fetchedData.map(org => org.operatorType))];
+            console.log('gfetched data org:', fetchedData);
             setChartData(chartDataArr.map(item => ({
                 name: item,
                 Total: fetchedData.filter(organisation => organisation.operatorType === item).length,
@@ -398,8 +412,9 @@ const Organisation: React.FC<Props> = (props: Props) => {
         && (
             <div className={styles.budgetPreviewContainer}>
                 <h2>
-                    Organizations working
-                    on DRRM activities in Rajapur
+                    <Gt section={Translations.OrganizationHeading} />
+                    {' '}
+                    {municipalityName}
                 </h2>
                 <BarChart
                     width={350}

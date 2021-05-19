@@ -11,6 +11,7 @@ import {
     districtsSelector,
     provincesSelector,
     drrmRegionSelector,
+    palikaLanguageSelector,
 } from '#selectors';
 import {
     createConnectedRequestCoordinator,
@@ -25,10 +26,11 @@ import Translations from '#views/PalikaReport/Translations';
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),
     user: userSelector(state),
-    muncipalities: municipalitiesSelector(state),
+    municipalities: municipalitiesSelector(state),
     districts: districtsSelector(state),
     provinces: provincesSelector(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 interface Props{
@@ -55,16 +57,20 @@ let municipality = '';
 
 let district = '';
 let province = '';
+let municipalityName = '';
+let provinceName = '';
+let districtName = '';
 
 const Header = (props: Props) => {
     const {
         generalData,
         requests: { FiscalYearFetch },
         user,
-        muncipalities,
+        municipalities,
         districts,
         provinces,
         drrmRegion,
+        drrmLanguage,
     } = props;
 
     const [fiscalYearList, setFiscalYearList] = useState([]);
@@ -79,14 +85,22 @@ const Header = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
-
-    const m = muncipalities.filter(mun => mun.id === municipality);
+    console.log('muns:', municipalities);
+    console.log('mun:', municipality);
+    const m = municipalities.filter(mun => mun.id === municipality);
     const d = districts.filter(dis => dis.id === district);
     const p = provinces.filter(pro => pro.id === province);
 
-    const municipalityName = m[0].title;
-    const provinceName = p[0].title;
-    const districtName = d[0].title;
+
+    if (drrmLanguage.language === 'en') {
+        municipalityName = m[0].title;
+        provinceName = p[0].title;
+        districtName = d[0].title;
+    } else {
+        municipalityName = m[0].title_ne;
+        provinceName = p[0].title_ne;
+        districtName = d[0].title_ne;
+    }
     // }
 
     const {
@@ -103,9 +117,6 @@ const Header = (props: Props) => {
     useEffect(() => {
         if (fiscalYearList.length > 0 && fiscalYear) {
             const FY = fiscalYearList.filter(item => item.id === Number(fiscalYear));
-            console.log('fy obj', FY);
-            console.log('fiscalYearList', fiscalYearList);
-            console.log('fiscalyear', fiscalYear);
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
@@ -122,13 +133,21 @@ const Header = (props: Props) => {
 
                     <div className={styles.address}>
                         <ul>
-                            <li className={styles.munTitle}>{`${municipalityName} Municipality`}</li>
-                            <li className={styles.desc}>
-                                {`${districtName} District`}
+                            <li className={styles.munTitle}>
+                                {`${municipalityName}`}
                                 {' '}
-,
+                                <Gt section={Translations.MunicipalitySingle} />
+                            </li>
+                            <li className={styles.desc}>
+                                {`${districtName}`}
+                                    ,
+                                {' '}
+                                <Gt section={Translations.dashboardTblHeaderDistrict} />
                                 {' '}
                                 {`${provinceName}`}
+                                {' '}
+                                <Gt section={Translations.dashboardTblHeaderProvince} />
+
                             </li>
 
                         </ul>
