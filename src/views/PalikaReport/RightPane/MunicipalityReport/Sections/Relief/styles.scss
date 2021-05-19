@@ -440,32 +440,32 @@ ul{
       font-weight: 600;
       margin-left: 10%;
       color: #222;
-      bottom: 25px;
+      // bottom: 25px;
       position: relative;
   }
   .lossRow{
     display: flex;
     // border: 1px solid red;
-    margin-left: 6%;
+    margin-left: 2%;
     .lossSection{
       display: flex;
       // flex: 1;
-      border: 2px solid green;
-      border-bottom: 2px solid white;
-      margin: 0 2%;
+      // border: 2px solid green;
+      // border-bottom: 2px solid white;
+      margin: 0 1%;
       align-items: flex-start;
       justify-content: flex-start;
-      border-radius: 40px;
-      bottom: 40px;
-      position: relative;
+      // border-radius: 40px;
+      // bottom: 40px;
+      // position: relative;
       .lossElement{
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         margin: 0 15px;
-        position: relative;
-        top: 10px;
+        // position: relative;
+        // top: 10px;
         background: white;
         // border: 1px solid blue;
         // height: 80%;

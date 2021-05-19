@@ -659,7 +659,7 @@ const BudgetActivity = (props: Props) => {
                                             <Icon
                                                 name="info"
                                                 className={styles.infoIcon}
-                                                placeholder={drrmLanguage.language === 'en'
+                                                title={drrmLanguage.language === 'en'
                                                     ? 'The Disaster Risk Reduction National Strategic Plan of Action 2018 – 2030 adopting the Sendai Framework for Disaster Risk Reduction as a main guidance, has identified 4 priority areas and 18 priority actions. The activities will be monitored based on the these priorities set. Get the action plan here: '
                                                     : 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८ – २०३०मा विपद् जोखिम न्यूनीकरणका लागि सेन्डाइ कार्य ढाँचालाई मूल मार्गदर्शनको रुपमा लिई चार प्राथमिकता प्राप्त क्षेत्रहरू र अठार प्राथमिकता प्राप्त कार्यहरू निर्धारण गरेको छ । यी प्राथमिकताहरूको आधारमा क्रियाकलापहरुको अनुगमन गरिनेछ'
                                                 }

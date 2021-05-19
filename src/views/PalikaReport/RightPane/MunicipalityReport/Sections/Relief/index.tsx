@@ -342,10 +342,13 @@ const Relief = (props: Props) => {
     const [wardWiseImpact, setWardWiseImpact] = useState([]);
 
 
-    // here
     const getMonthFromDate = (date: string) => {
         const dateItem = new Date(date);
         return dateItem.toLocaleString('default', { month: 'long' });
+    };
+    const getNpValFromDate = (date: string) => {
+        console.log('va ret: ', ADToBS(date), 'date:', date, 'val clalc:', Number(ADToBS(date).split('-')[1]));
+        return Number(ADToBS(date).split('-')[1]);
     };
 
     useEffect(() => {
@@ -358,12 +361,20 @@ const Relief = (props: Props) => {
     useEffect(() => {
         if (reliefData) {
             const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const reliefChart = reliefDateArr.map(d => ({
-                name: d,
+            const reliefDateArrNep = ['बैशाख', 'जेष्ठा', 'असार', 'श्रवण', 'भद्रा', 'अश्विन', 'कार्तिक', 'मंगसिर', 'पौष', 'माघ', 'फाल्गुन', 'चैत्र'];
+            const reliefChart = reliefDateArr.map((d, mainindex) => ({
+                name: drrmLanguage.language === 'en' ? d.substring(0, 3) : reliefDateArrNep[mainindex],
                 'Amount-Distributed': reliefData
                     .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
                     ? reliefData
                         .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
+                        .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
+                        .reliefAmountNpr
+                    : 0,
+                'रकम वितरित': reliefData
+                    .filter((nep, i) => getNpValFromDate(nep.dateOfReliefDistribution) === mainindex + 1).length > 0
+                    ? reliefData
+                        .filter(item => getNpValFromDate(item.dateOfReliefDistribution) === mainindex + 1)
                         .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
                         .reliefAmountNpr
                     : 0,
@@ -375,11 +386,18 @@ const Relief = (props: Props) => {
                         .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
                         .numberOfBeneficiaryFamily
                     : 0,
+                लाभार्थीहरू: reliefData
+                    .filter((nep, i) => getNpValFromDate(nep.dateOfReliefDistribution) === mainindex + 1).length > 0
+                    ? reliefData
+                        .filter(item => getNpValFromDate(item.dateOfReliefDistribution) === mainindex + 1)
+                        .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
+                        .numberOfBeneficiaryFamily
+                    : 0,
             }));
-
+            console.log('relief chart data:', reliefChart);
             setReliefChartData(reliefChart);
         }
-    }, [reliefData]);
+    }, [drrmLanguage.language, reliefData]);
     const handlemaleBenefited = (data) => {
         setmaleBenefited(data.target.value);
     };
@@ -702,26 +720,6 @@ const Relief = (props: Props) => {
 
     useEffect(() => {
         if (reliefData) {
-            const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const reliefChart = reliefDateArr.map(d => ({
-                name: d,
-                'Amount-Distributed': reliefData
-                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
-                    ? reliefData
-                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
-                        .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
-                        .reliefAmountNpr
-                    : 0,
-
-                Beneficiaries: reliefData
-                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
-                    ? reliefData
-                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
-                        .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
-                        .numberOfBeneficiaryFamily
-                    : 0,
-            }));
-            setReliefChartData(reliefChart);
             let totData = {
                 numberOfBeneficiaryFamily: 0,
                 nameOfBeneficiary: 0,
@@ -919,27 +917,6 @@ const Relief = (props: Props) => {
     // const handleUpdateAndClose = (response) => {
     useEffect(() => {
         if (reliefData && reliefData.length > 0) {
-            const reliefDateArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const reliefChart = reliefDateArr.map(d => ({
-                name: d,
-                'Amount-Distributed': reliefData
-                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
-                    ? reliefData
-                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
-                        .reduce((a, b) => ({ reliefAmountNpr: a.reliefAmountNpr + b.reliefAmountNpr }))
-                        .reliefAmountNpr
-                    : 0,
-
-                Beneficiaries: reliefData
-                    .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d).length > 0
-                    ? reliefData
-                        .filter(item => getMonthFromDate(item.dateOfReliefDistribution) === d)
-                        .reduce((a, b) => ({ numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily }))
-                        .numberOfBeneficiaryFamily
-                    : 0,
-            }));
-            setReliefChartData(reliefChart);
-
             const totData = reliefData.reduce((a, b) => ({
                 numberOfBeneficiaryFamily: a.numberOfBeneficiaryFamily + b.numberOfBeneficiaryFamily,
                 nameOfBeneficiary: a.nameOfBeneficiary + b.nameOfBeneficiary,
@@ -1250,26 +1227,55 @@ const Relief = (props: Props) => {
                                 props.annex
                                 && (
                                     <>
-                                        <h2>Reliefs</h2>
+                                        <h2>
+                                            <Gt section={Translations.Relief} />
+                                        </h2>
                                         <table
                                             style={{ tableLayout: 'fixed' }}
                                             id="table-to-xls"
                                         >
                                             <tbody>
                                                 <tr>
-                                                    <th>S.N</th>
-                                                    <th>No. of Beneficiary Family</th>
-                                                    <th>Date of Relief Distribution</th>
-                                                    <th>Relief Amount (NPR)</th>
-                                                    <th>Male</th>
-                                                    <th>Female</th>
-                                                    <th>Dalit</th>
-                                                    <th>Minorities</th>
-                                                    <th>Madhesis</th>
-                                                    <th>Person with Disabilities</th>
-                                                    <th>Janajati</th>
-                                                    <th>Incident</th>
-                                                    <th>Incident On</th>
+                                                    <th>
+                                                        <Gt section={Translations.dashboardTblHeaderSN} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBeneficiary} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefDistributionDate} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefAmount} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleMale} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleFemale} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleDalit} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleMinorities} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleMadhesi} />
+
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleDisable} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.ReliefBenefitedPeopleJanajati} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.Incident} />
+                                                    </th>
+                                                    <th>
+                                                        <Gt section={Translations.IncidentOn} />
+                                                    </th>
 
                                                 </tr>
 
@@ -1334,17 +1340,39 @@ const Relief = (props: Props) => {
                                   <table id="table-to-xls">
                                       <tbody>
                                           <tr>
-                                              <th>Title</th>
-                                              <th>Hazard</th>
-                                              <th>Incident On</th>
-                                              <th>Reported On</th>
-                                              <th>Total Death</th>
-                                              <th>Total Injured</th>
-                                              <th>Total Missing</th>
-                                              <th>Family Affected</th>
-                                              <th>Infrastructure Affected</th>
-                                              <th>Infrastructure Destroyed</th>
-                                              <th>Livestock Destroyed</th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentTitle} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentHazard} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentOn} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentReportedOn} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentTotalDeath} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentTotalInjured} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentTotalMissing} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentFamilyAffected} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentInfrastructureAffected} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentInfrastructureDestroyed} />
+                                              </th>
+                                              <th>
+                                                  <Gt section={Translations.IncidentLiveStockLoss} />
+                                              </th>
                                           </tr>
 
                                           <tr key={currentRelief.id}>
@@ -1388,7 +1416,7 @@ const Relief = (props: Props) => {
             && (
                 <>
                     <div className={styles.budgetPreviewContainer}>
-                        <h2>Disaster Incident Summary</h2>
+                        <h2><Gt section={Translations.DisasterIncidentSummary} /></h2>
                         <div className={styles.lossRow}>
 
                             <div className={styles.lossSection}>
@@ -1401,7 +1429,9 @@ const Relief = (props: Props) => {
 
                                     <ul>
                                         <p className={styles.darkerText}>{Number(incidentCount)}</p>
-                                        <p className={styles.smallerText}>Incident</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.Incident} />
+                                        </p>
                                     </ul>
                                 </div>
                                 <div className={styles.lossElement}>
@@ -1412,7 +1442,9 @@ const Relief = (props: Props) => {
                                     />
                                     <ul>
                                         <p className={styles.darkerText}>{`${(Number(totalEstimatedLoss) / 1000000).toFixed(2)}m`}</p>
-                                        <p className={styles.smallerText}>ESTIMATED LOSS (RS)</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.EstimatedLoss} />
+                                        </p>
                                     </ul>
                                 </div>
                                 <div className={styles.lossElement}>
@@ -1423,7 +1455,10 @@ const Relief = (props: Props) => {
                                     />
                                     <ul>
                                         <p className={styles.darkerText}>{Number(deathCount)}</p>
-                                        <p className={styles.smallerText}>DEATH</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.Death} />
+
+                                        </p>
                                     </ul>
                                 </div>
                                 <div className={styles.lossElement}>
@@ -1434,7 +1469,10 @@ const Relief = (props: Props) => {
                                     />
                                     <ul>
                                         <p className={styles.darkerText}>{Number(missing)}</p>
-                                        <p className={styles.smallerText}>MISSING</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.Missing} />
+
+                                        </p>
                                     </ul>
                                 </div>
                                 <div className={styles.lossElement}>
@@ -1445,7 +1483,10 @@ const Relief = (props: Props) => {
                                     />
                                     <ul>
                                         <p className={styles.darkerText}>{Number(injured)}</p>
-                                        <p className={styles.smallerText}>INJURED</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.Injured} />
+
+                                        </p>
                                     </ul>
                                 </div>
                                 <div className={styles.lossElement}>
@@ -1456,7 +1497,10 @@ const Relief = (props: Props) => {
                                     />
                                     <ul>
                                         <p className={styles.darkerText}>{Number(infraDestroyed)}</p>
-                                        <p className={styles.smallerText}>INFRASTRUCTURE DESTROYED</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.IncidentInfrastructureDestroyed} />
+
+                                        </p>
                                     </ul>
                                 </div>
                                 <div className={styles.lossElement}>
@@ -1467,7 +1511,10 @@ const Relief = (props: Props) => {
                                     />
                                     <ul>
                                         <p className={styles.darkerText}>{Number(livestockDestroyed)}</p>
-                                        <p className={styles.smallerText}>LIVE STOCK DESTROYED</p>
+                                        <p className={styles.smallerText}>
+                                            <Gt section={Translations.LiveStockLossDestroyed} />
+
+                                        </p>
                                     </ul>
                                 </div>
                             </div>
@@ -1485,8 +1532,9 @@ const Relief = (props: Props) => {
                         <div className={styles.incidentImpactRow}>
                             <div className={styles.incidentSection}>
                                 <h2>
-                             Hazardwise Impact
-                             (Top 5)
+                                    <Gt section={Translations.Hazardwiseimpact} />
+
+
                                 </h2>
                                 <BarChart
                                     width={300}
@@ -1527,7 +1575,8 @@ const Relief = (props: Props) => {
 
                             <div className={styles.incidentMiddleSection}>
                                 <h2>
-                             Genderwise Death
+
+                                    <Gt section={Translations.Genderwiseimpact} />
                                 </h2>
                                 <div className={styles.chartandlegend}>
 
@@ -1621,7 +1670,11 @@ const Relief = (props: Props) => {
                                 </div>
 
                                 <div className={styles.houseData}>
-                                    <p>House Damaged</p>
+                                    <p>
+                                        <Gt section={Translations.HouseDamaged} />
+
+
+                                    </p>
                                     <div className={styles.houseRow}>
                                         <div className={styles.houseElement}>
 
@@ -1632,7 +1685,10 @@ const Relief = (props: Props) => {
                                             />
                                             <ul>
                                                 <span className={styles.darker}>{houseAffected}</span>
-                                                <li>PARTIAL</li>
+                                                <li>
+                                                    <Gt section={Translations.Partial} />
+
+                                                </li>
                                             </ul>
 
                                         </div>
@@ -1645,7 +1701,9 @@ const Relief = (props: Props) => {
                                             />
                                             <ul>
                                                 <li><span className={styles.darker}>{houseDamaged}</span></li>
-                                                <li>FULLY</li>
+                                                <li>
+                                                    <Gt section={Translations.Fully} />
+                                                </li>
                                             </ul>
 
                                         </div>
@@ -1656,8 +1714,7 @@ const Relief = (props: Props) => {
 
                             <div className={styles.incidentSection}>
                                 <h2>
-                             Wardwise Human Impact
-                             (Top 5)
+                                    <Gt section={Translations.Wardwiseimpact} />
                                 </h2>
                                 <BarChart
                                     width={250}
@@ -1707,7 +1764,7 @@ const Relief = (props: Props) => {
                         <div className={styles.reliefdistRow}>
                             <div className={styles.incidentSection}>
                                 <h2>
-                             Relief
+                                    <Gt section={Translations.Relief} />
                                 </h2>
                                 <ComposedChart
                                     width={500}
@@ -1750,7 +1807,7 @@ const Relief = (props: Props) => {
                                     <Tooltip />
                                     <Legend />
                                     <Bar
-                                        dataKey="Beneficiaries"
+                                        dataKey={drrmLanguage.language === 'en' ? 'Beneficiaries' : 'लाभार्थीहरू'}
                                         barSize={20}
                                         fill="rgb(0,177,117)"
                                         label={{ position: 'top', fill: '#777', fontSize: '10px' }}
@@ -1760,7 +1817,7 @@ const Relief = (props: Props) => {
                                     <Line
                                         yAxisId="right"
                                         type="monotone"
-                                        dataKey="Amount-Distributed"
+                                        dataKey={drrmLanguage.language === 'en' ? 'Amount-Distributed' : 'रकम वितरित'}
                                         stroke="rgb(165,0,21)"
                                         label={{ position: 'top', fill: '#777', fontSize: '10px' }}
 
@@ -1780,13 +1837,16 @@ const Relief = (props: Props) => {
                                         <ul>
                                             <li>
                                                 <span className={styles.biggerText}>
-Rs
+                                                    <Gt section={Translations.Rupees} />
+
                                                     {' '}
                                                     {totreliefAmt}
                                                 </span>
                                             </li>
                                             <li>
-                                                <span className={styles.smallerText}>Relief Amount</span>
+                                                <span className={styles.smallerText}>
+                                                    <Gt section={Translations.ReliefAmt} />
+                                                </span>
                                             </li>
                                         </ul>
                                     </div>
@@ -1802,7 +1862,8 @@ Rs
                                             </li>
                                             <li>
                                                 <span className={styles.smallerText}>
-                                                     Number of Beneficiary Families
+                                                    <Gt section={Translations.ReliefBen} />
+
                                                 </span>
                                             </li>
                                         </ul>
@@ -1824,7 +1885,10 @@ Rs
 
                                                 </li>
                                                 <li>
-                                                    <span className={styles.smallerText}>Male</span>
+                                                    <span className={styles.smallerText}>
+                                                        <Gt section={Translations.Male} />
+
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1840,7 +1904,10 @@ Rs
                                                 </li>
 
                                                 <li>
-                                                    <span className={styles.smallerText}>Female</span>
+                                                    <span className={styles.smallerText}>
+                                                        <Gt section={Translations.Female} />
+
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1849,27 +1916,25 @@ Rs
                                         <ul>
                                             <li>
                                                 <span className={styles.darkerSmText}>
-                                                    {totJanajatis}
-
+                                                    {totJanajatis || 0}
                                                 </span>
                                             </li>
                                             <li>
                                                 <span className={styles.lighterSmText}>
-                                         JANAJATI
+                                                    <Gt section={Translations.ReliefBenefitedPeopleJanajati} />
+
                                                 </span>
                                             </li>
                                         </ul>
                                         <ul>
                                             <li>
                                                 <span className={styles.darkerSmText}>
-
-
                                                     {totMadhesis}
                                                 </span>
                                             </li>
                                             <li>
                                                 <span className={styles.lighterSmText}>
-                                         MADEHESI
+                                                    <Gt section={Translations.ReliefBenefitedPeopleMadhesi} />
                                                 </span>
                                             </li>
                                         </ul>
@@ -1882,7 +1947,8 @@ Rs
                                             <li>
                                                 <span className={styles.lighterSmText}>
 
-                                         MINORITY
+                                                    <Gt section={Translations.ReliefBenefitedPeopleMinorities} />
+
                                                 </span>
                                             </li>
                                         </ul>
@@ -1894,7 +1960,8 @@ Rs
                                             </li>
                                             <li>
                                                 <span className={styles.lighterSmText}>
-                                         DALITS
+                                                    <Gt section={Translations.ReliefBenefitedPeopleDalit} />
+
                                                 </span>
                                             </li>
                                         </ul>

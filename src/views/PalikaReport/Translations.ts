@@ -935,6 +935,10 @@ const languageTranslations: LanguageEntry = {
         np: 'घटनाहरु',
         en: 'Incidents',
     },
+    Incident: {
+        np: 'घटना',
+        en: 'Incident',
+    },
     IncidentSerialNumber: {
         np: 'क्रम संख्या',
         en: 'SN',
@@ -964,7 +968,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Total Injured',
     },
     IncidentTotalMissing: {
-        np: 'कुल घाइते संख्या',
+        np: 'कुल हराइरहेको संख्या',
         en: 'Total Missing',
     },
     IncidentFamilyAffected: {
@@ -990,6 +994,10 @@ const languageTranslations: LanguageEntry = {
     IncidentAddReliefTooltip: {
         np: 'राहत थप्नुहोस्',
         en: 'Add Relief',
+    },
+    Relief: {
+        np: 'राहत',
+        en: 'Relief',
     },
     ReliefHeading: {
         np: 'कृपया माथिको घटनाको लागि राहत थप्नुहोस्',
@@ -1034,6 +1042,10 @@ const languageTranslations: LanguageEntry = {
     ReliefBenefitedPeopleMadhesi: {
         np: 'मधेशी',
         en: 'Madhesis',
+    },
+    ReliefBenefitedPeopleJanajati: {
+        np: 'जनजाती',
+        en: 'Janajati',
     },
     ReliefBenefitedPeopleDisable: {
         np: 'अशक्त मानिस',
@@ -1084,6 +1096,46 @@ const languageTranslations: LanguageEntry = {
     Industries: {
         en: 'Industries',
         np: 'उद्योगहरू',
+    },
+    EstimatedLoss: {
+        np: 'अनुमानित घाटा (रु)',
+        en: 'Estimated Loss (Rs)',
+    },
+    Death: {
+        en: 'Death',
+        np: 'मृत्यु',
+    },
+    Missing: {
+        np: 'हराइरहेको',
+        en: 'Missing',
+    },
+    Injured: {
+        np: 'घाइते',
+        en: 'Injured',
+    },
+    LiveStockLossDestroyed: {
+        np: 'पशुधन हानि',
+        en: 'Livestock Destroyed',
+    },
+    HouseDamaged: {
+        en: 'House Damaged',
+        np: 'घर बिग्रिएको',
+    },
+    Fully: {
+        en: 'Fully',
+        np: 'पूर्ण रूपमा',
+    },
+    Partial: {
+        en: 'Partially',
+        np: 'आंशिक रूपमा',
+    },
+    ReliefAmt: {
+        np: 'राहत रकम',
+        en: 'Relief amount',
+    },
+    ReliefBen: {
+        np: 'लाभान्वित परिवारको संख्या',
+        en: 'Number of benificiaries family',
     },
 
 };
