@@ -548,10 +548,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                 }-${(new Date(item.modifiedOn)).getMonth() + 1
                 }-${new Date(item.modifiedOn).getDate()}`;
                 if (municipalityDetails) {
-                    return { municipality: municipalityDetails.title,
-                        province: provinceDetails.title,
-                        district: districtDetails.title,
+                    return { municipality: municipalityDetails.title_en,
+                        municipalityNp: municipalityDetails.title_ne,
+                        province: provinceDetails.title_en,
+                        provinceNp: provinceDetails.title_ne,
+                        district: districtDetails.title_en,
+                        districtNp: districtDetails.title_ne,
                         fiscalYear: item.fiscalYear && fiscalYears.titleEn,
+                        fiscalYearNp: item.fiscalYear && fiscalYears.titleNp,
                         createdDate: item.createdOn && createdDate,
                         modifiedDate: item.modifiedOn && modifiedDate,
                         item };
@@ -569,7 +573,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isSort, submenuId, fetchedData, fiscalYear]);
+    }, [isSort, submenuId, fetchedData, fiscalYear, language]);
 
 
     const closeModal = () => {

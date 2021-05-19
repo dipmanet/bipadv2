@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 // import Loader from 'react-loader-spinner';
 import Loader from 'react-loader';
+import { ADToBS } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import Gt from '../../../../utils';
@@ -357,7 +358,7 @@ const Budget = (props: Props) => {
                                 !props.previewDetails
 
             && (
-                <div>
+                <div className={drrmLanguage.language === 'np' && styles.nep}>
 
                     <h2>
                         <Gt section={Translations.BudgetTitlePart1} />
@@ -518,7 +519,7 @@ const Budget = (props: Props) => {
                                                             <td>{item.disasterBudgetNrs}</td>
                                                             <td>{item.otherBudgetNrs}</td>
                                                             {/* <td>{item.updatedBy}</td> */}
-                                                            <td>{item.modifiedOn.split('T')[0]}</td>
+                                                            <td>{ADToBS(item.modifiedOn.split('T')[0])}</td>
 
 
                                                         </tr>

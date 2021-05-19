@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../Kalimati\ Regular.ttf") format("truetype");
+    }
+    
 .breadcrumbRow{
     display: flex;
     // justify-content: center;
@@ -231,6 +236,9 @@
   
   .show {display: block;}
 .palikaTable{
+    .nep{
+        font-family: "Kalimati Regular"!important;
+       }
     .dataUnavailable{
         display: flex;
         justify-content: center;

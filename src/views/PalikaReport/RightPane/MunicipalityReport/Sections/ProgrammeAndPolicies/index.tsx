@@ -245,7 +245,7 @@ const ProgramPolicies = (props: Props) => {
     };
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
             { !props.previewDetails
             && (
                 <div>
@@ -435,7 +435,7 @@ const ProgramPolicies = (props: Props) => {
                 </div>
             )}
 
-        </>
+        </div>
     );
 };
 

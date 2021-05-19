@@ -620,7 +620,7 @@ const BudgetActivity = (props: Props) => {
         <>
 
 
-            <div>
+            <div className={drrmLanguage.language === 'np' && styles.nep}>
                 {!props.previewDetails && !props.monitoringDetails
                 && (
                     <div className={styles.mainPageDetailsContainer}>
@@ -735,9 +735,11 @@ const BudgetActivity = (props: Props) => {
                                         <th>
                                             <Gt section={Translations.Remarks} />
                                         </th>
-                                        <th>
-                                            <Gt section={Translations.ResourcesAction} />
-                                        </th>
+                                        {budgetActivities.length > 0 && (
+                                            <th>
+                                                <Gt section={Translations.ResourcesAction} />
+                                            </th>
+                                        )}
 
 
                                     </tr>

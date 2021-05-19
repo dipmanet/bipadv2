@@ -253,7 +253,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
     };
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
             {!props.previewDetails
             && (
                 <div className={styles.tabsPageContainer}>
@@ -434,7 +434,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
         )
             }
 
-        </>
+        </div>
 
     );
 };

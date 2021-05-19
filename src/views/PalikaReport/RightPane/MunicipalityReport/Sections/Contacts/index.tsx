@@ -532,9 +532,10 @@ const Contacts = (props: Props) => {
         if (nonGovContacts && hazardDetails.length > 0) {
             const finalfetchedData = nonGovContacts.map((item, i) => {
                 const hazardName = hazardDetails.find(data => data.id === item.focusedHazard);
-
+                console.log('hazardname', hazardName);
                 if (hazardName) {
                     return { hazardName: hazardName.titleEn,
+                        hazardNameNp: hazardName.titleNe,
                         item };
                 }
 
@@ -628,7 +629,7 @@ const Contacts = (props: Props) => {
 
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
             {
                 !props.previewDetails
                 && (
@@ -962,7 +963,7 @@ const Contacts = (props: Props) => {
                                                         <td>{data.item.nameOfOrganization}</td>
                                                         <td>{data.item.position}</td>
                                                         <td>{data.item.trainedTitle}</td>
-                                                        <td>{data.hazardName}</td>
+                                                        <td>{drrmLanguage.language === 'np' ? data.hazardNameNp : data.hazardName}</td>
                                                         <td>{data.item.trainingActivities}</td>
                                                         <td>{data.item.trainingDateFrom}</td>
                                                         <td>{data.item.trainingDateTo}</td>
@@ -1059,7 +1060,7 @@ const Contacts = (props: Props) => {
                                                             <option value="">{drrmLanguage.language === 'np' ? 'केन्द्रित जोखिम चयन गर्नुहोस्' : 'Select Focused Hazard'}</option>
                                                             {hazardDetails.map(data => (
                                                                 <option value={data.id}>
-                                                                    {data.titleEn}
+                                                                    {drrmLanguage.language === 'np' ? data.titleNe : data.titleEn}
                                                                 </option>
                                                             ))}
 
@@ -1170,7 +1171,7 @@ const Contacts = (props: Props) => {
                     <div className={styles.budgetPreviewContainer}>
                         <div className={styles.simElementsContainer}>
                             <h2>
-                                 DRR Related Training
+                                <Gt section={Translations.TrainingRelatedContact} />
                             </h2>
                             <div className={styles.simRow}>
                                 <div className={styles.simElements}>
@@ -1186,7 +1187,7 @@ const Contacts = (props: Props) => {
                                         }
                                     </div>
                                     <p className={styles.simDesc}>
-                                    No. of trained people
+                                        <Gt section={Translations.TrainingRelatedNoofTrainedPeople} />
                                     </p>
                                 </div>
                                 <div className={styles.simElements}>
@@ -1194,13 +1195,13 @@ const Contacts = (props: Props) => {
                                         {trainingsList.length}
                                     </div>
                                     <p className={styles.simDesc}>
-                                 Training Activities
+                                        <Gt section={Translations.TrainingRelatedActivities} />
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div className={styles.simElementsContainer}>
-                            <p>List of training activities</p>
+                            <p><Gt section={Translations.TrainingRelatedActivitiesList} /></p>
                             <div className={styles.simRow}>
                                 <div className={styles.simElements}>
                                     <ul>
@@ -1219,7 +1220,7 @@ const Contacts = (props: Props) => {
                         </div>
                     </div>
                 )}
-        </>
+        </div>
     );
 };
 

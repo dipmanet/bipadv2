@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+import { ADToBS } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Gt from '../../utils';
@@ -11,12 +12,7 @@ import { iconNames } from '#constants';
 import editIcon from '#resources/palikaicons/edit.svg';
 import fileDownload from '#resources/palikaicons/file-download.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
+
 import {
     setGeneralDataAction,
 } from '#actionCreators';
@@ -128,7 +124,7 @@ const PalikaReportTable = (props) => {
         <div>
             {/* <h1>Responsive Table Example</h1> */}
             <div className={styles.palikaTable}>
-                <table id="table-to-xls">
+                <table className={drrmLanguage.language === 'np' && styles.nep} id="table-to-xls">
                     <tbody>
                         {submenuId === 1
                             ? (
@@ -250,14 +246,14 @@ const PalikaReportTable = (props) => {
                                     </tr>
                                     {tableData.length > 0 && tableData.map((item, index) => (
                                         <tr key={item.item.id}>
-                                            <td>{(currentPage - 1) * pageSize + index + 1}</td>
+                                            <td>{ (currentPage - 1) * pageSize + index + 1}</td>
                                             <td>{item.item.title}</td>
-                                            <td>{item.fiscalYear}</td>
-                                            <td>{item.province}</td>
-                                            <td>{item.district}</td>
-                                            <td>{item.municipality}</td>
-                                            <td>{item.createdDate}</td>
-                                            <td>{item.modifiedDate}</td>
+                                            <td>{drrmLanguage.language === 'np' ? item.fiscalYearNp : item.fiscalYear}</td>
+                                            <td>{drrmLanguage.language === 'np' ? item.provinceNp : item.province}</td>
+                                            <td>{drrmLanguage.language === 'np' ? item.districtNp : item.district}</td>
+                                            <td>{drrmLanguage.language === 'np' ? item.municipalityNp : item.municipality}</td>
+                                            <td>{ADToBS(item.createdDate)}</td>
+                                            <td>{ADToBS(item.modifiedDate)}</td>
                                             <td>{item.item.updatedBy.username}</td>
                                             <td>
                                                 <div ref={node} className={styles.dropdown}>
@@ -282,8 +278,19 @@ const PalikaReportTable = (props) => {
                                                     </button>
                                                     <div id="myDropdown" className={reportId === item.item.id && downloadClicked ? _cs(styles.dropdownContent, styles.show) : styles.dropdownContent}>
 
-                                                        <a id="summaryReport" href="#summary_report" onClick={() => window.open(item.item.summaryFileEn)}>Summary Report</a>
-                                                        <a id="fullReport" href="#full_report" onClick={() => window.open(item.item.fullFileEn)}>Full Report</a>
+                                                        <a id="summaryReport" href="#summary_report" onClick={() => window.open(item.item.summaryFileEn)}>
+                                                            {' '}
+                                                            <Gt
+                                                                section={Translations.dashboardTableSummaryReportDownload}
+                                                            />
+
+                                                        </a>
+                                                        <a id="fullReport" href="#full_report" onClick={() => window.open(item.item.fullFileEn)}>
+                                                            <Gt
+                                                                section={Translations.dashboardTableFullReportDownload}
+                                                            />
+
+                                                        </a>
 
                                                     </div>
 
@@ -304,7 +311,12 @@ const PalikaReportTable = (props) => {
                              && tableHeader.map((item, i) => (
                                  <th key={item.i}>{item}</th>
                              ))} */}
-                                        <th>SN</th>
+                                        <th>
+                                            <Gt
+                                                section={Translations.dashboardTblHeaderSN}
+                                            />
+
+                                        </th>
                                         <th>
                                             <Gt
                                                 section={Translations.dashboardTblHeaderTitle}
@@ -375,9 +387,9 @@ const PalikaReportTable = (props) => {
                                         <tr key={data.id}>
                                             <td>{(currentPage - 1) * pageSize + index + 1}</td>
                                             <td>{data.item.title}</td>
-                                            <td>{data.fiscalYear}</td>
-                                            <td>{data.createdDate}</td>
-                                            <td>{data.modifiedDate}</td>
+                                            <td>{drrmLanguage.language === 'np' ? data.fiscalYearNp : data.fiscalYear}</td>
+                                            <td>{ADToBS(data.createdDate)}</td>
+                                            <td>{ADToBS(data.modifiedDate)}</td>
                                             <td>{data.item.updatedBy.username}</td>
                                             <td>
                                                 <button
@@ -425,7 +437,14 @@ const PalikaReportTable = (props) => {
                 </table>
 
                 {tableData && tableData.length === 0
-                && <p className={styles.dataUnavailable}>Data Unavailable</p>
+                && (
+                    <p className={styles.dataUnavailable}>
+                        {' '}
+                        <Gt
+                            section={Translations.DashBoardNoDataMessage}
+                        />
+                    </p>
+                )
 
                 }
             </div>

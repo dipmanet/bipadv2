@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Kalimati Regular";
+  src: url("../../../../Kalimati\ Regular.ttf") format("truetype");
+  }
+  
+.nep{
+  font-family: "Kalimati Regular"!important;
+ }
 .inputContainer{
   display: flex;
   border-radius: 3px;

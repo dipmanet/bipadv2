@@ -495,27 +495,7 @@ const Sidebar = (props) => {
                             <Icon
                                 name="info"
                                 className={styles.infoIcon}
-                                title="This module in the BIPAD portal will generate
-                                Disaster Risk Reduction and Management Report
-                                for each fiscal year for all three tiers of the governments.
-
-
-                                DRRM Act, 2074 and its regulation, 2076 mandates the
-                                Local Disaster Management Committee, Disaster Management
-                                Committee, Provincial Disaster Management Executive Committee,
-                                and NDRRMA to prepare an Annual DRRM Report that includes
-                                information on the activities conducted by the respective
-                                committees each fiscal year. To aid this mandate, the
-                                reporting module will include general information of
-                                the chosen location, organizations working on disaster
-                                management, DRR policy-related work, the budget allocated
-                                and activities for DRRM, and available inventories, and
-                                other DRR related information.
-                                The report will also monitor and track activities
-                                based on the priorities set by the DRR National Strategic Action Plan 2018-2030.
-                                "
-
-
+                                title={drrmLanguage.language === 'np' ? Translations.CreateReportInformationButtom.np : Translations.CreateReportInformationButtom.en}
                             />
 
                         </h2>

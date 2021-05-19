@@ -59,6 +59,7 @@ const mapStateToProps = (state, props) => ({
     drrmCritical: drrmCriticalSelecter(state),
     drrmContacts: drrmContactsSelecter(state),
     drrmRegion: drrmRegionSelector(state),
+    drrmLanguage: palikaLanguageSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
@@ -158,6 +159,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         drrmCritical,
         drrmContacts,
         drrmRegion,
+        drrmLanguage,
     } = props;
     const {
         fiscalYear,
@@ -393,7 +395,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
 
 
     return (
-        <>
+        <div className={drrmLanguage.language === 'np' && styles.nep}>
 
             {
                 (keyTab === 0
@@ -923,7 +925,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         </div>
                     ) : ''
             }
-        </>
+        </div>
     );
 };
 
