@@ -634,7 +634,7 @@ const Relief = (props: Props) => {
             const hazards = [...new Set(fetchedData.map(item => item.hazard))]
                 .filter(hazar => hazar !== undefined);
             const hazardwiseImpactData = hazards.map((item) => {
-                const name = hazardTypes[item].title;
+                const name = drrmLanguage.language === 'en' ? hazardTypes[item].title : hazardTypes[item].titleNe;
                 const Incidents = fetchedData.filter(inc => inc.hazard === item).length;
                 const PeopleDeath = fetchedData.filter(inc => inc.hazard === item)
                     .map(losses => losses.loss)
@@ -645,7 +645,7 @@ const Relief = (props: Props) => {
                     PeopleDeath.reduce((a, b) => Number(a) + Number(b));
                 }
                 return {
-                    name, Incidents, PeopleDeath,
+                    name, Incidents, PeopleDeath, घटना: Incidents, 'मान्छे-मृत्यु': PeopleDeath,
                 };
             });
 
@@ -692,8 +692,16 @@ const Relief = (props: Props) => {
 
             setdeathGenderChartData(
                 [
-                    { name: 'Male', value: deathMaleData },
-                    { name: 'Female', value: deathFemaleData },
+                    {
+                        name: 'Male',
+                        nameNp: 'पुरुष',
+                        value: deathMaleData,
+                    },
+                    {
+                        name: 'Female',
+                        nameNp: 'महिला',
+                        value: deathFemaleData,
+                    },
                 ],
             );
             sethazardwiseImpact(hazardwiseImpactData);
@@ -715,7 +723,7 @@ const Relief = (props: Props) => {
 
             setWardWiseImpact([]);
         }
-    }, [fetchedData, hazardTypes]);
+    }, [drrmLanguage.language, fetchedData, hazardTypes]);
 
 
     useEffect(() => {
@@ -1533,8 +1541,6 @@ const Relief = (props: Props) => {
                             <div className={styles.incidentSection}>
                                 <h2>
                                     <Gt section={Translations.Hazardwiseimpact} />
-
-
                                 </h2>
                                 <BarChart
                                     width={300}
@@ -1562,13 +1568,11 @@ const Relief = (props: Props) => {
                                     />
                                     <Bar
                                         fill="rgb(198,233,232)"
-                                        dataKey="People Death"
-
+                                        dataKey={drrmLanguage.language === 'en' ? 'People Death' : 'मान्छे-मृत्यु'}
                                     />
                                     <Bar
-                                        dataKey="Incidents"
                                         fill="rgb(0,173,115)"
-
+                                        dataKey={drrmLanguage.language === 'en' ? 'Incidents' : 'घटना'}
                                     />
                                 </BarChart>
                             </div>
@@ -1629,7 +1633,9 @@ const Relief = (props: Props) => {
                                                         </span>
                                                     </li>
                                                     <li className={styles.light}>
-                                                        <span>Male</span>
+                                                        <span>
+                                                            <Gt section={Translations.Male} />
+                                                        </span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -1660,7 +1666,9 @@ const Relief = (props: Props) => {
                                                         </span>
                                                     </li>
                                                     <li className={styles.light}>
-                                                        <span>Female</span>
+                                                        <span>
+                                                            <Gt section={Translations.Female} />
+                                                        </span>
                                                     </li>
                                                 </ul>
                                             </div>

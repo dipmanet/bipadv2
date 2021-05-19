@@ -124,7 +124,9 @@ const Footer = (props: Props) => {
                 <div className={styles.address}>
                     <ul>
                         <li className={styles.munTitle}>
-                            {`${municipalityName} Municipality`}
+                            {`${municipalityName}`}
+                            {' '}
+                            <Gt section={Translations.MunicipalitySingle} />
                             {' '}
                             <Gt section={Translations.MunicipalitySingle} />
                             ,
@@ -142,7 +144,10 @@ const Footer = (props: Props) => {
                         </li>
                         {/* <li className={styles.munTitle}>POB: 213311</li> */}
                         {/* <li className={styles.munTitle}>PHONE: +977-1-449354</li> */}
-                        <li className={styles.munTitle}>{`WEB: https://www.${municipalityName.toLowerCase()}mun.gov.np/en`}</li>
+                        {
+                            drrmLanguage.language === 'en'
+                            && <li className={styles.munTitle}>{`WEB: https://www.${municipalityName.toLowerCase()}mun.gov.np/en`}</li>
+                        }
                     </ul>
                 </div>
             </div>
