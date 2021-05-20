@@ -1236,12 +1236,12 @@ const languageTranslations: LanguageEntry = {
         np: 'नगरपालिका',
     },
     SubmitFull: {
-        en: 'सबमिट गर्नुहोस् र पूर्ण रिपोर्ट डाउनलोड गर्नुहोस्',
-        np: 'Submit and Download Full Report',
+        np: 'सबमिट गर्नुहोस् र पूर्ण रिपोर्ट डाउनलोड गर्नुहोस्',
+        en: 'Submit and Download Full Report',
     },
     SubmitPart: {
-        en: 'सबमिट गर्नुहोस् र सारांश रिपोर्ट डाउनलोड गर्नुहोस्',
-        np: 'Submit and Download Summary Report',
+        np: 'सबमिट गर्नुहोस् र सारांश रिपोर्ट डाउनलोड गर्नुहोस्',
+        en: 'Submit and Download Summary Report',
     },
     LDMC: {
         en: 'Local Disaster Management Committee',
