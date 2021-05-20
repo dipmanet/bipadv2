@@ -269,11 +269,11 @@ class RainMap extends React.PureComponent {
             offset: 8,
         };
 
-        // const { showModal } = this.state;
+        const { showModal } = this.state;
 
         const bounds = zoomToData(data);
 
-        // const { title: stationName, stationId, geometry } = tooltipParams || {};
+        const { title: stationName, stationId, geometry } = tooltipParams || {};
         const region = { adminLevel: 3, geoarea: municipality || undefined };
         return (
             <div className={styles.dataArchiveRainMap}>
@@ -368,10 +368,20 @@ class RainMap extends React.PureComponent {
                         />
                     </React.Fragment>
                 </MapSource>
-                { }
+                {showModal
+                && (
+                    <RainModal
+                        handleModalClose={this.handleModalClose}
+                        stationName={stationName}
+                        stationId={stationId}
+                        geometry={geometry}
+                    />
+                )
+                }
+
             </div>
         );
     }
 }
-
+RainMap.contextType = MapChildContext;
 export default connect(mapStateToProps, [])(RainMap);
