@@ -1070,9 +1070,11 @@ const Relief = (props: Props) => {
 
                 if (hazardName) {
                     tempArr.push({ hazardName: hazardName.titleEn,
+                        hazardNameNp: hazardName.titleNe,
                         item });
 
                     return { hazardName: hazardName.titleEn,
+                        hazardNameNp: hazardName.titleNe,
                         item };
                 }
 
@@ -1179,7 +1181,8 @@ const Relief = (props: Props) => {
                                                 <tr key={item.item.id}>
                                                     <td>{i + 1}</td>
                                                     <td>{item.item.title || '-'}</td>
-                                                    <td>{item.hazardName || '-'}</td>
+                                                    <td>{drrmLanguage.language === 'np' ? item.hazardNameNp : item.hazardName || '-'}</td>
+                                                    {/* <td>{item.hazardName || '-'}</td> */}
                                                     <td>{ADToBS(item.item.incidentOn.split('T')[0]) || '-'}</td>
                                                     <td>{ADToBS(item.item.reportedOn.split('T')[0]) || '-'}</td>
                                                     <td>{item.item.loss ? item.item.loss.peopleDeathCount : 0}</td>
