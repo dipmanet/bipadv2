@@ -706,22 +706,59 @@ const Relief = (props: Props) => {
             );
             sethazardwiseImpact(hazardwiseImpactData);
 
+            const getWardWiseDatum = (dataA, wardA) => dataA.map(item => item.loss).reduce((a, b) => ({
+                ward: wardA,
+                peopleDeathCount: a.peopleDeathCount + b.peopleDeathCount,
+                peopleInjuredCount: a.peopleInjuredCount + b.peopleInjuredCount,
+                peopleMissingCount: a.peopleMissingCount + b.peopleMissingCount,
+            }));
 
             const wards = [...new Set(fetchedData.map(item => item.wards[0]))]
                 .filter(ward => ward !== undefined);
+            console.log('wards arr', wards);
+            const chartArr = [];
+            const filteredData = fetchedData.filter(item => item.loss !== undefined);
+            const lossArr = filteredData.map(item => item.loss);
+            const newArr = wards.map((ward) => {
+                const filteredArr = fetchedData.filter(item => item.wards[0] === ward);
+                console.log('filtering by this ward:', ward);
+                console.log('filtered Arr:', filteredArr);
+                console.log('array thats reduced', filteredArr.map(item => item.loss));
+                if (filteredArr.length > 1) {
+                    // chartArr.push(thisD);
+                    return getWardWiseDatum(filteredArr, ward);
+                }
+                if (filteredArr.length === 1) {
+                    return { ward,
+                        peopleDeathCount: filteredArr[0].loss.peopleDeathCount,
+                        peopleInjuredCount: filteredArr[0].loss.peopleInjuredCount,
+                        peopleMissingCount: filteredArr[0].loss.peopleMissingCount };
+                }
+                chartArr.push({ ward,
+                    peopleDeathCount: 0,
+                    peopleInjuredCount: 0,
+                    peopleMissingCount: 0 });
 
-            const wardWiseImpactData = wards.map(wardItem => fetchedData.filter(e => e.wards[0] !== undefined && e.wards[0] === wardItem)
-                .map(item => item.loss)
-                .filter(iitems => iitems !== undefined)
-                .reduce((a, b) => ({
-                    ward: wardItem,
-                    Death: (Number(a.peopledeathCount) || 0) + (Number(b.peopledeathCount) || 0),
-                    Injured: (Number(a.peopleInjuredCount) || 0) + (Number(b.peopledeathCount) || 0),
-                    Missing: (Number(a.peopleMissingCount) || 0) + (Number(b.peopledeathCount) || 0),
-                })));
+                return { ward,
+                    peopleDeathCount: 0,
+                    peopleInjuredCount: 0,
+                    peopleMissingCount: 0 };
+            });
 
 
-            setWardWiseImpact([]);
+            console.log('ward Impact data:', chartArr);
+            console.log('mapreturend', newArr);
+            // console.log('filtered ward Impact data:', wardWiseImpactData);
+            const chartWardwiseData = newArr.map(item => ({
+                ward: item.ward,
+                Injured: item.peopleInjuredCount,
+                घाइते: item.peopleInjuredCount,
+                Missing: item.peopleMissingCount,
+                हराइरहेको: item.peopleMissingCount,
+                Death: item.peopleDeathCount,
+                मृत: item.peopleDeathCount,
+            }));
+            setWardWiseImpact(chartWardwiseData);
         }
     }, [drrmLanguage.language, fetchedData, hazardTypes]);
 
@@ -1620,16 +1657,13 @@ const Relief = (props: Props) => {
                                                         <span className={styles.bigerNum}>
 
 
-                                                            {
-                                                                (Number(maleDeath)
-                                                / (Number(maleDeath)
-                                                + Number(femaleDeath))
-                                                * 100).toFixed(0)
+                                                            { maleDeath && femaleDeath
+                                                                ? `${(Number(maleDeath)
+                                                                / (Number(maleDeath)
+                                                                + Number(femaleDeath))
+                                                                * 100).toFixed(0)} %`
+                                                                : '-'
                                                             }
-                                                            {
-                                                                '%'
-                                                            }
-
                                                         </span>
                                                     </li>
                                                     <li className={styles.light}>
@@ -1654,14 +1688,12 @@ const Relief = (props: Props) => {
 
                                                         <span className={styles.bigerNum}>
 
-                                                            {
-                                                                (Number(femaleDeath)
-                                                / (Number(femaleDeath)
-                                                + Number(maleDeath))
-                                                * 100).toFixed(0)
-                                                            }
-                                                            {
-                                                                '%'
+                                                            { maleDeath && femaleDeath
+                                                                ? `${(Number(femaleDeath)
+                                                                / (Number(maleDeath)
+                                                                + Number(femaleDeath))
+                                                                * 100).toFixed(0)} %`
+                                                                : '-'
                                                             }
                                                         </span>
                                                     </li>
@@ -1745,22 +1777,24 @@ const Relief = (props: Props) => {
                                             marginLeft: '15px',
                                         }}
                                     />
+
+
                                     <Bar
-                                        dataKey="Death"
+                                        dataKey={drrmLanguage.language === 'en' ? 'Death' : 'मृत'}
                                         stackId="a"
                                         fill="rgb(143,212,221)"
                                         barSize={10}
 
                                     />
                                     <Bar
-                                        dataKey="Missing"
+                                        dataKey={drrmLanguage.language === 'en' ? 'Missing' : 'हराइरहेको'}
                                         stackId="a"
                                         fill="rgb(0,82,52)"
                                         barSize={10}
 
                                     />
                                     <Bar
-                                        dataKey="Injured"
+                                        dataKey={drrmLanguage.language === 'en' ? 'Injured' : 'घाइते'}
                                         stackId="a"
                                         fill="rgb(0,177,117)"
                                         barSize={10}
