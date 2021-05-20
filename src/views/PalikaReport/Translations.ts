@@ -1249,51 +1249,51 @@ const languageTranslations: LanguageEntry = {
     },
     AnnexA: {
         en: 'Annex A',
-        np: 'अनुसूची क',
+        np: 'विवरण क',
     },
     AnnexC: {
         en: 'Annex C',
-        np: 'अनुसूची ग',
+        np: 'विवरण ग',
     },
     AnnexB: {
         en: 'Annex B',
-        np: 'अनुसूची ख',
+        np: 'विवरण ख',
     },
     AnnexD: {
         en: 'Annex D',
-        np: 'अनुसूची घ',
+        np: 'विवरण घ',
     },
     AnnexE: {
         en: 'Annex E',
-        np: 'अनुसूची ङ',
+        np: 'विवरण ङ',
     },
     AnnexF: {
         en: 'Annex F',
-        np: 'अनुसूची च',
+        np: 'विवरण च',
     },
     AnnexG: {
         en: 'Annex G',
-        np: 'अनुसूची छ',
+        np: 'विवरण छ',
     },
     AnnexH: {
         en: 'Annex H',
-        np: 'अनुसूची ज',
+        np: 'विवरण ज',
     },
     AnnexI: {
         en: 'Annex I',
-        np: 'अनुसूची झ',
+        np: 'विवरण झ',
     },
     AnnexJ: {
         en: 'Annex J',
-        np: 'अनुसूची ञ',
+        np: 'विवरण ञ',
     },
     AnnexK: {
         en: 'Annex K',
-        np: 'अनुसूची ट',
+        np: 'विवरण ट',
     },
     AnnexL: {
         en: 'Annex L',
-        np: 'अनुसूची ठ',
+        np: 'विवरण ठ',
     },
 
 

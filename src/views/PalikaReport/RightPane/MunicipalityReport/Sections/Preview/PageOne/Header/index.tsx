@@ -140,9 +140,9 @@ const Header = (props: Props) => {
                             </li>
                             <li className={styles.desc}>
                                 {`${districtName}`}
-                                    ,
                                 {' '}
                                 <Gt section={Translations.dashboardTblHeaderDistrict} />
+                                    ,
                                 {' '}
                                 {`${provinceName}`}
                                 {' '}

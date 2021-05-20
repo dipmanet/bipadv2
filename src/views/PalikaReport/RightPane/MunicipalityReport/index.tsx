@@ -131,6 +131,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 let province = 0;
 let district = 0;
 let municipality = 0;
+let municipalityName = '';
+let provinceName = '';
+let districtName = '';
 
 // const formdata = new FormData();
 const ReportModal: React.FC<Props> = (props: Props) => {
@@ -194,6 +197,19 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         district = user.profile.district;
         province = user.profile.province;
     }
+    const m = municipalities.filter(mun => mun.id === municipality);
+    const d = districts.filter(dis => dis.id === district);
+    const p = provinces.filter(pro => pro.id === province);
+
+    if (drrmLanguage.language === 'en') {
+        municipalityName = m[0].title;
+        provinceName = p[0].title;
+        districtName = d[0].title;
+    } else {
+        municipalityName = m[0].title_ne;
+        provinceName = p[0].title_ne;
+        districtName = d[0].title_ne;
+    }
     const getGeneralData = () => ({
         reportTitle,
         datefrom,
@@ -204,10 +220,6 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         formationDate,
         memberCount,
     });
-
-    let municipalityName = '';
-
-    municipalityName = municipalities.find(item => item.id === municipality);
 
 
     const handleDisasterProfile = (response) => {
@@ -301,16 +313,16 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
         const formdata = new FormData();
         if (language === 'en') {
-            formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${'Fiscal year:'}.pdf`);
-            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+            formdata.append('fullFileEn', blob, `${municipalityName.title_en}_DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
+            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
         }
         if (language === 'np') {
-            formdata.append('fullFileNp', blob, `${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
-            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+            formdata.append('fullFileNp', blob, `${municipalityName.title_en}_DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
+            formdata.append('summaryFileEn', blobSummary, `${municipalityName.title_en}_Summary_DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
         }
 
 
-        formdata.append('title', `${municipalityName.title_en} DRRM Report FY ${generalData.fiscalYearTitle}`);
+        formdata.append('title', `${municipalityName} DRRM Report FY ${generalData.fiscalYearTitle}`);
         formdata.append('fiscalYear', generalData.fiscalYear);
         formdata.append('drrmCommitteeFormationDate', generalData.formationDate);
         formdata.append('drrmCommitteeMembersCount', generalData.committeeMembers);
@@ -337,27 +349,43 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     setProgress(100);
                     if (language === 'np') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${'fiscalyear'}.pdf`);
+                            doc.save(`${municipalityName}DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                            docSummary.save(`${municipalityName}सारांश DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
                         }
                     }
                     if (language === 'en') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_en}DRRM Report FY_${'fiscalyear'}.pdf`);
+                            doc.save(`${municipalityName}DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                            docSummary.save(`${municipalityName}Summary DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
                         }
                     }
-                    alert('Your palika report has been uploaded sucessfully');
+                    alert('Your DRRM report has been uploaded sucessfully');
                 }).catch((error) => {
                     setPending(false);
                     setProgress(100);
+                    if (language === 'np') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName}DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName}सारांश DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                    }
+                    if (language === 'en') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName}DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName}Summary DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                    }
 
-                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
-                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
+                    // docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                    // doc.save(`${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
                     alert('Error occured. Please try again.');
                 });
         } else {
@@ -369,28 +397,44 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                     setProgress(100);
                     if (language === 'np') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_np}Nepali_DRRM Report FY_${'fiscalyear'}.pdf`);
+                            doc.save(`${municipalityName}DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_np}Nepali_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                            docSummary.save(`${municipalityName}सारांश DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
                         }
                     }
                     if (language === 'en') {
                         if (reportType === 'full') {
-                            doc.save(`${municipalityName.title_en}DRRM Report FY_${'fiscalyear'}.pdf`);
+                            doc.save(`${municipalityName}DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
                         }
                         if (reportType === 'summary') {
-                            docSummary.save(`${municipalityName.title_en}Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                            docSummary.save(`${municipalityName}Summary DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
                         }
                     }
-                    alert('Your palika report has been uploaded sucessfully');
+                    alert('Your DRRM report has been uploaded sucessfully');
                 }).catch((error) => {
                     setPending(false);
                     setProgress(100);
 
                     alert('Error occured. Please try again.');
-                    docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
-                    doc.save(`${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
+                    if (language === 'np') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName}DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName}सारांश DRRM प्रतिवेदन आर्थिक वर्ष_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                    }
+                    if (language === 'en') {
+                        if (reportType === 'full') {
+                            doc.save(`${municipalityName}DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                        if (reportType === 'summary') {
+                            docSummary.save(`${municipalityName}Summary DRRM Report FY_${generalData.fiscalYearTitle}.pdf`);
+                        }
+                    }
+                    // docSummary.save(`${municipalityName.title_en}_Summary_DRRM Report FY_${'fiscalyear'}.pdf`);
+                    // doc.save(`${municipalityName.title_en}_DRRM Report FY_${'fiscalyear'}.pdf`);
                 });
         }
     };
