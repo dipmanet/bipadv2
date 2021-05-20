@@ -337,7 +337,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             showHintAndError,
             drrmLanguage,
         } = this.props;
-
+        console.log('ProvinceList', provinceList);
         if (reset) {
             this.setState({
                 selectedProvinceId: undefined,
