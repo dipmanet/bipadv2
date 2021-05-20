@@ -158,7 +158,7 @@ const Sidebar = (props) => {
     // eslint-disable-next-line @typescript-eslint/camelcase
     const {
         municipalityName,
-        municipalityName: { title_en, title_np },
+        municipalityName: { title_en, title_ne },
         showReportEdit,
         handleMenuClick,
         selectedTab,
@@ -189,7 +189,7 @@ const Sidebar = (props) => {
             setShowErr(true);
         }
     };
-
+    console.log('Data', municipalityName);
     const Data1 = [{
         id: 1,
         title: 'Palika Reports',
@@ -407,7 +407,7 @@ const Sidebar = (props) => {
                                                         }
                                                         {
                                                             data.id === 2 && palikaLanguage.language === 'np'
-                                                                ? title_np
+                                                                ? title_ne
                                                                 : ''
                                                         }
                                                         {' '}
