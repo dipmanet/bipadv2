@@ -62,7 +62,7 @@ type TabKey = 'basin' | 'station' | 'dataRange' | 'others';
 const iconNames: {
     [key in TabKey]: string;
 } = {
-    basin: 'eye',
+    basin: 'basin',
     station: 'gps',
     dataRange: 'dataRange',
     others: 'filter',

@@ -60,6 +60,7 @@ const iconNames = {
 
     eye: 'ion-eye',
     eyeOff: 'ion-eye-off',
+    basin: 'fa-square',
 
     sliders: 'fa fa-sliders',
     table: 'fa fa-table',
@@ -92,7 +93,7 @@ const iconNames = {
     cart: 'ion-ios-cart-outline',
     lock: 'fa fa-unlock-alt',
     times: 'fa fa-times',
-    info: 'fa  fa-info-circle',
+    info: 'fa fa-info-circle',
 };
 
 export default iconNames;
