@@ -635,10 +635,7 @@ const BudgetActivity = (props: Props) => {
                         </h2>
                         <table id="table-to-xls">
                             <tbody>
-
-
                                 <>
-
                                     <tr>
 
                                         <th>
@@ -1453,17 +1450,19 @@ const BudgetActivity = (props: Props) => {
                                                  </>
                                              )
                                     )}
+
                                 </>
 
 
                             </tbody>
 
                         </table>
-                        {!loader && !budgetId.id && (
+                        {!loader && !budgetId.id && !props.annex && (
                             <h2 className={styles.emptyTable}>
                                 <Gt section={Translations.EnterBudget} />
                             </h2>
                         )}
+
 
                         {
                             Object.keys(postErrors).length > 0

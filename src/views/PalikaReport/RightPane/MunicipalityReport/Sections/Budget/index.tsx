@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
@@ -492,86 +493,95 @@ const Budget = (props: Props) => {
                                         </>
                                     ) : (
                                         <>
-                                            {annualBudgetData.length > 0 ? annualBudgetData.map((item, i) => (
-                                                editBudget ? (
-                                                    <tr>
-                                                        {/* <td>1</td> */}
-                                                        <td>
-                                                            <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
-                                                            {' '}
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
-                                                            {' '}
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
-                                                            {' '}
-                                                        </td>
-                                                        <td>{item.modifiedOn.split('T')[0]}</td>
-
-                                                    </tr>
-                                                )
-                                                    : (
-                                                        <tr key={item.id}>
-                                                            {/* <td>{i + 1}</td> */}
-                                                            <td>{item.totalBudgetNrs}</td>
-                                                            <td>{item.disasterBudgetNrs}</td>
-                                                            <td>{item.otherBudgetNrs}</td>
-                                                            {/* <td>{item.updatedBy}</td> */}
-                                                            <td>{ADToBS(item.modifiedOn.split('T')[0])}</td>
-
+                                            {annualBudgetData.length > 0
+                                                ? annualBudgetData.map((item, i) => (
+                                                    editBudget ? (
+                                                        <tr>
+                                                            {/* <td>1</td> */}
+                                                            <td>
+                                                                <input className={styles.inputContainer} type="text" value={municipalBudget} placeholder="Enter Total Municipal Budget" onChange={handleMunicipalBudget} />
+                                                                {' '}
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" className={styles.inputContainer} value={drrFund} placeholder="Enter DRR Fund of the Municipality" onChange={handleDRRFund} />
+                                                                {' '}
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" className={styles.inputContainer} value={additionalFund} placeholder="Other DRR Related Funding" onChange={handleAddFund} />
+                                                                {' '}
+                                                            </td>
+                                                            <td>{item.modifiedOn.split('T')[0]}</td>
 
                                                         </tr>
                                                     )
-                                            )) : (
-                                                <tr>
-                                                    {/* <td>1</td> */}
-                                                    <td>
-                                                        <input
-
-                                                            className={styles.inputContainer}
-                                                            type="text"
-                                                            value={municipalBudget}
-                                                            placeholder={drrmLanguage.language === 'en'
-                                                                ? 'Please Enter Total Municipal Budget'
-                                                                : 'कृपया गरपालिकाको कुल बजेट  प्रविष्ट गर्नुहोस्'
-                                                            }
-                                                            onChange={handleMunicipalBudget}
-                                                        />
-                                                        {' '}
-                                                    </td>
-                                                    <td>
-                                                        <input
-                                                            type="text"
-                                                            className={styles.inputContainer}
-                                                            value={drrFund}
-                                                            placeholder={drrmLanguage.language === 'en'
-                                                                ? 'Please Enter DRR Fund of the Municipality'
-                                                                : 'कृपया नगरपालिकाको विपद् कोष प्रविष्ट गर्नुहोस्'
-                                                            }
-                                                            onChange={handleDRRFund}
-                                                        />
-                                                        {' '}
-                                                    </td>
-                                                    <td>
-                                                        <input
-                                                            type="text"
-                                                            className={styles.inputContainer}
-                                                            value={additionalFund}
-                                                            placeholder={drrmLanguage.language === 'en'
-                                                                ? 'Please Enter Other DRR Related Funding'
-                                                                : 'कृपया अन्य विपद् सम्बन्धित बजेट प्रविष्ट गर्नुहोस्'
-                                                            }
-                                                            onChange={handleAddFund}
-                                                        />
-                                                        {' '}
-                                                    </td>
+                                                        : (
+                                                            <tr key={item.id}>
+                                                                {/* <td>{i + 1}</td> */}
+                                                                <td>{item.totalBudgetNrs}</td>
+                                                                <td>{item.disasterBudgetNrs}</td>
+                                                                <td>{item.otherBudgetNrs}</td>
+                                                                {/* <td>{item.updatedBy}</td> */}
+                                                                <td>{ADToBS(item.modifiedOn.split('T')[0])}</td>
 
 
-                                                </tr>
-                                            )
-                                            }
+                                                            </tr>
+                                                        )
+                                                ))
+
+                                                : !props.annex
+                                                    ? (
+                                                        <tr>
+                                                            {/* <td>1</td> */}
+                                                            <td>
+                                                                <input
+
+                                                                    className={styles.inputContainer}
+                                                                    type="text"
+                                                                    value={municipalBudget}
+                                                                    placeholder={drrmLanguage.language === 'en'
+                                                                        ? 'Please Enter Total Municipal Budget'
+                                                                        : 'कृपया गरपालिकाको कुल बजेट  प्रविष्ट गर्नुहोस्'
+                                                                    }
+                                                                    onChange={handleMunicipalBudget}
+                                                                />
+                                                                {' '}
+                                                            </td>
+                                                            <td>
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.inputContainer}
+                                                                    value={drrFund}
+                                                                    placeholder={drrmLanguage.language === 'en'
+                                                                        ? 'Please Enter DRR Fund of the Municipality'
+                                                                        : 'कृपया नगरपालिकाको विपद् कोष प्रविष्ट गर्नुहोस्'
+                                                                    }
+                                                                    onChange={handleDRRFund}
+                                                                />
+                                                                {' '}
+                                                            </td>
+                                                            <td>
+                                                                <input
+                                                                    type="text"
+                                                                    className={styles.inputContainer}
+                                                                    value={additionalFund}
+                                                                    placeholder={drrmLanguage.language === 'en'
+                                                                        ? 'Please Enter Other DRR Related Funding'
+                                                                        : 'कृपया अन्य विपद् सम्बन्धित बजेट प्रविष्ट गर्नुहोस्'
+                                                                    }
+                                                                    onChange={handleAddFund}
+                                                                />
+                                                                {' '}
+                                                            </td>
+
+
+                                                        </tr>
+                                                    ) : (
+                                                        <tr>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                        </tr>
+                                                    )}
                                         </>
                                     )}
 
