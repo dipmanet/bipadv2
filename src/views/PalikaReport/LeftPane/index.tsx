@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
-import styles from './styles.scss';
 
 import budgetLogo from '#resources/palikaicons/budget.svg';
 import budgetActivityLogo from '#resources/palikaicons/budgetactivity.svg';
@@ -18,6 +17,10 @@ import simulationLogo from '#resources/palikaicons/simulation.svg';
 import dashboardLogo from '#resources/palikaicons/dashboard.svg';
 import myreport from '#resources/palikaicons/drrmreport.svg';
 import Gt from '../utils';
+import SidebarMenu from './menuItems';
+import * as PageTypes from '#store/atom/page/types';
+import { User } from '#store/atom/auth/types';
+import { AppState } from '#store/types';
 
 import {
     userSelector,
@@ -40,8 +43,10 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
 import Translations from '../Translations';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
+import styles from './styles.scss';
 
-const mapStateToProps = (state, props) => ({
+
+const mapStateToProps = (state: AppState) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     generalData: generalDataSelector(state),
@@ -54,12 +59,55 @@ const mapStateToProps = (state, props) => ({
     drrmLanguage: palikaLanguageSelector(state),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
     setDrrmRegion: params => dispatch(setDrrmRegionAction(params)),
 });
+
+interface MenuItems{
+    key: number;
+    content: string;
+    contentNp: string;
+}
+
+interface MunicipalityName{
+    title_en: string;
+    title_ne: string;
+}
+
+interface PropsFromDispatch {
+    setGeneralDatapp: typeof setGeneralDataAction;
+    setBudgetDatapp: typeof setBudgetDataAction;
+    setBudgetId: typeof setBudgetIdAction;
+    setDrrmRegion: typeof setDrrmRegionAction;
+}
+
+
+interface Props{
+    municipalityName: MunicipalityName;
+    showReportEdit: boolean;
+    handleMenuClick: (menuItems: MenuItems[]) => void;
+    selectedTab: number;
+    generalData: PageTypes.GeneralData;
+    handleAddButton: (a: boolean, b: boolean, c: boolean) => void;
+    palikaLanguage: PageTypes.PalikaLanguage;
+    provinces: PageTypes.Province[];
+    districts: PageTypes.District[];
+    municipalities: PageTypes.Municipality[];
+    user: User;
+    drrmRegion: PageTypes.DrrmRegion;
+    drrmLanguage: PageTypes.PalikaLanguage;
+    showErr: boolean;
+    errFromProps: boolean;
+    handleShowErr: (a: boolean) => void;
+    handleMyPalikaSelect: (a: boolean) => void;
+    getmenuId: (a: number) => void;
+    urlData: (a: string) => void;
+    getsubmenuId: (a: number) => void;
+    getsubmenuTitle: (a: string) => void;
+}
 
 const icons = [
     generalLogo,
@@ -78,84 +126,21 @@ const allRepIcons = [
     dashboardLogo,
     myreport,
 ];
-const menuItems: {
-    key: number;
-    content: string;
-    contentNp: string;
-    url?: string;
-}[] = [
-    {
-        key: 0,
-        content: 'General',
-        contentNp: 'सामान्य',
-    },
-    {
-        key: 1,
-        content: 'Budget',
-        contentNp: 'बजेट',
-    },
-    {
-        key: 2,
-        content: 'Budget Activity',
-        contentNp: 'बजेट गतिविधि',
-    },
-    {
-        key: 3,
-        content: 'Programme and Policies',
-        contentNp: 'नीति तथा कार्यक्रमहरू',
-    },
-    {
-        key: 4,
-        content: 'Organisation',
-        contentNp: 'संस्था',
-    },
-    {
-        key: 5,
-        content: 'Inventories',
-        contentNp: 'सूची',
-    },
-    {
-        key: 6,
-        content: 'Resources',
-        contentNp: 'स्रोतहरू',
-    },
-    {
-        key: 7,
-        content: 'Contacts',
-        contentNp: 'सम्पर्क',
-    },
-    {
-        key: 8,
-        content: 'Incident and Relief',
-        contentNp: 'घटना तथा राहत',
-    },
-    {
-        key: 9,
-        content: 'Simulation',
-        contentNp: 'अनुकरण',
-    },
-    {
-        key: 10,
-        content: 'Create Report',
-        contentNp: 'प्रतिवेदन बनाउनुहोस्',
-    },
-];
+
+const {
+    menuItems,
+    Data1,
+    Data2,
+} = SidebarMenu;
 
 
-const Sidebar = (props) => {
-    const [selectedSubmenu, setSelectedSubmenu] = useState([]);
+const Sidebar = (props: Props) => {
     const [selectedMenuId, setSelectedMenuId] = useState(1);
     const [isSubmenuClicked, setIsSubmenuClicked] = useState(true);
     const [isIndicatorClicked, setIsIndicatorClicked] = useState(true);
     const [selectedSubMenuId, setSelectedSubMenuId] = useState(1);
     const [initialRender, setInitialRender] = useState(true);
     const [showErr, setShowErr] = useState(false);
-    const [menuSlug, setMenuSlug] = useState('');
-    const [subMenuSlug, setSubMenuSlug] = useState('');
-    const [newRegionValues, setNewRegionValues] = useState(undefined);
-    const [disableFilterButton, setDisableFilterButton] = useState(true);
-    // eslint-disable-next-line react/prop-types
-    // eslint-disable-next-line @typescript-eslint/camelcase
     const {
         municipalityName,
         municipalityName: { title_en, title_ne },
@@ -165,111 +150,68 @@ const Sidebar = (props) => {
         generalData,
         handleAddButton,
         palikaLanguage,
-        provinces,
-        districts,
-        municipalities,
         user,
-        setGeneralDatapp,
         drrmRegion,
         setDrrmRegion,
         drrmProgress,
         drrmLanguage,
-
+        showErr: errFromProps,
+        handleShowErr,
+        urlData,
+        getsubmenuId,
+        getsubmenuTitle,
+        handleMyPalikaSelect,
     } = props;
+
     useEffect(() => {
-        setShowErr(props.showErr);
-    }, [props.showErr]);
-    const handleMenuItemClick = (menuItem: number) => {
+        setShowErr(errFromProps);
+    }, [errFromProps]);
+
+    const handleMenuItemClick = (menuItem: MenuItems[]) => {
         if (generalData && generalData.fiscalYear) {
             handleMenuClick(menuItem);
             setShowErr(false);
-            props.handleShowErr(false);
+            handleShowErr(false);
         } else {
-            props.handleShowErr(true);
+            handleShowErr(true);
             setShowErr(true);
         }
     };
-    console.log('Data', municipalityName);
-    const Data1 = [{
-        id: 1,
-        title: 'Palika Reports',
-        slug: 'palika-reports',
-        components: [
-            { id: 1,
-                title: <Gt section={Translations.dashboardSidebarAllTitle} />,
-                url: '/disaster-profile/',
-                slug: 'all-reports' },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-            { id: 2,
-            // eslint-disable-next-line @typescript-eslint/camelcase
-                title: <Gt section={Translations.dashboardSidebarMunTitle} />,
-                url: '/disaster-profile/',
-                slug: 'my-reports' }],
-    },
-    ];
 
-    const Data2 = [{
-        id: 1,
-        title: <Gt section={Translations.dashboardSidebarMunTitle} />,
-        slug: 'palika-reports',
-        components: [{ id: 1,
-            title: <Gt section={Translations.dashboardSidebarAllTitle} />,
-            url: '/disaster-profile/',
-            slug: 'all-reports' },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        ],
-    },
-    ];
 
     const Data = municipalityName ? Data1 : Data2;
     const handleMyPalikaClick = () => {
-        props.handleMyPalikaSelect(true);
+        handleMyPalikaSelect(true);
     };
     const handleMyPalikaClickReport = () => {
-        props.handleMyPalikaSelect(false);
+        handleMyPalikaSelect(false);
     };
     const handleSelectMenu = (index, id, name) => {
-        setSelectedSubmenu(Data[index].components);
         setIsSubmenuClicked(true);
         setSelectedMenuId(id);
         setInitialRender(false);
         props.getmenuId(id);
-        // props.getsubmenuId(null);
     };
-    const handleSelectSubmenu = (id, url, title, slug, menumainSlug) => {
+    const handleSelectSubmenu = (id, url, title) => {
         setSelectedSubMenuId(id);
         setIsIndicatorClicked(true);
-        props.urlData(url);
-        props.getsubmenuId(id);
-        props.getsubmenuTitle(title);
-        setMenuSlug(menumainSlug);
-        setSubMenuSlug(slug);
-        // ReachRouter.navigate(`/palika-report/#/${menuSlug}/${slug}/`);
+        urlData(url);
+        getsubmenuId(id);
+        getsubmenuTitle(title);
     };
 
     useEffect(() => {
         if (selectedSubMenuId) {
-            props.getsubmenuId(selectedSubMenuId);
+            getsubmenuId(selectedSubMenuId);
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSubMenuId]);
 
-    // if (menuSlug) {
-    //     const Test = Data.filter(item => item.slug === menuSlug);
-    //     const finalTest = Test.components.filter(item => item.slug === subMenuSlug);
-    // }
-
     useEffect(() => {
         const InitialRender = () => {
             if (!initialRender) {
                 setIsIndicatorClicked(false);
-
-                // setSelectedSubMenuId(1);
-
-                // const linkUrl = selectedSubmenu.filter(item => item.id
-                //     === selectedSubMenuId).map(item => item.url);
-                // props.urlData(linkUrl[0]);
             }
         };
         InitialRender();
@@ -279,57 +221,20 @@ const Sidebar = (props) => {
     const handleAdd = () => {
         handleAddButton(true, true, true);
     };
-    const handleFormRegion = (Values) => {
-        setNewRegionValues(Values);
-        setDisableFilterButton(false);
-    };
-    const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
-        if (adminLevel === 1) {
-            return {
-                province: provinces.find(p => p.id === geoarea).id,
-                district: undefined,
-                municipality: undefined,
-            };
-        }
 
-        if (adminLevel === 2) {
-            const districtObj = districts.find(d => d.id === geoarea);
-            const district = districtObj.id;
-            const { province } = district;
-            return {
-                province,
-                district,
-                municipality: undefined,
-            };
-        }
-
-        if (adminLevel === 3) {
-            const municipalityObj = municipalities.find(m => m.id === geoarea);
-            const municipality = municipalityObj.id;
-            const { district } = municipalityObj;
-            const { province } = districts.find(d => d.id === district);
-            return {
-                province,
-                district,
-                municipality,
-            };
-        }
-        return '';
-    };
-
-    const handleCheckFilterDisableButtonForProvince = (province) => {
+    const handleCheckFilterDisableButtonForProvince = (province: string) => {
         setDrrmRegion({
             ...drrmRegion,
             province,
         });
     };
-    const handleCheckFilterDisableButtonForDistrict = (district) => {
+    const handleCheckFilterDisableButtonForDistrict = (district: string) => {
         setDrrmRegion({
             ...drrmRegion,
             district,
         });
     };
-    const handleCheckFilterDisableButtonForMunicipality = (municipality) => {
+    const handleCheckFilterDisableButtonForMunicipality = (municipality: string) => {
         setDrrmRegion({
             ...drrmRegion,
             municipality,
@@ -381,7 +286,7 @@ const Sidebar = (props) => {
                                         onClick={() => handleSelectMenu(i, item.id)}
                                     >
                                         {isSubmenuClicked && selectedMenuId === item.id
-                                            ? item.components.map((data, index) => (
+                                            ? item.components.map(data => (
                                                 <button
                                                     type="button"
                                                     className={
@@ -426,58 +331,55 @@ const Sidebar = (props) => {
                         </ul>
                         <div className={styles.addButnDiv}>
                             {selectedSubMenuId === 2
-&& (
-    <button
-        type="submit"
-        className={styles.addButn}
-        onClick={handleAdd}
-    >
-        <Gt section={Translations.dashboardReportGenerateButton} />
-        {' '}
+                        && (
+                            <button
+                                type="submit"
+                                className={styles.addButn}
+                                onClick={handleAdd}
+                            >
+                                <Gt section={Translations.dashboardReportGenerateButton} />
+                                {' '}
 
-    </button>
-)
+                            </button>
+                        )
                             }
                             {user && user.isSuperuser
-&& (
-    <>
+                        && (
+                            <>
 
-        <div className={styles.inputContainer}>
-            <h5><Gt section={Translations.dashboardSidebarSelectMunicipalityHeader} /></h5>
-            <StepwiseRegionSelectInput
-
-                className={
-                    styles.stepwiseRegionSelectInput}
-                faramElementName="region"
-                wardsHidden
-                onChange={handleFormRegion}
-                checkProvince={handleCheckFilterDisableButtonForProvince}
-                checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                checkMun={handleCheckFilterDisableButtonForMunicipality}
-                // reset={resetFilterProps}
-                provinceInputClassName={styles.snprovinceinput}
-                districtInputClassName={styles.sndistinput}
-                municipalityInputClassName={styles.snmuniinput}
-            />
+                                <div className={styles.inputContainer}>
+                                    <h5><Gt section={Translations.dashboardSidebarSelectMunicipalityHeader} /></h5>
+                                    <StepwiseRegionSelectInput
+                                        className={
+                                            styles.stepwiseRegionSelectInput}
+                                        faramElementName="region"
+                                        wardsHidden
+                                        checkProvince={handleCheckFilterDisableButtonForProvince}
+                                        checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                        checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                        provinceInputClassName={styles.snprovinceinput}
+                                        districtInputClassName={styles.sndistinput}
+                                        municipalityInputClassName={styles.snmuniinput}
+                                    />
 
 
-        </div>
-        <div className={styles.butnDiv}>
-            <button
-                type="submit"
-                className={styles.addButn}
-                onClick={handleAdd}
-                disabled={!drrmRegion.municipality}
-            >
-                <Gt section={Translations.dashboardReportGenerateButton} />
-                {' '}
+                                </div>
+                                <div className={styles.butnDiv}>
+                                    <button
+                                        type="submit"
+                                        className={styles.addButn}
+                                        onClick={handleAdd}
+                                        disabled={!drrmRegion.municipality}
+                                    >
+                                        <Gt section={Translations.dashboardReportGenerateButton} />
+                                        {' '}
 
-            </button>
-        </div>
+                                    </button>
+                                </div>
 
 
-    </>
-)
+                            </>
+                        )
                             }
                         </div>
                     </div>
@@ -543,11 +445,7 @@ const Sidebar = (props) => {
                                                                 />
                                                             )
                                                     }
-
-
                                                 </span>
-
-
                                             </button>
                                         </li>
                                     );
@@ -565,22 +463,11 @@ const Sidebar = (props) => {
                                             type="button"
                                             disabled={drrmProgress === item.key}
                                         >
-
                                             {
                                                 drrmLanguage.language === 'en'
                                                     ? item.content
                                                     : item.contentNp
                                             }
-
-                                            {/* <Icon
-                                                name="info"
-                                                // className={styles.infoIcon}
-                                                title=" DRR fund of the municipality is part of the total
-                                                            municipal budget of this fiscal year which is specifically
-                                                            separated for DRRM related
-                                                             activities"
-                                            /> */}
-
                                         </button>
                                     </li>
 
