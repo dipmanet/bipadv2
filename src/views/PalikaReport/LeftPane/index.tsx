@@ -243,34 +243,126 @@ const Sidebar = (props: Props) => {
 
     return (
         <div>
-
             {showReportEdit
-
             && (
-                <div className={styles.breadcrumbRow}>
-                    <button
-                        className={styles.breadcrumb}
-                        type="button"
-                        onClick={handleMyPalikaClick}
-                    >
-                        <Gt section={Translations.breadcrumb1} />
+                <>
+                    <div className={styles.breadcrumbRow}>
 
+                        <button
+                            className={styles.breadcrumb}
+                            type="button"
+                            onClick={handleMyPalikaClick}
+                        >
+                            <Gt section={Translations.breadcrumb1} />
                          &gt;
+                        </button>
 
-                    </button>
-                    <button
-                        className={_cs(styles.breadcrumb, styles.rightCrumb)}
-                        type="button"
-                        onClick={handleMyPalikaClickReport}
-                    >
-                        <Gt section={Translations.breadcrumb2} />
+                        <button
+                            className={_cs(styles.breadcrumb, styles.rightCrumb)}
+                            type="button"
+                            onClick={handleMyPalikaClickReport}
+                        >
+                            <Gt section={Translations.breadcrumb2} />
+                        </button>
 
+                    </div>
 
-                    </button>
-                </div>
+                    <div className={styles.reportSidebarMainContainer}>
+                        <h2>
+                            <Gt section={Translations.sidebarTitle} />
+
+                            {' '}
+                            <Icon
+                                name="info"
+                                className={styles.infoIcon}
+                                title={drrmLanguage.language === 'np' ? Translations.CreateReportInformationButtom.np : Translations.CreateReportInformationButtom.en}
+                            />
+
+                        </h2>
+                        <ul className={styles.menuList}>
+                            {menuItems.map((item) => {
+                                if (item.key < menuItems.length - 1) {
+                                    return (
+                                        <li>
+                                            <button
+                                                key={item.key}
+                                                className={selectedTab === item.key ? styles.selected : styles.notSelected}
+                                                onClick={() => handleMenuItemClick(item.key)}
+                                                type="button"
+                                                disabled={drrmProgress < item.key}
+                                            >
+                                                <span className={styles.iconandMenu}>
+
+                                                    <ScalableVectorGraphics
+                                                        className={styles.bulletPoint}
+                                                        src={icons[item.key]}
+                                                        alt="Bullet Point"
+                                                    />
+                                                    {
+                                                        drrmLanguage.language === 'en'
+                                                            ? item.content
+                                                            : item.contentNp
+                                                    }
+                                                </span>
+                                                <span>
+                                                    {
+                                                        drrmProgress >= item.key
+
+                                                            ? (
+                                                                <Icon
+                                                                    name="check"
+                                                                    className={styles.progressDone}
+                                                                />
+                                                            )
+                                                            : (
+                                                                <Icon
+                                                                    name="circle"
+                                                                    className={drrmProgress + 1 === item.key
+                                                                        ? styles.progressOngoing
+                                                                        : styles.progressNotDone}
+                                                                />
+                                                            )
+                                                    }
+                                                </span>
+                                            </button>
+                                        </li>
+                                    );
+                                }
+                                return (
+                                    <li>
+                                        <button
+                                            key={item.key}
+                                            className={
+                                                drrmProgress === 9
+                                                    ? styles.createReportDisabled
+                                                    : styles.createReport
+                                            }
+                                            onClick={() => handleMenuItemClick(item.key)}
+                                            type="button"
+                                            disabled={drrmProgress === item.key}
+                                        >
+                                            {
+                                                drrmLanguage.language === 'en'
+                                                    ? item.content
+                                                    : item.contentNp
+                                            }
+                                        </button>
+                                    </li>
+
+                                );
+                            })}
+                            {
+                                showErr
+            && (
+                <span className={styles.error}>
+                    <Gt section={Translations.validationErrSidebar} />
+                </span>
+            )}
+                        </ul>
+                    </div>
+                </>
             )
             }
-
 
             {
                 !showReportEdit
@@ -386,104 +478,6 @@ const Sidebar = (props: Props) => {
                 )
             }
 
-            {
-                showReportEdit
-                && (
-                    <div className={styles.reportSidebarMainContainer}>
-                        <h2>
-                            <Gt section={Translations.sidebarTitle} />
-
-                            {' '}
-                            <Icon
-                                name="info"
-                                className={styles.infoIcon}
-                                title={drrmLanguage.language === 'np' ? Translations.CreateReportInformationButtom.np : Translations.CreateReportInformationButtom.en}
-                            />
-
-                        </h2>
-                        <ul className={styles.menuList}>
-                            {menuItems.map((item) => {
-                                if (item.key < menuItems.length - 1) {
-                                    return (
-                                        <li>
-                                            <button
-                                                key={item.key}
-                                                className={selectedTab === item.key ? styles.selected : styles.notSelected}
-                                                onClick={() => handleMenuItemClick(item.key)}
-                                                type="button"
-                                                disabled={drrmProgress < item.key}
-                                            >
-                                                <span className={styles.iconandMenu}>
-
-                                                    <ScalableVectorGraphics
-                                                        className={styles.bulletPoint}
-                                                        src={icons[item.key]}
-                                                        alt="Bullet Point"
-                                                    />
-                                                    {
-                                                        drrmLanguage.language === 'en'
-                                                            ? item.content
-                                                            : item.contentNp
-                                                    }
-                                                </span>
-                                                <span>
-                                                    {
-                                                        drrmProgress >= item.key
-
-                                                            ? (
-                                                                <Icon
-                                                                    name="check"
-                                                                    className={styles.progressDone}
-                                                                />
-                                                            )
-                                                            : (
-                                                                <Icon
-                                                                    name="circle"
-                                                                    className={drrmProgress + 1 === item.key
-                                                                        ? styles.progressOngoing
-                                                                        : styles.progressNotDone}
-                                                                />
-                                                            )
-                                                    }
-                                                </span>
-                                            </button>
-                                        </li>
-                                    );
-                                }
-                                return (
-                                    <li>
-                                        <button
-                                            key={item.key}
-                                            className={
-                                                drrmProgress === 9
-                                                    ? styles.createReportDisabled
-                                                    : styles.createReport
-                                            }
-                                            onClick={() => handleMenuItemClick(item.key)}
-                                            type="button"
-                                            disabled={drrmProgress === item.key}
-                                        >
-                                            {
-                                                drrmLanguage.language === 'en'
-                                                    ? item.content
-                                                    : item.contentNp
-                                            }
-                                        </button>
-                                    </li>
-
-                                );
-                            })}
-                            {
-                                showErr
-                                    && (
-                                        <span className={styles.error}>
-                                            <Gt section={Translations.validationErrSidebar} />
-                                        </span>
-                                    )}
-                        </ul>
-                    </div>
-                )
-            }
         </div>
 
     );
