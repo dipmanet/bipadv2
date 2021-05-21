@@ -105,9 +105,15 @@ class RainMap extends React.PureComponent {
 
     componentDidUpdate(prevProps) {
         // eslint-disable-next-line max-len
-        // if (this.props.rainFilters && this.props.rainFilters.basin !== prevProps.rainFilters.basin) {
+        if (this.props.rainFilters && this.props.rainFilters.basin !== prevProps.rainFilters.basin) {
+            if (typeof this.props.rainFilters.basin === 'object') {
+                // eslint-disable-next-line react/no-did-update-set-state
+                this.setState({ rasterLayers: [] });
+            }
+        }
         // console.log('rain filter.basin:', this.props.rainFilters.basin);
         console.log('Compare props:', this.props, prevProps);
+
         if (prevProps.rainList !== this.props.rainList) {
             console.log('rainlist update:', this.props.rainList);
             // eslint-disable-next-line prefer-const
@@ -140,11 +146,16 @@ class RainMap extends React.PureComponent {
                     ].join('');
 
                     const ourAarray = [{ key: `basin-${this.props.rainFilters.basin}`, layername: `layer-basin-${this.props.rainFilters.basin}`, tiles: test }];
+                    if (typeof this.props.rainFilters.basin === 'object') {
+                        // eslint-disable-next-line react/no-did-update-set-state
+                        this.setState({ rasterLayers: [] });
+                    } else {
                     // eslint-disable-next-line react/no-did-update-set-state
-                    this.setState(prevState => ({
-                        rasterLayers: [
-                            ourAarray[0]],
-                    }));
+                        this.setState({
+                            rasterLayers: [
+                                ourAarray[0]],
+                        });
+                    }
                 }
             }
             // }
