@@ -139,9 +139,12 @@ class RainMap extends React.PureComponent {
                         `&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
                     ].join('');
 
-                    const ourAarray = [{ key: 'basin-key', layername: 'basin-layer', tiles: test }];
+                    const ourAarray = [{ key: `basin-${this.props.rainFilters.basin}`, layername: `layer-basin-${this.props.rainFilters.basin}`, tiles: test }];
                     // eslint-disable-next-line react/no-did-update-set-state
-                    this.setState({ rasterLayers: ourAarray });
+                    this.setState(prevState => ({
+                        rasterLayers: [
+                            ourAarray[0]],
+                    }));
                 }
             }
             // }
