@@ -5,7 +5,7 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import Gt from '#views/PalikaReport/utils';
-import Translations from '#views/PalikaReport/Translations';
+import Translations from '#views/PalikaReport/Constants/Translations';
 import styles from './styles.scss';
 
 interface Props{

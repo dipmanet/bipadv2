@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 import Gt from '../../views/PalikaReport/utils';
-import Translations from '../../views/PalikaReport/Translations';
+import Translations from '../../views/PalikaReport/Constants/Translations';
 import SelectInput from '#rsci/SelectInput';
 
 import {

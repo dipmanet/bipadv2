@@ -34,7 +34,7 @@ import {
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
 import Gt from '../../../../utils';
-import Translations from '../../../../Translations';
+import Translations from '../../../../Constants/Translations';
 import ReportChart from './ReportChart';
 
 interface Props{

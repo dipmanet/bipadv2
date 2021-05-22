@@ -21,7 +21,7 @@ import {
 } from '#request';
 
 import Gt from '#views/PalikaReport/utils';
-import Translations from '#views/PalikaReport/Translations';
+import Translations from '#views/PalikaReport/Constants/Translations';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),

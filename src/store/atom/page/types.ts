@@ -24,7 +24,7 @@ export interface DrrmOrg{
 }
 
 export interface DrrmRegion{
-    municipality: any;
+    municipality: number;
     district: number;
     province: number;
     data: {};

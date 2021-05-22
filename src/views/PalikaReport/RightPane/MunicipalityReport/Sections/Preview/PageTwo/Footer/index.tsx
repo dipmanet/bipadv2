@@ -18,7 +18,7 @@ import {
     methods,
 } from '#request';
 import Gt from '../../../../../../utils';
-import Translations from '../../../../../../Translations';
+import Translations from '../../../../../../Constants/Translations';
 
 const mapStateToProps = state => ({
     generalData: generalDataSelector(state),

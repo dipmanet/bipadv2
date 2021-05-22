@@ -1,19 +1,23 @@
 .toBarContainer{
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     margin: 0;
     position: relative;
     margin-right: 80px;
     top: 0;
     background-color: white;
     height: 40px;
+    padding-left: 25px;
+    align-items: center;
+    p{
+        color: #777;
+        font-style: italic;
+    }
     .languageButton{
-        
-            display: flex;
-            align-items: center;
-            margin-right: 20px;
-          
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
     }
     .nepButton{
         background-color: grey;
@@ -30,26 +34,14 @@
         filter: saturate(100%);
     }
     .engButton{
-    background-color: grey;
-    opacity: 0.67;
-    border: none;
-    color: white;
-    outline: none;
-    font-size: 12px;
-    text-decoration: none;
-    text-align: center;
-    padding-right: 20px;
-    cursor: pointer;
-    width: 22px;
-    height: 20px;
-    filter: saturate(100%);
+        @extend .nepButton;
+        padding-right: 20px;
     }
     .selectedLanguage {
-        background-color: #297EDF;
+        background-color: #1b7ae7;
       }
     .langBtn{
         background: transparent;
-        // border: 1px solid #f5f5f5;
         cursor: pointer;
         height: 40px;
         padding: 4px;
@@ -69,4 +61,8 @@
             padding-left: 5px;
         }
     }
+}
+.notLoggedIn{
+    @extend .toBarContainer;
+    justify-content: flex-end;
 }

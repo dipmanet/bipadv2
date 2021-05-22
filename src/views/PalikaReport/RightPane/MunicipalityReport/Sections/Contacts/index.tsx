@@ -31,7 +31,7 @@ import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
 import Gt from '../../../../utils';
-import Translations from '../../../../Translations';
+import Translations from '../../../../Constants/Translations';
 
 const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),

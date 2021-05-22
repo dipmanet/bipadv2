@@ -26,7 +26,7 @@ import {
     palikaLanguageSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
-import Translations from '#views/PalikaReport/Translations';
+import Translations from '#views/PalikaReport/Constants/Translations';
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PolicyGetRequest: { url: '/annual-policy-program/',

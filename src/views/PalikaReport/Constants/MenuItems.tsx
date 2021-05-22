@@ -1,6 +1,6 @@
 import React from 'react';
 import Gt from '#views/PalikaReport/utils';
-import Translations from '#views/PalikaReport/Translations';
+import Translations from '#views/PalikaReport/Constants/Translations';
 
 export default {
     menuItems: [

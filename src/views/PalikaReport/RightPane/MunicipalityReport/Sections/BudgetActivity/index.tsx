@@ -11,8 +11,8 @@ import Loader from 'react-loader';
 import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import Gt from '#views/PalikaReport/utils';
-import Translations from '#views/PalikaReport/Translations';
-import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
+import Translations from '#views/PalikaReport/Constants/Translations';
+import priorityData from '#views/PalikaReport/Constants/PriorityDropdownSelectData';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import {

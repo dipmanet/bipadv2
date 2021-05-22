@@ -17,7 +17,7 @@ import simulationLogo from '#resources/palikaicons/simulation.svg';
 import dashboardLogo from '#resources/palikaicons/dashboard.svg';
 import myreport from '#resources/palikaicons/drrmreport.svg';
 import Gt from '../utils';
-import SidebarMenu from './menuItems';
+import SidebarMenu from '#views/PalikaReport/Constants/MenuItems';
 import * as PageTypes from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
 import { AppState } from '#store/types';
@@ -41,7 +41,7 @@ import {
 } from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
-import Translations from '../Translations';
+import Translations from '../Constants/Translations';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import styles from './styles.scss';
 

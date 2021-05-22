@@ -25,7 +25,7 @@ import editIcon from '#resources/palikaicons/edit.svg';
 import addRelief from '#resources/palikaicons/add.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Gt from '../../../../utils';
-import Translations from '../../../../Translations';
+import Translations from '../../../../Constants/Translations';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,

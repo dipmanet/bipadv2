@@ -8,7 +8,7 @@ import Loader from 'react-loader';
 import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import Gt from '../../../../utils';
-import Translations from '../../../../Translations';
+import Translations from '../../../../Constants/Translations';
 import NextPrevBtns from '../../NextPrevBtns';
 import 'nepali-datepicker-reactjs/dist/index.css';
 

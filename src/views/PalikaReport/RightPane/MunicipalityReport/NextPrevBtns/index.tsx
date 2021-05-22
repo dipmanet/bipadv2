@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 import Gt from '../../../utils';
-import Translations from '../../../Translations';
+import Translations from '../../../Constants/Translations';
 
 interface Props{
     handleNextClick: () => {};

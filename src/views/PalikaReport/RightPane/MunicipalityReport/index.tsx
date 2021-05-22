@@ -21,7 +21,7 @@ import CriticalInfra from './Sections/CriticalInfra';
 import Organisation from './Sections/Organisation';
 import Relief from './Sections/Relief';
 import Gt from '#views/PalikaReport/utils';
-import Translations from '#views/PalikaReport/Translations';
+import Translations from '#views/PalikaReport/Constants/Translations';
 import 'react-circular-progressbar/dist/styles.css';
 
 import {

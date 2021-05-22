@@ -7,7 +7,7 @@ import { ADToBS } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Gt from '../../utils';
-import Translations from '#views/PalikaReport/Translations';
+import Translations from '#views/PalikaReport/Constants/Translations';
 import { iconNames } from '#constants';
 import editIcon from '#resources/palikaicons/edit.svg';
 import fileDownload from '#resources/palikaicons/file-download.svg';

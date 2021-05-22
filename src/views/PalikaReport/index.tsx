@@ -10,7 +10,7 @@ import Page from '#components/Page';
 import styles from './styles.scss';
 import RightPane from './RightPane';
 import Modal from '#rscv/Modal';
-import Translations from './Translations';
+import Translations from './Constants/Translations';
 import Gt from './utils';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 
@@ -31,8 +31,8 @@ import {
     methods,
 } from '#request';
 
-import PalikaReportTable from './RightPane/Dashboard/PalikaReportTable';
-import TopBar from './RightPane/TopBar';
+import PalikaReportTable from './RightPane/Dashboard';
+import TopBar from './TopBar';
 
 interface Props {
 

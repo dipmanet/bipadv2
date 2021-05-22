@@ -40,7 +40,7 @@ import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
 import Gt from '../../../../utils';
-import Translations from '../../../../Translations';
+import Translations from '../../../../Constants/Translations';
 
 const mapDispatchToProps = dispatch => ({
     setGeneralDatapp: params => dispatch(setGeneralDataAction(params)),

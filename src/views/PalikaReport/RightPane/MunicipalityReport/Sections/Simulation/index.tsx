@@ -9,12 +9,11 @@ import styles from './styles.scss';
 import 'nepali-datepicker-reactjs/dist/index.css';
 import editIcon from '#resources/palikaicons/edit.svg';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Gt from '../../../../utils';
-import Translations from '../../../../Translations';
+import Gt from '#views/PalikaReport/utils';
+import Translations from '../../../../Constants/Translations';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
@@ -34,8 +33,7 @@ import {
     palikaLanguageSelector,
 } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
-import priorityData from '#views/PalikaReport/RightPane/priorityDropdownSelectData';
-import Hazard from '#views/RiskInfo/LeftPane/Details/Hazard';
+import priorityData from '#views/PalikaReport/Constants/PriorityDropdownSelectData';
 import Icon from '#rscg/Icon';
 
 interface Props{
