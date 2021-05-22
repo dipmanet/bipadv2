@@ -4,28 +4,20 @@ import styles from './styles.scss';
 import Gt from '../../../utils';
 import Translations from '../../../Translations';
 
-const NextPrevBtns = (props) => {
-    const { handlePrevClick, handleNextClick, lastpage, firstpage, disabled } = props;
+interface Props{
+    handleNextClick: () => {};
+    lastpage?: number;
+    disabled?: boolean;
+}
+
+const NextPrevBtns = (props: Props) => {
+    const { handleNextClick, lastpage, disabled } = props;
 
     const handleNClick = () => handleNextClick();
-    const handlePClick = () => handlePrevClick();
 
 
     return (
         <div className={styles.btnContainer}>
-            {/* {!firstpage
-                       && (
-                           <button
-                               type="button"
-                               onClick={handlePClick}
-                               className={styles.savebtn}
-                           >
-                       Previous
-                           </button>
-                       )
-
-            } */}
-
             {!lastpage
             && (
                 <button

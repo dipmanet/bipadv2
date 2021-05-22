@@ -152,7 +152,6 @@ const Footer = (props: Props) => {
                 </div>
             </div>
             <div className={styles.rightContainer}>
-
                 <ul>
                     <li>
                         <Gt section={Translations.ContactMessageGenerated} />

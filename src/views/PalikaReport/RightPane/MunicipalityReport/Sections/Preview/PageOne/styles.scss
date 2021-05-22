@@ -1,7 +1,9 @@
 .previewContainer{
     background: white;
+    border: 1px solid £#f5f5f5;
     .row{
         display: flex;
+        padding: 0 10px;
         .columntwo, .columnOne{
         display: flex;
             flex-direction: column;

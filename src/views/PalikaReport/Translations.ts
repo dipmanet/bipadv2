@@ -416,9 +416,9 @@ const languageTranslations: LanguageEntry = {
         en: 'Edit Budget',
         np: 'बजेट सम्पादन गर्नुहोस्',
     },
-    BudgetAddBtn: {
-        en: 'Add Budget',
-        np: 'बजेट थप्नुहोस्',
+    BudgetUpdateBtn: {
+        en: 'Update Budget',
+        np: 'बजेट अद्यावधिक गर्नुहोस्',
     },
     BudgetTitlePart1: {
         en: 'Budget for Fiscal Year ',

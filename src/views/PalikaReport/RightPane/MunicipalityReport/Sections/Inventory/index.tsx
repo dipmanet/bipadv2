@@ -4,15 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
-import {
-    Bar, BarChart,
-    CartesianGrid,
-    ResponsiveContainer,
-    XAxis, YAxis,
-} from 'recharts';
+
 import { ADToBS } from 'bikram-sambat-js';
 import NextPrevBtns from '../../NextPrevBtns';
 import styles from './styles.scss';
+import { AppState } from '#store/types';
+import * as PageTypes from '#store/atom/page/types';
+import { User } from '#store/atom/auth/types';
 
 import {
     createConnectedRequestCoordinator,
@@ -27,23 +25,67 @@ import { provincesSelector,
     palikaRedirectSelector,
     drrmRegionSelector,
     palikaLanguageSelector } from '#selectors';
-import Loading from '#components/Loading';
-
 import {
     setPalikaRedirectAction,
     setDrrmInventoryAction,
     setDrrmProgressAction,
+    setPalikaLanguageAction,
 } from '#actionCreators';
-import Icon from '#rscg/Icon';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import editIcon from '#resources/palikaicons/edit.svg';
 import Gt from '../../../../utils';
 import Translations from '../../../../Translations';
+import ReportChart from './ReportChart';
 
 interface Props{
-
+    handleNextClick: () => void;
+    previewDetails: any;
+    annex: any;
+    handlePrevClick: any;
+    drrmRegion: PageTypes.DrrmRegion;
+    user: User;
+    rows: number;
 }
-const mapStateToProps = (state, props) => ({
+
+interface Params{
+    province: PageTypes.Province;
+    district: PageTypes.District;
+    municipality: PageTypes.Municipality;
+    user: User;
+    palikaRedirect: PageTypes.PalikaRedirect;
+    drrmRegion: PageTypes.DrrmRegion;
+    drrmLanguage: PageTypes.PalikaLanguage;
+    page: number;
+    offset: number;
+    inventories: any;
+    fields: any;
+    meta: any;
+    organisation: (response: []) => void;
+    annex: boolean;
+    previewDetails: boolean;
+}
+
+interface PropsFromAppState {
+    provinces: PageTypes.Province[];
+    districts: PageTypes.District[];
+    municipalities: PageTypes.Municipality[];
+    user: User;
+    palikaRedirect: PageTypes.PalikaRedirect;
+    drrmRegion: PageTypes.DrrmRegion;
+    drrmLanguage: PageTypes.PalikaLanguage;
+}
+
+type ReduxProps = PropsFromAppState & PropsFromDispatch;
+type NewProps = ReduxProps & Props;
+
+interface PropsFromDispatch {
+    setDrrmInventory: typeof setDrrmInventoryAction;
+    drrmLanguage?: typeof setPalikaLanguageAction;
+    setProgress: typeof setDrrmProgressAction;
+    setPalikaRedirect: typeof setPalikaRedirectAction;
+}
+
+const mapStateToProps = (state: AppState) => ({
     provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -51,22 +93,20 @@ const mapStateToProps = (state, props) => ({
     palikaRedirect: palikaRedirectSelector(state),
     drrmRegion: drrmRegionSelector(state),
     drrmLanguage: palikaLanguageSelector(state),
-
 });
 
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmInventory: params => dispatch(setDrrmInventoryAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
-
 });
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportInventoriesReport: {
         url: ({ params }) => `${params.url}`,
-        query: ({ params, props }) => {
+        query: ({ params }) => {
             if (params && params.municipality) {
                 return {
                     province: params.province,
@@ -76,11 +116,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     resource_type: params.inventories,
                     expand: params.fields,
                     meta: params.meta,
-
                 };
             }
-
-
             return { limit: params.page,
                 offset: params.offset,
                 resource_type: params.inventories,
@@ -91,15 +128,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         onMount: true,
 
         onSuccess: ({ response, params }) => {
-            let citizenReportList: CitizenReport[] = [];
-            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-            citizenReportList = citizenReportsResponse.results;
-
+            let reportReportList = [];
+            const reportReportsResponse = response;
+            reportReportList = reportReportsResponse.results;
             if (params && params.organisation) {
-                params.organisation(citizenReportList);
-            }
-            if (params && params.paginationParameters) {
-                params.paginationParameters(response);
+                params.organisation(reportReportList);
             }
         },
     },
@@ -108,53 +141,61 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 let province = 0;
 let district = 0;
 let municipality = 0;
-let inventoriesData = [];
+let inventoriesData: array = [];
+const finalInventoriesData: array = [];
 
-const Inventory: React.FC<Props> = (props: Props) => {
+const url = '/resource/';
+const fields = 'inventories';
+const meta = true;
+const defaultQueryParameter = 'governance';
+
+const Inventory: React.FC<Props> = (props: NewProps) => {
     const [fetchedData, setFetechedData] = useState([]);
-    const [tableHeader, setTableHeader] = useState([]);
-    const [paginationParameters, setPaginationParameters] = useState();
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(props.page);
-    const [offset, setOffset] = useState(0);
-    const [url, setUrl] = useState('/resource/');
-    const [defaultQueryParameter, setDefaultQueryParameter] = useState('governance');
-    const [fields, setfields] = useState('inventories');
-    const [meta, setMeta] = useState(true);
-    const [finalInventoriesData, setFinalInventoriesData] = useState([]);
-    const [firstSerialNumber, setFirstSerialNumber] = useState(0);
-    const [lastSerialNumber, setLastSerialNumber] = useState(10);
     const [chartData, setChartData] = useState([]);
     const [loader, setLoader] = useState(true);
-
-
     const [checkedRows, setCheckedRows] = useState([]);
     const [checkedAll, setCheckedAll] = useState(true);
     const [dataWithIndex, setDataWithIndex] = useState<number[]>([]);
 
-
-    const { requests: { PalikaReportInventoriesReport }, provinces,
-        districts,
-        municipalities, drrmRegion, setProgress,
-        user, rows, setDrrmInventory, drrmLanguage } = props;
+    const {
+        requests: { PalikaReportInventoriesReport },
+        drrmRegion,
+        setProgress,
+        user,
+        rows,
+        setDrrmInventory,
+        drrmLanguage,
+        annex,
+        previewDetails,
+    } = props;
 
     const handleFetchedData = (response) => {
         setFetechedData(response);
         setLoader(false);
     };
     if (drrmRegion.municipality) {
-        municipality = drrmRegion.municipality;
-        district = drrmRegion.district;
-        province = drrmRegion.province;
+        const {
+            municipality: munFromProps,
+            district: districtFromProps,
+            province: provinceFromProps,
+        } = drrmRegion;
+        municipality = munFromProps;
+        district = districtFromProps;
+        province = provinceFromProps;
     } else {
-        municipality = user.profile.municipality;
-        district = user.profile.district;
-        province = user.profile.province;
+        const {
+            profile: {
+                municipality: munFromUser,
+                district: districtFromUser,
+                province: provinceFromUser,
+            },
+        } = user;
+        if (munFromUser && districtFromUser && provinceFromUser) {
+            municipality = munFromUser;
+            district = districtFromUser;
+            province = provinceFromUser;
+        }
     }
-
-    const handlePaginationParameters = (response) => {
-        setPaginationParameters(response);
-    };
-
 
     const handleEditInventory = (inventoryItem) => {
         const { setPalikaRedirect } = props;
@@ -168,23 +209,11 @@ const Inventory: React.FC<Props> = (props: Props) => {
         ReachRouter.navigate('/risk-info/#/capacity-and-resources',
             { state: { showForm: true }, replace: true });
     };
-    // const handleAddInventory = () => {
-    //     const { setPalikaRedirect } = props;
-    //     setPalikaRedirect({
-    //         showForm: true,
-    //         inventoryItem: { resource: '' },
-    //         showModal: 'inventory',
 
-    //     });
-    //     ReachRouter.navigate('/risk-info/#/capacity-and-resources',
-    //         { state: { showForm: true }, replace: true });
-    // };
 
     PalikaReportInventoriesReport.setDefaultParams({
         organisation: handleFetchedData,
-        paginationParameters: handlePaginationParameters,
         url,
-        page: paginationQueryLimit,
         inventories: defaultQueryParameter,
         fields,
         municipality,
@@ -223,18 +252,18 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 }
                 return null;
             });
-            const chatData = [...new Set(finalInventoriesData.map(inventory => inventory.item.category))];
-            console.log('inven chart dat:', finalInventoriesData);
-            setChartData(chatData.slice(0, 4).map(item => ({
+            const categories = [...new Set(finalInventoriesData.map(inventory => inventory.item.category))];
+            const chart = categories.slice(0, 4).map(item => ({
                 name: item,
                 Total: finalInventoriesData.filter(inven => inven.item.category === item).length,
-            })));
+            }));
+            setChartData(chart);
 
             const chkArr = Array.from(Array(finalInventoriesData.length).keys());
             setCheckedRows(chkArr);
             setDataWithIndex(finalInventoriesData.map((item, i) => ({ ...item, index: i, selectedRow: true })));
         }
-    }, [fetchedData.length, finalInventoriesData]);
+    }, [fetchedData.length]);
 
 
     const handleCheckAll = (e) => {
@@ -280,18 +309,18 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
-            { !props.previewDetails
+            { !previewDetails
             && (
                 <div className={styles.tabsPageContainer}>
-                    <h2 className={styles.InvenTitle}>
+                    <h2 className={styles.invenTitle}>
                         <Gt section={Translations.InventoryHeading} />
                     </h2>
                     <div className={styles.palikaTable}>
-                        <table id="table-to-xls">
+                        <table>
                             <tbody>
                                 <tr>
                                     {
-                                        !props.annex
+                                        !annex
                                         && (
                                             <th>
                                                 <input
@@ -316,7 +345,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
                                     <th><Gt section={Translations.InventoryResourceAddedDate} /></th>
                                     <th><Gt section={Translations.InventoryResourceUpdatedDate} /></th>
                                     {
-                                        !props.annex
+                                        !annex
                                         && <th><Gt section={Translations.InventoryAction} /></th>
                                     }
 
@@ -363,7 +392,7 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
 
                                                 {
-                                                    !props.annex
+                                                    !annex
                                             && (
                                                 <td>
                                                     <button
@@ -396,10 +425,9 @@ const Inventory: React.FC<Props> = (props: Props) => {
 
 
                                 {
-                                    !props.annex
+                                    !annex
                             && (
                                 <NextPrevBtns
-                                    handlePrevClick={props.handlePrevClick}
                                     handleNextClick={handleNext}
                                 />
                             )
@@ -411,42 +439,11 @@ const Inventory: React.FC<Props> = (props: Props) => {
                 </div>
             )
             }
-            { props.previewDetails
+            { previewDetails
             && (
-                <div className={styles.budgetPreviewContainer}>
-                    <h2>
-                        <Gt section={Translations.InventoryHeading} />
-                    </h2>
-                    <BarChart
-                        width={350}
-                        height={200}
-                        data={chartData}
-                        layout="vertical"
-                        margin={{ left: 10, right: 5, top: 10 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                            type="number"
-                            tick={false}
-                        />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#777', fontSize: '10px' }}
-                        />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(0,164,109)"
-                            // barCategoryGap={30}
-                            barCategoryGap={80}
-                            label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
-                            tick={{ fill: 'rgb(200,200,200)' }}
-                            cx={90}
-                            cy={105}
-                            barSize={20}
-                        />
-                    </BarChart>
-                </div>
+                <ReportChart
+                    chartData={chartData}
+                />
             )
             }
 

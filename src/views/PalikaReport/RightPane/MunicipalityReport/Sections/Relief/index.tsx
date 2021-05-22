@@ -715,17 +715,11 @@ const Relief = (props: Props) => {
 
             const wards = [...new Set(fetchedData.map(item => item.wards[0]))]
                 .filter(ward => ward !== undefined);
-            console.log('wards arr', wards);
             const chartArr = [];
             const filteredData = fetchedData.filter(item => item.loss !== undefined);
-            const lossArr = filteredData.map(item => item.loss);
             const newArr = wards.map((ward) => {
                 const filteredArr = fetchedData.filter(item => item.wards[0] === ward);
-                console.log('filtering by this ward:', ward);
-                console.log('filtered Arr:', filteredArr);
-                console.log('array thats reduced', filteredArr.map(item => item.loss));
                 if (filteredArr.length > 1) {
-                    // chartArr.push(thisD);
                     return getWardWiseDatum(filteredArr, ward);
                 }
                 if (filteredArr.length === 1) {
@@ -746,9 +740,6 @@ const Relief = (props: Props) => {
             });
 
 
-            console.log('ward Impact data:', chartArr);
-            console.log('mapreturend', newArr);
-            // console.log('filtered ward Impact data:', wardWiseImpactData);
             const chartWardwiseData = newArr.map(item => ({
                 ward: item.ward,
                 Injured: item.peopleInjuredCount,
@@ -1770,7 +1761,14 @@ const Relief = (props: Props) => {
 
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dx={10} interval={0} angle={40} dataKey="ward" />
+                                    <XAxis
+                                        dx={10}
+                                        dy={10}
+                                        interval={0}
+                                        angle={40}
+                                        dataKey="ward"
+                                        tick={{ fontSize: 10 }}
+                                    />
                                     <YAxis />
                                     <Tooltip />
                                     <Legend
@@ -1813,7 +1811,7 @@ const Relief = (props: Props) => {
                                 </h2>
                                 <ComposedChart
                                     width={500}
-                                    height={300}
+                                    height={330}
                                     data={reliefChartData}
                                     margin={{
                                         top: 5,

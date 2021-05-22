@@ -32,11 +32,11 @@ ul{
     height: 20px;
     cursor: pointer;
   }
-  .editButtn{
-    filter: saturate(100%);
-    border: none;
-    background-color: transparent;
-  }
+.editButtn{
+filter: saturate(100%);
+border: none;
+background-color: transparent;
+}
 .txtAreadetails{
     display: flex;
     flex-direction: column;
@@ -48,36 +48,6 @@ ul{
         margin-top: 10px;
     }
 }
-// table{
-//     margin-top: 0px;
-//     border-collapse: collapse;
-//     width: 100%;
-//     // table-layout: fixed;
-//     // word-break: break-all;
-//     // word-break: keep-all;
-//     }
-//     th{
-//     padding: 0.5rem;
-//     text-align: left;
-   
-//     }
-//     td{
-//     border-top: 1px solid #EBEBEB;
-//     border-bottom: 1px solid #EBEBEB;
-//     padding: 0.5rem;
-//     text-align: left;
-//     }
-//     tr:nth-child(even) {
-//         background-color:#EDEDED;
-   
-    
-//     }
-//     tr:nth-child(odd) {
-//         background-color:#FFFFFF;
-        
-//         }
-
-
 .savebtn{
     position: relative;
     margin-top: 10px;
@@ -97,86 +67,12 @@ ul{
         padding-right: 4px;
     }
 }
-h2{
-    margin-bottom: 20px !important;
-    // margin-left: 30px;
-}
-.inputContainer{
-    display: flex;
-    border-radius: 3px;
-    background-color: rgb(232,232,232);
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 12px;
-    padding-left: 10px;
-    // border: 1px solid blue;
-    .labelDate{
-    padding-left: 10px;
-    color: #777;
-    width: 100%;
-    // margin-top: 15px;
-    }
-    select{
-    border: none !important;
-    padding: 0px 10px;
-    background: transparent;
-    width: 100%;
-    padding: 15px 10px !important;
-    color: #777;
-    }
-    .label{
-    padding: 12px 18px 0 15px;
-    width: 100%;
-    font-size: 10px;
-    color: #111;
-    }
-    .datepicker{
-    width: 100%;
-    }
-    .addEditBtn{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    filter: saturate(100%);
-    
-    .addEditIcon{
-    font-size: 18px;
-    padding-right: 10px;
-    color: rgb(49,158,255);
-    }
-    }
-    .inputElement{
-    padding: 0;
-    }
-    
-    input::-webkit-input-placeholder{
-    font-size: 10px;
-    vertical-align:middle !important;
-    line-height: 25px !important;
-    }
-    
-    input{
-    border: none;
-    padding: 15px 10px !important;
-    background: transparent;
-    width: 100%;
-    }
-    input:focus{
-    outline: none;
-    }
-    input::placeholder{
-    font-size: 12px;
-    }
-    .inputIcon{
-    color: rgb(152,152,152);
-    }
-    }
-  .buttonDiv{
-    display: flex;
-  }
 .budgetPreviewContainer{
     margin-left: 30px;
     margin-top: 30px;
+    height: 210px;
+    padding-right: 20px;
+
     h2{
         font-size: 14px;
         font-weight: 600;
@@ -191,210 +87,21 @@ h2{
         padding-left: 10px;
         color: #777;
         li{
-            font-size: 14px;
+            font-size: 11px;
             line-height: 1.7em;
     
         }
     }
 }
-.btns{
-    display: flex;
-    // border: 1px solid red;
-    .newActivityBtn{
-        position: relative;
-        margin-top: 45px;
-        // width: fit-content;
-        max-width: 100%;
-        background-color: rgb(0,105,222) !important;
-        border-radius: 15px;
-        color: white; 
-        padding: 0 12px;
-        cursor: pointer;
-        // border: none;
-        filter: saturate(80%);
-        border: none;
-        margin-right: 10px;
-    }
-
-}
-
-.pagination {
-    margin: 15px auto;
-    display: flex;
-    list-style: none;
-    outline: none;
-    justify-content: flex-end;
-  }
-  .pagination > .active > a{
-    background-color: #3498FC ;
-    border-color: #F5F5F5;
-    color: #fff;
-  }
-  .pagination > li > a{
-    border: 1px solid #F5F5F5 ;
-    padding: 5px 10px;
-    outline: none;
-    cursor: pointer;
-  }
-  .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
-    background-color: #3498FC ;
-    border-color: #F5F5F5;
-    outline: none ;
-  }
-  .pagination > li > a, .pagination > li > span{
-    color: black
-  }
-  .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
-    border-radius: unset
-  }
-  .paginationRight{
-      margin-left: auto;
-  }
 .mainPageDetailsContainer{
     min-height: 400px !important;
     display: flex;
     flex-direction: column;
-    padding: 50px;
+    // padding: 50px;
     h2{
         text-align: left;
         margin-bottom: 15px;
     }
-    .formColumn{
-        padding: 0 0px 0 0;
-        p{
-            font-size: 14px;
-        }
-        .row{
-            display: flex;
-            width: 100%;
-            // border: 1px solid red;
-            justify-content: flex-start;
-            flex-direction: column;
-       
-            .inputContainer{
-                display: flex;
-                border-radius: 3px;
-                background-color: rgb(232,232,232);
-                justify-content: flex-start;
-                align-items: center;
-                margin-top: 10px;
-                padding-left: 10px;
-                .view{
-                    width: 100%;
-                    // border: 1px solid red;
-                }
-                .labelDate{
-                    padding-left: 10px;
-                    color: #777;
-                    width: 100%;
-                }
-                select{
-                    border: none !important;
-                    padding: 15px 10px;
-                    background: transparent;
-                    width: 100%;
-                    padding: 15px 10px !important;
-                    color: #777;
-                }
-                .label{
-                    padding: 12px 18px 0 15px;
-                    width: 100%;
-                    font-size: 10px;
-                    color: #111;
-                }
-                .dpText{
-                    padding-left: 12px;
-                    color: #777;
-                }
-                .datepicker{
-                    width: 100%;
-                    padding-left: 20px;
-                }
-                .addEditBtn{
-                    background-color: transparent;
-                    border: none;
-                    cursor: pointer;
-                    filter: saturate(100%);
-        
-                    .addEditIcon{
-                        font-size: 18px;
-                        padding-right: 10px;
-                        color: rgb(49,158,255);
-                    }
-                }
-                .inputElement{
-                    padding: 0;
-                }
-            
-                input::-webkit-input-placeholder{
-                    font-size: 10px;
-                    vertical-align:middle !important;
-                    line-height: 25px !important;
-                }
-        
-                textarea,input{
-                    border: none;
-                    padding: 15px 10px !important;
-                    background: transparent;
-                    width: 100%;
-                }
-                textarea:focus,input:focus{
-                    outline: none;
-                }
-                input::placeholder{
-                    font-size: 12px;
-                }
-                textarea::placeholder{
-                  position: relative;
-                  top: 50%;
-                  padding-top: 50px;
-                  font-family: inherit !important;
-                }
-                .inputIcon{
-                    color: rgb(152,152,152);
-                }
-                }
-        }
 
-        h3{
-            margin-top: 20px;
-        margin-bottom: 10px;
-
-        }
-        .personalDetailsrow{
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 12px;
-            margin-top: 10px;
-            .personalDetails{
-                margin-top: 10px;
-               
-                .titlePersonal{
-                    font-size: 14px;
-                    margin-right: 10px;
-                }
-                display: flex;
-                ul{
-                    list-style:none;
-                    li{
-                        display: flex;
-                        align-items: center;
-
-                        
-                    }
-                }
-                .addEditBtn{
-                    background: transparent;
-                    border: none;
-                    filter: saturate(100%);
-                    margin-left: 12px;
-                    .addEditIcon{
-                        color: rgb(0,92,230);
-                        font-size: 20px;
-                    }
-                        
-                    }
-            }
-        }
-    }
 }
+

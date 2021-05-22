@@ -6,168 +6,34 @@
 .nep{
   font-family: "Kalimati Regular"!important;
  }
-.inputContainer{
-  display: flex;
-  border-radius: 3px;
-  background-color: rgb(232,232,232);
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-left: 10px;
-  // border: 1px solid blue;
-  .labelDate{
-  padding-left: 10px;
-  color: #777;
-  width: 100%;
-  // margin-top: 15px;
-  }
-  select{
-  border: none !important;
-  padding: 0px 10px;
-  background: transparent;
-  width: 100%;
-  padding: 15px 10px !important;
-  color: #777;
-  }
-  .label{
-  padding: 12px 18px 0 15px;
-  width: 100%;
-  font-size: 10px;
-  color: #111;
-  }
-  .datepicker{
-  width: 100%;
-  }
-  .addEditBtn{
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+ .editButtn{
   filter: saturate(100%);
-  
-  .addEditIcon{
-  font-size: 18px;
-  padding-right: 10px;
-  color: rgb(49,158,255);
-  }
-  }
-  .inputElement{
-  padding: 0;
-  }
-  
-  input::-webkit-input-placeholder{
-  font-size: 10px;
-  vertical-align:middle !important;
-  line-height: 25px !important;
-  }
-  
-  input{
   border: none;
-  padding: 15px 10px !important;
-  background: transparent;
-  width: 100%;
-  }
-  input:focus{
-  outline: none;
-  }
-  input::placeholder{
-  font-size: 12px;
-  }
-  .inputIcon{
-  color: rgb(152,152,152);
-  }
-  }
-.buttonDiv{
-  display: flex;
-}
-.budgetPreviewContainer{
-  // margin-left: 30px;
-  margin-top: 10px;
-  // h2{
-  //     font-size: 14px;
-  //     font-weight: 600;
-  //     margin-left: 2%;
-  //     color: #222
-  // }
+  background-color: transparent;
 }
 .tabsPageContainer{
-  h2{
-    // text-align: center;
-    margin-top: 50px;
-    // margin-left: 30px !important;
-
+  .invenTitle{
+    margin-left: 0px;
+    // border: 1px solid red;
   }
   .palikaTable{
     h2{
       text-align: center;
       margin-top: 50px;
-      // margin-left: 30px;
-
     }
+    .loaderInfo{
+      position: absolute;
+      top: 54%;
+      left: 55%;
+      .bulletPoint{
+        height: 20px;
+        cursor: pointer;
+      }
+      
   }
-  .loaderInfo{
-    position: absolute;
-    top: 54%;
-    left: 55%;
-}
+  }
 
-  .bulletPoint{
-    height: 20px;
-    cursor: pointer;
-  }
-  .editButtn{
-    filter: saturate(100%);
-    border: none;
-    background-color: transparent;
-  }
-  .savebtn{
-    position: relative;
-    margin-top: 45px;
-    width: fit-content;
-    // background-color: rgb(54, 132, 216) !important;
-    background-color: transparent;
-    border-radius: 4px;
-    color: rgb(54, 132, 216) !important;
-    padding: 8px 18px;
-    cursor: pointer;
-    // border: none;
-    filter: saturate(80%);
-    border: none;
-    margin-right: 10px;
-    .plusIcon{
-        padding-right: 4px;
-    }
+  
 }
    
 
-    .pagination {
-      margin: 15px auto;
-      display: flex;
-      list-style: none;
-      outline: none;
-      justify-content: flex-end;
-    }
-    .pagination > .active > a{
-      background-color: #3498FC ;
-      border-color: #F5F5F5;
-      color: #fff;
-    }
-    .pagination > li > a{
-      border: 1px solid #F5F5F5 ;
-      padding: 5px 10px;
-      outline: none;
-      cursor: pointer;
-    }
-    .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
-      background-color: #3498FC ;
-      border-color: #F5F5F5;
-      outline: none ;
-    }
-    .pagination > li > a, .pagination > li > span{
-      color: black
-    }
-    .pagination > li:first-child > a, .pagination > li:first-child > span, .pagination > li:last-child > a, .pagination > li:last-child > span{
-      border-radius: unset
-    }
-    .paginationRight{
-        margin-left: auto;
-    }}

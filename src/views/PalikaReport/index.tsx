@@ -31,7 +31,7 @@ import {
     methods,
 } from '#request';
 
-import PalikaReportTable from './RightPane/Dashboard/palikaReportTable';
+import PalikaReportTable from './RightPane/Dashboard/PalikaReportTable';
 import TopBar from './RightPane/TopBar';
 
 interface Props {
@@ -54,7 +54,7 @@ const mapDispatchToProps = dispatch => ({
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     PalikaReportGetRequest: {
         url: ({ params }) => `${params.url}`,
-        query: ({ params, props }) => {
+        query: ({ params }) => {
             if (params && params.submitQuery) {
                 return {
                     province: params.submitQuery.province,
@@ -76,11 +76,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         onMount: true,
 
         onSuccess: ({ response, params }) => {
-            let citizenReportList: CitizenReport[] = [];
-            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-            citizenReportList = citizenReportsResponse.results;
+            let drrmReportList = [];
+            const drrmReportsResponse = response;
+            drrmReportList = drrmReportsResponse.results;
             if (params && params.annualBudget) {
-                params.annualBudget(citizenReportList);
+                params.annualBudget(drrmReportList);
             }
             if (params && params.paginationParameters) {
                 params.paginationParameters(response);
@@ -93,10 +93,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         onMount: true,
 
         onSuccess: ({ response, params }) => {
-            let citizenReportList: CitizenReport[] = [];
-            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
-            citizenReportList = citizenReportsResponse.results;
-            params.fiscalYear(citizenReportList);
+            let drrmReportList = [];
+            const drrmReportsResponse = response;
+            drrmReportList = drrmReportsResponse.results;
+            params.fiscalYear(drrmReportList);
         },
     },
 
@@ -112,10 +112,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [paginationParameters, setPaginationParameters] = useState();
     const [clearFilter, setClearFilter] = useState(false);
     const [url, setUrl] = useState('/disaster-profile/');
-    const [paginationQueryLimit, setPaginationQueryLimit] = useState(6);
-    const [offset, setOffset] = useState(0);
     const [showTabs, setShowTabs] = useState(false);
-    const [menuId, setMenuId] = useState(1);
     const [submenuId, setSubmenuId] = useState(1);
     const [subMenuTitle, setSubMenuTitle] = useState('Disaster Risk Reduction and Management Report');
     const [tableHeader, setTableHeader] = useState([]);
@@ -124,9 +121,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     const [disableFilterButton, setDisableFilterButton] = useState(true);
     const [fetchedData, setFetechedData] = useState([]);
     const [sortBy, setSortBy] = useState('');
-    const [province, setProvince] = useState(null);
-    const [district, setDistrict] = useState(null);
-    const [municipality, setMunicipality] = useState(null);
     const [isSort, setIsSort] = useState(false);
     const [dateFrom, setDateFrom] = useState('');
     const [dateTo, setDateTo] = useState('');
@@ -186,7 +180,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         annualBudget: handleFetchedData,
         paginationParameters: handlePaginationParameters,
         url,
-        page: paginationQueryLimit,
         expand: 'updated_by',
 
     });
@@ -306,7 +299,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
 
     const getMenuId = (menu) => {
-        setMenuId(menu);
     };
     const getSubmenuTitle = (title) => {
         setSubMenuTitle(title);
@@ -692,9 +684,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                             showReportModal={showReportModal}
                                             hideWelcomePage={hideWelcomePage}
                                             setShowReportModal={setShowReportModal}
-                                            province={province}
-                                            district={district}
-                                            municipality={municipality}
                                             getTabSelected={handleTabSelect}
                                             selectedTab={selectedTab}
                                             handleShowErr={handleShowErr}
@@ -794,7 +783,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                                         sortCreatedOn={handleSortCreatedOn}
                                                         sortModifiedOn={handleSortModifiedOn}
                                                         currentPage={currentPageNumber}
-                                                        pageSize={paginationQueryLimit}
                                                         setShowTabs={handleAddbuttonClick}
                                                     />
                                                 </div>

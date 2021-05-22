@@ -175,12 +175,12 @@ const Header = (props: Props) => {
                 <ul>
                     <li>
                         <Gt section={Translations.dashboardTblHeaderPublishedOn} />
-                        {':'}
+                        {': '}
                         {new Date().toISOString().split('T')[0]}
                     </li>
                     <li>
                         <Gt section={Translations.dashboardTblHeaderLastModified} />
-                        {':'}
+                        {': '}
                         {new Date().toISOString().split('T')[0]}
                     </li>
 

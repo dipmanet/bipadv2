@@ -3,17 +3,16 @@
     display: flex;
     background-color: rgb(237,237,237);
     justify-content: space-between;
-    padding: 3%;
+    padding: 3% 5%;
     .leftContainer{
         display: flex;
-        width: 80%;
+        align-items: center;
         .logoAndAddress{
             display:flex;
             justify-content: flex-start;
             align-items: center;
-            // border: 1px solid blue;
+            flex:1;
             .logo{
-                // width: 25%;
                 padding: 0;
             }
             .address{
@@ -29,12 +28,10 @@
                 }
             }
         }
-    
         .titleAndFY{
-            // display: flex;
-            // align-items: center;
+            flex:1;
+
             border-left: 2px solid green;
-            // justify-content: flex-start;
             padding-left: 1%;
             ul{ 
                 list-style: none;                

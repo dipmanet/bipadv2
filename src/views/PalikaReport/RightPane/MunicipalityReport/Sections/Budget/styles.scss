@@ -161,7 +161,6 @@
 .budgetPreviewContainer{
     margin-left: 30px;
     margin-top: 10px;
-    // border: 1px solid gray;
     h2{
         font-size: 14px;
         font-weight: 600;
@@ -172,31 +171,27 @@
         // height: 100px;
         .budgetDetails{
             display: flex;
-            align-items: center;
-            padding: 0em;
-            // border: 1px solid blue;
+            align-items: flex-end;
             .lighter{
                 color: #777;
                 padding-left: 2px;
-                padding-top: 0;
-                padding-bottom: 12px;
-
+                // padding: 10px;
+                // border: 1px solid gray;
             }
             .light{
                 color: #777;
                 font-weight: 600;
                 padding-left: 2px;
-                padding-top: 0;
                 
             }
             ul{
                 list-style: none; 
                 padding-left: 2%;
                 padding-right: 2%;
-                line-height: 1em;
+                line-height: 1.7em;
                 li{
                     white-space: nowrap;
-                    line-height: 0.4em;
+                    line-height: 1.3em;
                 }
             }
     

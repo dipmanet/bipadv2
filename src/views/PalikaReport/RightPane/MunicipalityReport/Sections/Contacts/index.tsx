@@ -1,10 +1,6 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import ReactPaginate from 'react-paginate';
-import { reverseRoute, _cs } from '@togglecorp/fujs';
-import { useTheme } from '@material-ui/core';
-import { Item } from 'semantic-ui-react';
 import * as ReachRouter from '@reach/router';
 import Loader from 'react-loader';
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
@@ -26,7 +22,6 @@ import { provincesSelector,
     palikaLanguageSelector } from '#selectors';
 import NextPrevBtns from '../../NextPrevBtns';
 
-
 import {
     setPalikaRedirectAction,
     setDrrmContactsAction,
@@ -42,7 +37,6 @@ const mapDispatchToProps = dispatch => ({
     setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
     setDrrmContacts: params => dispatch(setDrrmContactsAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
-
 });
 
 interface Props{

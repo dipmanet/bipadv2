@@ -629,7 +629,8 @@ const Budget = (props: Props) => {
                                                 name="plus"
                                                 className={styles.plusIcon}
                                             />
-                                            <Gt section={Translations.BudgetEditBtn} />
+                                            <Gt section={Translations.BudgetUpdateBtn} />
+
                                         </button>
                                     )
                                     : (
@@ -642,7 +643,7 @@ const Budget = (props: Props) => {
                                                 name="plus"
                                                 className={styles.plusIcon}
                                             />
-                                            <Gt section={Translations.BudgetAddBtn} />
+                                            <Gt section={Translations.BudgetEditBtn} />
                                         </button>
                                     )
                                 )}

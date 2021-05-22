@@ -80,10 +80,11 @@
             align-items: center;
             filter: saturate(100%);
             justify-content: space-between;
-            padding-right: 20px;
+            padding-right: 24px;
+
             .iconandMenu{
                 display: flex;
-                // padding-left: 30px;
+                align-items: center;
             }
             .progressDone{
                 color: green;
@@ -94,7 +95,8 @@
                 font-size: 9px;
             }
             .progressOngoing{
-                color: rgb(247, 176, 45);
+                color: rgb(83, 144, 235);
+
                 font-size: 9px;
             }
             .bulletPoint{
@@ -124,21 +126,23 @@
             color: #444;
             cursor: pointer;
             filter: saturate(100%);
-            padding-right: 20px;
+            padding-right: 24px;
              
             .iconandMenu{
                 display: flex;
+                align-items: center;
             }
             .progressDone{
                 color: green;
                 font-size: 14px;
             }
             .progressOngoing{
-                color: orange;
+                color: rgb(83, 144, 235);
+
                 font-size: 9px;
             }
             .progressNotDone{
-                color: rgb(214, 73, 73);
+                color: rgb(182, 181, 181);
 
                 font-size: 9px;
             }

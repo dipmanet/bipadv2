@@ -248,7 +248,7 @@ const ProgramPolicies = (props: Props) => {
         <div className={drrmLanguage.language === 'np' && styles.nep}>
             { !props.previewDetails
             && (
-                <div>
+                <div className={styles.mainPageDetailsContainer}>
                     <h2>
                         <Gt section={Translations.PapTitlePart1} />
                         {''}
@@ -259,7 +259,7 @@ const ProgramPolicies = (props: Props) => {
                         <Gt section={Translations.PapTitlePart2} />
 
                     </h2>
-                    <table id="table-to-xls">
+                    <table>
                         <tbody>
                             <tr>
 

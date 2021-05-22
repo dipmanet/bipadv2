@@ -101,35 +101,37 @@ const Preview = (props: Props) => {
     } = budgetActivityData;
 
     return (
-        <div className={styles.previewContainer}>
-            {/* <Header /> */}
-            <div className={styles.rowOne}>
+        <>
+            <div className={styles.previewContainer}>
+                {/* <Header /> */}
+                <div className={styles.rowOne}>
 
-                <Relief
-                    previewDetails
-                    reportData={''}
-                    tableHeader={() => {}}
-                    updateTab={() => {}}
-                    page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
-                />
+                    <Relief
+                        previewDetails
+                        reportData={''}
+                        tableHeader={() => {}}
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                    />
 
-            </div>
-            <div className={styles.rowTwo}>
-                <Relief
-                    hazardwiseImpact
-                    reportData={''}
-                    tableHeader={() => {}}
-                    updateTab={() => {}}
-                    page={-1}
-                    handlePrevClick={() => {}}
-                    handleNextClick={() => {}}
-                />
-            </div>
+                </div>
+                <div className={styles.rowTwo}>
+                    <Relief
+                        hazardwiseImpact
+                        reportData={''}
+                        tableHeader={() => {}}
+                        updateTab={() => {}}
+                        page={-1}
+                        handlePrevClick={() => {}}
+                        handleNextClick={() => {}}
+                    />
+                </div>
 
-            <div className={styles.rowfour}>
-                <Leadership />
+                <div className={styles.rowfour}>
+                    <Leadership />
+                </div>
             </div>
             <div className={styles.rowFive}>
 
@@ -137,7 +139,7 @@ const Preview = (props: Props) => {
                 <Footer />
 
             </div>
-        </div>
+        </>
     );
 };
 
