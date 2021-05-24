@@ -13,6 +13,7 @@ import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
 import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
 import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
 import styles from './styles.scss';
+import NavButtons from '../../Components/NavButtons';
 
 interface State {
     showInfo: boolean;
@@ -117,6 +118,12 @@ class Rajapur extends React.PureComponent<Props, State> {
 
         const {
             municipalities,
+            handleNext,
+            handlePrev,
+            disableNavLeftBtn,
+            disableNavRightBtn,
+            pagenumber,
+            totalPages,
         } = this.props;
 
         const {
@@ -245,7 +252,14 @@ class Rajapur extends React.PureComponent<Props, State> {
 
                 {/* <SourceInfo /> */}
 
-
+                <NavButtons
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    disableNavLeftBtn={disableNavLeftBtn}
+                    disableNavRightBtn={disableNavRightBtn}
+                    pagenumber={pagenumber}
+                    totalPages={totalPages}
+                />
             </div>
         );
     }

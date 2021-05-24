@@ -170,40 +170,6 @@ export default class Rajapur extends React.Component {
 
         return (
             <div>
-                { (
-                    <div className={styles.navBtnCont}>
-                        <button
-                            type="button"
-                            onClick={this.handlePrev}
-                            className={styles.navbutton}
-                            disabled={disableNavLeftBtn}
-                        >
-                            <Icon
-                                name="chevronLeft"
-                                className={disableNavLeftBtn
-                                    ? styles.btnDisable
-                                    : styles.nextPrevBtn
-                                }
-                            />
-                        </button>
-                        <button
-                            type="button"
-                            onClick={this.handleNext}
-                            className={styles.navbutton}
-                            disabled={disableNavRightBtn}
-                        >
-                            <Icon
-                                name="chevronRight"
-                                className={disableNavRightBtn
-                                    ? styles.btnDisable
-                                    : styles.nextPrevBtn}
-                            />
-                        </button>
-
-                    </div>
-                )}
-
-
                 <Map
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
@@ -218,6 +184,19 @@ export default class Rajapur extends React.Component {
                     enableNavBtns={this.enableNavBtns}
                 />
                 {rightelements[rightElement]}
+                {rightElement === 0
+                && (
+                    <RightElement1
+                        handleNext={this.handleNext}
+                        handlePrev={this.handlePrev}
+                        disableNavLeftBtn={disableNavLeftBtn}
+                        disableNavRightBtn={disableNavRightBtn}
+                        pagenumber={rightElement + 1}
+                        totalPages={rightelements.length}
+                    />
+
+                )
+                }
                 {rightElement === 1
                     ? (
                         <div className={styles.legends}>
