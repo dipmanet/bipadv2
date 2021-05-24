@@ -65,6 +65,7 @@ const getPeriod = (periodCode: string) => {
         minute: 'Minute wise',
         hourly: 'Hourly average',
         daily: 'Daily average',
+        monthly: 'Monthly average',
     };
     return periods[periodCode];
 };

@@ -6,7 +6,7 @@
             white-space: nowrap;
             max-height: 300px;
             .header {
-                border: 1px solid black;
+                // border: 1px solid black;
                 background-color: var(--color-foreground-alt);
                 font-weight: bold;
                 text-transform: none;
@@ -17,7 +17,7 @@
                     .cell {
                         // border-bottom: .1px solid black;
                         // border-right: .1px solid black;
-                        border: 1px solid rgba($color: #000000, $alpha: 3)
+                        // border: 1px solid rgba($color: #000000, $alpha: 3)
                     }
                 }
             }

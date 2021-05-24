@@ -77,14 +77,14 @@ export const getErrors = (fv: any) => {
         errors.push(error);
     }
 
-    if (Object.keys(interval).length === 0) {
-        error = {
-            type: 'Interval',
-            err: 'Interval not supplied',
-            message: 'Please select an interval value',
-        };
-        errors.push(error);
-    }
+    // if (Object.keys(interval).length === 0) {
+    //     error = {
+    //         type: 'Interval',
+    //         err: 'Interval not supplied',
+    //         message: 'Please select an interval value',
+    //     };
+    //     errors.push(error);
+    // }
 
     if (Object.keys(period).length === 0) {
         error = {

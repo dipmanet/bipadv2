@@ -12,7 +12,7 @@ import { MultiResponse } from '#store/atom/response/types';
 
 import DateSelector from './DateSelector';
 import PeriodSelector from './PeriodSelector';
-import IntervalSelector from './IntervalSelector';
+// import IntervalSelector from './IntervalSelector';
 import Loading from '#components/Loading';
 
 import { getErrors } from '../utils';
@@ -152,7 +152,7 @@ const Filters = (props: Props) => {
                             />
                         </div>
                     </div>
-                    <div className={styles.intervals}>
+                    {/* <div className={styles.intervals}>
                         <div className={styles.title}>
                             Interval
                         </div>
@@ -162,7 +162,7 @@ const Filters = (props: Props) => {
                                 errors={errors}
                             />
                         </div>
-                    </div>
+                    </div> */}
                 </Faram>
             </div>
             <div

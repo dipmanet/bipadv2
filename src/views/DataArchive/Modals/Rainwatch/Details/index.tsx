@@ -27,9 +27,9 @@ const Details = (props: Props) => {
         // { title: 'Station Name', value: title || 'N/A', style: styles.full },
         // { title: 'Province', value: provinceTitle || 'N/A', style: styles.full },
         { title: 'Station Index', value: '', style: styles.full },
-        { title: 'District', value: districtTitle || 'N/A', style: styles.full },
         { title: 'Longitude', value: longitude || 'N/A', style: styles.full },
         { title: 'Latitude', value: latitude || 'N/A', style: styles.full },
+        { title: 'District', value: districtTitle || 'N/A', style: styles.full },
         { title: 'Description', value: description || 'N/A', style: styles.full },
     ];
     return (

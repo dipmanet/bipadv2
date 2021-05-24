@@ -120,6 +120,7 @@ const RainModal = (props: Props) => {
 
     const rainDataWithParameter = parseInterval(stationData);
     const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
+    console.log('Rain data period:', rainDataWithPeriod);
 
     const minuteWiseGroup = groupList(
         rainDataWithPeriod.filter(r => r.dateWithMinute),
@@ -133,19 +134,34 @@ const RainModal = (props: Props) => {
         rainDataWithPeriod.filter(r => r.dateOnly),
         rain => rain.dateOnly,
     );
+    console.log('Daily wise group:', dailyWiseGroup);
+
+    const monthlyWiseGroup = groupList(
+        rainDataWithPeriod.filter(r => r.dateOnly),
+        rain => rain.dateOnly,
+    );
+
+
     let filterWiseChartData;
+    let intervalCode;
     const {
         period: { periodCode },
-        interval: { intervalCode },
+        // interval: { intervalCode },
     } = filterValues;
     if (periodCode === 'minute') {
         filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
     }
     if (periodCode === 'hourly') {
         filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
+        intervalCode = 'oneHour';
     }
     if (periodCode === 'daily') {
         filterWiseChartData = getChartData(dailyWiseGroup, 'dateName');
+        intervalCode = 'twentyFourHour';
+    }
+    if (periodCode === 'monthly') {
+        filterWiseChartData = getChartData(monthlyWiseGroup, 'monthName');
+        intervalCode = 'twentyFourHour';
     }
 
     // sorting filteredData by measuredOn asc
