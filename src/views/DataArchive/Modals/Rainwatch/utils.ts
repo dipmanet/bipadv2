@@ -213,6 +213,8 @@ export const getItemParts = (dataArray: any[], field: string) => {
     return [minimum, average, maximum];
 };
 
+const getAcc = arr => arr.reduce((a, b) => ({ oneHour: a.oneHour + b.oneHour }));
+
 export const getChartData = (
     data: {key: string | number; value: any[]}[],
     labelKey: string,
@@ -220,6 +222,7 @@ export const getChartData = (
     const chartData = data.map((singleItem) => {
         const { key, value: dataArray } = singleItem;
         const label = dataArray[0][labelKey];
+        const { oneHour } = getAcc(dataArray);
         const { createdOn, measuredOn } = dataArray[0];
         const [oneHourMin, oneHourAvg, oneHourMax] = getItemParts(dataArray, 'oneHour');
         const [threeHourMin, threeHourAvg, threeHourMax] = getItemParts(dataArray, 'threeHour');
@@ -229,6 +232,7 @@ export const getChartData = (
 
         return {
             key,
+            accHour: Number(oneHour) || 0,
             label: String(label || ''),
             createdOn: String(createdOn || ''),
             measuredOn: String(measuredOn || ''),

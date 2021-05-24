@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     ResponsiveContainer,
     LineChart,
@@ -8,6 +8,9 @@ import {
     CartesianGrid,
     Tooltip,
     Legend,
+    BarChart,
+    Bar,
+    ComposedChart,
 } from 'recharts';
 import Button from '#rsca/Button';
 import {
@@ -48,6 +51,7 @@ const handleSaveClick = (downloadId?: string) => {
 //     };
 //     return status[periodCode];
 // };
+
 
 const getinterval = (intervalCode: string) => {
     const intervals: {[key: string]: string} = {
@@ -93,7 +97,26 @@ const Graph = (props: Props) => {
         stationName,
         filterValues: { dataDateRange: { startDate, endDate } },
     } = props;
+
+    const [cumulativeData, setCD] = useState([]);
+
+    useEffect(() => {
+        if (filterWiseChartData && filterWiseChartData.length > 0) {
+            let cumulative = 0;
+            const datawithCumulative = filterWiseChartData.map((item) => {
+                cumulative += item.accHour;
+                return ({
+                    ...item,
+                    cumulativeHourData: cumulative,
+                });
+            });
+            setCD(datawithCumulative);
+        }
+    }, [filterWiseChartData]);
+
     // const displayNote = shouldDisplayNote(periodCode || '');
+    console.log('for chart: ', filterWiseChartData);
+    console.log('cumulative: ', cumulativeData);
     const date = `${startDate} to ${endDate}`;
     const calculatedTitle = getChartTitle(
         intervalCode || '',
@@ -141,7 +164,7 @@ const Graph = (props: Props) => {
                         className={styles.chart}
                     >
                         <ResponsiveContainer className={styles.container}>
-                            <LineChart
+                            {/* <LineChart
                                 data={filterWiseChartData}
                                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                             >
@@ -157,16 +180,45 @@ const Graph = (props: Props) => {
                                     )}
                                 />
                                 <Legend />
-                                {isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Rainfall amount (mm)" dataKey={`${intervalCode}Avg`} stroke="green" />}
-                                {!isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Min Water Level (mm)" dataKey={`${intervalCode}Min`} stroke="blue" />}
-                                {!isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Max Water Level (mm)" dataKey={`${intervalCode}Max`} stroke="red" />}
-                                {!isMinuteSelected
-                                && <Line type="monotone" dot={false} name="Average Water Level (mm)" dataKey={`${intervalCode}Avg`} stroke="green" />}
-                            </LineChart>
+                                <Line type="monotone" dot={false} name="Acc fsdfs(mm)
+                                " dataKey="accHour" stroke="green" />
+
+                            </LineChart>  */}
+
+                            {/* <BarChart
+                                data={filterWiseChartData}
+                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="label" />
+                                <YAxis domain={['dataMin', 'auto']} />
+                                <Tooltip />
+                                <Legend />
+                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" />
+
+                            </BarChart> */}
+
+                            <ComposedChart
+                                data={cumulativeData}
+                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                            >
+                                <CartesianGrid stroke="#f5f5f5" />
+                                <XAxis dataKey="label" />
+                                <YAxis domain={['accHour', 'auto']} />
+                                <Tooltip />
+                                <Legend />
+                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" />
+                                <Line
+                                    type="monotone"
+                                    name="Cumilative Rain(mm)"
+                                    dataKey="cumulativeHourData"
+                                    stroke="#ff7300"
+                                    dot={false}
+                                />
+                            </ComposedChart>
                         </ResponsiveContainer>
+
+
                     </div>
                 </div>
             </div>
