@@ -5,6 +5,7 @@ import styles from './styles.scss';
 import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
+import Jugal from './Jugal';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import BarabiseLandslide from './BarabiseLandslide';
@@ -14,6 +15,7 @@ const slides = [
     <Rajapur />,
     <BarabiseLandslide />,
     <Gulariya />,
+    <Jugal />,
 
 ];
 
@@ -38,6 +40,9 @@ const VizRiskMainPage = () => {
             setTitle('Visualising Landslide Exposure');
         } else if (municipality === 'gulariya') {
             setCurrentPage(2);
+            setTitle('Visualising Flood Exposure');
+        } else if (municipality === 'jugal') {
+            setCurrentPage(3);
             setTitle('Visualising Flood Exposure');
         }
     };
@@ -113,6 +118,14 @@ const VizRiskMainPage = () => {
 
                             >
                                 <h1 className={styles.menuItems}>Bharabise Municipality</h1>
+
+                            </Button>
+                            <Button
+                                transparent
+                                onClick={() => handleMenuTitleClick('jugal')}
+
+                            >
+                                <h1 className={styles.menuItems}>Jugal Municipality</h1>
 
                             </Button>
 
