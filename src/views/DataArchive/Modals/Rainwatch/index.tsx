@@ -167,6 +167,7 @@ const RainModal = (props: Props) => {
     // sorting filteredData by measuredOn asc
     if (filterWiseChartData) {
         filterWiseChartData.sort(arraySorter);
+        console.log('Sorted Data:', filterWiseChartData.sort(arraySorter));
     }
 
     const isInitial = isEqualObject(initialFaramValue, filterValues);
