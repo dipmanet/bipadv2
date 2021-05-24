@@ -27,7 +27,7 @@ const languageTranslations: LanguageEntry = {
         en: 'This module in the BIPAD portal will generate a Disaster Risk Reduction and Management (DRRM) Report for each fiscal year for all tiers of the government.',
     },
     welcomeNoteparagraph1: {
-        np: 'यहाँहरु लाई विपद् पोर्टलको विपद् सम्बन्धित प्रतिवेदन मोड्युलमा स्वागत छ ।',
+        np: 'यहाँहरुलाई विपद् पोर्टलको विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन सम्बन्धित प्रतिवेदन मोड्युलमा स्वागत छ ।',
         en: 'Welcome to the DRRM Report Module of the BIPAD Portal',
     },
     welcomeNoteparagraph2: {
@@ -55,7 +55,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Data Unavailable',
     },
     dashBoardHeading: {
-        np: 'बिपद जोखिम न्यूनीकरण र व्यवस्थापन रिपोर्ट',
+        np: 'बिपद जोखिम न्यूनीकरण तथा व्यवस्थापन रिपोर्ट',
         en: 'Disaster Risk Reduction and Management Report',
     },
     dashBoardMainTitle: {
@@ -111,7 +111,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Action',
     },
     dashboardSidebarSelectMunicipalityHeader: {
-        np: 'कृपया रिपोर्ट उत्पन्न गर्न मनाहानगरपालिका/नगरपालिका/गाउँपालिका चयन गर्नुहोस्',
+        np: 'कृपया रिपोर्ट उत्पन्न गर्न महानगरपालिका/उपमहानगरपालिका/नगरपालिका/गाउँपालिका चयन गर्नुहोस्',
         en: 'Please select a municipality to generate report.',
     },
     PleaseSelect: {
@@ -144,7 +144,7 @@ const languageTranslations: LanguageEntry = {
     },
     dashboardFilter: {
         np: 'फिल्टर',
-        en: 'Filter',
+        en: 'Filters',
     },
     dashboardFilterProvinceLabel: {
         np: 'प्रदेश',
@@ -163,7 +163,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Select District',
     },
     dashboardFilterMunicipalityLabel: {
-        np: 'महानगरपालिका/नगरपालिका/गाउँपालिका',
+        np: 'महानगरपालिका/उपमहानगरपालिका/नगरपालिका/गाउँपालिका',
         en: 'Municipality',
     },
     dashboardFilterMunicipalityPlaceholder: {
@@ -197,7 +197,7 @@ const languageTranslations: LanguageEntry = {
 
     MayororChairperson: {
         en: 'Mayor or Chairperson',
-        np: 'मेयर वा अध्यक्ष',
+        np: 'नगर प्रमुख वा अध्यक्ष',
     },
     Mayor: {
         en: 'Mayor',
@@ -205,7 +205,7 @@ const languageTranslations: LanguageEntry = {
     },
     ChiefAdminstrative: {
         en: 'Chief Adminstrative Officer',
-        np: 'मुख्य प्रशासनिक अधिकारी',
+        np: 'प्रमुख प्रशासकिय अधिकृत',
     },
 
     DRRfocal: {
@@ -234,12 +234,12 @@ const languageTranslations: LanguageEntry = {
     },
     FormationDateTitle: {
         en: 'Local Disaster Mangement Committee Formation Date',
-        np: 'स्थानीय विपद व्यवस्थापन समितिको गठन मिति',
+        np: 'स्थानीय विपद् व्यवस्थापन समितिको गठन मिति ',
     },
 
     Committeemembers: {
         en: 'Committee members list',
-        np: 'समिति सदस्यहरूको सूची',
+        np: 'समितिका सदस्यहरूको सूची',
     },
 
     Numberofmembers: {
@@ -254,16 +254,16 @@ const languageTranslations: LanguageEntry = {
 
     TitleMunicipality: {
         en: 'Municipality: Disaster Risk Reduction and Management Report FY 077/078',
-        np: 'नगरपालिका: आर्थिक वर्ष ७७/७८ को विपद् जोखिम न्यूनीकरण र व्यवस्थापन रिपोर्ट ',
+        np: 'नगरपालिका: आर्थिक वर्ष ७७/७८ को विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन रिपोर्ट ',
     },
 
     GeneralSubtitleFirst: {
         en: 'DRRM report will be generated for each fiscal year.',
-        np: 'विपद् जोखिम न्यूनीकरण र व्यवस्थापन प्रतिवेदन प्रत्येक आर्थिक वर्षको आधारमा प्रकाशित हुन्छ l',
+        np: 'विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्रतिवेदन आर्थिक वर्षको आधारमा प्रकाशित हुन्छ l',
     },
 
     GeneralSelectFiscalYear: {
-        en: 'Please select fiscal year from General Section',
+        en: 'Please Enter Valid Fiscal Year from General Section',
         np: 'कृपया सामान्य सेक्सनबाट मान्य आर्थिक वर्ष प्रविष्ट गर्नुहोस्',
     },
     GeneralSelectorPlaceholder: {
@@ -279,7 +279,7 @@ const languageTranslations: LanguageEntry = {
         np: 'विवरणहरू थप्नुहोस् वा सम्पादन गर्नुहोस्',
     },
     GeneralPleaseClick: {
-        np: 'विवरण अपडेट गर्न कृपया थप्नुहोस् / सम्पादन गर्नुहोस् बटनमा क्लिक गर्नुहोस्',
+        np: 'कृपया  विवरण अपडेट गर्न थप्नुहोस् / सम्पादन गर्नुहोस् बटनमा क्लिक गर्नुहोस्',
         en: 'Please click on the add/edit button to update the details',
     },
     Update: {
@@ -335,15 +335,15 @@ const languageTranslations: LanguageEntry = {
         en: 'Edit Organization Data',
     },
     InventoryHeading: {
-        np: 'सूची',
-        en: 'Inventories',
+        np: 'इन्भेन्टरी',
+        en: 'Inventory',
     },
     InventorySerialNumber: {
         np: 'क्रम संख्या',
         en: 'SN',
     },
     InventoryResourceName: {
-        np: 'स्रोतको नाम',
+        np: 'साधनको नाम',
         en: 'Name of Resource',
     },
     InventoryResourceQuantity: {
@@ -355,11 +355,11 @@ const languageTranslations: LanguageEntry = {
         en: 'Unit',
     },
     InventoryResourceCategory: {
-        np: 'श्रेणी',
+        np: 'श्रेणी/वर्गीकरण',
         en: 'Category',
     },
     InventoryResourceOwnerOrganization: {
-        np: 'सम्बंदित संस्था',
+        np: 'सम्बन्धित संस्था',
         en: 'Owner Organization Name',
     },
     InventoryResourceOwnerOrganizationType: {
@@ -367,7 +367,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Type of Organization',
     },
     InventoryResourceAddedDate: {
-        np: 'थपिएको मिति',
+        np: ' प्रविष्ट गरिएको मिति',
         en: 'Added date',
     },
     InventoryResourceUpdatedDate: {
@@ -394,23 +394,23 @@ const languageTranslations: LanguageEntry = {
     },
     DRRFundMun: {
         en: 'DRR fund of municipality',
-        np: 'नगरपालिकाको विपद् कोष',
+        np: 'नगरपालिकाको विपद् व्यवस्थापन कोष',
     },
     OtherDrrFund: {
         en: 'Other DRR related funding',
-        np: 'अन्य विपद् सम्बन्धित बजेट',
+        np: 'अन्य विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन सम्बन्धित बजेट',
     },
     BudgetDescription: {
         en: 'Total municipal budget is the total budget allocated by the municipality for the execution of various activities for this fiscal year',
-        np: 'कुल बजेट भन्नाले यस आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको कुल बजेट',
+        np: 'कुल बजेट भन्नाले यस आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको  बजेट',
     },
     DRRMunFundDescriptio: {
         en: 'DRR fund of the municipality is part of the total municipal budget of this fiscal year which is specifically separated for DRRM related activities',
-        np: 'नगरपालिकाको विपद कोष भनेको  यस आर्थिक वर्षको कुल बजेटको हिस्सा हो जुन विशेष रूपमा विपद  सम्बन्धित गतिविधिहरूको लागि छुट्याइएको छ',
+        np: 'नगरपालिकाको विपद व्यवस्थापन कोष भनेको यस आर्थिक वर्षको कुल बजेटको हिस्सा मध्ये विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन सम्बन्धित गतिविधिहरूको लागि छुट्याइएको बजेट हो',
     },
     OtherDrrRelatedFund: {
         en: 'Other DRR related funding is the funding received by the municipality from various sources like I/NGOS, the federal government, provincial government, private sectors, etc. for this fiscal year',
-        np: 'अन्य विपद् सम्बन्धित बजेट भनेको यस आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि जस्ता विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम हो।',
+        np: 'अन्य विपद् सम्बन्धित बजेट भनेको यस आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि  विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम हो।',
     },
     BudgetEditBtn: {
         en: 'Edit Budget',
@@ -442,8 +442,8 @@ const languageTranslations: LanguageEntry = {
         np: 'रु',
     },
     ResourcesHeading: {
-        en: 'Critical Infrastructures',
-        np: 'भौतिक पूर्वाधारहरू',
+        en: 'स्रोत साधन',
+        np: 'Resources',
     },
     ResourcesSerialNumber: {
         np: 'क्रम संख्या',
@@ -508,7 +508,7 @@ const languageTranslations: LanguageEntry = {
     },
     Drrrelatedpoints: {
         en: 'Please enter the DRR related points in this fiscal years Annual Policy and Programme of the municipality',
-        np: 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा विपद् जोखिम न्यूनीकरण सम्बन्धित कार्यक्रमहरू उल्लेख गर्नुहोस् l',
+        np: 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा उल्लेखीत विपद् जोखिम न्यूनीकरण सम्बन्धित कार्यक्रमहरू प्रविष्ट गर्नुहोस् ।',
     },
     points: {
         en: 'Points',
@@ -557,15 +557,15 @@ const languageTranslations: LanguageEntry = {
         en: 'SN',
     },
     ContactsName: {
-        np: 'नाम',
-        en: 'Name',
+        np: 'प्रशिक्षित जनशक्ति (पालिकाका कर्मचारी र निर्वाचित प्रतिनिधिहरु)',
+        en: 'Trained personnel (Municipal staffs and elected personnel)',
     },
     ContactTypeOfOrganization: {
         np: 'संस्थाको प्रकार',
         en: 'Type of Organization',
     },
     ContactPosition: {
-        np: 'स्थिति',
+        np: 'पद',
         en: 'Position',
     },
     ContactNameOfOrganization: {
@@ -573,7 +573,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Name of Organization',
     },
     ContactTrainingTitle: {
-        np: 'प्रशिक्षित शीर्षक',
+        np: 'तालिम शीर्षक',
         en: 'Training Title',
     },
     ContactTrainingDuration: {
@@ -658,7 +658,7 @@ const languageTranslations: LanguageEntry = {
     },
     SimulationExercise: {
         np: 'अनुकरण अभ्यासको नाम',
-        en: 'Name of Simulation excerise',
+        en: 'Name of Simulation exercise',
     },
     SimulationDate: {
         np: 'मिति',
@@ -678,7 +678,7 @@ const languageTranslations: LanguageEntry = {
     },
     SimulationPriorityActivity: {
         np: 'प्राथमिकता गतिविधि',
-        en: 'Priority Acitivity',
+        en: 'Priority Activity',
     },
     SimulationOrganizer: {
         np: 'आयोजक',
@@ -763,7 +763,7 @@ const languageTranslations: LanguageEntry = {
     },
     ProjectCompletion: {
         en: 'Project Completion date',
-        np: 'परियोजना पूरा हुने मिति',
+        np: 'परियोजना सम्पन्न हुने मिति',
     },
     Status: {
         en: 'Status',
@@ -771,7 +771,7 @@ const languageTranslations: LanguageEntry = {
     },
     AllocatedProject: {
         en: 'Allocated Project budget',
-        np: 'परियोजना बजेट विनियोजित',
+        np: 'परियोजनाका लागी विनियोजित बजेट',
     },
     Actualexpenditure: {
         en: 'Actual expenditure',
@@ -795,11 +795,11 @@ const languageTranslations: LanguageEntry = {
     },
     Municipalgovernment: {
         en: 'Municipal government',
-        np: 'मनाहानगरपालिका/नगरपालिका/गाउँपालिका',
+        np: 'महानगरपालिका/उपमहानगरपालिका/नगरपालिका/गाउँपालिका',
     },
     INGO: {
         en: 'I/NGO',
-        np: 'अन्तर्राष्ट्रिय/राष्ट्रिय गैर-सरकारी संगठन',
+        np: 'अन्तर्राष्ट्रिय/राष्ट्रिय गैर-सरकारी संस्था',
     },
     PrivateSector: {
         en: 'Private Sector',
@@ -823,7 +823,7 @@ const languageTranslations: LanguageEntry = {
     },
     completed: {
         en: 'Completed',
-        np: 'पूरा भयोको',
+        np: 'सम्पन्न भएको',
     },
     NameofActivity: {
         en: 'Name of Activity',
@@ -854,15 +854,15 @@ const languageTranslations: LanguageEntry = {
 
     MonitoringAct: {
         en: 'Monitoring the activities based on the Priority Areas',
-        np: 'प्राथमिकता क्षेत्रहरूमा आधारित गतिविधिहरू उल्लेख गर्दै',
+        np: 'प्राथमिकता क्षेत्रहरूमा आधारित गतिविधिहरूको अनुगमन',
     },
     DisasterRiskStrategic: {
         en: 'Disaster Risk Reduction National Strategic Plan of Action 2018-2030',
         np: 'विपद् जोखिम न्यूनीकरण राष्ट्रिय रणनीतिक कार्ययोजना २०१८-२०३०',
     },
     Organizationsworking: {
-        en: 'Organizations workingon DRRM in Rajapur',
-        np: 'विपद् जोखिम न्यूनीकरण र व्यवस्थापनमा राजापुर नगरपालिकामा कम गर्ने संस्थाहरु ',
+        en: 'Organizations working on DRRM in Rajapur',
+        np: 'विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनमा राजापुर नगरपालिकामा कम गर्ने संस्थाहरु',
     },
     Hazardwiseimpact: {
         en: 'Hazardwise impact (top 5)',
@@ -898,11 +898,11 @@ const languageTranslations: LanguageEntry = {
     },
     Contctus: {
         en: 'CONTACT US',
-        np: 'हामीलाई सम्पर्क गर्नुहोस',
+        np: ' सम्पर्क गर्नुहोस',
     },
     Phone: {
         en: 'Phone:',
-        np: 'सम्पर्क',
+        np: 'फोन नं',
     },
     Website: {
         en: 'Website',
@@ -994,19 +994,19 @@ const languageTranslations: LanguageEntry = {
         en: 'Hazard',
     },
     IncidentOn: {
-        np: 'घटना भएको',
+        np: 'घटना भएको मिति',
         en: 'Incident On',
     },
     IncidentReportedOn: {
-        np: 'रिपोर्ट गरिएको',
+        np: 'रिपोर्ट गरिएको मिति',
         en: 'Reported on ',
     },
     IncidentTotalDeath: {
-        np: 'कुल मृत्यु संख्या ',
+        np: 'कुल मृतकको संख्या',
         en: 'Total Death',
     },
     IncidentTotalInjured: {
-        np: 'कुल घाइते संख्या',
+        np: 'कुल घाइतेको संख्या',
         en: 'Total Injured',
     },
     IncidentTotalMissing: {
@@ -1026,7 +1026,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Infrastructure Destroyed',
     },
     IncidentLiveStockLoss: {
-        np: 'पशुधन हानि',
+        np: 'पशुधन हानि नोक्शानी',
         en: 'Livestock Loss',
     },
     IncidentAction: {
