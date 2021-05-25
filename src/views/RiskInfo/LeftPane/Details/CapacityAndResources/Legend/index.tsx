@@ -33,8 +33,10 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const CapacityAndResourcesLegend = (props: Props) => {
     const titleContext = useContext(TitleContext);
     // for dynamic legend render
+
     const getActiveLegends = () => {
         const { activeLayersIndication } = props;
+
         const activeLegends = legendItems.filter((item) => {
             if (activeLayersIndication[item.key]) {
                 return item;
@@ -85,6 +87,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
     } else legendTitle = 'Openspace Boundary';
 
     const { resourceIdForLegend, handleDroneImage } = props;
+
     return (
         <React.Fragment>
             {!resourceIdForLegend && openspaceOn && (

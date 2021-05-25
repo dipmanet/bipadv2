@@ -14,7 +14,10 @@ type toggleValues =
     | 'industry'
     | 'communication'
     | 'communityspace'
-    | 'openspace';
+    | 'openspace'
+    |'fireengine'
+    |'helipad'
+    ;
 
 interface Props {
     activeLayersIndication: {
@@ -28,6 +31,9 @@ interface Props {
         communication: boolean;
         openspace: boolean;
         communityspace: boolean;
+        fireengine: boolean;
+        helipad: boolean;
+
     };
     handleToggleClick: (key: toggleValues, value: boolean) => void;
     handleIconClick: (key: string) => void;
@@ -44,7 +50,9 @@ const SwitchView = (props: Props) => {
         industry,
         communication,
         openspace,
-        communityspace },
+        communityspace,
+        fireengine,
+        helipad },
     handleToggleClick,
     handleIconClick,
     disabled } = props;
@@ -212,6 +220,45 @@ const SwitchView = (props: Props) => {
                     />
                 </div>
             </div>
+            <div className={styles.listItem}>
+                <Switch
+                    className={styles.switch}
+                    disabled={disabled}
+                    on
+                    off={false}
+                    value={fireengine}
+                    onChange={(value: boolean) => {
+                        handleToggleClick('fireengine', value);
+                    }}
+                />
+                <div className={styles.listTitle}> Fire Engine </div>
+            </div>
+            <div className={styles.listItem}>
+                <Switch
+                    className={styles.switch}
+                    disabled={disabled}
+                    on
+                    off={false}
+                    value={helipad}
+                    onChange={(value: boolean) => {
+                        handleToggleClick('helipad', value);
+                    }}
+                />
+                <div className={styles.listTitle}> Helipad </div>
+            </div>
+            {/* <div className={styles.listItem}>
+                <Switch
+                    className={styles.switch}
+                    disabled={disabled}
+                    on
+                    off={false}
+                    value={helipad}
+                    onChange={(value: boolean) => {
+                        handleToggleClick('helipad', value);
+                    }}
+                />
+                <div className={styles.listTitle}> Helipad </div>
+            </div> */}
         </div>
     );
 };

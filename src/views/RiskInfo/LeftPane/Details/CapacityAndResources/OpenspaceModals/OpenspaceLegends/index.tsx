@@ -81,7 +81,7 @@ class BoundaryComponent extends React.PureComponent<Props, State> {
         }
         if (checked) {
             handleDroneImage(true);
-            console.log('url', geoserverUrl);
+
 
             if (!urlAvailable) {
                 this.setState({
