@@ -442,8 +442,8 @@ const languageTranslations: LanguageEntry = {
         np: 'रु',
     },
     ResourcesHeading: {
-        en: 'स्रोत साधन',
-        np: 'Resources',
+        en: 'Resources',
+        np: 'स्रोत साधन',
     },
     ResourcesSerialNumber: {
         np: 'क्रम संख्या',

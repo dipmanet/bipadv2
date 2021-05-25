@@ -1083,7 +1083,7 @@ const Relief = (props: Props) => {
         }
         props.handleNextClick();
     };
-
+    console.log('This final Array', finalArr);
     return (
         <>
 
@@ -1148,6 +1148,9 @@ const Relief = (props: Props) => {
                                         <th>
                                             <Gt section={Translations.IncidentLiveStockLoss} />
                                         </th>
+                                        <th>
+                                            Cause
+                                        </th>
                                         { !props.annex
                                         && (
                                             <th>
@@ -1191,7 +1194,17 @@ const Relief = (props: Props) => {
                                                     <td>{item.item.loss ? item.item.loss.infrastructureDestroyedCount : 0}</td>
                                                     <td>{item.item.loss ? item.item.loss.livestockDestroyedCount : 0}</td>
 
+                                                    <td>
 
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleReliefView(item.item)}
+                                                            className={styles.addReliefBttn}
+                                                        >
+                                                                       Add Cause
+                                                        </button>
+
+                                                    </td>
                                                     {!props.annex && reliefData
                                            && reliefData.find(data => data.incident === item.item.id)
                                                         ? reliefData.filter(data => data.incident === item.item.id).map(data => (

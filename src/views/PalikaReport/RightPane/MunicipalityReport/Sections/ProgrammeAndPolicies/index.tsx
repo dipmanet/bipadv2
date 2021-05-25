@@ -324,8 +324,7 @@ const ProgramPolicies = (props: Props) => {
                                              : (
                                                  <tr key={item.id}>
                                                      <td>
-                                                         {(currentPageNumber - 1)
-                                                * i + 1}
+                                                         {i + 1}
                                                      </td>
                                                      <td>{item.point}</td>
                                                      <td>
