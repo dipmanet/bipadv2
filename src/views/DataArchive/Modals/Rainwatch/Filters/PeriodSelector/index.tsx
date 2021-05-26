@@ -6,7 +6,7 @@ import { Periods, Errors } from '../../types';
 import styles from './styles.scss';
 
 const periods: Periods[] = [
-    { periodCode: 'minute', periodName: 'Minute' },
+    // { periodCode: 'minute', periodName: 'Minute' },
     { periodCode: 'hourly', periodName: 'Hourly' },
     { periodCode: 'daily', periodName: 'Daily' },
     { periodCode: 'monthly', periodName: 'Monthly' },

@@ -106,7 +106,6 @@ const Graph = (props: Props) => {
         if (filterWiseChartData && filterWiseChartData.length > 0) {
             let cumulative = 0;
             let cumulativeDaily = 0;
-            const cumulativeMonthly = 0;
             const datawithCumulative = filterWiseChartData.map((item) => {
                 cumulative += item.accHour;
                 cumulativeDaily += item.accDaily;
@@ -147,8 +146,8 @@ const Graph = (props: Props) => {
     }, [cumulativeData]);
 
     // const displayNote = shouldDisplayNote(periodCode || '');
-    console.log('for chart: ', filterWiseChartData);
-    console.log('cumulative: ', cumulativeData);
+    // console.log('for chart: ', filterWiseChartData);
+    // console.log('cumulative: ', cumulativeData);
     const date = `${startDate} to ${endDate}`;
     const calculatedTitle = getChartTitle(
         intervalCode || '',
@@ -164,7 +163,7 @@ const Graph = (props: Props) => {
             />
         );
     }
-    const isMinuteSelected = periodCode === 'minute';
+    // const isMinuteSelected = periodCode === 'minute';
     return (
         <div className={styles.visualizations}>
             <div
@@ -204,11 +203,11 @@ const Graph = (props: Props) => {
                                             margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                                         >
                                             <CartesianGrid stroke="#f5f5f5" />
-                                            <XAxis dataKey="yearMth" />
+                                            <XAxis dataKey="yearMth" interval={0} angle={-45} dy={15} height={70} />
                                             <YAxis />
                                             <Tooltip />
                                             <Legend />
-                                            <Bar name="Accumulated Rain(mm)" dataKey="accMonthly" />
+                                            <Bar name="Accumulated Rain(mm)" dataKey="accMonthly" fill="#82ca9d" />
                                             <Line
                                                 type="monotone"
                                                 name="Cumulative Rain(mm)"
@@ -226,11 +225,11 @@ const Graph = (props: Props) => {
                                                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                                             >
                                                 <CartesianGrid stroke="#f5f5f5" />
-                                                <XAxis dataKey="label" />
+                                                <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
                                                 <YAxis domain={['accHour', 'auto']} />
                                                 <Tooltip />
                                                 <Legend />
-                                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" />
+                                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" fill="#82ca9d" />
                                                 <Line
                                                     type="monotone"
                                                     name="Cumulative Rain(mm)"
@@ -250,7 +249,7 @@ const Graph = (props: Props) => {
                                                 <YAxis domain={['accDaily', 'auto']} />
                                                 <Tooltip />
                                                 <Legend />
-                                                <Bar name="Accumulated Rain(mm)" dataKey="accDaily" />
+                                                <Bar name="Accumulated Rain(mm)" dataKey="accDaily" fill="#82ca9d" />
                                                 <Line
                                                     type="monotone"
                                                     name="Cumulative Rain(mm)"

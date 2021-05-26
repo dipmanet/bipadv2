@@ -120,12 +120,12 @@ const RainModal = (props: Props) => {
 
     const rainDataWithParameter = parseInterval(stationData);
     const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
-    console.log('Rain data period:', rainDataWithPeriod);
+    // console.log('Rain data period:', rainDataWithPeriod);
 
-    const minuteWiseGroup = groupList(
-        rainDataWithPeriod.filter(r => r.dateWithMinute),
-        rain => rain.dateWithMinute,
-    );
+    // const minuteWiseGroup = groupList(
+    //     rainDataWithPeriod.filter(r => r.dateWithMinute),
+    //     rain => rain.dateWithMinute,
+    // );
     const hourWiseGroup = groupList(
         rainDataWithPeriod.filter(r => r.dateWithHour),
         rain => rain.dateWithHour,
@@ -148,9 +148,9 @@ const RainModal = (props: Props) => {
         period: { periodCode },
         // interval: { intervalCode },
     } = filterValues;
-    if (periodCode === 'minute') {
-        filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
-    }
+    // if (periodCode === 'minute') {
+    //     filterWiseChartData = getChartData(minuteWiseGroup, 'minuteName');
+    // }
     if (periodCode === 'hourly') {
         filterWiseChartData = getChartData(hourWiseGroup, 'hourName');
         intervalCode = 'oneHour';

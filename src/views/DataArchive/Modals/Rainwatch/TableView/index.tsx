@@ -84,6 +84,7 @@ const TableView = (props: Props) => {
         isInitial,
         stationName,
     } = props;
+    console.log('table');
     const rainHeader = [
         {
             key: 'year',
