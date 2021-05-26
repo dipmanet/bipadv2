@@ -32,12 +32,14 @@ import {
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import { hazardTypesList,
     incidentPointToGeojsonVR,
+    incidentPointToGeojson,
     getWardFilter } from '#utils/domain';
 
 import { hazardTypesSelector,
     incidentListSelectorIP,
     filtersSelector,
-    regionsSelector } from '#selectors';
+    regionsSelector,
+    incidentSelector } from '#selectors';
 import Locations from './Data/locations';
 import {
     transformRegionToFilter,
@@ -69,7 +71,7 @@ interface ComponentProps {
 }
 
 interface PropsFromDispatch {
-    // setIncidentList: typeof setIncidentListActionIP;
+    setIncidentList: typeof setIncidentListActionIP;
     setEventList: typeof setEventListAction;
 }
 interface PropsFromAppState {
@@ -88,11 +90,11 @@ type ReduxProps = ComponentProps & PropsFromDispatch & PropsFromAppState;
 
 type Props = NewProps<ReduxProps, Params>;
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-    // incidentList: incidentListSelectorIP(state),
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
     filters: filtersSelector(state),
     hazards: hazardTypesSelector(state),
+    incidentList: incidentListSelectorIP(state),
 
 });
 
@@ -111,47 +113,48 @@ const transformFilters = ({
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
-// const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-//     incidentsGetRequest: {
-//         url: '/incident/',
-//         method: methods.GET,
-//         // We have to transform dateRange to incident_on__lt and incident_on__gt
-//         query: () => {
-//             const filters = {
-//                 region: {},
-//                 hazard: [17],
-//                 dataDateRange: {
-//                     rangeInDays: 'custom',
-//                     startDate: '2011-01-01',
-//                     endDate: '2021-01-01',
-//                 },
-//             };
-//             return ({
-//                 ...transformFilters(filters),
-//                 expand: ['loss', 'event', 'wards'],
-//                 ordering: '-incident_on',
-//                 limit: -1,
-//             });
-//         },
-//         onSuccess: ({ response, props: { setIncidentList } }) => {
-//             interface Response { results: PageType.Incident[] }
-//             const { results: incidentList = [] } = response as Response;
-//             setIncidentList({ incidentList });
-//         },
-//         onMount: true,
-//         onPropsChanged: {
-//             filters: ({
-//                 props: { filters },
-//                 prevProps: { filters: prevFilters },
-//             }) => {
-//                 const shouldRequest = filters !== prevFilters;
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    incidentsGetRequest: {
+        url: '/incident/',
+        method: methods.GET,
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: () => {
+            const filters = {
+                region: { adminLevel: 3, geoarea: 23007 },
+                hazard: [],
+                dataDateRange: {
+                    rangeInDays: 'custom',
+                    startDate: '2011-01-01',
+                    endDate: '2021-01-01',
+                },
+            };
+            return ({
+                ...transformFilters(filters),
+                expand: ['loss', 'event', 'wards'],
+                ordering: '-incident_on',
+                limit: -1,
+            });
+        },
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            interface Response { results: PageType.Incident[] }
+            const { results: incidentList = [] } = response as Response;
+            console.log('incidents:', incidentList);
+            setIncidentList({ incidentList });
+        },
+        onMount: true,
+        onPropsChanged: {
+            filters: ({
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
 
-//                 return shouldRequest;
-//             },
-//         },
-//         // extras: { schemaName: 'incidentResponse' },
-//     },
-// };
+                return shouldRequest;
+            },
+        },
+        // extras: { schemaName: 'incidentResponse' },
+    },
+};
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -164,15 +167,16 @@ const BarabiseLandslide = (props) => {
     const [showDemoChart, setShowDemoChart] = useState(true);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const {
-        // incidentList,
+        incidentList,
         hazardTypes,
         regions,
+        hazards,
     } = props;
     const handleAnimationStart = () => setReanimate(false);
     const getSanitizedIncident = memoize(getSanitizedIncidents);
     // eslint-disable-next-line no-shadow
     const setDestinationhandle = destination => setDestination(destination);
-    const incidentList = CriticalData.criticalInfraData;
+    // const incidentList = CriticalData.criticalInfraData;
     const sanitizedIncidentList = getSanitizedIncident(
         incidentList,
         regions,
@@ -180,11 +184,28 @@ const BarabiseLandslide = (props) => {
     );
 
     const getPointFeatureCollection = memoize(incidentPointToGeojsonVR);
+    const getPointFeatureCollectionOriginal = memoize(incidentPointToGeojson);
     const pointFeatureCollection = getPointFeatureCollection(
         sanitizedIncidentList,
         hazardTypes,
         { ini: 1293819300000, fin: 1609438500000 },
     );
+    useEffect(() => {
+        if (incidentList) {
+            const sanitizedIncidentList = getSanitizedIncident(
+                incidentList,
+                regions,
+                hazardTypes,
+            );
+            const pointFeatureCollection = getPointFeatureCollectionOriginal(
+                sanitizedIncidentList,
+                hazards,
+            );
+            console.log('pointFeatureCollection', pointFeatureCollection);
+            console.log('incidentList', incidentList);
+        }
+    }, [getPointFeatureCollection, getPointFeatureCollectionOriginal,
+        getSanitizedIncident, hazardTypes, hazards, incidentList, regions]);
     const cood = Object.values(pointFeatureCollection)[1]
         .map(item => ({ position: item.geometry.coordinates, date: item.properties.incidentOn }));
 
@@ -299,6 +320,6 @@ const BarabiseLandslide = (props) => {
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    // createConnectedRequestCoordinator<ReduxProps>(),
-    // createRequestClient(requests),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
 )(BarabiseLandslide);

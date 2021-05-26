@@ -1,4 +1,8 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import memoize from 'memoize-one';
+
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -13,22 +17,112 @@ import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardLegends from './Legends/FloodHazardLegends';
 import FloodDepthLegend from './Legends/FloodDepthLegend';
+import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import {
+    incidentPointToGeojson,
+} from '#utils/domain';
+import {
+    regionsSelector,
+    filtersSelector,
+    hazardTypesSelector,
+    incidentListSelectorIP,
+} from '#selectors';
 
+import {
+    setIncidentListActionIP,
+    setEventListAction,
+} from '#actionCreators';
+
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
 import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
+import MapWithTimeline from './MapWithTimeline';
 
 const rightelements = [
     <RightElement1 />,
     <RightElement2 />,
-    <RightElement3 />,
-    <RightElement4 />,
-    <RightElement5 />,
-    <RightElement6 />,
+    // <RightElement3 />,
+    // <RightElement4 />,
+    // <RightElement5 />,
+    // <RightElement6 />,
 ];
 
-export default class Rajapur extends React.Component {
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    hazardTypes: hazardTypesSelector(state),
+    regions: regionsSelector(state),
+    filters: filtersSelector(state),
+    hazards: hazardTypesSelector(state),
+    incidentList: incidentListSelectorIP(state),
+
+});
+
+const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+    setEventList: params => dispatch(setEventListAction(params)),
+});
+
+const transformFilters = ({
+    dataDateRange,
+    region,
+    ...otherFilters
+}: FiltersElement) => ({
+    ...otherFilters,
+    // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
+    ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
+    ...transformRegionToFilter(region),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    incidentsGetRequest: {
+        url: '/incident/',
+        method: methods.GET,
+        query: () => {
+            const filters = {
+                region: { adminLevel: 3, geoarea: 23007 },
+                hazard: [],
+                dataDateRange: {
+                    rangeInDays: 'custom',
+                    startDate: '2011-01-01',
+                    endDate: '2021-01-01',
+                },
+            };
+            return ({
+                ...transformFilters(filters),
+                expand: ['loss', 'event', 'wards'],
+                ordering: '-incident_on',
+                limit: -1,
+            });
+        },
+        onSuccess: ({ response, props: { setIncidentList } }) => {
+            interface Response { results: PageType.Incident[] }
+            const { results: incidentList = [] } = response as Response;
+            console.log('incidents:', incidentList);
+            setIncidentList({ incidentList });
+        },
+        onMount: true,
+        onPropsChanged: {
+            filters: ({
+                props: { filters },
+                prevProps: { filters: prevFilters },
+            }) => {
+                const shouldRequest = filters !== prevFilters;
+
+                return shouldRequest;
+            },
+        },
+        // extras: { schemaName: 'incidentResponse' },
+    },
+};
+
+class Jugal extends React.Component {
     public constructor(props) {
         super(props);
 
@@ -48,6 +142,17 @@ export default class Rajapur extends React.Component {
             evacElement: 'all',
             showCriticalElements: true,
         };
+
+        const { requests: { incidentsGetRequest } } = this.props;
+
+        incidentsGetRequest.setDefaultParams({
+            onSuccess: this.setIncidents,
+        });
+    }
+
+    public setIncidents = (incidents) => {
+        this.setState({ incidents });
+        console.log('incidents data:', incidents);
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -152,6 +257,9 @@ export default class Rajapur extends React.Component {
         }
     }
 
+    private getSanitizedIncidents = memoize(getSanitizedIncidents);
+
+    private getPointFeatureCollectionOriginal = memoize(incidentPointToGeojson);
 
     public render() {
         const {
@@ -168,45 +276,96 @@ export default class Rajapur extends React.Component {
             showCriticalElements,
         } = this.state;
 
+        const {
+            incidentList,
+            regions,
+            hazardTypes,
+            hazards,
+        } = this.props;
+        const sanitizedIncidentList = this.getSanitizedIncidents(
+            incidentList,
+            regions,
+            hazardTypes,
+        );
+        const pointFeatureCollection = this.getPointFeatureCollectionOriginal(
+            sanitizedIncidentList,
+            hazards,
+        );
+
+        console.log('pointFeatureCollection', pointFeatureCollection);
         return (
             <div>
-                <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    disableNavBtns={this.disableNavBtns}
-                    enableNavBtns={this.enableNavBtns}
-                />
-                {rightelements[rightElement]}
-                {rightElement === 0
-                && (
-                    <RightElement1
-                        handleNext={this.handleNext}
-                        handlePrev={this.handlePrev}
-                        disableNavLeftBtn={disableNavLeftBtn}
-                        disableNavRightBtn={disableNavRightBtn}
-                        pagenumber={rightElement + 1}
-                        totalPages={rightelements.length}
-                    />
-
-                )
+                {
+                    rightElement === 0
+                    && (
+                        <>
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                            />
+                            <RightElement1
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                            />
+                        </>
+                    )
                 }
                 {rightElement === 1
-                    ? (
-                        <div className={styles.legends}>
-                            <VRLegend>
-                                <LandcoverLegends />
-                            </VRLegend>
-                        </div>
+                    && (
+                        <>
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                            />
+                            <RightElement3
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                            />
+                        </>
 
                     )
-                    : ''}
+                }
+                {
+                    rightElement === 5
+                    && (
+                        <MapWithTimeline
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                        />
+                    )
+                }
+                {/* {rightelements[rightElement]} */}
+
+
                 {rightElement === 2
                     ? (
                         <div className={styles.legends}>
@@ -290,3 +449,9 @@ export default class Rajapur extends React.Component {
         );
     }
 }
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
+)(Jugal);

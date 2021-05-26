@@ -6,12 +6,6 @@ import { CartesianGrid,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
-import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
-import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
-import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
-import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
 import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 
@@ -132,91 +126,21 @@ class Rajapur extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1> Rajapur Municipality </h1>
-                {/* <p>
-                         Rajapur municipality lies in the Terai region of Bardiya
-                        district in Province five. It covers a total area of 127.08
-                        square km, and is situated at an elevation of 142 m to 154 m from sea level.
-                </p> */}
+                <h1> Jugal Rural Municipality</h1>
                 <p>
-                    Rajapur municipality lies in the Terai region of Bardiya
-                    district in Lumbini Province. It covers a  total area of
-                    127.08 square km, and is situated at an elevation of
-                    142 m to 154 m from sea level.
-
+                    Jugal Rural Municipality is located in Sindhupalchok district,
+                    Province No. 3 of Nepal. It has total 7 wards, which are scattered
+                    across 596.5 square kilometers of geographical area. It lies at an
+                    elevation of 300 to 7080 meters above sea level.
                 </p>
                 <h2>Climate</h2>
                 <p>
-                    {' '}
-                    Rajapur experiences a lower tropical climate.  Summer
-                    starts from March and lasts till June. Winter begins
-                    in November and lasts till February. Rajapur faces heavy
-                    downpours during the monsoon, from June to October.
-
+                    Winter is from November-March, summer is from April-May and
+                    rainy is from May to October with mean annual temperature of
+                    18°C, and maximum temperature of 32.5°C and minimum of 5°C and
                 </p>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={TempIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>41℃</div>
-                            <div className={styles.iconText}>
-                            Average Maximum
-                                <br />
-                            Temperature in Summer
-                            </div>
 
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        {/* <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={TempIcon}
-                        /> */}
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>7℃</div>
-                            <div className={styles.iconText}>
-                            Average Minimum
-                                <br />
-                            Temeperature in Winter
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={AvgRainFall}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1900mm</div>
-                            <div className={styles.iconText}>
-                            Average Annual
-                            Rainfall
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainerHidden}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ElevationIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>142m - 154m</div>
-                            <div className={styles.iconText}>
-                            Elevation from Sea Level
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <ResponsiveContainer className={styles.chartContainer} height={300}>
+                <ResponsiveContainer className={styles.chartContainer} width={360} height={300}>
                     <LineChart
                         margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
                         data={lineData}
@@ -227,7 +151,8 @@ class Rajapur extends React.PureComponent<Props, State> {
                         />
                         <XAxis
                             dataKey="name"
-                            interval="preserveStart"
+                            interval={0}
+                            angle={30}
                             tick={{ fill: '#94bdcf' }}
                         />
                         <YAxis

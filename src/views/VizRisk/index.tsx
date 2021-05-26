@@ -112,22 +112,24 @@ const VizRiskMainPage = () => {
                                 </Button>
                             </div>
                             <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick('bharabise')}
+                            <div className={styles.vizriskmunicipalityName}>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('bharabise')}
 
-                            >
-                                <h1 className={styles.menuItems}>Bharabise Municipality</h1>
+                                >
+                                    <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
-                            </Button>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick('jugal')}
+                                </Button>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('jugal')}
 
-                            >
-                                <h1 className={styles.menuItems}>Jugal Municipality</h1>
+                                >
+                                    <h1 className={styles.menuItems}>Jugal Municipality</h1>
 
-                            </Button>
+                                </Button>
+                            </div>
 
 
                         </div>

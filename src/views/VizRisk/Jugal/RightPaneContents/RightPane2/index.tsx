@@ -25,14 +25,11 @@ import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
 import Disclaimer from '../../Components/Disclaimer';
+import NavButtons from '../../Components/NavButtons';
+import DemographyData from './DemographyChartData';
 
-const data = [
-    { name: 'Agricultural land', value: 94.07 },
-    { name: 'Forest', value: 5.99 },
-    { name: 'Water bodies', value: 5.18 },
-    { name: 'Other', value: 21.5 },
-    { name: 'Buildings', value: 0.959 },
-].sort(({ value: a }, { value: b }) => b - a);
+const demoChartdata = DemographyData.chartData;
+
 
 const COLORS_CHART = [
     '#d3e378',
@@ -148,22 +145,25 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public render() {
         const { activeIndex, showInfo } = this.state;
-
+        const {
+            handleNext,
+            handlePrev,
+            disableNavLeftBtn,
+            disableNavRightBtn,
+            pagenumber,
+            totalPages,
+        } = this.props;
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Land Cover</h1>
-
-                {/* <p>
-                    {' '}
-                    Located in the Terai region and lying close to water bodies,
-                    Rajapur has fertile and arable land.
-
-                </p> */}
+                <h1>Demography</h1>
                 <p>
-                    Out of total area of 127.08 square km, 74.06% of land is
-                    used for agriculture. Building covers 0.75% of land while
-                    water bodies occupies 4.08% of total land in Rajapur.
+                    Jugal Rural Municipality has the total population of
+                    19,231 with the male and female population being 9,581
+                    and 9,650 respectively. Total household number counts
+                    to 3,941. Ward number 2 has the largest household number
+                    that equals to 731, while ward number 6 has the least
+                    comprising of only 378 number of household.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -174,7 +174,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         <Pie
                             activeIndex={activeIndex}
                             activeShape={this.renderActiveShape}
-                            data={data}
+                            data={demoChartdata}
                                 // cx={150}
                             // cy={50}
                             innerRadius={70}
@@ -186,15 +186,15 @@ class RightPane extends React.PureComponent<Props, State> {
                             stroke="none"
                         >
                             {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
+                                demoChartdata.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
                             }
                             <Label
                                 width={30}
                                 position="center"
                                 content={(
                                     <CustomLabel
-                                        value1={`${data[activeIndex].value} sq km`}
-                                        value2={` / ${((data[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
+                                        value1={`${demoChartdata[activeIndex].value} sq km`}
+                                        value2={` / ${((demoChartdata[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
                                     />
                                 )}
                             />
@@ -205,46 +205,53 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <div className={styles.customChartLegend}>
                     <CustomChartLegend
-                        text={data[0].name}
+                        text={demoChartdata[0].name}
                         barColor={COLORS_CHART[0]}
                         background={'#eee'}
-                        data={'94.07 sq km / 74.06'}
+                        demoChartdata={'94.07 sq km / 74.06'}
                         selected={activeIndex === 0}
                     />
 
                     <CustomChartLegend
-                        text={data[2].name}
+                        text={demoChartdata[2].name}
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
-                        data={'5.99 sq km / 4.72'}
+                        demoChartdata={'5.99 sq km / 4.72'}
                         selected={activeIndex === 2}
                     />
                     <CustomChartLegend
-                        text={data[3].name}
+                        text={demoChartdata[3].name}
                         barColor={COLORS_CHART[3]}
                         background={'#eee'}
-                        data={'5.18 sq km / 4.08'}
+                        demoChartdata={'5.18 sq km / 4.08'}
                         selected={activeIndex === 3}
                     />
                     <CustomChartLegend
-                        text={data[4].name}
+                        text={demoChartdata[4].name}
                         barColor={COLORS_CHART[4]}
                         background={'#444'}
-                        data={'0.959 sq km / 0.75'}
+                        demoChartdata={'0.959 sq km / 0.75'}
                         selected={activeIndex === 4}
                         builtupArea
                     />
                     <CustomChartLegend
-                        text={data[1].name}
+                        text={demoChartdata[1].name}
                         barColor={COLORS_CHART[1]}
                         background={'#444'}
-                        data={'21.5 sq km / 16.93'}
+                        demoChartdata={'21.5 sq km / 16.93'}
                         selected={activeIndex === 1}
                     />
 
                 </div>
-                {/* <SourceInfo /> */}
-                <Disclaimer />
+
+                <NavButtons
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    disableNavLeftBtn={disableNavLeftBtn}
+                    disableNavRightBtn={disableNavRightBtn}
+                    pagenumber={pagenumber}
+                    totalPages={totalPages}
+                />
             </div>
         );
     }

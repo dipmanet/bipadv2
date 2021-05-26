@@ -9,13 +9,12 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Rajapur/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Rajapur/Icons/male.svg';
-import Female from '#views/VizRisk/Rajapur/Icons/female.svg';
-import Home from '#views/VizRisk/Rajapur/Icons/homeNew.svg';
+import DemographyData from './DemographyChartData';
 
 import Disclaimer from '../../Components/Disclaimer';
+import NavButtons from '../../Components/NavButtons';
+
+const demoChartdata = DemographyData.chartData;
 
 interface ComponentProps {}
 
@@ -24,117 +23,61 @@ type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideThreePane extends React.PureComponent<Props, State> {
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
+    public renderLegend = props => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
                        Male Pop
-                        <sup>n</sup>
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
-                    Female Pop
-                        <sup>n</sup>
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
-                       Total Household
-                    </div>
+                    <sup>n</sup>
                 </div>
             </div>
-        );
-    }
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMin} />
+                <div className={styles.legendText}>
+                    Female Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendDaily} />
+                <div className={styles.legendText}>
+                       Total Household
+                </div>
+            </div>
+        </div>
+    )
 
     public render() {
-        const chartData = demographicsData.demographicsData;
+        const {
+            payload,
+            handleNext,
+            handlePrev,
+            disableNavLeftBtn,
+            disableNavRightBtn,
+            disableNav,
+            RightBtn,
+            pagenumber,
+            totalPages,
+        } = this.props;
+
         return (
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven
-                with some pockets of dense settlements. This map allows
-                viewing the population distribution within each ward and
-                helps to locate the region of dense and sparse settlements.
+                Jugal Rural Municipality has the total population of
+                19,231 with the male and female population being
+                9,581 and 9,650 respectively. Total household number
+                counts to 3,941. Ward number 2 has the largest household
+                number that equals to 731, while ward number 6 has the
+                least comprising of only 378 number of household.
                 </p>
-                <p>
-                Ward number 4 has the highest number of population with 1693
-                households. Notably, these high populations ward lies very close
-                to the western tributary of the Karnali river.  Ward number 7 has
-                the least number of households comprising of 766 numbers.
-                </p>
-
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ManWoman}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>55,584</div>
-                            <div className={styles.iconText}>
-                                Total Population
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIconHH}
-                            src={Home}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>12,138</div>
-                            <div className={styles.iconText}>
-                             Total Household Number
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={Male}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>25,519</div>
-                            <div className={styles.iconText}>
-                             Male Population
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={Female}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>30,065</div>
-                            <div className={styles.iconText}>
-                             Female Population
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
 
                 <ResponsiveContainer width="100%" height={'50%'}>
                     <BarChart
                         width={350}
                         height={600}
-                        data={chartData}
+                        data={demoChartdata}
                         layout="vertical"
                         margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
                     >
@@ -150,8 +93,14 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
-                {/* <SourceInfo /> */}
-                <Disclaimer />
+                <NavButtons
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    disableNavLeftBtn={disableNavLeftBtn}
+                    disableNavRightBtn={disableNavRightBtn}
+                    pagenumber={pagenumber}
+                    totalPages={totalPages}
+                />
 
             </div>
         );

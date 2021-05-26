@@ -2,10 +2,12 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { mapSources } from '#constants';
 import SchoolGeoJSON from '../Data/rajapurGEOJSON';
 import demographicsData from '../Data/demographicsData';
 import styles from './styles.scss';
+import '@watergis/mapbox-gl-legend/css/styles.css';
 
 import {
     // provincesSelector,
@@ -17,6 +19,7 @@ import {
     selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
+    incidentListSelectorIP,
 } from '#selectors';
 
 import {
@@ -81,20 +84,15 @@ const criticalInfraClusters = [].concat(...arrCritical);
 const evacClusters = [].concat(...arrEvac);
 
 
-const slideOneLayers = ['jugalwardnumber',
+const slideOneLayers = ['incidents-layer', 'jugalwardnumber',
     'water', 'waterway',
     'jugalwardoutline', 'jugalmun', 'municipalitycentroidgeo'];
 
-const slideTwoLayers = ['water',
-    'canalRajapur', 'rajapurbuildings', 'bridgeRajapur',
-    'rajapurRoads', 'forestRajapur', 'agriculturelandRajapurPattern',
-    'agriculturelandRajapur',
-
+const slideTwoLayers = ['jugalwardnumber', 'water', 'jugalwardoutline',
+    'ward-fill-local',
 ];
 
-const slideThreeLayers = ['wardNumbers', 'water', 'wardOutline',
-    'ward-fill-local', 'bufferRajapur',
-    'population-extruded'];
+const slideThreeLayers = ['incidents-layer'];
 
 const slideFourLayers = [
     ...criticalInfraClusters, 'water', 'wardOutline',
@@ -135,13 +133,13 @@ class FloodHistoryMap extends React.Component {
             selectedProvinceId: provinceId,
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
+            incidentList,
         } = this.props;
-
         const mapping = [];
         if (wards) {
             wards.map((item) => {
                 const { id } = item;
-                if (item.municipality === 58007) {
+                if (item.municipality === 23007) {
                     if (item.title === '1') {
                         mapping.push({ id, value: 1 });
                     }
@@ -163,15 +161,6 @@ class FloodHistoryMap extends React.Component {
                     if (item.title === '7') {
                         mapping.push({ id, value: 7 });
                     }
-                    if (item.title === '8') {
-                        mapping.push({ id, value: 8 });
-                    }
-                    if (item.title === '9') {
-                        mapping.push({ id, value: 9 });
-                    }
-                    if (item.title === '10') {
-                        mapping.push({ id, value: 10 });
-                    }
                 }
                 return null;
             });
@@ -187,10 +176,11 @@ class FloodHistoryMap extends React.Component {
         });
 
 
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
+        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-        this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+        this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+        this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
         this.map.on('idle', () => {
             const { rightElement, enableNavBtns } = this.props;
             if (rightElement === 0) {
@@ -202,24 +192,6 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            const updateArea = (e) => {
-                console.log(e);
-            };
-            const draw = new MapboxDraw({
-                displayControlsDefault: false,
-                controls: {
-                    polygon: true,
-                    trash: true,
-                },
-                defaultMode: 'draw_polygon',
-            });
-            this.map.addControl(draw);
-
-            this.map.on('draw.create', updateArea);
-            this.map.on('draw.delete', updateArea);
-            this.map.on('draw.update', updateArea);
-
-
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
@@ -394,10 +366,11 @@ class FloodHistoryMap extends React.Component {
                         1,
                     ],
                 },
-                filter: getWardFilter(5, 65, 58007, wards),
+                filter: getWardFilter(3, 24, 23007, wards),
             });
-
-            this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            if (this.props.rightElement !== 1) {
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            }
 
             mapping.forEach((attribute) => {
                 this.map.setFeatureState(
@@ -512,17 +485,17 @@ class FloodHistoryMap extends React.Component {
                 hoveredWardId = null;
             });
 
-            this.map.setZoom(1);
-            this.props.disableNavBtns('both');
-            setTimeout(() => {
-                this.props.disableNavBtns('both');
+            // this.map.setZoom(1);
+            // this.props.disableNavBtns('both');
+            // setTimeout(() => {
+            //     this.props.disableNavBtns('both');
 
-                this.map.easeTo({
-                    zoom: 10.5,
-                    duration: 8000,
-                });
-            }, 4000);
-            this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
+            //     this.map.easeTo({
+            //         zoom: 10.2,
+            //         duration: 8000,
+            //     });
+            // }, 4000);
+            // this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
         });
     }
 
@@ -573,15 +546,14 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideOneLayers, 'visible');
                 } else if (nextProps.rightElement === 1) {
                 // this.map.setPitch(40);
-                    this.map.easeTo({
-                        pitch: 40,
-                        zoom: 12,
-                        duration: 2000,
-                    });
+                //     this.map.easeTo({
+                //         pitch: 40,
+                //         zoom: 12,
+                //         duration: 2000,
+                //     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'none');
                     this.toggleVisiblity(slideTwoLayers, 'visible');
-                    this.map.setPaintProperty('wardFill', 'fill-color', '#b4b4b4');
                     this.orderLayers(slideTwoLayers);
                 } else if (nextProps.rightElement === 2) {
                     this.toggleVisiblity(slideTwoLayers, 'none');
@@ -616,9 +588,54 @@ class FloodHistoryMap extends React.Component {
         }
     }
 
+
+    public componentDidUpdate(nextProps) {
+        // const inci = this.map.getLayer('incidents-layer');
+        // if (!inci) {
+        //     this.map.addSource('incidents', {
+        //         type: 'geojson',
+        //         data: this.props.incidentList,
+        //     });
+        //     this.map.addLayer(
+        //         {
+        //             id: 'incidents-layer',
+        //             type: 'circle',
+        //             source: 'incidents',
+        //             layout: {},
+        //             paint: {
+        //                 'circle-color': '#ff0000',
+        //             },
+        //         },
+        //     );
+        // }
+
+
+        // if (this.props.rightElement === 1) {
+        //     const updateArea = (e) => {
+        //         console.log(e);
+        //     };
+        //     const draw = new MapboxDraw({
+        //         displayControlsDefault: false,
+        //         controls: {
+        //             polygon: true,
+        //             trash: true,
+        //         },
+        //         defaultMode: 'draw_polygon',
+        //     });
+        //     this.map.addControl(draw, 'top-right');
+
+        //     this.map.on('draw.create', updateArea);
+        //     this.map.on('draw.delete', updateArea);
+        //     this.map.on('draw.update', updateArea);
+        // } if (this.props.rightElement === 0) {
+        //     this.map.removeControl('draw');
+        // }
+    }
+
     public componentWillUnmount() {
         this.map.remove();
     }
+
 
     public getRasterLayer = (years: number) => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
@@ -763,20 +780,23 @@ class FloodHistoryMap extends React.Component {
         this.props.handleMoveEnd(true);
     }
 
+    public handleInputChange = (e) => {
+        console.log('e:', e.target.value);
+    }
+
     public render() {
         const mapStyle = {
             position: 'absolute',
             width: '70%',
             left: 'calc(30% - 60px)',
             top: 0,
-            bottom: 0,
+            // bottom: 0,
             height: '100vh',
         };
 
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-
             </div>
         );
     }
