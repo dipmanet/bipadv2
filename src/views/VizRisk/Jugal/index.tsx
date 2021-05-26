@@ -42,7 +42,7 @@ import {
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
-import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
 
@@ -366,7 +366,7 @@ class Jugal extends React.Component {
                 {/* {rightelements[rightElement]} */}
 
 
-                {rightElement === 2
+                {rightElement === 1
                     ? (
                         <div className={styles.legends}>
                             <VRLegend>

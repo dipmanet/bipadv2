@@ -53,10 +53,11 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, 'rgb(0,177,0)', 2, 'rgb(181,209,122)',
-    3, 'rgb(241,238,150)', 4, '#9a3404',
-    5, '#d95f0e', 6, 'rgb(245,219,131)',
-    7, 'rgb(255,240,255)', 8, 'rgb(207,144,119)',
+    1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
+    3, 'rgb(255,111,0)', 4, 'rgb(255,143,13)',
+    5, 'rgb(255,111,0)', 6, 'rgb(255,207,142)',
+    7, 'rgb(255,143,13)', 8, 'rgb(207,144,119)',
+    99, 'rgb(255,235,199)',
 ];
 const {
     criticalinfrastructures,
@@ -154,7 +155,6 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
         this.map.on('idle', () => {
             const { rightElement, enableNavBtns } = this.props;
             if (rightElement === 0) {
@@ -327,10 +327,11 @@ class FloodHistoryMap extends React.Component {
                         'interpolate',
                         ['linear'],
                         ['feature-state', 'value'],
-                        1, 'rgb(0,177,0)', 2, 'rgb(181,209,122)',
-                        3, 'rgb(241,238,150)', 4, '#9a3404',
-                        5, '#d95f0e', 6, 'rgb(245,219,131)',
-                        7, 'rgb(255,240,255)', 8, 'rgb(207,144,119)',
+                        1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
+                        3, 'rgb(255,111,0)', 4, 'rgb(255,143,13)',
+                        5, 'rgb(255,111,0)', 6, 'rgb(255,207,142)',
+                        7, 'rgb(255,143,13)', 8, 'rgb(207,144,119)',
+                        99, 'rgb(255,235,199)',
                     ],
                     'fill-opacity': [
                         'case',
@@ -342,6 +343,7 @@ class FloodHistoryMap extends React.Component {
                 filter: getWardFilter(3, 24, 23007, wards),
             });
             if (this.props.rightElement !== 1) {
+                this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
             }
 

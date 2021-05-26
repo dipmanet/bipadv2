@@ -38,16 +38,10 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationIndicator5} />
                             </div>
                             <div className={styles.populationTextContainer}>
-                                <div className={styles.populationText}>
-                                    {/* {'>'}
-                                    {' '} */}
-                                        7079
-                                </div>
-                                <div className={styles.populationText}>7000</div>
-                                <div className={styles.populationText}>6000</div>
-                                <div className={styles.populationText}>5000</div>
-                                <div className={styles.populationText}>4000</div>
-                                <div className={styles.populationText}>3000</div>
+                                <div className={styles.populationText}>3000-4000</div>
+                                <div className={styles.populationText}>2000-3000</div>
+                                <div className={styles.populationText}>1000-2000</div>
+                                <div className={styles.populationText}>0-1000</div>
                             </div>
 
                         </div>
@@ -72,12 +66,13 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationIndicator5} />
                             </div>
                             <div className={styles.populationTextContainer}>
-                                <div className={styles.populationText}>16400</div>
-                                <div className={styles.populationText}>6800</div>
-                                <div className={styles.populationText}>3520</div>
-                                <div className={styles.populationText}>1760</div>
-                                <div className={styles.populationText}>560</div>
-                                <div className={styles.populationText}>0</div>
+                                {/* <div className={styles.populationText}>16400</div> */}
+                                {/* <div className={styles.populationText}>16400</div> */}
+                                <div className={styles.populationText}>0-120</div>
+                                <div className={styles.populationText}>120.01-480</div>
+                                <div className={styles.populationText}>480.01-1040</div>
+                                <div className={styles.populationText}>1040.01-1840</div>
+                                <div className={styles.populationText}>1840.01 - 3680</div>
                             </div>
 
                         </div>
