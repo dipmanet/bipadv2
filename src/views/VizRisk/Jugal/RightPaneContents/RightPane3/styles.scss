@@ -28,7 +28,12 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
-   
+        .chartContainer{
+            // border: 1px solid red;
+            height: 600px;
+            padding-top:0;
+            width: 360px;
+        }
         .lastPara{
             z-index: 2;
             background-color:#112330;

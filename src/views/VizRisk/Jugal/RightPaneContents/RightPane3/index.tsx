@@ -79,27 +79,28 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 number that equals to 731, while ward number 6 has the
                 least comprising of only 378 number of household.
                 </p>
-
-                <ResponsiveContainer width="100%" height={'50%'}>
-                    <BarChart
-                        width={350}
-                        height={600}
-                        data={demoChartdata}
-                        layout="vertical"
-                        margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
-                        <Tooltip />
-                        {/* <Legend /> */}
-                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
-                        <Bar dataKey="MalePop" fill="#ffbf00" />
-                        <Bar dataKey="FemalePop" fill="#00d725" />
-                        <Bar dataKey="TotalHousehold" fill="#347eff" />
-                        {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
-                    </BarChart>
-                </ResponsiveContainer>
+                <div className={styles.chartContainer}>
+                    <ResponsiveContainer width="100%" height={'100%'}>
+                        <BarChart
+                            width={350}
+                            height={600}
+                            data={demoChartdata.filter(item => item.name !== 'Ward 99')}
+                            layout="vertical"
+                            margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                            <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
+                            <Tooltip />
+                            {/* <Legend /> */}
+                            <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
+                            <Bar dataKey="MalePop" fill="#ffbf00" />
+                            <Bar dataKey="FemalePop" fill="#00d725" />
+                            <Bar dataKey="TotalHousehold" fill="#347eff" />
+                            {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
                 <NavButtons
                     handleNext={handleNext}
                     handlePrev={handlePrev}

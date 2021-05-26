@@ -119,7 +119,7 @@ class FloodHistoryMap extends React.Component {
         this.state = {
             lat: 28.015490220644214,
             lng: 85.79108507481781,
-            zoom: 11,
+            zoom: 10,
             wardNumber: 'Hover to see ward number',
         };
     }
