@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useEffect, useState } from 'react';
 import {
     ResponsiveContainer,
@@ -22,6 +23,7 @@ import NoData from '../NoData';
 import CustomTooltip from './Tooltip';
 import Note from './Note';
 import styles from './styles.scss';
+import { getMonthName } from '#views/DataArchive/utils';
 
 interface Props {
     stationData: ArchiveRain[];
@@ -97,22 +99,52 @@ const Graph = (props: Props) => {
         stationName,
         filterValues: { dataDateRange: { startDate, endDate } },
     } = props;
-
     const [cumulativeData, setCD] = useState([]);
+    const [monthlyChartData, setCmd] = useState([]);
 
     useEffect(() => {
         if (filterWiseChartData && filterWiseChartData.length > 0) {
             let cumulative = 0;
+            let cumulativeDaily = 0;
+            const cumulativeMonthly = 0;
             const datawithCumulative = filterWiseChartData.map((item) => {
                 cumulative += item.accHour;
+                cumulativeDaily += item.accDaily;
                 return ({
                     ...item,
                     cumulativeHourData: cumulative,
+                    cumulativeDailyData: cumulativeDaily,
                 });
             });
             setCD(datawithCumulative);
         }
     }, [filterWiseChartData]);
+
+
+    useEffect(() => {
+        if (cumulativeData && cumulativeData.length > 0) {
+            const getAccRain = (yearMth: string) => cumulativeData
+                .filter(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}` === yearMth)
+                .reduce((a, b) => ({
+                    accDaily: a.accDaily + b.accDaily,
+                }));
+
+            const uniquemonthArr = [...new Set(cumulativeData.map(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}`))];
+            const monthlychartData = uniquemonthArr.map(yearMth => ({
+                yearMth,
+                accMonthly: getAccRain(yearMth).accDaily,
+            }));
+            let cumulativeMth = 0;
+            const monthlyCumulativeCrtData = monthlychartData.map((item) => {
+                cumulativeMth += item.accMonthly;
+                return {
+                    ...item,
+                    cumulativeMonthlyData: cumulativeMth,
+                };
+            });
+            setCmd(monthlyCumulativeCrtData);
+        }
+    }, [cumulativeData]);
 
     // const displayNote = shouldDisplayNote(periodCode || '');
     console.log('for chart: ', filterWiseChartData);
@@ -164,58 +196,73 @@ const Graph = (props: Props) => {
                         className={styles.chart}
                     >
                         <ResponsiveContainer className={styles.container}>
-                            {/* <LineChart
-                                data={filterWiseChartData}
-                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="label" />
-                                <YAxis domain={['dataMin', 'auto']} />
-                                <Tooltip
-                                    content={(
-                                        <CustomTooltip
-                                            periodCode={periodCode}
-                                            intervalCode={intervalCode}
-                                        />
-                                    )}
-                                />
-                                <Legend />
-                                <Line type="monotone" dot={false} name="Acc fsdfs(mm)
-                                " dataKey="accHour" stroke="green" />
+                            {
+                                periodCode === 'monthly' && monthlyChartData.length > 0
+                                    ? (
+                                        <ComposedChart
+                                            data={monthlyChartData}
+                                            margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                                        >
+                                            <CartesianGrid stroke="#f5f5f5" />
+                                            <XAxis dataKey="yearMth" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Bar name="Accumulated Rain(mm)" dataKey="accMonthly" />
+                                            <Line
+                                                type="monotone"
+                                                name="Cumulative Rain(mm)"
+                                                dataKey="cumulativeMonthlyData"
+                                                stroke="#ff7300"
+                                                dot={false}
+                                            />
+                                        </ComposedChart>
+                                    )
 
-                            </LineChart>  */}
+                                    : periodCode === 'hourly'
+                                        ? (
+                                            <ComposedChart
+                                                data={cumulativeData}
+                                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                                            >
+                                                <CartesianGrid stroke="#f5f5f5" />
+                                                <XAxis dataKey="label" />
+                                                <YAxis domain={['accHour', 'auto']} />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" />
+                                                <Line
+                                                    type="monotone"
+                                                    name="Cumulative Rain(mm)"
+                                                    dataKey="cumulativeHourData"
+                                                    stroke="#ff7300"
+                                                    dot={false}
+                                                />
+                                            </ComposedChart>
+                                        )
+                                        : (
+                                            <ComposedChart
+                                                data={cumulativeData}
+                                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                                            >
+                                                <CartesianGrid stroke="#f5f5f5" />
+                                                <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
+                                                <YAxis domain={['accDaily', 'auto']} />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar name="Accumulated Rain(mm)" dataKey="accDaily" />
+                                                <Line
+                                                    type="monotone"
+                                                    name="Cumulative Rain(mm)"
+                                                    dataKey="cumulativeDailyData"
+                                                    stroke="#ff7300"
+                                                    dot={false}
+                                                />
+                                            </ComposedChart>
+                                        )
+                            }
 
-                            {/* <BarChart
-                                data={filterWiseChartData}
-                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="label" />
-                                <YAxis domain={['dataMin', 'auto']} />
-                                <Tooltip />
-                                <Legend />
-                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" />
 
-                            </BarChart> */}
-
-                            <ComposedChart
-                                data={cumulativeData}
-                                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
-                            >
-                                <CartesianGrid stroke="#f5f5f5" />
-                                <XAxis dataKey="label" />
-                                <YAxis domain={['accHour', 'auto']} />
-                                <Tooltip />
-                                <Legend />
-                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" />
-                                <Line
-                                    type="monotone"
-                                    name="Cumilative Rain(mm)"
-                                    dataKey="cumulativeHourData"
-                                    stroke="#ff7300"
-                                    dot={false}
-                                />
-                            </ComposedChart>
                         </ResponsiveContainer>
 
 
