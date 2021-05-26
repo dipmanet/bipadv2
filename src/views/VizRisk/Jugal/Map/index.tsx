@@ -53,11 +53,10 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fe9b2a',
-    3, '#fe9b2a', 4, '#9a3404',
-    5, '#d95f0e', 6, '#fe9b2a',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#fed990', 10, '#d95f0e',
+    1, 'rgb(0,177,0)', 2, 'rgb(181,209,122)',
+    3, 'rgb(241,238,150)', 4, '#9a3404',
+    5, '#d95f0e', 6, 'rgb(245,219,131)',
+    7, 'rgb(255,240,255)', 8, 'rgb(207,144,119)',
 ];
 const {
     criticalinfrastructures,
@@ -135,36 +134,11 @@ class FloodHistoryMap extends React.Component {
             selectedMunicipalityId: municipalityId,
             incidentList,
         } = this.props;
-        const mapping = [];
-        if (wards) {
-            wards.map((item) => {
-                const { id } = item;
-                if (item.municipality === 23007) {
-                    if (item.title === '1') {
-                        mapping.push({ id, value: 1 });
-                    }
-                    if (item.title === '2') {
-                        mapping.push({ id, value: 2 });
-                    }
-                    if (item.title === '3') {
-                        mapping.push({ id, value: 3 });
-                    }
-                    if (item.title === '4') {
-                        mapping.push({ id, value: 4 });
-                    }
-                    if (item.title === '5') {
-                        mapping.push({ id, value: 5 });
-                    }
-                    if (item.title === '6') {
-                        mapping.push({ id, value: 6 });
-                    }
-                    if (item.title === '7') {
-                        mapping.push({ id, value: 7 });
-                    }
-                }
-                return null;
-            });
-        }
+        const mapping = wards.filter(item => item.municipality === 23007).map(item => ({
+            ...item,
+            value: Number(item.title),
+        }));
+
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
@@ -353,11 +327,10 @@ class FloodHistoryMap extends React.Component {
                         'interpolate',
                         ['linear'],
                         ['feature-state', 'value'],
-                        1, '#fe9b2a', 2, '#fe9b2a',
-                        3, '#fe9b2a', 4, '#9a3404',
-                        5, '#d95f0e', 6, '#fe9b2a',
-                        7, '#ffffd6', 8, '#fe9b2a',
-                        9, '#fed990', 10, '#d95f0e',
+                        1, 'rgb(0,177,0)', 2, 'rgb(181,209,122)',
+                        3, 'rgb(241,238,150)', 4, '#9a3404',
+                        5, '#d95f0e', 6, 'rgb(245,219,131)',
+                        7, 'rgb(255,240,255)', 8, 'rgb(207,144,119)',
                     ],
                     'fill-opacity': [
                         'case',
@@ -383,38 +356,6 @@ class FloodHistoryMap extends React.Component {
                 );
             });
 
-            this.map.on('click', 'ward-fill-local', (e) => {
-                console.log('hvfsl:', e);
-                if (e.features.length > 0) {
-                    if (hoveredWardId) {
-                        this.setState({ wardNumber: hoveredWardId });
-                        this.map.setFeatureState(
-                            {
-                                id: hoveredWardId,
-                                source: 'vizrisk-fills',
-                                // paint: { 'fill-color': '#eee' },
-                                sourceLayer: mapSources.nepal.layers.ward,
-                            },
-                            { hover: false },
-                        );
-                        this.map.setPaintProperty('ward-fill-local', 'fill-color', '#112330');
-                        // this.map.setZoom(14);
-                        // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 0.3);
-                    }
-                    hoveredWardId = e.features[0].id;
-                    this.map.setFeatureState(
-                        {
-                            id: hoveredWardId,
-                            source: 'vizrisk-fills',
-                            // paint: { 'fill-color': '#eee' },
-                            sourceLayer: mapSources.nepal.layers.ward,
-
-                        },
-                        { hover: true },
-                    );
-                }
-            });
-
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
@@ -429,14 +370,6 @@ class FloodHistoryMap extends React.Component {
                     const wardno = e.features[0].properties.title;
                     const details = demographicsData.demographicsData.filter(item => item.name === `Ward ${wardno}`);
                     const totalPop = details[0].MalePop + details[0].FemalePop;
-                    // const description = (
-                    //     `Ward No:
-                    //         ${wardno}
-                    //     Male Population: ${details[0].MalePop}
-                    //     Female Population: ${details[0].FemalePop}
-                    //     Total Household: ${details[0].TotalHousehold}
-                    //         `
-                    // );
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                             <p> Total Population: ${totalPop}</p>
@@ -444,7 +377,6 @@ class FloodHistoryMap extends React.Component {
                         `,
                     ).addTo(this.map);
                     if (hoveredWardId) {
-                        this.setState({ wardNumber: hoveredWardId });
                         this.map.setFeatureState(
                             {
                                 id: hoveredWardId,
@@ -455,6 +387,8 @@ class FloodHistoryMap extends React.Component {
                         );
                     }
                     hoveredWardId = e.features[0].id;
+                    console.log('hoveredWardId,', hoveredWardId);
+                    console.log('e.features[0]', e.features[0]);
                     this.map.setFeatureState(
                         {
                             id: hoveredWardId,

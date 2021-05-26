@@ -20,7 +20,14 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
+const COLORS = [
+    'rgb(0,177,0)',
+    'rgb(181,209,122)',
+    'rgb(241,238,150)',
+    'rgb(245,219,131)',
+    'rgb(255,240,255)',
+    'rgb(207,144,119)',
+];
 
 class SlideThreePane extends React.PureComponent<Props, State> {
     public renderLegend = props => (
@@ -87,8 +94,8 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <Tooltip />
                         {/* <Legend /> */}
                         <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
-                        <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
-                        <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
+                        <Bar dataKey="MalePop" fill="#ffbf00" />
+                        <Bar dataKey="FemalePop" fill="#00d725" />
                         <Bar dataKey="TotalHousehold" fill="#347eff" />
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
