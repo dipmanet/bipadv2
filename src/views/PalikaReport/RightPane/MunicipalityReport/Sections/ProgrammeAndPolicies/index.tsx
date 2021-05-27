@@ -366,8 +366,8 @@ const ProgramPolicies = (props: Props) => {
                                             <textarea
                                                 value={point}
                                                 placeholder={drrmLanguage.language === 'en'
-                                                    ? 'DRR programmes listed in the annual policy and programme'
-                                                    : 'विपद् जोखिम न्यूनीकरण सम्बन्धि  वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू'
+                                                    ? 'Please enter the DRR related points in this fiscal year Annual Policy and Programme of the municipality'
+                                                    : 'कृपया आफ्नो  पालिकाको  यस आर्थिक वर्षको वार्षिक नीति र कार्यक्रममा उल्लेखीत विपद् जोखिम न्यूनीकरण सम्बन्धित क्रियाकलापहरु प्रविष्ट गर्नुहोस् ।'
                                                 }
                                                 onChange={handleChangePoint}
                                                 rows="4"

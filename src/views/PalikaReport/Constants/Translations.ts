@@ -23,7 +23,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Please Enter Valid Fiscal Year from General Section',
     },
     CreateReportInformationButtom: {
-        np: 'विपद् पोर्टलको यो मोड्युलले सबै तहका सरकारले प्रत्येक आर्थिक वर्षमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको प्रतिवेदन प्रकाशन गर्दछ ।',
+        np: 'विपद्सँग सम्वन्धित् विभिन्न रुपमा छरिएर रहेका तथ्यांकहलाई एकीकृत गरी विपद जोखिम न्यूनीकरण तथा व्यवस्थापनमा सहयोग पुर्याउने हेतुले यो विपद तथ्यांक प्रोफाइल तयार गरिएको हो  ।',
         en: 'This module in the BIPAD portal will generate a Disaster Risk Reduction and Management (DRRM) Report for each fiscal year for all tiers of the government.',
     },
     welcomeNoteparagraph1: {
@@ -31,11 +31,11 @@ const languageTranslations: LanguageEntry = {
         en: 'Welcome to the DRRM Report Module of the BIPAD Portal',
     },
     welcomeNoteparagraph2: {
-        np: 'विपद् पोर्टलको यो मोड्युलले सबै तहका सरकारले प्रत्येक आर्थिक वर्षमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको प्रतिवेदन प्रकाशन गर्दछ ।',
+        np: 'विपद्सँग सम्वन्धित् विभिन्न रुपमा छरिएर रहेका तथ्यांकहलाई एकीकृत गरी विपद जोखिम न्यूनीकरण तथा व्यवस्थापनमा सहयोग पुर्याउने हेतुले यो विपद तथ्यांक प्रोफाइल तयार गरिएको हो  ।',
         en: 'This module in the BIPAD portal will generate a Disaster Risk Reduction and Management (DRRM) Report for each fiscal year for all tiers of the government.',
     },
     welcomeNoteparagraph3: {
-        np: 'विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन ऐन २०७४ र सोको नियमावली २०७६ को नियम १६ को व्यवस्था बमोजिम स्थानिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, जिल्ला विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, प्रदेश विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, र राष्ट्रिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्राधिकरणले प्रत्येक आर्थिक बर्षमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको वार्षिक प्रतिवेदन तयार गरी आर्थिक वर्ष समाप्त भएपछि पेश गर्नु पदर्छ । विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन ऐन २०७४ र सोको नियमावली २०७६ को नियम १६ को प्राबधानलाई सहयोग गर्न प्रतिवेदन मोड्युलमा छनौट गरिएको भौगोलिक स्थान वा क्षेत्रको सामान्य जानकारी, सो स्थानमा विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन क्षेत्रमा कार्यरत संघ—संस्था, विपद् सम्बन्धित ऐन, नीति, निर्देशन, कार्यविधि, विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन गर्न तय गरिएका वार्षिक योजना, विनियोजित बजेट तथा विपद् सम्बन्धित विभिन्न जानकारी समाबेश गरिएको छ ।',
+        np: 'विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन ऐन २०७४ र  नियमावली २०७६  बमोजिम स्थानिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, जिल्ला विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, प्रदेश विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन समिति, र राष्ट्रिय विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्राधिकरणले विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनका क्षेत्रमा गरेका गतिविधिहरुको निरन्तर अद्यावधिक विवरण यसमा समावेश हुनेछ । मुलतः स्थानीय तहमा भएका विपद् जोखिम न्यूनीकरण तथा व्यवस्थापनसँग सम्बन्धित विभिन्न जानकारीहरु यसमा समाबेश गरिएको छ । यस विपद तथ्यांक प्रोफाइलले स्थानीय तहले वार्षिकरुपमा तयार गर्नु पर्ने विपद जोखिम न्यूनीकरण तथा व्यवस्थापनसँग सम्वन्धित् वार्षिक प्रतिवेदन तयार गर्न सहयोग गर्नुका साथै प्रदेश र संघीय सरकारलाई पनि नीति, योजना र कार्यक्रम तर्जुमा गर्न आवश्यक सूचना उपलब्ध गराउनेछ । ',
         en: 'DRRM Act, 2074 and its regulation, 2076 mandates the Local Disaster Management Committee, District Disaster Management Committee, Provincial Disaster Management Executive Committee, and NDRRMA to prepare an Annual DRRM Report that includes information on the activities conducted by the respective committees each fiscal year. To aid this mandate, the reporting module will include general information of the chosen location, organizations working on disaster management, DRR policy-related work, the budget allocated and activities for DRRM, and available inventories, and other DRR related information.',
     },
     welcomeNoteparagraph4: {
@@ -43,7 +43,7 @@ const languageTranslations: LanguageEntry = {
         en: 'The report will also monitor and track activities based on the priorities set by the DRR National Strategic Action Plan 2018-2030.',
     },
     welcomeNoteparagraph5: {
-        np: 'तपाईंको क्षेत्रको लागि रिपोर्ट प्रकाशन गर्न यहाँ क्लिक गर्नुहोस्।',
+        np: 'सम्बन्धित स्थानीय तहको लागि विपद तथ्यांक प्रोफाइल प्रकाशन गर्न यहाँ क्लिक गर्नुहोस ।',
         en: 'Click proceed to generate the report for your region.',
     },
     proceedButton: {
@@ -55,8 +55,8 @@ const languageTranslations: LanguageEntry = {
         en: 'Data Unavailable',
     },
     dashBoardHeading: {
-        np: 'बिपद जोखिम न्यूनीकरण तथा व्यवस्थापन रिपोर्ट',
-        en: 'Disaster Risk Reduction and Management Report',
+        np: 'विपद् जोखिम न्यूनीकरण तथा  व्यवस्थापन सम्बन्धि तथ्याङ्क प्रोफाइल',
+        en: 'Disaster Risk Reduction and Management  related Data profile',
     },
     dashBoardMainTitle: {
         np: 'शीर्षक',
@@ -239,12 +239,12 @@ const languageTranslations: LanguageEntry = {
 
     Committeemembers: {
         en: 'Committee members list',
-        np: 'समितिका सदस्यहरूको सूची',
+        np: 'स्थानीय विपद् व्यवस्थापन समितिका सदस्यहरूको सूची',
     },
 
     Numberofmembers: {
         en: 'Number of members in Local Disaster Management Committee',
-        np: 'स्थानीय विपद् व्यवस्थापन समिति सदस्य संख्या',
+        np: 'स्थानीय विपद् व्यवस्थापन समितिको सदस्य संख्या',
     },
 
     Title: {
@@ -258,8 +258,8 @@ const languageTranslations: LanguageEntry = {
     },
 
     GeneralSubtitleFirst: {
-        en: 'DRRM report will be generated for each fiscal year.',
-        np: 'विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन प्रतिवेदन आर्थिक वर्षको आधारमा प्रकाशित हुन्छ l',
+        en: 'Please Enter Valid Fiscal Year from General Section',
+        np: 'आर्थिक वर्ष अनुसार छनोट गर्नुहोस्',
     },
 
     GeneralSelectFiscalYear: {
@@ -279,7 +279,7 @@ const languageTranslations: LanguageEntry = {
         np: 'विवरणहरू थप्नुहोस् वा सम्पादन गर्नुहोस्',
     },
     GeneralPleaseClick: {
-        np: 'कृपया  विवरण अपडेट गर्न थप्नुहोस् / सम्पादन गर्नुहोस् बटनमा क्लिक गर्नुहोस्',
+        np: 'कृपया विवरण अपडेट र सम्पादन गर्न यस बटनमा क्लिक गर्नुहोस् ',
         en: 'Please click on the add/edit button to update the details',
     },
     Update: {
@@ -287,7 +287,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Update',
     },
     SaveContinue: {
-        np: 'सुरक्षित  र जारी राख्नुहोस्',
+        np: 'सुरक्षित गर्नुहोस् र जारी राख्नुहोस्',
         en: 'Save and Continue',
     },
     AddMember: {
@@ -359,7 +359,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Category',
     },
     InventoryResourceOwnerOrganization: {
-        np: 'सम्बन्धित संस्था',
+        np: 'स्वामित्व लिने संस्था',
         en: 'Owner Organization Name',
     },
     InventoryResourceOwnerOrganizationType: {
@@ -398,19 +398,19 @@ const languageTranslations: LanguageEntry = {
     },
     OtherDrrFund: {
         en: 'Other DRR related funding',
-        np: 'अन्य विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन सम्बन्धित बजेट',
+        np: 'विपद्सगं सम्बन्धित अन्य बजेट',
     },
     BudgetDescription: {
         en: 'Total municipal budget is the total budget allocated by the municipality for the execution of various activities for this fiscal year',
-        np: 'कुल बजेट भन्नाले यस आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको  बजेट',
+        np: 'आर्थिक वर्षको लागि विभिन्न गतिविधिहरू कार्यान्वयन गर्न नगरपालिकाबाट विनियोजन गरिएको  बजेट',
     },
     DRRMunFundDescriptio: {
         en: 'DRR fund of the municipality is part of the total municipal budget of this fiscal year which is specifically separated for DRRM related activities',
-        np: 'नगरपालिकाको विपद व्यवस्थापन कोष भनेको यस आर्थिक वर्षको कुल बजेटको हिस्सा मध्ये विपद् जोखिम न्यूनीकरण तथा व्यवस्थापन सम्बन्धित गतिविधिहरूको लागि छुट्याइएको बजेट हो',
+        np: 'आर्थिक वर्षको कुल बजेटको हिस्सा मध्ये विपद्सगं सम्बन्धित गतिविधिहरूको लागि छुट्याइएको बजेट',
     },
     OtherDrrRelatedFund: {
         en: 'Other DRR related funding is the funding received by the municipality from various sources like I/NGOS, the federal government, provincial government, private sectors, etc. for this fiscal year',
-        np: 'अन्य विपद् सम्बन्धित बजेट भनेको यस आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि  विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम हो।',
+        np: 'आर्थिक वर्षको लागि दात्री निकाय , संघीय सरकार,प्रादेशिक  सरकार, निजी क्षेत्र आदि  विभिन्न स्रोतबाट नगरपालिकाले प्राप्त गरेको रकम',
     },
     BudgetEditBtn: {
         en: 'Edit Budget',
@@ -500,7 +500,7 @@ const languageTranslations: LanguageEntry = {
     },
     DRRprogrammeslisted: {
         en: 'DRR programmes listed in the annual policy and programme',
-        np: 'विपद् जोखिम न्यूनीकरण सम्बन्धि वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध कार्यक्रमहरू',
+        np: 'विपद् सम्बन्धि  वार्षिक नीति तथा कार्यक्रममा सूचीबद्ध क्रियाकलापहरु',
     },
     PaPAddbtn: {
         en: '+ Add Annual Policy and Programme',
@@ -657,7 +657,7 @@ const languageTranslations: LanguageEntry = {
         en: 'SN',
     },
     SimulationExercise: {
-        np: 'अनुकरण अभ्यासको नाम',
+        np: 'कृतिम घटना अभ्यासको नाम',
         en: 'Name of Simulation exercise',
     },
     SimulationDate: {
@@ -689,7 +689,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Number of Participants',
     },
     SimulationHazards: {
-        np: 'केन्द्रित प्रकोप',
+        np: 'कृतिम अभ्यास गरिएको प्रकोप',
         en: 'Focused Hazard',
     },
     SimulationAction: {
@@ -713,7 +713,7 @@ const languageTranslations: LanguageEntry = {
         en: 'Update Simulation',
     },
     NumberOfSimulationConducted: {
-        np: 'आयोजित अनुकरणको संख्या',
+        np: 'कृतिम घटना अभ्यास गरिएका संख्या',
         en: 'No of Simulation Conducted',
     },
     NumberOfPeopleTrained: {
@@ -771,7 +771,7 @@ const languageTranslations: LanguageEntry = {
     },
     AllocatedProject: {
         en: 'Allocated Project budget',
-        np: 'परियोजनाका लागी विनियोजित बजेट',
+        np: 'परियोजनाका लागी  विनियोजित बजेट',
     },
     Actualexpenditure: {
         en: 'Actual expenditure',
@@ -835,7 +835,7 @@ const languageTranslations: LanguageEntry = {
     },
     BudgetActivity: {
         en: 'Budget Activity',
-        np: 'बजेट गतिविधि',
+        np: 'बजेट क्रियाकलापहरु',
     },
     TotalActivities: {
         en: 'Total number of activities',

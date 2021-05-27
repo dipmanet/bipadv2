@@ -646,7 +646,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                         </div>
                         <div className={styles.report}>
-                        DRRM Report
+                        DRRM Data Profile
                         </div>
 
                     </div>

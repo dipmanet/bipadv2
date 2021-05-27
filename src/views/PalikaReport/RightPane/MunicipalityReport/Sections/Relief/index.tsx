@@ -118,6 +118,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             }
         },
     },
+    CausePatchData: {
+        url: ({ params }) => `/incident/${params.incidentId}/`,
+        method: methods.PATCH,
+        onMount: false,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, params }) => {
+            console.log('Reponse', response);
+            if (params && params.savedCause) {
+                params.savedCause(response);
+            }
+        },
+    },
     ReliefDataGet: {
         url: '/incident-relief/',
         query: ({ params, props }) => ({
@@ -224,6 +236,7 @@ const Relief = (props: Props) => {
             ReliefDataGet,
             ReliefDataPUT,
             NepaliFiscalYearGet,
+            CausePatchData,
         },
         user,
         hazardTypes,
@@ -279,6 +292,7 @@ const Relief = (props: Props) => {
     const [postButton, setPostButton] = useState(false);
     const [reliefId, setReliefId] = useState();
     const [modalClose, setModalClose] = useState(true);
+    const [causemodalClose, setCausemodalClose] = useState(true);
     const [disableInput, setDisableInput] = useState(false);
     const [loader, setLoader] = useState(true);
     const [hazardDetails, setHazardDetails] = useState([]);
@@ -295,8 +309,10 @@ const Relief = (props: Props) => {
     const [totMinotiries, setTotMinorities] = useState(0);
     const [totDalits, setTotDalits] = useState(0);
     const [postErrors, setPostErrors] = useState('');
-
+    const [incidentId, setIncidentId] = useState('');
+    const [causeData, setCauseData] = useState('');
     const [fiscalYearObj, setFiscalYearObj] = useState([]);
+    const [selectedIncidentTitle, setSelectedIncidentTitle] = useState('');
     // const [femaleBenefited, handlefemaleBenefited] = useState(0);
 
 
@@ -435,14 +451,18 @@ const Relief = (props: Props) => {
     const handleFetchedData = (response) => {
         setFetechedData(response);
         setLoader(false);
+        setPostButton(false);
+        setUpdateButton(false);
     };
 
     const handleReliefAdd = (data) => {
+        console.log('This data', data);
         setShowRelief(true);
         setCurrentRelief(data);
         setPostButton(true);
         setUpdateButton(false);
         setModalClose(false);
+        setSelectedIncidentTitle(data.title);
     };
     const handleFilteredViewRelief = (response) => {
         console.log('response', response);
@@ -462,6 +482,7 @@ const Relief = (props: Props) => {
     };
     const handleCloseModal = () => {
         setModalClose(true);
+        setCausemodalClose(true);
         setShowRelief(false);
         setDisableInput(false);
         setfamiliesBenefited(null);
@@ -503,6 +524,7 @@ const Relief = (props: Props) => {
         setPostButton(false);
         setUpdateButton(false);
         setModalClose(false);
+        setSelectedIncidentTitle(data.title);
         ReliefDataGet.do({
             incidentId: data.id,
             filteredViewRelief: handleFilteredViewRelief,
@@ -546,6 +568,7 @@ const Relief = (props: Props) => {
 
     const handleReliefEdit = (data, item) => {
         console.log('This data', data);
+        setSelectedIncidentTitle(data.title);
         setLoader(false);
         setReliefId(data.id);
         setModalClose(false);
@@ -808,6 +831,7 @@ const Relief = (props: Props) => {
 
     const handleBackButton = () => {
         setShowRelief(false);
+        setCausemodalClose(true);
         setModalClose(true);
         setDisableInput(false);
         setfamiliesBenefited(null);
@@ -843,6 +867,7 @@ const Relief = (props: Props) => {
     const handleSavedReliefData = (response) => {
         setShowRelief(false);
         setModalClose(true);
+        setCausemodalClose(true);
         setfamiliesBenefited(null);
         setnamesofBeneficiaries('');
         setreliefDate('');
@@ -1083,7 +1108,93 @@ const Relief = (props: Props) => {
         }
         props.handleNextClick();
     };
-    console.log('This final Array', finalArr);
+    const handleAddCause = (data) => {
+        setCausemodalClose(false);
+        setIncidentId(data.id);
+        setCurrentRelief(data);
+        setPostButton(true);
+        setSelectedIncidentTitle(data.title);
+    };
+    const handleAddCauseData = (e) => {
+        setCauseData(e.target.value);
+    };
+    const handleSavedCause = (response) => {
+        setCausemodalClose(true);
+        PalikaReportInventoriesReport.do({
+            organisation: handleFetchedData,
+            url,
+            inventories: defaultQueryParameter,
+            fields,
+            municipality,
+            district,
+            province,
+            meta,
+            date: getdateTimeFromFs(generalData.fiscalYearTitle),
+
+
+        });
+        // ReliefDataGet.do({
+        //     ReliefData: handleReliefData,
+        //     municipality,
+        //     district,
+        //     province,
+        //     fiscalYear: generalData.fiscalYear,
+        // });
+    };
+    const handleSaveIncidentCause = () => {
+        console.log('what');
+        setLoader(true);
+
+        setPostErrors('');
+        CausePatchData.do({
+            body: {
+                cause: causeData,
+
+
+            },
+            incidentId,
+            savedCause: handleSavedCause,
+
+
+        });
+    };
+    const handleFilteredViewCause = (response) => {
+        console.log('response', response);
+        setCauseData(response[0].cause ? response[0].cause : '-');
+        setShowRelief(true);
+    };
+    const handleCauseEdit = (data) => {
+        setCausemodalClose(false);
+        setCauseData(data.cause);
+        setUpdateButton(true);
+        setIncidentId(data.id);
+        setSelectedIncidentTitle(data.title);
+        console.log(data.title);
+    };
+    const handleCauseView = (data) => {
+        console.log(data);
+        // setShowRelief(true);
+        // setDisableInput(true);
+        setSelectedIncidentTitle(data.title);
+        setCausemodalClose(false);
+        setDisableInput(true);
+        setCauseData(data.cause);
+        setUpdateButton(false);
+        // setPostButton(false);
+        // setUpdateButton(false);
+        // setModalClose(false);
+        // PalikaReportInventoriesReport.do({
+        //     incidentId: data.id,
+        //     organisation: handleFilteredViewCause,
+        //     municipality,
+        //     url,
+        //     district,
+        //     province,
+        //     fiscalYear: generalData.fiscalYear,
+
+        // });
+    };
+
     return (
         <>
 
@@ -1195,14 +1306,50 @@ const Relief = (props: Props) => {
                                                     <td>{item.item.loss ? item.item.loss.livestockDestroyedCount : 0}</td>
 
                                                     <td>
+                                                        {item.item.cause
+                                                            ? (
+                                                                <div className={styles.buttonDiv}>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleCauseView(item.item)}
+                                                                        className={styles.reliefBtn}
 
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleReliefView(item.item)}
-                                                            className={styles.addReliefBttn}
-                                                        >
-                                                                       Add Cause
-                                                        </button>
+                                                                        title={drrmLanguage.language === 'np' ? 'राहत हेर्नुहोस्' : 'View Relief'}
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={programAndPolicyLogo}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
+
+                                                                    <button
+                                                                    // className={styles.editButtn}
+                                                                        type="button"
+                                                                        onClick={() => handleCauseEdit(item.item)}
+                                                                        className={styles.reliefBtn}
+
+                                                                        title={drrmLanguage.language === 'np' ? 'राहत सम्पादन गर्नुहोस्' : 'Edit Relief'}
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={editIcon}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                            )
+                                                            : (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleAddCause(item.item)}
+                                                                    className={styles.addReliefBttn}
+                                                                >
+                                                             Add Cause
+                                                                </button>
+                                                            )
+                                                        }
+
 
                                                     </td>
                                                     {!props.annex && reliefData
@@ -2032,6 +2179,82 @@ const Relief = (props: Props) => {
                 )
 
             }
+            {causemodalClose ? ''
+                : (
+                    <Modal>
+                        <ModalHeader
+
+                            rightComponent={(
+                                <DangerButton
+                                    transparent
+                                    iconName="close"
+                                    title="Close Modal"
+                                    onClick={handleCloseModal}
+                                />
+                            )}
+                        />
+                        <ModalBody>
+                            <h2 style={{ marginLeft: '10px', marginBottom: '20px' }}>
+                                Cause For Selected Incident
+
+                            </h2>
+                            <h3 style={{ marginLeft: '10px', marginBottom: '20px' }}>
+                            Incident Title:
+                                {' '}
+                                {selectedIncidentTitle}
+                            </h3>
+                            <div className={styles.inputContainer}>
+
+                                <textarea
+                                    className={styles.inputElement}
+                                    onChange={handleAddCauseData}
+                                    value={causeData}
+
+                                    placeholder={drrmLanguage.language === 'np' ? 'कृपया चयन गरिएको घटनाको लागि कारण निर्दिष्ट गर्नुहोस्' : 'Kindly specify the Cause For Selected Incident'}
+                                    rows={5}
+                                    // cols={7}
+                                    disabled={disableInput}
+                                />
+
+                            </div>
+
+                            <div className={styles.butnGroup}>
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                                    onClick={handleBackButton}
+
+                                >
+                                    <Gt section={Translations.ReliefDataBackButton} />
+                                </button>
+
+                                {postButton && (
+                                    <button
+                                        type="button"
+                                        className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                        onClick={handleSaveIncidentCause}
+                                    >
+                                        <Gt section={Translations.ReliefDataSaveButton} />
+                                    </button>
+                                )
+                                }
+
+                                {updateButton && (
+                                    <button
+                                        type="button"
+                                        className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                        onClick={handleSaveIncidentCause}
+                                    >
+                                        <Gt section={Translations.ReliefDataUpdateButton} />
+                                    </button>
+                                )}
+                            </div>
+                        </ModalBody>
+
+                    </Modal>
+                )}
             {modalClose ? ''
                 : (
                     <Modal>
@@ -2047,9 +2270,14 @@ const Relief = (props: Props) => {
                             )}
                         />
                         <ModalBody>
-                            <h3>
+                            <h2 style={{ marginBottom: '10px' }}>
                                 {' '}
                                 <Gt section={Translations.ReliefHeading} />
+                            </h2>
+                            <h3 style={{ marginLeft: '10px', marginBottom: '20px' }}>
+                            Incident Title:
+                                {' '}
+                                {selectedIncidentTitle}
                             </h3>
                             <div className={styles.inputContainer}>
                                 <span className={styles.dpText}><Gt section={Translations.ReliefBeneficiary} /></span>
@@ -2114,7 +2342,7 @@ const Relief = (props: Props) => {
                             </div>
 
 
-                            <h3><strong><Gt section={Translations.ReliefBenefitedPeopleHeading} /></strong></h3>
+                            <h2 style={{ marginBottom: '10px' }}><strong><Gt section={Translations.ReliefBenefitedPeopleHeading} /></strong></h2>
                             <div className={styles.inputContainer}>
                                 <span className={styles.dpText}><Gt section={Translations.ReliefBenefitedPeopleMale} /></span>
                                 <input
@@ -2212,37 +2440,38 @@ const Relief = (props: Props) => {
                                 </ul>
                             )
                             }
-
-                            <button
-                                type="button"
-                                className={styles.savebtn}
-                                onClick={handleBackButton}
-
-                            >
-                                <Gt section={Translations.ReliefDataBackButton} />
-                            </button>
-                            {postButton && (
+                            <div className={styles.butnGroup}>
                                 <button
                                     type="button"
                                     className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
-                                    onClick={handleSaveRelief}
-                                >
-                                    <Gt section={Translations.ReliefDataSaveButton} />
-                                </button>
-                            )
-                            }
+                                    onClick={handleBackButton}
 
-                            {updateButton && (
-                                <button
-                                    type="button"
-                                    className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
-                                    onClick={handleUpdateRelief}
                                 >
-                                    <Gt section={Translations.ReliefDataUpdateButton} />
+                                    <Gt section={Translations.ReliefDataBackButton} />
                                 </button>
-                            )}
+                                {postButton && (
+                                    <button
+                                        type="button"
+                                        className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                        onClick={handleSaveRelief}
+                                    >
+                                        <Gt section={Translations.ReliefDataSaveButton} />
+                                    </button>
+                                )
+                                }
+
+                                {updateButton && (
+                                    <button
+                                        type="button"
+                                        className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                        onClick={handleUpdateRelief}
+                                    >
+                                        <Gt section={Translations.ReliefDataUpdateButton} />
+                                    </button>
+                                )}
+                            </div>
                         </ModalBody>
 
                     </Modal>

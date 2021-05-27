@@ -21,30 +21,46 @@ ul{
 .addReliefBttn{
   width: 100px;
   cursor: pointer;
+  background-color: #297EDF;
+  border-radius: 5px;
+  border: none;
+ 
+  height: 30px;
+ 
+  filter: saturate(100%);
+  color: white;
+  opacity: 0.67;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 .inputContainer{
+  
   display: flex;
   border-radius: 3px;
-  background-color: rgb(232,232,232);
+  // background-color: rgb(232,232,232);
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 12px;
   padding-left: 10px;
+  .dpText{
+    width: 250px;
+  }
   textarea{
     padding-top: 10px !important;
-    text-align: center;
+    // text-align: center;
     font-size: 11px;
     width: 100%;
-    margin-left: 10px;
-    padding: 5px;
+   
+    padding: 5px !important;
     background-color: rgb(228, 228, 228);
-
+   
     border: none !important;
   }
   ::placeholder {
     /* Firefox 18- */
-    text-align: center;
-    padding-top: 5px !important;
+    // text-align: center;
+    padding-top: 15px !important;
 }
 
   .labelDate{
@@ -97,7 +113,7 @@ ul{
   input{
   border: none;
   padding: 15px 10px !important;
-  background: transparent;
+  background-color: rgb(228, 228, 228);
   width: 100%;
   }
   input:focus{
@@ -489,14 +505,14 @@ ul{
 }
 .savebtn{
   position: relative;
-  margin-top: 45px;
+  margin-top: 10px;
   max-width: 100%;
   background-color:  #297EDF;
   border-radius: 15px;
   color: white; 
   padding: 7px 15px;
   cursor: pointer;
-  filter: saturate(80%);
+  filter: saturate(100%);
   border: none;
   margin-right: 10px;
 
@@ -521,5 +537,25 @@ ul{
      fill-opacity: 0.67;
    }
 
+  }
+}
+.butnGroup{
+  display: flex;
+  justify-content: flex-end;
+  .savebtn{
+    width: 100px;
+    cursor: pointer;
+    background-color: #297EDF;
+    border-radius: 5px;
+    border: none;
+   
+    height: 30px;
+    
+    filter: saturate(100%);
+    color: white;
+    opacity: 0.67;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 10px;
   }
 }
