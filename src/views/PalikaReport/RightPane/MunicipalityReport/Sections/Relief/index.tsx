@@ -1008,7 +1008,7 @@ const Relief = (props: Props) => {
             console.log('fetchedData.length ', fetchedData);
             return [
                 (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].title || '-'),
-                (fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn || '-'),
+                (ADToBS(fetchedData.filter(incidentObj => incidentObj.id === item.incident)[0].incidentOn.split('T')[0]) || '-'),
             ];
         }
 
@@ -1195,6 +1195,7 @@ const Relief = (props: Props) => {
         // });
     };
 
+    console.log('Final array', finalArr);
     return (
         <>
 
@@ -1259,13 +1260,18 @@ const Relief = (props: Props) => {
                                         <th>
                                             <Gt section={Translations.IncidentLiveStockLoss} />
                                         </th>
-                                        <th>
-                                            Cause
-                                        </th>
+                                        {!props.annex
+                                        && (
+                                            <th>
+                                                <Gt section={Translations.IncidentCause} />
+                                            </th>
+                                        )
+                                        }
+
                                         { !props.annex
                                         && (
                                             <th>
-                                                <Gt section={Translations.IncidentAction} />
+                                                <Gt section={Translations.IncidentRelief} />
                                             </th>
                                         )
                                         }
@@ -1306,7 +1312,7 @@ const Relief = (props: Props) => {
                                                     <td>{item.item.loss ? item.item.loss.livestockDestroyedCount : 0}</td>
 
                                                     <td>
-                                                        {item.item.cause
+                                                        {!props.annex && item.item.cause
                                                             ? (
                                                                 <div className={styles.buttonDiv}>
                                                                     <button
@@ -1314,7 +1320,7 @@ const Relief = (props: Props) => {
                                                                         onClick={() => handleCauseView(item.item)}
                                                                         className={styles.reliefBtn}
 
-                                                                        title={drrmLanguage.language === 'np' ? 'राहत हेर्नुहोस्' : 'View Relief'}
+                                                                        title={drrmLanguage.language === 'np' ? 'कारण हेर्नुहोस्' : 'View Cause'}
                                                                     >
                                                                         <ScalableVectorGraphics
                                                                             className={styles.bulletPoint}
@@ -1329,7 +1335,7 @@ const Relief = (props: Props) => {
                                                                         onClick={() => handleCauseEdit(item.item)}
                                                                         className={styles.reliefBtn}
 
-                                                                        title={drrmLanguage.language === 'np' ? 'राहत सम्पादन गर्नुहोस्' : 'Edit Relief'}
+                                                                        title={drrmLanguage.language === 'np' ? 'कारण सम्पादन गर्नुहोस्' : 'Edit Cause'}
                                                                     >
                                                                         <ScalableVectorGraphics
                                                                             className={styles.bulletPoint}
@@ -1339,14 +1345,16 @@ const Relief = (props: Props) => {
                                                                     </button>
                                                                 </div>
                                                             )
-                                                            : (
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => handleAddCause(item.item)}
-                                                                    className={styles.addReliefBttn}
-                                                                >
-                                                             Add Cause
-                                                                </button>
+                                                            : (!props.annex
+                                                                && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleAddCause(item.item)}
+                                                                        className={styles.addReliefBttn}
+                                                                    >
+                                                                        <Gt section={Translations.IncidentAddCauseTooltip} />
+                                                                    </button>
+                                                                )
                                                             )
                                                         }
 
@@ -2195,11 +2203,12 @@ const Relief = (props: Props) => {
                         />
                         <ModalBody>
                             <h2 style={{ marginLeft: '10px', marginBottom: '20px' }}>
-                                Cause For Selected Incident
+                                <Gt section={Translations.IncidentCauseReliefSelectionHeading} />
 
                             </h2>
                             <h3 style={{ marginLeft: '10px', marginBottom: '20px' }}>
-                            Incident Title:
+                                <Gt section={Translations.IncidentTitle} />
+:
                                 {' '}
                                 {selectedIncidentTitle}
                             </h3>
@@ -2275,7 +2284,8 @@ const Relief = (props: Props) => {
                                 <Gt section={Translations.ReliefHeading} />
                             </h2>
                             <h3 style={{ marginLeft: '10px', marginBottom: '20px' }}>
-                            Incident Title:
+                                <Gt section={Translations.IncidentTitle} />
+:
                                 {' '}
                                 {selectedIncidentTitle}
                             </h3>

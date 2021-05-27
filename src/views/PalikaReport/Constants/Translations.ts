@@ -1029,9 +1029,21 @@ const languageTranslations: LanguageEntry = {
         np: 'पशुधन हानि नोक्शानी',
         en: 'Livestock Loss',
     },
-    IncidentAction: {
-        np: 'कार्य',
-        en: 'Action',
+    IncidentRelief: {
+        np: 'राहत',
+        en: 'Relief',
+    },
+    IncidentCause: {
+        np: 'कारण',
+        en: 'Cause',
+    },
+    IncidentAddCauseTooltip: {
+        np: 'कारण थप्नुहोस्',
+        en: 'Add Cause',
+    },
+    IncidentCauseReliefSelectionHeading: {
+        np: 'चयन गरिएको घटनाको लागि कारण',
+        en: 'Cause For Selected Incident',
     },
     IncidentAddReliefTooltip: {
         np: 'राहत थप्नुहोस्',
