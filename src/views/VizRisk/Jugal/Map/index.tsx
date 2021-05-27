@@ -346,6 +346,23 @@ class FloodHistoryMap extends React.Component {
                 this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
             }
+            if (this.props.rightElement === 2) {
+                this.map.setLayoutProperty('Scree', 'visibility', 'visible');
+                this.map.setLayoutProperty('Scrub', 'visibility', 'visible');
+                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+                this.map.setLayoutProperty('Farmland', 'visibility', 'visible');
+                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+            } else {
+                this.map.setLayoutProperty('Scree', 'visibility', 'none');
+                this.map.setLayoutProperty('Scrub', 'visibility', 'none');
+                this.map.setLayoutProperty('Forest', 'visibility', 'none');
+                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
+                this.map.setLayoutProperty('Farmland', 'visibility', 'none');
+                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
+                this.map.setLayoutProperty('Roads', 'visibility', 'none');
+            }
 
             mapping.forEach((attribute) => {
                 this.map.setFeatureState(

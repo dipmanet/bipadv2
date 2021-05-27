@@ -72,12 +72,12 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Jugal Rural Municipality has the total population of
-                19,231 with the male and female population being
-                9,581 and 9,650 respectively. Total household number
-                counts to 3,941. Ward number 2 has the largest household
-                number that equals to 731, while ward number 6 has the
-                least comprising of only 378 number of household.
+                    Located in the Hilly region, Jugal has total area of
+                    596.5 square kilometers. Out of total area, 81.24% of
+                    land is used for agriculture. Major crops grown in this
+                    rural municipality are rice, maize, and wheat. Built-in
+                    area covers 7.66 % of land while water bodies occupy 3.29%
+                    of total land in Jugal.
                 </p>
                 <div className={styles.chartContainer}>
                     <ResponsiveContainer width="100%" height={'100%'}>

@@ -23,12 +23,14 @@
         flex-direction: column;
         background-color:rgb(12,36,50);
         color:#b6d6e4;
-        padding: 40px 20px 20px 30px;
+        padding: 40px 0 20px 0;
         width: calc(30% - 60px);
         height: 100vh;
         left: 0;
         overflow-y: scroll;
-   
+        .customChartLegend{
+            margin-top: 30px;
+        }
         .lastPara{
             z-index: 2;
             background-color:#112330;
@@ -42,6 +44,7 @@
        
         h1{
             @extend .heading-style;
+            padding-left: 30px;
         }
         h2{
             @extend .heading-style;
