@@ -50,7 +50,7 @@ const rightelements = [
     <RightElement1 />,
     <RightElement2 />,
     <RightElement3 />,
-    // <RightElement4 />,
+    <RightElement4 />,
     // <RightElement5 />,
     // <RightElement6 />,
 ];
@@ -370,6 +370,35 @@ class Jugal extends React.Component {
                                 incidentList={pointFeatureCollection}
                             />
                             <RightElement2
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                            />
+                        </>
+
+                    )
+                }
+                {rightElement === 3
+                    && (
+                        <>
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                            />
+                            <RightElement4
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
                                 disableNavLeftBtn={disableNavLeftBtn}
