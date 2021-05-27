@@ -230,7 +230,7 @@ const TableView = (props: Props) => {
             modifier: (row: ChartData) => {
                 const { measuredOn } = row;
 
-                return getPeriodWiseDate(measuredOn, periodCode);
+                return row.key;
             },
         },
         {
@@ -292,15 +292,20 @@ const TableView = (props: Props) => {
     }
     // removing year column for hourly period
     let header;
+    let csvData;
     if (periodCode === 'hourly') {
         header = rainHourlyHeader;
+        csvData = cumulativeData;
     } else if (periodCode === 'daily') {
         header = rainDailyHeader;
+        csvData = cumulativeData;
     } else if (periodCode === 'monthly') {
         header = rainMonthlyHeader;
+        csvData = monthlyChartData;
     }
+    console.log('csvdata', csvData);
 
-    const formattedTableData = convertNormalTableToCsv(data,
+    const formattedTableData = convertNormalTableToCsv(csvData,
         header);
 
     const fileName = generateFileName(intervalCode || '', periodCode || '', stationName);
