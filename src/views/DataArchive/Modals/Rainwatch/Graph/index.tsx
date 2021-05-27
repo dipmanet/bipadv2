@@ -116,8 +116,9 @@ const Graph = (props: Props) => {
                 });
             });
             setCD(datawithCumulative);
+            props.handleTableData(datawithCumulative);
         }
-    }, [filterWiseChartData]);
+    }, [filterWiseChartData, props]);
 
 
     useEffect(() => {
@@ -142,8 +143,11 @@ const Graph = (props: Props) => {
                 };
             });
             setCmd(monthlyCumulativeCrtData);
+            // props.handleTableData(monthlyCumulativeCrtData);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cumulativeData]);
+
 
     // const displayNote = shouldDisplayNote(periodCode || '');
     // console.log('for chart: ', filterWiseChartData);

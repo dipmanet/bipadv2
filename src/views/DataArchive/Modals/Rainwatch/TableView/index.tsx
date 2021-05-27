@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useState, useEffect } from 'react';
+
 import {
     compareString,
     compareNumber,
@@ -26,7 +28,7 @@ const rainSelector = (rain: ChartData) => rain.measuredOn;
 
 const defaultSort = {
     key: 'year',
-    order: 'dsc',
+    order: 'asc',
 };
 
 const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
@@ -37,6 +39,9 @@ const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
         return (dateTime) ? getDateWithRange(dateTime) : undefined;
     }
     if (periodCode === 'daily') {
+        return (dateTime) ? getDate(dateTime) : undefined;
+    }
+    if (periodCode === 'monthly') {
         return (dateTime) ? getDate(dateTime) : undefined;
     }
     return null;
@@ -84,7 +89,9 @@ const TableView = (props: Props) => {
         isInitial,
         stationName,
     } = props;
-    console.log('table');
+    console.log('table data:', data);
+
+
     const rainHeader = [
         {
             key: 'year',
@@ -99,38 +106,61 @@ const TableView = (props: Props) => {
             },
         },
         {
-            key: 'min',
-            label: 'MINIMUM RAINFALL (mm)',
+            key: 'key',
+            label: 'ACCUMULATED RAINFALL(mm)',
             order: 2,
             sortable: true,
-            comparator: (a, b) => compareNumber(a[`${intervalCode}Min`], b[`${intervalCode}Min`]),
+            comparator: (a, b) => compareNumber(a.accHour, b.accHour),
             modifier: (row: ChartData) => {
-                const min = row[`${intervalCode}Min`];
+                const min = row.accHour;
                 return (min) ? `${min.toFixed(2)}` : undefined;
             },
         },
         {
-            key: 'avg',
-            label: 'AVERAGE RAINFALL (mm)',
-            order: 3,
+            key: 'min',
+            label: 'CUMULATIV RAINFALL (mm)',
+            order: 2,
             sortable: true,
-            comparator: (a, b) => compareNumber(a[`${intervalCode}Avg`], b[`${intervalCode}Avg`]),
+            comparator: (a, b) => compareNumber(a[`${intervalCode}Min`], b[`${intervalCode}Min`]),
             modifier: (row: ChartData) => {
-                const avg = row[`${intervalCode}Avg`];
-                return (avg) ? `${avg.toFixed(2)}` : undefined;
+                // setCumu(row.accHour);
+                const min = row.accHour;
+                return (min) ? `${min.toFixed(2)}` : undefined;
             },
         },
-        {
-            key: 'max',
-            label: 'MAXIMUM RAINFALL (mm)',
-            order: 4,
-            sortable: true,
-            comparator: (a, b) => compareNumber(a[`${intervalCode}Max`], b[`${intervalCode}Max`]),
-            modifier: (row: ChartData) => {
-                const max = row[`${intervalCode}Max`];
-                return (max) ? `${max.toFixed(2)}` : undefined;
-            },
-        },
+        // {
+        //     key: 'min',
+        //     label: 'MINIMUM RAINFALL (mm)',
+        //     order: 2,
+        //     sortable: true,
+        //     comparator: (a, b) => compareNumber(a[`${intervalCode}Min`], b[`${intervalCode}Min`]),
+        //     modifier: (row: ChartData) => {
+        //         const min = row[`${intervalCode}Min`];
+        //         return (min) ? `${min.toFixed(2)}` : undefined;
+        //     },
+        // },
+        // {
+        //     key: 'avg',
+        //     label: 'AVERAGE RAINFALL (mm)',
+        //     order: 3,
+        //     sortable: true,
+        //     comparator: (a, b) => compareNumber(a[`${intervalCode}Avg`], b[`${intervalCode}Avg`]),
+        //     modifier: (row: ChartData) => {
+        //         const avg = row[`${intervalCode}Avg`];
+        //         return (avg) ? `${avg.toFixed(2)}` : undefined;
+        //     },
+        // },
+        // {
+        //     key: 'max',
+        //     label: 'MAXIMUM RAINFALL (mm)',
+        //     order: 4,
+        //     sortable: true,
+        //     comparator: (a, b) => compareNumber(a[`${intervalCode}Max`], b[`${intervalCode}Max`]),
+        //     modifier: (row: ChartData) => {
+        //         const max = row[`${intervalCode}Max`];
+        //         return (max) ? `${max.toFixed(2)}` : undefined;
+        //     },
+        // },
     ];
     const rainMinuteHeader = [
         {

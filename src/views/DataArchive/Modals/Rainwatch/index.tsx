@@ -82,6 +82,7 @@ const initialFaramValue = {
 };
 
 const RainModal = (props: Props) => {
+    const [tableData, setTableData] = useState([]);
     const [filterValues, setFilterValues] = useState<FaramValues>(initialFaramValue);
     const [stationData, setStationData] = useState<ArchiveRain[]>([]);
     const { stationName = 'Rain Modal',
@@ -172,6 +173,11 @@ const RainModal = (props: Props) => {
 
     const isInitial = isEqualObject(initialFaramValue, filterValues);
 
+    const handleTableData = (td) => {
+        setTableData(td);
+    };
+
+
     return (
         <Modal className={styles.rainModal}>
             <ModalHeader
@@ -215,11 +221,12 @@ const RainModal = (props: Props) => {
                             isInitial={isInitial}
                             stationName={stationName}
                             filterValues={filterValues}
+                            handleTableData={handleTableData}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>
                         <TableView
-                            filterWiseChartData={filterWiseChartData}
+                            filterWiseChartData={tableData}
                             filterValues={filterValues}
                             isInitial={isInitial}
                             stationName={stationName}
