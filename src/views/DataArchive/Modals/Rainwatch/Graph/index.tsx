@@ -107,7 +107,7 @@ const Graph = (props: Props) => {
             let cumulative = 0;
             let cumulativeDaily = 0;
             const datawithCumulative = filterWiseChartData.map((item) => {
-                cumulative += item.accHour;
+                cumulative += item.accHourly;
                 cumulativeDaily += item.accDaily;
                 return ({
                     ...item,
@@ -116,9 +116,9 @@ const Graph = (props: Props) => {
                 });
             });
             setCD(datawithCumulative);
-            props.handleTableData(datawithCumulative);
+            // props.handleTableData(datawithCumulative);
         }
-    }, [filterWiseChartData, props]);
+    }, [filterWiseChartData]);
 
 
     useEffect(() => {
@@ -230,10 +230,10 @@ const Graph = (props: Props) => {
                                             >
                                                 <CartesianGrid stroke="#f5f5f5" />
                                                 <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
-                                                <YAxis domain={['accHour', 'auto']} />
+                                                <YAxis domain={['accHourly', 'auto']} />
                                                 <Tooltip />
                                                 <Legend />
-                                                <Bar name="Accumulated Rain(mm)" dataKey="accHour" fill="#82ca9d" />
+                                                <Bar name="Accumulated Rain(mm)" dataKey="accHourly" fill="#82ca9d" />
                                                 <Line
                                                     type="monotone"
                                                     name="Cumulative Rain(mm)"

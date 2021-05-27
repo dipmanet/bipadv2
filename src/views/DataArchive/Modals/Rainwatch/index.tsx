@@ -131,6 +131,8 @@ const RainModal = (props: Props) => {
         rainDataWithPeriod.filter(r => r.dateWithHour),
         rain => rain.dateWithHour,
     );
+    console.log('Hourly wise group:', hourWiseGroup);
+
     const dailyWiseGroup = groupList(
         rainDataWithPeriod.filter(r => r.dateOnly),
         rain => rain.dateOnly,
@@ -141,7 +143,7 @@ const RainModal = (props: Props) => {
         rainDataWithPeriod.filter(r => r.dateOnly),
         rain => rain.dateOnly,
     );
-
+    console.log('Monthly wise group:', monthlyWiseGroup);
 
     let filterWiseChartData;
     let intervalCode;
@@ -172,11 +174,6 @@ const RainModal = (props: Props) => {
     }
 
     const isInitial = isEqualObject(initialFaramValue, filterValues);
-
-    const handleTableData = (td) => {
-        setTableData(td);
-    };
-
 
     return (
         <Modal className={styles.rainModal}>
@@ -221,12 +218,11 @@ const RainModal = (props: Props) => {
                             isInitial={isInitial}
                             stationName={stationName}
                             filterValues={filterValues}
-                            handleTableData={handleTableData}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>
                         <TableView
-                            filterWiseChartData={tableData}
+                            filterWiseChartData={filterWiseChartData}
                             filterValues={filterValues}
                             isInitial={isInitial}
                             stationName={stationName}

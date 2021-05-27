@@ -237,7 +237,7 @@ export const getChartData = (
 
         return {
             key,
-            accHour: Number(oneHour) || 0,
+            accHourly: Number(oneHour) || 0,
             accDaily: Number(twentyFourHour) || 0,
             label: String(label || ''),
             createdOn: String(createdOn || ''),

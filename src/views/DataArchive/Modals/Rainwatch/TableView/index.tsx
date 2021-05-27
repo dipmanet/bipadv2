@@ -49,9 +49,9 @@ const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {
 
 const getPeriod = (periodCode: string) => {
     const periods: {[key: string]: string} = {
-        minute: 'Minutewise',
         hourly: 'Hourly',
         daily: 'Daily',
+        monthly: 'Monthly',
     };
     return periods[periodCode];
 };
@@ -78,6 +78,7 @@ const generateFileName = (
     return name.replace(/ /g, '_');
 };
 
+
 const TableView = (props: Props) => {
     const {
         filterValues: {
@@ -89,10 +90,63 @@ const TableView = (props: Props) => {
         isInitial,
         stationName,
     } = props;
-    console.log('table data:', data);
+    console.log('Data passed to tableview:', data);
+    console.log('My period code:', periodCode);
+    console.log('My interval code:', intervalCode);
+
+    const [cumulativeData, setCD] = useState([]);
+    const [monthlyChartData, setCmd] = useState([]);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            let cumulative = 0;
+            let cumulativeDaily = 0;
+            const datawithCumulative = data.map((item) => {
+                cumulative += item.accHourly;
+                cumulativeDaily += item.accDaily;
+                return ({
+                    ...item,
+                    cumulativeHourData: cumulative,
+                    cumulativeDailyData: cumulativeDaily,
+                });
+            });
+            setCD(datawithCumulative);
+            // props.handleTableData(datawithCumulative);
+        }
+    }, [data]);
 
 
-    const rainHeader = [
+    useEffect(() => {
+        if (cumulativeData && cumulativeData.length > 0) {
+            const getAccRain = (key: string) => cumulativeData
+                .filter(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}` === key)
+                .reduce((a, b) => ({
+                    accDaily: a.accDaily + b.accDaily,
+                }));
+
+            const uniquemonthArr = [...new Set(cumulativeData.map(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}`))];
+            const monthlychartData = uniquemonthArr.map(key => ({
+                key,
+                accMonthly: getAccRain(key).accDaily,
+            }));
+            let cumulativeMth = 0;
+            const monthlyCumulativeCrtData = monthlychartData.map((item) => {
+                cumulativeMth += item.accMonthly;
+                return {
+                    ...item,
+                    cumulativeMonthlyData: cumulativeMth,
+                };
+            });
+            setCmd(monthlyCumulativeCrtData);
+            // props.handleTableData(monthlyCumulativeCrtData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cumulativeData]);
+
+    console.log('data from table view:', cumulativeData);
+    console.log('data from table view1:', monthlyChartData);
+
+    const rainHourlyHeader = [
         {
             key: 'year',
             label: 'DATE',
@@ -110,58 +164,100 @@ const TableView = (props: Props) => {
             label: 'ACCUMULATED RAINFALL(mm)',
             order: 2,
             sortable: true,
-            comparator: (a, b) => compareNumber(a.accHour, b.accHour),
+            comparator: (a, b) => compareNumber(a.accHourly, b.accHourly),
             modifier: (row: ChartData) => {
-                const min = row.accHour;
+                const min = row.accHourly;
                 return (min) ? `${min.toFixed(2)}` : undefined;
             },
         },
         {
             key: 'min',
-            label: 'CUMULATIV RAINFALL (mm)',
-            order: 2,
+            label: 'CUMULATIVE RAINFALL (mm)',
+            order: 3,
             sortable: true,
-            comparator: (a, b) => compareNumber(a[`${intervalCode}Min`], b[`${intervalCode}Min`]),
+            comparator: (a, b) => compareNumber(a.cumulativeHourData, b.cumulativeHourData),
             modifier: (row: ChartData) => {
                 // setCumu(row.accHour);
-                const min = row.accHour;
+                const min = row.cumulativeHourData;
                 return (min) ? `${min.toFixed(2)}` : undefined;
             },
         },
-        // {
-        //     key: 'min',
-        //     label: 'MINIMUM RAINFALL (mm)',
-        //     order: 2,
-        //     sortable: true,
-        //     comparator: (a, b) => compareNumber(a[`${intervalCode}Min`], b[`${intervalCode}Min`]),
-        //     modifier: (row: ChartData) => {
-        //         const min = row[`${intervalCode}Min`];
-        //         return (min) ? `${min.toFixed(2)}` : undefined;
-        //     },
-        // },
-        // {
-        //     key: 'avg',
-        //     label: 'AVERAGE RAINFALL (mm)',
-        //     order: 3,
-        //     sortable: true,
-        //     comparator: (a, b) => compareNumber(a[`${intervalCode}Avg`], b[`${intervalCode}Avg`]),
-        //     modifier: (row: ChartData) => {
-        //         const avg = row[`${intervalCode}Avg`];
-        //         return (avg) ? `${avg.toFixed(2)}` : undefined;
-        //     },
-        // },
-        // {
-        //     key: 'max',
-        //     label: 'MAXIMUM RAINFALL (mm)',
-        //     order: 4,
-        //     sortable: true,
-        //     comparator: (a, b) => compareNumber(a[`${intervalCode}Max`], b[`${intervalCode}Max`]),
-        //     modifier: (row: ChartData) => {
-        //         const max = row[`${intervalCode}Max`];
-        //         return (max) ? `${max.toFixed(2)}` : undefined;
-        //     },
-        // },
     ];
+    const rainDailyHeader = [
+        {
+            key: 'year',
+            label: 'DATE',
+            order: 1,
+            sortable: true,
+            comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
+            modifier: (row: ChartData) => {
+                const { measuredOn } = row;
+
+                return getPeriodWiseDate(measuredOn, periodCode);
+            },
+        },
+        {
+            key: 'key',
+            label: 'ACCUMULATED RAINFALL(mm)',
+            order: 2,
+            sortable: true,
+            comparator: (a, b) => compareNumber(a.accDaily, b.accDaily),
+            modifier: (row: ChartData) => {
+                const min = row.accDaily;
+                return (min) ? `${min.toFixed(2)}` : undefined;
+            },
+        },
+        {
+            key: 'min',
+            label: 'CUMULATIVE RAINFALL (mm)',
+            order: 3,
+            sortable: true,
+            comparator: (a, b) => compareNumber(a.cumulativeDailyData, b.cumulativeDailyData),
+            modifier: (row: ChartData) => {
+                // setCumu(row.accHour);
+                const min = row.cumulativeDailyData;
+                return (min) ? `${min.toFixed(2)}` : undefined;
+            },
+        },
+    ];
+    const rainMonthlyHeader = [
+        {
+            key: 'year',
+            label: 'DATE',
+            order: 1,
+            sortable: true,
+            comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
+            modifier: (row: ChartData) => {
+                const { measuredOn } = row;
+
+                return getPeriodWiseDate(measuredOn, periodCode);
+            },
+        },
+        {
+            key: 'key',
+            label: 'ACCUMULATED RAINFALL(mm)',
+            order: 2,
+            sortable: true,
+            comparator: (a, b) => compareNumber(a.accMonthly, b.accMonthly),
+            modifier: (row: ChartData) => {
+                const min = row.accMonthly;
+                return (min) ? `${min.toFixed(2)}` : undefined;
+            },
+        },
+        {
+            key: 'min',
+            label: 'CUMULATIVE RAINFALL (mm)',
+            order: 3,
+            sortable: true,
+            comparator: (a, b) => compareNumber(a.cumulativeMonthlyData, b.cumulativeMonthlyData),
+            modifier: (row: ChartData) => {
+                // setCumu(row.accHour);
+                const min = row.cumulativeMonthlyData;
+                return (min) ? `${min.toFixed(2)}` : undefined;
+            },
+        },
+    ];
+
     const rainMinuteHeader = [
         {
             key: 'year',
@@ -196,10 +292,12 @@ const TableView = (props: Props) => {
     }
     // removing year column for hourly period
     let header;
-    if (periodCode === 'minute') {
-        header = rainMinuteHeader;
-    } else {
-        header = rainHeader;
+    if (periodCode === 'hourly') {
+        header = rainHourlyHeader;
+    } else if (periodCode === 'daily') {
+        header = rainDailyHeader;
+    } else if (periodCode === 'monthly') {
+        header = rainMonthlyHeader;
     }
 
     const formattedTableData = convertNormalTableToCsv(data,
@@ -225,14 +323,31 @@ const TableView = (props: Props) => {
                     />
                 </DownloadButton>
             </div>
-            <Table
-                // rowClassNameSelector={getClassName}
-                className={styles.rainTable}
-                data={data}
-                headers={header}
-                keySelector={rainSelector}
-                defaultSort={defaultSort}
-            />
+            {
+                monthlyChartData && monthlyChartData.length > 0 && periodCode === 'monthly'
+                    ? (
+                        <Table
+                            // rowClassNameSelector={getClassName}
+                            className={styles.rainTable}
+                            data={monthlyChartData}
+                            headers={header}
+                            keySelector={rainSelector}
+                            defaultSort={defaultSort}
+                        />
+                    )
+                    : (
+                        <Table
+                            // rowClassNameSelector={getClassName}
+                            className={styles.rainTable}
+                            data={cumulativeData}
+                            headers={header}
+                            keySelector={rainSelector}
+                            defaultSort={defaultSort}
+                        />
+                    )
+            }
+
+
         </div>
     );
 };
