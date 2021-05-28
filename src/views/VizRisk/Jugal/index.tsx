@@ -51,7 +51,7 @@ const rightelements = [
     <RightElement2 />,
     <RightElement3 />,
     <RightElement4 />,
-    // <RightElement5 />,
+    <RightElement5 />,
     // <RightElement6 />,
 ];
 
@@ -411,13 +411,24 @@ class Jugal extends React.Component {
                     )
                 }
                 {
-                    rightElement === 5
+                    rightElement === 4
                     && (
-                        <MapWithTimeline
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                        />
+                        <>
+                            <MapWithTimeline
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                            />
+                            <RightElement5
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                incidentList={pointFeatureCollection}
+                            />
+                        </>
                     )
                 }
                 {/* {rightelements[rightElement]} */}
@@ -448,34 +459,7 @@ class Jugal extends React.Component {
                     )
                     : ''
                 }
-                {rightElement === 4
-                    ? (
-                        <>
-                            <div className={styles.legends}>
-                                <VRLegend>
-                                    <CriticalInfraLegends
-                                        handleCritical={this.handleCriticalFlood}
-                                        showCriticalElements={showCriticalElements}
-                                        criticalFlood={criticalFlood}
 
-                                    />
-                                </VRLegend>
-                                <VRLegend>
-                                    <FloodHazardLegends
-                                        handleFloodChange={this.handleFloodChange}
-                                        handleExposedElementChange={this.handleExposedElementChange}
-                                        handleChisapani={this.handleChisapani}
-                                        showCriticalElements={showCriticalElements}
-                                    />
-                                </VRLegend>
-                                <VRLegend>
-                                    <FloodDepthLegend />
-                                </VRLegend>
-                            </div>
-                        </>
-                    )
-                    : ''
-                }
                 {rightElement === 5
                     ? (
                         <div className={styles.legends}>

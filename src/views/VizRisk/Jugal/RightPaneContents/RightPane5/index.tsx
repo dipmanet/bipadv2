@@ -1,6 +1,13 @@
 import React from 'react';
+import {
+    Bar, BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    XAxis, YAxis,
+} from 'recharts';
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
+import NavButtons from '../../Components/NavButtons';
 
 interface ComponentProps {}
 
@@ -25,32 +32,70 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const chartData = demographicsData.demographicsData;
         const { showLandcover } = this.state;
+        const {
+            handleNext,
+            handlePrev,
+            disableNavLeftBtn,
+            disableNavRightBtn,
+            pagenumber,
+            totalPages,
+            incidentList,
+        } = this.props;
+
+        console.log('incidents list ', incidentList);
+        const hazardTitle = [...new Set(incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+
+        const chartData = hazardTitle.map(item => ({
+            name: item,
+            Total: incidentList.features.filter(ht => ht.properties.hazardTitle === item).length,
+        }));
+
         return (
             <div className={styles.vrSideBar}>
-                <h1>Flood Exposure </h1>
+                <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                    This visualization allows the super imposition of the flood hazard
-                    maps for different return period of flood with land use details.
-                    Return period is the probability of experiencing a given water
-                    depth within a single year; i.e. ‘1-in-100 year’ means 1 in 100 (1%)
-                    chance of occurrence in any given year.
+                    Jugal rural municipality has had 43 landslide and 2
+                    earthquake incidents in the past 10 years. These incidents
+                    caused the loss of lives of 3664 people and 133 people went missing.
+                    These incidents damaged 90050 houses and affected 2776 houses and caused
+                    an estimated loss of NPR 28815000.
                 </p>
-                <p>
-                    This visualization helps understand the population, elements
-                    and assets that are at threat to modeled flood hazard in the
-                    region. For instance, the dense settlement areas that are in
-                    proximity to Karnali river, on either tributaries, and lying
-                    in the high flood depth might face major human and economic
-                    loss in future floods.
-                </p>
-                <p>
-                    The impact of flooding can be greatly reduced through
-                    flood-sensitive land use planning and this visualization
-                    allows re-thinking long term spatial planning in the region.
-                </p>
-                {/* <SourceInfo /> */}
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
+                    <BarChart
+                        width={300}
+                        height={600}
+                        data={chartData}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,219,95)"
+                            barCategoryGap={20}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+
+                <NavButtons
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    disableNavLeftBtn={disableNavLeftBtn}
+                    disableNavRightBtn={disableNavRightBtn}
+                    pagenumber={pagenumber}
+                    totalPages={totalPages}
+                />
 
             </div>
         );

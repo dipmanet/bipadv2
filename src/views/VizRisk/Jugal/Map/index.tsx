@@ -306,6 +306,9 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Buildings', 'visibility', 'none');
                 this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
+            if (this.props.rightElement === 1) {
+                this.map.setLayoutProperty('Population Density', 'visibility', 'visible');
+            }
 
             mapping.forEach((attribute) => {
                 this.map.setFeatureState(
