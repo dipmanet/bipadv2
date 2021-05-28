@@ -18,8 +18,6 @@ import {
 import { dataArchiveRainListSelector, rainFiltersSelector, resourceListSelectorRP } from '#selectors';
 import styles from './styles.scss';
 
-import { httpGet } from '#utils/common';
-
 const mapStateToProps = state => ({
     rainFilters: rainFiltersSelector(state),
     rainList: dataArchiveRainListSelector(state),
@@ -84,8 +82,6 @@ const zoomToData = (data) => {
     if (coordsArray.length > 0) {
         const line = lineString(coordsArray);
         const boundbox = bbox(line);
-        // const boundsbox = boundbox.map((b, index) => (b % 2 == 0) ? b + 0.5 :);
-        // console.log('boundbox:', boundbox);
         return boundbox;
     }
     return null;
@@ -111,23 +107,16 @@ class RainMap extends React.PureComponent {
                 this.setState({ rasterLayers: [] });
             }
         }
-        // console.log('rain filter.basin:', this.props.rainFilters.basin);
-        console.log('Compare props:', this.props, prevProps);
 
         if (prevProps.rainList !== this.props.rainList) {
-            console.log('rainlist update:', this.props.rainList);
             // eslint-disable-next-line prefer-const
             let basinCoordinates = [];
 
             if (this.props.rainList.length > 0) {
-                console.log('component mount data:', this.props.rainList);
-                console.log('rainfilter.basin:', this.props.rainFilters.basin);
                 // eslint-disable-next-line max-len
                 const mydata = this.props.rainList.filter(item => item.basin === this.props.rainFilters.basin);
-                console.log('mydata:', mydata);
                 if (mydata.length > 0) {
                     basinCoordinates = mydata[0].point.coordinates;
-                    console.log('basin cords:', basinCoordinates);
                     const test = [
                         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
                         '&service=WMS',
@@ -254,7 +243,6 @@ class RainMap extends React.PureComponent {
         });
     }
 
-
     render() {
         const { data,
             rainFilters,
@@ -267,7 +255,6 @@ class RainMap extends React.PureComponent {
             rasterLayers,
         } = this.state;
 
-        console.log('raster layer data:', rasterLayers);
         if (data) {
             data.sort(compare);
         }

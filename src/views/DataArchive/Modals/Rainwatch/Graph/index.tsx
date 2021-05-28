@@ -150,8 +150,7 @@ const Graph = (props: Props) => {
 
 
     // const displayNote = shouldDisplayNote(periodCode || '');
-    // console.log('for chart: ', filterWiseChartData);
-    // console.log('cumulative: ', cumulativeData);
+
     const date = `${startDate} to ${endDate}`;
     const calculatedTitle = getChartTitle(
         intervalCode || '',

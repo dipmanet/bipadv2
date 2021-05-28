@@ -185,9 +185,6 @@ const Rain = (props: Props) => {
             return prevState;
         });
     }
-    useEffect(() => {
-        console.log('rain list:', rainList);
-    }, [rainList]);
 
     if (!pending && rainList && rainList.length < 1) {
         return (

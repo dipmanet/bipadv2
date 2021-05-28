@@ -72,9 +72,9 @@ const generateFileName = (
     periodCode: string,
     stationName: string,
 ) => {
-    const interval = getinterval(intervalCode);
+    // const interval = getinterval(intervalCode);
     const period = getPeriod(periodCode);
-    const name = `DataArchiveRain_${period}_${interval}_Readings_${stationName}`;
+    const name = `DataArchiveRain_${period}_Readings_${stationName}`;
     return name.replace(/ /g, '_');
 };
 
@@ -90,9 +90,6 @@ const TableView = (props: Props) => {
         isInitial,
         stationName,
     } = props;
-    console.log('Data passed to tableview:', data);
-    console.log('My period code:', periodCode);
-    console.log('My interval code:', intervalCode);
 
     const [cumulativeData, setCD] = useState([]);
     const [monthlyChartData, setCmd] = useState([]);
@@ -142,9 +139,6 @@ const TableView = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cumulativeData]);
-
-    console.log('data from table view:', cumulativeData);
-    console.log('data from table view1:', monthlyChartData);
 
     const rainHourlyHeader = [
         {
@@ -303,7 +297,6 @@ const TableView = (props: Props) => {
         header = rainMonthlyHeader;
         csvData = monthlyChartData;
     }
-    console.log('csvdata', csvData);
 
     const formattedTableData = convertNormalTableToCsv(csvData,
         header);

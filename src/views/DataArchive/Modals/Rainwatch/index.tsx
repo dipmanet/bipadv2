@@ -121,7 +121,6 @@ const RainModal = (props: Props) => {
 
     const rainDataWithParameter = parseInterval(stationData);
     const rainDataWithPeriod = parsePeriod(rainDataWithParameter);
-    // console.log('Rain data period:', rainDataWithPeriod);
 
     // const minuteWiseGroup = groupList(
     //     rainDataWithPeriod.filter(r => r.dateWithMinute),
@@ -131,19 +130,16 @@ const RainModal = (props: Props) => {
         rainDataWithPeriod.filter(r => r.dateWithHour),
         rain => rain.dateWithHour,
     );
-    console.log('Hourly wise group:', hourWiseGroup);
 
     const dailyWiseGroup = groupList(
         rainDataWithPeriod.filter(r => r.dateOnly),
         rain => rain.dateOnly,
     );
-    console.log('Daily wise group:', dailyWiseGroup);
 
     const monthlyWiseGroup = groupList(
         rainDataWithPeriod.filter(r => r.dateOnly),
         rain => rain.dateOnly,
     );
-    console.log('Monthly wise group:', monthlyWiseGroup);
 
     let filterWiseChartData;
     let intervalCode;
@@ -170,7 +166,6 @@ const RainModal = (props: Props) => {
     // sorting filteredData by measuredOn asc
     if (filterWiseChartData) {
         filterWiseChartData.sort(arraySorter);
-        console.log('Sorted Data:', filterWiseChartData.sort(arraySorter));
     }
 
     const isInitial = isEqualObject(initialFaramValue, filterValues);

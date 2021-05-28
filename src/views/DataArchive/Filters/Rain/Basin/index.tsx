@@ -13,8 +13,8 @@ interface Props {
     stations: RainStation[];
 }
 
-const BasinKeySelector = (r: sampleBasinData) => r.title;
-const BasinLabelSelector = (r: sampleBasinData) => r.title;
+const BasinKeySelector = (r: BasinData) => r.title;
+const BasinLabelSelector = (r: BasinData) => r.title;
 
 const mapStateToProps = (state: AppState) => ({
     rainStations: dataArchiveRainListSelector(state),
@@ -32,11 +32,10 @@ const BasinSelector = (props: Props) => {
     const handleBasinChange = (basinName: string) => {
         setSelectedBasin(basinName);
         onChangeFromProps(basinName || {});
-        console.log(basinName);
     };
     const uniqueBasins = [...new Set(basinStations.map(item => item.basin))];
 
-    const sampleBasinData = uniqueBasins.map((item, i) => ({
+    const BasinData = uniqueBasins.map((item, i) => ({
         id: i + 1,
         title: item,
     }));
@@ -46,7 +45,7 @@ const BasinSelector = (props: Props) => {
             <SelectInput
                 className={styles.basinInput}
                 label="Basin Name"
-                options={sampleBasinData}
+                options={BasinData}
                 keySelector={BasinKeySelector}
                 labelSelector={BasinLabelSelector}
                 value={selectedBasin}

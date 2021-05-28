@@ -108,9 +108,8 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARainFiltersElement) =
         station: 'station',
         dataRange: 'dataDateRange',
     };
-    // console.log('filter map obj', tabKeyToFilterMap);
+
     const filter = filters[tabKeyToFilterMap[key]];
-    // console.log('filter', filter);
 
     if (Array.isArray(filter)) {
         return filter.length !== 0;
@@ -140,7 +139,6 @@ class RainFilters extends React.PureComponent<Props, State> {
 
     public componentDidMount() {
         const { rainFilters: faramValues } = this.props;
-        console.log('filtertest:', faramValues);
         this.setState({ faramValues });
     }
 
@@ -219,7 +217,6 @@ class RainFilters extends React.PureComponent<Props, State> {
 
         const { setDataArchiveRainFilter } = this.props;
         const { faramValues } = this.state;
-        console.log('Faram:', faramValues);
         if (faramValues) {
             setDataArchiveRainFilter({ dataArchiveRainFilters: faramValues });
         }
@@ -230,16 +227,12 @@ class RainFilters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: DARainFiltersElement) => {
-        // const { setFilters } = this.props;
-        // setFilters({ filters: faramValues });
         this.setState({ faramValues });
-        console.log('setting fv:', faramValues);
     }
 
     private handleSubmitClick = () => {
         const { setDataArchiveRainFilter } = this.props;
         const { faramValues } = this.state;
-        console.log('fv', faramValues);
         const { dataDateRange } = faramValues || {};
         const { rangeInDays, startDate = '', endDate = '' } = dataDateRange || {};
         let faramError = '';
