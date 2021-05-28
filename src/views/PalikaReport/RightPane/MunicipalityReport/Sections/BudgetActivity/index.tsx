@@ -106,11 +106,51 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
             params.budgetActivities(response);
         },
         onFailure: ({ error, params }) => {
-            console.log('params:', params);
+            params.body.setErrors(error);
         },
 
 
     },
+
+    PriorityActionGet: { url: '/priority-action/',
+
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.priorityAction) {
+                params.priorityAction(citizenReportList);
+            }
+        } },
+    PriorityActivityGet: { url: '/priority-activity/',
+
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.priorityActivity) {
+                params.priorityActivity(citizenReportList);
+            }
+        } },
+    PriorityAreaGet: { url: '/priority-area/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.priorityArea) {
+                params.priorityArea(citizenReportList);
+            }
+        } },
+
 
 };
 
@@ -165,6 +205,7 @@ let district = 0;
 let municipality = 0;
 
 const COLORS = ['rgb(0,117,117)', 'rgb(198,233,232)'];
+let finalArr = [];
 const BudgetActivity = (props: Props) => {
     const {
         updateTab,
@@ -175,7 +216,10 @@ const BudgetActivity = (props: Props) => {
         budgetId,
         requests: { BudgetActivityGetRequest,
             BudgetActivityPostRequest,
-            BudgetActivityPutRequest },
+            BudgetActivityPutRequest,
+            PriorityActionGet,
+            PriorityAreaGet,
+            PriorityActivityGet },
         user,
         drrmRegion,
         setProgress,
@@ -259,7 +303,6 @@ const BudgetActivity = (props: Props) => {
     const [allocatedBudget, setallocatedBudget] = useState();
     const [actualExp, setactualExp] = useState();
     const [remarks, setremarks] = useState('');
-    const [priorityArea, setpriorityArea] = useState('');
     const [paginationQueryLimit, setPaginationQueryLimit] = useState(6);
     const [offset, setOffset] = useState(0);
     const [paginationParameters, setPaginationParameters] = useState();
@@ -267,6 +310,7 @@ const BudgetActivity = (props: Props) => {
     const [activity, setActivity] = useState(activityfromprops);
     const [areaofImplementation, setareaofImplementation] = useState(areaofImplementationfromprops);
     const [organisationName, setorganisationName] = useState('');
+    const [priorityArea, setpriorityArea] = useState('');
     const [priorityAction, setPriorityAction] = useState('');
     const [priorityActivity, setPriorityActivity] = useState('');
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
@@ -287,6 +331,13 @@ const BudgetActivity = (props: Props) => {
 
     const [projectStartDateAD, setProjectStartDate] = useState('');
     const [projectEndDateAD, setProjectEndDate] = useState('');
+    const [priorityActionFetched, setPriorityActionFetched] = useState([]);
+    const [priorityActivityFetched, setPriorityActivityFetched] = useState([]);
+    const [priorityAreaFetched, setpriorityAreaFetched] = useState([]);
+    const [filteredpriorityActivityFetched, setFilteredPriorityActivityFetched] = useState();
+    const [filteredpriorityActionFetched, setFilteredpriorityActionFetched] = useState();
+    const [disablePriorityAction, setDisablePriorityAction] = useState(true);
+    const [disablePriorityActivity, setDisablePriorityActivity] = useState(true);
     const handleInfoBtn = () => {
         setShowInfo(!showInfo);
     };
@@ -295,8 +346,10 @@ const BudgetActivity = (props: Props) => {
         setLoader(data);
     };
     const handleErrors = (errors) => {
+        setLoader(false);
         setPostErrors(errors);
     };
+    console.log('That', postErrors);
     const handleDataSubmittedResponse = (response) => {
         setDataSubmittedResponse(!dataSubmittedResponse);
         setStartDate('');
@@ -357,7 +410,26 @@ const BudgetActivity = (props: Props) => {
     const handleOrganisationName = (org: string) => {
         setorganisationName(org.target.value);
     };
+    const handlePriorityActivityFetch = (data) => {
+        setPriorityActivityFetched(data);
+    };
+    const handlePriorityActionFetch = (data) => {
+        setPriorityActionFetched(data);
+    };
+    const handlePriorityAreaFetch = (data) => {
+        setpriorityAreaFetched(data);
+    };
+    PriorityActionGet.setDefaultParams({
+        priorityAction: handlePriorityActionFetch,
+    });
+    PriorityActivityGet.setDefaultParams({
+        priorityActivity: handlePriorityActivityFetch,
 
+    });
+    PriorityAreaGet.setDefaultParams({
+        priorityArea: handlePriorityAreaFetch,
+
+    });
     useEffect(() => {
         if (projstartDate) {
             const bsToAd = BSToAD(projstartDate);
@@ -499,22 +571,66 @@ const BudgetActivity = (props: Props) => {
     const PriorityAction = priorityData.Data.filter(data => data.parent === parent);
     const PriorityActivity = priorityData.Data.filter(data => data.level === 2);
 
+    // const handlePriorityArea = (e) => {
+    //     setpriorityArea(e.target.value);
+    //     const obj = priorityData.Data.filter(item => item.title === e.target.value);
+    //     setParent(obj.sn);
+
+    //     setPData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
+    // };
+
+    // const handlePriorityAction = (e) => {
+    //     setPriorityAction(e.target.value);
+    //     const obj = priorityData.Data.filter(item => item.title === e.target.value);
+
+    //     setAData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
+    // };
+    // const handlePriorityActivity = (e) => {
+    //     setPriorityActivity(e.target.value);
+    // };
     const handlePriorityArea = (e) => {
-        setpriorityArea(e.target.value);
-        const obj = priorityData.Data.filter(item => item.title === e.target.value);
-        setParent(obj.sn);
-
-        setPData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
+        setpriorityArea(Number(e.target.value));
+        setDisablePriorityAction(false);
+        setDisablePriorityActivity(true);
+        setPriorityAction('');
+        setPriorityActivity('');
+        if (e.target.value === '' || e.target.value === 0) {
+            setDisablePriorityAction(true);
+            setDisablePriorityActivity(true);
+        }
     };
-
+    useEffect(() => {
+        if (priorityArea) {
+            const filteredData = priorityActionFetched.filter(item => item.priorityArea === Number(priorityArea));
+            setFilteredpriorityActionFetched(filteredData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [priorityArea]);
+    useEffect(() => {
+        setFilteredPriorityActivityFetched(priorityActivityFetched);
+        setFilteredpriorityActionFetched(priorityActionFetched);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const handlePriorityAction = (e) => {
-        setPriorityAction(e.target.value);
-        const obj = priorityData.Data.filter(item => item.title === e.target.value);
-
-        setAData(priorityData.Data.filter(item => item.parent === Number(obj[0].ndrrsapid)));
+        setPriorityAction(Number(e.target.value));
+        setDisablePriorityActivity(false);
+        setPriorityActivity('');
+        if (e.target.value === '') {
+            setDisablePriorityActivity(true);
+        }
     };
+    console.log('Priority area', priorityArea);
+    console.log('Priority Activity', priorityActivity);
+    console.log('Priority Action', priorityAction);
+    useEffect(() => {
+        if (priorityAction) {
+            const filteredData = priorityActivityFetched.filter(item => item.priorityAction === Number(priorityAction));
+            setFilteredPriorityActivityFetched(filteredData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [priorityAction]);
     const handlePriorityActivity = (e) => {
-        setPriorityActivity(e.target.value);
+        setPriorityActivity(Number(e.target.value));
     };
     const handlefundingType = (data) => {
         if (data.target.value === 'Others') {
@@ -558,9 +674,11 @@ const BudgetActivity = (props: Props) => {
         setEditBudgetActivity(true);
         setSelectedBudgetActivityIndex(index);
         setEditBtnClicked(!editBtnClicked);
+        setPostErrors({});
     };
     const handleUpdateActivity = () => {
         setLoader(true);
+        setPostErrors({});
         BudgetActivityPutRequest.do({
             body: {
                 activityName,
@@ -588,6 +706,7 @@ const BudgetActivity = (props: Props) => {
             id: budgetActivityId,
         });
     };
+    console.log('Budget act', budgetActivities);
     useEffect(() => {
         if (budgetActivities.length > 0) {
             setactivityName(budgetActivities[selectedBudgetActivityIndex].activityName);
@@ -616,6 +735,29 @@ const BudgetActivity = (props: Props) => {
         props.handleNextClick();
     };
 
+    useEffect(() => {
+        if (budgetActivities.length) {
+            const finalArrayData = budgetActivities.map((data) => {
+                const PriorityAreaName = priorityAreaFetched.find(item => item.id === data.priorityArea);
+                const PriorityActionName = priorityActionFetched.find(item => item.id === data.priorityAction);
+                const PriorityActivityName = priorityActivityFetched.find(item => item.id === data.priorityActivity);
+
+                return {
+                    PriorityActionNameEn: PriorityActionName && PriorityActionName.title || '-',
+                    PriorityActionNameNe: PriorityActionName && PriorityActionName.titleNp || '-',
+                    PriorityActivityNameEn: PriorityActivityName && PriorityActivityName.title || '-',
+                    PriorityActivityNameNe: PriorityActivityName && PriorityActivityName.titleNp || '-',
+                    PriorityAreaNameEn: PriorityAreaName && PriorityAreaName.title || '-',
+                    PriorityAreaNameNe: PriorityAreaName && PriorityAreaName.titleNp || '-',
+                    data,
+                };
+            });
+            finalArr = [...new Set(finalArrayData)];
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [budgetActivities]);
+
+    console.log('Final arr', finalArr);
     return (
         <>
 
@@ -752,8 +894,8 @@ const BudgetActivity = (props: Props) => {
                                         budgetId.id
                                              && (
                                                  <>
-                                                     {budgetActivities && budgetActivities.map((data, i) => (
-                                                         data.id === budgetActivityId ? (
+                                                     {finalArr && finalArr.map((data, i) => (
+                                                         data.data.id === budgetActivityId ? (
                                                              <tr>
                                                                  <td>{selectedBudgetActivityIndex + 1}</td>
                                                                  <td>
@@ -769,21 +911,18 @@ const BudgetActivity = (props: Props) => {
                                                                      />
                                                                  </td>
 
+
                                                                  <td>
                                                                      <select
                                                                          value={priorityArea}
                                                                          onChange={handlePriorityArea}
                                                                          className={styles.inputElement}
+
                                                                      >
-                                                                         <option value="">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Select Priority Area'
-                                                                                 : 'प्राथमिकता प्राप्त क्षेत्र चयन गर्नुहोस्'
-                                                                             }
-                                                                         </option>
-                                                                         {PriorityArea.map(item => (
-                                                                             <option value={item.title}>
-                                                                                 {item.title}
+                                                                         <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                                         {priorityAreaFetched.map(item => (
+                                                                             <option value={item.id}>
+                                                                                 {drrmLanguage.language === 'np' ? item.titleNp : item.title}
                                                                              </option>
                                                                          ))}
 
@@ -794,17 +933,12 @@ const BudgetActivity = (props: Props) => {
                                                                          value={priorityAction}
                                                                          onChange={handlePriorityAction}
                                                                          className={styles.inputElement}
+                                                                         disabled={disablePriorityAction}
                                                                      >
-                                                                         <option value="">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Select Priority Action'
-                                                                                 : 'प्राथमिकता प्राप्त कार्य चयन गर्नुहोस्'
-                                                                             }
-
-                                                                         </option>
-                                                                         {priorityActionData.map(item => (
-                                                                             <option value={item.title}>
-                                                                                 {item.title}
+                                                                         <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                                         {filteredpriorityActionFetched.map(item => (
+                                                                             <option value={item.id}>
+                                                                                 {drrmLanguage.language === 'np' ? item.titleNp : item.title}
                                                                              </option>
                                                                          ))}
 
@@ -815,16 +949,12 @@ const BudgetActivity = (props: Props) => {
                                                                          value={priorityActivity}
                                                                          onChange={handlePriorityActivity}
                                                                          className={styles.inputElement}
+                                                                         disabled={disablePriorityActivity}
                                                                      >
-                                                                         <option value="">
-                                                                             {drrmLanguage.language === 'en'
-                                                                                 ? 'Select Priority Activity'
-                                                                                 : 'प्राथमिकता प्राप्त क्रियाकलाप चयन गर्नुहोस्'
-                                                                             }
-                                                                         </option>
-                                                                         {priorityActivityData.map(item => (
-                                                                             <option value={item.title}>
-                                                                                 {item.title}
+                                                                         <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                                         {filteredpriorityActivityFetched.map(item => (
+                                                                             <option value={item.id}>
+                                                                                 {drrmLanguage.language === 'np' ? item.titleNp : item.title}
                                                                              </option>
                                                                          ))}
 
@@ -1078,37 +1208,37 @@ const BudgetActivity = (props: Props) => {
                                                              </tr>
                                                          )
                                                              : (
-                                                                 <tr key={data.id}>
+                                                                 <tr key={data.data.id}>
 
                                                                      <td>{(currentPageNumber - 1) * paginationQueryLimit + i + 1}</td>
 
-                                                                     <td>{data.activityName}</td>
+                                                                     <td>{data.data.activityName}</td>
 
                                                                      <td>
                                                                          {
-                                                                             data.priorityArea
+                                                                             drrmLanguage.language === 'np' ? data.PriorityAreaNameNe : data.PriorityAreaNameEn
 
                                                                          }
                                                                      </td>
-                                                                     <td>{data.priorityAction}</td>
-                                                                     <td>{data.priorityActivity}</td>
-                                                                     {/* <td>{data.priorityArea}</td> */}
-                                                                     <td>{data.fundType}</td>
-                                                                     <td>{data.otherFundType}</td>
-                                                                     <td>{data.donerOrganization}</td>
-                                                                     <td>{data.budgetCode}</td>
-                                                                     <td>{ADToBS(data.projectStartDate)}</td>
-                                                                     <td>{ADToBS(data.projectEndDate)}</td>
-                                                                     <td>{data.status}</td>
-                                                                     <td>{data.amount}</td>
-                                                                     <td>{data.expenditure}</td>
-                                                                     <td>{data.remarks}</td>
+                                                                     <td>{ drrmLanguage.language === 'np' ? data.PriorityActionNameNe : data.PriorityActionNameEn}</td>
+                                                                     <td>{ drrmLanguage.language === 'np' ? data.PriorityActivityNameNe : data.PriorityActivityNameEn}</td>
+
+                                                                     <td>{data.data.fundType}</td>
+                                                                     <td>{data.data.otherFundType}</td>
+                                                                     <td>{data.data.donerOrganization}</td>
+                                                                     <td>{data.data.budgetCode}</td>
+                                                                     <td>{ADToBS(data.data.projectStartDate)}</td>
+                                                                     <td>{ADToBS(data.data.projectEndDate)}</td>
+                                                                     <td>{data.data.status}</td>
+                                                                     <td>{data.data.amount}</td>
+                                                                     <td>{data.data.expenditure}</td>
+                                                                     <td>{data.data.remarks}</td>
                                                                      <td>
 
                                                                          <button
                                                                              className={styles.editButtn}
                                                                              type="button"
-                                                                             onClick={() => handleEditActivity(data.id, i)}
+                                                                             onClick={() => handleEditActivity(data.data.id, i)}
                                                                              title="Edit Budget Activity"
                                                                          >
                                                                              <ScalableVectorGraphics
@@ -1140,21 +1270,19 @@ const BudgetActivity = (props: Props) => {
                                                              />
                                                          </td>
 
+
                                                          <td>
                                                              <select
                                                                  value={priorityArea}
                                                                  onChange={handlePriorityArea}
                                                                  className={styles.inputElement}
+
+
                                                              >
-                                                                 <option value="">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Select Priority Area'
-                                                                         : 'प्राथमिकता प्राप्त क्षेत्र चयन गर्नुहोस्'
-                                                                     }
-                                                                 </option>
-                                                                 {PriorityArea.map(item => (
-                                                                     <option value={item.title}>
-                                                                         {item.title}
+                                                                 <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                                 {priorityAreaFetched.map(data => (
+                                                                     <option value={data.id}>
+                                                                         {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                                      </option>
                                                                  ))}
 
@@ -1165,17 +1293,12 @@ const BudgetActivity = (props: Props) => {
                                                                  value={priorityAction}
                                                                  onChange={handlePriorityAction}
                                                                  className={styles.inputElement}
+                                                                 disabled={disablePriorityAction}
                                                              >
-                                                                 <option value="">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Select Priority Action'
-                                                                         : 'प्राथमिकता प्राप्त कार्य चयन गर्नुहोस्'
-                                                                     }
-
-                                                                 </option>
-                                                                 {priorityActionData.map(item => (
-                                                                     <option value={item.title}>
-                                                                         {item.title}
+                                                                 <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                                 {filteredpriorityActionFetched.map(data => (
+                                                                     <option value={data.id}>
+                                                                         {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                                      </option>
                                                                  ))}
 
@@ -1186,16 +1309,12 @@ const BudgetActivity = (props: Props) => {
                                                                  value={priorityActivity}
                                                                  onChange={handlePriorityActivity}
                                                                  className={styles.inputElement}
+                                                                 disabled={disablePriorityActivity}
                                                              >
-                                                                 <option value="">
-                                                                     {drrmLanguage.language === 'en'
-                                                                         ? 'Select Priority Activity'
-                                                                         : 'प्राथमिकता प्राप्त क्रियाकलाप चयन गर्नुहोस्'
-                                                                     }
-                                                                 </option>
-                                                                 {priorityActivityData.map(item => (
-                                                                     <option value={item.title}>
-                                                                         {item.title}
+                                                                 <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                                 {filteredpriorityActivityFetched.map(data => (
+                                                                     <option value={data.id}>
+                                                                         {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                                      </option>
                                                                  ))}
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 import React, { useState, useEffect, useCallback } from 'react';
@@ -1195,7 +1196,7 @@ const Relief = (props: Props) => {
         // });
     };
 
-    console.log('Final array', finalArr);
+
     return (
         <>
 
@@ -1260,13 +1261,11 @@ const Relief = (props: Props) => {
                                         <th>
                                             <Gt section={Translations.IncidentLiveStockLoss} />
                                         </th>
-                                        {!props.annex
-                                        && (
-                                            <th>
-                                                <Gt section={Translations.IncidentCause} />
-                                            </th>
-                                        )
-                                        }
+
+                                        <th>
+                                            <Gt section={Translations.IncidentCause} />
+                                        </th>
+
 
                                         { !props.annex
                                         && (
@@ -1359,7 +1358,9 @@ const Relief = (props: Props) => {
                                                         }
 
 
+                                                        {props.annex ? item.item.cause ? item.item.cause : '-' : ''}
                                                     </td>
+
                                                     {!props.annex && reliefData
                                            && reliefData.find(data => data.incident === item.item.id)
                                                         ? reliefData.filter(data => data.incident === item.item.id).map(data => (

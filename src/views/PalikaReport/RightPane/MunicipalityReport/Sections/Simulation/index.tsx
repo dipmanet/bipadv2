@@ -125,6 +125,44 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 
     },
+    PriorityActionGet: { url: '/priority-action/',
+
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.priorityAction) {
+                params.priorityAction(citizenReportList);
+            }
+        } },
+    PriorityActivityGet: { url: '/priority-activity/',
+
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.priorityActivity) {
+                params.priorityActivity(citizenReportList);
+            }
+        } },
+    PriorityAreaGet: { url: '/priority-area/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            let citizenReportList: CitizenReport[] = [];
+            const citizenReportsResponse = response as MultiResponse<CitizenReport>;
+            citizenReportList = citizenReportsResponse.results;
+
+            if (params && params.priorityArea) {
+                params.priorityArea(citizenReportList);
+            }
+        } },
 
 };
 
@@ -171,11 +209,11 @@ const Simulation = (props: Props) => {
     // const [province, setProvince] = useState(0);
     // const [district, setDistrict] = useState(0);
     // const [municipality, setMunicipality] = useState(0);
-
+    const [postErrors, setPostErrors] = useState({});
     const [simulationData, setSimulationData] = useState([]);
-    const [priorityAction, setPriorityAction] = useState('');
-    const [priorityActivity, setPriorityActivity] = useState('');
-    const [priorityArea, setpriorityArea] = useState('');
+    const [priorityAction, setPriorityAction] = useState();
+    const [priorityActivity, setPriorityActivity] = useState();
+    const [priorityArea, setpriorityArea] = useState();
     const [focusHazard, setFocusHazard] = useState(null);
     const [startDate, setStartDate] = useState('');
     const [loader, setLoader] = useState(true);
@@ -183,11 +221,22 @@ const Simulation = (props: Props) => {
     const [simulationIndex, setSimulationIndex] = useState();
     const [editBtnClicked, setEditBtnClicked] = useState(false);
     const [simulationDateAD, setSimulationDateAD] = useState('');
+    const [priorityActionFetched, setPriorityActionFetched] = useState([]);
+    const [priorityActivityFetched, setPriorityActivityFetched] = useState([]);
+    const [priorityAreaFetched, setpriorityAreaFetched] = useState([]);
+    const [filteredpriorityActivityFetched, setFilteredPriorityActivityFetched] = useState();
+    const [filteredpriorityActionFetched, setFilteredpriorityActionFetched] = useState();
+    const [disablePriorityAction, setDisablePriorityAction] = useState(true);
+    const [disablePriorityActivity, setDisablePriorityActivity] = useState(true);
+
     // const [fiscalYear, setFiscalYear] = useState(2);
     const { requests: { SimulationPostRequest,
         SimulationGetRequest, SimulationPutRequest,
 
-        HazardGetRequest } } = props;
+        HazardGetRequest,
+        PriorityActionGet,
+        PriorityActivityGet,
+        PriorityAreaGet } } = props;
 
     if (drrmRegion.municipality) {
         municipality = drrmRegion.municipality;
@@ -225,6 +274,27 @@ const Simulation = (props: Props) => {
         id: '-id',
 
     });
+
+    const handlePriorityActivityFetch = (data) => {
+        setPriorityActivityFetched(data);
+    };
+    const handlePriorityActionFetch = (data) => {
+        setPriorityActionFetched(data);
+    };
+    const handlePriorityAreaFetch = (data) => {
+        setpriorityAreaFetched(data);
+    };
+    PriorityActionGet.setDefaultParams({
+        priorityAction: handlePriorityActionFetch,
+    });
+    PriorityActivityGet.setDefaultParams({
+        priorityActivity: handlePriorityActivityFetch,
+
+    });
+    PriorityAreaGet.setDefaultParams({
+        priorityArea: handlePriorityAreaFetch,
+
+    });
     useEffect(() => {
         if (startDate) {
             const bsToAd = BSToAD(startDate);
@@ -253,13 +323,49 @@ const Simulation = (props: Props) => {
         setParticipants(e.target.value);
     };
     const handlePriorityArea = (e) => {
-        setpriorityArea(e.target.value);
+        setpriorityArea(Number(e.target.value));
+        setDisablePriorityAction(false);
+        setDisablePriorityActivity(true);
+        setPriorityAction('');
+        setPriorityActivity('');
+        if (e.target.value === '' || e.target.value === 0) {
+            setDisablePriorityAction(true);
+            setDisablePriorityActivity(true);
+        }
     };
+    console.log('Act', disablePriorityAction);
+    useEffect(() => {
+        if (priorityArea) {
+            const filteredData = priorityActionFetched.filter(item => item.priorityArea === Number(priorityArea));
+            setFilteredpriorityActionFetched(filteredData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [priorityArea]);
+
+    useEffect(() => {
+        setFilteredPriorityActivityFetched(priorityActivityFetched);
+        setFilteredpriorityActionFetched(priorityActionFetched);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handlePriorityAction = (e) => {
-        setPriorityAction(e.target.value);
+        setPriorityAction(Number(e.target.value));
+        setDisablePriorityActivity(false);
+        setPriorityActivity('');
+        if (e.target.value === '') {
+            setDisablePriorityActivity(true);
+        }
     };
+    useEffect(() => {
+        if (priorityAction) {
+            const filteredData = priorityActivityFetched.filter(item => item.priorityAction === Number(priorityAction));
+            setFilteredPriorityActivityFetched(filteredData);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [priorityAction]);
+
     const handlePriorityActivity = (e) => {
-        setPriorityActivity(e.target.value);
+        setPriorityActivity(Number(e.target.value));
     };
     const handleFocusHazard = (e) => {
         setFocusHazard(e.target.value);
@@ -276,6 +382,9 @@ const Simulation = (props: Props) => {
         }
     };
 
+    console.log('Priority area', priorityAreaFetched);
+    console.log('Priority Activity', priorityActivityFetched);
+    console.log('Priority Action', priorityActionFetched);
     useEffect(() => {
         if (simulationData) {
             const finalSimulationData = simulationData.map((data) => {
@@ -295,8 +404,9 @@ const Simulation = (props: Props) => {
     }, [simulationData]);
 
 
-    const handleErrorData = (response) => {
+    const handleErrorData = (data) => {
         setLoader(false);
+        setPostErrors(data.response);
     };
     const handleDataSubmittedResponse = (response) => {
         setDescription('');
@@ -310,6 +420,7 @@ const Simulation = (props: Props) => {
     };
     const handleAddNew = () => {
         setLoader(true);
+        setPostErrors({});
         SimulationPostRequest.do({
             body: {
                 title: simulationName,
@@ -366,9 +477,11 @@ const Simulation = (props: Props) => {
         setSimulationId(id);
         setSimulationIndex(index);
         setEditBtnClicked(!editBtnClicked);
+        setPostErrors({});
     };
     const handleUpdateSimulation = () => {
         setLoader(true);
+        setPostErrors({});
         SimulationPutRequest.do({
             body: {
                 title: simulationName,
@@ -412,7 +525,7 @@ const Simulation = (props: Props) => {
     } else {
         tableStyle = { tableLayout: 'initial' };
     }
-
+    console.log('That', postErrors);
 
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
@@ -517,11 +630,12 @@ const Simulation = (props: Props) => {
                                                                     value={priorityArea}
                                                                     onChange={handlePriorityArea}
                                                                     className={styles.inputElement}
+
                                                                 >
                                                                     <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
-                                                                    {PriorityArea.map(data => (
-                                                                        <option value={data.title}>
-                                                                            {data.title}
+                                                                    {priorityAreaFetched.map(data => (
+                                                                        <option value={data.id}>
+                                                                            {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                                         </option>
                                                                     ))}
 
@@ -532,11 +646,12 @@ const Simulation = (props: Props) => {
                                                                     value={priorityAction}
                                                                     onChange={handlePriorityAction}
                                                                     className={styles.inputElement}
+                                                                    disabled={disablePriorityAction}
                                                                 >
                                                                     <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
-                                                                    {PriorityAction.map(data => (
-                                                                        <option value={data.title}>
-                                                                            {data.title}
+                                                                    {filteredpriorityActionFetched.map(data => (
+                                                                        <option value={data.id}>
+                                                                            {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                                         </option>
                                                                     ))}
 
@@ -547,11 +662,12 @@ const Simulation = (props: Props) => {
                                                                     value={priorityActivity}
                                                                     onChange={handlePriorityActivity}
                                                                     className={styles.inputElement}
+                                                                    disabled={disablePriorityActivity}
                                                                 >
                                                                     <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
-                                                                    {PriorityActivity.map(data => (
-                                                                        <option value={data.title}>
-                                                                            {data.title}
+                                                                    {filteredpriorityActivityFetched.map(data => (
+                                                                        <option value={data.id}>
+                                                                            {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                                         </option>
                                                                     ))}
 
@@ -689,16 +805,12 @@ const Simulation = (props: Props) => {
                                                         value={priorityArea}
                                                         onChange={handlePriorityArea}
                                                         className={styles.inputElement}
-                                                    >
-                                                        <option value="">
-                                                            {drrmLanguage.language === 'np'
-                                                                ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्'
-                                                                : 'Select Priority Area'}
 
-                                                        </option>
-                                                        {PriorityArea.map(data => (
-                                                            <option value={data.title}>
-                                                                {data.title}
+                                                    >
+                                                        <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता क्षेत्र चयन गर्नुहोस्' : 'Select Priority Area'}</option>
+                                                        {priorityAreaFetched.map(data => (
+                                                            <option value={data.id}>
+                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                             </option>
                                                         ))}
 
@@ -709,16 +821,12 @@ const Simulation = (props: Props) => {
                                                         value={priorityAction}
                                                         onChange={handlePriorityAction}
                                                         className={styles.inputElement}
+                                                        disabled={disablePriorityAction}
                                                     >
-                                                        <option value="">
-                                                            {drrmLanguage.language === 'np'
-                                                                ? 'प्राथमिकता कार्य चयन गर्नुहोस्'
-                                                                : 'Select Priority Action'}
-
-                                                        </option>
-                                                        {PriorityAction.map(data => (
-                                                            <option value={data.title}>
-                                                                {data.title}
+                                                        <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता कार्य चयन गर्नुहोस्' : 'Select Priority Action'}</option>
+                                                        {filteredpriorityActionFetched.map(data => (
+                                                            <option value={data.id}>
+                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                             </option>
                                                         ))}
 
@@ -729,11 +837,12 @@ const Simulation = (props: Props) => {
                                                         value={priorityActivity}
                                                         onChange={handlePriorityActivity}
                                                         className={styles.inputElement}
+                                                        disabled={disablePriorityActivity}
                                                     >
-                                                        <option value="">{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
-                                                        {PriorityActivity.map(data => (
-                                                            <option value={data.title}>
-                                                                {data.title}
+                                                        <option value={''}>{drrmLanguage.language === 'np' ? 'प्राथमिकता गतिविधि चयन गर्नुहोस्' : 'Select Priority Activity'}</option>
+                                                        {filteredpriorityActivityFetched.map(data => (
+                                                            <option value={data.id}>
+                                                                {drrmLanguage.language === 'np' ? data.titleNp : data.title}
                                                             </option>
                                                         ))}
 
@@ -790,6 +899,27 @@ const Simulation = (props: Props) => {
 
                             </tbody>
                         </table>
+                        {
+                            Object.keys(postErrors).length > 0
+                            && (
+                                <ul>
+                                    <li>
+                                        <span className={styles.errorHeading}>
+                                    Please fix the following errors:
+                                        </span>
+                                    </li>
+                                    {
+                                        Object.keys(postErrors).map(errorItem => (
+                                            <li>
+                                                {`${errorItem}: ${postErrors[errorItem]}`}
+                                            </li>
+                                        ), // return <li>Please enter valid info in all fields</li>;
+                                        )
+                                    }
+
+                                </ul>
+                            )
+                        }
                         {!simulationId && (
                             <>
                                 {!loader && (
