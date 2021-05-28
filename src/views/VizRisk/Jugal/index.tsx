@@ -91,7 +91,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 dataDateRange: {
                     rangeInDays: 'custom',
                     startDate: '2011-01-01',
-                    endDate: '2021-01-01',
+                    endDate: '2021-05-01',
                 },
             };
             return ({
@@ -141,6 +141,8 @@ class Jugal extends React.Component {
             showPopulation: 'ward',
             evacElement: 'all',
             showCriticalElements: true,
+            clickedIncidentItem: 'all',
+
         };
 
         const { requests: { incidentsGetRequest } } = this.props;
@@ -261,6 +263,10 @@ class Jugal extends React.Component {
 
     private getPointFeatureCollectionOriginal = memoize(incidentPointToGeojson);
 
+    private handleIncidentItemClick = (clickedIncidentItem) => {
+        this.setState({ clickedIncidentItem });
+    };
+
     public render() {
         const {
             showRaster,
@@ -274,6 +280,7 @@ class Jugal extends React.Component {
             evacElement,
             criticalFlood,
             showCriticalElements,
+            clickedIncidentItem,
         } = this.state;
 
         const {
@@ -418,6 +425,7 @@ class Jugal extends React.Component {
                                 disableNavBtns={this.disableNavBtns}
                                 enableNavBtns={this.enableNavBtns}
                                 incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
                             />
                             <RightElement5
                                 handleNext={this.handleNext}
@@ -427,6 +435,8 @@ class Jugal extends React.Component {
                                 pagenumber={rightElement + 1}
                                 totalPages={rightelements.length}
                                 incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                handleIncidentItemClick={this.handleIncidentItemClick}
                             />
                         </>
                     )

@@ -81,7 +81,8 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const mapping = [];
+        const { clickedItem, incidentList } = this.props;
+
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -98,7 +99,8 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
+        // this.map.addControl(new MapboxLegendControl({},
+        // { reverseOrder: false }), 'bottom-right');
         this.map.on('idle', () => {
             const { rightElement, enableNavBtns } = this.props;
             if (rightElement === 0) {
@@ -110,64 +112,87 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            const updateArea = (e) => {
-                console.log(e);
-            };
-            const draw = new MapboxDraw({
-                displayControlsDefault: false,
-                controls: {
-                    polygon: true,
-                    trash: true,
-                },
-                defaultMode: 'draw_polygon',
-            });
-            this.map.addControl(draw, 'top-right');
+            // const updateArea = (e) => {
+            //     console.log(e);
+            // };
+            // const draw = new MapboxDraw({
+            //     displayControlsDefault: false,
+            //     controls: {
+            //         polygon: true,
+            //         trash: true,
+            //     },
+            //     defaultMode: 'draw_polygon',
+            // });
+            // this.map.addControl(draw, 'top-right');
 
-            this.map.on('draw.create', updateArea);
-            this.map.on('draw.delete', updateArea);
-            this.map.on('draw.update', updateArea);
-
-            this.map.addSource('incidents', {
-                type: 'geojson',
-                data: this.props.incidentList,
-            });
-            this.map.addLayer(
-                {
-                    id: 'incidents-layer',
-                    type: 'circle',
-                    source: 'incidents',
-                    layout: {},
-                    paint: {
-                        'circle-color': '#ff0000',
+            // this.map.on('draw.create', updateArea);
+            // this.map.on('draw.delete', updateArea);
+            // this.map.on('draw.update', updateArea);
+            const hazardTitle = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+            hazardTitle.map((layer) => {
+                this.map.addSource(layer, {
+                    type: 'geojson',
+                    data: this.getGeoJSON(layer, incidentList),
+                });
+                this.map.addLayer(
+                    {
+                        id: `incidents-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        layout: {},
+                        paint: {
+                            'circle-color': ['get', 'hazardColor'],
+                        },
                     },
-                },
-            );
+                );
+
+                return null;
+            });
         });
     }
 
-    public componentDidUpdate() {
-        const inci = this.map.getLayer('incidents-layer');
-        if (!inci) {
-            this.map.addSource('incidents', {
-                type: 'geojson',
-                data: this.props.incidentList,
-            });
-            this.map.addLayer(
-                {
-                    id: 'incidents-layer',
-                    type: 'circle',
-                    source: 'incidents',
-                    layout: {},
-                    paint: {
-                        'circle-color': '#ff0000',
-                    },
-                },
-            );
+    public componentDidUpdate(prevProps) {
+        // const { clickedItem, incidentList } = this.props;
+        // let hazardTitle = [];
+        // if (incidentList) {
+        const hazardTitle = [...new Set(this.props.incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+        //     return null;
+        // }
+        console.log('np', this.props);
+        if (prevProps.clickedItem !== this.props.clickedItem) {
+            console.log('legend clidked');
+            if (this.props.clickedItem === 'all') {
+                hazardTitle.map((ht) => {
+                    this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
+                    return null;
+                });
+            } else {
+                hazardTitle.map((ht) => {
+                    this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
+                    return null;
+                });
+                this.map.setLayoutProperty(`incidents-${this.props.clickedItem}`, 'visibility', 'visible');
+            }
         }
+        // const inci = this.map.getLayer('incidents-Earthquake');
     }
 
     public componentWillUnmount() {
         this.map.remove();
+    }
+
+    public getGeoJSON = (filterBy: string, data: any) => {
+        const geoObj = {};
+        geoObj.type = 'FeatureCollection';
+        geoObj.name = filterBy;
+        geoObj.features = [];
+        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
+        geoObj.features.push(...d);
+        return geoObj;
     }
 
     public render() {
