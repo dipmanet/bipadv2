@@ -6,8 +6,10 @@ import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { mapSources } from '#constants';
 import SchoolGeoJSON from '../Data/rajapurGEOJSON';
 import demographicsData from '../Data/demographicsData';
+import Icon from '#rscg/Icon';
 import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
+
 
 import {
     // provincesSelector,
@@ -73,6 +75,7 @@ class FloodHistoryMap extends React.Component {
             lng: 85.79108507481781,
             zoom: 10,
             incidentYear: '0',
+            playState: true,
         };
     }
 
@@ -82,7 +85,14 @@ class FloodHistoryMap extends React.Component {
         } = this.state;
 
         const { clickedItem, incidentList } = this.props;
-
+        this.interval = setInterval(() => {
+            this.setState((prevState) => {
+                if (Number(prevState.incidentYear) < 10) {
+                    return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
+                }
+                return ({ incidentYear: '0' });
+            });
+        }, 1000);
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -155,15 +165,13 @@ class FloodHistoryMap extends React.Component {
     }
 
     public componentDidUpdate(prevProps) {
-        // const { clickedItem, incidentList } = this.props;
-        // let hazardTitle = [];
-        // if (incidentList) {
+        if (this.state.playState) {
+            this.handleStateChange();
+        }
         const hazardTitle = [...new Set(this.props.incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
-        //     return null;
-        // }
-        console.log('np', this.props);
+
         if (prevProps.clickedItem !== this.props.clickedItem) {
             console.log('legend clidked');
             if (this.props.clickedItem === 'all') {
@@ -184,6 +192,7 @@ class FloodHistoryMap extends React.Component {
 
     public componentWillUnmount() {
         this.map.remove();
+        clearInterval(this.interval);
     }
 
     public getGeoJSON = (filterBy: string, data: any) => {
@@ -196,13 +205,28 @@ class FloodHistoryMap extends React.Component {
         return geoObj;
     }
 
+    public handlePlayPause = () => {
+        this.setState(prevState => ({ playState: !prevState.playState }));
+        if (this.state.playState) {
+            clearInterval(this.interval);
+        } else {
+            this.interval = setInterval(() => {
+                this.setState((prevState) => {
+                    if (Number(prevState.incidentYear) < 10) {
+                        return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
+                    }
+                    return ({ incidentYear: '0' });
+                });
+            }, 1000);
+        }
+    };
+
     public handleInputChange = (e) => {
         const val = e.target.value;
         this.props.handleIncidentChange(val);
         const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
         const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
         console.log('year input', yearInt);
-        // 1429899300000 incident
         const filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
         const hazardTitle = [...new Set(this.props.incidentList.features.map(
             item => item.properties.hazardTitle,
@@ -212,6 +236,22 @@ class FloodHistoryMap extends React.Component {
             return null;
         });
         this.setState({ incidentYear: e.target.value });
+    }
+
+    public handleStateChange = () => {
+        const val = this.state.incidentYear;
+        this.props.handleIncidentChange(val);
+        const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
+        const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
+        const filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
+        const hazardTitle = [...new Set(this.props.incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+        hazardTitle.map((layer) => {
+            this.map.setFilter(`incidents-${layer}`, filters);
+            return null;
+        });
+        // this.setState({ incidentYear: e.target.value });
     }
 
     public render() {
@@ -227,17 +267,39 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
+
                 <div className={styles.incidentsSlider}>
+                    <button
+                        className={styles.playButton}
+                        type="button"
+                        onClick={this.handlePlayPause}
+                    >
+                        {
+                            !this.state.playState
+                                ? (
+                                    <Icon
+                                        name="play"
+                                        className={styles.playpauseIcon}
+                                    />
+                                ) : (
+                                    <Icon
+                                        name="pause"
+                                        className={styles.playpauseIcon}
+                                    />
+                                )}
+                    </button>
                     <input
                         onChange={this.handleInputChange}
                         id="slider"
                         type="range"
                         min="0"
-                        max="11"
+                        max="10"
                         step="1"
-                        defaultValue="0"
-
+                        value={this.state.incidentYear}
+                        className={styles.slider}
                     />
+                    <div className={styles.ticks} />
+                    <span>{`${Number(this.state.incidentYear) + 2011}`}</span>
                 </div>
             </div>
         );
