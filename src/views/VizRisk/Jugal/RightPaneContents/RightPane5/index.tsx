@@ -49,6 +49,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             incidentList,
             clickedItem,
             handleIncidentItemClick,
+            incidentFilterYear,
         } = this.props;
 
         console.log('incidents list ', incidentList);
@@ -58,7 +59,12 @@ class SlideFourPane extends React.PureComponent<Props, State> {
 
         const chartData = hazardTitle.map(item => ({
             name: item,
-            Total: incidentList.features.filter(ht => ht.properties.hazardTitle === item).length,
+            Total: incidentList.features
+                .filter(
+                    ht => ht.properties.hazardTitle === item
+                && new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
+                )
+                .length,
         }));
 
 

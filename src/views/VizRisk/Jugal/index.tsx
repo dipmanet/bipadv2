@@ -142,6 +142,7 @@ class Jugal extends React.Component {
             evacElement: 'all',
             showCriticalElements: true,
             clickedIncidentItem: 'all',
+            incidentFilterYear: '2011',
 
         };
 
@@ -267,6 +268,12 @@ class Jugal extends React.Component {
         this.setState({ clickedIncidentItem });
     };
 
+    private handleIncidentChange = (incidentYear) => {
+        const y = `${Number(incidentYear) + 2011}`;
+        this.setState({ incidentFilterYear: y });
+    };
+
+
     public render() {
         const {
             showRaster,
@@ -281,6 +288,7 @@ class Jugal extends React.Component {
             criticalFlood,
             showCriticalElements,
             clickedIncidentItem,
+            incidentFilterYear,
         } = this.state;
 
         const {
@@ -426,6 +434,8 @@ class Jugal extends React.Component {
                                 enableNavBtns={this.enableNavBtns}
                                 incidentList={pointFeatureCollection}
                                 clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
                             />
                             <RightElement5
                                 handleNext={this.handleNext}
@@ -437,6 +447,8 @@ class Jugal extends React.Component {
                                 incidentList={pointFeatureCollection}
                                 clickedItem={clickedIncidentItem}
                                 handleIncidentItemClick={this.handleIncidentItemClick}
+                                incidentFilterYear={incidentFilterYear}
+
                             />
                         </>
                     )

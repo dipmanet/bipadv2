@@ -160,8 +160,6 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            console.log('categoriesCritical:', categoriesCritical);
-            console.log('geojson:', this.getGeoJSON('education', criticalinfrastructures));
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
@@ -384,6 +382,25 @@ class FloodHistoryMap extends React.Component {
                 hoveredWardId = null;
             });
 
+            categoriesCritical.map(layer => this.map.on('mousemove', `unclustered-point-${layer}`, (e) => {
+                if (e) {
+                    console.log('efeatures', e.features);
+                    this.map.getCanvas().style.cursor = 'pointer';
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const ciName = e.features[0].properties.Name;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                    ).addTo(this.map);
+                }
+            }));
+            categoriesCritical.map(layer => this.map.on('mouseleave', `unclustered-point-${layer}`, () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+            }));
             // this.map.setZoom(1);
             // this.props.disableNavBtns('both');
             // setTimeout(() => {

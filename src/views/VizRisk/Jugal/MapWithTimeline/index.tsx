@@ -71,8 +71,8 @@ class FloodHistoryMap extends React.Component {
         this.state = {
             lat: 28.015490220644214,
             lng: 85.79108507481781,
-            zoom: 11,
-            wardNumber: 'Hover to see ward number',
+            zoom: 10,
+            incidentYear: '0',
         };
     }
 
@@ -128,6 +128,7 @@ class FloodHistoryMap extends React.Component {
             // this.map.on('draw.create', updateArea);
             // this.map.on('draw.delete', updateArea);
             // this.map.on('draw.update', updateArea);
+
             const hazardTitle = [...new Set(incidentList.features.map(
                 item => item.properties.hazardTitle,
             ))];
@@ -195,6 +196,24 @@ class FloodHistoryMap extends React.Component {
         return geoObj;
     }
 
+    public handleInputChange = (e) => {
+        const val = e.target.value;
+        this.props.handleIncidentChange(val);
+        const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
+        const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
+        console.log('year input', yearInt);
+        // 1429899300000 incident
+        const filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
+        const hazardTitle = [...new Set(this.props.incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+        hazardTitle.map((layer) => {
+            this.map.setFilter(`incidents-${layer}`, filters);
+            return null;
+        });
+        this.setState({ incidentYear: e.target.value });
+    }
+
     public render() {
         const mapStyle = {
             position: 'absolute',
@@ -216,7 +235,8 @@ class FloodHistoryMap extends React.Component {
                         min="0"
                         max="11"
                         step="1"
-                        value="0"
+                        defaultValue="0"
+
                     />
                 </div>
             </div>
