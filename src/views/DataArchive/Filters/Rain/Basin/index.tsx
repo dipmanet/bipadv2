@@ -33,8 +33,8 @@ const BasinSelector = (props: Props) => {
         setSelectedBasin(basinName);
         onChangeFromProps(basinName || {});
     };
-    const uniqueBasins = [...new Set(basinStations.map(item => item.basin))];
-
+    const tempBasins = [...new Set(basinStations.map(item => item.basin))];
+    const uniqueBasins = tempBasins.filter(item => item !== '');
     const BasinData = uniqueBasins.map((item, i) => ({
         id: i + 1,
         title: item,

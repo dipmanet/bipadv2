@@ -57,51 +57,80 @@ const Tooltip = (props: TooltipProps) => {
     const { active, label, payload, periodCode, intervalCode } = props;
     if (active && label && payload) {
         const { payload: innerPayload } = payload[0] || emptyObject;
-        const {
-            measuredOn,
-        } = innerPayload;
-        const minuteWise = periodCode === 'minute';
-        const date = getDate(measuredOn);
-        const time = getTimeWithIndictor(measuredOn);
-        const dateTimeForMinuteWise = `${date} ${time}`;
-        const dateTImeForHourly = getDateWithRange(measuredOn);
-        const min = getIntervalwiseMin(intervalCode || '', innerPayload);
-        const max = getIntervalwiseMax(intervalCode || '', innerPayload);
-        const average = getIntervalwiseAverage(intervalCode || '', innerPayload);
-        if (minuteWise) {
+        let measuredOn;
+        let date;
+        let time;
+        let dateTImeForHourly;
+        if (periodCode !== 'monthly') {
+            measuredOn = innerPayload.measuredOn;
+            date = getDate(measuredOn);
+            time = getTimeWithIndictor(measuredOn);
+            dateTImeForHourly = getDateWithRange(measuredOn);
+        }
+        // const minuteWise = periodCode === 'minute';
+
+        // const dateTimeForMinuteWise = `${date} ${time}`;
+
+        // const min = getIntervalwiseMin(intervalCode || '', innerPayload);
+        // const max = getIntervalwiseMax(intervalCode || '', innerPayload);
+        // const average = getIntervalwiseAverage(intervalCode || '', innerPayload);
+        if (periodCode === 'hourly') {
             return (
                 <div className={styles.tooltip}>
                     <div className={styles.value}>
                         <b>Date: </b>
-                        {dateTimeForMinuteWise}
+                        {dateTImeForHourly}
                     </div>
                     <div className={styles.value}>
-                        <b>Rainfall Amount: </b>
-                        {`${average} mm`}
+                        <b>Accumulated Rain: </b>
+                        {innerPayload.accHourly === 0 ? 'N/A' : `${innerPayload.accHourly} mm`}
                     </div>
+                    <div className={styles.value}>
+                        <b>Cumulative Rain: </b>
+                        {innerPayload.cumulativeHourData === 0 ? 'N/A' : `${innerPayload.cumulativeHourData} mm`}
+                    </div>
+
                 </div>
             );
         }
-        return (
-            <div className={styles.tooltip}>
-                <div className={styles.value}>
-                    <b>Date: </b>
-                    {periodCode === 'hourly' ? dateTImeForHourly : date}
+        if (periodCode === 'daily') {
+            return (
+                <div className={styles.tooltip}>
+                    <div className={styles.value}>
+                        <b>Date: </b>
+                        {date}
+                    </div>
+                    <div className={styles.value}>
+                        <b>Accumulated Rain: </b>
+                        {innerPayload.accDaily === 0 ? 'N/A' : `${innerPayload.accDaily} mm`}
+                    </div>
+                    <div className={styles.value}>
+                        <b>Cumulative Rain: </b>
+                        {innerPayload.cumulativeDailyData === 0 ? 'N/A' : `${innerPayload.cumulativeDailyData} mm`}
+                    </div>
+
                 </div>
-                <div className={styles.value}>
-                    <b>Min Water Level: </b>
-                    {`${min} mm`}
+            );
+        }
+        if (periodCode === 'monthly') {
+            return (
+                <div className={styles.tooltip}>
+                    <div className={styles.value}>
+                        <b>Date: </b>
+                        {innerPayload.yearMth}
+                    </div>
+                    <div className={styles.value}>
+                        <b>Accumulated Rain: </b>
+                        {innerPayload.accMonthly === 0 ? 'N/A' : `${innerPayload.accMonthly} mm`}
+                    </div>
+                    <div className={styles.value}>
+                        <b>Cumulative Rain: </b>
+                        {innerPayload.cumulativeMonthlyData === 0 ? 'N/A' : `${innerPayload.cumulativeMonthlyData} mm`}
+                    </div>
+
                 </div>
-                <div className={styles.value}>
-                    <b>Average Water Level: </b>
-                    {`${average} mm`}
-                </div>
-                <div className={styles.value}>
-                    <b>Max Water Level: </b>
-                    {`${max} mm`}
-                </div>
-            </div>
-        );
+            );
+        }
     }
     return null;
 };

@@ -208,7 +208,15 @@ const Graph = (props: Props) => {
                                             <CartesianGrid stroke="#f5f5f5" />
                                             <XAxis dataKey="yearMth" interval={0} angle={-45} dy={15} height={70} />
                                             <YAxis />
-                                            <Tooltip />
+                                            <Tooltip
+                                                content={(
+                                                    <CustomTooltip
+                                                        periodCode={periodCode}
+                                                        intervalCode={intervalCode}
+                                                    />
+                                                )}
+                                            />
+
                                             <Legend />
                                             <Bar name="Accumulated Rain(mm)" dataKey="accMonthly" fill="#82ca9d" />
                                             <Line
@@ -230,7 +238,15 @@ const Graph = (props: Props) => {
                                                 <CartesianGrid stroke="#f5f5f5" />
                                                 <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
                                                 <YAxis domain={['accHourly', 'auto']} />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    content={(
+                                                        <CustomTooltip
+                                                            periodCode={periodCode}
+                                                            intervalCode={intervalCode}
+                                                        />
+                                                    )}
+                                                />
+
                                                 <Legend />
                                                 <Bar name="Accumulated Rain(mm)" dataKey="accHourly" fill="#82ca9d" />
                                                 <Line
@@ -250,7 +266,15 @@ const Graph = (props: Props) => {
                                                 <CartesianGrid stroke="#f5f5f5" />
                                                 <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
                                                 <YAxis domain={['accDaily', 'auto']} />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    content={(
+                                                        <CustomTooltip
+                                                            periodCode={periodCode}
+                                                            intervalCode={intervalCode}
+                                                        />
+                                                    )}
+                                                />
+
                                                 <Legend />
                                                 <Bar name="Accumulated Rain(mm)" dataKey="accDaily" fill="#82ca9d" />
                                                 <Line

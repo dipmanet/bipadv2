@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
+import { connect } from 'react-redux';
+import { useEventCallback } from '@material-ui/core';
 import SelectInput from '#rsci/SelectInput';
 
 import styles from './styles.scss';
 
 import { RainStation } from '#types';
+import { rainFiltersSelector } from '#selectors';
 
 interface Props {
     onChange: Function;
@@ -14,6 +17,11 @@ interface Props {
 
 const stationKeySelector = (r: RainStation) => r.id;
 const StationLabelSelector = (r: RainStation) => r.title;
+
+const mapStateToProps = state => ({
+    rainFilters: rainFiltersSelector(state),
+});
+
 
 const compare = (a: RainStation, b: RainStation) => {
     const sortKey = 'title';
@@ -28,10 +36,28 @@ const compare = (a: RainStation, b: RainStation) => {
 
 const StationSelector = (props: Props) => {
     const { onChange: onChangeFromProps,
-        stations: stationsFromProps,
+        stations: mystationsFromProps,
+        rainFilters,
         value: { id } } = props;
 
+    const [stationsFromProps, setStationsFromProps] = useState(mystationsFromProps);
+    // stationsFromProps = mystationsFromProps;
+
+    useEffect(() => {
+        if (typeof rainFilters.basin !== 'object') {
+            setStationsFromProps(mystationsFromProps.filter(s => s.basin === rainFilters.basin));
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rainFilters.basin]);
+
     const [selectedStation, setSelectedStation] = useState(id);
+
+    // if (typeof rainFilters.basin !== 'object') {
+    //     stationsFromProps = mystationsFromProps.filter(s => s.basin === rainFilters.basin);
+    // } else {
+    //     stationsFromProps = mystationsFromProps;
+    // }
+
     const handleStationChange = (stationId: number) => {
         setSelectedStation(stationId);
         const station = stationsFromProps.filter(s => s.id === stationId)[0];
@@ -64,4 +90,4 @@ const StationSelector = (props: Props) => {
     );
 };
 
-export default FaramInputElement(StationSelector);
+export default connect(mapStateToProps, [])(FaramInputElement(StationSelector));

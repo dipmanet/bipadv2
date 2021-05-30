@@ -228,6 +228,8 @@ export const getChartData = (
         const { key, value: dataArray } = singleItem;
         const label = dataArray[0][labelKey];
         const { oneHour, twentyFourHour } = getAcc(dataArray);
+        const avgOneHour = Number(oneHour) / dataArray.length;
+        const avgTwentyFourHour = Number(twentyFourHour) / dataArray.length;
         const { createdOn, measuredOn } = dataArray[0];
         const [oneHourMin, oneHourAvg, oneHourMax] = getItemParts(dataArray, 'oneHour');
         const [threeHourMin, threeHourAvg, threeHourMax] = getItemParts(dataArray, 'threeHour');
@@ -237,8 +239,8 @@ export const getChartData = (
 
         return {
             key,
-            accHourly: Number(oneHour) || 0,
-            accDaily: Number(twentyFourHour) || 0,
+            accHourly: Number(avgOneHour) || 0,
+            accDaily: Number(avgTwentyFourHour) || 0,
             label: String(label || ''),
             createdOn: String(createdOn || ''),
             measuredOn: String(measuredOn || ''),

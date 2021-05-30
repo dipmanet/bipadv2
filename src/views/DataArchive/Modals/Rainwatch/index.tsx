@@ -213,6 +213,7 @@ const RainModal = (props: Props) => {
                             isInitial={isInitial}
                             stationName={stationName}
                             filterValues={filterValues}
+                            chartTitle={'Accumulated Rainfall (mm)'}
                         />
                     </div>
                     <div className={styles.modalTwelveMonth}>

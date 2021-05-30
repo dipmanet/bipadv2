@@ -284,7 +284,7 @@ class RainMap extends React.PureComponent {
                     boundsPadding={boundsPadding}
                     region={municipality ? region : undefined}
                 />
-                {bounds && (
+                {bounds && typeof this.props.rainFilters.basin !== 'object' && (
                     <MapBounds
                         bounds={bounds}
                         padding={boundsPadding}
