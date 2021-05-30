@@ -73,7 +73,7 @@ class FloodHistoryMap extends React.Component {
         this.state = {
             lat: 28.015490220644214,
             lng: 85.79108507481781,
-            zoom: 10,
+            zoom: 9.8,
             incidentYear: '0',
             playState: true,
         };
@@ -293,18 +293,26 @@ class FloodHistoryMap extends React.Component {
                                     />
                                 )}
                     </button>
-                    <input
-                        onChange={this.handleInputChange}
-                        id="slider"
-                        type="range"
-                        min="0"
-                        max="10"
-                        step="1"
-                        value={this.state.incidentYear}
-                        className={styles.slider}
-                    />
-                    <div className={styles.ticks} />
-                    <span>{`${Number(this.state.incidentYear) + 2011}`}</span>
+
+                    <div className={styles.rangeWrap}>
+                        <div
+                            style={{ left: `calc(${Number(this.state.incidentYear) * 10}% - ${Number(this.state.incidentYear) * 2}px)` }}
+                            className={styles.rangeValue}
+                            id="rangeV"
+                        >
+                            {Number(this.state.incidentYear) + 2011}
+                        </div>
+                        <input
+                            onChange={this.handleInputChange}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="10"
+                            step="1"
+                            value={this.state.incidentYear}
+                            className={styles.slider}
+                        />
+                    </div>
                 </div>
             </div>
         );
