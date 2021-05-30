@@ -8,8 +8,6 @@ import Health from '../../Icons/icon_set_health-01.svg';
 import Industry from '../../Icons/icon_set_industry.svg';
 import Tourism from '../../Icons/icon_set_hotel.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
-import Trade from '../../Icons/trade.svg';
-import Water from '../../Icons/WATER.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
@@ -314,7 +312,7 @@ const LandCoverLegends = (props) => {
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Water}
+                                    src={Bank}
                                 />
 
                                  Water Source
@@ -333,7 +331,7 @@ const LandCoverLegends = (props) => {
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Trade}
+                                    src={Bank}
                                 />
 
                                  Trade and Business

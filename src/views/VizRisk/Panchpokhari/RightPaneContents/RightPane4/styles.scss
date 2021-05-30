@@ -10,7 +10,7 @@
 }
 .para-style{
     color:white;
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'Source Sans Pro';
     padding: 0 10px 0 0;
     opacity: 0.87;
@@ -29,12 +29,6 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
-        .respContainer{
-            // border: 1px solid red;
-            position: relative;
-            right: 30px;
-            width: 375px !important;
-        }
         .chartContainer{
             // border: 1px solid red;
             height: 600px;

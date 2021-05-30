@@ -10,7 +10,7 @@
 }
 .para-style{
     color:white;
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'Source Sans Pro';
     padding: 0 10px 0 0;
     opacity: 0.87;
@@ -29,12 +29,6 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
-        .respContainer{
-            // border: 1px solid red;
-            position: relative;
-            right: 30px;
-            width: 375px !important;
-        }
         .chartContainer{
             // border: 1px solid red;
             height: 600px;
@@ -101,6 +95,53 @@
                     text-transform: uppercase;
                 }
             }
+        }
+
+        .incidentsLegendsContainer{
+            .hazardItemContainer{
+                display: flex;
+                padding: 0;
+                margin: 0;
+               .legendBtnSelected{
+                font-size: 11px;
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+                // opacity: 0.87;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                text-transform: uppercase;
+
+                .educationHexagon{
+                    width: 11px;
+                    margin: 0 7px 0 0;
+                }
+               }
+                .legendBtn{
+                    font-size: 14px;
+                    display: flex;
+                    background-color: transparent;
+                    border: none;
+                    color: white; 
+                    opacity: 0.37;
+                    margin-bottom: 5px;
+                    align-items: center;
+                    font-family: 'Source Sans Pro';
+                    filter: saturate(100%);
+                    cursor: pointer;
+                    font-size: 11px;
+                    text-transform: uppercase;
+                    .educationHexagon{
+                        width: 11px;
+                        margin: 0 7px 0 0;
+                    }
+                }
+            }
+        
         }
 
     }

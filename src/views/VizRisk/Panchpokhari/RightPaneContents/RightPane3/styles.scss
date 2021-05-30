@@ -1,5 +1,4 @@
-
- .vrSideBar::-webkit-scrollbar {
+.vrSideBar::-webkit-scrollbar {
     display: none;
   }
   .heading-style{
@@ -10,7 +9,7 @@
 }
 .para-style{
     color:white;
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'Source Sans Pro';
     padding: 0 10px 0 0;
     opacity: 0.87;
@@ -29,12 +28,6 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
-        .respContainer{
-            // border: 1px solid red;
-            position: relative;
-            right: 30px;
-            width: 375px !important;
-        }
         .chartContainer{
             // border: 1px solid red;
             height: 600px;
@@ -104,6 +97,40 @@
         }
 
     }
+
+
+
+    .customTooltip{
+        background-color: rgb(190, 190, 190) !important;
+        color: #444;
+        padding-bottom: 5px;
+        border-radius: 4px;
+        h2{
+            color: rgb(41, 40, 40) !important;
+            font-size: 12px !important;
+            line-height: 1em;
+            padding: 10px 0 0 10px;
+            display: flex;
+            justify-content: center;
+
+        }
+        p{
+            color: rgb(41, 40, 40) !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            justify-content: center;
+        }
+    }
+    .recharts-tooltip-wrapper{
+        background-color: white !important;
+        border: 1px solid gray;
+        z-index: 100;
+        color: blue;
+        padding: 0px !important;
+
+    }
+
 
 
 

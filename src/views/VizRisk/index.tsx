@@ -6,6 +6,7 @@ import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
 import Jugal from './Jugal';
+import Panchpokhari from './Panchpokhari';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import BarabiseLandslide from './BarabiseLandslide';
@@ -16,6 +17,8 @@ const slides = [
     <BarabiseLandslide />,
     <Gulariya />,
     <Jugal />,
+    <Panchpokhari />,
+
 
 ];
 
@@ -30,7 +33,6 @@ const VizRiskMainPage = () => {
     };
 
     const handleMenuTitleClick = (municipality) => {
-        console.log('This is final muni>>>', municipality);
         setShowMenu(false);
         if (municipality === 'rajapur') {
             setCurrentPage(0);
@@ -43,7 +45,10 @@ const VizRiskMainPage = () => {
             setTitle('Visualising Flood Exposure');
         } else if (municipality === 'jugal') {
             setCurrentPage(3);
-            setTitle('Visualising Flood Exposure');
+            setTitle('Visualising Multihazard Exposure');
+        } else if (municipality === 'pokhari') {
+            setCurrentPage(4);
+            setTitle('Visualising Multihazard Exposure');
         }
     };
 
@@ -121,12 +126,24 @@ const VizRiskMainPage = () => {
                                     <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
                                 </Button>
+                            </div>
+                            <p className={styles.menuTitle}>Visualizing Multi Hazard Exposure </p>
+
+                            <div className={styles.vizriskmunicipalityName}>
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('jugal')}
 
                                 >
                                     <h1 className={styles.menuItems}>Jugal Municipality</h1>
+
+                                </Button>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('pokhari')}
+
+                                >
+                                    <h1 className={styles.menuItems}>Panchpokhari Municipality</h1>
 
                                 </Button>
                             </div>
