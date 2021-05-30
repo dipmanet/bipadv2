@@ -80,7 +80,8 @@ const emptyMunicipalityOptions: MunicipalityElement[] = [];
 const emptyWardOptions: WardElement[] = [];
 
 const regionKeySelector = (r: RegionElement) => r.id;
-const regionLabelSelector = (r: RegionElement) => r.title;
+const regionLabelSelectorEng = (r: RegionElement) => r.title_en;
+const regionLabelSelectorNep = (r: RegionElement) => r.title_ne;
 
 class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -371,7 +372,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         const shouldDisableDistrictInput = disabled || !selectedProvinceId;
         const shouldDisableMunicipalityInput = disabled || !selectedDistrictId;
         const shouldDisableWardInput = disabled || !selectedMunicipalityId;
-
+        console.log('province option', provinceOptions);
         return (
             <div className={_cs(className, styles.stepwiseRegionSelectInput)}>
                 <SelectInput
@@ -379,7 +380,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     label={<Gt section={Translations.dashboardFilterProvinceLabel} />}
                     options={provinceOptions}
                     keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
+                    labelSelector={drrmLanguage.language === 'np' ? regionLabelSelectorNep : regionLabelSelectorEng}
                     value={selectedProvinceId}
                     onChange={this.handleProvinceChange}
                     disabled={shouldDisableProvinceInput}
@@ -392,7 +393,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     label={<Gt section={Translations.dashboardFilterDistrictLabel} />}
                     options={districtOptions}
                     keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
+                    labelSelector={drrmLanguage.language === 'np' ? regionLabelSelectorNep : regionLabelSelectorEng}
                     value={selectedDistrictId}
                     onChange={this.handleDistrictChange}
                     disabled={shouldDisableDistrictInput}
@@ -404,7 +405,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                     label={<Gt section={Translations.dashboardFilterMunicipalityLabel} />}
                     options={municipalityOptions}
                     keySelector={regionKeySelector}
-                    labelSelector={regionLabelSelector}
+                    labelSelector={drrmLanguage.language === 'np' ? regionLabelSelectorNep : regionLabelSelectorEng}
                     value={selectedMunicipalityId}
                     onChange={this.handleMunicipalityChange}
                     disabled={shouldDisableMunicipalityInput}
@@ -417,7 +418,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                         label="Ward"
                         options={wardOptions}
                         keySelector={regionKeySelector}
-                        labelSelector={regionLabelSelector}
+                        labelSelector={drrmLanguage.language === 'np' ? regionLabelSelectorNep : regionLabelSelectorEng}
                         value={selectedWardId}
                         onChange={this.handleWardChange}
                         disabled={shouldDisableWardInput}

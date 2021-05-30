@@ -675,10 +675,14 @@ const BudgetActivity = (props: Props) => {
         setSelectedBudgetActivityIndex(index);
         setEditBtnClicked(!editBtnClicked);
         setPostErrors({});
+        setDisablePriorityAction(false);
+        setDisablePriorityActivity(false);
     };
     const handleUpdateActivity = () => {
         setLoader(true);
         setPostErrors({});
+        setDisablePriorityAction(true);
+        setDisablePriorityActivity(true);
         BudgetActivityPutRequest.do({
             body: {
                 activityName,
@@ -1783,7 +1787,7 @@ const BudgetActivity = (props: Props) => {
                                   </span>
                                   <div className={styles.scorePatch}>
                                       {budgetActivities.length > 0
-                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 1')).length
+                                          ? budgetActivities.filter(item => item.priorityArea === 1).length
                                           : 0
                                       }
                                   </div>
@@ -1796,7 +1800,7 @@ const BudgetActivity = (props: Props) => {
                                   </span>
                                   <div className={styles.scorePatch}>
                                       {budgetActivities.length > 0
-                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 2')).length
+                                          ? budgetActivities.filter(item => item.priorityArea === 2).length
                                           : 0
                                       }
                                   </div>
@@ -1811,7 +1815,7 @@ const BudgetActivity = (props: Props) => {
                                   <div className={styles.scorePatch}>
                                       {budgetActivities.length > 0
 
-                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 3')).length
+                                          ? budgetActivities.filter(item => item.priorityArea === 3).length
                                           : 0
                                       }
                                   </div>
@@ -1825,7 +1829,7 @@ const BudgetActivity = (props: Props) => {
                                   </span>
                                   <div className={styles.scorePatch}>
                                       {budgetActivities.length > 0
-                                          ? budgetActivities.filter(item => item.priorityArea.includes('Priority Area 4')).length
+                                          ? budgetActivities.filter(item => item.priorityArea === 4).length
                                           : 0
                                       }
                                   </div>

@@ -389,14 +389,21 @@ const Simulation = (props: Props) => {
         if (simulationData) {
             const finalSimulationData = simulationData.map((data) => {
                 const FinalHazard = hazardType.find(item => item.id === data.focusHazard);
-                if (FinalHazard) {
-                    return {
-                        HazardName: FinalHazard.titleEn,
-                        HazardNameNp: FinalHazard.titleNe,
-                        data,
-                    };
-                }
-                return null;
+                const PriorityAreaName = priorityAreaFetched.find(item => item.id === data.priorityArea);
+                const PriorityActionName = priorityActionFetched.find(item => item.id === data.priorityAction);
+                const PriorityActivityName = priorityActivityFetched.find(item => item.id === data.priorityActivity);
+
+                return {
+                    PriorityActionNameEn: PriorityActionName ? PriorityActionName.title : '-',
+                    PriorityActionNameNe: PriorityActionName ? PriorityActionName.titleNp : '-',
+                    PriorityActivityNameEn: PriorityActivityName ? PriorityActivityName.title : '-',
+                    PriorityActivityNameNe: PriorityActivityName ? PriorityActivityName.titleNp : '-',
+                    PriorityAreaNameEn: PriorityAreaName ? PriorityAreaName.title : '-',
+                    PriorityAreaNameNe: PriorityAreaName ? PriorityAreaName.titleNp : '-',
+                    HazardName: FinalHazard ? FinalHazard.titleEn : '-',
+                    HazardNameNp: FinalHazard ? FinalHazard.titleNe : '-',
+                    data,
+                };
             });
             finalArr = [...new Set(finalSimulationData)];
         }
@@ -478,10 +485,14 @@ const Simulation = (props: Props) => {
         setSimulationIndex(index);
         setEditBtnClicked(!editBtnClicked);
         setPostErrors({});
+        setDisablePriorityAction(false);
+        setDisablePriorityActivity(false);
     };
     const handleUpdateSimulation = () => {
         setLoader(true);
         setPostErrors({});
+        setDisablePriorityAction(true);
+        setDisablePriorityActivity(true);
         SimulationPutRequest.do({
             body: {
                 title: simulationName,
@@ -525,7 +536,7 @@ const Simulation = (props: Props) => {
     } else {
         tableStyle = { tableLayout: 'initial' };
     }
-    console.log('That', postErrors);
+    console.log('That', finalArr);
 
     return (
         <div className={drrmLanguage.language === 'np' && styles.nep}>
@@ -570,9 +581,12 @@ const Simulation = (props: Props) => {
                                         <th>
                                             <Gt section={Translations.SimulationHazards} />
                                         </th>
-                                        <th>
-                                            <Gt section={Translations.SimulationAction} />
-                                        </th>
+                                        {!props.annex
+                                        && (
+                                            <th>
+                                                <Gt section={Translations.SimulationAction} />
+                                            </th>
+                                        )}
 
 
                                     </tr>
@@ -732,31 +746,34 @@ const Simulation = (props: Props) => {
                                                             <td>{item.data.title}</td>
                                                             <td>{ADToBS(item.data.date)}</td>
                                                             <td>{item.data.description}</td>
-                                                            <td>{item.data.priorityArea}</td>
-                                                            <td>{item.data.priorityAction}</td>
-                                                            <td>{item.data.priorityActivity}</td>
+                                                            <td>{ drrmLanguage.language === 'np' ? item.PriorityAreaNameNe : item.PriorityAreaNameEn}</td>
+                                                            <td>{drrmLanguage.language === 'np' ? item.PriorityActionNameNe : item.PriorityActionNameEn}</td>
+                                                            <td>{drrmLanguage.language === 'np' ? item.PriorityActivityNameNe : item.PriorityActivityNameEn}</td>
                                                             <td>{item.data.organizer}</td>
                                                             <td>{item.data.totalParticipants}</td>
                                                             <td>{drrmLanguage.language === 'np' ? item.HazardNameNp : item.HazardName}</td>
-                                                            <td>
-                                                                {' '}
-                                                                <button
-                                                                    className={styles.editButtn}
-                                                                    type="button"
-                                                                    onClick={() => handleEditSimulation(item.data.id, i)}
-                                                                    title={drrmLanguage.language === 'np'
-                                                                        ? Translations.SimulationEditTooltip.np
-                                                                        : Translations.SimulationEditTooltip.en
-                                                                    }
-                                                                >
-                                                                    <ScalableVectorGraphics
-                                                                        className={styles.bulletPoint}
-                                                                        src={editIcon}
-                                                                        alt="editPoint"
-                                                                    />
-                                                                </button>
+                                                            {!props.annex
+                                                            && (
+                                                                <td>
+                                                                    {' '}
+                                                                    <button
+                                                                        className={styles.editButtn}
+                                                                        type="button"
+                                                                        onClick={() => handleEditSimulation(item.data.id, i)}
+                                                                        title={drrmLanguage.language === 'np'
+                                                                            ? Translations.SimulationEditTooltip.np
+                                                                            : Translations.SimulationEditTooltip.en
+                                                                        }
+                                                                    >
+                                                                        <ScalableVectorGraphics
+                                                                            className={styles.bulletPoint}
+                                                                            src={editIcon}
+                                                                            alt="editPoint"
+                                                                        />
+                                                                    </button>
 
-                                                            </td>
+                                                                </td>
+                                                            )}
                                                         </tr>
                                                     )
                                             ))}
