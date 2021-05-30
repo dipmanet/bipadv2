@@ -168,6 +168,9 @@ class FloodHistoryMap extends React.Component {
         if (this.state.playState) {
             this.handleStateChange();
         }
+        if (prevProps.clickedItem !== this.props.clickedItem) {
+            this.handleStateChange();
+        }
         const hazardTitle = [...new Set(this.props.incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
@@ -221,13 +224,18 @@ class FloodHistoryMap extends React.Component {
         }
     };
 
-    public handleInputChange = (e) => {
-        const val = e.target.value;
-        this.props.handleIncidentChange(val);
+    public filterOnMap = (val) => {
         const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
         const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
-        console.log('year input', yearInt);
-        const filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
+        let filters = [];
+        if (this.props.clickedItem === 'all') {
+            filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
+        } else {
+            filters = ['all',
+                ['>', 'incidentOn', yearInt],
+                ['<', 'incidentOn', nextYear],
+                ['==', 'hazardTitle', this.props.clickedItem]];
+        }
         const hazardTitle = [...new Set(this.props.incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
@@ -235,22 +243,19 @@ class FloodHistoryMap extends React.Component {
             this.map.setFilter(`incidents-${layer}`, filters);
             return null;
         });
+    }
+
+    public handleInputChange = (e) => {
+        const val = e.target.value;
+        this.props.handleIncidentChange(val);
+        this.filterOnMap(val);
         this.setState({ incidentYear: e.target.value });
     }
 
     public handleStateChange = () => {
         const val = this.state.incidentYear;
         this.props.handleIncidentChange(val);
-        const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
-        const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
-        const filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
-        const hazardTitle = [...new Set(this.props.incidentList.features.map(
-            item => item.properties.hazardTitle,
-        ))];
-        hazardTitle.map((layer) => {
-            this.map.setFilter(`incidents-${layer}`, filters);
-            return null;
-        });
+        this.filterOnMap(val);
         // this.setState({ incidentYear: e.target.value });
     }
 
