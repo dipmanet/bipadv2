@@ -86,7 +86,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: () => {
             const filters = {
-                region: { adminLevel: 3, geoarea: 23007 },
+                region: { adminLevel: 3, geoarea: 23010 },
                 hazard: [],
                 dataDateRange: {
                     rangeInDays: 'custom',

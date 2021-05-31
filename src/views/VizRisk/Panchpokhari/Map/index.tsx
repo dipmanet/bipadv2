@@ -78,11 +78,11 @@ const arrCritical = categoriesCritical.map(
 const criticalInfraClusters = [].concat(...arrCritical);
 
 
-const slideOneLayers = ['incidents-layer', 'jugalwardnumber',
+const slideOneLayers = ['incidents-layer', 'Ward No.',
     'water', 'waterway',
-    'jugalwardoutline', 'jugalmun', 'municipalitycentroidgeo'];
+    'Ward Boundary Line', 'Panch Pokhari Boundary', 'municipalitycentroidgeo'];
 
-const slideTwoLayers = ['jugalwardnumber', 'water', 'jugalwardoutline',
+const slideTwoLayers = ['Ward No.', 'water', 'Ward Boundary Line',
     'ward-fill-local',
 ];
 
@@ -111,8 +111,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.015490220644214,
-            lng: 85.79108507481781,
+            lng: 85.64347922706821,
+            lat: 28.013604885888867,
             zoom: 10,
             wardNumber: 'Hover to see ward number',
         };
@@ -129,7 +129,7 @@ class FloodHistoryMap extends React.Component {
             selectedMunicipalityId: municipalityId,
             incidentList,
         } = this.props;
-        const mapping = wards.filter(item => item.municipality === 23007).map(item => ({
+        const mapping = wards.filter(item => item.municipality === 23010).map(item => ({
             ...item,
             value: Number(item.title),
         }));
@@ -137,7 +137,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
+            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -277,7 +277,7 @@ class FloodHistoryMap extends React.Component {
                         1,
                     ],
                 },
-                filter: getWardFilter(3, 24, 23007, wards),
+                filter: getWardFilter(3, 24, 23010, wards),
             });
             if (this.props.rightElement !== 1) {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');

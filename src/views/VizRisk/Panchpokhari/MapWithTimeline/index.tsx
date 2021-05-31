@@ -71,8 +71,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.015490220644214,
-            lng: 85.79108507481781,
+            lng: 85.64347922706821,
+            lat: 28.013604885888867,
             zoom: 9.8,
             incidentYear: '0',
             playState: true,
@@ -97,7 +97,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
+            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
