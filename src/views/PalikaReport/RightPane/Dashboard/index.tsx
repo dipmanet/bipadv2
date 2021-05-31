@@ -246,7 +246,7 @@ const PalikaReportTable = (props) => {
                                     </tr>
                                     {tableData.length > 0 && tableData.map((item, index) => (
                                         <tr key={item.item.id}>
-                                            <td>{ (currentPage - 1) * pageSize + index + 1}</td>
+                                            <td>{ index + 1}</td>
                                             <td>{item.item.title}</td>
                                             <td>{drrmLanguage.language === 'np' ? item.fiscalYearNp : item.fiscalYear}</td>
                                             <td>{drrmLanguage.language === 'np' ? item.provinceNp : item.province}</td>
@@ -385,7 +385,7 @@ const PalikaReportTable = (props) => {
 
                                     {tableData.length > 0 && tableData.map((data, index) => (
                                         <tr key={data.id}>
-                                            <td>{(currentPage - 1) * pageSize + index + 1}</td>
+                                            <td>{ index + 1}</td>
                                             <td>{data.item.title}</td>
                                             <td>{drrmLanguage.language === 'np' ? data.fiscalYearNp : data.fiscalYear}</td>
                                             <td>{ADToBS(data.createdDate)}</td>
