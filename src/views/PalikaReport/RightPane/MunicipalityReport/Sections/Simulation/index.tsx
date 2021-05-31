@@ -408,7 +408,7 @@ const Simulation = (props: Props) => {
             finalArr = [...new Set(finalSimulationData)];
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [simulationData]);
+    }, [simulationData, priorityActionFetched, priorityAreaFetched, priorityActivityFetched, hazardType]);
 
 
     const handleErrorData = (data) => {

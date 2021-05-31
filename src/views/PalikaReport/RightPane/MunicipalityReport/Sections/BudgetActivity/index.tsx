@@ -742,6 +742,10 @@ const BudgetActivity = (props: Props) => {
     useEffect(() => {
         if (budgetActivities.length) {
             const finalArrayData = budgetActivities.map((data) => {
+                console.log('hang', data);
+                console.log('this', priorityActionFetched);
+                console.log('area', priorityAreaFetched);
+                console.log('Activity', priorityActivityFetched);
                 const PriorityAreaName = priorityAreaFetched.find(item => item.id === data.priorityArea);
                 const PriorityActionName = priorityActionFetched.find(item => item.id === data.priorityAction);
                 const PriorityActivityName = priorityActivityFetched.find(item => item.id === data.priorityActivity);
@@ -759,9 +763,10 @@ const BudgetActivity = (props: Props) => {
             finalArr = [...new Set(finalArrayData)];
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [budgetActivities]);
+    }, [budgetActivities, priorityActionFetched, priorityAreaFetched, priorityActivityFetched]);
 
     console.log('Final arr', finalArr);
+    console.log('Budget Activities', budgetActivities);
     return (
         <>
 
@@ -1625,14 +1630,18 @@ const BudgetActivity = (props: Props) => {
                                </div>
                            ) : (
                                <div className={styles.btns}>
-                                   <button
-                                       type="button"
-                                       className={styles.savebtn}
-                                       onClick={handleAddNew}
-                                   >
+                                   {!editBudgetActivity && (
+                                       <button
+                                           type="button"
+                                           className={styles.savebtn}
+                                           onClick={handleAddNew}
+                                       >
 
-                                       <Gt section={Translations.AddnewAct} />
-                                   </button>
+                                           <Gt section={Translations.AddnewAct} />
+                                       </button>
+                                   )
+                                   }
+
                                    <NextPrevBtns
                                        handlePrevClick={props.handlePrevClick}
                                        handleNextClick={handleNext}

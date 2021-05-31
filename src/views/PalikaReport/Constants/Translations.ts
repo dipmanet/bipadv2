@@ -275,8 +275,8 @@ const languageTranslations: LanguageEntry = {
         np: 'पद',
     },
     AddEdit: {
-        en: 'Add/Edit Details',
-        np: 'विवरणहरू थप्नुहोस् वा सम्पादन गर्नुहोस्',
+        np: 'कार्य',
+        en: 'Action',
     },
     GeneralPleaseClick: {
         np: 'कृपया विवरण अपडेट र सम्पादन गर्न यस बटनमा क्लिक गर्नुहोस् ',

@@ -15,11 +15,11 @@ a{
     border: none;
     cursor: pointer;
         background-color: transparent;
-    .infoIcon{
-        font-size: 14px;
-        opacity: 0.33;
-        padding-right: 7px;
-    }
+        .infoIcon{
+            font-size: 16px; 
+            opacity: 0.5;
+            padding-left: 7px;
+        }
 }
   .buttonDiv{
     display: flex;
@@ -185,6 +185,11 @@ a{
     .updateButtn{
         cursor: pointer;
     }
+    .infoIcon{
+        font-size: 16px; 
+        opacity: 0.5;
+        padding-left: 7px;
+    }
     .loaderInfo{
         position: absolute;
         top: 54%;
@@ -224,10 +229,11 @@ a{
             border: none;
             cursor: pointer;
                 background-color: transparent;
-            .infoIcon{
-                font-size: 14px;
-                
-            }
+                .infoIcon{
+                    font-size: 16px; 
+                    opacity: 0.5;
+                    padding-left: 7px;
+                }
         }
     }
     ul{
