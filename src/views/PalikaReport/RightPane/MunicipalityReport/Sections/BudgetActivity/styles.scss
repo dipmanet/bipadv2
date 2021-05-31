@@ -156,6 +156,18 @@ a{
 .btns{
     display: flex;
     flex-direction: column;
+  
+
+}
+.emptyTable {
+    text-align: center !important;
+    margin-top: 50px;
+}
+.mainPageDetailsContainer{
+    // border: 1px solid gray;
+    .updateButtn{
+        cursor: pointer;
+    }
     .savebtn{
         position: relative;
         width: fit-content;
@@ -170,20 +182,10 @@ a{
         border: none;
         margin-right: 10px;
         white-space: nowrap;
+        padding-left: 0px;
         .plusIcon{
             padding-right: 4px;
         }
-    }
-
-}
-.emptyTable {
-    text-align: center !important;
-    margin-top: 50px;
-}
-.mainPageDetailsContainer{
-    // border: 1px solid gray;
-    .updateButtn{
-        cursor: pointer;
     }
     .infoIcon{
         font-size: 16px; 

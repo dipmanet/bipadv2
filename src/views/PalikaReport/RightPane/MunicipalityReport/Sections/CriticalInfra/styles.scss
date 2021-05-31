@@ -112,7 +112,6 @@
   }
   .savebtn{
     position: relative;
-    margin-top: 20px;
     width: fit-content;
     // background-color: rgb(54, 132, 216) !important;
     background-color: transparent;
@@ -124,6 +123,7 @@
     filter: saturate(80%);
     border: none;
     margin-right: 10px;
+    padding-left: 0px;
     .plusIcon{
         padding-right: 4px;
     }

@@ -443,40 +443,52 @@ const CriticalInfra = (props: Props) => {
                                         ))}
                                     </>
                                 )}
+                            {!props.annex && !loader
+&& (
+    <tr>
+        <td />
+        <td />
+        <td>
+            <button
+                type="button"
+                className={styles.savebtn}
+                onClick={handleAddResource}
+            >
+                <Icon
+                    name="plus"
+                    className={styles.plusIcon}
+                />
+                <Gt section={Translations.ResourcesAddButton} />
+            </button>
+        </td>
+        <td />
+        <td />
+        <td />
+        <td />
+        <td />
+        <td />
+    </tr>
+)
 
+                            }
                         </tbody>
                     </table>
                     {!loader && filteredtData.length === 0
                                  && <h2><Gt section={Translations.ResourcesNoDataMessage} /></h2>
 
                     }
-                    {!loader && (
-                        <>
-                            {
-                                !props.annex
-                        && (
-                            <>
-                                <button
-                                    type="button"
-                                    className={styles.savebtn}
-                                    onClick={handleAddResource}
+                    {!loader && !props.annex
+                                 && (
+                                     <>
 
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.plusIcon}
-                                    />
-                                    <Gt section={Translations.ResourcesAddButton} />
-                                </button>
-                                <NextPrevBtns
-                                    handlePrevClick={props.handlePrevClick}
-                                    handleNextClick={handleNext}
-                                />
-                            </>
-                        )
-                            }
-                        </>
-                    )}
+                                         <NextPrevBtns
+                                             handlePrevClick={props.handlePrevClick}
+                                             handleNextClick={handleNext}
+                                         />
+                                     </>
+                                 )
+                    }
+
 
                 </div>
 

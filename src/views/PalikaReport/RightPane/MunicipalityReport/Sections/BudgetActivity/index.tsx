@@ -1554,27 +1554,69 @@ const BudgetActivity = (props: Props) => {
                                                          {
                                                              !props.annex
                                                  && (
-                                                     <td>
-                                                         {' '}
-                                                         <input
-                                                             type="text"
-                                                             className={styles.inputElement}
-                                                             onChange={handleRemarks}
-                                                             value={remarks}
-                                                             placeholder={drrmLanguage.language === 'en'
-                                                                 ? 'Remarks'
-                                                                 : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
-                                                             }
-                                                         />
+                                                     <>
+                                                         <td>
+                                                             {' '}
+                                                             <input
+                                                                 type="text"
+                                                                 className={styles.inputElement}
+                                                                 onChange={handleRemarks}
+                                                                 value={remarks}
+                                                                 placeholder={drrmLanguage.language === 'en'
+                                                                     ? 'Remarks'
+                                                                     : 'कुनै टिप्पणीभए जानकारी दिनुहोस्'
+                                                                 }
+                                                             />
 
-                                                     </td>
+                                                         </td>
+                                                         <td />
+                                                     </>
                                                  )
                                                          }
                                                      </tr>
+
                                                  )
 
                                              )
                                                      }
+                                                     {!props.annex
+                                                      && (
+                                                          <tr>
+
+                                                              {!editBudgetActivity && (
+                                                                  <>
+                                                                      <td />
+                                                                      <td>
+                                                                          <button
+                                                                              type="button"
+                                                                              className={styles.savebtn}
+                                                                              onClick={handleAddNew}
+                                                                          >
+
+                                                                              <Gt section={Translations.AddnewAct} />
+                                                                          </button>
+                                                                      </td>
+
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                      <td />
+                                                                  </>
+                                                              )
+                                                              }
+
+                                                          </tr>
+                                                      )}
                                                  </>
                                              )
                                     )}
@@ -1630,17 +1672,7 @@ const BudgetActivity = (props: Props) => {
                                </div>
                            ) : (
                                <div className={styles.btns}>
-                                   {!editBudgetActivity && (
-                                       <button
-                                           type="button"
-                                           className={styles.savebtn}
-                                           onClick={handleAddNew}
-                                       >
 
-                                           <Gt section={Translations.AddnewAct} />
-                                       </button>
-                                   )
-                                   }
 
                                    <NextPrevBtns
                                        handlePrevClick={props.handlePrevClick}

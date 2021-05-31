@@ -582,6 +582,56 @@ const Budget = (props: Props) => {
                                                             <td>-</td>
                                                         </tr>
                                                     )}
+
+                                            {!props.annex
+                                                                   && annualBudgetData.length > 0
+                                                                    && (editBudget
+                                                                        ? (
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        className={styles.savebtn}
+                                                                                        onClick={handleUpdateBudget}
+                                                                                    >
+                                                                                        <Icon
+                                                                                            name="plus"
+                                                                                            className={styles.plusIcon}
+                                                                                        />
+                                                                                        <Gt section={Translations.BudgetUpdateBtn} />
+
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td />
+                                                                                <td />
+                                                                                <td />
+
+                                                                            </tr>
+
+                                                                        )
+                                                                        : (
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        className={styles.savebtn}
+                                                                                        onClick={handleEditBudget}
+                                                                                    >
+                                                                                        <Icon
+                                                                                            name="plus"
+                                                                                            className={styles.plusIcon}
+                                                                                        />
+                                                                                        <Gt section={Translations.BudgetEditBtn} />
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td />
+                                                                                <td />
+                                                                                <td />
+
+                                                                            </tr>
+
+                                                                        )
+                                                                    )}
                                         </>
                                     )}
 
@@ -615,50 +665,21 @@ const Budget = (props: Props) => {
                             <>
                                 {
                                     !props.annex
-                        && (
-                            <>
-                                {annualBudgetData.length > 0
-                                && (editBudget
-                                    ? (
-                                        <button
-                                            type="button"
-                                            className={styles.savebtn}
-                                            onClick={handleUpdateBudget}
-                                        >
-                                            <Icon
-                                                name="plus"
-                                                className={styles.plusIcon}
-                                            />
-                                            <Gt section={Translations.BudgetUpdateBtn} />
+                          && (
+                              <>
 
-                                        </button>
-                                    )
-                                    : (
-                                        <button
-                                            type="button"
-                                            className={styles.savebtn}
-                                            onClick={handleEditBudget}
-                                        >
-                                            <Icon
-                                                name="plus"
-                                                className={styles.plusIcon}
-                                            />
-                                            <Gt section={Translations.BudgetEditBtn} />
-                                        </button>
-                                    )
-                                )}
 
-                                <NextPrevBtns
-                                    handlePrevClick={props.handlePrevClick}
+                                  <NextPrevBtns
+                                      handlePrevClick={props.handlePrevClick}
                                     // handleNextClick={props.handleNextClick}
-                                    handleNextClick={handleNextClick}
+                                      handleNextClick={handleNextClick}
 
                                     // disabled={!((drrFund && municipalBudget && additionalFund))}
-                                    // disabled={!(annualBudgetData.length > 0)}
-                                />
+                                      // disabled={!(annualBudgetData.length > 0)}
+                                  />
 
-                            </>
-                        )
+                              </>
+                          )
                                 }
                             </>
                         )}

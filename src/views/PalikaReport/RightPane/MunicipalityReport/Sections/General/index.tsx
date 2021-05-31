@@ -820,8 +820,8 @@ const General = (props: Props) => {
 
                                     {
                                         fetchedData
-                                    && fetchedData
-                                        .filter(member => member.committee === 'LDMC').length > 0
+                                     && fetchedData
+                                         .filter(member => member.committee === 'LDMC').length > 0
                                             ? fetchedData
                                                 .filter(availableMembers => availableMembers.committee === 'LDMC').map((mem, i) => (
                                                     <tr key={mem.id}>
@@ -877,7 +877,34 @@ const General = (props: Props) => {
                                                 </tr>
                                             )
                                     }
+                                    {!props.annex
+                                && (
+                                    <tr>
+                                        <td />
+                                        <td>
+                                            {' '}
+                                            <button
+                                                type="button"
+                                                className={styles.savebtnInfo}
+                                                onClick={handleAddContact}
+                                            >
+                                                <Icon
+                                                    name="plus"
+                                                    className={styles.plusIcon}
+                                                />
+                                                <Gt
+                                                    section={Translations.AddMember}
+                                                />
+                                                {/* Add */}
+                                            </button>
+                                        </td>
+                                        <td />
+                                        <td />
+                                        <td />
 
+                                    </tr>
+                                )
+                                    }
 
                                 </tbody>
                             </table>
@@ -893,20 +920,7 @@ const General = (props: Props) => {
                                         />
                                     </i>
                                 </h5>
-                                <button
-                                    type="button"
-                                    className={styles.savebtn}
-                                    onClick={handleAddContact}
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.plusIcon}
-                                    />
-                                    <Gt
-                                        section={Translations.AddMember}
-                                    />
-                                    {/* Add */}
-                                </button>
+
 
                             </>
                         )

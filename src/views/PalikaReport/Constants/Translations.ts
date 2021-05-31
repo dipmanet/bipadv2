@@ -119,8 +119,8 @@ const languageTranslations: LanguageEntry = {
         en: 'Please Select',
     },
     dashboardReportGenerateButton: {
-        np: '+ नयाँ रिपोर्ट थप्नुहोस्',
-        en: '+ Add New Report',
+        np: '+ रिपोर्ट थप्नुहोस्',
+        en: '+ Add Report',
     },
     dashboardSidebarAllTitle: {
         np: 'ड्यासबोर्ड',

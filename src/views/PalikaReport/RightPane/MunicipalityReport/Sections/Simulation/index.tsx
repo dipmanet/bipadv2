@@ -902,7 +902,7 @@ const Simulation = (props: Props) => {
 
                                                     </select>
                                                 </td>
-
+                                                <td />
                                             </tr>
                                         )
                                                     }
@@ -912,7 +912,36 @@ const Simulation = (props: Props) => {
                                     )}
 
                                 </>
+                                {!props.annex
+                            && (
+                                <tr>
+                                    <td />
+                                    <td>
+                                        <button
+                                            type="button"
+                                            onClick={handleAddNew}
+                                            className={styles.savebtn}
+                                        >
+                                            <Icon
+                                                name="plus"
+                                                className={styles.plusIcon}
+                                            />
+                                            <Gt section={Translations.SimulationAddButton} />
+                                        </button>
+                                    </td>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                </tr>
+                            )
 
+                                }
 
                             </tbody>
                         </table>
@@ -945,17 +974,7 @@ const Simulation = (props: Props) => {
                                             !props.annex
                           && (
                               <>
-                                  <button
-                                      type="button"
-                                      onClick={handleAddNew}
-                                      className={styles.savebtn}
-                                  >
-                                      <Icon
-                                          name="plus"
-                                          className={styles.plusIcon}
-                                      />
-                                      <Gt section={Translations.SimulationAddButton} />
-                                  </button>
+
                                   <div className={styles.btns}>
                                       <NextPrevBtns
                                           handlePrevClick={props.handlePrevClick}

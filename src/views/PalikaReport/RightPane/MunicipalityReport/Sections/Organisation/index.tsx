@@ -362,45 +362,49 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                         }
                                     </>
                                 )}
+                                {!loader && !props.annex && (
+                                    <tr>
+                                        <td />
+                                        <td />
+                                        <td>
+                                            <button
+                                                type="button"
+                                                onClick={handleOrnaisationRedirect}
+                                                className={styles.savebtn}
+                                            >
+                                                <Icon
+                                                    name="plus"
+                                                    className={styles.plusIcon}
+                                                />
+                                                <Gt section={Translations.OrganizationDataAddButton} />
+                                            </button>
+                                        </td>
 
+                                        <td />
+                                        <td />
+                                        <td />
+                                        <td />
+                                    </tr>
+                                )
+
+                                }
                             </tbody>
                         </table>
                         {!loader && fetchedData.length === 0 && <h2><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
-                        {!loader
-                        && (
-                            <>
-                                {
-                                    !props.annex
-                            && (
-                                <button
-                                    type="button"
-                                    onClick={handleOrnaisationRedirect}
-                                    className={styles.savebtn}
-                                >
-                                    <Icon
-                                        name="plus"
-                                        className={styles.plusIcon}
-                                    />
-                                    <Gt section={Translations.OrganizationDataAddButton} />
-                                </button>
-                            )
 
-                                }
-                                {
-                                    !props.annex
-                                        ? (
-                                            <div className={styles.btnsCont}>
-                                                <NextPrevBtns
-                                                    handlePrevClick={handleNext}
-                                                    handleNextClick={handleNext}
-                                                />
-                                            </div>
-                                        )
-                                        : ''
-                                }
-                            </>
-                        )
+                        {
+                            !props.annex
+                                ? (
+                                    <div className={styles.btnsCont}>
+                                        <NextPrevBtns
+                                            handlePrevClick={handleNext}
+                                            handleNextClick={handleNext}
+                                        />
+                                    </div>
+                                )
+                                : ''
                         }
+
 
                     </div>
 

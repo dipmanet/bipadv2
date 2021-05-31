@@ -722,28 +722,41 @@ const Contacts = (props: Props) => {
                                             }
                                         </>
                                     )}
+                                    {!loader && !props.annex && (
+                                        <tr>
+                                            <td />
+                                            <td />
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAddContacts()}
+                                                    className={styles.savebtn}
+                                                >
+                                                    <Icon
+                                                        name="plus"
+                                                        className={styles.plusIcon}
+                                                    />
+                                                    <Gt section={Translations.ContactAddButton} />
+                                                </button>
+                                            </td>
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                             {!loader && mergedData.length === 0
                                  && <h2><Gt section={Translations.ContactNoDataMessage} /></h2>
 
                             }
-                            {!loader && (
-                                <>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAddContacts()}
-                                        className={styles.savebtn}
-                                    >
-                                        <Icon
-                                            name="plus"
-                                            className={styles.plusIcon}
-                                        />
-                                        <Gt section={Translations.ContactAddButton} />
-                                    </button>
 
-                                </>
-                            )}
                         </div>
                         {!loader && (
                             <>
@@ -1106,10 +1119,42 @@ const Contacts = (props: Props) => {
                                                             placeholder={drrmLanguage.language === 'np' ? 'ईमेल' : 'Email'}
                                                         />
                                                     </td>
+                                                    <td />
                                                 </tr>
                                             </>
                                         )}
-
+                                        {!props.annex && !loader
+                                    && (
+                                        <tr>
+                                            <td />
+                                            <td />
+                                            <td>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleAddNonGovContacts()}
+                                                    className={styles.savebtn}
+                                                >
+                                                    <Icon
+                                                        name="plus"
+                                                        className={styles.plusIcon}
+                                                    />
+                                                    <Gt section={Translations.ContactAddButton} />
+                                                </button>
+                                            </td>
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                            <td />
+                                        </tr>
+                                    )
+                                        }
 
                                     </tbody>
                                 </table>
@@ -1137,17 +1182,7 @@ const Contacts = (props: Props) => {
                                 {!loader && !nonGovContactId
                                     && (
                                         <>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleAddNonGovContacts()}
-                                                className={styles.savebtn}
-                                            >
-                                                <Icon
-                                                    name="plus"
-                                                    className={styles.plusIcon}
-                                                />
-                                                <Gt section={Translations.ContactAddButton} />
-                                            </button>
+
                                             <NextPrevBtns
                                                 handlePrevClick={props.handlePrevClick}
                                                 handleNextClick={handleNext}
