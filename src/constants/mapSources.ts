@@ -9,6 +9,7 @@ export default {
             water: 'water copy',
         },
     },
+
     wardFillLocalTikapur: {
         url: `${process.env.REACT_APP_MAP_SOURCE_TIKAPUR}`,
         layers: {
@@ -31,13 +32,13 @@ export default {
         },
     },
 
-    // populationDensity: {
-    //     // url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_DENSITY_POPULATION}`,
-    //     url: 'mapbox://ankur20.92mbzrhu',
-    //     layers: {
-    //         density: 'density-b7o1uo',
-    //     },
-    // },
+    populationDensity: {
+        // url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_DENSITY_POPULATION}`,
+        url: 'mapbox://ankur20.92mbzrhu',
+        layers: {
+            density: 'density-b7o1uo',
+        },
+    },
 
     criticalInfrastructures: {
         // url: `${process.env.REACT_APP_VIZ_RISK_MAP_SOURCE_CRITICAL_INFRASTRUCTURES}`,
