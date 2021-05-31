@@ -82,7 +82,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
                     <BarChart
                         width={300}
-                        height={600}
+                        height={700}
                         data={chartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
@@ -97,9 +97,11 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                         <Bar
                             dataKey="Total"
                             fill="rgb(0,219,95)"
-                            barCategoryGap={20}
+                            barSize={15}
                             label={{ position: 'right', fill: '#ffffff' }}
                             tick={{ fill: '#94bdcf' }}
+                            radius={[0, 15, 15, 0]}
+
                         />
                     </BarChart>
                 </ResponsiveContainer>

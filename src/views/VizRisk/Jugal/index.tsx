@@ -45,6 +45,7 @@ import Icon from '#rscg/Icon';
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
+import MapWithDraw from './MapWithDraw';
 
 const rightelements = [
     <RightElement1 />,
@@ -52,7 +53,7 @@ const rightelements = [
     <RightElement3 />,
     <RightElement4 />,
     <RightElement5 />,
-    // <RightElement6 />,
+    <RightElement6 />,
 ];
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -483,30 +484,32 @@ class Jugal extends React.Component {
                 }
 
                 {rightElement === 5
-                    ? (
-                        <div className={styles.legends}>
+                    && (
 
-                            <VRLegend>
-                                <EvacLegends
-                                    handleEvac={this.handleEvac}
-                                    evacElement={evacElement}
+                        <>
+                            <MapWithDraw
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
+                            />
+                            <RightElement6
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                handleIncidentItemClick={this.handleIncidentItemClick}
+                                incidentFilterYear={incidentFilterYear}
 
-                                />
-                            </VRLegend>
-                            <VRLegend>
-                                <FloodHazardLegends
-                                    handleFloodChange={this.handleFloodChange}
-                                    handleExposedElementChange={this.handleExposedElementChange}
-                                    handleChisapani={this.handleChisapani}
-                                />
-                            </VRLegend>
-                            <VRLegend>
-                                <FloodDepthLegend />
-                            </VRLegend>
-                        </div>
-
+                            />
+                        </>
                     )
-                    : ''
                 }
             </div>
         );

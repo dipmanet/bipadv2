@@ -67,9 +67,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                         <Bar
                             dataKey="Total"
                             fill="rgb(0,219,95)"
-                            barCategoryGap={20}
+                            barSize={20}
                             label={{ position: 'right', fill: '#ffffff' }}
                             tick={{ fill: '#94bdcf' }}
+                            radius={[0, 20, 20, 0]}
                         />
                     </BarChart>
                 </ResponsiveContainer>

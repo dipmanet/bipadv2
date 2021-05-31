@@ -83,7 +83,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     <ResponsiveContainer width="100%" height={'100%'}>
                         <BarChart
                             width={350}
-                            height={600}
+                            height={700}
                             data={demoChartdata.filter(item => item.name !== 'Ward 99')}
                             layout="vertical"
                             margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
@@ -94,9 +94,26 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             <Tooltip />
                             {/* <Legend /> */}
                             <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
-                            <Bar dataKey="MalePop" fill="#ffbf00" />
-                            <Bar dataKey="FemalePop" fill="#00d725" />
-                            <Bar dataKey="TotalHousehold" fill="#347eff" />
+                            <Bar
+                                dataKey="MalePop"
+                                fill="#ffbf00"
+                                radius={[0, 10, 10, 0]}
+                                barSize={10}
+                            />
+                            <Bar
+                                dataKey="FemalePop"
+                                radius={[0, 10, 10, 0]}
+                                fill="#00d725"
+                                barSize={10}
+
+                            />
+                            <Bar
+                                dataKey="TotalHousehold"
+                                radius={[0, 10, 10, 0]}
+                                fill="#347eff"
+                                barSize={10}
+
+                            />
                             {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                         </BarChart>
                     </ResponsiveContainer>
