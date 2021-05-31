@@ -8,12 +8,12 @@ import Gulariya from './Gulariya';
 import Tikapur from './Tikapur';
 import Dhangadi from './Dhangadi';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
-import BarabiseLandslide from './BarabiseLandslide';
+// import BarabiseLandslide from './BarabiseLandslide';
 
 
 const slides = [
     <Rajapur />,
-    <BarabiseLandslide />,
+    // <BarabiseLandslide />,
     <Gulariya />,
     <Tikapur />,
     <Dhangadi />,
@@ -128,7 +128,7 @@ const VizRiskMainPage = () => {
 
                                 </Button>
                             </div>
-                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
+                            {/* <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
                             <Button
                                 transparent
                                 onClick={() => handleMenuTitleClick('bharabise')}
@@ -136,7 +136,7 @@ const VizRiskMainPage = () => {
                             >
                                 <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
-                            </Button>
+                            </Button> */}
 
 
                         </div>
