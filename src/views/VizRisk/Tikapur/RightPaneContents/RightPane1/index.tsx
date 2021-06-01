@@ -127,10 +127,11 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Tikapur Municipality  </h1>
                 <p>
-                Tikapur Municipality is located in Kailali district
-                of Sudurpaschim province.
-                Tikapur municipality has a total area of 118 square km
-                and is situated at an elevation of 145m to 161m AMSL.
+                Tikapur Municipality is located in Kailali
+                 district of Sudurpaschim province.
+                Tikapur municipality has a total area of 118
+                square km and is situated at an elevation of
+                 145m to 161m AMSL.
 
                 </p>
                 <h2>Climate</h2>

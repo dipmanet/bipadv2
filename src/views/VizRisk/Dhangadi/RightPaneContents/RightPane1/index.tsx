@@ -125,14 +125,14 @@ class Rajapur extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1> Dhangadi Municipality  </h1>
+                <h2> Dhangadhi Sub-Metropolitan City  </h2>
                 <p>
-                Gulariya municipality lies in the Terai region
-                of Bardiya district in Lumbini Province.
-                It covers a total area of 118.21square km,
-                and is situated at an elevation of 145m from
+                Dhangadi Sub-Metropolitan City is in the Terai region
+                of Kailali
+                 district of Sudurpaschim province. It covers a
+                 total area of  271.74 square km and is  situated at an elevation of
+                  109 m from
                 sea level.
-
                 </p>
                 <h2>Climate</h2>
                 <p>
