@@ -8,6 +8,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { isDefined, _cs } from '@togglecorp/fujs';
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import styles from './styles.scss';
 import Budget from './Sections/Budget';
 import BudgetActivity from './Sections/BudgetActivity';
@@ -827,8 +828,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                                                         {item.resourceName || '-'}
                                                     </td>
                                                     <td>{item.organizationType || '-'}</td>
-                                                    <td>{item.createdOn.split('T')[0] || '-'}</td>
-                                                    <td>{item.modifiedOn.split('T')[0] || '-'}</td>
+                                                    <td>{ADToBS(item.createdOn) || '-'}</td>
+                                                    <td>{ADToBS(item.modifiedOn) || '-'}</td>
                                                 </tr>
                                             ))}
                                     </tbody>

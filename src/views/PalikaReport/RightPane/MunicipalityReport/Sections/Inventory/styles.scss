@@ -10,10 +10,16 @@
   filter: saturate(100%);
   border: none;
   background-color: transparent;
+ .bulletPoint{
+        height: 20px;
+        cursor: pointer;
+      }
 }
 .tabsPageContainer{
   .invenTitle{
     margin-left: 0px;
+    margin-top: 30px;
+    margin-bottom: 10px;
     // border: 1px solid red;
   }
   .palikaTable{
@@ -25,10 +31,7 @@
       position: absolute;
       top: 54%;
       left: 55%;
-      .bulletPoint{
-        height: 20px;
-        cursor: pointer;
-      }
+     
       
   }
   }

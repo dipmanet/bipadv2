@@ -62,13 +62,14 @@ tr:nth-child(odd) {
         display:flex;
         justify-content: flex-start;
         width: 100%;
+        margin-bottom: 10px;
         // margin: 0 auto;
         .agreeBtn{
             filter: saturate(100%);
-            margin-left: 10px;
+            margin-right: 10px;
             border: none;
-            background-color: #297EDF !important;
-            opacity: 0.67;
+            background-color: #3684d8;
+        opacity: 1 !important;
             border-radius: 3px;
             color: white !important; 
             padding: 7px;

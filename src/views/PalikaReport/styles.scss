@@ -45,7 +45,8 @@
     }
 
     .selectedLanguage {
-        background-color: #297EDF;
+        background-color: #3684d8;
+        opacity: 1 !important;
     }
 
     .tabsPageContainer {
@@ -127,7 +128,8 @@
         .agreeBtn {
             width: auto;
             filter: saturate(100%);
-            background-color: #297EDF !important;
+            background-color: #3684d8 !important;
+            opacity: 1;
             border-radius: 5px;
             color: white !important;
         }
@@ -303,7 +305,8 @@
             }
 
             .submitBut {
-                background-color: #297EDF;
+                background-color: #3684d8;
+                opacity: 1 ;
                 border-radius: 5px;
                 border: none;
                 width: 80px;
@@ -311,7 +314,7 @@
                 margin-left: 30px;
                 filter: saturate(100%);
                 color: white;
-                opacity: 0.67;
+              
                 font-weight: 700;
                 cursor: pointer;
                 margin-bottom: 10px;

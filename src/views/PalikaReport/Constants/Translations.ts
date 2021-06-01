@@ -229,12 +229,12 @@ const languageTranslations: LanguageEntry = {
     },
 
     LocalDisaster: {
-        en: 'Local Disaster Mangement Committee',
+        en: 'Local Disaster Mangement Committee(LDMC)',
         np: 'स्थानीय विपद् व्यवस्थापन समिति ',
     },
     FormationDateTitle: {
-        en: 'Local Disaster Mangement Committee Formation Date',
-        np: 'स्थानीय विपद् व्यवस्थापन समितिको गठन मिति ',
+        en: 'LDMC Formed:',
+        np: 'गठनभएको मिति:',
     },
 
     Committeemembers: {
@@ -243,8 +243,8 @@ const languageTranslations: LanguageEntry = {
     },
 
     Numberofmembers: {
-        en: 'Number of members in Local Disaster Management Committee',
-        np: 'स्थानीय विपद् व्यवस्थापन समितिको सदस्य संख्या',
+        en: 'Total Members:',
+        np: 'सदस्य संख्या:',
     },
 
     Title: {
@@ -1041,6 +1041,10 @@ const languageTranslations: LanguageEntry = {
         np: 'कारण थप्नुहोस्',
         en: 'Add Cause',
     },
+    IncidentEditCauseTooltip: {
+        np: 'सम्पादन गर्नुहोस्',
+        en: 'Edit Cause',
+    },
     IncidentCauseReliefSelectionHeading: {
         np: 'चयन गरिएको घटनाको लागि कारण',
         en: 'Cause For Selected Incident',
@@ -1048,6 +1052,10 @@ const languageTranslations: LanguageEntry = {
     IncidentAddReliefTooltip: {
         np: 'राहत थप्नुहोस्',
         en: 'Add Relief',
+    },
+    IncidentEditReliefTooltip: {
+        np: 'सम्पादन गर्नुहोस्',
+        en: 'Edit Relief',
     },
     Relief: {
         np: 'राहत',

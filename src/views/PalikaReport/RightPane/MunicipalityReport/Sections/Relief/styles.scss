@@ -16,20 +16,24 @@ ul{
       
   }
 }
-
+.tabsWardContainer{
+  h2{
+    margin-bottom: 10px;
+    margin-top: 30px;
+  }
+}
 
 .addReliefBttn{
-  width: 100px;
+  width: 90px;
   cursor: pointer;
-  background-color: #297EDF;
+  background-color: #3684d8 ;
   border-radius: 5px;
   border: none;
  
-  height: 30px;
+  height: 25px;
  
   filter: saturate(100%);
   color: white;
-  opacity: 0.67;
   font-weight: 700;
   cursor: pointer;
   margin-bottom: 10px;
@@ -507,7 +511,7 @@ ul{
   position: relative;
   margin-top: 10px;
   max-width: 100%;
-  background-color:  #297EDF;
+  background-color:  #3684d8;
   border-radius: 15px;
   color: white; 
   padding: 7px 15px;
@@ -519,10 +523,28 @@ ul{
   white-space: nowrap;
 }
 .reliefBtn{
-  white-space: nowrap;
-  filter: saturate(100%) !important;
-  border: none !important;
-  background-color: transparent !important;
+  width: 90px;
+  cursor: pointer;
+  background-color: #F6F6F6!important;
+  border-radius: 5px;
+  border: none;
+  
+ 
+  height: 25px;
+ 
+  filter: saturate(100%);
+  color: black;
+  opacity: 0.67;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+
+  // white-space: nowrap;
+  // filter: saturate(100%) !important;
+  // border: none !important;
+  // background-color: #EBEBEB !important;
+  // height: 25px;
   .bulletPoint{
     height: 25px;
     cursor: pointer;
@@ -545,7 +567,7 @@ ul{
   .savebtn{
     // width: 100px;
     cursor: pointer;
-    background-color: #297EDF;
+    background-color:  #3684d8;
     border-radius: 5px;
     border: none;
    
@@ -553,7 +575,6 @@ ul{
     
     filter: saturate(100%);
     color: white;
-    opacity: 0.67;
     font-weight: 700;
     cursor: pointer;
     margin-bottom: 10px;

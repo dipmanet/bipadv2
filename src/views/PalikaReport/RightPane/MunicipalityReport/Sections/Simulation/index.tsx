@@ -912,7 +912,7 @@ const Simulation = (props: Props) => {
                                     )}
 
                                 </>
-                                {!props.annex
+                                {!props.annex && !loader
                             && (
                                 <tr>
                                     <td />

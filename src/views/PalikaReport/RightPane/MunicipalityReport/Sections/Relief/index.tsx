@@ -1313,36 +1313,18 @@ const Relief = (props: Props) => {
                                                     <td>
                                                         {!props.annex && item.item.cause
                                                             ? (
-                                                                <div className={styles.buttonDiv}>
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={() => handleCauseView(item.item)}
-                                                                        className={styles.reliefBtn}
 
-                                                                        title={drrmLanguage.language === 'np' ? 'कारण हेर्नुहोस्' : 'View Cause'}
-                                                                    >
-                                                                        <ScalableVectorGraphics
-                                                                            className={styles.bulletPoint}
-                                                                            src={programAndPolicyLogo}
-                                                                            alt="editPoint"
-                                                                        />
-                                                                    </button>
 
-                                                                    <button
-                                                                    // className={styles.editButtn}
-                                                                        type="button"
-                                                                        onClick={() => handleCauseEdit(item.item)}
-                                                                        className={styles.reliefBtn}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleCauseEdit(item.item)}
+                                                                    className={styles.reliefBtn}
+                                                                    title={drrmLanguage.language === 'np' ? 'कारण सम्पादन गर्नुहोस्' : 'Edit Cause'}
+                                                                >
+                                                                    <Gt section={Translations.IncidentEditCauseTooltip} />
 
-                                                                        title={drrmLanguage.language === 'np' ? 'कारण सम्पादन गर्नुहोस्' : 'Edit Cause'}
-                                                                    >
-                                                                        <ScalableVectorGraphics
-                                                                            className={styles.bulletPoint}
-                                                                            src={editIcon}
-                                                                            alt="editPoint"
-                                                                        />
-                                                                    </button>
-                                                                </div>
+                                                                </button>
+
                                                             )
                                                             : (!props.annex
                                                                 && (
@@ -1350,6 +1332,7 @@ const Relief = (props: Props) => {
                                                                         type="button"
                                                                         onClick={() => handleAddCause(item.item)}
                                                                         className={styles.addReliefBttn}
+                                                                        title={drrmLanguage.language === 'np' ? Translations.IncidentAddCauseTooltip.np : Translations.IncidentAddCauseTooltip.en}
                                                                     >
                                                                         <Gt section={Translations.IncidentAddCauseTooltip} />
                                                                     </button>
@@ -1366,7 +1349,7 @@ const Relief = (props: Props) => {
                                                         ? reliefData.filter(data => data.incident === item.item.id).map(data => (
                                                             <td>
                                                                 <div className={styles.buttonDiv}>
-                                                                    <button
+                                                                    {/* <button
                                                                         type="button"
                                                                         onClick={() => handleReliefView(item.item)}
                                                                         className={styles.reliefBtn}
@@ -1393,6 +1376,16 @@ const Relief = (props: Props) => {
                                                                             src={editIcon}
                                                                             alt="editPoint"
                                                                         />
+                                                                    </button> */}
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleReliefEdit(data, item.item)}
+                                                                        className={styles.reliefBtn}
+                                                                        title={drrmLanguage.language === 'np' ? 'राहत सम्पादन गर्नुहोस्' : 'Edit Relief'}
+
+                                                                    >
+                                                                        <Gt section={Translations.IncidentEditReliefTooltip} />
+
                                                                     </button>
                                                                 </div>
                                                             </td>
@@ -2238,19 +2231,18 @@ const Relief = (props: Props) => {
                                     <Gt section={Translations.ReliefDataBackButton} />
                                 </button>
 
-                                {postButton && (
-                                    <button
-                                        type="button"
-                                        className={styles.savebtn}
-                            // onClick={() => setShowRelief(false)}
-                                        onClick={handleSaveIncidentCause}
-                                    >
-                                        <Gt section={Translations.ReliefDataSaveButton} />
-                                    </button>
-                                )
-                                }
 
-                                {updateButton && (
+                                <button
+                                    type="button"
+                                    className={styles.savebtn}
+                            // onClick={() => setShowRelief(false)}
+                                    onClick={handleSaveIncidentCause}
+                                >
+                                    <Gt section={Translations.ReliefDataSaveButton} />
+                                </button>
+
+
+                                {/* {updateButton && (
                                     <button
                                         type="button"
                                         className={styles.savebtn}
@@ -2259,7 +2251,7 @@ const Relief = (props: Props) => {
                                     >
                                         <Gt section={Translations.ReliefDataUpdateButton} />
                                     </button>
-                                )}
+                                )} */}
                             </div>
                         </ModalBody>
 
@@ -2479,7 +2471,7 @@ const Relief = (props: Props) => {
                             // onClick={() => setShowRelief(false)}
                                         onClick={handleUpdateRelief}
                                     >
-                                        <Gt section={Translations.ReliefDataUpdateButton} />
+                                        <Gt section={Translations.ReliefDataSaveButton} />
                                     </button>
                                 )}
                             </div>

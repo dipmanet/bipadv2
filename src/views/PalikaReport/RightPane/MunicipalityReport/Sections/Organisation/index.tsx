@@ -393,7 +393,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                         {!loader && fetchedData.length === 0 && <h2><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
 
                         {
-                            !props.annex
+                            !props.annex && !loader
                                 ? (
                                     <div className={styles.btnsCont}>
                                         <NextPrevBtns

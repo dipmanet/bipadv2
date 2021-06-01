@@ -354,7 +354,7 @@ const Budget = (props: Props) => {
                         </div>
                     )
                     : (
-                        <div>
+                        <div className={styles.mainContainer}>
                             {
                                 !props.previewDetails
 

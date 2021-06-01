@@ -348,22 +348,49 @@ const General = (props: Props) => {
                     }
                     {
                         !props.annex
-                && (
-                    <div className={styles.formColumn}>
-                        <h5>
-                            <Gt
-                                section={Translations.GeneralSubtitleFirst}
-                            />
-                        </h5>
-                        <h3>
-                            <strong>
-                                <Gt
-                                    section={Translations.Fiscalyear}
-                                />
-                            </strong>
-                        </h3>
-                        <div className={styles.row}>
-                            <div className={styles.inputContainer}>
+                        && (
+                            <div className={styles.formColumn}>
+
+
+                                <div className={styles.inputFiscalYear}>
+                                    <h3>
+                                        <strong>
+                                            <Gt
+                                                section={Translations.Fiscalyear}
+                                            />
+                                        </strong>
+                                    </h3>
+
+                                    <select
+                                        value={Number(fiscalYear)}
+                                    // defaultValue={fiscalYear}
+                                        onChange={handleSelectChange}
+                                        className={styles.inputElement}
+                                        disabled={disabled}
+                                    >
+                                        <option value="">
+                                            {drrmLanguage.language === 'np'
+                                                ? 'आर्थिक वर्ष चयन गर्नुहोस्'
+                                                : 'Select Fiscal Year'
+                                            }
+                                        </option>
+                                        {fiscalYearList && fiscalYearList
+                                            .map(item => (
+                                                <option
+                                                    value={item.id}
+                                                >
+                                                    {drrmLanguage.language === 'np' ? item.titleNp : item.titleEn}
+                                                </option>
+                                            ))}
+
+                                    </select>
+
+                                </div>
+                                {/* <h5>
+                                    <Gt
+                                        section={Translations.GeneralSubtitleFirst}
+                                    />
+                                </h5> */}
                                 {fyErr
                                     ? (
                                         <div className={styles.errorMsg}>
@@ -374,41 +401,15 @@ const General = (props: Props) => {
                                         </div>
                                     )
                                     : ''}
-                                <select
-                                    value={Number(fiscalYear)}
-                                    // defaultValue={fiscalYear}
-                                    onChange={handleSelectChange}
-                                    className={styles.inputElement}
-                                    disabled={disabled}
-                                >
-                                    <option value="">
-                                        {drrmLanguage.language === 'np'
-                                            ? 'आर्थिक वर्ष चयन गर्नुहोस्'
-                                            : 'Select Fiscal Year'
-                                        }
-                                    </option>
-                                    {fiscalYearList && fiscalYearList
-                                        .map(item => (
-                                            <option
-                                                value={item.id}
-                                            >
-                                                {drrmLanguage.language === 'np' ? item.titleNp : item.titleEn}
-                                            </option>
-                                        ))}
-
-                                </select>
 
                             </div>
-
-                        </div>
-                    </div>
-                )}
+                        )}
 
                     <div className={styles.formColumn}>
                         {
                             !props.annex
                     && (
-                        <h3>
+                        <h3 style={{ marginBottom: '10px' }}>
                             <strong>
                                 <Gt
                                     section={Translations.MunicipalDRR}
@@ -708,79 +709,86 @@ const General = (props: Props) => {
                         {
                             !props.annex
                     && (
-                        <h3>
-                            <strong>
-                                <Gt
-                                    section={Translations.LocalDisaster}
-                                />
-                            </strong>
-                        </h3>
+                        <div className={styles.localComitteeData}>
+                            <h3>
+                                <strong>
+                                    <Gt
+                                        section={Translations.LocalDisaster}
+                                    />
+                                </strong>
+                            </h3>
+                            <div className={styles.localComitteeDetail}>
+                                <div className={styles.inputContainer}>
+
+                                    <span className={styles.labelDate}>
+                                        <Gt
+                                            section={Translations.FormationDateTitle}
+                                        />
+                                    </span>
+                                    <NepaliDatePicker
+                                        inputClassName={styles.formControl}
+                                        className={styles.datepicker}
+                                        value={formationDate}
+                                        onChange={(value: string) => setformationDate(value)}
+                                                            // placeholder="sdfsdfs"
+                                        options={{
+                                            closeOnSelect: true,
+                                            calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                            valueLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
+                                        }}
+                                    />
+
+
+                                </div>
+                                <div className={styles.inputContainer}>
+
+                                    <span className={styles.labelDate}>
+                                        <Gt
+                                            section={Translations.Numberofmembers}
+                                        />
+                                    </span>
+                                    <input
+                                        className={styles.comitteeMembers}
+                                        onChange={handleCommitteeMembers}
+                                        value={committeeMembers}
+                                        type="number"
+                                        placeholder="Enter the number of members"
+                                    />
+
+                                </div>
+                            </div>
+                        </div>
+
                     )
                         }
 
                         <div className={styles.row}>
                             { !props.annex
-                && (
-                    <>
-                        <div className={styles.inputContainer}>
+                            && (
+                                <>
 
-                            <span className={styles.labelDate}>
-                                <Gt
-                                    section={Translations.FormationDateTitle}
-                                />
-                            </span>
-                            <NepaliDatePicker
-                                inputClassName="form-control"
-                                className={styles.datepicker}
-                                value={formationDate}
-                                onChange={(value: string) => setformationDate(value)}
-                                // placeholder="sdfsdfs"
-                                options={{
-                                    closeOnSelect: true,
-                                    calenderLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                    valueLocale: drrmLanguage.language === 'en' ? 'en' : 'ne',
-                                }}
-                            />
+                                    <h3>
+                                        <strong>
+                                            <Gt
+                                                section={Translations.Committeemembers}
+                                            />
+                                        </strong>
 
-
-                        </div>
-                        <div className={styles.inputContainer}>
-
-                            <span className={styles.labelDate}>
-                                <Gt
-                                    section={Translations.Numberofmembers}
-                                />
-                            </span>
-                            <input
-                                onChange={handleCommitteeMembers}
-                                value={committeeMembers}
-                                type="number"
-                                placeholder="Enter the number of members"
-                            />
-
-                        </div>
-                        <h3>
-                            <strong>
-                                <Gt
-                                    section={Translations.Committeemembers}
-                                />
-                            </strong>
-
-                        </h3>
-                    </>
-                )
+                                    </h3>
+                                </>
+                            )
                             }
                             {
                                 props.annex
-                        && (
-                            <h3>
-                                <strong>
-                                    <Gt
-                                        section={Translations.FormationDateTitle}
-                                    />
-                                </strong>
-                            </h3>
-                        )
+                            && (
+                                <h3>
+                                    <strong>
+                                        <Gt
+                                            section={Translations.FormationDateTitle}
+                                        />
+                                    </strong>
+                                </h3>
+                            )
                             }
                             <table className={drrmLanguage.language === 'np' ? _cs(styles.reportTable, styles.nep) : styles.reportTable} id="table-to-xls">
                                 <tbody>
@@ -910,20 +918,20 @@ const General = (props: Props) => {
                             </table>
                             {
                                 !props.annex
-                        && (
-                            <>
-                                <h5>
-                                    {' '}
-                                    <i>
-                                        <Gt
-                                            section={Translations.GeneralPleaseClick}
-                                        />
-                                    </i>
-                                </h5>
+                            && (
+                                <>
+                                    <h5>
+                                        {' '}
+                                        <i>
+                                            <Gt
+                                                section={Translations.GeneralPleaseClick}
+                                            />
+                                        </i>
+                                    </h5>
 
 
-                            </>
-                        )
+                                </>
+                            )
                             }
                         </div>
 
