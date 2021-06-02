@@ -27,19 +27,26 @@ import styles from './styles.scss';
 import Disclaimer from '../../Components/Disclaimer';
 
 const data = [
-    { name: 'Agricultural land', value: 6.6 },
-    { name: 'Forest', value: 105.83 },
-    { name: 'Water bodies', value: 4.43 },
-    { name: 'Other (Unmapped/Uncategorized)', value: 140.45 },
-    { name: 'Buildings', value: 3.607 },
+    { name: 'Agricultural land', value: 115.77 },
+    { name: 'Forest', value: 89.12 },
+    { name: 'Grassland', value: 0.88 },
+    { name: 'Meadow', value: 0.52 },
+    { name: 'Sand', value: 3.37 },
+    { name: 'Water bodies', value: 4.96 },
+    { name: 'Buildings', value: 4.01 },
+    { name: 'Other ', value: 42.289 },
 ].sort(({ value: a }, { value: b }) => b - a);
 
 const COLORS_CHART = [
-    '#d5d3d3', // other
-    '#00a811', // forest
     '#d3e378', // agriculture
+    '#00a811', // forest
+    '#d5d3d3', // other
     '#0765AA', // water bodies
     '#F2F2F2', // building
+    '#effdc9', // sand
+    '#4ad391', // grassland
+    '#afeb0a', // meadow
+
 
 ];
 
@@ -110,7 +117,7 @@ class RightPane extends React.PureComponent<Props, State> {
             // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 260.917) * 100).toFixed(2)} % `}</p>
+                    <p>{`${((payload[0].value / 260.919) * 100).toFixed(2)} % `}</p>
                 </div>
             );
         }
@@ -149,7 +156,8 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public render() {
         const { activeIndex, showInfo } = this.state;
-
+        console.log('Color', COLORS_CHART);
+        console.log('data', data);
         return (
             <div className={styles.vrSideBar}>
 
@@ -199,7 +207,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                 content={(
                                     <CustomLabel
                                         value1={`${data[activeIndex].value} sq km`}
-                                        value2={` / ${((data[activeIndex].value / 260.917)
+                                        value2={` / ${((data[activeIndex].value / 260.919)
                                              * 100).toFixed(2)}%`}
                                     />
                                 )}
@@ -211,43 +219,63 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <div className={styles.customChartLegend}>
                     <CustomChartLegend
+                        text={data[0].name}
+                        barColor={COLORS_CHART[0]}
+                        background={'#eee'}
+                        data={'115.77 sq km / 44.37'}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
                         text={data[1].name}
                         barColor={COLORS_CHART[1]}
                         background={'#eee'}
-                        data={'105.83 sq km / 40.56'}
-                        selected={activeIndex === 2}
+                        data={'89.12 sq km / 34.16'}
+                        selected={activeIndex === 1}
                     />
+
                     <CustomChartLegend
                         text={data[2].name}
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
-                        data={'6.6sq km / 2.53'}
-                        selected={activeIndex === 0}
+                        data={'42.28 sq km / 16.2'}
+                        selected={activeIndex === 1}
                     />
-
-
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS_CHART[3]}
                         background={'#eee'}
-                        data={'4.43sq km / 1.70'}
-                        selected={activeIndex === 3}
+                        data={'4.96 sq km / 1.90'}
+                        selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
-                        background={'#444'}
-                        data={'3.607 sq km / 1.38'}
-                        selected={activeIndex === 4}
-                        builtupArea
-                    />
-                    <CustomChartLegend
-                        text={data[0].name}
-                        barColor={COLORS_CHART[0]}
-                        background={'#444'}
-                        data={'140.45 sq km / 53.83'}
+                        background={'#eee'}
+                        data={'4.01 sq km / 1.53'}
                         selected={activeIndex === 1}
                     />
+                    <CustomChartLegend
+                        text={data[5].name}
+                        barColor={COLORS_CHART[5]}
+                        background={'#eee'}
+                        data={'3.37 sq km / 1.29'}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
+                        text={data[6].name}
+                        barColor={COLORS_CHART[6]}
+                        background={'#eee'}
+                        data={'0.88 sq km / 0.33'}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
+                        text={data[7].name}
+                        barColor={COLORS_CHART[7]}
+                        background={'#eee'}
+                        data={'0.52 sq km / 0.19'}
+                        selected={activeIndex === 1}
+                    />
+
 
                 </div>
                 {/* <SourceInfo /> */}

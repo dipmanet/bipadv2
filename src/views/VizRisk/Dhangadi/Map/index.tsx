@@ -86,7 +86,7 @@ const slideOneLayers = ['wardNumbers',
 const slideTwoLayers = ['bridgeDhangadi', 'water', 'waterway',
     'canalDhangadi', 'DhangadiBuildings',
     'DhangadiRoads', 'forestDhangadi', 'WoodforestDhangadi',
-    'agriculturallandDhangadi', 'agriculturelandDhangadiFarmyard', 'municipalityFill',
+    'agriculturallandDhangadi', 'agriculturelandDhangadiFarmyard', 'grasslandDhangadi', 'meadowDhangadi', 'SandDhangadi', 'municipalityFill',
 
 ];
 
