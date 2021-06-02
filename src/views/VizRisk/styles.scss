@@ -90,8 +90,12 @@
                 }
             
             }
-          
-    
+            
+            
+        }
+        .hamburgerBtnContMenu{
+            @extend .hamburgerBtnContainer;
+            right: 95%;
         }
 
   

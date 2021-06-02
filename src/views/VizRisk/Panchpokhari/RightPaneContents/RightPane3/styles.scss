@@ -29,8 +29,7 @@
         left: 0;
         overflow-y: scroll;
         .chartContainer{
-            // border: 1px solid red;
-            height: 600px;
+            height: 700px;
             padding-top:0;
             width: 360px;
         }
@@ -40,7 +39,7 @@
         }
     
         .chartContainer{
-            margin-top: 20px;
+            // margin-top: 10px;
             position: relative;
             right: 35px;
         }
@@ -64,26 +63,25 @@
             .climatelegend{
             display:flex;
             padding-right: 20px;
-                .legendMax{
+                .legendMale{
                     width: 15px;
                     height: 15px;
                     background-color: #ffbf00;
                     padding-right: 4px;
                     margin-right: 3px;
                 }
-                .legendMin{
+                .legendFemale{
                     width: 15px;
                     height: 15px;
-                    background-color: #347eff;
+                    background-color: #00d725;
                     // border: 1px solid #1f59be;
                     margin-right: 3px;
 
                 }
-                .legendDaily{
+                .legendTotHH{
                     width: 15px;
                     height: 15px;
-                    background-color: #00d725;
-                    // border: 1px solid #047a18;
+                    background-color: #347eff;
                     margin-right: 3px;
                 
                 }

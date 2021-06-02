@@ -5,7 +5,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { mapSources } from '#constants';
 import CIData from '../RightPaneContents/RightPane4/ci';
-import demographicsData from '../Data/demographicsData';
+import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
 import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 
@@ -54,9 +54,9 @@ const populationWardExpression = [
     ['linear'],
     ['feature-state', 'value'],
     1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
-    3, 'rgb(255,111,0)', 4, 'rgb(255,143,13)',
-    5, 'rgb(255,111,0)', 6, 'rgb(255,207,142)',
-    7, 'rgb(255,143,13)', 8, 'rgb(207,144,119)',
+    3, 'rgb(255,111,0)', 4, 'rgb(255,111,0)',
+    5, 'rgb(255,143,13)', 6, 'rgb(255, 94, 0)',
+    7, 'rgb(255, 94, 0)', 8, 'rgb(255,143,13)',
     99, 'rgb(255,235,199)',
 ];
 const {
@@ -213,6 +213,8 @@ class FloodHistoryMap extends React.Component {
                         'text-size': 12,
                     },
                 });
+
+
                 if (this.props.rightElement !== 3) {
                     this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
                     this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
@@ -260,16 +262,7 @@ class FloodHistoryMap extends React.Component {
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    'fill-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['feature-state', 'value'],
-                        1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
-                        3, 'rgb(255,111,0)', 4, 'rgb(255,143,13)',
-                        5, 'rgb(255,111,0)', 6, 'rgb(255,207,142)',
-                        7, 'rgb(255,143,13)', 8, 'rgb(207,144,119)',
-                        99, 'rgb(255,235,199)',
-                    ],
+                    'fill-color': populationWardExpression,
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
@@ -331,7 +324,7 @@ class FloodHistoryMap extends React.Component {
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const wardno = e.features[0].properties.title;
-                    const details = demographicsData.demographicsData.filter(item => item.name === `Ward ${wardno}`);
+                    const details = demographicsData.chartData.filter(item => item.name === `Ward ${wardno}`);
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">

@@ -29,6 +29,9 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+        .respContainer{
+            border: 1px solid red;
+        }
         .chartContainer{
             // border: 1px solid red;
             height: 600px;

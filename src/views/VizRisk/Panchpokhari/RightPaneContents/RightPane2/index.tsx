@@ -157,6 +157,7 @@ class RightPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
 
                 <h1>Land Cover</h1>
+                <p>Out of a total area of 187.29 square km, 36.34% of the land is used for agriculture. Forests cover 12.94%, water bodies cover 7.71% and buildings cover 0.94% of the land. However, 47.6% of land in Tikapur is uncategorized or still unmapped in OpenStreetMap.</p>
                 <div className={styles.customChartLegend}>
 
                     <ResponsiveContainer className={styles.respContainer} height={200}>

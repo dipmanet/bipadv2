@@ -126,19 +126,19 @@ class Rajapur extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1> Jugal Rural Municipality</h1>
+                <h1> Panchpokhari Thangpal Rural Municipality</h1>
                 <p>
-                    Jugal Rural Municipality is located in Sindhupalchok district,
-                    Province No. 3 of Nepal. It has total 7 wards, which are scattered
-                    across 596.5 square kilometers of geographical area. It lies at an
-                    elevation of 300 to 7080 meters above sea level.
+                Panchpokhari Thangpal Rural Municipality is located in the Sindhupalchok district of Bagmati Province.
                 </p>
-                <h2>Climate</h2>
+                <p>
+                It covers a total area of 187.29 square km and is situated at an elevation of 145m to 161m AMSL.
+                </p>
+                {/* <h2>Climate</h2>
                 <p>
                     Winter is from November-March, summer is from April-May and
                     rainy is from May to October with mean annual temperature of
                     18°C, and maximum temperature of 32.5°C and minimum of 5°C and
-                </p>
+                </p> */}
 
                 <ResponsiveContainer className={styles.chartContainer} width={360} height={300}>
                     <LineChart

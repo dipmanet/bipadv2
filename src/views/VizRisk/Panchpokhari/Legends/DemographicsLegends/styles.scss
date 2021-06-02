@@ -19,32 +19,39 @@
             .populationIndicator1{
                 width: 12px;
                 height: 25px;
-                background-color: rgb(255,111,0);
+                background-color: rgb(255, 94, 0);
                 border-radius: 6px 6px 0 0;
             }
             .populationIndicator2{
                 width: 12px;
                 height: 25px;
-                background-color: rgb(255,143,13); 
+                background-color: rgb(255,111,0);
+                // border-radius: 6px 6px 0 0;
             }
             .populationIndicator3{
                 width: 12px;
                 height: 25px;
-                background-color:rgb(255,207,142);
-                display: none;
-
+                background-color: rgb(255,143,13); 
             }
             .populationIndicator4{
                 width: 12px;
                 height: 25px;
-                background-color:rgb(255,207,142);
+                background-color:rgb(202, 150, 78);
+                // display: none;
+
             }
             .populationIndicator5{
+                width: 12px;
+                height: 25px;
+                background-color:rgb(255,207,142);
+            }
+            .populationIndicator6{
                 width: 12px;
                 height: 25px;
                 background-color:rgb(255,235,198);
                 border-radius: 0 0 6px 6px;
             }
+      
         }
         .populationTextContainer{
             display:flex;

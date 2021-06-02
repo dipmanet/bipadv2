@@ -36,8 +36,11 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationIndicator3} />
                                 <div className={styles.populationIndicator4} />
                                 <div className={styles.populationIndicator5} />
+                                <div className={styles.populationIndicator6} />
                             </div>
                             <div className={styles.populationTextContainer}>
+                                <div className={styles.populationText}>5000-6000</div>
+                                <div className={styles.populationText}>4000-5000</div>
                                 <div className={styles.populationText}>3000-4000</div>
                                 <div className={styles.populationText}>2000-3000</div>
                                 <div className={styles.populationText}>1000-2000</div>

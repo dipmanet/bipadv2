@@ -71,7 +71,10 @@ const VizRiskMainPage = () => {
                 <div className={styles.navBtnsContainer}>
 
 
-                    <div className={styles.hamburgerBtnContainer}>
+                    <div className={showMenu
+                        ? styles.hamburgerBtnContMenu
+                        : styles.hamburgerBtnContainer}
+                    >
                         <Button
                             transparent
                             onClick={handleMenuIconClick}

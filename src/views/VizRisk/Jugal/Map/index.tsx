@@ -213,6 +213,17 @@ class FloodHistoryMap extends React.Component {
                         'text-size': 12,
                     },
                 });
+                this.map.addLayer({
+                    id: `circle-point-${layer}`,
+                    type: 'circle',
+                    source: layer,
+                    filter: ['!', ['has', 'point_count']],
+                    paint: {
+                        'circle-color': '#ff0000',
+                        'circle-radius': '10',
+                    },
+                });
+                this.map.moveLayer(`circle-point-${layer}`);
                 if (this.props.rightElement !== 3) {
                     this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
                     this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');

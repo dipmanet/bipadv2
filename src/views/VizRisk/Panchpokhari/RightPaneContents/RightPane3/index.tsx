@@ -33,21 +33,21 @@ class SlideThreePane extends React.PureComponent<Props, State> {
     public renderLegend = props => (
         <div className={styles.climateLegendContainer}>
             <div className={styles.climatelegend}>
-                <div className={styles.legendMax} />
+                <div className={styles.legendMale} />
                 <div className={styles.legendText}>
                        Male Pop
                     <sup>n</sup>
                 </div>
             </div>
             <div className={styles.climatelegend}>
-                <div className={styles.legendMin} />
+                <div className={styles.legendFemale} />
                 <div className={styles.legendText}>
                     Female Pop
                     <sup>n</sup>
                 </div>
             </div>
             <div className={styles.climatelegend}>
-                <div className={styles.legendDaily} />
+                <div className={styles.legendTotHH} />
                 <div className={styles.legendText}>
                        Total Household
                 </div>
@@ -72,18 +72,16 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                    Located in the Hilly region, Jugal has total area of
-                    596.5 square kilometers. Out of total area, 81.24% of
-                    land is used for agriculture. Major crops grown in this
-                    rural municipality are rice, maize, and wheat. Built-in
-                    area covers 7.66 % of land while water bodies occupy 3.29%
-                    of total land in Jugal.
+                Population distribution in the region is largely uneven
+                 with some pockets of dense settlements. This map allows
+                 viewing the population distribution within each ward and
+                 helps to locate the region of dense and sparse settlements.
                 </p>
                 <div className={styles.chartContainer}>
                     <ResponsiveContainer width="100%" height={'100%'}>
                         <BarChart
-                            width={350}
-                            height={600}
+                            // width={350}
+                            // height={600}
                             data={demoChartdata.filter(item => item.name !== 'Ward 99')}
                             layout="vertical"
                             margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
@@ -92,12 +90,27 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             <XAxis type="number" tick={{ fill: '#94bdcf' }} />
                             <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
                             <Tooltip />
-                            {/* <Legend /> */}
                             <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
-                            <Bar dataKey="MalePop" fill="#ffbf00" />
-                            <Bar dataKey="FemalePop" fill="#00d725" />
-                            <Bar dataKey="TotalHousehold" fill="#347eff" />
-                            {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
+                            <Bar
+                                dataKey="MalePop"
+                                fill="#ffbf00"
+                                radius={[0, 10, 10, 0]}
+                                barSize={10}
+                            />
+                            <Bar
+                                dataKey="FemalePop"
+                                radius={[0, 10, 10, 0]}
+                                fill="#00d725"
+                                barSize={10}
+
+                            />
+                            <Bar
+                                dataKey="TotalHousehold"
+                                radius={[0, 10, 10, 0]}
+                                fill="#347eff"
+                                barSize={10}
+
+                            />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

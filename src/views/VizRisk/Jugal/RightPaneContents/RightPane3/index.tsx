@@ -82,7 +82,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 <div className={styles.chartContainer}>
                     <ResponsiveContainer width="100%" height={'100%'}>
                         <BarChart
-                            width={350}
+                            width={330}
                             height={700}
                             data={demoChartdata.filter(item => item.name !== 'Ward 99')}
                             layout="vertical"
