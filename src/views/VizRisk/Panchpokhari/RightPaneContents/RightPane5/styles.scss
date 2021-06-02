@@ -30,7 +30,9 @@
         left: 0;
         overflow-y: scroll;
         .respContainer{
-            border: 1px solid red;
+            // border: 1px solid red;
+            position: relative;
+            right: 20px;
         }
         .chartContainer{
             // border: 1px solid red;

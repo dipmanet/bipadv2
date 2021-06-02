@@ -22,18 +22,18 @@
             text-transform: capitalize;
             margin: 3px 0;
             .allIconSelected{
-                font-size: 20px;
+                font-size: 16px;
                 color: #036ef0;
-                padding-right: 9px;
-                padding-left: 7px;
+                padding-right: 5px;
+                padding-left: 5px;
 
             }
             .allIcon{
-                font-size: 20px;
+                font-size: 16px;
                 color: white;
                 opacity: 0.87;
-                padding-right: 9px;
-                padding-left: 7px;
+                padding-right: 5px;
+                padding-left: 2px;
 
             }
             .canalIcon{
@@ -68,11 +68,11 @@
                 // border: 1px solid red;
                 margin: 0;
                 padding: 0;
-                height: 28px;
+                height: 20px;
                 // padding-top: 10px;
-           
+                
                 .svgIcon{
-                    width: 32px;
+                    width: 25px;
                 }
                   path{
                     fill: #1664c1;
@@ -98,7 +98,7 @@
                 // border: 1px solid blue;
                 margin: 0;
                 padding: 0;
-                height: 28px;
+                height: 20px;
                 // padding-top: 10px;
                 white-space: nowrap;
                 path{
@@ -111,7 +111,7 @@
 
                 }
                 .svgIcon{
-                    width: 32px;
+                    width: 25px;
                 }
             }
         }

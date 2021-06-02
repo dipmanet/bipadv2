@@ -160,6 +160,23 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
+            this.map.addSource('hillshadePachpokhari', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'raster-hillshade',
+                    type: 'raster',
+                    source: 'hillshadePachpokhari',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
@@ -200,6 +217,7 @@ class FloodHistoryMap extends React.Component {
                     layout: {
                         'icon-image': ['get', 'icon'],
                         'icon-size': 0.3,
+                        'icon-anchor': 'bottom',
                     },
                 });
 
@@ -224,28 +242,6 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
 
-
-            rasterLayersYears.map((layer) => {
-                this.map.addSource(`rasterrajapur${layer}`, {
-                    type: 'raster',
-                    tiles: [this.getRasterLayer(layer)],
-                    tileSize: 256,
-                });
-
-                this.map.addLayer(
-                    {
-                        id: `raster-rajapur-${layer}`,
-                        type: 'raster',
-                        source: `rasterrajapur${layer}`,
-                        layout: {},
-                        paint: {
-                            'raster-opacity': 0.7,
-                        },
-                    },
-                );
-                this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'none');
-                return null;
-            });
 
             this.map.addSource('vizrisk-fills', {
                 type: 'vector',
@@ -494,60 +490,16 @@ class FloodHistoryMap extends React.Component {
     }
 
 
-    public componentDidUpdate(nextProps) {
-        // const inci = this.map.getLayer('incidents-layer');
-        // if (!inci) {
-        //     this.map.addSource('incidents', {
-        //         type: 'geojson',
-        //         data: this.props.incidentList,
-        //     });
-        //     this.map.addLayer(
-        //         {
-        //             id: 'incidents-layer',
-        //             type: 'circle',
-        //             source: 'incidents',
-        //             layout: {},
-        //             paint: {
-        //                 'circle-color': '#ff0000',
-        //             },
-        //         },
-        //     );
-        // }
-
-
-        // if (this.props.rightElement === 1) {
-        //     const updateArea = (e) => {
-        //         console.log(e);
-        //     };
-        //     const draw = new MapboxDraw({
-        //         displayControlsDefault: false,
-        //         controls: {
-        //             polygon: true,
-        //             trash: true,
-        //         },
-        //         defaultMode: 'draw_polygon',
-        //     });
-        //     this.map.addControl(draw, 'top-right');
-
-        //     this.map.on('draw.create', updateArea);
-        //     this.map.on('draw.delete', updateArea);
-        //     this.map.on('draw.update', updateArea);
-        // } if (this.props.rightElement === 0) {
-        //     this.map.removeControl('draw');
-        // }
-    }
-
     public componentWillUnmount() {
         this.map.remove();
     }
 
-
-    public getRasterLayer = (years: number) => [
+    public getRasterLayer = () => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetMap',
-        `&layers=Bipad:Rajapur_FD_1in${years}`,
+        '&layers=Bipad:Panchpokhari_hillshade',
         '&tiled=true',
         '&width=256',
         '&height=256',

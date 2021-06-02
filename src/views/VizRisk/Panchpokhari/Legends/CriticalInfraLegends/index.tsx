@@ -8,6 +8,8 @@ import Health from '../../Icons/icon_set_health-01.svg';
 import Industry from '../../Icons/icon_set_industry.svg';
 import Tourism from '../../Icons/icon_set_hotel.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
+import Trade from '#views/VizRisk/Jugal/Icons/trade.svg';
+import Water from '#views/VizRisk/Jugal/Icons/WATER.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
@@ -312,7 +314,7 @@ const LandCoverLegends = (props) => {
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Bank}
+                                    src={Water}
                                 />
 
                                  Water Source
@@ -331,7 +333,7 @@ const LandCoverLegends = (props) => {
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Bank}
+                                    src={Trade}
                                 />
 
                                  Trade and Business

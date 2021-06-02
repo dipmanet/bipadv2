@@ -82,7 +82,7 @@ const slideOneLayers = ['incidents-layer', 'jugalwardnumber',
     'water', 'waterway',
     'jugalwardoutline', 'jugalmun', 'municipalitycentroidgeo'];
 
-const slideTwoLayers = ['jugalwardnumber', 'water', 'jugalwardoutline',
+const slideTwoLayers = ['Wardnumber', 'water', 'WardBoundary',
     'ward-fill-local',
 ];
 
@@ -160,6 +160,23 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
+            this.map.addSource('jugalHillshade', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'jugalHillshadeLayer',
+                    type: 'raster',
+                    source: 'jugalHillshade',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
@@ -200,6 +217,7 @@ class FloodHistoryMap extends React.Component {
                     layout: {
                         'icon-image': ['get', 'icon'],
                         'icon-size': 0.3,
+                        'icon-anchor': 'bottom',
                     },
                 });
 
@@ -213,17 +231,7 @@ class FloodHistoryMap extends React.Component {
                         'text-size': 12,
                     },
                 });
-                this.map.addLayer({
-                    id: `circle-point-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    paint: {
-                        'circle-color': '#ff0000',
-                        'circle-radius': '10',
-                    },
-                });
-                this.map.moveLayer(`circle-point-${layer}`);
+
                 if (this.props.rightElement !== 3) {
                     this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
                     this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
@@ -233,28 +241,6 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
 
-
-            rasterLayersYears.map((layer) => {
-                this.map.addSource(`rasterrajapur${layer}`, {
-                    type: 'raster',
-                    tiles: [this.getRasterLayer(layer)],
-                    tileSize: 256,
-                });
-
-                this.map.addLayer(
-                    {
-                        id: `raster-rajapur-${layer}`,
-                        type: 'raster',
-                        source: `rasterrajapur${layer}`,
-                        layout: {},
-                        paint: {
-                            'raster-opacity': 0.7,
-                        },
-                    },
-                );
-                this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'none');
-                return null;
-            });
 
             this.map.addSource('vizrisk-fills', {
                 type: 'vector',
@@ -296,6 +282,7 @@ class FloodHistoryMap extends React.Component {
 
             if (this.props.rightElement === 0) {
                 this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
+                this.map.moveLayer('jugalHillshade');
             }
             if (this.props.rightElement === 2) {
                 this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
@@ -306,6 +293,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Farmland', 'visibility', 'visible');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
                 this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+                // this.map.moveLayer('jugalHillshade');
             } else {
                 this.map.setLayoutProperty('Scree', 'visibility', 'none');
                 this.map.setLayoutProperty('Scrub', 'visibility', 'none');
@@ -317,7 +305,16 @@ class FloodHistoryMap extends React.Component {
             }
             if (this.props.rightElement === 1) {
                 this.map.setLayoutProperty('Population Density', 'visibility', 'visible');
+                this.map.setLayoutProperty('WardBoundary', 'visibility', 'visible');
+                this.map.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
+                this.map.setLayoutProperty('Jugal Contour', 'visibility', 'none');
+                this.map.setLayoutProperty('Wardnumber', 'visibility', 'visible');
+                this.map.setLayoutProperty('jugalHillshade', 'visibility', 'none');
+
+                this.map.moveLayer('WardBoundary');
+                this.map.moveLayer('Wardnumber');
             }
+
 
             mapping.forEach((attribute) => {
                 this.map.setFeatureState(
@@ -426,90 +423,90 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
-    public componentWillReceiveProps(nextProps) {
-        const {
-            rasterLayer,
-            showPopulation,
-            criticalElement,
-            criticalFlood,
-            rightElement,
-        } = this.props;
+    // public componentWillReceiveProps(nextProps) {
+    //     const {
+    //         rasterLayer,
+    //         showPopulation,
+    //         criticalElement,
+    //         criticalFlood,
+    //         rightElement,
+    //     } = this.props;
 
-        // disable the button
-        if (this.map.isStyleLoaded()) {
-            if (nextProps.showPopulation !== showPopulation) {
-                if (nextProps.showPopulation === 'popdensity') {
-                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-                // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-                // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
-                } else {
-                    this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-                }
-            }
-            if (nextProps.criticalFlood !== criticalFlood) {
-                this.handleInfraClusterSwitch(nextProps.criticalFlood);
-            }
-            if (nextProps.rasterLayer !== rasterLayer) {
-                this.handleFloodRasterSwitch(nextProps.rasterLayer);
-            }
+    //     // disable the button
+    //     if (this.map.isStyleLoaded()) {
+    //         if (nextProps.showPopulation !== showPopulation) {
+    //             if (nextProps.showPopulation === 'popdensity') {
+    //                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+    //             // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
+    //             // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
+    //             } else {
+    //                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+    //             }
+    //         }
+    //         if (nextProps.criticalFlood !== criticalFlood) {
+    //             this.handleInfraClusterSwitch(nextProps.criticalFlood);
+    //         }
+    //         if (nextProps.rasterLayer !== rasterLayer) {
+    //             this.handleFloodRasterSwitch(nextProps.rasterLayer);
+    //         }
 
-            if (nextProps.criticalElement !== criticalElement) {
-                this.handleInfraClusterSwitch(nextProps.criticalElement);
-            }
+    //         if (nextProps.criticalElement !== criticalElement) {
+    //             this.handleInfraClusterSwitch(nextProps.criticalElement);
+    //         }
 
-            if (nextProps.rightElement !== rightElement) {
-                if (nextProps.rightElement === 0) {
-                    this.map.easeTo({
-                        pitch: 0,
-                        zoom: 11.4,
-                        duration: 1000,
-                    });
-                    this.resetClusters();
-                    this.orderLayers(slideOneLayers);
-                    this.toggleVisiblity(slideTwoLayers, 'none');
-                    this.toggleVisiblity(slideOneLayers, 'visible');
-                } else if (nextProps.rightElement === 1) {
-                // this.map.setPitch(40);
-                //     this.map.easeTo({
-                //         pitch: 40,
-                //         zoom: 12,
-                //         duration: 2000,
-                //     });
-                    this.toggleVisiblity(slideThreeLayers, 'none');
-                    this.toggleVisiblity(slideOneLayers, 'none');
-                    this.toggleVisiblity(slideTwoLayers, 'visible');
-                    this.orderLayers(slideTwoLayers);
-                } else if (nextProps.rightElement === 2) {
-                    this.toggleVisiblity(slideTwoLayers, 'none');
-                    this.toggleVisiblity(slideFourLayers, 'none');
-                    this.toggleVisiblity(slideThreeLayers, 'visible');
-                    this.orderLayers(slideThreeLayers);
-                    this.resetClusters();
-                } else if (nextProps.rightElement === 3) {
-                    this.toggleVisiblity(slideThreeLayers, 'none');
-                    this.toggleVisiblity(slideFiveLayers, 'none');
-                    this.toggleVisiblity(slideFourLayers, 'visible');
+    //         if (nextProps.rightElement !== rightElement) {
+    //             if (nextProps.rightElement === 0) {
+    //                 this.map.easeTo({
+    //                     pitch: 0,
+    //                     zoom: 11.4,
+    //                     duration: 1000,
+    //                 });
+    //                 this.resetClusters();
+    //                 this.orderLayers(slideOneLayers);
+    //                 this.toggleVisiblity(slideTwoLayers, 'none');
+    //                 this.toggleVisiblity(slideOneLayers, 'visible');
+    //             } else if (nextProps.rightElement === 1) {
+    //             // this.map.setPitch(40);
+    //             //     this.map.easeTo({
+    //             //         pitch: 40,
+    //             //         zoom: 12,
+    //             //         duration: 2000,
+    //             //     });
+    //                 this.toggleVisiblity(slideThreeLayers, 'none');
+    //                 this.toggleVisiblity(slideOneLayers, 'none');
+    //                 this.toggleVisiblity(slideTwoLayers, 'visible');
+    //                 this.orderLayers(slideTwoLayers);
+    //             } else if (nextProps.rightElement === 2) {
+    //                 this.toggleVisiblity(slideTwoLayers, 'none');
+    //                 this.toggleVisiblity(slideFourLayers, 'none');
+    //                 this.toggleVisiblity(slideThreeLayers, 'visible');
+    //                 this.orderLayers(slideThreeLayers);
+    //                 this.resetClusters();
+    //             } else if (nextProps.rightElement === 3) {
+    //                 this.toggleVisiblity(slideThreeLayers, 'none');
+    //                 this.toggleVisiblity(slideFiveLayers, 'none');
+    //                 this.toggleVisiblity(slideFourLayers, 'visible');
 
-                    this.orderLayers(slideFourLayers);
-                    this.handleInfraClusterSwitch(criticalElement);
-                    this.hideFloodRasters();
-                } else if (nextProps.rightElement === 4) {
-                    this.toggleVisiblity(slideFourLayers, 'none');
-                    this.toggleVisiblity(slideSixLayers, 'none');
-                    this.toggleVisiblity(slideFiveLayers, 'visible');
+    //                 this.orderLayers(slideFourLayers);
+    //                 this.handleInfraClusterSwitch(criticalElement);
+    //                 this.hideFloodRasters();
+    //             } else if (nextProps.rightElement === 4) {
+    //                 this.toggleVisiblity(slideFourLayers, 'none');
+    //                 this.toggleVisiblity(slideSixLayers, 'none');
+    //                 this.toggleVisiblity(slideFiveLayers, 'visible');
 
-                    this.orderLayers(slideFiveLayers);
-                    this.handleInfraClusterSwitch(criticalFlood);
-                    this.handleFloodRasterSwitch('5');
-                } else if (nextProps.rightElement === 5) {
-                    this.toggleVisiblity(slideFiveLayers, 'none');
-                    this.toggleVisiblity(slideSixLayers, 'visible');
-                    this.orderLayers(slideSixLayers);
-                    this.handleFloodRasterSwitch('5');
-                }
-            }
-        }
-    }
+    //                 this.orderLayers(slideFiveLayers);
+    //                 this.handleInfraClusterSwitch(criticalFlood);
+    //                 this.handleFloodRasterSwitch('5');
+    //             } else if (nextProps.rightElement === 5) {
+    //                 this.toggleVisiblity(slideFiveLayers, 'none');
+    //                 this.toggleVisiblity(slideSixLayers, 'visible');
+    //                 this.orderLayers(slideSixLayers);
+    //                 this.handleFloodRasterSwitch('5');
+    //             }
+    //         }
+    //     }
+    // }
 
 
     public componentDidUpdate(nextProps) {
@@ -559,22 +556,6 @@ class FloodHistoryMap extends React.Component {
         this.map.remove();
     }
 
-
-    public getRasterLayer = (years: number) => [
-        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-        '&version=1.1.1',
-        '&service=WMS',
-        '&request=GetMap',
-        `&layers=Bipad:Rajapur_FD_1in${years}`,
-        '&tiled=true',
-        '&width=256',
-        '&height=256',
-        '&srs=EPSG:3857',
-        '&bbox={bbox-epsg-3857}',
-        '&transparent=true',
-        '&format=image/png',
-    ].join('');
-
     public getGeoJSON = (filterBy: string, data: any) => {
         const geoObj = {};
         geoObj.type = 'FeatureCollection';
@@ -585,6 +566,20 @@ class FloodHistoryMap extends React.Component {
         return geoObj;
     }
 
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Jugal_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public hideFloodRasters = () => {
         rasterLayersYears.map((layer) => {

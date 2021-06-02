@@ -122,23 +122,23 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            // const updateArea = (e) => {
-            //     console.log(e);
-            // };
-            // const draw = new MapboxDraw({
-            //     displayControlsDefault: false,
-            //     controls: {
-            //         polygon: true,
-            //         trash: true,
-            //     },
-            //     defaultMode: 'draw_polygon',
-            // });
-            // this.map.addControl(draw, 'top-right');
+            this.map.addSource('jugalHillshade', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
 
-            // this.map.on('draw.create', updateArea);
-            // this.map.on('draw.delete', updateArea);
-            // this.map.on('draw.update', updateArea);
-
+            this.map.addLayer(
+                {
+                    id: 'jugalHillshadeLayer',
+                    type: 'raster',
+                    source: 'jugalHillshade',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             const hazardTitle = [...new Set(incidentList.features.map(
                 item => item.properties.hazardTitle,
             ))];
@@ -198,6 +198,22 @@ class FloodHistoryMap extends React.Component {
         clearInterval(this.interval);
     }
 
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Jugal_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
+
+
     public getGeoJSON = (filterBy: string, data: any) => {
         const geoObj = {};
         geoObj.type = 'FeatureCollection';
@@ -206,6 +222,13 @@ class FloodHistoryMap extends React.Component {
         const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
         geoObj.features.push(...d);
         return geoObj;
+    }
+
+    public getYearsInIncidentData = () => {
+        if (this.props.incidentList.length > 0) {
+            return String([...new Set(this.props.incidentList.map(item => item.createdOn.split('-')[0]))].length);
+        }
+        return '0';
     }
 
     public handlePlayPause = () => {

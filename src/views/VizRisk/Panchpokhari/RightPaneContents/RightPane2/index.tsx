@@ -188,7 +188,7 @@ Out of a total area of 187.29 square km, 36.34% of the
                                 stroke="none"
                             >
                                 {
-                                    demoChartdata.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
+                                    demoChartdata.map(entry => <Cell key={`cell-${entry.name}`} fill={entry.color} />)
                                 }
                                 <Label
                                     width={30}
@@ -196,7 +196,7 @@ Out of a total area of 187.29 square km, 36.34% of the
                                     content={(
                                         <CustomLabel
                                             value1={`${demoChartdata[activeIndex].value} sq km`}
-                                            value2={` / ${((demoChartdata[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
+                                            value2={` / ${((demoChartdata[activeIndex].value / demoChartdata[0].total) * 100).toFixed(2)}%`}
                                         />
                                     )}
                                 />
@@ -206,44 +206,15 @@ Out of a total area of 187.29 square km, 36.34% of the
                     </ResponsiveContainer>
                 </div>
                 <div className={styles.customChartLegend}>
-                    <CustomChartLegend
-                        text={demoChartdata[0].name}
-                        barColor={COLORS_CHART[0]}
-                        background={'#eee'}
-                        data={'94.07 sq km / 74.06'}
-                        selected={activeIndex === 0}
-                    />
-
-                    <CustomChartLegend
-                        text={demoChartdata[2].name}
-                        barColor={COLORS_CHART[2]}
-                        background={'#eee'}
-                        data={'5.99 sq km / 4.72'}
-                        selected={activeIndex === 2}
-                    />
-                    <CustomChartLegend
-                        text={demoChartdata[3].name}
-                        barColor={COLORS_CHART[3]}
-                        background={'#eee'}
-                        data={'5.18 sq km / 4.08'}
-                        selected={activeIndex === 3}
-                    />
-                    <CustomChartLegend
-                        text={demoChartdata[4].name}
-                        barColor={COLORS_CHART[4]}
-                        background={'#444'}
-                        data={'0.959 sq km / 0.75'}
-                        selected={activeIndex === 4}
-                        builtupArea
-                    />
-                    <CustomChartLegend
-                        text={demoChartdata[1].name}
-                        barColor={COLORS_CHART[1]}
-                        background={'#444'}
-                        data={'21.5 sq km / 16.93'}
-                        selected={activeIndex === 1}
-                    />
-
+                    {demoChartdata.map((item, i) => (
+                        <CustomChartLegend
+                            text={item.name}
+                            barColor={item.color}
+                            background={'#eee'}
+                            data={`${item.value} sq km / ${(item.value / item.total * 100).toFixed(2)}`}
+                            selected={activeIndex === i}
+                        />
+                    ))}
                 </div>
 
                 <NavButtons

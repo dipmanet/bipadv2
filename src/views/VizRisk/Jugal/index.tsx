@@ -92,7 +92,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 dataDateRange: {
                     rangeInDays: 'custom',
                     startDate: '2011-01-01',
-                    endDate: '2021-05-01',
+                    // endDate: '2021-05-01',
+                    endDate: new Date().toISOString().substring(0, 10),
                 },
             };
             return ({
