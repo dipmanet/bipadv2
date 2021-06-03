@@ -27,14 +27,14 @@ import styles from './styles.scss';
 import Disclaimer from '../../Components/Disclaimer';
 
 const data = [
-    { name: 'Agricultural land', value: 115.77 },
+    { name: 'Agricultural land', value: 119.44 },
     { name: 'Forest', value: 89.12 },
-    { name: 'Grassland', value: 0.88 },
+    { name: 'Grassland', value: 2.06 },
     { name: 'Meadow', value: 0.52 },
     { name: 'Sand', value: 3.37 },
     { name: 'Water bodies', value: 4.96 },
     { name: 'Buildings', value: 4.01 },
-    { name: 'Other ', value: 42.289 },
+    { name: 'Other ', value: 36.71 },
 ].sort(({ value: a }, { value: b }) => b - a);
 
 const COLORS_CHART = [
@@ -222,7 +222,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         text={data[0].name}
                         barColor={COLORS_CHART[0]}
                         background={'#eee'}
-                        data={'115.77 sq km / 44.37'}
+                        data={'119.44 sq km / 45.78'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
@@ -237,7 +237,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         text={data[2].name}
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
-                        data={'42.28 sq km / 16.2'}
+                        data={'36.71 sq km / 14.07'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
@@ -251,7 +251,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
                         background={'#eee'}
-                        data={'4.01 sq km / 1.53'}
+                        data={'4.01 sq km / 1.54'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
@@ -265,7 +265,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         text={data[6].name}
                         barColor={COLORS_CHART[6]}
                         background={'#eee'}
-                        data={'0.88 sq km / 0.33'}
+                        data={'2.06 sq km / 0.79'}
                         selected={activeIndex === 1}
                     />
                     <CustomChartLegend
