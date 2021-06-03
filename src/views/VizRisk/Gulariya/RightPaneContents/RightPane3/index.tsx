@@ -131,7 +131,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 </div>
 
 
-                <ResponsiveContainer width="100%" height={'50%'}>
+                <ResponsiveContainer width="100%">
                     <BarChart
                         width={350}
                         height={600}

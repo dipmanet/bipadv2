@@ -157,7 +157,7 @@ class RightPane extends React.PureComponent<Props, State> {
     public render() {
         const { activeIndex, showInfo } = this.state;
         console.log('Color', COLORS_CHART);
-        console.log('data', data);
+
         return (
             <div className={styles.vrSideBar}>
 

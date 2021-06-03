@@ -44,12 +44,12 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fed990',
-    3, '#fed990', 4, '#9a3404',
-    5, '#ffffd6', 6, '#ffffd6',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#d95f0e', 10, '#fe9b2a',
-    11, '#fe9b2a', 12, '#fe9b2a',
+    1, '#bd6705', 2, '#fe9b2a ',
+    3, '#fe9b2a ', 4, '#9a3404',
+    5, '#fe9b2a', 6, '#fe9b2a',
+    7, '#fe9b2a', 8, '#bd6705',
+    9, '#bd6705', 10, '#bd6705',
+    11, '#bd6705', 12, '#bd6705',
 ];
 const {
     criticalinfrastructures,
@@ -83,7 +83,7 @@ const slideOneLayers = ['wardNumbers',
 const slideTwoLayers = ['bridgeGulariya', 'water', 'waterway',
     'canalGulariya', 'gulariyaBuildings',
     'GulariyaRoads', 'forestGulariya', 'WoodforestGulariya',
-    'agriculturallandGulariya', 'municipalityFill',
+    'agriculturallandGulariya', 'sandGulariya', 'meadowGulariya', 'municipalityFill',
 
 ];
 
@@ -242,6 +242,7 @@ class FloodHistoryMap extends React.Component {
                     layout: {
                         'icon-image': ['get', 'icon'],
                         'icon-size': 0.3,
+                        'icon-anchor': 'bottom',
                     },
                 });
 
@@ -312,6 +313,7 @@ class FloodHistoryMap extends React.Component {
                     layout: {
                         'icon-image': ['get', 'icon'],
                         'icon-size': 0.3,
+                        'icon-anchor': 'bottom',
                     },
 
                 });
@@ -371,17 +373,7 @@ class FloodHistoryMap extends React.Component {
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    'fill-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['feature-state', 'value'],
-                        1, '#fe9b2a', 2, '#fed990',
-                        3, '#fed990', 4, '#9a3404',
-                        5, '#ffffd6', 6, '#ffffd6',
-                        7, '#ffffd6', 8, '#fe9b2a',
-                        9, '#d95f0e', 10, '#fe9b2a',
-                        11, '#fe9b2a', 12, '#fe9b2a',
-                    ],
+                    'fill-color': populationWardExpression,
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],

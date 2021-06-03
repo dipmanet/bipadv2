@@ -1,9 +1,9 @@
 .mainVzContainer{
     position: relative;
-    width: 100vw;
+    width:calc(100vw - 60px) ;
     background: #193341;
     height:100%;
-    margin-top: -12px;
+    // margin-top: -12px;
     z-index: 2;
     .vizrisknmenupagecontainer{
         .vizrisknmenupage{

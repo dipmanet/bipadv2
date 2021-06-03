@@ -59,7 +59,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         height={600}
                         data={chartData}
                         layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 10, left: 30 }}
+                        margin={{ right: 20, left: 20 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />
