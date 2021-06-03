@@ -1,30 +1,49 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { mapSources } from '#constants';
 import CIData from '../RightPaneContents/RightPane4/ci';
 import demographicsData from '../Data/demographicsData';
-import styles from './styles.scss';
+import expressions from '../Data/expressions';
+import * as PageTypes from '#store/atom/page/types';
 import '@watergis/mapbox-gl-legend/css/styles.css';
-
+import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 import {
-    // provincesSelector,
     municipalitiesSelector,
     districtsSelector,
     wardsSelector,
-    regionLevelSelector,
     boundsSelector,
     selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
-    incidentListSelectorIP,
 } from '#selectors';
 
 import {
     getWardFilter,
 } from '#utils/domain';
+
+interface State{
+    lat: number;
+    lng: number;
+    zoom: number;
+}
+
+interface OwnProps{
+    rightElement: number;
+}
+
+interface PropsFromAppState {
+    districts: PageTypes.District[];
+    municipalities: PageTypes.Municipality[];
+    wards: PageTypes.Ward[];
+    bounds: [];
+    selectedProvinceId: number;
+    selectedDistrictId: number;
+    selectedMunicipalityId: number;
+}
+
+type Props = OwnProps & PropsFromAppState;
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -32,89 +51,33 @@ if (TOKEN) {
 }
 
 const mapStateToProps = (state, props) => ({
-    // provinces: provincesSelector(state),
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevelFromAppState: regionLevelSelector(state, props),
     bounds: boundsSelector(state, props),
     selectedProvinceId: selectedProvinceIdSelector(state, props),
     selectedDistrictId: selectedDistrictIdSelector(state, props),
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const colorGrade = [
-    '#ffedb8',
-    '#ffffff',
-];
-
 let hoveredWardId = null;
-const populationWardExpression = [
-    'interpolate',
-    ['linear'],
-    ['feature-state', 'value'],
-    1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
-    3, 'rgb(255,111,0)', 4, 'rgb(255,143,13)',
-    5, 'rgb(255,111,0)', 6, 'rgb(255,207,142)',
-    7, 'rgb(255,143,13)', 8, 'rgb(207,144,119)',
-    99, 'rgb(255,235,199)',
-];
+const { populationWardExpression } = expressions;
 const {
     data: criticalinfrastructures,
-
 } = CIData;
 
 const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
     item => item.properties.CI,
 ))];
 
-
-const rasterLayersYears = [5, 20, 50, 100];
-const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
-const arrCritical = categoriesCritical.map(
-    layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
-);
-
-const criticalInfraClusters = [].concat(...arrCritical);
-
-
-const slideOneLayers = ['incidents-layer', 'jugalwardnumber',
-    'water', 'waterway',
-    'jugalwardoutline', 'jugalmun', 'municipalitycentroidgeo'];
-
-const slideTwoLayers = ['Wardnumber', 'water', 'WardBoundary',
-    'ward-fill-local',
-];
-
-const slideThreeLayers = ['incidents-layer'];
-
-const slideFourLayers = [
-    ...criticalInfraClusters, 'water', 'wardOutline',
-    'bridgeRajapur', 'canalRajapur',
-    'waterway', 'rajapurRoads', 'wardFill',
-];
-
-const slideFiveLayers = [
-    ...criticalInfraClusters, 'rajapurbuildings', ...rasterLayers, 'water',
-    'bridgeRajapur', 'canalRajapur', 'waterway',
-    'rajapurRoads', 'wardOutline', 'wardFill',
-];
-const slideSixLayers = [
-    'safeshelterRajapurIcon', 'safeshelterRajapur',
-    ...rasterLayers, 'water',
-    'bridgeRajapur', 'rajapurRoads', 'canalRajapur', 'waterway',
-    'wardOutline', 'wardFill',
-];
-
-class FloodHistoryMap extends React.Component {
-    public constructor(props) {
+class JugalMap extends React.Component<Props, State> {
+    public constructor(props: Props) {
         super(props);
 
         this.state = {
             lat: 28.015490220644214,
             lng: 85.79108507481781,
             zoom: 10,
-            wardNumber: 'Hover to see ward number',
         };
     }
 
@@ -122,20 +85,19 @@ class FloodHistoryMap extends React.Component {
         const {
             lng, lat, zoom,
         } = this.state;
+
         const {
             wards,
-            selectedProvinceId: provinceId,
-            selectedDistrictId: districtId,
-            selectedMunicipalityId: municipalityId,
-            incidentList,
+            rightElement,
         } = this.props;
+
         const mapping = wards.filter(item => item.municipality === 23007).map(item => ({
             ...item,
             value: Number(item.title),
         }));
 
-        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-        this.map = new mapboxgl.Map({
+
+        this.jugalMap = new mapboxgl.Map({
             container: this.mapContainer,
             style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
             center: [lng, lat],
@@ -145,28 +107,18 @@ class FloodHistoryMap extends React.Component {
         });
 
 
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+        this.jugalMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-        this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        this.jugalMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        this.map.on('idle', () => {
-            const { rightElement, enableNavBtns } = this.props;
-            if (rightElement === 0) {
-                enableNavBtns('Right');
-            } else if (rightElement === 5) {
-                enableNavBtns('Left');
-            } else {
-                enableNavBtns('both');
-            }
-        });
-        this.map.on('style.load', () => {
-            this.map.addSource('jugalHillshade', {
+        this.jugalMap.on('style.load', () => {
+            this.jugalMap.addSource('jugalHillshade', {
                 type: 'raster',
-                tiles: [this.getRasterLayer()],
+                tiles: [getHillShadeLayer('Jugal_hillshade')],
                 tileSize: 256,
             });
 
-            this.map.addLayer(
+            this.jugalMap.addLayer(
                 {
                     id: 'jugalHillshadeLayer',
                     type: 'raster',
@@ -178,13 +130,13 @@ class FloodHistoryMap extends React.Component {
                 },
             );
             categoriesCritical.map((layer) => {
-                this.map.addSource(layer, {
+                this.jugalMap.addSource(layer, {
                     type: 'geojson',
-                    data: this.getGeoJSON(layer, criticalinfrastructures),
+                    data: getGeoJSON(layer, criticalinfrastructures),
                     cluster: true,
                     clusterRadius: 50,
                 });
-                this.map.addLayer({
+                this.jugalMap.addLayer({
                     id: `clusters-${layer}`,
                     type: 'circle',
                     source: layer,
@@ -209,7 +161,7 @@ class FloodHistoryMap extends React.Component {
                     },
                 });
 
-                this.map.addLayer({
+                this.jugalMap.addLayer({
                     id: `unclustered-point-${layer}`,
                     type: 'symbol',
                     source: layer,
@@ -221,7 +173,7 @@ class FloodHistoryMap extends React.Component {
                     },
                 });
 
-                this.map.addLayer({
+                this.jugalMap.addLayer({
                     id: `clusters-count-${layer}`,
                     type: 'symbol',
                     source: layer,
@@ -232,26 +184,26 @@ class FloodHistoryMap extends React.Component {
                     },
                 });
 
-                if (this.props.rightElement !== 3) {
-                    this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                if (rightElement !== 3) {
+                    this.jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                    this.jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                    this.jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
                 }
 
                 return null;
             });
 
 
-            this.map.addSource('vizrisk-fills', {
+            this.jugalMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
-            this.map.addSource('density', {
+            this.jugalMap.addSource('density', {
                 type: 'vector',
                 url: mapSources.populationDensity.url,
             });
 
-            this.map.addLayer({
+            this.jugalMap.addLayer({
                 id: 'ward-fill-local',
                 source: 'vizrisk-fills',
                 'source-layer': mapSources.nepal.layers.ward,
@@ -276,48 +228,48 @@ class FloodHistoryMap extends React.Component {
                 },
                 filter: getWardFilter(3, 24, 23007, wards),
             });
-            if (this.props.rightElement !== 1) {
-                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            if (rightElement !== 1) {
+                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
             }
 
-            if (this.props.rightElement === 0) {
-                this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
-                this.map.moveLayer('jugalHillshade');
+            if (rightElement === 0) {
+                this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
+                this.jugalMap.moveLayer('jugalHillshade');
             }
-            if (this.props.rightElement === 2) {
-                this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
-                this.map.setLayoutProperty('Scree', 'visibility', 'visible');
-                this.map.setLayoutProperty('Scrub', 'visibility', 'visible');
-                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
-                this.map.setLayoutProperty('Farmland', 'visibility', 'visible');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
-                // this.map.moveLayer('jugalHillshade');
+            if (rightElement === 2) {
+                this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
+                this.jugalMap.setLayoutProperty('Scree', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Scrub', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Forest', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Farmlands', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Farmland', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Roads', 'visibility', 'visible');
+                // this.jugalMap.moveLayer('jugalHillshade');
             } else {
-                this.map.setLayoutProperty('Scree', 'visibility', 'none');
-                this.map.setLayoutProperty('Scrub', 'visibility', 'none');
-                this.map.setLayoutProperty('Forest', 'visibility', 'none');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
-                this.map.setLayoutProperty('Farmland', 'visibility', 'none');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-                this.map.setLayoutProperty('Roads', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Scree', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Scrub', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Forest', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Farmlands', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Farmland', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Roads', 'visibility', 'none');
             }
-            if (this.props.rightElement === 1) {
-                this.map.setLayoutProperty('Population Density', 'visibility', 'visible');
-                this.map.setLayoutProperty('WardBoundary', 'visibility', 'visible');
-                this.map.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
-                this.map.setLayoutProperty('Jugal Contour', 'visibility', 'none');
-                this.map.setLayoutProperty('Wardnumber', 'visibility', 'visible');
-                this.map.setLayoutProperty('jugalHillshade', 'visibility', 'none');
+            if (rightElement === 1) {
+                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('WardBoundary', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Jugal Contour', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('Wardnumber', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('jugalHillshade', 'visibility', 'none');
 
-                this.map.moveLayer('WardBoundary');
-                this.map.moveLayer('Wardnumber');
+                this.jugalMap.moveLayer('WardBoundary');
+                this.jugalMap.moveLayer('Wardnumber');
             }
 
 
             mapping.forEach((attribute) => {
-                this.map.setFeatureState(
+                this.jugalMap.setFeatureState(
                     {
                         id: attribute.id,
                         source: 'vizrisk-fills',
@@ -332,9 +284,9 @@ class FloodHistoryMap extends React.Component {
                 closeOnClick: false,
                 className: 'popup',
             });
-            this.map.on('mousemove', 'ward-fill-local', (e) => {
+            this.jugalMap.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
-                    this.map.getCanvas().style.cursor = 'pointer';
+                    this.jugalMap.getCanvas().style.cursor = 'pointer';
 
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
@@ -346,9 +298,9 @@ class FloodHistoryMap extends React.Component {
                             <p> Total Population: ${totalPop}</p>
                         </div>
                         `,
-                    ).addTo(this.map);
+                    ).addTo(this.jugalMap);
                     if (hoveredWardId) {
-                        this.map.setFeatureState(
+                        this.jugalMap.setFeatureState(
                             {
                                 id: hoveredWardId,
                                 source: 'vizrisk-fills',
@@ -360,7 +312,7 @@ class FloodHistoryMap extends React.Component {
                     hoveredWardId = e.features[0].id;
                     console.log('hoveredWardId,', hoveredWardId);
                     console.log('e.features[0]', e.features[0]);
-                    this.map.setFeatureState(
+                    this.jugalMap.setFeatureState(
                         {
                             id: hoveredWardId,
                             source: 'vizrisk-fills',
@@ -372,11 +324,11 @@ class FloodHistoryMap extends React.Component {
                 }
             });
 
-            this.map.on('mouseleave', 'ward-fill-local', () => {
-                this.map.getCanvas().style.cursor = '';
+            this.jugalMap.on('mouseleave', 'ward-fill-local', () => {
+                this.jugalMap.getCanvas().style.cursor = '';
                 popup.remove();
                 if (hoveredWardId) {
-                    this.map.setFeatureState(
+                    this.jugalMap.setFeatureState(
                         {
                             source: 'vizrisk-fills',
                             id: hoveredWardId,
@@ -385,15 +337,14 @@ class FloodHistoryMap extends React.Component {
                         { hover: false },
 
                     );
-                    this.map.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    this.jugalMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                 }
                 hoveredWardId = null;
             });
 
-            categoriesCritical.map(layer => this.map.on('mousemove', `unclustered-point-${layer}`, (e) => {
+            categoriesCritical.map(layer => this.jugalMap.on('mousemove', `unclustered-point-${layer}`, (e) => {
                 if (e) {
-                    console.log('efeatures', e.features);
-                    this.map.getCanvas().style.cursor = 'pointer';
+                    this.jugalMap.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const ciName = e.features[0].properties.Name;
@@ -402,272 +353,20 @@ class FloodHistoryMap extends React.Component {
                             <p>${ciName}</p>
                         </div>
                         `,
-                    ).addTo(this.map);
+                    ).addTo(this.jugalMap);
                 }
             }));
-            categoriesCritical.map(layer => this.map.on('mouseleave', `unclustered-point-${layer}`, () => {
-                this.map.getCanvas().style.cursor = '';
+            categoriesCritical.map(layer => this.jugalMap.on('mouseleave', `unclustered-point-${layer}`, () => {
+                this.jugalMap.getCanvas().style.cursor = '';
                 popup.remove();
             }));
-            // this.map.setZoom(1);
-            // this.props.disableNavBtns('both');
-            // setTimeout(() => {
-            //     this.props.disableNavBtns('both');
-
-            //     this.map.easeTo({
-            //         zoom: 10.2,
-            //         duration: 8000,
-            //     });
-            // }, 4000);
-            // this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
         });
-    }
-
-    // public componentWillReceiveProps(nextProps) {
-    //     const {
-    //         rasterLayer,
-    //         showPopulation,
-    //         criticalElement,
-    //         criticalFlood,
-    //         rightElement,
-    //     } = this.props;
-
-    //     // disable the button
-    //     if (this.map.isStyleLoaded()) {
-    //         if (nextProps.showPopulation !== showPopulation) {
-    //             if (nextProps.showPopulation === 'popdensity') {
-    //                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-    //             // this.map.setLayoutProperty('ward-outline', 'visibility', 'none');
-    //             // this.map.setLayoutProperty('wardNumbers', 'visibility', 'none');
-    //             } else {
-    //                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-    //             }
-    //         }
-    //         if (nextProps.criticalFlood !== criticalFlood) {
-    //             this.handleInfraClusterSwitch(nextProps.criticalFlood);
-    //         }
-    //         if (nextProps.rasterLayer !== rasterLayer) {
-    //             this.handleFloodRasterSwitch(nextProps.rasterLayer);
-    //         }
-
-    //         if (nextProps.criticalElement !== criticalElement) {
-    //             this.handleInfraClusterSwitch(nextProps.criticalElement);
-    //         }
-
-    //         if (nextProps.rightElement !== rightElement) {
-    //             if (nextProps.rightElement === 0) {
-    //                 this.map.easeTo({
-    //                     pitch: 0,
-    //                     zoom: 11.4,
-    //                     duration: 1000,
-    //                 });
-    //                 this.resetClusters();
-    //                 this.orderLayers(slideOneLayers);
-    //                 this.toggleVisiblity(slideTwoLayers, 'none');
-    //                 this.toggleVisiblity(slideOneLayers, 'visible');
-    //             } else if (nextProps.rightElement === 1) {
-    //             // this.map.setPitch(40);
-    //             //     this.map.easeTo({
-    //             //         pitch: 40,
-    //             //         zoom: 12,
-    //             //         duration: 2000,
-    //             //     });
-    //                 this.toggleVisiblity(slideThreeLayers, 'none');
-    //                 this.toggleVisiblity(slideOneLayers, 'none');
-    //                 this.toggleVisiblity(slideTwoLayers, 'visible');
-    //                 this.orderLayers(slideTwoLayers);
-    //             } else if (nextProps.rightElement === 2) {
-    //                 this.toggleVisiblity(slideTwoLayers, 'none');
-    //                 this.toggleVisiblity(slideFourLayers, 'none');
-    //                 this.toggleVisiblity(slideThreeLayers, 'visible');
-    //                 this.orderLayers(slideThreeLayers);
-    //                 this.resetClusters();
-    //             } else if (nextProps.rightElement === 3) {
-    //                 this.toggleVisiblity(slideThreeLayers, 'none');
-    //                 this.toggleVisiblity(slideFiveLayers, 'none');
-    //                 this.toggleVisiblity(slideFourLayers, 'visible');
-
-    //                 this.orderLayers(slideFourLayers);
-    //                 this.handleInfraClusterSwitch(criticalElement);
-    //                 this.hideFloodRasters();
-    //             } else if (nextProps.rightElement === 4) {
-    //                 this.toggleVisiblity(slideFourLayers, 'none');
-    //                 this.toggleVisiblity(slideSixLayers, 'none');
-    //                 this.toggleVisiblity(slideFiveLayers, 'visible');
-
-    //                 this.orderLayers(slideFiveLayers);
-    //                 this.handleInfraClusterSwitch(criticalFlood);
-    //                 this.handleFloodRasterSwitch('5');
-    //             } else if (nextProps.rightElement === 5) {
-    //                 this.toggleVisiblity(slideFiveLayers, 'none');
-    //                 this.toggleVisiblity(slideSixLayers, 'visible');
-    //                 this.orderLayers(slideSixLayers);
-    //                 this.handleFloodRasterSwitch('5');
-    //             }
-    //         }
-    //     }
-    // }
-
-
-    public componentDidUpdate(nextProps) {
-        // const inci = this.map.getLayer('incidents-layer');
-        // if (!inci) {
-        //     this.map.addSource('incidents', {
-        //         type: 'geojson',
-        //         data: this.props.incidentList,
-        //     });
-        //     this.map.addLayer(
-        //         {
-        //             id: 'incidents-layer',
-        //             type: 'circle',
-        //             source: 'incidents',
-        //             layout: {},
-        //             paint: {
-        //                 'circle-color': '#ff0000',
-        //             },
-        //         },
-        //     );
-        // }
-
-
-        // if (this.props.rightElement === 1) {
-        //     const updateArea = (e) => {
-        //         console.log(e);
-        //     };
-        //     const draw = new MapboxDraw({
-        //         displayControlsDefault: false,
-        //         controls: {
-        //             polygon: true,
-        //             trash: true,
-        //         },
-        //         defaultMode: 'draw_polygon',
-        //     });
-        //     this.map.addControl(draw, 'top-right');
-
-        //     this.map.on('draw.create', updateArea);
-        //     this.map.on('draw.delete', updateArea);
-        //     this.map.on('draw.update', updateArea);
-        // } if (this.props.rightElement === 0) {
-        //     this.map.removeControl('draw');
-        // }
     }
 
     public componentWillUnmount() {
-        this.map.remove();
+        this.jugalMap.remove();
     }
 
-    public getGeoJSON = (filterBy: string, data: any) => {
-        const geoObj = {};
-        geoObj.type = 'FeatureCollection';
-        geoObj.name = filterBy;
-        geoObj.features = [];
-        const d = data.features.filter(item => item.properties.CI === filterBy);
-        geoObj.features.push(...d);
-        return geoObj;
-    }
-
-    public getRasterLayer = () => [
-        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-        '&version=1.1.1',
-        '&service=WMS',
-        '&request=GetMap',
-        '&layers=Bipad:Jugal_hillshade',
-        '&tiled=true',
-        '&width=256',
-        '&height=256',
-        '&srs=EPSG:3857',
-        '&bbox={bbox-epsg-3857}',
-        '&transparent=true',
-        '&format=image/png',
-    ].join('');
-
-    public hideFloodRasters = () => {
-        rasterLayersYears.map((layer) => {
-            this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'none');
-            return null;
-        });
-    };
-
-
-    public resetClusters = () => {
-        categoriesCritical.map((layer) => {
-            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
-
-            return null;
-        });
-    }
-
-    public toggleVisiblity = (layers, state) => {
-        layers.map((layer) => {
-            this.map.setLayoutProperty(layer, 'visibility', state);
-            return null;
-        });
-    };
-
-    public orderLayers = (layers) => {
-        const { length } = layers;
-        if (length > 1) {
-            for (let i = 0; i < (layers.length - 1); i += 1) {
-                this.map.moveLayer(layers[i + 1], layers[i]);
-            }
-        }
-    };
-
-    public generatePaint = color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            ...color,
-        ],
-        'fill-opacity': 1,
-    });
-
-    public handleInfraClusterSwitch = (layer) => {
-        this.resetClusters();
-
-        if (layer === 'all') {
-            categoriesCritical.map((item) => {
-                this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
-                this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
-                this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
-                return null;
-            });
-        } else {
-            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
-            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
-            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
-            this.map.moveLayer(`clusters-count-${layer}`);
-        }
-    };
-
-
-    public handleFloodRasterSwitch = (layer) => {
-        this.hideFloodRasters();
-        this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'visible');
-    }
-
-    public generateColor = (maxValue, minValue, colorMapping) => {
-        const newColor = [];
-        const { length } = colorMapping;
-        const range = maxValue - minValue;
-        colorMapping.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
-            newColor.push(color);
-        });
-        return newColor;
-    };
-
-    public handleFlyEnd = () => {
-        this.props.handleMoveEnd(true);
-    }
-
-    public handleInputChange = (e) => {
-        console.log('e:', e.target.value);
-    }
 
     public render() {
         const mapStyle = {
@@ -675,7 +374,6 @@ class FloodHistoryMap extends React.Component {
             width: '70%',
             left: 'calc(30% - 60px)',
             top: 0,
-            // bottom: 0,
             height: '100vh',
         };
 
@@ -686,4 +384,4 @@ class FloodHistoryMap extends React.Component {
         );
     }
 }
-export default connect(mapStateToProps)(FloodHistoryMap);
+export default connect(mapStateToProps)(JugalMap);

@@ -15,8 +15,6 @@ import RightElement6 from './RightPaneContents/RightPane6';
 import LandcoverLegends from './Legends/LandCoverLegends';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
-import FloodHazardLegends from './Legends/FloodHazardLegends';
-import FloodDepthLegend from './Legends/FloodDepthLegend';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import {
     incidentPointToGeojson,
@@ -40,8 +38,6 @@ import {
     methods,
 } from '#request';
 
-import EvacLegends from './Legends/EvacLegends';
-import Icon from '#rscg/Icon';
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
@@ -482,32 +478,7 @@ class Jugal extends React.Component {
                     : ''
                 }
 
-                {rightElement === 5
-                    ? (
-                        <div className={styles.legends}>
 
-                            <VRLegend>
-                                <EvacLegends
-                                    handleEvac={this.handleEvac}
-                                    evacElement={evacElement}
-
-                                />
-                            </VRLegend>
-                            <VRLegend>
-                                <FloodHazardLegends
-                                    handleFloodChange={this.handleFloodChange}
-                                    handleExposedElementChange={this.handleExposedElementChange}
-                                    handleChisapani={this.handleChisapani}
-                                />
-                            </VRLegend>
-                            <VRLegend>
-                                <FloodDepthLegend />
-                            </VRLegend>
-                        </div>
-
-                    )
-                    : ''
-                }
             </div>
         );
     }

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/rajapurGEOJSON';
 import demographicsData from '../Data/demographicsData';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
@@ -61,10 +60,7 @@ const populationWardExpression = [
     7, '#ffffd6', 8, '#fe9b2a',
     9, '#fed990', 10, '#d95f0e',
 ];
-const {
-    criticalinfrastructures,
-    evaccenters,
-} = SchoolGeoJSON;
+
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -84,7 +80,9 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
+
         const { clickedItem, incidentList } = this.props;
+
         this.interval = setInterval(() => {
             this.setState((prevState) => {
                 if (Number(prevState.incidentYear) < 10) {
@@ -92,7 +90,7 @@ class FloodHistoryMap extends React.Component {
                 }
                 return ({ incidentYear: '0' });
             });
-        }, 1000);
+        }, 2000);
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -109,8 +107,6 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        // this.map.addControl(new MapboxLegendControl({},
-        // { reverseOrder: false }), 'bottom-right');
         this.map.on('idle', () => {
             const { rightElement, enableNavBtns } = this.props;
             if (rightElement === 0) {
@@ -176,7 +172,6 @@ class FloodHistoryMap extends React.Component {
         ))];
 
         if (prevProps.clickedItem !== this.props.clickedItem) {
-            console.log('legend clidked');
             if (this.props.clickedItem === 'all') {
                 hazardTitle.map((ht) => {
                     this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');

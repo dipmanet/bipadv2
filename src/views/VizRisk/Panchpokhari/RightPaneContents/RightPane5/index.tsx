@@ -72,11 +72,11 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                    Jugal rural municipality has had 43 landslide and 2
-                    earthquake incidents in the past 10 years. These incidents
-                    caused the loss of lives of 3664 people and 133 people went missing.
-                    These incidents damaged 90050 houses and affected 2776 houses and caused
-                    an estimated loss of NPR 28815000.
+                Landslide, fire and Lightning incidents have been
+                reported in the municipality in the last 5 years
+                (2017 to 2021). These incidents have caused 3 deaths
+                and destroyed 7 houses. It is estimated that these
+                incidents resulted in a loss of NPR 77,90,000
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>

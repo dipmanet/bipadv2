@@ -15,8 +15,8 @@ import RightElement6 from './RightPaneContents/RightPane6';
 import LandcoverLegends from './Legends/LandCoverLegends';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
-import FloodHazardLegends from './Legends/FloodHazardLegends';
-import FloodDepthLegend from './Legends/FloodDepthLegend';
+import * as PageTypes from '#store/atom/page/types';
+
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import {
     incidentPointToGeojson,
@@ -40,8 +40,6 @@ import {
     methods,
 } from '#request';
 
-import EvacLegends from './Legends/EvacLegends';
-import Icon from '#rscg/Icon';
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
@@ -103,11 +101,11 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 limit: -1,
             });
         },
-        onSuccess: ({ response, props: { setIncidentList } }) => {
-            interface Response { results: PageType.Incident[] }
+        onSuccess: ({ params, response, props: { setIncidentList } }) => {
+            interface Response { results: PageTypes.Incident[] }
             const { results: incidentList = [] } = response as Response;
-            console.log('incidents:', incidentList);
             setIncidentList({ incidentList });
+            params.setIncidentList(incidentList);
         },
         onMount: true,
         onPropsChanged: {
@@ -145,19 +143,51 @@ class Jugal extends React.Component {
             showCriticalElements: true,
             clickedIncidentItem: 'all',
             incidentFilterYear: '2011',
+            incidentDetailsData: [],
 
         };
 
         const { requests: { incidentsGetRequest } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
-            onSuccess: this.setIncidents,
+            setIncidentList: this.setIncidentList,
         });
     }
 
-    public setIncidents = (incidents) => {
-        this.setState({ incidents });
-        console.log('incidents data:', incidents);
+    public getIncidentYear = (incidentOn: string) => {
+        if (incidentOn) {
+            const date = incidentOn.split('T')[0];
+            return date.split('-')[0];
+        }
+        return 0;
+    }
+
+    public setIncidentList = (year: string) => {
+        const { incidentList } = this.props;
+        if (incidentList.length > 0) {
+            const inciTotal = incidentList
+                .filter(y => this.getIncidentYear(y.incidentOn) === year)
+                .map(item => item.loss)
+                .filter(f => f !== undefined);
+
+            if (inciTotal.length > 0) {
+                const incidentDetails = inciTotal.reduce((a, b) => ({
+                    peopleDeathCount: (a.peopleDeathCount || 0) + (b.peopleDeathCount || 0),
+                    infrastructureDestroyedHouseCount:
+                    a.infrastructureDestroyedHouseCount + b.infrastructureDestroyedHouseCount,
+                    infrastructureAffectedHouseCount:
+                    a.infrastructureAffectedHouseCount + b.infrastructureAffectedHouseCount,
+                    peopleMissingCount:
+                    a.peopleMissingCount + b.peopleMissingCount,
+                    infrastructureEconomicLoss:
+                    a.infrastructureEconomicLoss + b.infrastructureEconomicLoss,
+                    agricultureEconomicLoss:
+                    a.agricultureEconomicLoss + b.agricultureEconomicLoss,
+                    totalAnnualincidents: inciTotal.length,
+                }));
+                this.setState({ incidentDetailsData: incidentDetails });
+            }
+        }
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -291,6 +321,7 @@ class Jugal extends React.Component {
             showCriticalElements,
             clickedIncidentItem,
             incidentFilterYear,
+            incidentDetailsData,
         } = this.state;
 
         const {
@@ -299,6 +330,9 @@ class Jugal extends React.Component {
             hazardTypes,
             hazards,
         } = this.props;
+
+        console.log('incidentDetailsData', incidentDetailsData);
+
         const sanitizedIncidentList = this.getSanitizedIncidents(
             incidentList,
             regions,
@@ -440,6 +474,7 @@ class Jugal extends React.Component {
                                 handleIncidentChange={this.handleIncidentChange}
                             />
                             <RightElement5
+                                incidentDetailsData={incidentDetailsData}
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
                                 disableNavLeftBtn={disableNavLeftBtn}
@@ -447,9 +482,11 @@ class Jugal extends React.Component {
                                 pagenumber={rightElement + 1}
                                 totalPages={rightelements.length}
                                 incidentList={pointFeatureCollection}
+                                incidentData={incidentList}
                                 clickedItem={clickedIncidentItem}
                                 handleIncidentItemClick={this.handleIncidentItemClick}
                                 incidentFilterYear={incidentFilterYear}
+                                getIncidentData={this.setIncidentList}
 
                             />
                         </>

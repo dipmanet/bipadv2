@@ -25,6 +25,17 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         };
     }
 
+
+    // public handlePopulationClick = (clickedItem: string) => {
+    //     this.setState({ clickedItem });
+    // };
+    public componentDidUpdate(prevProps) {
+        const { incidentFilterYear, getIncidentData } = this.props;
+        if (prevProps.incidentFilterYear !== incidentFilterYear) {
+            getIncidentData(incidentFilterYear);
+        }
+    }
+
     public handleShowLandCover= () => {
         this.setState(
             prevState => ({
@@ -32,10 +43,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             }),
         );
     }
-
-    // public handlePopulationClick = (clickedItem: string) => {
-    //     this.setState({ clickedItem });
-    // };
 
     public render() {
         // const { clickedItem } = this.state;
@@ -50,9 +57,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             clickedItem,
             handleIncidentItemClick,
             incidentFilterYear,
+            incidentDetailsData,
+            incidentData,
         } = this.props;
 
-        console.log('incidents list ', incidentList);
         const hazardTitle = [...new Set(incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
@@ -66,17 +74,52 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 )
                 .length,
         }));
-
+        console.log('incidentDetailsData', incidentDetailsData);
 
         return (
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                    Jugal rural municipality has had 43 landslide and 2
-                    earthquake incidents in the past 10 years. These incidents
-                    caused the loss of lives of 3664 people and 133 people went missing.
-                    These incidents damaged 90050 houses and affected 2776 houses and caused
-                    an estimated loss of NPR 28815000.
+                    Jugal rural municipality has had
+                    {' '}
+                    {incidentDetailsData.totalAnnualincidents || 0}
+                    {' '}
+                    total incidents. There were
+                    {' '}
+                    {chartData.map((ls, i) => {
+                        if (i === chartData.length - 1) { return ` and ${ls.Total} ${ls.name} `; }
+
+                        return ` ${ls.Total} ${ls.name}, `;
+                    })}
+                    {' '}
+                    in the year
+                    {' '}
+                    {incidentFilterYear}
+                    {' '}
+                    years. These incidents
+                    caused the loss of lives of
+                    {' '}
+                    {incidentDetailsData.peopleDeathCount}
+                    {' '}
+                    people and
+                    {' '}
+                    {incidentDetailsData.peopleMissingCount}
+                    {' '}
+                    people went missing.
+                    These incidents damaged
+                    {' '}
+                    {incidentDetailsData.infrastructureDestroyedHouseCount}
+                    {' '}
+                    houses and affected
+                    {' '}
+                    {incidentDetailsData.infrastructureAffectedHouseCount}
+                    {' '}
+                    houses and caused
+                    an estimated loss of NPR
+                    {' '}
+                    {incidentDetailsData.infrastructureEconomicLoss}
+                    {' '}
+
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>

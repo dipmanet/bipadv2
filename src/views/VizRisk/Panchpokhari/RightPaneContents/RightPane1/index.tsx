@@ -132,7 +132,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                 located in the Sindhupalchok district of Bagmati Province.
                 </p>
                 <p>
-                It covers a total area of 187.29 square km and
+                It covers a total area of 436.09 square km and
                 is situated at an elevation of 145m to 161m AMSL.
                 </p>
                 {/* <h2>Climate</h2>

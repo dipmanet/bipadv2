@@ -72,10 +72,12 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven
-                 with some pockets of dense settlements. This map allows
-                 viewing the population distribution within each ward and
-                 helps to locate the region of dense and sparse settlements.
+                Panchpokhari Thangpal Rural Municipality has the total
+                population of 34,697 with the male and female population
+                being 17,733 and 16,964 respectively. Total household number
+                 counts to 7,803. Ward number 7 has the largest household
+                  number that equals to 1414, while ward number 5 has the
+                  least comprising of only 690 number of household.
                 </p>
                 <div className={styles.chartContainer}>
                     <ResponsiveContainer width="100%" height={'100%'}>

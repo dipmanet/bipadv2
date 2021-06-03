@@ -176,7 +176,6 @@ class FloodHistoryMap extends React.Component {
         ))];
 
         if (prevProps.clickedItem !== this.props.clickedItem) {
-            console.log('legend clidked');
             if (this.props.clickedItem === 'all') {
                 hazardTitle.map((ht) => {
                     this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');

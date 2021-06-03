@@ -158,11 +158,12 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <h1>Land Cover</h1>
                 <p>
-Out of a total area of 187.29 square km, 36.34% of the
-                    land is used for agriculture. Forests cover 12.94%, water
-                    bodies cover 7.71% and buildings cover 0.94% of the land.
-                    However, 47.6% of land in Tikapur is uncategorized or still
-                    unmapped in OpenStreetMap.
+                Located in the Hilly region, Out of a total area of
+                436.09 square km, 44.3% of land is covered by forests,
+                15% by shrubs, 9% by glaciers, 8% by farmland ans scree
+                each. Other areas in the municipality is covered by built
+                up area, meadow, buildings, water, grassland and other
+                uncategorized and unmapped area.
 
                 </p>
                 <div className={styles.customChartLegend}>
@@ -210,7 +211,7 @@ Out of a total area of 187.29 square km, 36.34% of the
                         <CustomChartLegend
                             text={item.name}
                             barColor={item.color}
-                            background={'#eee'}
+                            background={'#777'}
                             data={`${item.value} sq km / ${(item.value / item.total * 100).toFixed(2)}`}
                             selected={activeIndex === i}
                         />
