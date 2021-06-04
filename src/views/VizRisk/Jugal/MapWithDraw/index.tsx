@@ -2,8 +2,9 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import * as turf from '@turf/turf';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
-
+import ci from '../RightPaneContents/RightPane4/ci';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 
 
@@ -38,6 +39,14 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
+const { data: cidata } = ci;
+const arr = cidata.features.map(item => [
+    item.properties.Longitude,
+    item.properties.Latitude,
+]);
+
+const points = turf.points(arr);
+
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -49,6 +58,7 @@ class FloodHistoryMap extends React.Component {
             zoom: 9.8,
             incidentYear: '0',
             playState: true,
+            ciChartData: [],
         };
     }
 
@@ -57,7 +67,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { clickedItem, incidentList } = this.props;
+
         this.interval = setInterval(() => {
             this.setState((prevState) => {
                 if (Number(prevState.incidentYear) < 10) {
@@ -82,22 +92,7 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        // this.map.addControl(new MapboxLegendControl({},
-        // { reverseOrder: false }), 'bottom-right');
-        this.map.on('idle', () => {
-            const { rightElement, enableNavBtns } = this.props;
-            if (rightElement === 0) {
-                enableNavBtns('Right');
-            } else if (rightElement === 5) {
-                enableNavBtns('Left');
-            } else {
-                enableNavBtns('both');
-            }
-        });
         this.map.on('style.load', () => {
-            const updateArea = (e) => {
-                console.log(e);
-            };
             const draw = new MapboxDraw({
                 displayControlsDefault: false,
                 controls: {
@@ -106,55 +101,61 @@ class FloodHistoryMap extends React.Component {
                 },
                 defaultMode: 'draw_polygon',
             });
+            const updateArea = (e) => {
+                const { handleDrawSelectedData } = this.props;
+                const datad = draw.getAll();
+                // data here
+                const dataArr = datad.features[0].geometry.coordinates;
+                console.log('selected', dataArr);
+                const searchWithin = turf.multiPolygon([dataArr], {});
+
+                const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+                // extract the features from these points
+                console.log('pts within:', ptsWithin);
+                const result = [];
+                const n = ptsWithin
+                    .features
+                    .map((i) => {
+                        result
+                            .push({
+                                geometry: i.geometry,
+                                hazardTitle: this.getTitleFromLatLng(i),
+                            });
+                        return null;
+                    });
+                handleDrawSelectedData(result);
+                // this.setState({ ciChartData: result });
+            };
             this.map.addControl(draw, 'top-right');
 
             this.map.on('draw.create', updateArea);
             this.map.on('draw.delete', updateArea);
             this.map.on('draw.update', updateArea);
+
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
         });
     }
 
-    public componentDidUpdate(prevProps) {
-        if (this.state.playState) {
-            this.handleStateChange();
-        }
-        if (prevProps.clickedItem !== this.props.clickedItem) {
-            this.handleStateChange();
-        }
-        const hazardTitle = [...new Set(this.props.incidentList.features.map(
-            item => item.properties.hazardTitle,
-        ))];
-
-        if (prevProps.clickedItem !== this.props.clickedItem) {
-            console.log('legend clidked');
-            if (this.props.clickedItem === 'all') {
-                hazardTitle.map((ht) => {
-                    this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
-                    return null;
-                });
-            } else {
-                hazardTitle.map((ht) => {
-                    this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
-                    return null;
-                });
-                this.map.setLayoutProperty(`incidents-${this.props.clickedItem}`, 'visibility', 'visible');
-            }
-        }
-        // const inci = this.map.getLayer('incidents-Earthquake');
-    }
 
     public componentWillUnmount() {
         this.map.remove();
         clearInterval(this.interval);
     }
 
-    public getGeoJSON = (filterBy: string, data: any) => {
+    public getTitleFromLatLng = (featureObject) => {
+        const latToCompare = featureObject.geometry.coordinates[1];
+        const lngToCompare = featureObject.geometry.coordinates[0];
+        const hT = cidata.features.filter(fC => fC.geometry.coordinates[0] === lngToCompare
+            && fC.geometry.coordinates[1] === latToCompare)[0].properties.CI;
+        return hT;
+    }
+
+    public getGeoJSON = (filterBy: string, datum: any) => {
         const geoObj = {};
         geoObj.type = 'FeatureCollection';
         geoObj.name = filterBy;
         geoObj.features = [];
-        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
+        const d = datum.features.filter(item => item.properties.hazardTitle === filterBy);
         geoObj.features.push(...d);
         return geoObj;
     }

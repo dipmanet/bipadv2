@@ -70,6 +70,10 @@ const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
     item => item.properties.CI,
 ))];
 
+const landCoverLayers = ['Scree', 'Scrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Glacier'];
+
+const popDensityLayers = ['Population Density', 'WardBoundary', 'Wardnumber'];
+
 class JugalMap extends React.Component<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -95,7 +99,6 @@ class JugalMap extends React.Component<Props, State> {
             ...item,
             value: Number(item.title),
         }));
-
 
         this.jugalMap = new mapboxgl.Map({
             container: this.mapContainer,
@@ -193,7 +196,6 @@ class JugalMap extends React.Component<Props, State> {
                 return null;
             });
 
-
             this.jugalMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
@@ -228,43 +230,35 @@ class JugalMap extends React.Component<Props, State> {
                 },
                 filter: getWardFilter(3, 24, 23007, wards),
             });
-            if (rightElement !== 1) {
-                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            }
 
             if (rightElement === 0) {
                 this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
-                this.jugalMap.moveLayer('jugalHillshade');
-            }
-            if (rightElement === 2) {
-                this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
-                this.jugalMap.setLayoutProperty('Scree', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('Scrub', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('Forest', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('Farmlands', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('Farmland', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('Roads', 'visibility', 'visible');
-                // this.jugalMap.moveLayer('jugalHillshade');
-            } else {
-                this.jugalMap.setLayoutProperty('Scree', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Scrub', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Forest', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Farmlands', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Farmland', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Roads', 'visibility', 'none');
+                this.jugalMap.moveLayer('Buildings');
             }
             if (rightElement === 1) {
-                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('WardBoundary', 'visibility', 'visible');
+                popDensityLayers.map((l) => {
+                    this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
+                    return null;
+                });
                 this.jugalMap.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
                 this.jugalMap.setLayoutProperty('Jugal Contour', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Wardnumber', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('jugalHillshade', 'visibility', 'none');
+            } else {
+                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            }
 
-                this.jugalMap.moveLayer('WardBoundary');
-                this.jugalMap.moveLayer('Wardnumber');
+            if (rightElement === 2) {
+                this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
+                landCoverLayers.map((l) => {
+                    this.jugalMap.setLayoutProperty(l, 'visibility', 'none');
+                    return null;
+                });
+            } else {
+                landCoverLayers.map((l) => {
+                    this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
+                    return null;
+                });
             }
 
 
@@ -284,6 +278,7 @@ class JugalMap extends React.Component<Props, State> {
                 closeOnClick: false,
                 className: 'popup',
             });
+
             this.jugalMap.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
                     this.jugalMap.getCanvas().style.cursor = 'pointer';
@@ -367,6 +362,7 @@ class JugalMap extends React.Component<Props, State> {
         this.jugalMap.remove();
     }
 
+    [x: string]: any;
 
     public render() {
         const mapStyle = {

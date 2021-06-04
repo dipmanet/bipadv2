@@ -44,24 +44,6 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const colorGrade = [
-    '#ffedb8',
-    '#ffffff',
-];
-
-const hoveredWardId = null;
-const populationWardExpression = [
-    'interpolate',
-    ['linear'],
-    ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fe9b2a',
-    3, '#fe9b2a', 4, '#9a3404',
-    5, '#d95f0e', 6, '#fe9b2a',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#fed990', 10, '#d95f0e',
-];
-
-
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
         super(props);
@@ -82,6 +64,7 @@ class FloodHistoryMap extends React.Component {
 
 
         const { clickedItem, incidentList } = this.props;
+        console.log('incident geojson:', incidentList);
 
         this.interval = setInterval(() => {
             this.setState((prevState) => {
@@ -151,6 +134,16 @@ class FloodHistoryMap extends React.Component {
                         layout: {},
                         paint: {
                             'circle-color': ['get', 'hazardColor'],
+                        },
+                    },
+                );
+                this.map.addLayer(
+                    {
+                        id: `incidents-icon-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'icon-image': ['get', 'hazardIcon'],
                         },
                     },
                 );

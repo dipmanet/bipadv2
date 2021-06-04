@@ -224,15 +224,6 @@ class FloodHistoryMap extends React.Component {
                     },
                 });
 
-                this.map.addLayer({
-                    id: `unclustered-point-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-                        'icon-image': ['get', 'icon'],
-                    },
-                });
 
                 this.map.addLayer({
                     id: `clusters-count-${layer}`,

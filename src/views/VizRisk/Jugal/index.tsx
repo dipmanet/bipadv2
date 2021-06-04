@@ -144,6 +144,7 @@ class Jugal extends React.Component {
             clickedIncidentItem: 'all',
             incidentFilterYear: '2011',
             incidentDetailsData: [],
+            drawChartData: [],
 
         };
 
@@ -188,6 +189,10 @@ class Jugal extends React.Component {
                 this.setState({ incidentDetailsData: incidentDetails });
             }
         }
+    }
+
+    public handleDrawSelectedData = (drawChartData) => {
+        this.setState({ drawChartData });
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -322,6 +327,7 @@ class Jugal extends React.Component {
             clickedIncidentItem,
             incidentFilterYear,
             incidentDetailsData,
+            drawChartData,
         } = this.state;
 
         const {
@@ -532,6 +538,8 @@ class Jugal extends React.Component {
                                 clickedItem={clickedIncidentItem}
                                 incidentFilterYear={incidentFilterYear}
                                 handleIncidentChange={this.handleIncidentChange}
+                                handleDrawSelectedData={this.handleDrawSelectedData}
+
                             />
                             <RightElement6
                                 handleNext={this.handleNext}
@@ -544,6 +552,7 @@ class Jugal extends React.Component {
                                 clickedItem={clickedIncidentItem}
                                 handleIncidentItemClick={this.handleIncidentItemClick}
                                 incidentFilterYear={incidentFilterYear}
+                                drawChartData={drawChartData}
 
                             />
                         </>

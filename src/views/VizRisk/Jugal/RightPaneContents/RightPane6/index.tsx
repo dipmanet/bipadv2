@@ -11,7 +11,7 @@ import styles from './styles.scss';
 import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 import NavButtons from '../../Components/NavButtons';
 
-const chartData = criticalInfraData.safeShelterData;
+// const chartData = criticalInfraData.safeShelterData;
 
 interface ComponentProps {}
 
@@ -41,7 +41,14 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             disableNavRightBtn,
             pagenumber,
             totalPages,
+            drawChartData,
         } = this.props;
+        const chartDataTitles = [...new Set(drawChartData.map(item => item.hazardTitle))];
+        const chartData = chartDataTitles.map(h => ({
+            name: h,
+            Total: drawChartData.filter(i => i.hazardTitle === h).length,
+        }));
+
         return (
             <div className={styles.vrSideBar}>
                 <h1>Earthquake Exposure in Jugal </h1>
