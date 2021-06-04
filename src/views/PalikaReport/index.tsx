@@ -176,17 +176,14 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
     const { requests: { PalikaReportGetRequest, FiscalYearFetch } } = props;
 
-    PalikaReportGetRequest.setDefaultParams({
-        annualBudget: handleFetchedData,
-        paginationParameters: handlePaginationParameters,
-        url,
-        expand: 'updated_by',
 
-    });
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
-
+    console.log('This data>>>', submenuId);
+    const handleSubmenuId = (data) => {
+        setSubmenuId(data);
+    };
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return {
@@ -274,6 +271,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
     };
     const getSubmenuId = (data) => {
+        console.log('Hang', data);
+        console.log('Hang', url);
         setSubmenuId(data);
         setCurrentPageNumber(1);
         if (user) {
@@ -283,16 +282,21 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                 },
             } = user;
-
+            console.log('Hang', municipality);
             if (data === 2) {
+                console.log('Hang on');
                 PalikaReportGetRequest.do({
-
+                    annualBudget: handleFetchedData,
                     municipality,
+                    url,
+                    expand: 'updated_by',
                 });
             } else {
                 PalikaReportGetRequest.do({
-
+                    annualBudget: handleFetchedData,
                     municipality: null,
+                    url,
+                    expand: 'updated_by',
                 });
             }
         }
@@ -578,6 +582,18 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setPalikaLanguage({ language: 'en' });
         }
     };
+    useEffect(() => {
+        PalikaReportGetRequest.do({
+            annualBudget: handleFetchedData,
+            paginationParameters: handlePaginationParameters,
+            url,
+            expand: 'updated_by',
+
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+
     return (
         <>
             <Page hideMap hideFilter />
@@ -664,6 +680,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                             showErr={showErr}
                             handleShowErr={handleShowErr}
                             handleAddButton={handleAddbuttonClick}
+
+
                         />
 
                     </div>
@@ -784,6 +802,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                                         sortModifiedOn={handleSortModifiedOn}
                                                         currentPage={currentPageNumber}
                                                         setShowTabs={handleAddbuttonClick}
+
                                                     />
                                                 </div>
                                             )}

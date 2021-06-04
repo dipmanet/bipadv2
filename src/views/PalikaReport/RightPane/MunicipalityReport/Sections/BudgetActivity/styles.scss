@@ -165,6 +165,9 @@ a{
 }
 .mainPageDetailsContainer{
     // border: 1px solid gray;
+    td{
+        font-weight: bold;
+    }
     .updateButtn{
         cursor: pointer;
     }

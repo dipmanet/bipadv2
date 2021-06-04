@@ -40,6 +40,7 @@ import { userSelector, palikaRedirectSelector,
     drrmRegionSelector } from '#selectors';
 import Simulation from './Sections/Simulation';
 
+
 interface Props {
     keyTab: number;
     showTabs: boolean;
@@ -250,12 +251,17 @@ const ReportModal: React.FC<Props> = (props: Props) => {
         }
     }, [fiscalYear, fiscalYearList]);
 
+    console.log('This is general data', generalData);
+    console.log('This is general data', disasterProfile);
     const handlePreviewBtn = async (reportType: string) => {
+        console.log('fiscal', generalData.fiscalYearTitle);
         setPending(true);
         let pageNumber = 1;
         const doc = new JsPDF('p', 'mm', 'a4');
         const docSummary = new JsPDF('p', 'mm', 'a4');
-
+        let matchedFiscalYear = [];
+        matchedFiscalYear = disasterProfile.filter(item => item.fiscalYear === Number(generalData.fiscalYear));
+        console.log('This fiscal year', matchedFiscalYear);
         const ids = document.querySelectorAll('.page');
         const { length } = ids;
         for (let i = 0; i < length; i += 1) {
@@ -341,8 +347,8 @@ const ReportModal: React.FC<Props> = (props: Props) => {
             formdata.append('drrFocalPerson', generalData.focalPerson.id);
         }
 
-        if (disasterProfile.length) {
-            axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${disasterProfile[0].id}/`, formdata, { headers: {
+        if (matchedFiscalYear.length) {
+            axios.put(`${process.env.REACT_APP_API_SERVER_URL}/disaster-profile/${matchedFiscalYear[0].id}/`, formdata, { headers: {
                 'content-type': 'multipart/form-data',
             } })
                 .then((response) => {

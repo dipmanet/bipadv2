@@ -1515,6 +1515,7 @@ const Relief = (props: Props) => {
 
                             }
                         </div>
+                        {!loader && fetchedData.length === 0 && <h2 style={{ display: 'flex', justifyContent: 'center' }}><Gt section={Translations.OrganizationNoDataMessage} /></h2>}
                         {!loader && (
                             <>
                                 {
@@ -1608,6 +1609,7 @@ const Relief = (props: Props) => {
                           </>
                       )
                  }
+
              </div>
          )
             }

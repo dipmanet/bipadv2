@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import { ADToBS } from 'bikram-sambat-js';
+import Loader from 'react-loader';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 import Gt from '../../utils';
@@ -36,11 +37,12 @@ const PalikaReportTable = (props) => {
         sortDistrict,
         sortMunicipality, setShowTabs,
         sortFiscalYear, setGeneralDatapp,
-        sortCreatedOn, sortModifiedOn, currentPage, pageSize, drrmLanguage } = props;
+        sortCreatedOn, sortModifiedOn,
+        currentPage, pageSize, drrmLanguage } = props;
 
 
     const iconName = 'sort';
-
+    console.log('submenuid', submenuId);
     const handleEditButtonClick = (row) => {
         setGeneralDatapp(row);
         setShowTabs(false, false, true);
@@ -119,7 +121,6 @@ const PalikaReportTable = (props) => {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
     return (
         <div>
             {/* <h1>Responsive Table Example</h1> */}
@@ -244,7 +245,7 @@ const PalikaReportTable = (props) => {
 
                                         </th>
                                     </tr>
-                                    {tableData.length > 0 && tableData.map((item, index) => (
+                                    { tableData.length > 0 && tableData.map((item, index) => (
                                         <tr key={item.item.id}>
                                             <td>{ index + 1}</td>
                                             <td>{item.item.title}</td>

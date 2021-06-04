@@ -155,12 +155,15 @@ const Sidebar = (props: Props) => {
         setDrrmRegion,
         drrmProgress,
         drrmLanguage,
+        subMenuId,
+        setGeneralDatapp,
         showErr: errFromProps,
         handleShowErr,
         urlData,
         getsubmenuId,
         getsubmenuTitle,
         handleMyPalikaSelect,
+        handlesubMenuId,
     } = props;
 
     useEffect(() => {
@@ -182,6 +185,9 @@ const Sidebar = (props: Props) => {
     const Data = municipalityName ? Data1 : Data2;
     const handleMyPalikaClick = () => {
         handleMyPalikaSelect(true);
+
+        setSelectedSubMenuId(1);
+        getsubmenuId(1);
     };
     const handleMyPalikaClickReport = () => {
         handleMyPalikaSelect(false);
@@ -220,6 +226,7 @@ const Sidebar = (props: Props) => {
     }, [selectedMenuId]);
     const handleAdd = () => {
         handleAddButton(true, true, true);
+        setGeneralDatapp({});
     };
 
     const handleCheckFilterDisableButtonForProvince = (province: string) => {

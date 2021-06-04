@@ -34,6 +34,9 @@ h5{
     display: flex;
     flex-direction: column;
     // padding: 50px;
+    td{
+        font-weight: bold;
+    }
     select{
         width: 130px;
         margin-left: 10px;
@@ -252,6 +255,7 @@ h5{
             // width: 80%;
             // margin-bottom: 12px;
             // margin-top: 10px;
+           
             .personalDetails{
                 // margin-top: 10px;
                 display: flex;
