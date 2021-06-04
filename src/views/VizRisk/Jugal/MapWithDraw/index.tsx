@@ -129,8 +129,8 @@ class FloodHistoryMap extends React.Component {
             this.map.addControl(draw, 'top-right');
 
             this.map.on('draw.create', updateArea);
-            this.map.on('draw.delete', updateArea);
-            this.map.on('draw.update', updateArea);
+            // this.map.on('draw.delete', updateArea);
+            // this.map.on('draw.update', updateArea);
 
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
         });

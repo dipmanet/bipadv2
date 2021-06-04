@@ -305,8 +305,6 @@ class JugalMap extends React.Component<Props, State> {
                         );
                     }
                     hoveredWardId = e.features[0].id;
-                    console.log('hoveredWardId,', hoveredWardId);
-                    console.log('e.features[0]', e.features[0]);
                     this.jugalMap.setFeatureState(
                         {
                             id: hoveredWardId,

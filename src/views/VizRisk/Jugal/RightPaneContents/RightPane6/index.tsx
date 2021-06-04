@@ -80,7 +80,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             dataKey="Total"
                             fill="rgb(0,219,95)"
                             barSize={15}
-                            label={{ position: 'insideRight' }}
+                            label={{ position: 'right', fill: '#ffffff' }}
                             radius={[0, 15, 15, 0]}
                         />
                     </BarChart>
