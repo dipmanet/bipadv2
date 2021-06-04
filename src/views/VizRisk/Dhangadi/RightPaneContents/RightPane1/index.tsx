@@ -24,40 +24,78 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const lineData = [
     {
-        name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
+        name: 'Jan', AvgMax: 18.6, DailyAvg: 13.95, AvgMin: 9.3,
     },
     {
-        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
+        name: 'Feb', AvgMax: 23.5, DailyAvg: 17.95, AvgMin: 12.4,
     },
     {
-        name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
+        name: 'Mar', AvgMax: 28.6, DailyAvg: 21.8, AvgMin: 15,
     },
     {
-        name: 'Apr', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
+        name: 'Apr', AvgMax: 34, DailyAvg: 26.55, AvgMin: 19.1,
     },
     {
-        name: 'May', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
+        name: 'May', AvgMax: 35.8, DailyAvg: 29.2, AvgMin: 22.6,
     },
     {
-        name: 'Jun', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
+        name: 'Jun', AvgMax: 36.6, DailyAvg: 30.65, AvgMin: 24.7,
     },
     {
-        name: 'Jul', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
+        name: 'Jul', AvgMax: 34.2, DailyAvg: 30.25, AvgMin: 26.3,
     },
     {
-        name: 'Aug', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
+        name: 'Aug', AvgMax: 0, DailyAvg: 24.9, AvgMin: 24.9,
     },
     {
-        name: 'Sep', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
+        name: 'Sep', AvgMax: 0, DailyAvg: 25, AvgMin: 25,
     },
     {
-        name: 'Oct', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
+        name: 'Oct', AvgMax: 33.7, DailyAvg: 27.9, AvgMin: 22.1,
     },
     {
-        name: 'Nov', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
+        name: 'Nov', AvgMax: 28.7, DailyAvg: 22.25, AvgMin: 15.8,
     },
     {
-        name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
+        name: 'Dec', AvgMax: 23.2, DailyAvg: 16.85, AvgMin: 10.5,
+    },
+];
+const rainfallData = [
+    {
+        name: 'Jan', Rainfall: 134.3,
+    },
+    {
+        name: 'Feb', Rainfall: 25.3,
+    },
+    {
+        name: 'Mar', Rainfall: 84,
+    },
+    {
+        name: 'Apr', Rainfall: 31,
+    },
+    {
+        name: 'May', Rainfall: 226.7,
+    },
+    {
+        name: 'Jun', Rainfall: 314.5,
+    },
+    {
+        name: 'Jul', Rainfall: 668,
+    },
+    {
+        name: 'Aug', Rainfall: 644.7,
+    },
+    {
+        name: 'Sep', Rainfall: 229.5,
+    },
+    {
+        name: 'Oct', Rainfall: 0,
+    },
+    {
+        name: 'Nov', Rainfall: 0,
+    },
+    {
+        name: 'Dec', Rainfall: 0,
     },
 ];
 class Rajapur extends React.PureComponent<Props, State> {
@@ -97,6 +135,21 @@ class Rajapur extends React.PureComponent<Props, State> {
         );
     }
 
+    public renderLegendRainfall = (props) => {
+        const { payload } = props;
+        return (
+            <div className={styles.climateLegendContainer}>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMax} />
+                    <div className={styles.legendText}>
+                       Avg Rainfall
+                    </div>
+                </div>
+
+            </div>
+        );
+    }
+
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
@@ -105,6 +158,21 @@ class Rajapur extends React.PureComponent<Props, State> {
                     <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
                     <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
                     <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
+    public CustomTooltipRain = ({ active, payload, label }) => {
+        console.log('Payload', payload);
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Avg Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
+
                 </div>
             );
         }
@@ -152,7 +220,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>41℃</div>
+                            <div className={styles.iconTitle}>29.69℃</div>
                             <div className={styles.iconText}>
                             Average Maximum
                                 <br />
@@ -167,7 +235,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>7℃</div>
+                            <div className={styles.iconTitle}>18.975℃</div>
                             <div className={styles.iconText}>
                             Average Minimum
                                 <br />
@@ -184,7 +252,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1900mm</div>
+                            <div className={styles.iconTitle}>196.5 mm</div>
                             <div className={styles.iconText}>
                             Average Annual
                             Rainfall
@@ -206,7 +274,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
-
+                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}>Temperature</p>
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart
                         margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
@@ -240,7 +308,39 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
                     </LineChart>
                 </ResponsiveContainer>
+                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
+                <ResponsiveContainer className={styles.chartContainer} height={300}>
+                    <LineChart
+                        margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                        data={rainfallData}
+                    >
+                        <CartesianGrid
+                            vertical={false}
+                            strokeDasharray="3 3"
+                        />
+                        <XAxis
+                            dataKey="name"
+                            interval="preserveStart"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <YAxis
+                            unit={'mm'}
+                            axisLine={false}
+                            domain={[0, 700]}
+                            padding={{ top: 20 }}
+                            tick={{ fill: '#94bdcf' }}
+                            tickCount={10}
+                            interval="preserveEnd"
+                            allowDataOverflow
+                        />
+                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegendRainfall} />
+                        <Tooltip
+                            content={this.CustomTooltipRain}
+                        />
+                        <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
 
+                    </LineChart>
+                </ResponsiveContainer>
                 {/* <SourceInfo /> */}
 
 
