@@ -220,9 +220,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>29.69℃</div>
+                            <div className={styles.iconTitle}>36.6℃</div>
                             <div className={styles.iconText}>
-                            Average Maximum
+                            Maximum
                                 <br />
                             Temperature in Summer
                             </div>
@@ -235,9 +235,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>18.975℃</div>
+                            <div className={styles.iconTitle}>9.3℃</div>
                             <div className={styles.iconText}>
-                            Average Minimum
+                            Minimum
                                 <br />
                             Temeperature in Winter
                             </div>
@@ -252,9 +252,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>196.5 mm</div>
+                            <div className={styles.iconTitle}>2358 mm</div>
                             <div className={styles.iconText}>
-                            Average Annual
+                             Annual
                             Rainfall
                             </div>
 

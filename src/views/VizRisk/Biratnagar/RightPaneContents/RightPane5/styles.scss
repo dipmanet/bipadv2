@@ -1,0 +1,38 @@
+
+    .vrSideBar{
+        position: absolute;
+        background-color:#112330;
+        color:#b6d6e4;
+        padding: 70px 0 0 0;
+        // margin-right: 60px;
+        width: 30%;
+        height: 100vh;
+        right: 0;
+        overflow-y: scroll;
+        // top: 20%;
+       
+        h1{
+            font-family: 'Playfair Display';
+            font-size: 46px;
+            // font-size: 26px;
+            color: white;
+            opacity: 0.87;
+            padding: 0 30px;
+            // margin-top: 20px;
+            line-height: 1.2em;
+            }
+        p{
+            color:white;
+            font-size: 16px;
+            font-family: 'Source Sans Pro';
+            opacity: 0.67;
+            line-height: 1.4em;
+            padding: 0 30px;
+        }
+    }
+
+
+
+
+
+
