@@ -64,7 +64,6 @@ class FloodHistoryMap extends React.Component {
 
 
         const { clickedItem, incidentList } = this.props;
-        console.log('incident geojson:', incidentList);
 
         this.interval = setInterval(() => {
             this.setState((prevState) => {

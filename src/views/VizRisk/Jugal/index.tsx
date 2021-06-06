@@ -337,8 +337,6 @@ class Jugal extends React.Component {
             hazards,
         } = this.props;
 
-        console.log('incidentDetailsData', incidentDetailsData);
-
         const sanitizedIncidentList = this.getSanitizedIncidents(
             incidentList,
             regions,

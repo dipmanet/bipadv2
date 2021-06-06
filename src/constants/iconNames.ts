@@ -92,6 +92,7 @@ const iconNames = {
     cog: 'ion-ios-cog',
     circle: 'fa fa-circle',
     square: 'fa fa-square',
+    search: 'fa fa-search',
 };
 
 export default iconNames;

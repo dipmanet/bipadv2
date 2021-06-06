@@ -48,6 +48,13 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             name: h,
             Total: drawChartData.filter(i => i.hazardTitle === h).length,
         }));
+        chartData.push({
+            name: 'Buildings',
+            Total: drawChartData[drawChartData.length - 1]
+                ? drawChartData[drawChartData.length - 1].buildings
+                : 0,
+        });
+        console.log('incidents list with result:', drawChartData);
 
         return (
             <div className={styles.vrSideBar}>
@@ -66,7 +73,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         height={600}
                         data={chartData}
                         layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 10, left: 10 }}
+                        margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />

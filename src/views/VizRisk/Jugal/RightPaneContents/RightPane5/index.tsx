@@ -74,8 +74,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 )
                 .length,
         }));
-        console.log('incidentDetailsData', incidentDetailsData);
-
         return (
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Events in Jugal Rural Municipality</h1>
