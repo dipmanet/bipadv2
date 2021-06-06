@@ -205,7 +205,7 @@ const Budget = (props: Props) => {
         finalAnnualBudgetData: handleSaveAnnualBudgetData,
         handlePendingState: handlePending,
     });
-
+    console.log('What is gen data', generalData);
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
     };

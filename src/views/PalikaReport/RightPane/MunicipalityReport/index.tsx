@@ -419,6 +419,7 @@ const ReportModal: React.FC<Props> = (props: Props) => {
                         }
                     }
                     alert('Your DRRM report has been uploaded sucessfully');
+                    console.log('solved');
                 }).catch((error) => {
                     setPending(false);
                     setProgress(100);

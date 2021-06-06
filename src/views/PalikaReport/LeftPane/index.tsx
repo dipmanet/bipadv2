@@ -38,6 +38,7 @@ import {
     setBudgetDataAction,
     setBudgetIdAction,
     setDrrmRegionAction,
+    setDrrmProgressAction,
 } from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
@@ -64,6 +65,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBudgetDatapp: params => dispatch(setBudgetDataAction(params)),
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
     setDrrmRegion: params => dispatch(setDrrmRegionAction(params)),
+    setProgress: params => dispatch(setDrrmProgressAction(params)),
 });
 
 interface MenuItems{
@@ -164,6 +166,7 @@ const Sidebar = (props: Props) => {
         getsubmenuTitle,
         handleMyPalikaSelect,
         handlesubMenuId,
+        setProgress,
     } = props;
 
     useEffect(() => {
@@ -185,7 +188,6 @@ const Sidebar = (props: Props) => {
     const Data = municipalityName ? Data1 : Data2;
     const handleMyPalikaClick = () => {
         handleMyPalikaSelect(true);
-
         setSelectedSubMenuId(1);
         getsubmenuId(1);
     };

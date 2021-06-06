@@ -121,6 +121,7 @@ const PalikaReportTable = (props) => {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     return (
         <div>
             {/* <h1>Responsive Table Example</h1> */}

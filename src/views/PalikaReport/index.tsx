@@ -19,7 +19,8 @@ import { provincesSelector,
     municipalitiesSelector,
     userSelector,
     palikaRedirectSelector,
-    palikaLanguageSelector } from '#selectors';
+    palikaLanguageSelector,
+    drrmProgresSelector } from '#selectors';
 import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 import { setPalikaLanguageAction, setPalikaRedirectAction } from '#actionCreators';
@@ -44,6 +45,7 @@ const mapStateToProps = (state, props) => ({
     user: userSelector(state),
     palikaRedirect: palikaRedirectSelector(state),
     palikaLanguage: palikaLanguageSelector(state),
+    drrmProgress: drrmProgresSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -146,6 +148,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         palikaRedirect,
         palikaLanguage,
         setPalikaLanguage,
+        drrmProgress,
         // filters: { region },
 
     } = props;
@@ -218,7 +221,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         return '';
     };
 
-
+    console.log('This progress', drrmProgress);
     const handleSubmit = () => {
         if (filtered && newRegionValues !== undefined) {
             setResetFilterProps(true);
@@ -706,6 +709,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
                                             selectedTab={selectedTab}
                                             handleShowErr={handleShowErr}
                                             showErr={showErr}
+                                            handleAddButton={handleAddbuttonClick}
                                         />
 
                                     </div>

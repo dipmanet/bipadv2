@@ -117,18 +117,20 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {mayor.name || <Gt section={Translations.MayorNameUnavailable} />}
+                                {(mayor && mayor.name)
+                                || <Gt section={Translations.MayorNameUnavailable} />}
                                 (
                                 <Gt section={Translations.Mayor} />
 )
                             </span>
                         </li>
                         <li>
-                            {mayor.email || <Gt section={Translations.MayorEmailUnavailable} />}
+                            {(mayor && mayor.email)
+                            || <Gt section={Translations.MayorEmailUnavailable} />}
 
                         </li>
                         <li>
-                            {mayor.mobileNumber
+                            {(mayor && mayor.mobileNumber)
                             || <Gt section={Translations.MayorPhoneUnavailable} />}
 
                         </li>
@@ -138,7 +140,8 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {cao.name || <Gt section={Translations.CaoNameUnavailable} />}
+                                {(cao && cao.name)
+                                || <Gt section={Translations.CaoNameUnavailable} />}
                                 (
                                 <Gt section={Translations.ChiefAdminstrative} />
 )
@@ -147,11 +150,13 @@ const Leadership = (props: Props) => {
 
                         </li>
                         <li>
-                            {cao.email || <Gt section={Translations.CaoEmailUnavailable} />}
+                            {(cao && cao.email)
+                             || <Gt section={Translations.CaoEmailUnavailable} />}
 
                         </li>
                         <li>
-                            {cao.mobileNumber || <Gt section={Translations.CaoPhoneUnavailable} />}
+                            {(cao && cao.mobileNumber)
+                            || <Gt section={Translations.CaoPhoneUnavailable} />}
 
 
                         </li>
@@ -161,7 +166,7 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {focalPerson.name
+                                {(focalPerson && focalPerson.name)
                                 || <Gt section={Translations.FocalPersonNameUnavailable} />}
                                 (
                                 <Gt section={Translations.DRRfocal} />
@@ -169,12 +174,12 @@ const Leadership = (props: Props) => {
                             </span>
                         </li>
                         <li>
-                            {focalPerson.email
+                            {(focalPerson && focalPerson.email)
                             || <Gt section={Translations.FocalPersonEmailUnavailable} />}
 
                         </li>
                         <li>
-                            {focalPerson.mobileNumber
+                            {(focalPerson && focalPerson.mobileNumber)
                             || <Gt section={Translations.FocalPersonPhoneUnavailable} />}
 
                         </li>

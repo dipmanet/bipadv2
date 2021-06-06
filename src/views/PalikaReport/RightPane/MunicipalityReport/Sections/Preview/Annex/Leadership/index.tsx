@@ -102,7 +102,7 @@ const Leadership = (props: Props) => {
             setFYTitle(FY);
         }
     }, [fiscalYear, fiscalYearList]);
-
+    console.log('Hanging error', mayor);
     return (
         <div className={styles.leadership}>
             <h2>Municipal DRR Leadership</h2>
@@ -111,16 +111,16 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {mayor.name || 'Name Unavailable'}
+                                { (mayor && mayor.name) || 'Name Unavailable'}
                                 (Mayor)
                             </span>
                         </li>
                         <li>
-                            {mayor.email || 'Email Available'}
+                            {(mayor && mayor.email) || 'Email Available'}
 
                         </li>
                         <li>
-                            {mayor.mobileNumber || 'Phone Available'}
+                            {(mayor && mayor.mobileNumber) || 'Phone Available'}
 
                         </li>
                     </ul>
@@ -129,18 +129,18 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {cao.name || 'Name Unvailable'}
+                                {(cao && cao.name) || 'Name Unvailable'}
                                 (CAO)
 
                             </span>
 
                         </li>
                         <li>
-                            {cao.email || 'Email Unavailable'}
+                            {(cao && cao.email) || 'Email Unavailable'}
 
                         </li>
                         <li>
-                            {cao.mobileNumber || 'Phone Unavailable'}
+                            {(cao && cao.mobileNumber) || 'Phone Unavailable'}
 
 
                         </li>
@@ -150,16 +150,16 @@ const Leadership = (props: Props) => {
                     <ul>
                         <li>
                             <span className={styles.darker}>
-                                {focalPerson.name || 'Name Unvailable'}
+                                {(focalPerson && focalPerson.name) || 'Name Unvailable'}
                             (Focal Person)
                             </span>
                         </li>
                         <li>
-                            {focalPerson.email || 'Email Unvailable'}
+                            {(focalPerson && focalPerson.email) || 'Email Unvailable'}
 
                         </li>
                         <li>
-                            {focalPerson.mobileNumber || 'Phone Unvailable'}
+                            {(focalPerson && focalPerson.mobileNumber) || 'Phone Unvailable'}
 
                         </li>
                     </ul>

@@ -297,7 +297,13 @@ const General = (props: Props) => {
             return true;
         } return false;
     };
-
+    useEffect(() => {
+        if (generalData.fiscalYear) {
+            setFiscalYearTitle(generalData.fiscalYear);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    console.log('general data', generalData);
     const handleDataSave = () => {
         if (!validationErrs() && fiscalYear !== '') {
             props.setGeneralDatapp({
