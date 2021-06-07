@@ -8,7 +8,7 @@ import {
     XAxis, YAxis, LabelList,
 } from 'recharts';
 import styles from './styles.scss';
-import criticalInfraData from '#views/VizRisk/Tikapur/Data/criticalInfraData';
+import criticalInfraData from '#views/VizRisk/Biratnagar/Data/criticalInfraData';
 
 interface ComponentProps {}
 
@@ -60,6 +60,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             type="category"
                             dataKey="name"
                             tick={{ fill: '#94bdcf' }}
+                            width={80}
                         />
                         {/* <Tooltip /> */}
                         {/* <Legend /> */}
@@ -68,10 +69,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             fill="#ffbf00"
                             // barCategoryGap={30}
                             barCategoryGap={20}
-
+                            label={{ position: 'insideRight' }}
                             tick={{ fill: '#94bdcf' }}
                         >
-                            <LabelList content={renderCustomizedLabel} />
+                            {/* <LabelList content={renderCustomizedLabel} /> */}
                         </Bar>
                         {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
                         {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}

@@ -1,19 +1,28 @@
 export default {
     criticalInfraData: [
         {
-            name: 'Bridges', Total: 44,
+            name: 'Educational Institutions', Total: 134,
         },
         {
-            name: 'Banks', Total: 42,
+            name: 'Tourism', Total: 107,
         },
         {
-            name: 'Hospitals', Total: 9,
+            name: 'Cultural Sites', Total: 106,
         },
         {
-            name: 'Educational Institutions', Total: 5,
+            name: 'Banks', Total: 106,
         },
         {
-            name: 'Cultural Sites', Total: 1,
+            name: 'Government Buildings', Total: 52,
+        },
+        {
+            name: 'Industries', Total: 41,
+        },
+        {
+            name: 'Hospitals', Total: 27,
+        },
+        {
+            name: 'Communication', Total: 25,
         },
 
 

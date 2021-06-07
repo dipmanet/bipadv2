@@ -8,6 +8,7 @@ import Health from '../../Icons/icon_set_health-01.svg';
 import Industry from '../../Icons/icon_set_industry.svg';
 import Tourism from '../../Icons/icon_set_hotel.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
+import Communication from '../../Icons/icon_set_communication.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
@@ -19,6 +20,7 @@ const LandCoverLegends = (props) => {
     const [showCulture, setshowCulture] = useState(false);
     const [showHospital, setshowHospital] = useState(false);
     const [showTourism, setshowTourism] = useState(false);
+    const [showCommunication, setshowCommunication] = useState(false);
     const [showAll, setshowAll] = useState(true);
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
@@ -30,6 +32,7 @@ const LandCoverLegends = (props) => {
         setshowCulture(false);
         setshowHospital(false);
         setshowTourism(false);
+        setshowCommunication(false);
         setshowAll(false);
     };
 
@@ -64,6 +67,9 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Tourism') {
                 resetCriticalLayers();
                 setshowTourism(true);
+            } else if (criticalFlood === 'Communication') {
+                resetCriticalLayers();
+                setshowCommunication(true);
             }
         }, [criticalFlood],
 
@@ -102,6 +108,10 @@ const LandCoverLegends = (props) => {
         if (layer === 'Tourism') {
             resetCriticalLayers();
             setshowTourism(true);
+        }
+        if (layer === 'Communication') {
+            resetCriticalLayers();
+            setshowCommunication(true);
         }
     };
 
@@ -181,7 +191,7 @@ const LandCoverLegends = (props) => {
                                  Educational Institution
                             </button>
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -197,7 +207,7 @@ const LandCoverLegends = (props) => {
             Government Building
                             </button>
 
-                        </div> */}
+                        </div>
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
@@ -228,11 +238,11 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Health}
                                 />
-            Hospital
+                             Hospital
                             </button>
 
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showIndustry
@@ -248,8 +258,8 @@ const LandCoverLegends = (props) => {
                                 Industry
                             </button>
 
-                        </div> */}
-                        {/* <div className={styles.infraIconContainer}>
+                        </div>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -265,7 +275,7 @@ const LandCoverLegends = (props) => {
                              Hotel or Restaurant
                             </button>
 
-                        </div> */}
+                        </div>
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -283,26 +293,24 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
-        <button
-            type="button"
-            className={styles.criticalButton}
-            // onClick={() => handleCriticalclick('canals')}
-        >
-            <div className={styles.canalIcon} />
-             Canals
-        </button>
-    </div>
-    <div className={styles.infraIconContainer}>
-        <button
-            type="button"
-            className={styles.criticalButton}
-            // onClick={() => handleCriticalclick('roads')}
-        >
-            <div className={styles.roadIcon} />
-             Roads
-        </button>
-    </div> */}
+                        <div className={styles.infraIconContainer}>
+
+                            <button
+                                type="button"
+                                className={showCommunication
+                                    ? styles.criticalButtonSelected
+                                    : styles.criticalButton}
+                                onClick={() => handleCriticalclick('Communication')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.svgIcon}
+                                    src={Communication}
+                                />
+Communication
+                            </button>
+
+                        </div>
+
                     </div>
 
 

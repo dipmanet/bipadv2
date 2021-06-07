@@ -682,7 +682,7 @@ class FloodHistoryMap extends React.Component {
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetMap',
-        `&layers=Bipad:Tikapur_FD_1in${years}`,
+        `&layers=Bipad:Biratnagar_FD_1in${years}`,
         '&tiled=true',
         '&width=256',
         '&height=256',

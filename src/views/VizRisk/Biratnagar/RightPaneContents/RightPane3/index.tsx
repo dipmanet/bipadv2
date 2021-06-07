@@ -8,7 +8,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/Tikapur/Data/demographicsData';
+import demographicsData from '#views/VizRisk/Biratnagar/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
@@ -78,7 +78,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>98,651</div>
+                            <div className={styles.iconTitle}>2,01,125</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>
@@ -91,7 +91,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Home}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>18,620</div>
+                            <div className={styles.iconTitle}>45,131</div>
                             <div className={styles.iconText}>
                              Total Family Count
                             </div>
@@ -108,7 +108,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Male}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>50,405</div>
+                            <div className={styles.iconTitle}>1,01,949</div>
                             <div className={styles.iconText}>
                              Male Population
                             </div>
@@ -121,7 +121,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Female}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>48,246</div>
+                            <div className={styles.iconTitle}>99,176</div>
                             <div className={styles.iconText}>
                              Female Population
                             </div>
@@ -131,7 +131,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 </div>
 
 
-                <ResponsiveContainer width="100%" height={'50%'}>
+                <ResponsiveContainer width="100%">
                     <BarChart
                         width={350}
                         height={600}
