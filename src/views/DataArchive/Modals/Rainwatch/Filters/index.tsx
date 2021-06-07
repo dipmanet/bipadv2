@@ -60,8 +60,13 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                 return undefined;
             }
             const { startDate, endDate } = params.dataDateRange;
+
             return {
                 station: stationId,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                is_hourly: params.isHourly,
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                is_daily: params.isDaily,
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 measured_on__gt: `${startDate}T00:00:00+05:45`,
                 // eslint-disable-next-line @typescript-eslint/camelcase
@@ -106,10 +111,21 @@ const Filters = (props: Props) => {
         setErrors(faramErrors);
         if (faramErrors.length === 0) {
             handleFilterValues(faramValue);
-            const { dataDateRange } = faramValue;
+            console.log('faram value test:', faramValue);
+            const { dataDateRange, period } = faramValue;
             const { startDate, endDate } = dataDateRange;
+            const { periodCode } = period;
+            let isDaily;
+            let isHourly;
+            if (periodCode === 'daily' || periodCode === 'monthly') {
+                isDaily = 2;
+                isHourly = 1;
+            } else {
+                isHourly = 2;
+                isDaily = 1;
+            }
             if (submittedStartDate !== startDate || submittedEndDate !== endDate) {
-                stationRequest.do({ dataDateRange });
+                stationRequest.do({ dataDateRange, isDaily, isHourly });
                 setSubmittedStartDate(startDate);
                 setSubmittedEndDate(endDate);
             }
