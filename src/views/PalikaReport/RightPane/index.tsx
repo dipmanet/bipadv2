@@ -61,8 +61,12 @@ const MainModal: React.FC<Props> = (props: Props) => {
 
     const [tabSelected, setTabSelected] = useState(redirectTo);
     useEffect(() => {
-        setTabSelected(selectedTab);
-    }, [selectedTab]);
+        if (redirectTo === -2) {
+            setTabSelected(0);
+        } else {
+            setTabSelected(selectedTab);
+        }
+    }, [redirectTo, selectedTab]);
 
     const handleNextClick = () => {
         if (tabSelected < tabs.length - 1) {
@@ -76,7 +80,7 @@ const MainModal: React.FC<Props> = (props: Props) => {
             getTabSelected(tabSelected - 1);
         }
     };
-
+    console.log('Tab selected', tabSelected);
     return (
         <>
             <Page hideMap hideFilter />

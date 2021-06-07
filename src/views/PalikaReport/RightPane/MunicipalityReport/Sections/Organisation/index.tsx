@@ -63,6 +63,7 @@ const mapStateToProps = (state, props) => ({
     drrmRegion: drrmRegionSelector(state),
     drrmProgress: drrmProgresSelector(state),
     drrmLanguage: palikaLanguageSelector(state),
+
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {

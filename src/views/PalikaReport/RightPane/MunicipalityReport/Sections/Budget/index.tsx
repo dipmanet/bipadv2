@@ -205,7 +205,7 @@ const Budget = (props: Props) => {
         finalAnnualBudgetData: handleSaveAnnualBudgetData,
         handlePendingState: handlePending,
     });
-    console.log('What is gen data', generalData);
+
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
     };
@@ -306,7 +306,7 @@ const Budget = (props: Props) => {
         }
     };
 
-
+    console.log('Progress', drrmProgress);
     useEffect(() => {
         if (annualBudgetData.length > 0) {
             setBudgetTitle(annualBudgetData[0].title);

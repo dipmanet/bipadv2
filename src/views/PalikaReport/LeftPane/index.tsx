@@ -39,6 +39,7 @@ import {
     setBudgetIdAction,
     setDrrmRegionAction,
     setDrrmProgressAction,
+    setPalikaRedirectAction,
 } from '#actionCreators';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
@@ -66,6 +67,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBudgetId: params => dispatch(setBudgetIdAction(params)),
     setDrrmRegion: params => dispatch(setDrrmRegionAction(params)),
     setProgress: params => dispatch(setDrrmProgressAction(params)),
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
 });
 
 interface MenuItems{
@@ -167,6 +169,7 @@ const Sidebar = (props: Props) => {
         handleMyPalikaSelect,
         handlesubMenuId,
         setProgress,
+        setPalikaRedirect,
     } = props;
 
     useEffect(() => {
@@ -190,7 +193,12 @@ const Sidebar = (props: Props) => {
         handleMyPalikaSelect(true);
         setSelectedSubMenuId(1);
         getsubmenuId(1);
+        setProgress(-1);
+        setPalikaRedirect({
+            redirectTo: -2,
+        });
     };
+    console.log('Selected tab value', selectedTab);
     const handleMyPalikaClickReport = () => {
         handleMyPalikaSelect(false);
     };
@@ -327,7 +335,7 @@ const Sidebar = (props: Props) => {
                                                                 <Icon
                                                                     name="circle"
                                                                     className={drrmProgress + 1 === item.key
-                                                                        ? styles.progressOngoing
+                                                                        ? styles.progressNotDone
                                                                         : styles.progressNotDone}
                                                                 />
                                                             )

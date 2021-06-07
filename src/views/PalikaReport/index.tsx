@@ -150,7 +150,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         setPalikaLanguage,
         drrmProgress,
         // filters: { region },
-
+        palikaRedirect: { redirectTo },
     } = props;
     const {
         language,
@@ -595,7 +595,11 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    useEffect(() => {
+        if (redirectTo === -2) {
+            setSelectedTab(0);
+        }
+    }, [redirectTo]);
 
     return (
         <>

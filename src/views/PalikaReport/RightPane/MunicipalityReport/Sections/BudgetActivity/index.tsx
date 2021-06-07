@@ -733,6 +733,7 @@ const BudgetActivity = (props: Props) => {
     }, [selectedBudgetActivityIndex, editBtnClicked]);
 
     const handleNext = () => {
+        console.log('What progress', drrmProgress);
         if (drrmProgress < 2) {
             setProgress(2);
         }
@@ -1665,7 +1666,7 @@ const BudgetActivity = (props: Props) => {
 
                                    <NextPrevBtns
                                        handlePrevClick={props.handlePrevClick}
-                                       handleNextClick={props.handleNextClick}
+                                       handleNextClick={handleNext}
                                    />
 
 
