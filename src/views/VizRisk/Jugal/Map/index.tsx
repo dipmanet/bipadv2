@@ -230,20 +230,22 @@ class JugalMap extends React.Component<Props, State> {
                 },
                 filter: getWardFilter(3, 24, 23007, wards),
             });
-
+            console.log('jugal map:', this.jugalMap);
             if (rightElement === 0) {
                 this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
                 this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'visible');
                 this.jugalMap.moveLayer('Buildings');
+                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'none');
             }
             if (rightElement === 1) {
+                console.log('rightElement', rightElement);
                 popDensityLayers.map((l) => {
                     this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
                     return null;
                 });
                 this.jugalMap.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
                 this.jugalMap.setLayoutProperty('Jugal Contour', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('jugalHillshade', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('jugalHillshadeLayer', 'visibility', 'none');
             } else {
                 this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
             }
@@ -251,15 +253,18 @@ class JugalMap extends React.Component<Props, State> {
             if (rightElement === 2) {
                 this.jugalMap.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
                 landCoverLayers.map((l) => {
-                    this.jugalMap.setLayoutProperty(l, 'visibility', 'none');
-                    return null;
-                });
-            } else {
-                landCoverLayers.map((l) => {
                     this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
                     return null;
                 });
+                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'none');
             }
+
+            // else {
+            //     landCoverLayers.map((l) => {
+            //         this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
+            //         return null;
+            //     });
+            // }
 
 
             mapping.forEach((attribute) => {
@@ -354,6 +359,16 @@ class JugalMap extends React.Component<Props, State> {
                 popup.remove();
             }));
         });
+    }
+
+    public componentDidUpdate(prevProps) {
+        if (this.props.showPopulation !== prevProps.showPopulation) {
+            if (this.props.showPopulation === 'popdensity') {
+                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            } else {
+                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+            }
+        }
     }
 
     public componentWillUnmount() {

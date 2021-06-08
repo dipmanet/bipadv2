@@ -9,8 +9,9 @@ import {
 import styles from './styles.scss';
 
 import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
+import NavButtons from '../../Components/NavButtons';
 
-const chartData = criticalInfraData.safeShelterData;
+// const chartData = criticalInfraData.safeShelterData;
 
 interface ComponentProps {}
 
@@ -33,7 +34,28 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const { showReferences } = this.state;
+        const {
+            handleNext,
+            handlePrev,
+            disableNavLeftBtn,
+            disableNavRightBtn,
+            pagenumber,
+            totalPages,
+            drawChartData,
+        } = this.props;
+        const chartDataTitles = [...new Set(drawChartData.map(item => item.hazardTitle))];
+        const chartData = chartDataTitles.map(h => ({
+            name: h,
+            Total: drawChartData.filter(i => i.hazardTitle === h).length,
+        }));
+        chartData.push({
+            name: 'Buildings',
+            Total: drawChartData[drawChartData.length - 1]
+                ? drawChartData[drawChartData.length - 1].buildings
+                : 0,
+        });
+        console.log('incidents list with result:', drawChartData);
+
         return (
             <div className={styles.vrSideBar}>
                 <h1>Earthquake Exposure in Jugal </h1>
@@ -45,13 +67,13 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 <p>
                      CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE
                 </p>
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
                     <BarChart
                         width={350}
                         height={600}
                         data={chartData}
                         layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 10, left: 10 }}
+                        margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />
@@ -63,39 +85,22 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         <Tooltip />
                         <Bar
                             dataKey="Total"
-                            fill="#ffbf00"
-                            barCategoryGap={20}
-                            label={{ position: 'insideRight' }}
+                            fill="rgb(0,219,95)"
+                            barSize={15}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            radius={[0, 15, 15, 0]}
                         />
                     </BarChart>
                 </ResponsiveContainer>
-                <button
-                    className={styles.referencesBtn}
-                    type="button"
-                    onClick={this.handleRefClick}
-                >
-                References
-                </button>
-                {showReferences && (
-                    <ul className={styles.referencesText}>
-                        <li>
-                            Modeling Exposure Through Earth Observations Routines
-                            (METEOR) ,UK Space Agency, https://meteor-project.org/
-                        </li>
-                        <li>
-                            Risk Nexus, Urgent case for recovery. What we can
-                            learn from the August 2014 Karnali River floods in Nepal.
-                            Zurich Insurance Group Ltd and ISET-International, 2015
-                        </li>
-                        <li>
-                             Central Bureau of Statistics, 2011
-                        </li>
-                        <li>
-                             Rajapur Municipality Profile, 2075
-                        </li>
-                    </ul>
-                )
-                }
+
+                <NavButtons
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    disableNavLeftBtn={disableNavLeftBtn}
+                    disableNavRightBtn={disableNavRightBtn}
+                    pagenumber={pagenumber}
+                    totalPages={totalPages}
+                />
 
                 {/* <SourceInfo /> */}
             </div>

@@ -1,0 +1,115 @@
+
+    
+    .populationContainer{
+        display: flex;
+        flex-direction: column;
+        // width: 100%;
+        p{
+            line-height: 0;
+            position: relative;
+            bottom: 20px;
+        }
+        .populationIndContainer{
+            display: flex;
+            // flex-direction: column;
+            // padding-right: 4px;
+            .conainerStyle{ 
+                display: flex;
+                justify-content: center;
+                font-size: 10px;
+                padding: 3px;
+                border: 1px solid gray;
+                white-space: nowrap
+            }
+            .populationIndicator1{
+                @extend .conainerStyle;
+                width: 20%;
+                // height:10px;
+                background-color: rgb(172,226,84);
+                background-image: linear-gradient(to right, rgb(172,226,84) , rgb(232,249,145));
+                // border-radius: 6px 6px 0 0;
+            }
+            .populationIndicator2{
+                @extend .conainerStyle;
+
+                width: 20%;
+                // height:10px;
+                background-color: rgb(232,249,145); 
+                background-image: linear-gradient(to right, rgb(232,249,145),rgb(202,205,0));
+
+            }
+            .populationIndicator3{
+                @extend .conainerStyle;
+
+                width: 20%;
+                // height:10px;
+                
+                // background-color:rgb(202,205,0);
+                background-image: linear-gradient(to right, rgb(202,205,0),rgb(205,212,0));
+                // display: none;
+
+            }
+            .populationIndicator4{
+                @extend .conainerStyle;
+
+                width: 20%;
+                // height:10px;
+                background-color:rgb(205,212,0);
+                background-image: linear-gradient(to right, rgb(202,205,0),rgb(205,177,0));
+
+            }
+            .populationIndicator5{
+                @extend .conainerStyle;
+
+                width: 20%;
+                // height:10px;
+                background-color:rgb(205,212,0);
+                background-image: linear-gradient(to right, rgb(205,177,0),rgb(205,141,0));
+
+            }
+
+        }
+        
+        .populationIndContainerShort{
+            @extend .populationIndContainer;
+            .populationIndicator3{
+                width: 20%;
+                // height: 15px;
+                background-color:#f4aa43;
+                // display: none;
+
+            }
+        }
+        .populationTextContainer{
+            display:flex;
+            // flex-direction: column;
+            justify-content: space-between;
+            .populationText{
+                // width:10px;
+                color: white;
+                opacity:0.67;
+                font-family: 'Source Sans Pro';
+                position: relative;
+                bottom: 0;
+                // margin-bottom: 5px;
+                font-size: 11px;
+                padding-right: 15px
+            }
+        }
+    }
+
+    .susLegend{
+        h2{
+            font-size: 11px;
+            color: white;
+        }
+        position: fixed;
+        right: 52%;
+        bottom: 20px;
+        // border: 1px solid red;
+        // padding-bottom: 20px;
+        // width: 15%;
+      }
+
+
+

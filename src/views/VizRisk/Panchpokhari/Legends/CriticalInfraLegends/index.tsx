@@ -192,27 +192,10 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-            Educational Institution
+                                 Educational Institution
                             </button>
                         </div>
-                        <div className={styles.infraIconContainer}>
 
-                            <button
-                                type="button"
-                                className={showGovernemnt
-                                    ? styles.criticalButtonSelected
-                                    : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Governance')}
-                            >
-                                <ScalableVectorGraphics
-                                    className={styles.svgIcon}
-                                    src={Governance}
-                                />
-
-            Government Building
-                            </button>
-
-                        </div>
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
@@ -226,7 +209,7 @@ const LandCoverLegends = (props) => {
                                     src={Culture}
                                 />
 
-            Cultural Site
+                             Cultural Site
                             </button>
 
                         </div>
@@ -245,45 +228,11 @@ const LandCoverLegends = (props) => {
                                     src={Health}
                                 />
 
-            Hospital
+                                 Hospital
                             </button>
 
                         </div>
-                        <div className={styles.infraIconContainer}>
-                            <button
-                                type="button"
-                                className={showIndustry
-                                    ? styles.criticalButtonSelected
-                                    : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Industry')}
-                            >
-                                <ScalableVectorGraphics
-                                    className={styles.svgIcon}
-                                    src={Industry}
-                                />
 
-            Industry
-                            </button>
-
-                        </div>
-                        <div className={styles.infraIconContainer}>
-
-                            <button
-                                type="button"
-                                className={showTourism
-                                    ? styles.criticalButtonSelected
-                                    : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Tourism')}
-                            >
-                                <ScalableVectorGraphics
-                                    className={styles.svgIcon}
-                                    src={Tourism}
-                                />
-
-                                 Hotel or Restaurant
-                            </button>
-
-                        </div>
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -299,44 +248,6 @@ const LandCoverLegends = (props) => {
                                 />
 
                                  Finance
-                            </button>
-
-                        </div>
-
-                        <div className={styles.infraIconContainer}>
-
-                            <button
-                                type="button"
-                                className={showWater
-                                    ? styles.criticalButtonSelected
-                                    : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Water sources')}
-                            >
-                                <ScalableVectorGraphics
-                                    className={styles.svgIcon}
-                                    src={Water}
-                                />
-
-                                 Water Source
-                            </button>
-
-                        </div>
-
-                        <div className={styles.infraIconContainer}>
-
-                            <button
-                                type="button"
-                                className={showTrade
-                                    ? styles.criticalButtonSelected
-                                    : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Trade and business')}
-                            >
-                                <ScalableVectorGraphics
-                                    className={styles.svgIcon}
-                                    src={Trade}
-                                />
-
-                                 Trade and Business
                             </button>
 
                         </div>

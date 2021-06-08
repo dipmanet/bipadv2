@@ -29,6 +29,44 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+
+        .buildingClassContainer{
+            display: flex;
+            width: 100%;
+            // border: 1px solid red;
+            justify-content: space-between;
+            .levelContainer{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .iconLevel{
+                    display: flex;
+                    align-items: center;
+                    .high{
+                        path: {fill:rgb(197,44,56); }
+                        width: 20px;
+                        margin-right: 5px;
+                    }
+                    .med{
+                        path: {fill:rgb(193,127,90); }
+                        width: 20px;
+                        margin-right: 5px;
+
+                    }
+                    .low{
+                        path: {fill: rgb(153,171,182);}
+                        width: 20px;
+                        margin-right: 5px;
+
+                    }
+                    .number{
+                        font-size: 12px;
+                        font-weight: 600;
+                     }
+                }
+            }
+        }
+
         .respContainer{
             right: 25px;
             position: relative;

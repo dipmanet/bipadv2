@@ -12,9 +12,11 @@ import RightElement3 from './RightPaneContents/RightPane3';
 import RightElement4 from './RightPaneContents/RightPane4';
 import RightElement5 from './RightPaneContents/RightPane5';
 import RightElement6 from './RightPaneContents/RightPane6';
+import RightElement7 from './RightPaneContents/RightPane7';
 import LandcoverLegends from './Legends/LandCoverLegends';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
+import SesmicHazardLegend from './Legends/SesmicHazardLegend';
 import * as PageTypes from '#store/atom/page/types';
 
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
@@ -44,6 +46,7 @@ import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
 import MapWithDraw from './MapWithDraw';
+import MapVenerability from './MapVenerability';
 
 const rightelements = [
     <RightElement1 />,
@@ -52,6 +55,7 @@ const rightelements = [
     <RightElement4 />,
     <RightElement5 />,
     <RightElement6 />,
+    <RightElement7 />,
 ];
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -145,6 +149,7 @@ class Jugal extends React.Component {
             incidentFilterYear: '2011',
             incidentDetailsData: [],
             drawChartData: [],
+            sesmicLayer: 'ses',
 
         };
 
@@ -190,6 +195,10 @@ class Jugal extends React.Component {
             }
         }
     }
+
+    public handleSesmicLayerChange = (sesmicLayer) => {
+        this.setState({ sesmicLayer });
+    };
 
     public handleDrawSelectedData = (drawChartData) => {
         this.setState({ drawChartData });
@@ -328,6 +337,7 @@ class Jugal extends React.Component {
             incidentFilterYear,
             incidentDetailsData,
             drawChartData,
+            sesmicLayer,
         } = this.state;
 
         const {
@@ -537,7 +547,7 @@ class Jugal extends React.Component {
                                 incidentFilterYear={incidentFilterYear}
                                 handleIncidentChange={this.handleIncidentChange}
                                 handleDrawSelectedData={this.handleDrawSelectedData}
-
+                                sesmicLayer={sesmicLayer}
                             />
                             <RightElement6
                                 handleNext={this.handleNext}
@@ -553,10 +563,53 @@ class Jugal extends React.Component {
                                 drawChartData={drawChartData}
 
                             />
+                            <VRLegend>
+                                <SesmicHazardLegend
+                                    handleSesmicLayerChange={this.handleSesmicLayerChange}
+                                />
+                            </VRLegend>
+                        </>
+                    )
+                }
+                {rightElement === 6
+                    && (
+
+                        <>
+                            <MapVenerability
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
+                                handleDrawSelectedData={this.handleDrawSelectedData}
+                                sesmicLayer={sesmicLayer}
+                            />
+                            <RightElement7
+                                handleNext={this.handleNext}
+                                handlePrev={this.handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={rightElement + 1}
+                                totalPages={rightelements.length}
+                                incidentList={pointFeatureCollection}
+                                clickedItem={clickedIncidentItem}
+                                handleIncidentItemClick={this.handleIncidentItemClick}
+                                incidentFilterYear={incidentFilterYear}
+                                drawChartData={drawChartData}
+
+                            />
+                            <VRLegend>
+                                <SesmicHazardLegend
+                                    handleSesmicLayerChange={this.handleSesmicLayerChange}
+                                />
+                            </VRLegend>
                         </>
                     )
                 }
             </div>
+
+
         );
     }
 }

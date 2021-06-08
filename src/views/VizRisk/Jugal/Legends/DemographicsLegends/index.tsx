@@ -30,7 +30,7 @@ const DemoGraphicsLegends = (props) => {
                     <div>
                         <h2>Population by ward</h2>
                         <div className={styles.populationContainer}>
-                            <div className={styles.populationIndContainer}>
+                            <div className={styles.populationIndContainerShort}>
                                 <div className={styles.populationIndicator1} />
                                 <div className={styles.populationIndicator2} />
                                 <div className={styles.populationIndicator3} />

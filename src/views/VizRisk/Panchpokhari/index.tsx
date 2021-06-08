@@ -12,7 +12,7 @@ import RightElement3 from './RightPaneContents/RightPane3';
 import RightElement4 from './RightPaneContents/RightPane4';
 import RightElement5 from './RightPaneContents/RightPane5';
 import RightElement6 from './RightPaneContents/RightPane6';
-import LandcoverLegends from './Legends/LandCoverLegends';
+import RightElement7 from './RightPaneContents/RightPane7';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
@@ -41,6 +41,9 @@ import {
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
+import SesmicHazardLegend from './Legends/SesmicHazardLegend';
+import MapWithDraw from './MapWithDraw';
+import MapVenerability from './MapVenerability';
 
 const rightelements = [
     <RightElement1 />,
@@ -48,7 +51,8 @@ const rightelements = [
     <RightElement3 />,
     <RightElement4 />,
     <RightElement5 />,
-    // <RightElement6 />,
+    <RightElement6 />,
+    <RightElement7 />,
 ];
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -87,7 +91,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 dataDateRange: {
                     rangeInDays: 'custom',
                     startDate: '2011-01-01',
-                    endDate: '2021-05-01',
+                    endDate: new Date().toISOString().substring(0, 10),
                 },
             };
             return ({
@@ -139,7 +143,9 @@ class Jugal extends React.Component {
             showCriticalElements: true,
             clickedIncidentItem: 'all',
             incidentFilterYear: '2011',
-
+            incidentDetailsData: [],
+            drawChartData: [],
+            sesmicLayer: 'ses',
         };
 
         const { requests: { incidentsGetRequest } } = this.props;
@@ -285,6 +291,9 @@ class Jugal extends React.Component {
             showCriticalElements,
             clickedIncidentItem,
             incidentFilterYear,
+            incidentDetailsData,
+            drawChartData,
+            sesmicLayer,
         } = this.state;
 
         const {
@@ -307,147 +316,150 @@ class Jugal extends React.Component {
             <div>
                 {
                     rightElement === 0
-                    && (
-                        <>
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                            />
-                            <RightElement1
-                                handleNext={this.handleNext}
-                                handlePrev={this.handlePrev}
-                                disableNavLeftBtn={disableNavLeftBtn}
-                                disableNavRightBtn={disableNavRightBtn}
-                                pagenumber={rightElement + 1}
-                                totalPages={rightelements.length}
-                            />
-                        </>
-                    )
+                && (
+                    <>
+                        <Map
+                            showRaster={showRaster}
+                            rasterLayer={rasterLayer}
+                            exposedElement={exposedElement}
+                            rightElement={rightElement}
+                            handleMoveEnd={this.handleMoveEnd}
+                            showPopulation={showPopulation}
+                            criticalElement={criticalElement}
+                            criticalFlood={criticalFlood}
+                            evacElement={evacElement}
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                        />
+                        <RightElement1
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                        />
+                    </>
+                )
                 }
                 {rightElement === 1
-                    && (
-                        <>
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                            />
-                            <RightElement3
-                                handleNext={this.handleNext}
-                                handlePrev={this.handlePrev}
-                                disableNavLeftBtn={disableNavLeftBtn}
-                                disableNavRightBtn={disableNavRightBtn}
-                                pagenumber={rightElement + 1}
-                                totalPages={rightelements.length}
-                            />
-                        </>
+                && (
+                    <>
+                        <Map
+                            showRaster={showRaster}
+                            rasterLayer={rasterLayer}
+                            exposedElement={exposedElement}
+                            rightElement={rightElement}
+                            handleMoveEnd={this.handleMoveEnd}
+                            showPopulation={showPopulation}
+                            criticalElement={criticalElement}
+                            criticalFlood={criticalFlood}
+                            evacElement={evacElement}
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                        />
+                        <RightElement3
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                        />
+                    </>
 
-                    )
+                )
                 }
                 {rightElement === 2
-                    && (
-                        <>
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                            />
-                            <RightElement2
-                                handleNext={this.handleNext}
-                                handlePrev={this.handlePrev}
-                                disableNavLeftBtn={disableNavLeftBtn}
-                                disableNavRightBtn={disableNavRightBtn}
-                                pagenumber={rightElement + 1}
-                                totalPages={rightelements.length}
-                            />
-                        </>
+                && (
+                    <>
+                        <Map
+                            showRaster={showRaster}
+                            rasterLayer={rasterLayer}
+                            exposedElement={exposedElement}
+                            rightElement={rightElement}
+                            handleMoveEnd={this.handleMoveEnd}
+                            showPopulation={showPopulation}
+                            criticalElement={criticalElement}
+                            criticalFlood={criticalFlood}
+                            evacElement={evacElement}
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                        />
+                        <RightElement2
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                        />
+                    </>
 
-                    )
+                )
                 }
                 {rightElement === 3
-                    && (
-                        <>
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                            />
-                            <RightElement4
-                                handleNext={this.handleNext}
-                                handlePrev={this.handlePrev}
-                                disableNavLeftBtn={disableNavLeftBtn}
-                                disableNavRightBtn={disableNavRightBtn}
-                                pagenumber={rightElement + 1}
-                                totalPages={rightelements.length}
-                            />
-                        </>
+                && (
+                    <>
+                        <Map
+                            showRaster={showRaster}
+                            rasterLayer={rasterLayer}
+                            exposedElement={exposedElement}
+                            rightElement={rightElement}
+                            handleMoveEnd={this.handleMoveEnd}
+                            showPopulation={showPopulation}
+                            criticalElement={criticalElement}
+                            criticalFlood={criticalFlood}
+                            evacElement={evacElement}
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                        />
+                        <RightElement4
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                        />
+                    </>
 
-                    )
+                )
                 }
                 {
                     rightElement === 4
-                    && (
-                        <>
-                            <MapWithTimeline
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                                clickedItem={clickedIncidentItem}
-                                incidentFilterYear={incidentFilterYear}
-                                handleIncidentChange={this.handleIncidentChange}
-                            />
-                            <RightElement5
-                                handleNext={this.handleNext}
-                                handlePrev={this.handlePrev}
-                                disableNavLeftBtn={disableNavLeftBtn}
-                                disableNavRightBtn={disableNavRightBtn}
-                                pagenumber={rightElement + 1}
-                                totalPages={rightelements.length}
-                                incidentList={pointFeatureCollection}
-                                clickedItem={clickedIncidentItem}
-                                handleIncidentItemClick={this.handleIncidentItemClick}
-                                incidentFilterYear={incidentFilterYear}
+                && (
+                    <>
+                        <MapWithTimeline
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                            clickedItem={clickedIncidentItem}
+                            incidentFilterYear={incidentFilterYear}
+                            handleIncidentChange={this.handleIncidentChange}
+                        />
+                        <RightElement5
+                            incidentDetailsData={incidentDetailsData}
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                            incidentList={pointFeatureCollection}
+                            incidentData={incidentList}
+                            clickedItem={clickedIncidentItem}
+                            handleIncidentItemClick={this.handleIncidentItemClick}
+                            incidentFilterYear={incidentFilterYear}
+                            getIncidentData={this.setIncidentList}
 
-                            />
-                        </>
-                    )
+                        />
+                    </>
+                )
                 }
                 {/* {rightelements[rightElement]} */}
 
@@ -478,8 +490,80 @@ class Jugal extends React.Component {
                     : ''
                 }
 
+                {rightElement === 5
+                && (
 
+                    <>
+                        <MapWithDraw
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                            clickedItem={clickedIncidentItem}
+                            incidentFilterYear={incidentFilterYear}
+                            handleIncidentChange={this.handleIncidentChange}
+                            handleDrawSelectedData={this.handleDrawSelectedData}
+                            sesmicLayer={sesmicLayer}
+                        />
+                        <RightElement6
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                            incidentList={pointFeatureCollection}
+                            clickedItem={clickedIncidentItem}
+                            handleIncidentItemClick={this.handleIncidentItemClick}
+                            incidentFilterYear={incidentFilterYear}
+                            drawChartData={drawChartData}
+
+                        />
+                        <VRLegend>
+                            <SesmicHazardLegend
+                                handleSesmicLayerChange={this.handleSesmicLayerChange}
+                            />
+                        </VRLegend>
+                    </>
+                )
+                }
+                {rightElement === 6
+                && (
+
+                    <>
+                        <MapVenerability
+                            disableNavBtns={this.disableNavBtns}
+                            enableNavBtns={this.enableNavBtns}
+                            incidentList={pointFeatureCollection}
+                            clickedItem={clickedIncidentItem}
+                            incidentFilterYear={incidentFilterYear}
+                            handleIncidentChange={this.handleIncidentChange}
+                            handleDrawSelectedData={this.handleDrawSelectedData}
+                            sesmicLayer={sesmicLayer}
+                        />
+                        <RightElement7
+                            handleNext={this.handleNext}
+                            handlePrev={this.handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={rightElement + 1}
+                            totalPages={rightelements.length}
+                            incidentList={pointFeatureCollection}
+                            clickedItem={clickedIncidentItem}
+                            handleIncidentItemClick={this.handleIncidentItemClick}
+                            incidentFilterYear={incidentFilterYear}
+                            drawChartData={drawChartData}
+
+                        />
+                        <VRLegend>
+                            <SesmicHazardLegend
+                                handleSesmicLayerChange={this.handleSesmicLayerChange}
+                            />
+                        </VRLegend>
+                    </>
+                )
+                }
             </div>
+
         );
     }
 }

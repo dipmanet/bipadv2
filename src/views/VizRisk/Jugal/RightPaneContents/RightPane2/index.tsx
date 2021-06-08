@@ -180,7 +180,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                 stroke="none"
                             >
                                 {
-                                    demoChartdata.map((entry, index) => <Cell key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
+                                    demoChartdata.map(entry => <Cell key={`cell-${entry.name}`} fill={entry.color} />)
                                 }
                                 <Label
                                     width={30}
@@ -188,7 +188,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                     content={(
                                         <CustomLabel
                                             value1={`${demoChartdata[activeIndex].value} sq km`}
-                                            value2={` / ${((demoChartdata[activeIndex].value / 127.02) * 100).toFixed(2)}%`}
+                                            value2={` / ${((demoChartdata[activeIndex].value / demoChartdata[0].total) * 100).toFixed(2)}%`}
                                         />
                                     )}
                                 />
@@ -197,7 +197,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         </PieChart>
                     </ResponsiveContainer>
                 </div>
-                <div className={styles.customChartLegend}>
+                {/* <div className={styles.customChartLegend}>
                     <CustomChartLegend
                         text={demoChartdata[0].name}
                         barColor={COLORS_CHART[0]}
@@ -236,8 +236,19 @@ class RightPane extends React.PureComponent<Props, State> {
                         selected={activeIndex === 1}
                     />
 
-                </div>
+                </div> */}
 
+                <div className={styles.customChartLegend}>
+                    {demoChartdata.map((item, i) => (
+                        <CustomChartLegend
+                            text={item.name}
+                            barColor={item.color}
+                            background={'#777'}
+                            data={`${item.value} sq km / ${(item.value / item.total * 100).toFixed(2)}`}
+                            selected={activeIndex === i}
+                        />
+                    ))}
+                </div>
                 <NavButtons
                     handleNext={handleNext}
                     handlePrev={handlePrev}

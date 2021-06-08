@@ -7,6 +7,15 @@ export const getGeoJSON = (filterBy: string, data: any) => {
     geoObj.features.push(...d);
     return geoObj;
 };
+export const getGeoJSONPH = (filterBy: string, data: any) => {
+    const geoObj = {};
+    geoObj.type = 'FeatureCollection';
+    geoObj.name = filterBy;
+    geoObj.features = [];
+    const d = data.features.filter(item => item.properties.Type === filterBy);
+    geoObj.features.push(...d);
+    return geoObj;
+};
 // Jugal_hillshade
 export const getHillShadeLayer = (layer: string) => [
     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,

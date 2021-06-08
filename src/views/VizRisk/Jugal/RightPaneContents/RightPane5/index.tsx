@@ -119,33 +119,38 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {' '}
 
                 </p>
+                {
+                    chartData.length > 0
+                        ? (
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
+                                <BarChart
+                                    width={300}
+                                    height={700}
+                                    data={chartData}
+                                    layout="vertical"
+                                    margin={{ left: 20, right: 20 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,219,95)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        tick={{ fill: '#94bdcf' }}
+                                        radius={[0, 15, 15, 0]}
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
-                    <BarChart
-                        width={300}
-                        height={700}
-                        data={chartData}
-                        layout="vertical"
-                        margin={{ left: 20, right: 20 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(0,219,95)"
-                            barSize={15}
-                            label={{ position: 'right', fill: '#ffffff' }}
-                            tick={{ fill: '#94bdcf' }}
-                            radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : <h2>Please select a region using a draw tool to see the data</h2>
 
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
+                }
                 <VRLegend>
 
                     <div className={styles.incidentsLegendsContainer}>

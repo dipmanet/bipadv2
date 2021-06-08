@@ -30,8 +30,8 @@
             .populationIndicator3{
                 width: 12px;
                 height: 25px;
-                background-color:rgb(255,207,142);
-                display: none;
+                background-color:#f4aa43;
+                // display: none;
 
             }
             .populationIndicator4{
@@ -44,6 +44,17 @@
                 height: 25px;
                 background-color:rgb(255,235,198);
                 border-radius: 0 0 6px 6px;
+            }
+        }
+        
+        .populationIndContainerShort{
+            @extend .populationIndContainer;
+            .populationIndicator3{
+                width: 12px;
+                height: 25px;
+                background-color:#f4aa43;
+                display: none;
+
             }
         }
         .populationTextContainer{

@@ -8,6 +8,7 @@ import CIData from '../RightPaneContents/RightPane4/ci';
 import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
 import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
+import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Jugal/utils';
 
 import {
     // provincesSelector,
@@ -65,7 +66,7 @@ const {
 } = CIData;
 
 const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-    item => item.properties.CI,
+    item => item.properties.Type,
 ))];
 
 
@@ -180,7 +181,7 @@ class FloodHistoryMap extends React.Component {
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
                     type: 'geojson',
-                    data: this.getGeoJSON(layer, criticalinfrastructures),
+                    data: getGeoJSONPH(layer, criticalinfrastructures),
                     cluster: true,
                     clusterRadius: 50,
                 });
@@ -377,7 +378,7 @@ class FloodHistoryMap extends React.Component {
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
-                    const ciName = e.features[0].properties.Name;
+                    const ciName = e.features[0].properties.title;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>

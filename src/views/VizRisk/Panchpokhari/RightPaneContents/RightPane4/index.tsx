@@ -20,12 +20,12 @@ const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'
 const criticalinfrastructures = CIData.data;
 
 const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-    item => item.properties.CI,
+    item => item.properties.Type,
 ))];
 
 const chartData = categoriesCritical.map(item => ({
     name: item,
-    Total: criticalinfrastructures.features.filter(ci => ci.properties.CI === item).length,
+    Total: criticalinfrastructures.features.filter(ci => ci.properties.Type === item).length,
 }));
 
 class SlideFourPane extends React.PureComponent<Props, State> {
