@@ -2,7 +2,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/tikapurGEOJSON';
+import SchoolGeoJSON from '../Data/BiratnagarGEOJSON';
 import demographicsData from '../Data/demographicsData';
 import styles from './styles.scss';
 import {

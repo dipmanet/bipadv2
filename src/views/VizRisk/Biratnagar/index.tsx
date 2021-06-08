@@ -17,7 +17,7 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
-import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+import VRLegend from '#views/VizRisk/Biratnagar/Components/VRLegend';
 
 const rightelements = [
     <RightElement1 />,
@@ -246,7 +246,7 @@ export default class Biratnagar extends React.Component {
                 }
                 {rightElement === 3
                     ? (
-                        <div className={styles.legends}>
+                        <div className={styles.legends3}>
                             <VRLegend>
                                 <CriticalInfraLegends
                                     handleCritical={this.handleCriticalInfra}
@@ -260,7 +260,7 @@ export default class Biratnagar extends React.Component {
                 {rightElement === 4
                     ? (
                         <>
-                            <div className={styles.legends}>
+                            <div className={styles.legends4}>
                                 <VRLegend>
                                     <CriticalInfraLegends
                                         handleCritical={this.handleCriticalFlood}
@@ -269,7 +269,10 @@ export default class Biratnagar extends React.Component {
 
                                     />
                                 </VRLegend>
-                                <VRLegend>
+
+                            </div>
+                            <div className={styles.floodHazardLegend}>
+                                <VRLegend rightElement={4}>
                                     <FloodHazardLegends
                                         handleFloodChange={this.handleFloodChange}
                                         handleExposedElementChange={this.handleExposedElementChange}
