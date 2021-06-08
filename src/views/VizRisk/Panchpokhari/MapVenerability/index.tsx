@@ -10,7 +10,7 @@ import Zlib from 'zlib';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Panchpokhari/utils';
 import ci from '../RightPaneContents/RightPane4/ci';
-// import buildings from '../Data/buildings';
+import buildings from '../Data/buildings';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 
 import styles from './styles.scss';
@@ -49,20 +49,20 @@ const mapStateToProps = (state, props) => ({
 });
 
 const { data: cidata } = ci;
-// const { data: buildingsData } = buildings;
+const { data: buildingsData } = buildings;
 
 const arr = cidata.features.map(item => [
     item.properties.Longitude,
     item.properties.Latitude,
 ]);
-// const buildingsArr = buildingsData.features.map(item => [
-//     Number(item.geometry.coordinates[0].toFixed(7)),
-//     Number(item.geometry.coordinates[1].toFixed(7)),
-// ]);
+const buildingsArr = buildingsData.features.map(item => [
+    Number(item.geometry.coordinates[0].toFixed(7)),
+    Number(item.geometry.coordinates[1].toFixed(7)),
+]);
 
 
 const points = turf.points(arr);
-// const buildingpoints = turf.points(buildingsArr);
+const buildingpoints = turf.points(buildingsArr);
 
 
 class FloodHistoryMap extends React.Component {
@@ -70,8 +70,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.015490220644214,
-            lng: 85.79108507481781,
+            lng: 85.64347922706821,
+            lat: 28.013604885888867,
             zoom: 9.8,
             incidentYear: '0',
             playState: true,
@@ -99,7 +99,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
+            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -121,7 +121,7 @@ class FloodHistoryMap extends React.Component {
 
             this.map.addSource('lsSusep', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('jugal_durham_landslide_susceptibilty')],
+                tiles: [getHillShadeLayer('panchpokhari_durham_landslide_susceptibility')],
                 tileSize: 256,
             });
 
@@ -138,7 +138,7 @@ class FloodHistoryMap extends React.Component {
             );
             this.map.addSource('seicHazard', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('jugal_meteor_seismic_hazard_002')],
+                tiles: [getHillShadeLayer('panchpokhari_meteor_seismic_hazard_002')],
                 tileSize: 256,
             });
 
@@ -442,6 +442,7 @@ class FloodHistoryMap extends React.Component {
                 const searchWithin = turf.multiPolygon([dataArr], {});
 
                 const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+                const ptsWithinBuildings = turf.pointsWithinPolygon(buildingpoints, searchWithin);
                 const result = [];
                 const n = ptsWithin
                     .features
@@ -460,11 +461,13 @@ class FloodHistoryMap extends React.Component {
 
                 const point1 = this.map.project([bbox[0], bbox[1]]);
                 const point2 = this.map.project([bbox[2], bbox[3]]);
+
+
                 // todo: need to filter the buildings result further by points data using turf
-                const buildings = this.map.queryRenderedFeatures(
-                    [point1, point2],
-                    { layers: ['Buildings'] },
-                );
+                // const buildingsCount = this.map.queryRenderedFeatures(
+                //     [point1, point2],
+                //     { layers: ['Buildings'] },
+                // );
                 const farmlands = this.map.queryRenderedFeatures(
                     [point1, point2],
                     { layers: ['Farmlands'] },
@@ -473,41 +476,18 @@ class FloodHistoryMap extends React.Component {
                     [point1, point2],
                     { layers: ['Forest'] },
                 );
-
+                const buildingsCount = ptsWithinBuildings.features.length;
+                console.log('buildings count:', buildingsCount);
                 result.push({
-                    buildings: buildings.length,
+                    buildings: buildingsCount,
                     forest: forest.length,
                     farmlands: farmlands.length,
                 });
-                console.log('buildings: ', buildings);
-                // eslint-disable-next-line no-underscore-dangle
-                const { _pbf } = buildings[0]._vectorTileFeature;
                 handleDrawSelectedData(result);
 
                 this.map.fitBounds(bbox, {
                     padding: 20,
                 });
-
-                const data = _pbf.buf;
-                // const Protobuf = require('pbf');
-
-                // const tile = new VectorTile(new Pbf(data));
-                let tile;
-                Zlib.gunzip(data, (err, buffer) => {
-                    tile = new VectorTile(new Pbf(data));
-                    console.log('Buildings from whatnot:', tile);
-                });
-
-                // Contains a map of all layers
-                // tile.layers;
-
-                // const { building } = tile.layers;
-
-                // Amount of features in this layer
-                // Buildings.length;
-
-                // Returns the first feature
-                // console.log('Buildings from whatnot:', building.length);
             };
 
             this.map.addControl(draw, 'top-right');
@@ -580,19 +560,24 @@ class FloodHistoryMap extends React.Component {
         const searchId = this.state.searchTerm;
 
         // get the coordinates of the builing
-        const coordinates = [85.7754320848645, 27.8364085713613];
+        const coordinatesObj = buildingsData
+            .features.filter(b => Number(searchId) === Math.round(b.properties.osmid));
         // zoom to this coordinate with some padding
         // this.zoomTo(polygonData);
-
-        this.map.easeTo({
-            zoom: 17,
-            duration: 500,
-            center: coordinates,
-
-        });
-        // show popup
-        this.showPopupOnBldgs(coordinates, searchId);
-        this.setState({ searchTerm: '' });
+        let cood = [];
+        if (coordinatesObj.length > 0) {
+            cood = coordinatesObj[0].geometry.coordinates;
+            this.map.easeTo({
+                zoom: 17,
+                duration: 500,
+                center: cood,
+            });
+            // show popup
+            this.showPopupOnBldgs(cood, searchId);
+            this.setState({ searchTerm: '' });
+        } else {
+            alert('Please enter valid building id');
+        }
     };
 
     public render() {

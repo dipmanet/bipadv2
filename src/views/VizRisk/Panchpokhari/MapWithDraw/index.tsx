@@ -69,8 +69,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.015490220644214,
-            lng: 85.79108507481781,
+            lng: 85.64347922706821,
+            lat: 28.013604885888867,
             zoom: 9.8,
             incidentYear: '0',
             playState: true,
@@ -97,7 +97,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
+            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -111,7 +111,7 @@ class FloodHistoryMap extends React.Component {
         this.map.on('style.load', () => {
             this.map.addSource('lsSusep', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('jugal_durham_landslide_susceptibility')],
+                tiles: [getHillShadeLayer('panchpokhari_durham_landslide_susceptibility')],
                 tileSize: 256,
             });
 
@@ -128,7 +128,7 @@ class FloodHistoryMap extends React.Component {
             );
             this.map.addSource('seicHazard', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('jugal_meteor_seismic_hazard_002')],
+                tiles: [getHillShadeLayer('panchpokhari_meteor_seismic_hazard_002')],
                 tileSize: 256,
             });
 
@@ -465,6 +465,7 @@ class FloodHistoryMap extends React.Component {
                     { layers: ['Forest'] },
                 );
                 const buildingsCount = ptsWithinBuildings.features.length;
+                console.log('buildings count:', buildingsCount);
                 result.push({
                     buildings: buildingsCount,
                     forest: forest.length,

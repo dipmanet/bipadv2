@@ -166,6 +166,10 @@ class Jugal extends React.Component {
         });
     }
 
+    public handleDrawSelectedData = (drawChartData) => {
+        this.setState({ drawChartData });
+    }
+
     public handleCriticalFlood = (criticalFlood: string) => {
         this.setState({
             criticalFlood,
