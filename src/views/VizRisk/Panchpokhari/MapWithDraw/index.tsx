@@ -9,7 +9,7 @@ import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 import ci from '../RightPaneContents/RightPane4/ci';
-import buildings from '#views/VizRisk/Jugal/Data/buildings';
+import buildings from '#views/VizRisk/Panchpokhari/Data/buildings';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 
 import styles from './styles.scss';
