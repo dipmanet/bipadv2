@@ -8,7 +8,7 @@ import CIData from '../RightPaneContents/RightPane4/ci';
 import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
 import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
-import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Jugal/utils';
+import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Panchpokhari/utils';
 
 import {
     // provincesSelector,

@@ -5,20 +5,17 @@ import styles from './styles.scss';
 import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
-import Jugal from './Jugal';
-import Panchpokhari from './Panchpokhari';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import BarabiseLandslide from './BarabiseLandslide';
+import Panchpokhari from './Panchpokhari';
 
 
 const slides = [
     <Rajapur />,
     <BarabiseLandslide />,
     <Gulariya />,
-    <Jugal />,
     <Panchpokhari />,
-
 
 ];
 
@@ -43,11 +40,8 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'gulariya') {
             setCurrentPage(2);
             setTitle('Visualising Flood Exposure');
-        } else if (municipality === 'jugal') {
+        } else if (municipality === 'pachpokhari') {
             setCurrentPage(3);
-            setTitle('Visualising Multihazard Exposure');
-        } else if (municipality === 'pokhari') {
-            setCurrentPage(4);
             setTitle('Visualising Multihazard Exposure');
         }
     };
@@ -135,18 +129,10 @@ const VizRiskMainPage = () => {
                             <div className={styles.vizriskmunicipalityName}>
                                 <Button
                                     transparent
-                                    onClick={() => handleMenuTitleClick('jugal')}
+                                    onClick={() => handleMenuTitleClick('pachpokhari')}
 
                                 >
                                     <h1 className={styles.menuItems}>Jugal Municipality</h1>
-
-                                </Button>
-                                <Button
-                                    transparent
-                                    onClick={() => handleMenuTitleClick('pokhari')}
-
-                                >
-                                    <h1 className={styles.menuItems}>Panchpokhari Municipality</h1>
 
                                 </Button>
                             </div>
