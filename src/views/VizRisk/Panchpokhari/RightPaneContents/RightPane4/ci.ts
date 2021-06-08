@@ -41,7 +41,7 @@ export default {
             { type: 'Feature', properties: { Type: 'Education', icon: 'education', title: 'Urken Snter Floling PRA V', Latitude: 27.9237155, Longitude: 85.6186585, no_of_empl: 12 }, geometry: { type: 'Point', coordinates: [85.6186585, 27.9237155] } },
             { type: 'Feature', properties: { Type: 'Education', icon: 'education', title: 'Shree Ganesh PRA V', Latitude: 27.9359845, Longitude: 85.6280563, no_of_empl: 12 }, geometry: { type: 'Point', coordinates: [85.6280563, 27.9359845] } },
             { type: 'Feature', properties: { Type: 'Education', icon: 'education', title: 'Shree Chandika MA V', Latitude: 27.9247915, Longitude: 85.6210859, no_of_empl: 12 }, geometry: { type: 'Point', coordinates: [85.6210859, 27.9247915] } },
-            { type: 'Feature', properties: { Type: 'Cultural', icon: 'culture', title: 'Monastery', Latitude: 27.9236426, Longitude: 85.6188074, no_of_empl: 0 }, geometry: { type: 'Point', coordinates: [85.6188074, 27.9236426] } },
+            { type: 'Feature', properties: { Type: 'Culture', icon: 'culture', title: 'Monastery', Latitude: 27.9236426, Longitude: 85.6188074, no_of_empl: 0 }, geometry: { type: 'Point', coordinates: [85.6188074, 27.9236426] } },
         ],
     },
 
