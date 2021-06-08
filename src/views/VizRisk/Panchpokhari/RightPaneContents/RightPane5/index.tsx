@@ -9,7 +9,7 @@ import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 import NavButtons from '../../Components/NavButtons';
-import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
+import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 
 interface ComponentProps {}
 

@@ -38,7 +38,7 @@ import {
     methods,
 } from '#request';
 
-import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
+import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';

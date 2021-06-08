@@ -7,7 +7,7 @@ import { VectorTile } from '@mapbox/vector-tile';
 import * as turf from '@turf/turf';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
-import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
+import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Panchpokhari/utils';
 import ci from '../RightPaneContents/RightPane4/ci';
 import buildings from '#views/VizRisk/Panchpokhari/Data/buildings';
 import '@watergis/mapbox-gl-legend/css/styles.css';
