@@ -280,18 +280,18 @@ const Organisation: React.FC<Props> = (props: Props) => {
                             <tbody>
                                 <tr>
                                     {
-                                        !props.annex
-                                        && (
-                                            <th>
-                                                <input
-                                                    type="checkbox"
-                                                    onChange={handleCheckAll}
-                                                    checked={checkedAll}
+                                        !props.annex && fetchedData.length
+                                            ? (
+                                                <th>
+                                                    <input
+                                                        type="checkbox"
+                                                        onChange={handleCheckAll}
+                                                        checked={checkedAll}
                                                     // defaultChecked
-                                                    className={styles.checkBox}
-                                                />
-                                            </th>
-                                        )
+                                                        className={styles.checkBox}
+                                                    />
+                                                </th>
+                                            ) : null
                                     }
                                     <th><Gt section={Translations.OrganizationSerialNumber} /></th>
                                     <th><Gt section={Translations.OrganizationName} /></th>
@@ -300,8 +300,8 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                     <th><Gt section={Translations.OrganizationMaleEmployee} /></th>
                                     <th><Gt section={Translations.OrganizationFemaleEmployee} /></th>
                                     {
-                                        !props.annex
-                                        && <th><Gt section={Translations.OrganizationAction} /></th>
+                                        !props.annex && fetchedData.length
+                                            ? <th><Gt section={Translations.OrganizationAction} /></th> : null
                                     }
                                 </tr>
                                 {loader ? (
@@ -365,7 +365,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                 )}
                                 {!loader && !props.annex && (
                                     <tr>
-                                        <td />
+                                        {fetchedData.length ? <td /> : null}
                                         <td />
                                         <td>
                                             <button
@@ -384,7 +384,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                                         <td />
                                         <td />
                                         <td />
-                                        <td />
+                                        {fetchedData.length ? <td /> : null}
                                     </tr>
                                 )
 

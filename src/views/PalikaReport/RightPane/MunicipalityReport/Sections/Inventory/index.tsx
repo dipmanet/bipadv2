@@ -320,17 +320,17 @@ const Inventory: React.FC<Props> = (props: NewProps) => {
                             <tbody>
                                 <tr>
                                     {
-                                        !annex
-                                        && (
-                                            <th>
-                                                <input
-                                                    type="checkbox"
-                                                    onChange={handleCheckAll}
-                                                    checked={checkedAll}
-                                                    className={styles.checkBox}
-                                                />
-                                            </th>
-                                        )
+                                        !annex && finalInventoriesData.length
+                                            ? (
+                                                <th>
+                                                    <input
+                                                        type="checkbox"
+                                                        onChange={handleCheckAll}
+                                                        checked={checkedAll}
+                                                        className={styles.checkBox}
+                                                    />
+                                                </th>
+                                            ) : null
                                     }
                                     <th>
                                         {' '}
@@ -345,8 +345,8 @@ const Inventory: React.FC<Props> = (props: NewProps) => {
                                     <th><Gt section={Translations.InventoryResourceAddedDate} /></th>
                                     <th><Gt section={Translations.InventoryResourceUpdatedDate} /></th>
                                     {
-                                        !annex
-                                        && <th><Gt section={Translations.InventoryAction} /></th>
+                                        !annex && finalInventoriesData.length
+                                            ? <th><Gt section={Translations.InventoryAction} /></th> : null
                                     }
 
                                 </tr>

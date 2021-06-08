@@ -635,15 +635,18 @@ const Contacts = (props: Props) => {
                             <table id="table-to-xls">
                                 <tbody>
                                     <tr>
-                                        <th>
-                                            <input
-                                                type="checkbox"
-                                                onChange={handleCheckAll}
-                                                checked={checkedAll}
+                                        {!props.annex && mergedData.length
+                                            ? (
+                                                <th>
+                                                    <input
+                                                        type="checkbox"
+                                                        onChange={handleCheckAll}
+                                                        checked={checkedAll}
                                                     // defaultChecked
-                                                className={styles.checkBox}
-                                            />
-                                        </th>
+                                                        className={styles.checkBox}
+                                                    />
+                                                </th>
+                                            ) : null}
                                         <th><Gt section={Translations.ContactsSerialNumber} /></th>
                                         <th><Gt section={Translations.ContactsName} /></th>
                                         <th><Gt section={Translations.ContactTypeOfOrganization} /></th>
@@ -653,7 +656,7 @@ const Contacts = (props: Props) => {
                                         <th><Gt section={Translations.ContactTrainingDuration} /></th>
                                         <th><Gt section={Translations.ContactContactNumber} /></th>
                                         <th><Gt section={Translations.ContactContactEmail} /></th>
-                                        <th><Gt section={Translations.ContactAction} /></th>
+                                        {!props.annex && mergedData.length ? <th><Gt section={Translations.ContactAction} /></th> : null}
                                     </tr>
                                     {loader ? (
                                         <>
@@ -724,7 +727,7 @@ const Contacts = (props: Props) => {
                                     )}
                                     {!loader && !props.annex && (
                                         <tr>
-                                            <td />
+                                            {mergedData.length ? <td /> : null}
                                             <td />
                                             <td>
                                                 <button
@@ -746,7 +749,7 @@ const Contacts = (props: Props) => {
                                             <td />
                                             <td />
                                             <td />
-                                            <td />
+                                            {mergedData.length ? <td /> : null}
 
                                         </tr>
                                     )}
@@ -767,15 +770,18 @@ const Contacts = (props: Props) => {
                                 <table id="table-to-xls">
                                     <tbody>
                                         <tr>
-                                            <th>
-                                                <input
-                                                    type="checkbox"
-                                                    onChange={handleCheckAllNg}
-                                                    checked={checkedAllNg}
+                                            {!props.annex && finalArr.length
+                                                ? (
+                                                    <th>
+                                                        <input
+                                                            type="checkbox"
+                                                            onChange={handleCheckAllNg}
+                                                            checked={checkedAllNg}
                                                     // defaultChecked
-                                                    className={styles.checkBox}
-                                                />
-                                            </th>
+                                                            className={styles.checkBox}
+                                                        />
+                                                    </th>
+                                                ) : null}
                                             <th>
                                                 <Gt section={Translations.ContactsSerialNumber} />
                                             </th>
@@ -812,14 +818,14 @@ const Contacts = (props: Props) => {
                                             <th>
                                                 <Gt section={Translations.ContactContactEmail} />
                                             </th>
-                                            <th><Gt section={Translations.ContactAction} /></th>
+                                            {!props.annex && finalArr.length ? <th><Gt section={Translations.ContactAction} /></th> : null}
 
                                         </tr>
                                         {finalArr && finalArr.length > 0 && finalArr.map((data, i) => (
                                             nonGovContactId === data.item.id
                                                 ? (
                                                     <tr>
-                                                        <td>{''}</td>
+
                                                         <td>{nonGovContactIndex + 1}</td>
 
                                                         <td>
@@ -1001,7 +1007,7 @@ const Contacts = (props: Props) => {
                                         {!nonGovContactId && (
                                             <>
                                                 <tr>
-                                                    <td>{''}</td>
+                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null }
 
                                                     <td>{nonGovContacts.length + 1}</td>
                                                     <td>
@@ -1119,14 +1125,14 @@ const Contacts = (props: Props) => {
                                                             placeholder={drrmLanguage.language === 'np' ? 'ईमेल' : 'Email'}
                                                         />
                                                     </td>
-                                                    <td />
+                                                    {!props.annex && finalArr.length ? <td>{''}</td> : null }
                                                 </tr>
                                             </>
                                         )}
                                         {!props.annex && !loader
                                     && (
                                         <tr>
-                                            <td />
+                                            {!props.annex && finalArr.length ? <td>{''}</td> : null }
                                             <td />
                                             <td>
                                                 <button

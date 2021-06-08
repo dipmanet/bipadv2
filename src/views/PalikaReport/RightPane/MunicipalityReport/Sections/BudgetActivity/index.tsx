@@ -983,13 +983,20 @@ const BudgetActivity = (props: Props) => {
                                                                              }
                                                                          </option>
                                                                          <option value="DRR Fund of Muicipality">
-
-                                                                             <Gt section={Translations.DRRFundMun} />
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? Translations.DRRFundMun.en
+                                                                                 : Translations.DRRFundMun.np
+                                                                             }
 
 
                                                                          </option>
                                                                          <option value="Other DRR related funding">
-                                                                             <Gt section={Translations.OtherDrrFund} />
+                                                                             {drrmLanguage.language === 'en'
+                                                                                 ? Translations.OtherDrrFund.en
+                                                                                 : Translations.OtherDrrFund.np
+                                                                             }
+
+
                                                                          </option>
                                                                      </select>
                                                                  </td>
@@ -1343,13 +1350,20 @@ const BudgetActivity = (props: Props) => {
                                                                      }
                                                                  </option>
                                                                  <option value="DRR Fund of Muicipality">
-
-                                                                     <Gt section={Translations.DRRFundMun} />
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? Translations.DRRFundMun.en
+                                                                         : Translations.DRRFundMun.np
+                                                                     }
 
 
                                                                  </option>
                                                                  <option value="Other DRR related funding">
-                                                                     <Gt section={Translations.OtherDrrFund} />
+                                                                     {drrmLanguage.language === 'en'
+                                                                         ? Translations.OtherDrrFund.en
+                                                                         : Translations.OtherDrrFund.np
+                                                                     }
+
+
                                                                  </option>
                                                              </select>
                                                          </td>

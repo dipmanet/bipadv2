@@ -581,12 +581,12 @@ const Simulation = (props: Props) => {
                                         <th>
                                             <Gt section={Translations.SimulationHazards} />
                                         </th>
-                                        {!props.annex
-                                        && (
-                                            <th>
-                                                <Gt section={Translations.SimulationAction} />
-                                            </th>
-                                        )}
+                                        {!props.annex && finalArr.length
+                                            ? (
+                                                <th>
+                                                    <Gt section={Translations.SimulationAction} />
+                                                </th>
+                                            ) : null}
 
 
                                     </tr>
@@ -902,7 +902,7 @@ const Simulation = (props: Props) => {
 
                                                     </select>
                                                 </td>
-                                                <td />
+                                                {!props.annex && simulationData.length ? <td /> : null}
                                             </tr>
                                         )
                                                     }
@@ -937,7 +937,7 @@ const Simulation = (props: Props) => {
                                     <td />
                                     <td />
                                     <td />
-                                    <td />
+                                    {!props.annex && simulationData.length ? <td /> : null}
                                 </tr>
                             )
 

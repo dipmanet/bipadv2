@@ -339,15 +339,18 @@ const CriticalInfra = (props: Props) => {
                     <table id="table-to-xls">
                         <tbody>
                             <tr>
-                                <th>
-                                    <input
-                                        type="checkbox"
-                                        onChange={handleCheckAll}
-                                        checked={checkedAll}
-                                        defaultChecked
-                                        className={styles.checkBox}
-                                    />
-                                </th>
+                                {!props.annex && filteredtData.length
+                                    ? (
+                                        <th>
+                                            <input
+                                                type="checkbox"
+                                                onChange={handleCheckAll}
+                                                checked={checkedAll}
+                                                defaultChecked
+                                                className={styles.checkBox}
+                                            />
+                                        </th>
+                                    ) : null}
                                 <th>
                                     {' '}
                                     <Gt section={Translations.ResourcesSerialNumber} />
@@ -377,13 +380,13 @@ const CriticalInfra = (props: Props) => {
                                     <Gt section={Translations.ResourcesNumberOfTotalEmployee} />
                                 </th>
                                 {
-                                    !props.annex
-                                    && (
-                                        <th>
-                                            {' '}
-                                            <Gt section={Translations.ResourcesAction} />
-                                        </th>
-                                    )
+                                    !props.annex && filteredtData.length
+                                        ? (
+                                            <th>
+                                                {' '}
+                                                <Gt section={Translations.ResourcesAction} />
+                                            </th>
+                                        ) : null
                                 }
                             </tr>
                             {loader ? (
