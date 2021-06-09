@@ -550,7 +550,7 @@ class FloodHistoryMap extends React.Component {
         });
         popup.setLngLat(coordinates).setHTML(
             `<div style="padding: 5px;border-radius: 5px">
-                <p>${msg}</p>
+                <p>OSM_ID: ${msg}</p>
             </div>
             `,
         ).addTo(this.map);
@@ -569,7 +569,7 @@ class FloodHistoryMap extends React.Component {
         if (coordinatesObj.length > 0) {
             cood = coordinatesObj[0].geometry.coordinates;
             this.map.easeTo({
-                zoom: 17,
+                zoom: 19,
                 duration: 500,
                 center: cood,
             });

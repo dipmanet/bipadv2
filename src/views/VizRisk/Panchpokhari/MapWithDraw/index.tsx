@@ -556,7 +556,7 @@ class FloodHistoryMap extends React.Component {
         if (coordinatesObj.length > 0) {
             cood = coordinatesObj[0].geometry.coordinates;
             this.map.easeTo({
-                zoom: 18,
+                zoom: 19,
                 duration: 1000,
                 center: cood,
             });
