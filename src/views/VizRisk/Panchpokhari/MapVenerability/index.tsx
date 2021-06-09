@@ -12,6 +12,7 @@ import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Panchpokhari/utils
 import ci from '../RightPaneContents/RightPane4/ci';
 import buildings from '../Data/buildings';
 import '@watergis/mapbox-gl-legend/css/styles.css';
+import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 
 import styles from './styles.scss';
 
@@ -612,6 +613,7 @@ class FloodHistoryMap extends React.Component {
                         placeholder={'Enter house id'}
                     />
                 </div>
+                <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
             </div>
         );
     }
