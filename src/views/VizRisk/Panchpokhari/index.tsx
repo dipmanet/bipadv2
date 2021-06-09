@@ -155,9 +155,12 @@ class Jugal extends React.Component {
         });
     }
 
+    public handleSesmicLayerChange = (sesmicLayer) => {
+        this.setState({ sesmicLayer });
+    }
+
     public setIncidents = (incidents) => {
         this.setState({ incidents });
-        console.log('incidents data:', incidents);
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
