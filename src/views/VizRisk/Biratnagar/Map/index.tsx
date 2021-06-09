@@ -44,11 +44,14 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#9a3404', 2, '#9a3404',
-    3, '#fed990', 4, '#fed990',
-    5, '#fed990', 6, '#fe9b2a',
-    7, '#d95f0e', 8, '#fe9b2a',
-    9, '#ffffd6'];
+    1, '#fe9b2a', 2, '#fe9b2a',
+    3, '#bd6705', 4, '#9a3404',
+    5, '#bd6705', 6, '#fe9b2a',
+    7, '#fed990', 8, '#bd6705',
+    9, '#fed990', 10, '#bd6705',
+    11, '#fe9b2a', 12, '#bd6705', 13, '#fed990', 14, '#fed990', 15, '#fe9b2a', 16, '#fed990',
+    17, '#fed990', 18, '#fed990', 19, '#fed990',
+];
 const {
     criticalinfrastructures,
     evaccenters,
@@ -86,8 +89,8 @@ const slideTwoLayers = ['bridgeBiratnagar', 'water', 'waterway',
 ];
 
 const slideThreeLayers = ['wardNumbers', 'water', 'waterway',
-    'canalBiratnagar', 'wardOutline', 'densityBiratnagar',
-    'ward-fill-local',
+    'canalBiratnagar', 'wardOutline',
+    'ward-fill-local', 'densityBiratnagar',
 ];
 
 const slideFourLayers = ['bridgeBiratnagar', 'water', 'waterway',
@@ -102,7 +105,7 @@ const slideFiveLayers = [
 
 ];
 const slideSixLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'bridgeBiratnagar', 'water', 'waterway',
+    'safeshelterBiratnagarimage', 'safeshelterBiratnagarIcon', ...criticalInfraClusters, ...rasterLayers, 'bridgeBiratnagar', 'water', 'waterway',
     'canalBiratnagar',
     'BiratnagarRoads',
     'municipalityFill',
@@ -161,6 +164,36 @@ class FloodHistoryMap extends React.Component {
                     }
                     if (item.title === '9') {
                         mapping.push({ id, value: 9 });
+                    }
+                    if (item.title === '10') {
+                        mapping.push({ id, value: 10 });
+                    }
+                    if (item.title === '11') {
+                        mapping.push({ id, value: 11 });
+                    }
+                    if (item.title === '12') {
+                        mapping.push({ id, value: 12 });
+                    }
+                    if (item.title === '13') {
+                        mapping.push({ id, value: 13 });
+                    }
+                    if (item.title === '14') {
+                        mapping.push({ id, value: 14 });
+                    }
+                    if (item.title === '15') {
+                        mapping.push({ id, value: 15 });
+                    }
+                    if (item.title === '16') {
+                        mapping.push({ id, value: 16 });
+                    }
+                    if (item.title === '17') {
+                        mapping.push({ id, value: 17 });
+                    }
+                    if (item.title === '18') {
+                        mapping.push({ id, value: 18 });
+                    }
+                    if (item.title === '19') {
+                        mapping.push({ id, value: 19 });
                     }
                 }
                 return null;
@@ -350,16 +383,7 @@ class FloodHistoryMap extends React.Component {
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    'fill-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['feature-state', 'value'],
-                        1, '#9a3404', 2, '#9a3404',
-                        3, '#fed990', 4, '#fed990',
-                        5, '#fed990', 6, '#fe9b2a',
-                        7, '#d95f0e', 8, '#fe9b2a',
-                        9, '#ffffd6',
-                    ],
+                    'fill-color': populationWardExpression,
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
@@ -427,7 +451,8 @@ class FloodHistoryMap extends React.Component {
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const wardno = e.features[0].properties.title;
                     const details = demographicsData.demographicsData.filter(item => item.name === `Ward ${wardno}`);
-                    const totalPop = details[0].MalePop + details[0].FemalePop;
+                    const totalPop = details[0].MalePop + details[0].FemalePop
+                    + details[0].ThirdGender;
                     // const description = (
                     //     `Ward No:
                     //         ${wardno}
@@ -734,8 +759,8 @@ class FloodHistoryMap extends React.Component {
                 `evac-unclustered-${layer}`, 'visibility', 'none',
             );
 
-            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'none');
+            this.map.setLayoutProperty('safeshelterBiratnagarimage', 'visibility', 'none');
+            this.map.setLayoutProperty('safeshelterBiratnagarIcon', 'visibility', 'none');
             return null;
         });
     }

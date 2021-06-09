@@ -43,6 +43,13 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
+                    <div className={styles.legendOther} />
+                    <div className={styles.legendText}>
+                    Third Gender Pop
+                        <sup>n</sup>
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
                        Total Family Count
@@ -78,7 +85,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>2,01,125</div>
+                            <div className={styles.iconTitle}>3,05,098</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>
@@ -91,7 +98,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Home}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>45,131</div>
+                            <div className={styles.iconTitle}>63,410</div>
                             <div className={styles.iconText}>
                              Total Family Count
                             </div>
@@ -108,7 +115,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Male}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1,01,949</div>
+                            <div className={styles.iconTitle}>155082</div>
                             <div className={styles.iconText}>
                              Male Population
                             </div>
@@ -121,9 +128,22 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Female}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>99,176</div>
+                            <div className={styles.iconTitle}>149972</div>
                             <div className={styles.iconText}>
                              Female Population
+                            </div>
+
+                        </div>
+                    </div>
+                    <div className={styles.infoIconsContainer}>
+                        <ScalableVectorGraphics
+                            className={styles.infoIcon}
+                            src={Male}
+                        />
+                        <div className={styles.descriptionCotainer}>
+                            <div className={styles.iconTitle}>44</div>
+                            <div className={styles.iconText}>
+                             Third Gender Population
                             </div>
 
                         </div>
@@ -141,12 +161,13 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
+                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} interval={0} />
                         <Tooltip />
                         {/* <Legend /> */}
                         <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
                         <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
                         <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
+                        <Bar dataKey="ThirdGender" stackId="a" fill="red" />
                         <Bar dataKey="TotalFamilyCount" fill="#347eff" />
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
