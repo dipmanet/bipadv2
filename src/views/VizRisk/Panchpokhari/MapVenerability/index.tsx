@@ -523,7 +523,7 @@ class FloodHistoryMap extends React.Component {
             && fC.geometry.coordinates[1] === latToCompare)[0];
 
         if (hT.properties) {
-            return hT.properties.CI;
+            return hT.properties.Type;
         }
         return [];
     }

@@ -80,7 +80,11 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Incidents</h1>
                 <p>
-                In the past 1 year, total
+                In the year
+                    {' '}
+                    {incidentFilterYear}
+                    {' '}
+                , total
 
                     {' '}
                     {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}

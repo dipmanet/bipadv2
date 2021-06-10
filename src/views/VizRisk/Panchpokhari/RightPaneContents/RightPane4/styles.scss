@@ -29,9 +29,10 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+       
         .chartContainer{
             // border: 1px solid red;
-            height: 600px;
+            height: 700px;
             padding-top:0;
             width: 360px;
         }
@@ -44,6 +45,7 @@
             margin-top: 20px;
             position: relative;
             right: 35px;
+            // border: 1px solid red;
         }
        
         h1{

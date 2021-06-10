@@ -45,7 +45,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             totalPages,
             drawChartData,
         } = this.props;
-        const chartDataTitles = [...new Set(drawChartData.map(item => item.hazardTitle))];
+        console.log('vul data in left pane:', drawChartData);
+
+        const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
+        const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
             name: h,
             Total: drawChartData.filter(i => i.hazardTitle === h).length,
@@ -137,7 +140,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     VULNERABILITY OF BUILDINGS
                 </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'50%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                     <BarChart
                         width={350}
                         height={600}
@@ -167,7 +170,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                      VULNERABLE GROUPS OF PEOPLE
                 </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'50%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                     <BarChart
                         width={350}
                         height={600}
@@ -197,7 +200,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                      AGE GROUPS
                 </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'50%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                     <BarChart
                         width={350}
                         height={600}

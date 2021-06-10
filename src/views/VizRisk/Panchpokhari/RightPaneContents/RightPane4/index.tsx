@@ -60,7 +60,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                      various hazards every year.
 
                 </p>
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
                     <BarChart
                         width={300}
                         height={600}

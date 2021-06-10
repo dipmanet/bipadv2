@@ -207,6 +207,7 @@ class Jugal extends React.Component {
     }
 
     public handleDrawSelectedData = (drawChartData) => {
+        console.log('vul data:', drawChartData);
         this.setState({ drawChartData });
     }
 

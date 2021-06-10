@@ -465,12 +465,12 @@ class FloodHistoryMap extends React.Component {
                     { layers: ['Forest'] },
                 );
                 const buildingsCount = ptsWithinBuildings.features.length;
-                console.log('buildings count:', buildingsCount);
                 result.push({
                     buildings: buildingsCount,
                     forest: forest.length,
                     farmlands: farmlands.length,
                 });
+
                 handleDrawSelectedData(result);
 
                 this.map.fitBounds(bbox, {
@@ -510,7 +510,7 @@ class FloodHistoryMap extends React.Component {
             && fC.geometry.coordinates[1] === latToCompare)[0];
 
         if (hT.properties) {
-            return hT.properties.CI;
+            return hT.properties.Type;
         }
         return [];
     }
