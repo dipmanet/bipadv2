@@ -158,12 +158,11 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <h1>Land Cover</h1>
                 <p>
-                Located in the Hilly region, Out of a total area of
-                436.09 square km, 44.3% of land is covered by forests,
-                15% by shrubs, 9% by glaciers, 8% by farmland ans scree
-                each. Other areas in the municipality is covered by built
-                up area, meadow, buildings, water, grassland and other
-                uncategorized and unmapped area.
+                Located in the Hilly region, Out of a total area of 436.09
+                square km, 44.3% of land is covered by forests, 15% by shrubs,
+                9% by glaciers, 8% by farmland and scree each. Other areas in
+                the municipality is covered by built up area, meadow,
+                buildings, water, grassland and other uncategorized and unmapped area.
 
                 </p>
                 <div className={styles.customChartLegend}>

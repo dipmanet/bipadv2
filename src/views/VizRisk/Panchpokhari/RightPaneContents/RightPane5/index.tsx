@@ -72,11 +72,11 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                Landslide, fire and Lightning incidents have been
-                reported in the municipality in the last 5 years
-                (2017 to 2021). These incidents have caused 3 deaths
-                and destroyed 7 houses. It is estimated that these
-                incidents resulted in a loss of NPR 77,90,000
+                In the past 1 year, total 3 incidents of Fire and
+                Landslide have been reported in Panchpokhari Thangpal
+                Rural Municipality. These incidents have caused 2 deaths
+                and 2 houses were destroyed causing economic loss of about
+                24 lakhs.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>

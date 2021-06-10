@@ -74,10 +74,10 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 <p>
                 Panchpokhari Thangpal Rural Municipality has the total
                 population of 34,697 with the male and female population
-                being 17,733 and 16,964 respectively. Total household number
-                 counts to 7,803. Ward number 7 has the largest household
-                  number that equals to 1414, while ward number 5 has the
-                  least comprising of only 690 number of household.
+                being 17,733 and 16,964 respectively. Total household
+                number counts to 7,803. Ward number 7 has the largest
+                household number that equals to 1414, while ward number
+                5 has the least comprising of only 690 number of household.
                 </p>
                 <div className={styles.chartContainer}>
                     <ResponsiveContainer width="100%" height={'100%'}>
