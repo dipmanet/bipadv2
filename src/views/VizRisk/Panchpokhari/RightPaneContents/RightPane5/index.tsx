@@ -78,7 +78,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1>Past Disaster Events in Jugal Rural Municipality</h1>
+                <h1>Past Disaster Incidents</h1>
                 <p>
                 In the past 1 year, total
 

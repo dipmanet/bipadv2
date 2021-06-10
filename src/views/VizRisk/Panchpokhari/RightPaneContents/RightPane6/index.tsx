@@ -58,15 +58,40 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1>Earthquake Exposure in Jugal </h1>
-                <p>
-                    The map depicts the peak ground acceleration values
-                    due to earthquake ground shaking with 2% probability
-                    of exceedance in 50 years.
-                </p>
-                <p>
-                     CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE
-                </p>
+                {
+                    this.props.sesmicLayer === 'ses'
+                        ? (
+                            <>
+                                <h1>Earthquake Exposure </h1>
+                                <p>
+                    The map shows the exposure of critical infrastructures
+                    and assets to earthquake. The seismic hazard map is the
+                    base map which depicts the peak ground acceleration values
+                    due to earthquake ground shaking with 2% probability of
+                    exceedance in 50 years.
+                                </p>
+                                <p>
+                         CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE
+                                </p>
+                            </>
+                        )
+                        : (
+                            <>
+                                <h1>Landslide Exposure </h1>
+                                <p>
+                    The map shows the exposure of critical infrastructures
+                    and assets to landslide. The landslide susceptibility
+                    map is the base map, which represents the relative
+                    indication of the probability of sesimically triggered landslides.
+                                </p>
+                                <p>
+                        CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO LANDSLIDE
+                                </p>
+                            </>
+                        )
+                }
+
+
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
                     <BarChart
                         width={350}

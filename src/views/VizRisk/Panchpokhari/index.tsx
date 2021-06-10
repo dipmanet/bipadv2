@@ -560,6 +560,7 @@ class Jugal extends React.Component {
                             handleIncidentItemClick={this.handleIncidentItemClick}
                             incidentFilterYear={incidentFilterYear}
                             drawChartData={drawChartData}
+                            sesmicLayer={sesmicLayer}
 
                         />
                         <VRLegend>
@@ -596,6 +597,7 @@ class Jugal extends React.Component {
                             handleIncidentItemClick={this.handleIncidentItemClick}
                             incidentFilterYear={incidentFilterYear}
                             drawChartData={drawChartData}
+                            sesmicLayer={sesmicLayer}
 
                         />
                         <VRLegend>

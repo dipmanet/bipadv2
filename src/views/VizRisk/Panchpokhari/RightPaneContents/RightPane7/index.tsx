@@ -56,9 +56,21 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 : 0,
         });
 
+        console.log('chartdata:', chartData);
+
         return (
             <div className={styles.vrSideBar}>
-                <h1>Venerability of people and infrastructures </h1>
+                <h1>Vulnerability of people and infrastructures </h1>
+                <p>
+                Vulnerability is the conditions which increase the
+                susceptibility of a community to the impact of hazards.
+                The vulnerability level of each household has been visualized
+                in the map in 3 different colors. Red siginifies the high
+                vulnerability level, blue denotes moderate and gray
+                denotes the low vulnerability level. Physical, social and
+                economic factors were considered to identify the vulnerability
+                of each household.
+                </p>
                 <p>
                 CLASSIFICATION OF BUILDINGS BASED ON THE VULNERABILITY
                 </p>
