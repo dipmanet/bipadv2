@@ -101,11 +101,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 limit: -1,
             });
         },
-        onSuccess: ({ response, props: { setIncidentList } }) => {
+        onSuccess: ({ params, response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
             const { results: incidentList = [] } = response as Response;
             console.log('incidents:', incidentList);
             setIncidentList({ incidentList });
+            params.setIncidentList(incidentList);
         },
         onMount: true,
         onPropsChanged: {
@@ -151,8 +152,36 @@ class Jugal extends React.Component {
         const { requests: { incidentsGetRequest } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
-            onSuccess: this.setIncidents,
+            setIncidentList: this.setIncidentList,
         });
+    }
+
+    public setIncidentList = (year: string) => {
+        const { incidentList } = this.props;
+        if (incidentList.length > 0) {
+            const inciTotal = incidentList
+                .filter(y => this.getIncidentYear(y.incidentOn) === year)
+                .map(item => item.loss)
+                .filter(f => f !== undefined);
+
+            if (inciTotal.length > 0) {
+                const incidentDetails = inciTotal.reduce((a, b) => ({
+                    peopleDeathCount: (a.peopleDeathCount || 0) + (b.peopleDeathCount || 0),
+                    infrastructureDestroyedHouseCount:
+                    a.infrastructureDestroyedHouseCount + b.infrastructureDestroyedHouseCount,
+                    infrastructureAffectedHouseCount:
+                    a.infrastructureAffectedHouseCount + b.infrastructureAffectedHouseCount,
+                    peopleMissingCount:
+                    a.peopleMissingCount + b.peopleMissingCount,
+                    infrastructureEconomicLoss:
+                    a.infrastructureEconomicLoss + b.infrastructureEconomicLoss,
+                    agricultureEconomicLoss:
+                    a.agricultureEconomicLoss + b.agricultureEconomicLoss,
+                    totalAnnualincidents: inciTotal.length,
+                }));
+                this.setState({ incidentDetailsData: incidentDetails });
+            }
+        }
     }
 
     public handleSesmicLayerChange = (sesmicLayer) => {
