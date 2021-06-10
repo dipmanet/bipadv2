@@ -25,6 +25,17 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         };
     }
 
+
+    // public handlePopulationClick = (clickedItem: string) => {
+    //     this.setState({ clickedItem });
+    // };
+    public componentDidUpdate(prevProps) {
+        const { incidentFilterYear, getIncidentData } = this.props;
+        if (prevProps.incidentFilterYear !== incidentFilterYear) {
+            getIncidentData(incidentFilterYear);
+        }
+    }
+
     public handleShowLandCover= () => {
         this.setState(
             prevState => ({
@@ -32,10 +43,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             }),
         );
     }
-
-    // public handlePopulationClick = (clickedItem: string) => {
-    //     this.setState({ clickedItem });
-    // };
 
     public render() {
         // const { clickedItem } = this.state;
