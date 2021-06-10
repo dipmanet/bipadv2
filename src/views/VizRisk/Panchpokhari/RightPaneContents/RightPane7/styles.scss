@@ -33,8 +33,9 @@
         .buildingClassContainer{
             display: flex;
             width: 100%;
-            // border: 1px solid red;
+            border-top: 1px dotted #eee;
             justify-content: space-between;
+            padding-top: 15px;
             .levelContainer{
                 display: flex;
                 flex-direction: column;
@@ -43,21 +44,22 @@
                     display: flex;
                     align-items: center;
                     .high{
-                        path: {fill:rgb(197,44,56); }
-                        width: 20px;
+                        // path: {fill:rgb(197,44,56); }
+                        font-size: 30px;
+                        color:#ff0000;
                         margin-right: 5px;
                     }
                     .med{
-                        path: {fill:rgb(193,127,90); }
-                        width: 20px;
+                        // path: {fill:rgb(193,127,90); }
+                        font-size: 30px;
                         margin-right: 5px;
-
+                        color: #0000ff;
                     }
                     .low{
-                        path: {fill: rgb(153,171,182);}
-                        width: 20px;
+                        // path: {fill: rgb(153,171,182);}
+                        font-size: 30px;
                         margin-right: 5px;
-
+                        color: #eeeeee;
                     }
                     .number{
                         font-size: 12px;
