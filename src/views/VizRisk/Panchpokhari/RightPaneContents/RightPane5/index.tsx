@@ -53,7 +53,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             incidentDetailsData,
         } = this.props;
 
-        console.log('incidents list ', incidentList);
+        console.log('incidentDetailsData', incidentDetailsData);
         const hazardTitle = [...new Set(incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
@@ -78,7 +78,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {' '}
                     {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
                     {' '}
-                incidents of Earthquake, Landslide, Windstorm
+                incidents of Landslide, Fire
                 and Thunderbolt have been reported in Jugal Rural Municipality.
                 These incidents have caused
                     {' '}
