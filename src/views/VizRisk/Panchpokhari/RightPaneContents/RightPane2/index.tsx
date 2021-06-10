@@ -102,11 +102,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
-            console.log('payload', payload);
-            // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 127.02) * 100).toFixed(2)} % `}</p>
+                    <p>{`${((payload[0].value / 436.09) * 100).toFixed(2)} % `}</p>
                 </div>
             );
         }

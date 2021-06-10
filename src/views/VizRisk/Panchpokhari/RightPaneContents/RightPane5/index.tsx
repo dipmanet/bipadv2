@@ -50,6 +50,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             clickedItem,
             handleIncidentItemClick,
             incidentFilterYear,
+            incidentDetailsData,
         } = this.props;
 
         console.log('incidents list ', incidentList);
@@ -72,11 +73,24 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                In the past 1 year, total 3 incidents of Fire and
-                Landslide have been reported in Panchpokhari Thangpal
-                Rural Municipality. These incidents have caused 2 deaths
-                and 2 houses were destroyed causing economic loss of about
-                24 lakhs.
+                In the past 1 year, total
+
+                    {' '}
+                    {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
+                    {' '}
+                incidents of Earthquake, Landslide, Windstorm
+                and Thunderbolt have been reported in Jugal Rural Municipality.
+                These incidents have caused
+                    {' '}
+                    {incidentDetailsData.peopleDeathCount}
+                    {' '}
+                 deaths and
+                    {' '}
+                    {incidentDetailsData.infrastructureDestroyedHouseCount}
+                    {' '}
+                 houses were destroyed causing economic loss of about
+                    {incidentDetailsData.infrastructureEconomicLoss}
+                 NPR.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>

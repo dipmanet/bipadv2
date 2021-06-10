@@ -296,6 +296,11 @@ class FloodHistoryMap extends React.Component {
             }
             if (this.props.rightElement === 1) {
                 this.map.setLayoutProperty('Population Density', 'visibility', 'visible');
+                this.map.setLayoutProperty('Ward Boundary Line', 'visibility', 'visible');
+                this.map.moveLayer('Ward Boundary Line');
+                this.map.setLayoutProperty('Ward No.', 'visibility', 'visible');
+                this.map.moveLayer('Ward No.');
+                this.map.setLayoutProperty('raster-hillshade', 'visibility', 'none');
             }
 
             mapping.forEach((attribute) => {
