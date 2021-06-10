@@ -93,6 +93,7 @@ const iconNames = {
     circle: 'fa fa-circle',
     square: 'fa fa-square',
     search: 'fa fa-search',
+    home: 'fa fa-home',
 };
 
 export default iconNames;

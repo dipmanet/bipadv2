@@ -61,6 +61,69 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         });
 
         console.log('chartdata:', chartData);
+        const voBChartData = [
+            {
+                name: 'Category R3 Flat Roof',
+                Total: drawChartData[drawChartData.length - 1]
+                    ? Math.round(drawChartData[drawChartData.length - 1].buildings / 3)
+                    : 0,
+            },
+            {
+                name: 'Category R2 Heavy Weight',
+                Total: drawChartData[drawChartData.length - 1]
+                    ? Math.round(drawChartData[drawChartData.length - 1].buildings / 2)
+                    : 0,
+            },
+            {
+                name: 'Category R1 Light Wight',
+                Total: drawChartData[drawChartData.length - 1]
+                    ? Math.round(drawChartData[drawChartData.length - 1].buildings / 6)
+                    : 0,
+            },
+        ];
+
+        const vgofChartData = [
+            {
+                name: 'Woman Headed',
+                Total: 25000,
+            },
+            {
+                name: 'PWD',
+                Total: 1500,
+            },
+            {
+                name: 'Lactating',
+                Total: 9000,
+            },
+            {
+                name: 'Female',
+                Total: 7500,
+            },
+            {
+                name: 'Male',
+                Total: 6400,
+            },
+        ];
+
+        const ageGrpChartData = [
+            {
+                name: '>71',
+                Total: 3500,
+            },
+            {
+                name: '31-50',
+                Total: 5500,
+            },
+            {
+                name: '13-18',
+                Total: 6300,
+            },
+            {
+                name: '<5',
+                Total: 2567,
+            },
+
+        ];
 
         return (
             <div className={styles.vrSideBar}>
@@ -144,7 +207,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     <BarChart
                         width={350}
                         height={600}
-                        data={chartData}
+                        data={voBChartData}
                         layout="vertical"
                         margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                     >
@@ -174,7 +237,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     <BarChart
                         width={350}
                         height={600}
-                        data={chartData}
+                        data={vgofChartData}
                         layout="vertical"
                         margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                     >
@@ -188,7 +251,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         <Tooltip />
                         <Bar
                             dataKey="Total"
-                            fill="rgb(0,219,95)"
+                            fill="rgb(0,149,215)"
                             barSize={15}
                             label={{ position: 'right', fill: '#ffffff' }}
                             radius={[0, 15, 15, 0]}
@@ -204,7 +267,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     <BarChart
                         width={350}
                         height={600}
-                        data={chartData}
+                        data={ageGrpChartData}
                         layout="vertical"
                         margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                     >
@@ -218,7 +281,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         <Tooltip />
                         <Bar
                             dataKey="Total"
-                            fill="rgb(0,219,95)"
+                            fill="rgb(213,81,76)"
                             barSize={15}
                             label={{ position: 'right', fill: '#ffffff' }}
                             radius={[0, 15, 15, 0]}

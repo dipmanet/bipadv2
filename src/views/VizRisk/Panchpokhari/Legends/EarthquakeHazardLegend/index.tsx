@@ -52,6 +52,7 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationIndicator3}>0.2-0.35</div>
                                 <div className={styles.populationIndicator4}>0.35-0.55</div>
                                 <div className={styles.populationIndicator5}>0.55-0.9</div>
+                                <div className={styles.populationIndicator6}>0.9-1.5</div>
                             </div>
 
                         </div>

@@ -13,6 +13,7 @@ import ci from '../RightPaneContents/RightPane4/ci';
 import buildings from '../Data/buildings';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
+import expressions from '../Data/expressions';
 
 import styles from './styles.scss';
 
@@ -64,6 +65,7 @@ const buildingsArr = buildingsData.features.map(item => [
 
 const points = turf.points(arr);
 const buildingpoints = turf.points(buildingsArr);
+const { buildingColor } = expressions;
 
 
 class FloodHistoryMap extends React.Component {
@@ -112,13 +114,14 @@ class FloodHistoryMap extends React.Component {
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         this.map.on('style.load', () => {
-            this.map.on('click', 'Buildings', (e) => {
-                console.log('features:', e.features[0]);
-                console.log('all e::', e);
-                this.setState({ osmID: e.features[0].properties.osm_id });
-                const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
-                this.map.setFilter('Buildings', filter);
-            });
+            // this.map.on('click', 'Buildings', (e) => {
+            //     console.log('features:', e.features[0]);
+            //     console.log('all e::', e);
+            //     this.setState({ osmID: e.features[0].properties.osm_id });
+            //     const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
+            //     this.map.setFilter('Buildings', filter);
+            // });
+            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
 
             this.map.addSource('lsSusep', {
                 type: 'raster',

@@ -47,13 +47,20 @@
             .populationIndicator4{
                 @extend .conainerStyle;
 
-                background-color:rgb(205,212,0);
+                background-color:rgb(255,212,0);
 
             }
             .populationIndicator5{
                 @extend .conainerStyle;
 
                 background-color:rgb(205,177,0);
+
+            }
+            
+            .populationIndicator6{
+                @extend .conainerStyle;
+
+                background-color:rgb(255,62,0);
 
             }
 
