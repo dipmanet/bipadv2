@@ -156,6 +156,14 @@ class Jugal extends React.Component {
         });
     }
 
+    public getIncidentYear = (incidentOn: string) => {
+        if (incidentOn) {
+            const date = incidentOn.split('T')[0];
+            return date.split('-')[0];
+        }
+        return 0;
+    }
+
     public setIncidentList = (year: string) => {
         const { incidentList } = this.props;
         if (incidentList.length > 0) {

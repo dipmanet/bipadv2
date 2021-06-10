@@ -96,7 +96,9 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {incidentDetailsData.infrastructureDestroyedHouseCount}
                     {' '}
                  houses were destroyed causing economic loss of about
+                    {' '}
                     {incidentDetailsData.infrastructureEconomicLoss}
+                    {' '}
                  NPR.
                 </p>
 
