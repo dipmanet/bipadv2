@@ -11,6 +11,7 @@ import Home from '#resources/icons/homeNew.svg';
 import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 import NavButtons from '../../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import Icon from '#rscg/Icon';
 
 // const chartData = criticalInfraData.safeShelterData;
 
@@ -80,11 +81,18 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             High
                         </span>
                         <div className={styles.iconLevel}>
-                            <ScalableVectorGraphics
+                            {/* <ScalableVectorGraphics
                                 className={styles.high}
                                 src={Home}
+                            /> */}
+                            <Icon
+                                name="home"
+                                className={styles.high}
                             />
-                            <span className={styles.number}>55</span>
+                            <span className={styles.number}>
+                                {'> '}
+                                10
+                            </span>
                         </div>
                     </div>
                     <div className={styles.levelContainer}>
@@ -92,11 +100,15 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             Medium
                         </span>
                         <div className={styles.iconLevel}>
-                            <ScalableVectorGraphics
+                            {/* <ScalableVectorGraphics
                                 className={styles.med}
                                 src={Home}
+                            /> */}
+                            <Icon
+                                name="home"
+                                className={styles.med}
                             />
-                            <span className={styles.number}>22</span>
+                            <span className={styles.number}>5 - 10</span>
                         </div>
                     </div>
                     <div className={styles.levelContainer}>
@@ -104,14 +116,23 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             Low
                         </span>
                         <div className={styles.iconLevel}>
-                            <ScalableVectorGraphics
+                            {/* <ScalableVectorGraphics
                                 className={styles.low}
                                 src={Home}
+                            /> */}
+                            <Icon
+                                name="home"
+                                className={styles.low}
                             />
-                            <span className={styles.number}>10</span>
+                            <span className={styles.number}>
+                                {' '}
+                                {'< '}
+                                    5
+                            </span>
                         </div>
                     </div>
                 </div>
+
                 <p>
                     VULNERABILITY OF BUILDINGS
                 </p>
