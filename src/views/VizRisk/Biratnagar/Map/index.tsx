@@ -110,6 +110,7 @@ const slideSixLayers = [
     'BiratnagarRoads',
     'municipalityFill',
 ];
+
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
         super(props);
@@ -131,6 +132,7 @@ class FloodHistoryMap extends React.Component {
             selectedProvinceId: provinceId,
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
+            criticalInfrastructureData,
         } = this.props;
 
         const mapping = [];

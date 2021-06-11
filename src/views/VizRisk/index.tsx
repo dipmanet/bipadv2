@@ -38,7 +38,7 @@ const VizRiskMainPage = () => {
             setTitle('Visualising Flood Exposure');
         } else if (municipality === 'tikapur') {
             setCurrentPage(1);
-            setTitle('Visualising Landslide Exposure');
+            setTitle('Visualising Flood Exposure');
         } else if (municipality === 'gulariya') {
             setCurrentPage(2);
             setTitle('Visualising Flood Exposure');

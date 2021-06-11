@@ -43,11 +43,11 @@ const DemoGraphicsLegends = (props) => {
                                     {' '} */}
                                         48527
                                 </div>
-                                <div className={styles.populationText}>8000</div>
+                                <div className={styles.populationText}>11000</div>
+                                <div className={styles.populationText}>9000</div>
                                 <div className={styles.populationText}>7000</div>
-                                <div className={styles.populationText}>6000</div>
                                 <div className={styles.populationText}>5000</div>
-                                <div className={styles.populationText}>4000</div>
+                                <div className={styles.populationText}>3000</div>
                             </div>
 
                         </div>
@@ -72,11 +72,11 @@ const DemoGraphicsLegends = (props) => {
                                 <div className={styles.populationIndicator5} />
                             </div>
                             <div className={styles.populationTextContainer}>
-                                <div className={styles.populationText}>16240</div>
-                                <div className={styles.populationText}>7600</div>
-                                <div className={styles.populationText}>4160</div>
-                                <div className={styles.populationText}>2000</div>
-                                <div className={styles.populationText}>560</div>
+                                <div className={styles.populationText}>2016</div>
+                                <div className={styles.populationText}>1168</div>
+                                <div className={styles.populationText}>736</div>
+                                <div className={styles.populationText}>384</div>
+                                <div className={styles.populationText}>128</div>
                                 <div className={styles.populationText}>0</div>
                             </div>
 

@@ -44,10 +44,10 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#9a3404', 2, '#9a3404',
+    1, '#9a3404', 2, '#d95f0e',
     3, '#fed990', 4, '#fed990',
-    5, '#fed990', 6, '#fe9b2a',
-    7, '#d95f0e', 8, '#fe9b2a',
+    5, '#fed990', 6, '#fed990',
+    7, '#fe9b2a', 8, '#fed990',
     9, '#ffffd6'];
 const {
     criticalinfrastructures,
@@ -81,7 +81,7 @@ const slideOneLayers = ['wardNumbers',
 const slideTwoLayers = ['bridgeTikapur', 'water', 'waterway',
     'canalTikapur', 'TikapurBuildings',
     'TikapurRoads', 'forestTikapur', 'WoodforestTikapur',
-    'agriculturallandTikapur', 'agriculturelandTikapurFarmyard', 'municipalityFill',
+    'agriculturallandTikapur', 'agriculturelandTikapurFarmyard', 'grasslandTikapur', 'meadowTikapur', 'sandTikapur', 'municipalityFill',
 
 ];
 
@@ -358,16 +358,7 @@ class FloodHistoryMap extends React.Component {
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    'fill-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['feature-state', 'value'],
-                        1, '#9a3404', 2, '#9a3404',
-                        3, '#fed990', 4, '#fed990',
-                        5, '#fed990', 6, '#fe9b2a',
-                        7, '#d95f0e', 8, '#fe9b2a',
-                        9, '#ffffd6',
-                    ],
+                    'fill-color': populationWardExpression,
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],

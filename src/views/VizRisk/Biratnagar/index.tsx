@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -13,7 +14,13 @@ import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardLegends from './Legends/FloodHazardLegends';
 import FloodDepthLegend from './Legends/FloodDepthLegend';
-
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
@@ -27,11 +34,32 @@ const rightelements = [
     <RightElement5 />,
     <RightElement6 />,
 ];
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    GetCriticalInfrastructure: {
+        url: `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows`,
+        method: methods.GET,
+        query: ({ params }) => ({
+            version: '1.0.0',
+            service: 'WFS',
+            request: 'GetFeature',
+            typeName: 'Bipad:CI_Biratnagar',
+            outputFormat: 'application/json',
 
-export default class Biratnagar extends React.Component {
+        }),
+        onSuccess: ({ response, params }) => {
+            if (params && params.CriticalInfraData) {
+                params.CriticalInfraData(response);
+            }
+        },
+
+        onMount: true,
+
+    },
+};
+class Biratnagar extends React.Component {
     public constructor(props) {
         super(props);
-
+        const { requests: { GetCriticalInfrastructure } } = props;
         this.state = {
             showRaster: true,
             rasterLayer: '5',
@@ -48,7 +76,11 @@ export default class Biratnagar extends React.Component {
             showCriticalElements: true,
             disableNavRightBtn: false,
             disableNavLeftBtn: false,
+            criticalInfrastructureData: [],
         };
+        GetCriticalInfrastructure.setDefaultParams({
+            CriticalInfraData: this.handleCriticalInfraData,
+        });
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -75,6 +107,9 @@ export default class Biratnagar extends React.Component {
         });
     }
 
+    public handleCriticalInfraData=(data) => {
+        this.setState({ criticalInfrastructureData: data });
+    }
 
     public handleLegendsClick = (rasterLayer: string, showRasterRec: boolean) => {
         this.setState({
@@ -169,8 +204,9 @@ export default class Biratnagar extends React.Component {
             showCriticalElements,
             disableNavLeftBtn,
             disableNavRightBtn,
+            criticalInfrastructureData,
         } = this.state;
-
+        console.log('This data', criticalInfrastructureData);
         return (
             <div>
                 {!disableNavBtns && (
@@ -220,6 +256,7 @@ export default class Biratnagar extends React.Component {
                     evacElement={evacElement}
                     enableNavBtns={this.enableNavBtns}
                     disableNavBtns={this.disableNavBtns}
+                    criticalInfrastructureData={criticalInfrastructureData}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1
@@ -318,3 +355,10 @@ export default class Biratnagar extends React.Component {
         );
     }
 }
+export default connect()(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            Biratnagar,
+        ),
+    ),
+);

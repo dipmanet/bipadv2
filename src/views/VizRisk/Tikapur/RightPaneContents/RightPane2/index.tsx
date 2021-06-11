@@ -27,19 +27,26 @@ import styles from './styles.scss';
 import Disclaimer from '../../Components/Disclaimer';
 
 const data = [
-    { name: 'Agricultural land', value: 36.335 },
-    { name: 'Forest', value: 15.276 },
-    { name: 'Water bodies', value: 9.1 },
-    { name: 'Other', value: 56.181 },
-    { name: 'Buildings', value: 1.113 },
+    { name: 'Agricultural land', value: 74.71 },
+    { name: 'Forest', value: 14.91 },
+    { name: 'Water bodies', value: 6.11 },
+    { name: 'Other', value: 18.2 },
+    { name: 'Buildings', value: 1.69 },
+    { name: 'Grassland', value: 0.51 },
+    { name: 'Sand', value: 1.06 },
+    { name: 'Meadows', value: 0.83 },
 ].sort(({ value: a }, { value: b }) => b - a);
 console.log('This is final formal>>>', data);
 const COLORS_CHART = [
-    '#d5d3d3', // other
     '#d3e378', // agriculture
+    '#d5d3d3', // other
     '#00a811', // forest
     '#0765AA', // water bodies
     '#F2F2F2', // building
+    '#effdc9', // sand
+    '#afeb0a', // meadow
+    '#4ad391', // grassland
+
 
 ];
 
@@ -162,10 +169,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Out of a total area of 118 square km, 36.34% of the land is used
-                for agriculture.Forests cover 12.94%, water bodies cover 7.71%
-                and buildings cover 0.94% of the land.However, 47.6% of land in
-                Tikapur is uncategorized or still unmapped in OpenStreetMap.
+                Out of a total area of 118 square km, 63.30% of the land is used
+                for agriculture.Forests cover 12.63%, water bodies cover 5.17%
+                and buildings cover 1.43% of the land.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -213,42 +219,63 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <div className={styles.customChartLegend}>
                     <CustomChartLegend
+                        text={data[0].name}
+                        barColor={COLORS_CHART[0]}
+                        background={'#eee'}
+                        data={'74.71 sq km / 63.30'}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
                         text={data[1].name}
                         barColor={COLORS_CHART[1]}
                         background={'#eee'}
-                        data={'36.335 sq km / 30.79'}
-                        selected={activeIndex === 0}
+                        data={'18.2 sq km / 15.42'}
+                        selected={activeIndex === 1}
                     />
 
                     <CustomChartLegend
                         text={data[2].name}
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
-                        data={'15.276 sq km / 12.94'}
-                        selected={activeIndex === 2}
+                        data={'14.91 sq km / 12.63'}
+                        selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS_CHART[3]}
                         background={'#eee'}
-                        data={'9.1 sq km / 7.71'}
-                        selected={activeIndex === 3}
+                        data={'6.11 sq km / 5.18'}
+                        selected={activeIndex === 1}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
-                        background={'#444'}
-                        data={'1.113  sq km / 0.94'}
-                        selected={activeIndex === 4}
-                        builtupArea
-                    />
-                    <CustomChartLegend
-                        text={data[0].name}
-                        barColor={COLORS_CHART[0]}
-                        background={'#444'}
-                        data={'56.181 sq km / 47.6'}
+                        background={'#eee'}
+                        data={'1.69 sq km / 1.43'}
                         selected={activeIndex === 1}
                     />
+                    <CustomChartLegend
+                        text={data[5].name}
+                        barColor={COLORS_CHART[5]}
+                        background={'#eee'}
+                        data={'1.06 sq km / 0.90'}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
+                        text={data[6].name}
+                        barColor={COLORS_CHART[6]}
+                        background={'#eee'}
+                        data={'0.83 sq km / 0.70'}
+                        selected={activeIndex === 1}
+                    />
+                    <CustomChartLegend
+                        text={data[7].name}
+                        barColor={COLORS_CHART[7]}
+                        background={'#eee'}
+                        data={'0.51 sq km / 0.43'}
+                        selected={activeIndex === 1}
+                    />
+
 
                 </div>
                 {/* <SourceInfo /> */}
