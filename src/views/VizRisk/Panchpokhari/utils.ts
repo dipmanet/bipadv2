@@ -12,7 +12,7 @@ export const getGeoJSONPH = (filterBy: string, data: any) => {
     geoObj.type = 'FeatureCollection';
     geoObj.name = filterBy;
     geoObj.features = [];
-    const d = data.features.filter(item => item.properties.CI === filterBy);
+    const d = data.features.filter(item => item.properties.Type === filterBy);
     geoObj.features.push(...d);
     return geoObj;
 };
