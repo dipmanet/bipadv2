@@ -109,6 +109,14 @@ class FloodHistoryMap extends React.Component {
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         this.map.on('style.load', () => {
+            this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
+            this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+            this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
+            this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+            this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+            this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.addSource('lsSusep', {
                 type: 'raster',
                 tiles: [getHillShadeLayer('panchpokhari_durham_landslide_susceptibility')],

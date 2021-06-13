@@ -139,7 +139,30 @@ class FloodHistoryMap extends React.Component {
             // this.map.on('draw.create', updateArea);
             // this.map.on('draw.delete', updateArea);
             // this.map.on('draw.update', updateArea);
-
+            this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
+            this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+            this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
+            this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+            this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+            this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            this.map.addSource('hillshadePachpokhari', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
+            this.map.addLayer(
+                {
+                    id: 'raster-hillshade',
+                    type: 'raster',
+                    source: 'hillshadePachpokhari',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             const hazardTitle = [...new Set(incidentList.features.map(
                 item => item.properties.hazardTitle,
             ))];
@@ -207,6 +230,21 @@ class FloodHistoryMap extends React.Component {
         geoObj.features.push(...d);
         return geoObj;
     }
+
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Panchpokhari_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public handlePlayPause = () => {
         this.setState(prevState => ({ playState: !prevState.playState }));
