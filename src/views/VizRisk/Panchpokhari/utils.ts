@@ -12,7 +12,7 @@ export const getGeoJSONPH = (filterBy: string, data: any) => {
     geoObj.type = 'FeatureCollection';
     geoObj.name = filterBy;
     geoObj.features = [];
-    const d = data.features.filter(item => item.properties.Type === filterBy);
+    const d = data.features.filter(item => item.properties.CI === filterBy);
     geoObj.features.push(...d);
     return geoObj;
 };
@@ -30,4 +30,13 @@ export const getHillShadeLayer = (layer: string) => [
     '&bbox={bbox-epsg-3857}',
     '&transparent=true',
     '&format=image/png',
+].join('');
+
+export const getgeoJsonLayer = (layer: string) => [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows?`,
+    '&version=1.1.0',
+    '&service=WFS',
+    '&request=GetFeature',
+    `&typeName=Bipad:${layer}`,
+    '&outputFormat=application/json',
 ].join('');

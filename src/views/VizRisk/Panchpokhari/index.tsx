@@ -16,6 +16,7 @@ import RightElement7 from './RightPaneContents/RightPane7';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import { getgeoJsonLayer } from './utils';
 import {
     incidentPointToGeojson,
 } from '#utils/domain';
@@ -79,6 +80,7 @@ const transformFilters = ({
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
+const url = 'https://geoserver.yilab.org.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad:CI_Biratnagar&outputFormat=application/json';
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidentsGetRequest: {
@@ -104,7 +106,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ params, response, props: { setIncidentList } }) => {
             interface Response { results: PageType.Incident[] }
             const { results: incidentList = [] } = response as Response;
-            console.log('incidents:', incidentList);
             setIncidentList({ incidentList });
             params.setIncidentList(incidentList);
         },
@@ -119,6 +120,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 return shouldRequest;
             },
         },
+        // extras: { schemaName: 'incidentResponse' },
+    },
+    cIGetRequest: {
+        url: ({ params }) => params.url,
+        method: methods.GET,
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results: cI = [] } = response as Response;
+            params.setCI(response);
+        },
+        onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
 };
@@ -147,12 +159,17 @@ class Jugal extends React.Component {
             incidentDetailsData: [],
             drawChartData: [],
             sesmicLayer: 'ses',
+            cI: [],
         };
 
-        const { requests: { incidentsGetRequest } } = this.props;
+        const { requests: { incidentsGetRequest, cIGetRequest } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
             setIncidentList: this.setIncidentList,
+        });
+        cIGetRequest.setDefaultParams({
+            setCI: this.setCI,
+            url: getgeoJsonLayer('CI_Jugal'),
         });
     }
 
@@ -162,6 +179,11 @@ class Jugal extends React.Component {
             return date.split('-')[0];
         }
         return 0;
+    }
+
+    public setCI = (cI) => {
+        console.log('jugalCI', cI);
+        this.setState({ cI });
     }
 
     public setIncidentList = (year: string) => {
@@ -207,7 +229,6 @@ class Jugal extends React.Component {
     }
 
     public handleDrawSelectedData = (drawChartData) => {
-        console.log('vul data:', drawChartData);
         this.setState({ drawChartData });
     }
 
@@ -339,6 +360,7 @@ class Jugal extends React.Component {
             incidentDetailsData,
             drawChartData,
             sesmicLayer,
+            cI,
         } = this.state;
 
         const {
@@ -376,6 +398,7 @@ class Jugal extends React.Component {
                             disableNavBtns={this.disableNavBtns}
                             enableNavBtns={this.enableNavBtns}
                             incidentList={pointFeatureCollection}
+
                         />
                         <RightElement1
                             handleNext={this.handleNext}
@@ -404,6 +427,8 @@ class Jugal extends React.Component {
                             disableNavBtns={this.disableNavBtns}
                             enableNavBtns={this.enableNavBtns}
                             incidentList={pointFeatureCollection}
+                            CIData={cI}
+
                         />
                         <RightElement3
                             handleNext={this.handleNext}
@@ -462,6 +487,7 @@ class Jugal extends React.Component {
                             disableNavBtns={this.disableNavBtns}
                             enableNavBtns={this.enableNavBtns}
                             incidentList={pointFeatureCollection}
+                            CIData={cI}
                         />
                         <RightElement4
                             handleNext={this.handleNext}

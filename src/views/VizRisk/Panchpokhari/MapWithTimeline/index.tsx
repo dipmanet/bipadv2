@@ -27,6 +27,7 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import TimelineSlider from './TimelineSlider';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -271,48 +272,17 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-
-                <div className={styles.incidentsSlider}>
-                    <button
-                        className={styles.playButton}
-                        type="button"
-                        onClick={this.handlePlayPause}
-                    >
-                        {
-                            !this.state.playState
-                                ? (
-                                    <Icon
-                                        name="play"
-                                        className={styles.playpauseIcon}
-                                    />
-                                ) : (
-                                    <Icon
-                                        name="pause"
-                                        className={styles.playpauseIcon}
-                                    />
-                                )}
-                    </button>
-
-                    <div className={styles.rangeWrap}>
-                        <div
-                            style={{ left: `calc(${Number(this.state.incidentYear) * 10}% - ${Number(this.state.incidentYear) * 2}px)` }}
-                            className={styles.rangeValue}
-                            id="rangeV"
-                        >
-                            {Number(this.state.incidentYear) + 2011}
-                        </div>
-                        <input
-                            onChange={this.handleInputChange}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="10"
-                            step="1"
-                            value={this.state.incidentYear}
-                            className={styles.slider}
-                        />
-                    </div>
-                </div>
+                <TimelineSlider
+                    onChange={this.handleInputChange}
+                    id="slider"
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value={this.state.incidentYear}
+                    playState={this.state.playState}
+                    onPlayBtnClick={this.handlePlayPause}
+                />
             </div>
         );
     }
