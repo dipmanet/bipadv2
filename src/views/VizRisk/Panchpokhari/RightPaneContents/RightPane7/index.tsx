@@ -35,6 +35,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         }));
     }
 
+    public handleBackBtn = () => {
+        this.props.setSingularBuilding(false);
+    }
+
     public render() {
         const {
             handleNext,
@@ -82,6 +86,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             },
         ];
 
+
         const vgofChartData = [
             {
                 name: 'Woman Headed',
@@ -128,167 +133,223 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1>Vulnerability of people and infrastructures </h1>
-                <p>
-                Vulnerability is the conditions which increase the
-                susceptibility of a community to the impact of hazards.
-                The vulnerability level of each household has been visualized
-                in the map in 3 different colors. Red siginifies the high
-                vulnerability level, blue denotes moderate and gray
-                denotes the low vulnerability level. Physical, social and
-                economic factors were considered to identify the vulnerability
-                of each household.
-                </p>
-                <p>
-                CLASSIFICATION OF BUILDINGS BASED ON THE VULNERABILITY
-                </p>
-                <div className={styles.buildingClassContainer}>
-                    <div className={styles.levelContainer}>
-                        <span>
-                            High
-                        </span>
-                        <div className={styles.iconLevel}>
-                            {/* <ScalableVectorGraphics
-                                className={styles.high}
-                                src={Home}
-                            /> */}
-                            <Icon
-                                name="home"
-                                className={styles.high}
-                            />
-                            <span className={styles.number}>
-                                {'> '}
-                                10
-                            </span>
-                        </div>
-                    </div>
-                    <div className={styles.levelContainer}>
-                        <span>
-                            Medium
-                        </span>
-                        <div className={styles.iconLevel}>
-                            {/* <ScalableVectorGraphics
-                                className={styles.med}
-                                src={Home}
-                            /> */}
-                            <Icon
-                                name="home"
-                                className={styles.med}
-                            />
-                            <span className={styles.number}>5 - 10</span>
-                        </div>
-                    </div>
-                    <div className={styles.levelContainer}>
-                        <span>
-                            Low
-                        </span>
-                        <div className={styles.iconLevel}>
-                            {/* <ScalableVectorGraphics
-                                className={styles.low}
-                                src={Home}
-                            /> */}
-                            <Icon
-                                name="home"
-                                className={styles.low}
-                            />
-                            <span className={styles.number}>
+                { this.props.singularBuilding
+                    ? (
+                        <>
+                            <p>
+                        Showing the elements that are vulnerable to multiple
+                        hazards and showing the data in terms of Vulnerability
+                        Score of the building.
+                            </p>
+                            <h1>
+                       Vulnerability:
                                 {' '}
-                                {'< '}
-                                    5
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                                Medium
+                            </h1>
+                            <p>
+                        Age Groups
+                            </p>
 
-                <p>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                                <BarChart
+                                    width={350}
+                                    height={600}
+                                    data={ageGrpChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,219,95)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+
+                            <button
+                                onClick={this.handleBackBtn}
+                                type="button"
+                                className={styles.backButton}
+                            >
+                                Back
+                            </button>
+                        </>
+                    )
+
+                    : (
+                        <>
+                            <p>
+                Vulnerability is the conditions which increase the susceptibility
+                of an individual, household or community to the impact of hazards.
+                The vulnerability level of each household has been visualized in the
+                map in 3 different colors. Red siginifies the high vulnerability level,
+                orange denotes moderate and yellow denotes the low vulnerability level.
+                Physical, social and economic facors were considered to identify the
+                vulnerability of each household.
+                            </p>
+                            <p>
+                CLASSIFICATION OF BUILDINGS BASED ON THE VULNERABILITY
+                            </p>
+                            <div className={styles.buildingClassContainer}>
+                                <div className={styles.levelContainer}>
+                                    <span>
+                            High
+                                    </span>
+                                    <div className={styles.iconLevel}>
+                                        {/* <ScalableVectorGraphics
+                                className={styles.high}
+                                src={Home}
+                            /> */}
+                                        <Icon
+                                            name="home"
+                                            className={styles.high}
+                                        />
+                                        <span className={styles.number}>
+                                            {'> '}
+                                0
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={styles.levelContainer}>
+                                    <span>
+                            Medium
+                                    </span>
+                                    <div className={styles.iconLevel}>
+                                        {/* <ScalableVectorGraphics
+                                className={styles.med}
+                                src={Home}
+                            /> */}
+                                        <Icon
+                                            name="home"
+                                            className={styles.med}
+                                        />
+                                        <span className={styles.number}>1</span>
+                                    </div>
+                                </div>
+                                <div className={styles.levelContainer}>
+                                    <span>
+                            Low
+                                    </span>
+                                    <div className={styles.iconLevel}>
+                                        {/* <ScalableVectorGraphics
+                                className={styles.low}
+                                src={Home}
+                            /> */}
+                                        <Icon
+                                            name="home"
+                                            className={styles.low}
+                                        />
+                                        <span className={styles.number}>
+                                            {' '}
+                                            {'< '}
+                                    3
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>
                     VULNERABILITY OF BUILDINGS
-                </p>
+                            </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                    <BarChart
-                        width={350}
-                        height={600}
-                        data={voBChartData}
-                        layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <Tooltip />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(0,219,95)"
-                            barSize={15}
-                            label={{ position: 'right', fill: '#ffffff' }}
-                            radius={[0, 15, 15, 0]}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                                <BarChart
+                                    width={350}
+                                    height={600}
+                                    data={voBChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,219,95)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
 
-                <p>
+                            <p>
                      VULNERABLE GROUPS OF PEOPLE
-                </p>
+                            </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                    <BarChart
-                        width={350}
-                        height={600}
-                        data={vgofChartData}
-                        layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <Tooltip />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(0,149,215)"
-                            barSize={15}
-                            label={{ position: 'right', fill: '#ffffff' }}
-                            radius={[0, 15, 15, 0]}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                                <BarChart
+                                    width={350}
+                                    height={600}
+                                    data={vgofChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,149,215)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
 
-                <p>
+                            <p>
                      AGE GROUPS
-                </p>
+                            </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                    <BarChart
-                        width={350}
-                        height={600}
-                        data={ageGrpChartData}
-                        layout="vertical"
-                        margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <Tooltip />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(213,81,76)"
-                            barSize={15}
-                            label={{ position: 'right', fill: '#ffffff' }}
-                            radius={[0, 15, 15, 0]}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
-
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                                <BarChart
+                                    width={350}
+                                    height={600}
+                                    data={ageGrpChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(213,81,76)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </>
+                    )
+                }
                 <NavButtons
                     handleNext={handleNext}
                     handlePrev={handlePrev}
@@ -297,6 +358,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     pagenumber={pagenumber}
                     totalPages={totalPages}
                 />
+
 
                 {/* <SourceInfo /> */}
             </div>

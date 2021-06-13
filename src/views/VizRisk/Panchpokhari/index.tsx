@@ -162,6 +162,8 @@ class Jugal extends React.Component {
             drawChartData: [],
             sesmicLayer: 'ses',
             cI: [],
+            singularBuilding: false,
+            score: 7,
         };
 
         const { requests: { incidentsGetRequest, cIGetRequest } } = this.props;
@@ -186,6 +188,14 @@ class Jugal extends React.Component {
     public setCI = (cI) => {
         console.log('jugalCI', cI);
         this.setState({ cI });
+    }
+
+    public setSingularBuilding = (singularBuilding) => {
+        this.setState({ singularBuilding });
+    }
+
+    public setScore = (score) => {
+        this.setState({ score });
     }
 
     public setIncidentList = (year: string) => {
@@ -623,6 +633,9 @@ class Jugal extends React.Component {
                             handleIncidentChange={this.handleIncidentChange}
                             handleDrawSelectedData={this.handleDrawSelectedData}
                             sesmicLayer={sesmicLayer}
+                            singularBuilding={this.state.singularBuilding}
+                            setSingularBuilding={this.setSingularBuilding}
+                            setScore={this.setScore}
                         />
                         <RightElement7
                             handleNext={this.handleNext}
@@ -637,13 +650,17 @@ class Jugal extends React.Component {
                             incidentFilterYear={incidentFilterYear}
                             drawChartData={drawChartData}
                             sesmicLayer={sesmicLayer}
+                            singularBuilding={this.state.singularBuilding}
+                            score={this.state.score}
+                            setSingularBuilding={this.setSingularBuilding}
+
 
                         />
-                        <VRLegend>
+                        {/* <VRLegend>
                             <SesmicHazardLegend
                                 handleSesmicLayerChange={this.handleSesmicLayerChange}
                             />
-                        </VRLegend>
+                        </VRLegend> */}
                     </>
                 )
                 }

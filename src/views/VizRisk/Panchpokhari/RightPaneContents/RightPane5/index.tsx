@@ -99,11 +99,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {' '}
                     {incidentDetailsData.infrastructureDestroyedHouseCount}
                     {' '}
-                 houses were destroyed causing economic loss of about
-                    {' '}
-                    {incidentDetailsData.infrastructureEconomicLoss}
-                    {' '}
-                 NPR.
+                 houses were destroyed.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>

@@ -38,7 +38,7 @@ const DemoGraphicsLegends = (props) => {
     return (
         <div className={styles.susLegend}>
             {layer === 'ses'
-                ? (
+                && (
                     <div>
                         <h2>Seismic hazard (g)</h2>
                         <div className={styles.populationContainer}>
@@ -57,31 +57,34 @@ const DemoGraphicsLegends = (props) => {
 
                         </div>
                     </div>
-                ) : (
-                    <div>
-                        <h2>
-                            Landslide Suseptibility
-                        </h2>
-
-                        <div className={styles.populationContainer}>
-                            {susep.legends.map(legend => (
-                                <div key={legend.key} className={styles.legendsRow}>
-                                    <div
-                                        style={{
-                                            backgroundColor: legend.color,
-                                            marginBottom: 0,
-                                        }}
-                                        className={styles.populationIndicator2}
-                                    >
-                                        {legend.label}
-                                    </div>
-
-                                </div>
-                            ))}
-                        </div>
-
-                    </div>
                 )
+            }
+            {layer === 'sus'
+&& (
+    <div>
+        <h2>
+                            Landslide Suseptibility
+        </h2>
+
+        <div className={styles.populationContainer}>
+            {susep.legends.map(legend => (
+                <div key={legend.key} className={styles.legendsRow}>
+                    <div
+                        style={{
+                            backgroundColor: legend.color,
+                            marginBottom: 0,
+                        }}
+                        className={styles.populationIndicator2}
+                    >
+                        {legend.label}
+                    </div>
+
+                </div>
+            ))}
+        </div>
+
+    </div>
+)
             }
         </div>
     );

@@ -1,4 +1,4 @@
-
+$button-color: rgb(0,170,223);
  .vrSideBar::-webkit-scrollbar {
     display: none;
   }
@@ -29,6 +29,17 @@
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+        .backButton{
+            background-color: transparent;
+            border: 1px solid $button-color;
+            filter: saturate(100%);
+            color: $button-color;
+            cursor:pointer;
+            padding: 5px 10px;
+            margin-left: 5px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
 
         .buildingClassContainer{
             display: flex;

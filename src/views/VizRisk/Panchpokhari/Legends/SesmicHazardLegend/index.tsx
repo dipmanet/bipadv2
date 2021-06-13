@@ -3,8 +3,8 @@ import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 
 const DemoGraphicsLegends = (props) => {
-    const [showPopulationWard, setShowPopulationWard] = useState(false);
-    const [showPopulationDensity, setShowPopulationDensity] = useState(true);
+    const [showSus, setshowSus] = useState(false);
+    const [showSes, setshowSes] = useState(true);
     const {
         handleSesmicLayerChange,
     } = props;
@@ -12,14 +12,15 @@ const DemoGraphicsLegends = (props) => {
 
     const handlePopulationClick = (val) => {
         handleSesmicLayerChange(val);
+
         if (val === 'sus') {
-            setShowPopulationWard(true);
-            setShowPopulationDensity(false);
+            setshowSus(true);
+            setshowSes(false);
         }
 
         if (val === 'ses') {
-            setShowPopulationWard(false);
-            setShowPopulationDensity(true);
+            setshowSus(false);
+            setshowSes(true);
         }
     };
 
@@ -29,14 +30,14 @@ const DemoGraphicsLegends = (props) => {
             <div className={styles.hazardItemContainer}>
                 <button
                     type="button"
-                    className={showPopulationWard ? styles.legendBtnSelected : styles.legendBtn}
+                    className={showSus ? styles.legendBtnSelected : styles.legendBtn}
                     onClick={() => handlePopulationClick('sus')}
                 >
                     <Hexagon
                         style={{
                             stroke: '#fff',
                             strokeWidth: 50,
-                            fill: showPopulationWard ? '#036ef0' : 'transparent',
+                            fill: showSus ? '#036ef0' : 'transparent',
                         }}
                         className={styles.educationHexagon}
                     />
@@ -46,7 +47,7 @@ const DemoGraphicsLegends = (props) => {
             <div className={styles.hazardItemContainer}>
                 <button
                     type="button"
-                    className={showPopulationDensity ? styles.legendBtnSelected : styles.legendBtn}
+                    className={showSes ? styles.legendBtnSelected : styles.legendBtn}
                     onClick={() => handlePopulationClick('ses')}
 
                 >
@@ -54,7 +55,7 @@ const DemoGraphicsLegends = (props) => {
                         style={{
                             stroke: '#fff',
                             strokeWidth: 50,
-                            fill: showPopulationDensity ? '#036ef0' : 'transparent',
+                            fill: showSes ? '#036ef0' : 'transparent',
 
                         }}
                         className={styles.educationHexagon}

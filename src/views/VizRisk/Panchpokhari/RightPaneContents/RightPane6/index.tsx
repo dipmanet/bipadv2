@@ -66,13 +66,30 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         ? (
                             <>
                                 <h1>Earthquake Exposure </h1>
+
                                 <p>
-                    The map shows the exposure of critical infrastructures
-                    and assets to earthquake. The seismic hazard map is the
-                    base map which depicts the peak ground acceleration values
-                    due to earthquake ground shaking with 2% probability of
-                    exceedance in 50 years.
+                                The map shows the exposure of critical infrastructures
+                                and assets to earthquake.
+                                This visualization allows the super imposition of the
+                                seimic hazard map with landcover and critical infrastructures.
+                                The map shows the peak ground acceleration values
+                                due to earthquake ground shaking with 2% probability
+                                of exceedance in 50 years.
                                 </p>
+
+                                <p>
+                                This visualization helps understand the population,
+                                elements and assets that are at threat to
+                                earthquake hazard in the region.
+                                </p>
+                                <p>
+
+                                Its impacts can be reduced through
+                                risk-sensitive land use planning and this
+                                visualization allows re-thinking long term
+                                spatial planning in the region.
+                                </p>
+
                                 <p>
                          CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE
                                 </p>
@@ -82,10 +99,28 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <>
                                 <h1>Landslide Exposure </h1>
                                 <p>
-                    The map shows the exposure of critical infrastructures
-                    and assets to landslide. The landslide susceptibility
-                    map is the base map, which represents the relative
-                    indication of the probability of sesimically triggered landslides.
+The map shows the exposure of critical
+                                    infrastructures and assets to landslide.
+                                    This visualization allows the super imposition
+                                    of the landslide susceptibility map with details
+                                    of landcover and critical infrastructures. The map
+                                    shows the relative indication of the probability of
+                                    rainfall triggered landslides.
+
+                                </p>
+
+                                <p>
+This visualization helps understand the population,
+                                    elements and assets that are at threat to earthquake
+                                    hazard in the region.
+                                    {' '}
+
+                                </p>
+
+                                <p>
+Its impacts can be reduced through risk-sensitive
+                                    land use planning and this visualization allows
+                                    re-thinking long term spatial planning in the region.
                                 </p>
                                 <p>
                         CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO LANDSLIDE
@@ -95,7 +130,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 }
 
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={400}>
                     <BarChart
                         width={350}
                         height={600}

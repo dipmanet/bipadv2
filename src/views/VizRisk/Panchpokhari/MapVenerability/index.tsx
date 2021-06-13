@@ -121,6 +121,19 @@ class FloodHistoryMap extends React.Component {
             //     const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
             //     this.map.setFilter('Buildings', filter);
             // });
+            this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
+            this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+            this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
+            this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+            this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+            this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            this.map.addSource('hillshadePachpokhari', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
             this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
 
             this.map.addSource('lsSusep', {
@@ -136,7 +149,7 @@ class FloodHistoryMap extends React.Component {
                     source: 'lsSusep',
                     layout: {},
                     paint: {
-                        'raster-opacity': 1,
+                        'raster-opacity': 0.6,
                     },
                 },
             );
@@ -153,7 +166,7 @@ class FloodHistoryMap extends React.Component {
                     source: 'seicHazard',
                     layout: {},
                     paint: {
-                        'raster-opacity': 1,
+                        'raster-opacity': 0.6,
                     },
                 },
             );
@@ -512,6 +525,17 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
             }
         }
+
+        if (this.props.singularBuilding !== prevProps.singularBuilding) {
+            console.log('singular building in map reset', this.props.singularBuilding);
+            if (!this.props.singularBuilding) {
+                this.map.easeTo({
+                    zoom: 9.8,
+                    duration: 500,
+                    center: [85.64347922706821, 28.013604885888867],
+                });
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -562,7 +586,7 @@ class FloodHistoryMap extends React.Component {
     public handleSearch = () => {
         // get the searchID
         const searchId = this.state.searchTerm;
-
+        // setScore
         // get the coordinates of the builing
         const coordinatesObj = buildingsData
             .features.filter(b => Number(searchId) === Math.round(b.properties.osmid));
@@ -579,6 +603,7 @@ class FloodHistoryMap extends React.Component {
             // show popup
             this.showPopupOnBldgs(cood, searchId);
             this.setState({ searchTerm: '' });
+            this.props.setSingularBuilding(true);
         } else {
             alert('Please enter valid building id');
         }
@@ -616,7 +641,7 @@ class FloodHistoryMap extends React.Component {
                         placeholder={'Enter house id'}
                     />
                 </div>
-                <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                {/* <EarthquakeHazardLegends layer={this.props.sesmicLayer} /> */}
             </div>
         );
     }

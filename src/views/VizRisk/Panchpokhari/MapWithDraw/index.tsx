@@ -47,6 +47,14 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
+// const {
+//     data: criticalinfrastructures,
+// } = CIData;
+
+// const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
+//     item => item.properties.Type,
+// ))];
+
 const { data: cidata } = ci;
 const { data: buildingsData } = buildings;
 
@@ -117,6 +125,22 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('Roads', 'visibility', 'visible');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            this.map.addSource('hillshadePachpokhari', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
+            this.map.addLayer(
+                {
+                    id: 'raster-hillshade',
+                    type: 'raster',
+                    source: 'hillshadePachpokhari',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             this.map.addSource('lsSusep', {
                 type: 'raster',
                 tiles: [getHillShadeLayer('panchpokhari_durham_landslide_susceptibility')],
@@ -128,9 +152,11 @@ class FloodHistoryMap extends React.Component {
                     id: 'jugallsSuslayer',
                     type: 'raster',
                     source: 'lsSusep',
-                    layout: {},
+                    layout: {
+                        visibility: 'none',
+                    },
                     paint: {
-                        'raster-opacity': 1,
+                        'raster-opacity': 0.6,
                     },
                 },
             );
@@ -145,16 +171,19 @@ class FloodHistoryMap extends React.Component {
                     id: 'jugallseicHazard',
                     type: 'raster',
                     source: 'seicHazard',
-                    layout: {},
+                    layout: {
+                        visibility: 'visible',
+
+                    },
                     paint: {
-                        'raster-opacity': 1,
+                        'raster-opacity': 0.6,
                     },
                 },
             );
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('Population Density', 'visibility', 'none');
-            this.map.moveLayer('Buildings');
             this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
+            this.map.moveLayer('Buildings');
 
             const draw = new MapboxDraw({
                 displayControlsDefault: false,
@@ -503,6 +532,15 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
             }
+            // if (this.props.sesmicLayer === 'sesHide') {
+            //     this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
+            // }
+            // if (this.props.sesmicLayer === 'sus') {
+            //     this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
+            // }
+            // if (this.props.sesmicLayer === 'susHide') {
+            //     this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
+            // }
         }
     }
 
@@ -510,6 +548,21 @@ class FloodHistoryMap extends React.Component {
         this.map.remove();
         clearInterval(this.interval);
     }
+
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Panchpokhari_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public getTitleFromLatLng = (featureObject) => {
         const latToCompare = featureObject.geometry.coordinates[1];

@@ -3,10 +3,10 @@
     .populationContainer{
         display: flex;
         flex-direction: column;
-        
+        width: 60px;
         // border: 1px solid red;
         .legendsRow{
-            width: 55px;
+            // width: 30px;
             text-align: center;
             padding-left: 25px;
         }
@@ -18,7 +18,7 @@
         .populationIndContainer{
             display: flex;
             flex-direction: column;
-            width: 50px;
+            // width: 50px;
             .conainerStyle{ 
                 display: flex;
                 justify-content: center;
@@ -29,31 +29,31 @@
             }
             .populationIndicator1{
                 @extend .conainerStyle;
-                background-color: rgb(172,226,84);
+                background-color: rgb(252,255,0);
             }
             .populationIndicator2{
                 @extend .conainerStyle;
 
-                background-color: rgb(232,249,145); 
+                background-color: rgb(255,212,0); 
 
             }
             .populationIndicator3{
                 @extend .conainerStyle;
 
                 
-                background-color:rgb(202,205,0);
+                background-color:rgb(255,167,0);
 
             }
             .populationIndicator4{
                 @extend .conainerStyle;
 
-                background-color:rgb(255,212,0);
+                background-color:rgb(255,187,0);
 
             }
             .populationIndicator5{
                 @extend .conainerStyle;
 
-                background-color:rgb(205,177,0);
+                background-color:rgb(205,134,0);
 
             }
             
@@ -67,10 +67,43 @@
         }
         
         .populationIndContainerShort{
-            @extend .populationIndContainer;
-            .populationIndicator3{
-                background-color:rgb(202,205,0);
+            .populationIndicator1{
+                @extend .conainerStyle;
+                background-color: rgb(252,255,0);
+            }
+            .populationIndicator2{
+                @extend .conainerStyle;
 
+                background-color: rgb(255,212,0); 
+
+            }
+            .populationIndicator3{
+                @extend .conainerStyle;
+
+                
+                background-color:rgb(255,167,0);
+                background-color:rgb(255,187,0);
+                
+            }
+            .populationIndicator4{
+                @extend .conainerStyle;
+                
+                background-color:rgb(255,187,0);
+                background-color:rgb(255,167,0);
+
+            }
+            .populationIndicator5{
+                @extend .conainerStyle;
+
+                background-color:rgb(255,134,0);
+
+            }
+            
+            .populationIndicator6{
+                @extend .conainerStyle;
+
+                background-color:rgb(255,62,0);
+                display: none;
             }
         }
         .populationTextContainer{
