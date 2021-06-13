@@ -276,31 +276,48 @@ class FloodHistoryMap extends React.Component {
 
             if (this.props.rightElement !== 1) {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+
+                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
+                this.map.setLayoutProperty('Snow', 'visibility', 'none');
+                this.map.setLayoutProperty('Shrub', 'visibility', 'none');
+                this.map.setLayoutProperty('Forest', 'visibility', 'none');
+                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
+                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
+                this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
 
             if (this.props.rightElement === 0) {
-                this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
                 this.map.setLayoutProperty('raster-hillshade', 'visibility', 'visible');
                 this.map.moveLayer('raster-hillshade');
                 console.log('map:', this.map);
-            }
-            if (this.props.rightElement === 2) {
-                this.map.addControl(new MapboxLegendControl({}, { reverseOrder: false }), 'bottom-right');
-                this.map.setLayoutProperty('Scree', 'visibility', 'visible');
-                this.map.setLayoutProperty('Scrub', 'visibility', 'visible');
-                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
-                this.map.setLayoutProperty('Farmland', 'visibility', 'visible');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
-            } else {
-                this.map.setLayoutProperty('Scree', 'visibility', 'none');
-                this.map.setLayoutProperty('Scrub', 'visibility', 'none');
+
+                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
+                this.map.setLayoutProperty('Snow', 'visibility', 'none');
+                this.map.setLayoutProperty('Shrub', 'visibility', 'none');
                 this.map.setLayoutProperty('Forest', 'visibility', 'none');
                 this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
-                this.map.setLayoutProperty('Farmland', 'visibility', 'none');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'none');
                 this.map.setLayoutProperty('Roads', 'visibility', 'none');
+            }
+            if (this.props.rightElement === 2) {
+                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
+                this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+                this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
+                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+                this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            }
+            if (this.props.rightElement === 3) {
+                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
+                this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+                this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
+                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+                this.map.setLayoutProperty('National Park', 'visibility', 'none');
             }
             if (this.props.rightElement === 1) {
                 this.map.setLayoutProperty('Population Density', 'visibility', 'visible');
@@ -309,6 +326,14 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Ward No.', 'visibility', 'visible');
                 this.map.moveLayer('Ward No.');
                 this.map.setLayoutProperty('raster-hillshade', 'visibility', 'none');
+
+                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
+                this.map.setLayoutProperty('Snow', 'visibility', 'none');
+                this.map.setLayoutProperty('Shrub', 'visibility', 'none');
+                this.map.setLayoutProperty('Forest', 'visibility', 'none');
+                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
+                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
+                this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
 
             mapping.forEach((attribute) => {

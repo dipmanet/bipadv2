@@ -1,7 +1,6 @@
 import React from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
-import AgriPattern from '../../Icons/agrihexagon.png';
 
 const LandCoverLegends = () => (
     <>
@@ -39,21 +38,18 @@ const LandCoverLegends = () => (
         </p>
 
         <p className={styles.landcoverIconContainer}>
-            {/* <span>
+            <span>
                 <Hexagon
                     style={{
                         stroke: '#edf7d2',
                         strokeWidth: 50,
-                        // fill: '#e6f2a1',
+                        fill: '#d3e878',
 
                     }}
                     className={styles.agricultureIcon}
-                    backgroundImage={AgriPattern}
-
                 />
 
-            </span> */}
-            <img src={AgriPattern} alt="agriculture legend" className={styles.agricultureIcon} />
+            </span>
                             Agricultural Land
         </p>
         <p className={styles.landcoverIconContainer}>
@@ -62,7 +58,7 @@ const LandCoverLegends = () => (
                     style={{
                         stroke: '#a6dea6',
                         strokeWidth: 50,
-                        fill: '#00a811',
+                        fill: '#90d086',
 
                     }}
                     className={styles.forestIcon}
@@ -72,11 +68,6 @@ const LandCoverLegends = () => (
                             Forest
         </p>
 
-        <div className={styles.landcoverIconContainer}>
-            <div className={styles.canalIcon} />
-
-                            Canals
-        </div>
 
         <div className={styles.landcoverIconContainer}>
             <div className={styles.roadIcon} />
@@ -102,6 +93,58 @@ const LandCoverLegends = () => (
                 />
             </span>
                             Other
+        </p>
+
+        <p className={styles.landcoverIconContainer}>
+            <Hexagon
+                style={{
+                    stroke: '#fff',
+                    strokeWidth: 50,
+                    fill: '#c2d9a5',
+
+                }}
+                className={styles.otherIcon}
+            />
+            Shrubs
+        </p>
+        <p className={styles.landcoverIconContainer}>
+            <Hexagon
+                style={{
+                    stroke: '#fff',
+                    strokeWidth: 50,
+                    fill: '#ffffff',
+
+                }}
+                className={styles.otherIcon}
+            />
+            Snow
+
+        </p>
+        <p className={styles.landcoverIconContainer}>
+            <Hexagon
+                style={{
+                    stroke: '#fff',
+                    strokeWidth: 50,
+                    fill: '#e9e1d8',
+
+                }}
+                className={styles.otherIcon}
+            />
+            Rocks/Stones
+
+        </p>
+        <p className={styles.landcoverIconContainer}>
+            <Hexagon
+                style={{
+                    stroke: '#fff',
+                    strokeWidth: 50,
+                    fill: '#c4f1ac',
+
+                }}
+                className={styles.otherIcon}
+            />
+            Grassland
+
         </p>
 
     </>

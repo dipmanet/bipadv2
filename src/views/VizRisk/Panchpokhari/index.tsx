@@ -45,6 +45,8 @@ import MapWithTimeline from './MapWithTimeline';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
+import LandCoverLegends from './Legends/LandCoverLegends';
+
 
 const rightelements = [
     <RightElement1 />,
@@ -542,6 +544,16 @@ class Jugal extends React.Component {
                                 <DemographicsLegends
                                     handlePopulationChange={this.handlePopulationChange}
                                 />
+                            </VRLegend>
+                        </div>
+                    )
+                    : ''
+                }
+                {rightElement === 2
+                    ? (
+                        <div className={styles.legends}>
+                            <VRLegend>
+                                <LandCoverLegends />
                             </VRLegend>
                         </div>
                     )
