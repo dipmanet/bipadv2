@@ -1,6 +1,4 @@
 import React from 'react';
-import memoize from 'memoize-one';
-
 import {
     Bar, BarChart,
     CartesianGrid,
@@ -8,7 +6,6 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import CIData from './ci';
 import NavButtons from '../../Components/NavButtons';
 
 interface ComponentProps {}
@@ -16,8 +13,6 @@ interface ComponentProps {}
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
-
-const criticalinfrastructures = CIData.data;
 
 const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
     item => item.properties.Type,

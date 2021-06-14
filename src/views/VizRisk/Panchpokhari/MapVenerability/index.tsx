@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { isDefined } from '@togglecorp/fujs';
@@ -9,8 +10,6 @@ import Pbf from 'pbf';
 import Zlib from 'zlib';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Panchpokhari/utils';
-import ci from '../RightPaneContents/RightPane4/ci';
-import buildings from '../Data/buildings';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
@@ -50,22 +49,20 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const { data: cidata } = ci;
-const { data: buildingsData } = buildings;
 
-const arr = cidata.features.map(item => [
-    item.properties.Longitude,
-    item.properties.Latitude,
-]);
-const buildingsArr = buildingsData.features.map(item => [
-    Number(item.geometry.coordinates[0].toFixed(7)),
-    Number(item.geometry.coordinates[1].toFixed(7)),
-]);
-
-
-const points = turf.points(arr);
-const buildingpoints = turf.points(buildingsArr);
-const { buildingColor } = expressions;
+const ciRef = {
+    'Water sources': 'Water Source',
+    'Trade and business (groceries, meat, textiles)': 'Trade and business',
+    'Industry/ hydropower': 'Industry',
+    'Hotel/resort/homestay': 'Hotel or Restaurant',
+    Health: 'Hospital',
+    'Government Buildings': 'Government Building',
+    Bridge: 'Bridge',
+    'Community buildings': 'Community Building',
+    'Cultural heritage sites': 'Cultural Heritage',
+    Finance: 'Financial Institution',
+    Education: 'Education Instution',
+};
 
 
 class FloodHistoryMap extends React.Component {
@@ -81,6 +78,8 @@ class FloodHistoryMap extends React.Component {
             ciChartData: [],
             searchTerm: '',
             osmID: 0,
+            points: [],
+            buildingpoints: [],
         };
     }
 
@@ -109,9 +108,357 @@ class FloodHistoryMap extends React.Component {
             maxZoom: 22,
         });
 
+        this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        const { CIData: cidata, buildings } = this.props;
+
+        if (isDefined(cidata.features)) {
+            const arr = cidata.features.map(item => [
+                item.properties.Longitude,
+                item.properties.Latitude,
+            ]);
+            const points = turf.points(arr);
+            this.setState({ points });
+        }
+        if (isDefined(buildings.features)) {
+            const buildingsD = buildings.features.map(item => [
+                Number(item.geometry.coordinates[0].toFixed(7)),
+                Number(item.geometry.coordinates[1].toFixed(7)),
+            ]);
+            const buildingpointsData = turf.points(buildingsD);
+            this.setState({ buildingpoints: buildingpointsData });
+
+
+            const draw = new MapboxDraw({
+                displayControlsDefault: false,
+                userProperties: true,
+                controls: {
+                    polygon: true,
+                    trash: true,
+                },
+                styles: [
+
+                    {
+                        id: 'gl-draw-polygon-fill-inactive',
+                        type: 'fill',
+                        filter: ['all', ['==', 'active', 'false'],
+                            ['==', '$type', 'Polygon'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        paint: {
+                            'fill-color': '#3bb2d0',
+                            'fill-outline-color': '#3bb2d0',
+                            'fill-opacity': 0.1,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-fill-active',
+                        type: 'fill',
+                        filter: ['all', ['==', 'active', 'true'],
+                            ['==', '$type', 'Polygon'],
+                        ],
+                        paint: {
+                            'fill-color': '#fbb03b',
+                            'fill-outline-color': '#fbb03b',
+                            'fill-opacity': 0.1,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-midpoint',
+                        type: 'circle',
+                        filter: ['all', ['==', '$type', 'Point'],
+                            ['==', 'meta', 'midpoint'],
+                        ],
+                        paint: {
+                            'circle-radius': 3,
+                            'circle-color': '#fbb03b',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-stroke-inactive',
+                        type: 'line',
+                        filter: ['all', ['==', 'active', 'false'],
+                            ['==', '$type', 'Polygon'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round',
+                        },
+                        paint: {
+                            'line-color': '#3bb2d0',
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-stroke-active',
+                        type: 'line',
+                        filter: ['all', ['==', 'active', 'true'],
+                            ['==', '$type', 'Polygon'],
+                        ],
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round',
+                        },
+                        paint: {
+                            'line-color': '#fbb03b',
+                            'line-dasharray': [0.2, 2],
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-line-inactive',
+                        type: 'line',
+                        filter: ['all', ['==', 'active', 'false'],
+                            ['==', '$type', 'LineString'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round',
+                        },
+                        paint: {
+                            'line-color': '#3bb2d0',
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-line-active',
+                        type: 'line',
+                        filter: ['all', ['==', '$type', 'LineString'],
+                            ['==', 'active', 'true'],
+                        ],
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round',
+                        },
+                        paint: {
+                            'line-color': '#fbb03b',
+                            'line-dasharray': [0.2, 2],
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-and-line-vertex-stroke-inactive',
+                        type: 'circle',
+                        filter: ['all', ['==', 'meta', 'vertex'],
+                            ['==', '$type', 'Point'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-color': '#fff',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-and-line-vertex-inactive',
+                        type: 'circle',
+                        filter: ['all', ['==', 'meta', 'vertex'],
+                            ['==', '$type', 'Point'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        paint: {
+                            'circle-radius': 3,
+                            'circle-color': '#fbb03b',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-point-point-stroke-inactive',
+                        type: 'circle',
+                        filter: ['all', ['==', 'active', 'false'],
+                            ['==', '$type', 'Point'],
+                            ['==', 'meta', 'feature'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-opacity': 1,
+                            'circle-color': '#fff',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-point-inactive',
+                        type: 'circle',
+                        filter: ['all', ['==', 'active', 'false'],
+                            ['==', '$type', 'Point'],
+                            ['==', 'meta', 'feature'],
+                            ['!=', 'mode', 'static'],
+                        ],
+                        paint: {
+                            'circle-radius': 3,
+                            'circle-color': '#3bb2d0',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-point-stroke-active',
+                        type: 'circle',
+                        filter: ['all', ['==', '$type', 'Point'],
+                            ['==', 'active', 'true'],
+                            ['!=', 'meta', 'midpoint'],
+                        ],
+                        paint: {
+                            'circle-radius': 7,
+                            'circle-color': '#fff',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-point-active',
+                        type: 'circle',
+                        filter: ['all', ['==', '$type', 'Point'],
+                            ['!=', 'meta', 'midpoint'],
+                            ['==', 'active', 'true'],
+                        ],
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-color': '#fbb03b',
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-fill-static',
+                        type: 'fill',
+                        filter: ['all', ['==', 'mode', 'static'],
+                            ['==', '$type', 'Polygon'],
+                        ],
+                        paint: {
+                            'fill-color': '#404040',
+                            'fill-outline-color': '#404040',
+                            'fill-opacity': 0.1,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-polygon-stroke-static',
+                        type: 'line',
+                        filter: ['all', ['==', 'mode', 'static'],
+                            ['==', '$type', 'Polygon'],
+                        ],
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round',
+                        },
+                        paint: {
+                            'line-color': '#404040',
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-line-static',
+                        type: 'line',
+                        filter: ['all', ['==', 'mode', 'static'],
+                            ['==', '$type', 'LineString'],
+                        ],
+                        layout: {
+                            'line-cap': 'round',
+                            'line-join': 'round',
+                        },
+                        paint: {
+                            'line-color': '#404040',
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-point-static',
+                        type: 'circle',
+                        filter: ['all', ['==', 'mode', 'static'],
+                            ['==', '$type', 'Point'],
+                        ],
+                        paint: {
+                            'circle-radius': 5,
+                            'circle-color': '#404040',
+                        },
+                    },
+
+                    {
+                        id: 'gl-draw-polygon-color-picker',
+                        type: 'fill',
+                        // filter: ['all', ['==', '$type', 'Polygon'],
+                        //     ['has', 'user_portColor'],
+                        // ],
+                        paint: {
+                            'fill-color': '#ff0000',
+                            'fill-outline-color': '#ffffff',
+                            'fill-opacity': 0.1,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-line-color-picker',
+                        type: 'line',
+                        // filter: ['all', ['==', '$type', 'LineString'],
+                        //     ['has', 'user_portColor'],
+                        // ],
+                        paint: {
+                            'line-color': '#ffffff',
+                            'line-width': 2,
+                        },
+                    },
+                    {
+                        id: 'gl-draw-point-color-picker',
+                        type: 'circle',
+                        // filter: ['all', ['==', '$type', 'Point'],
+                        //     ['has', 'user_portColor'],
+                        // ],
+                        paint: {
+                            'circle-radius': 3,
+                            'circle-color': '#ffffff',
+                        },
+                    },
+                ],
+                defaultMode: 'draw_polygon',
+            });
+            const updateArea = (e) => {
+                const { handleDrawSelectedData } = this.props;
+                const { points, buildingpoints } = this.state;
+                const datad = draw.getAll();
+                const dataArr = datad.features[0].geometry.coordinates;
+                const searchWithin = turf.multiPolygon([dataArr], {});
+
+                const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+                const ptsWithinBuildings = turf.pointsWithinPolygon(buildingpoints, searchWithin);
+                const result = [];
+                const n = ptsWithin
+                    .features
+                    .map((i) => {
+                        result
+                            .push({
+                                geometry: i.geometry,
+                                hazardTitle: ciRef[this.getTitleFromLatLng(i, cidata)],
+                            });
+                        return null;
+                    });
+                const coordList = dataArr[0]
+                    .map(position => [parseFloat(position[0]), parseFloat(position[1])]);
+                const line = turf.lineString(coordList);
+                const bbox = turf.bbox(line);
+
+                const point1 = this.map.project([bbox[0], bbox[1]]);
+                const point2 = this.map.project([bbox[2], bbox[3]]);
+                const farmlands = this.map.queryRenderedFeatures(
+                    [point1, point2],
+                    { layers: ['Farmlands'] },
+                );
+                const forest = this.map.queryRenderedFeatures(
+                    [point1, point2],
+                    { layers: ['Forest'] },
+                );
+                const buildingsCount = ptsWithinBuildings.features.length;
+                result.push({
+                    buildings: buildingsCount,
+                    forest: forest.length,
+                    farmlands: farmlands.length,
+                });
+                handleDrawSelectedData(result);
+
+                this.map.fitBounds(bbox, {
+                    padding: 20,
+                });
+            };
+
+            this.map.addControl(draw, 'top-right');
+
+            this.map.on('draw.create', updateArea);
+        }
+
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-        this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         this.map.on('style.load', () => {
             // this.map.on('click', 'Buildings', (e) => {
@@ -134,7 +481,7 @@ class FloodHistoryMap extends React.Component {
                 tiles: [this.getRasterLayer()],
                 tileSize: 256,
             });
-            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
 
             this.map.addSource('lsSusep', {
                 type: 'raster',
@@ -454,6 +801,8 @@ class FloodHistoryMap extends React.Component {
             });
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
+                const { points, buildingpoints } = this.state;
+
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
                 const searchWithin = turf.multiPolygon([dataArr], {});
@@ -536,6 +885,362 @@ class FloodHistoryMap extends React.Component {
                 });
             }
         }
+        if (this.props.buildings !== prevProps.buildings
+            || this.props.CIData !== prevProps.CIData
+        ) {
+            const { CIData: cidata, buildings } = this.props;
+            if (isDefined(cidata.features)) {
+                const arr = cidata.features.map(item => [
+                    item.properties.Longitude,
+                    item.properties.Latitude,
+                ]);
+                const points = turf.points(arr);
+                this.setState({ points });
+            }
+            if (isDefined(buildings.features)) {
+                const buildingsD = buildings.features.map(item => [
+                    Number(item.geometry.coordinates[0].toFixed(7)),
+                    Number(item.geometry.coordinates[1].toFixed(7)),
+                ]);
+                const buildingpointsData = turf.points(buildingsD);
+                this.setState({ buildingpoints: buildingpointsData });
+
+
+                const draw = new MapboxDraw({
+                    displayControlsDefault: false,
+                    userProperties: true,
+                    controls: {
+                        polygon: true,
+                        trash: true,
+                    },
+                    styles: [
+                        {
+                            id: 'gl-draw-polygon-fill-inactive',
+                            type: 'fill',
+                            filter: ['all', ['==', 'active', 'false'],
+                                ['==', '$type', 'Polygon'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            paint: {
+                                'fill-color': '#3bb2d0',
+                                'fill-outline-color': '#3bb2d0',
+                                'fill-opacity': 0.1,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-fill-active',
+                            type: 'fill',
+                            filter: ['all', ['==', 'active', 'true'],
+                                ['==', '$type', 'Polygon'],
+                            ],
+                            paint: {
+                                'fill-color': '#fbb03b',
+                                'fill-outline-color': '#fbb03b',
+                                'fill-opacity': 0.1,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-midpoint',
+                            type: 'circle',
+                            filter: ['all', ['==', '$type', 'Point'],
+                                ['==', 'meta', 'midpoint'],
+                            ],
+                            paint: {
+                                'circle-radius': 3,
+                                'circle-color': '#fbb03b',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-stroke-inactive',
+                            type: 'line',
+                            filter: ['all', ['==', 'active', 'false'],
+                                ['==', '$type', 'Polygon'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round',
+                            },
+                            paint: {
+                                'line-color': '#3bb2d0',
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-stroke-active',
+                            type: 'line',
+                            filter: ['all', ['==', 'active', 'true'],
+                                ['==', '$type', 'Polygon'],
+                            ],
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round',
+                            },
+                            paint: {
+                                'line-color': '#fbb03b',
+                                'line-dasharray': [0.2, 2],
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-line-inactive',
+                            type: 'line',
+                            filter: ['all', ['==', 'active', 'false'],
+                                ['==', '$type', 'LineString'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round',
+                            },
+                            paint: {
+                                'line-color': '#3bb2d0',
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-line-active',
+                            type: 'line',
+                            filter: ['all', ['==', '$type', 'LineString'],
+                                ['==', 'active', 'true'],
+                            ],
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round',
+                            },
+                            paint: {
+                                'line-color': '#fbb03b',
+                                'line-dasharray': [0.2, 2],
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-and-line-vertex-stroke-inactive',
+                            type: 'circle',
+                            filter: ['all', ['==', 'meta', 'vertex'],
+                                ['==', '$type', 'Point'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            paint: {
+                                'circle-radius': 5,
+                                'circle-color': '#fff',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-and-line-vertex-inactive',
+                            type: 'circle',
+                            filter: ['all', ['==', 'meta', 'vertex'],
+                                ['==', '$type', 'Point'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            paint: {
+                                'circle-radius': 3,
+                                'circle-color': '#fbb03b',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-point-point-stroke-inactive',
+                            type: 'circle',
+                            filter: ['all', ['==', 'active', 'false'],
+                                ['==', '$type', 'Point'],
+                                ['==', 'meta', 'feature'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            paint: {
+                                'circle-radius': 5,
+                                'circle-opacity': 1,
+                                'circle-color': '#fff',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-point-inactive',
+                            type: 'circle',
+                            filter: ['all', ['==', 'active', 'false'],
+                                ['==', '$type', 'Point'],
+                                ['==', 'meta', 'feature'],
+                                ['!=', 'mode', 'static'],
+                            ],
+                            paint: {
+                                'circle-radius': 3,
+                                'circle-color': '#3bb2d0',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-point-stroke-active',
+                            type: 'circle',
+                            filter: ['all', ['==', '$type', 'Point'],
+                                ['==', 'active', 'true'],
+                                ['!=', 'meta', 'midpoint'],
+                            ],
+                            paint: {
+                                'circle-radius': 7,
+                                'circle-color': '#fff',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-point-active',
+                            type: 'circle',
+                            filter: ['all', ['==', '$type', 'Point'],
+                                ['!=', 'meta', 'midpoint'],
+                                ['==', 'active', 'true'],
+                            ],
+                            paint: {
+                                'circle-radius': 5,
+                                'circle-color': '#fbb03b',
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-fill-static',
+                            type: 'fill',
+                            filter: ['all', ['==', 'mode', 'static'],
+                                ['==', '$type', 'Polygon'],
+                            ],
+                            paint: {
+                                'fill-color': '#404040',
+                                'fill-outline-color': '#404040',
+                                'fill-opacity': 0.1,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-polygon-stroke-static',
+                            type: 'line',
+                            filter: ['all', ['==', 'mode', 'static'],
+                                ['==', '$type', 'Polygon'],
+                            ],
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round',
+                            },
+                            paint: {
+                                'line-color': '#404040',
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-line-static',
+                            type: 'line',
+                            filter: ['all', ['==', 'mode', 'static'],
+                                ['==', '$type', 'LineString'],
+                            ],
+                            layout: {
+                                'line-cap': 'round',
+                                'line-join': 'round',
+                            },
+                            paint: {
+                                'line-color': '#404040',
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-point-static',
+                            type: 'circle',
+                            filter: ['all', ['==', 'mode', 'static'],
+                                ['==', '$type', 'Point'],
+                            ],
+                            paint: {
+                                'circle-radius': 5,
+                                'circle-color': '#404040',
+                            },
+                        },
+
+                        {
+                            id: 'gl-draw-polygon-color-picker',
+                            type: 'fill',
+                            // filter: ['all', ['==', '$type', 'Polygon'],
+                            //     ['has', 'user_portColor'],
+                            // ],
+                            paint: {
+                                'fill-color': '#ff0000',
+                                'fill-outline-color': '#ffffff',
+                                'fill-opacity': 0.1,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-line-color-picker',
+                            type: 'line',
+                            // filter: ['all', ['==', '$type', 'LineString'],
+                            //     ['has', 'user_portColor'],
+                            // ],
+                            paint: {
+                                'line-color': '#ffffff',
+                                'line-width': 2,
+                            },
+                        },
+                        {
+                            id: 'gl-draw-point-color-picker',
+                            type: 'circle',
+                            // filter: ['all', ['==', '$type', 'Point'],
+                            //     ['has', 'user_portColor'],
+                            // ],
+                            paint: {
+                                'circle-radius': 3,
+                                'circle-color': '#ffffff',
+                            },
+                        },
+                    ],
+                    defaultMode: 'draw_polygon',
+                });
+                const updateArea = (e) => {
+                    const { handleDrawSelectedData } = this.props;
+                    const { points, buildingpoints } = this.state;
+                    const datad = draw.getAll();
+                    const dataArr = datad.features[0].geometry.coordinates;
+                    const searchWithin = turf.multiPolygon([dataArr], {});
+
+                    const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+                    const ptsWithinBuildings = turf
+                        .pointsWithinPolygon(buildingpoints, searchWithin);
+                    const result = [];
+                    const n = ptsWithin
+                        .features
+                        .map((i) => {
+                            result
+                                .push({
+                                    geometry: i.geometry,
+                                    hazardTitle: ciRef[this.getTitleFromLatLng(i, cidata)],
+                                });
+                            return null;
+                        });
+                    const coordList = dataArr[0]
+                        .map(position => [parseFloat(position[0]), parseFloat(position[1])]);
+                    const line = turf.lineString(coordList);
+                    const bbox = turf.bbox(line);
+
+                    const point1 = this.map.project([bbox[0], bbox[1]]);
+                    const point2 = this.map.project([bbox[2], bbox[3]]);
+
+
+                    // todo: need to filter the buildings result further by points data using turf
+                    // const buildingsCount = this.map.queryRenderedFeatures(
+                    //     [point1, point2],
+                    //     { layers: ['Buildings'] },
+                    // );
+                    const farmlands = this.map.queryRenderedFeatures(
+                        [point1, point2],
+                        { layers: ['Farmlands'] },
+                    );
+                    const forest = this.map.queryRenderedFeatures(
+                        [point1, point2],
+                        { layers: ['Forest'] },
+                    );
+                    const buildingsCount = ptsWithinBuildings.features.length;
+                    result.push({
+                        buildings: buildingsCount,
+                        forest: forest.length,
+                        farmlands: farmlands.length,
+                    });
+                    handleDrawSelectedData(result);
+
+                    this.map.fitBounds(bbox, {
+                        padding: 20,
+                    });
+                };
+
+                this.map.addControl(draw, 'top-right');
+
+                this.map.on('draw.create', updateArea);
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -543,7 +1248,7 @@ class FloodHistoryMap extends React.Component {
         clearInterval(this.interval);
     }
 
-    public getTitleFromLatLng = (featureObject) => {
+    public getTitleFromLatLng = (featureObject, cidata) => {
         const latToCompare = featureObject.geometry.coordinates[1];
         const lngToCompare = featureObject.geometry.coordinates[0];
         const hT = cidata.features.filter(fC => fC.geometry.coordinates[0] === lngToCompare
@@ -588,7 +1293,7 @@ class FloodHistoryMap extends React.Component {
         const searchId = this.state.searchTerm;
         // setScore
         // get the coordinates of the builing
-        const coordinatesObj = buildingsData
+        const coordinatesObj = this.props.buildings
             .features.filter(b => Number(searchId) === Math.round(b.properties.osmid));
         // zoom to this coordinate with some padding
         // this.zoomTo(polygonData);

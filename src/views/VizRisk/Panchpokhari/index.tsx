@@ -134,6 +134,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    buildingsGetRequest: {
+        url: ({ params }) => params.url,
+        method: methods.GET,
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results: cI = [] } = response as Response;
+            params.setBuilding(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 class Jugal extends React.Component {
@@ -163,16 +174,26 @@ class Jugal extends React.Component {
             cI: [],
             singularBuilding: false,
             score: 7,
+            buildings: [],
         };
 
-        const { requests: { incidentsGetRequest, cIGetRequest } } = this.props;
+        const { requests:
+            {
+                incidentsGetRequest,
+                cIGetRequest,
+                buildingsGetRequest,
+            } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
             setIncidentList: this.setIncidentList,
         });
         cIGetRequest.setDefaultParams({
             setCI: this.setCI,
-            url: getgeoJsonLayer('CI_Panchpokhari'),
+            url: getgeoJsonLayer('CI_Jugal'),
+        });
+        buildingsGetRequest.setDefaultParams({
+            setBuilding: this.setBuilding,
+            url: getgeoJsonLayer('panchpokhari_buildings'),
         });
     }
 
@@ -185,8 +206,11 @@ class Jugal extends React.Component {
     }
 
     public setCI = (cI) => {
-        console.log('jugalCI', cI);
         this.setState({ cI });
+    }
+
+    public setBuilding = (buildings) => {
+        this.setState({ buildings });
     }
 
     public setSingularBuilding = (singularBuilding) => {
@@ -372,6 +396,7 @@ class Jugal extends React.Component {
             drawChartData,
             sesmicLayer,
             cI,
+            buildings,
         } = this.state;
 
         const {
@@ -511,6 +536,7 @@ class Jugal extends React.Component {
                             disableNavRightBtn={disableNavRightBtn}
                             pagenumber={rightElement + 1}
                             totalPages={rightelements.length}
+                            CIData={cI}
                         />
                     </>
 
@@ -602,6 +628,7 @@ class Jugal extends React.Component {
                             handleDrawSelectedData={this.handleDrawSelectedData}
                             sesmicLayer={sesmicLayer}
                             CIData={cI}
+                            buildings={buildings}
 
                         />
                         <RightElement6
@@ -644,6 +671,7 @@ class Jugal extends React.Component {
                             setSingularBuilding={this.setSingularBuilding}
                             setScore={this.setScore}
                             CIData={cI}
+                            buildings={buildings}
 
                         />
                         <RightElement7

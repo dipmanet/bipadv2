@@ -1,13 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import MapboxLegendControl from '@watergis/mapbox-gl-legend';
-import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/rajapurGEOJSON';
-import demographicsData from '../Data/demographicsData';
-import Icon from '#rscg/Icon';
-import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 
 
@@ -21,12 +14,9 @@ import {
     selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
-    incidentListSelectorIP,
 } from '#selectors';
 
-import {
-    getWardFilter,
-} from '#utils/domain';
+
 import TimelineSlider from './TimelineSlider';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
@@ -46,26 +36,6 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const colorGrade = [
-    '#ffedb8',
-    '#ffffff',
-];
-
-const hoveredWardId = null;
-const populationWardExpression = [
-    'interpolate',
-    ['linear'],
-    ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fe9b2a',
-    3, '#fe9b2a', 4, '#9a3404',
-    5, '#d95f0e', 6, '#fe9b2a',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#fed990', 10, '#d95f0e',
-];
-const {
-    criticalinfrastructures,
-    evaccenters,
-} = SchoolGeoJSON;
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
