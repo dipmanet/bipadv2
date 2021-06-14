@@ -82,7 +82,6 @@ const transformFilters = ({
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
     ...transformRegionToFilter(region),
 });
-const url = 'https://geoserver.yilab.org.np/geoserver/Bipad/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=Bipad:CI_Biratnagar&outputFormat=application/json';
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidentsGetRequest: {
@@ -173,7 +172,7 @@ class Jugal extends React.Component {
         });
         cIGetRequest.setDefaultParams({
             setCI: this.setCI,
-            url: getgeoJsonLayer('CI_Jugal'),
+            url: getgeoJsonLayer('CI_Panchpokhari'),
         });
     }
 
@@ -410,6 +409,7 @@ class Jugal extends React.Component {
                             disableNavBtns={this.disableNavBtns}
                             enableNavBtns={this.enableNavBtns}
                             incidentList={pointFeatureCollection}
+                            CIData={cI}
 
                         />
                         <RightElement1
@@ -470,6 +470,8 @@ class Jugal extends React.Component {
                             disableNavBtns={this.disableNavBtns}
                             enableNavBtns={this.enableNavBtns}
                             incidentList={pointFeatureCollection}
+                            CIData={cI}
+
                         />
                         <RightElement2
                             handleNext={this.handleNext}
@@ -500,6 +502,7 @@ class Jugal extends React.Component {
                             enableNavBtns={this.enableNavBtns}
                             incidentList={pointFeatureCollection}
                             CIData={cI}
+
                         />
                         <RightElement4
                             handleNext={this.handleNext}
@@ -524,6 +527,8 @@ class Jugal extends React.Component {
                             clickedItem={clickedIncidentItem}
                             incidentFilterYear={incidentFilterYear}
                             handleIncidentChange={this.handleIncidentChange}
+                            CIData={cI}
+
                         />
                         <RightElement5
                             incidentDetailsData={incidentDetailsData}
@@ -596,6 +601,8 @@ class Jugal extends React.Component {
                             handleIncidentChange={this.handleIncidentChange}
                             handleDrawSelectedData={this.handleDrawSelectedData}
                             sesmicLayer={sesmicLayer}
+                            CIData={cI}
+
                         />
                         <RightElement6
                             handleNext={this.handleNext}
@@ -636,6 +643,8 @@ class Jugal extends React.Component {
                             singularBuilding={this.state.singularBuilding}
                             setSingularBuilding={this.setSingularBuilding}
                             setScore={this.setScore}
+                            CIData={cI}
+
                         />
                         <RightElement7
                             handleNext={this.handleNext}

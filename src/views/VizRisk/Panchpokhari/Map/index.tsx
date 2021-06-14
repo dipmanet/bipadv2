@@ -5,7 +5,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { isDefined } from '@togglecorp/fujs';
 import { mapSources } from '#constants';
-import CIData from '../RightPaneContents/RightPane4/ci';
+// import CIData from '../RightPaneContents/RightPane4/ci';
 import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
 import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
@@ -61,51 +61,14 @@ const populationWardExpression = [
     7, 'rgb(255, 94, 0)', 8, 'rgb(255,143,13)',
     99, 'rgb(255,235,199)',
 ];
-const {
-    data: criticalinfrastructures,
-} = CIData;
+// const {
+//     data: criticalinfrastructures,
+// } = CIData;
 
-const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-    item => item.properties.Type,
-))];
+// const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
+//     item => item.properties.Type,
+// ))];
 
-
-const rasterLayersYears = [5, 20, 50, 100];
-const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
-const arrCritical = categoriesCritical.map(
-    layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
-);
-
-const criticalInfraClusters = [].concat(...arrCritical);
-
-
-const slideOneLayers = ['incidents-layer', 'Ward No.',
-    'water', 'waterway',
-    'Ward Boundary Line', 'Panch Pokhari Boundary', 'municipalitycentroidgeo'];
-
-const slideTwoLayers = ['Ward No.', 'water', 'Ward Boundary Line',
-    'ward-fill-local',
-];
-
-const slideThreeLayers = ['incidents-layer'];
-
-const slideFourLayers = [
-    'water', 'wardOutline',
-    'bridgeRajapur', 'canalRajapur',
-    'waterway', 'rajapurRoads', 'wardFill',
-];
-
-const slideFiveLayers = [
-    'rajapurbuildings', ...rasterLayers, 'water',
-    'bridgeRajapur', 'canalRajapur', 'waterway',
-    'rajapurRoads', 'wardOutline', 'wardFill',
-];
-const slideSixLayers = [
-    'safeshelterRajapurIcon', 'safeshelterRajapur',
-    ...rasterLayers, 'water',
-    'bridgeRajapur', 'rajapurRoads', 'canalRajapur', 'waterway',
-    'wardOutline', 'wardFill',
-];
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -116,6 +79,7 @@ class FloodHistoryMap extends React.Component {
             lat: 28.013604885888867,
             zoom: 10,
             wardNumber: 'Hover to see ward number',
+            categoriesCritical: [],
         };
     }
 
@@ -152,25 +116,14 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        this.map.on('idle', () => {
-            const { rightElement, enableNavBtns } = this.props;
-            if (rightElement === 0) {
-                enableNavBtns('Right');
-            } else if (rightElement === 5) {
-                enableNavBtns('Left');
-            } else {
-                enableNavBtns('both');
-            }
-        });
+
         this.map.on('style.load', () => {
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
             console.log('right element', this.props.rightElement);
-            // const { CIData } = this.props;
-
-            // if (isDefined(CIData.features)) {
-            // const categoriesCritical = [...new Set(CIData.features.map(
-            //     item => item.properties.CI,
-            //     ))];
-
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],
@@ -187,69 +140,98 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
-            categoriesCritical.map((layer) => {
-                this.map.addSource(layer, {
-                    type: 'geojson',
-                    data: getGeoJSONPH(layer, criticalinfrastructures),
-                    cluster: true,
-                    clusterRadius: 50,
-                });
-                this.map.addLayer({
-                    id: `clusters-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'],
-                            '#a4ac5e',
-                            100,
-                            '#a4ac5e',
-                        ],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'],
-                            20,
-                            100,
-                            30,
-                            750,
-                            40,
-                        ],
-                    },
-                });
+            const { CIData } = this.props;
 
-                this.map.addLayer({
-                    id: `unclustered-point-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-                        'icon-image': ['get', 'icon'],
-                        'icon-size': 0.3,
-                        'icon-anchor': 'bottom',
-                    },
-                });
+            if (isDefined(CIData.features)) {
+                const categoriesCritical = [...new Set(CIData.features.map(
+                    item => item.properties.Type,
+                ))];
+                this.setState({ categoriesCritical });
 
-                this.map.addLayer({
-                    id: `clusters-count-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12,
-                    },
-                });
+                categoriesCritical.map((layer) => {
+                    this.map.addSource(layer, {
+                        type: 'geojson',
+                        data: getGeoJSONPH(layer, CIData),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#a4ac5e',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                    });
 
-                if (this.props.rightElement !== 3) {
-                    this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
-                }
-                return null;
-            });
-            // }
+                    this.map.addLayer({
+                        id: `unclustered-point-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['downcase', ['get', 'Type']],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `clusters-count-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                        },
+                    });
+
+                    if (this.props.rightElement !== 3) {
+                        this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                    }
+
+                    // here
+                    categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
+                        if (e) {
+                            console.log('efeatures', e.features);
+                            this.map.getCanvas().style.cursor = 'pointer';
+                            const { lngLat } = e;
+                            const coordinates = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.title;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                            ).addTo(this.map);
+                        }
+                    }));
+                    categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
+                        this.map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    }));
+                    return null;
+                });
+            }
 
 
             this.map.addSource('vizrisk-fills', {
@@ -352,11 +334,7 @@ class FloodHistoryMap extends React.Component {
                 );
             });
 
-            const popup = new mapboxgl.Popup({
-                closeButton: false,
-                closeOnClick: false,
-                className: 'popup',
-            });
+
             this.map.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
                     this.map.getCanvas().style.cursor = 'pointer';
@@ -415,25 +393,6 @@ class FloodHistoryMap extends React.Component {
                 hoveredWardId = null;
             });
 
-            categoriesCritical.map(layer => this.map.on('mousemove', `unclustered-point-${layer}`, (e) => {
-                if (e) {
-                    console.log('efeatures', e.features);
-                    this.map.getCanvas().style.cursor = 'pointer';
-                    const { lngLat } = e;
-                    const coordinates = [lngLat.lng, lngLat.lat];
-                    const ciName = e.features[0].properties.title;
-                    popup.setLngLat(coordinates).setHTML(
-                        `<div style="padding: 5px;border-radius: 5px">
-                            <p>${ciName}</p>
-                        </div>
-                        `,
-                    ).addTo(this.map);
-                }
-            }));
-            categoriesCritical.map(layer => this.map.on('mouseleave', `unclustered-point-${layer}`, () => {
-                this.map.getCanvas().style.cursor = '';
-                popup.remove();
-            }));
             // this.map.setZoom(1);
             // this.props.disableNavBtns('both');
             // setTimeout(() => {
@@ -448,75 +407,6 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
-    // public componentDidUpdate(prevProps) {
-    //     console.log('inupdate:', this.props.CIData);
-    //     if (prevProps.CIData !== this.props.CIData) {
-    //         // const { CIData } = this.props;
-    //         console.log('geosjson in update:', CIData);
-    //         if (CIData.length > 0) {
-    //             const categoriesCritical = [...new Set(CIData.features.map(
-    //                 item => item.properties.CI,
-    //             ))];
-    //             categoriesCritical.map((layer) => {
-    //                 this.map.addSource(layer, {
-    //                     type: 'geojson',
-    //                     data: getGeoJSONPH(layer, CIData),
-    //                     cluster: true,
-    //                     clusterRadius: 50,
-    //                 });
-    //                 this.map.addLayer({
-    //                     id: `clusters-${layer}`,
-    //                     type: 'circle',
-    //                     source: layer,
-    //                     filter: ['has', 'point_count'],
-    //                     paint: {
-    //                         'circle-color': [
-    //                             'step',
-    //                             ['get', 'point_count'],
-    //                             '#a4ac5e',
-    //                             100,
-    //                             '#a4ac5e',
-    //                         ],
-    //                         'circle-radius': [
-    //                             'step',
-    //                             ['get', 'point_count'],
-    //                             20,
-    //                             100,
-    //                             30,
-    //                             750,
-    //                             40,
-    //                         ],
-    //                     },
-    //                 });
-
-    //                 this.map.addLayer({
-    //                     id: `unclustered-point-${layer}`,
-    //                     type: 'symbol',
-    //                     source: layer,
-    //                     filter: ['!', ['has', 'point_count']],
-    //                     layout: {
-    //                         'icon-image': ['get', 'icon'],
-    //                         'icon-size': 0.3,
-    //                         'icon-anchor': 'bottom',
-    //                     },
-    //                 });
-
-    //                 this.map.addLayer({
-    //                     id: `clusters-count-${layer}`,
-    //                     type: 'symbol',
-    //                     source: layer,
-    //                     layout: {
-    //                         'text-field': '{point_count_abbreviated}',
-    //                         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-    //                         'text-size': 12,
-    //                     },
-    //                 });
-    //                 return null;
-    //             });
-    //         }
-    //     }
-    // }
-
 
     public componentDidUpdate(prevProps) {
         if (this.props.showPopulation !== prevProps.showPopulation) {
@@ -528,6 +418,7 @@ class FloodHistoryMap extends React.Component {
         }
         if (this.props.criticalElement !== prevProps.criticalElement) {
             this.resetClusters();
+            const { categoriesCritical } = this.state;
             const layer = this.props.criticalElement;
             if (layer === 'all') {
                 categoriesCritical.map((item) => {
@@ -583,6 +474,74 @@ class FloodHistoryMap extends React.Component {
                 this.map.moveLayer('clusters-count-Trade and business');
             }
         }
+        if (prevProps.CIData !== this.props.CIData) {
+            const { CIData } = this.props;
+            // if (CIData.length > 0) {
+            if (isDefined(CIData.features)) {
+                const categoriesCritical = [...new Set(CIData.features.map(
+                    item => item.properties.Type,
+                ))];
+                // eslint-disable-next-line react/no-did-update-set-state
+                this.setState({ categoriesCritical });
+
+                categoriesCritical.map((layer) => {
+                    this.map.addSource(layer, {
+                        type: 'geojson',
+                        data: getGeoJSONPH(layer, CIData),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#a4ac5e',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `unclustered-point-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['downcase', ['get', 'Type']],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `clusters-count-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                        },
+                    });
+                    return null;
+                });
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -615,16 +574,8 @@ class FloodHistoryMap extends React.Component {
     }
 
 
-    public hideFloodRasters = () => {
-        rasterLayersYears.map((layer) => {
-            this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'none');
-            return null;
-        });
-    };
-
-
     public resetClusters = () => {
-        categoriesCritical.map((layer) => {
+        this.state.categoriesCritical.map((layer) => {
             this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
             this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
             this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
@@ -663,7 +614,7 @@ class FloodHistoryMap extends React.Component {
         this.resetClusters();
 
         if (layer === 'all') {
-            categoriesCritical.map((item) => {
+            this.state.categoriesCritical.map((item) => {
                 this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
