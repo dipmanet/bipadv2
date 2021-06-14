@@ -276,8 +276,6 @@ class FloodHistoryMap extends React.Component {
             if (this.props.rightElement === 0) {
                 this.map.setLayoutProperty('raster-hillshade', 'visibility', 'visible');
                 this.map.moveLayer('raster-hillshade');
-                console.log('map:', this.map);
-
                 this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
                 this.map.setLayoutProperty('Snow', 'visibility', 'none');
                 this.map.setLayoutProperty('Shrub', 'visibility', 'none');
@@ -475,6 +473,11 @@ class FloodHistoryMap extends React.Component {
             }
         }
         if (prevProps.CIData !== this.props.CIData) {
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
             const { CIData } = this.props;
             // if (CIData.length > 0) {
             if (isDefined(CIData.features)) {
@@ -538,6 +541,30 @@ class FloodHistoryMap extends React.Component {
                             'text-size': 12,
                         },
                     });
+                    categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
+                        if (e) {
+                            console.log('efeatures', e.features);
+                            this.map.getCanvas().style.cursor = 'pointer';
+                            const { lngLat } = e;
+                            const coordinates = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.title;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                            ).addTo(this.map);
+                        }
+                    }));
+                    categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
+                        this.map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    }));
+                    if (this.props.rightElement !== 3) {
+                        this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                    }
                     return null;
                 });
             }

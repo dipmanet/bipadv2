@@ -3,18 +3,12 @@ import Icon from '#rscg/Icon';
 import Page from '#components/Page';
 import styles from './styles.scss';
 import Button from '#rsca/Button';
-import Rajapur from './Rajapur';
-import Gulariya from './Gulariya';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
-import BarabiseLandslide from './BarabiseLandslide';
 import Panchpokhari from './Panchpokhari';
 
 
 const slides = [
-    <Rajapur />,
-    <BarabiseLandslide />,
-    <Gulariya />,
     <Panchpokhari />,
 
 ];
@@ -23,6 +17,7 @@ const VizRiskMainPage = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [title, setTitle] = useState('');
+    const [mun, setMun] = useState('');
     // console.log(props);
 
     const handleMenuIconClick = () => {
@@ -31,6 +26,7 @@ const VizRiskMainPage = () => {
 
     const handleMenuTitleClick = (municipality) => {
         setShowMenu(false);
+        setMun(municipality);
         if (municipality === 'rajapur') {
             setCurrentPage(0);
             setTitle('Visualising Flood Exposure');
@@ -41,7 +37,7 @@ const VizRiskMainPage = () => {
             setCurrentPage(2);
             setTitle('Visualising Flood Exposure');
         } else if (municipality === 'pachpokhari') {
-            setCurrentPage(3);
+            setCurrentPage(0);
             setTitle('Visualising Multihazard Exposure');
         }
     };
@@ -55,6 +51,20 @@ const VizRiskMainPage = () => {
         evacChosen: 'all',
     };
 
+    const getBtnStyle = () => {
+        if (mun === 'pachpokhari' || mun === 'jugal') {
+            if (showMenu) {
+                return styles.hamburgerBtnContMenu;
+            }
+            return styles.hamburgerBtnContainer;
+        }
+
+        if (showMenu) {
+            return styles.hamburgerBtnContainerOther;
+        }
+        return styles.hamburgerBtnContMenu;
+    };
+
     return (
         <VizRiskContext.Provider value={vrcontextProps}>
             <div className={styles.mainVzContainer}>
@@ -65,10 +75,7 @@ const VizRiskMainPage = () => {
                 <div className={styles.navBtnsContainer}>
 
 
-                    <div className={showMenu
-                        ? styles.hamburgerBtnContMenu
-                        : styles.hamburgerBtnContainer}
-                    >
+                    <div className={getBtnStyle()}>
                         <Button
                             transparent
                             onClick={handleMenuIconClick}
@@ -96,34 +103,6 @@ const VizRiskMainPage = () => {
                 <div className={styles.vizrisknmenupagecontainer}>
                     {showMenu ? (
                         <div className={styles.vizrisknmenupage}>
-                            <p className={styles.menuTitle}>Visualizing Flood Exposure</p>
-                            <div className={styles.vizriskmunicipalityName}>
-                                <Button
-                                    transparent
-                                    onClick={() => handleMenuTitleClick('rajapur')}
-                                >
-                                    <h1 className={styles.menuItems}>Rajapur Municipality</h1>
-
-                                </Button>
-                                <Button
-                                    transparent
-                                    onClick={() => handleMenuTitleClick('gulariya')}
-                                >
-                                    <h1 className={styles.menuItems}>Gulariya Municipality</h1>
-
-                                </Button>
-                            </div>
-                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
-                            <div className={styles.vizriskmunicipalityName}>
-                                <Button
-                                    transparent
-                                    onClick={() => handleMenuTitleClick('bharabise')}
-
-                                >
-                                    <h1 className={styles.menuItems}>Bharabise Municipality</h1>
-
-                                </Button>
-                            </div>
                             <p className={styles.menuTitle}>Visualizing Multi Hazard Exposure </p>
 
                             <div className={styles.vizriskmunicipalityName}>

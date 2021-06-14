@@ -93,6 +93,35 @@
             
             
         }
+        .hamburgerBtnContainerOther{
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;   
+            right: 95%;        
+            top: 10px; 
+            .hamburgerBtn{
+                color: white;
+                display: flex;
+               align-items: center;
+            //    border: 1px solid red;
+            padding: 0;
+
+               filter:saturate(100%);
+                .hamburgerBtnIcon{
+                font-size: 30px;  
+                color: rgb(175, 220, 241);
+                }
+                .strong{
+                    color: rgb(175, 220, 241);
+                    // opacity: 0.87;
+                    display: none;
+                }
+            
+            }
+            
+            
+        }
         .hamburgerBtnContMenu{
             @extend .hamburgerBtnContainer;
             right: 95%;
