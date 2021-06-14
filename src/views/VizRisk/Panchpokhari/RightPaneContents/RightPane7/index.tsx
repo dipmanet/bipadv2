@@ -7,10 +7,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import Home from '#resources/icons/homeNew.svg';
-import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 import NavButtons from '../../Components/NavButtons';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Icon from '#rscg/Icon';
 
 // const chartData = criticalInfraData.safeShelterData;

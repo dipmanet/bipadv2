@@ -6,10 +6,12 @@ import Button from '#rsca/Button';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Panchpokhari from './Panchpokhari';
+import Jugal from './Jugal';
 
 
 const slides = [
     <Panchpokhari />,
+    <Jugal />,
 
 ];
 
@@ -33,8 +35,8 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'bharabise') {
             setCurrentPage(1);
             setTitle('Visualising Landslide Exposure');
-        } else if (municipality === 'gulariya') {
-            setCurrentPage(2);
+        } else if (municipality === 'jugal') {
+            setCurrentPage(1);
             setTitle('Visualising Flood Exposure');
         } else if (municipality === 'pachpokhari') {
             setCurrentPage(0);
@@ -115,6 +117,20 @@ const VizRiskMainPage = () => {
                                         className={styles.menuItems}
                                     >
                                             Panchpokhari Thangpal Municipality
+                                    </h1>
+
+                                </Button>
+                            </div>
+                            <div className={styles.vizriskmunicipalityName}>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('jugal')}
+
+                                >
+                                    <h1
+                                        className={styles.menuItems}
+                                    >
+                                            Jugal Municipality
                                     </h1>
 
                                 </Button>

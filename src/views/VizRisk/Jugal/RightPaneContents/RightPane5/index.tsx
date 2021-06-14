@@ -7,8 +7,9 @@ import {
 } from 'recharts';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
+import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 import NavButtons from '../../Components/NavButtons';
-import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
+import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 
 interface ComponentProps {}
 
@@ -57,12 +58,14 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             handleIncidentItemClick,
             incidentFilterYear,
             incidentDetailsData,
+            incidentData,
         } = this.props;
 
-        console.log('incidentDetailsData', incidentDetailsData);
-        const hazardTitle = [...new Set(incidentList.features.map(
+        const hazardTitleData = [...new Set(incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
+
+        const hazardTitle = hazardTitleData.filter(item => item !== undefined);
 
         const chartData = hazardTitle.map(item => ({
             name: item,
@@ -73,22 +76,16 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 )
                 .length,
         }));
-
-
         return (
             <div className={styles.vrSideBar}>
-                <h1>Past Disaster Incidents</h1>
+                <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                In the year
-                    {' '}
-                    {incidentFilterYear}
-                    {' '}
-                , total
+                In the past 1 year, total
 
                     {' '}
-                    {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
+                    {chartData.length > 0 ? chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total : '-'}
                     {' '}
-                incidents of Landslide, Fire
+                incidents of Earthquake, Landslide, Windstorm
                 and Thunderbolt have been reported in Jugal Rural Municipality.
                 These incidents have caused
                     {' '}
@@ -98,13 +95,15 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {' '}
                     {incidentDetailsData.infrastructureDestroyedHouseCount}
                     {' '}
-                 houses were destroyed.
+                 houses were destroyed causing economic loss of about
+                    {incidentDetailsData.infrastructureEconomicLoss}
+                 NPR.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
                     <BarChart
                         width={300}
-                        height={600}
+                        height={700}
                         data={chartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
@@ -123,9 +122,11 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             label={{ position: 'right', fill: '#ffffff' }}
                             tick={{ fill: '#94bdcf' }}
                             radius={[0, 15, 15, 0]}
+
                         />
                     </BarChart>
                 </ResponsiveContainer>
+
                 <VRLegend>
 
                     <div className={styles.incidentsLegendsContainer}>

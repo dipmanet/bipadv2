@@ -8,7 +8,6 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 import NavButtons from '../../Components/NavButtons';
 
 // const chartData = criticalInfraData.safeShelterData;
