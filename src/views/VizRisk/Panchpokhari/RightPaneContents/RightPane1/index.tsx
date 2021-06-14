@@ -9,9 +9,9 @@ import VizRiskContext from '#components/VizRiskContext';
 import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
-import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
-import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
+import TempIcon from '#resources/icons/Temp.svg';
+import AvgRainFall from '#resources/icons/RainFall.svg';
+import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
 
 
 interface State {

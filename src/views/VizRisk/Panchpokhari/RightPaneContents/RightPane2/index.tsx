@@ -10,7 +10,7 @@ import {
     Cell,
     Sector,
 } from 'recharts';
-import CustomChartLegend from '#views/VizRisk/Rajapur/Components/CustomChartLegend';
+import CustomChartLegend from '../../Components/CustomChartLegend';
 
 import {
     mapStyleSelector,
