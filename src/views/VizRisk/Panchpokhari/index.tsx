@@ -189,7 +189,7 @@ class Jugal extends React.Component {
         });
         cIGetRequest.setDefaultParams({
             setCI: this.setCI,
-            url: getgeoJsonLayer('CI_Jugal'),
+            url: getgeoJsonLayer('CI_Panchpokhari'),
         });
         buildingsGetRequest.setDefaultParams({
             setBuilding: this.setBuilding,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { isDefined } from '@togglecorp/fujs';
 import {
     Bar, BarChart,
     CartesianGrid,
@@ -12,18 +13,54 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
-const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-    item => item.properties.Type,
-))];
-
-const chartData = categoriesCritical.map(item => ({
-    name: item,
-    Total: criticalinfrastructures.features.filter(ci => ci.properties.Type === item).length,
-}));
 
 class SlideFourPane extends React.PureComponent<Props, State> {
+    public constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            chartData: [],
+        };
+    }
+
+    public componentDidMount() {
+        console.log('ci data:', this.props.CIData);
+        const { CIData: criticalinfrastructures } = this.props;
+        if (isDefined(criticalinfrastructures.features)) {
+            const categoriesCriticalArr = [...new Set(criticalinfrastructures.features.map(
+                item => item.properties.Type,
+            ))];
+            const categoriesCritical = categoriesCriticalArr.filter(item => item !== undefined);
+            const chartD = categoriesCritical.map(item => ({
+                name: item,
+                Total: criticalinfrastructures.features
+                    .filter(ci => ci.properties.Type === item).length,
+            }));
+            this.setState({ chartData: chartD });
+        }
+    }
+
+    public componentDidUpdate(prevProps) {
+        if (prevProps.CIData !== this.props.CIData) {
+            const { CIData: criticalinfrastructures } = this.props;
+            if (isDefined(criticalinfrastructures.features)) {
+                const categoriesCriticalArr = [...new Set(criticalinfrastructures.features.map(
+                    item => item.properties.CI,
+                ))];
+                const categoriesCritical = categoriesCriticalArr.filter(item => item !== undefined);
+
+                const chartD = categoriesCritical.map(item => ({
+                    name: item,
+                    Total: criticalinfrastructures.features
+                        .filter(ci => ci.properties.CI === item).length,
+                }));
+                // eslint-disable-next-line react/no-did-update-set-state
+                this.setState({ chartData: chartD });
+            }
+        }
+    }
+
     public render() {
         const {
             payload,
@@ -53,7 +90,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     <BarChart
                         width={300}
                         height={600}
-                        data={chartData}
+                        data={this.state.chartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
                     >

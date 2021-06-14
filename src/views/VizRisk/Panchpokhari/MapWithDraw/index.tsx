@@ -802,6 +802,7 @@ class FloodHistoryMap extends React.Component {
             });
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
+                const { points, buildingpoints } = this.state;
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
                 const searchWithin = turf.multiPolygon([dataArr], {});
