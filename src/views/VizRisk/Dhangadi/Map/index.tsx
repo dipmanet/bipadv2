@@ -57,7 +57,7 @@ const populationWardExpression = [
 const {
     criticalinfrastructures,
     evaccenters,
-} = Data();
+} = Data;
 
 const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
     item => item.properties.Type,
