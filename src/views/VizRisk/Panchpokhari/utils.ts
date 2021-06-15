@@ -112,3 +112,33 @@ export const getsocialFactorChartData = (d) => {
 
     return [];
 };
+
+export const getageGroupChartData = (d) => {
+    if (d.length > 0) {
+        const totalMFData = d.reduce((a, b) => (
+            {
+                seniorCitizens: (a.seniorCitizens || 0) + (b.seniorCitizens || 0),
+                childrenUnder5: (a.childrenUnder5 || 0) + (b.childrenUnder5 || 0),
+                totalPopulation: (a.totalPopulation || 0) + (b.totalPopulation || 0),
+            }
+        ));
+
+        const finalData = {
+            '>65': totalMFData.seniorCitizens,
+            '6-64': totalMFData.totalPopulation - totalMFData.seniorCitizens - totalMFData.childrenUnder5,
+            '<5': totalMFData.childrenUnder5,
+        };
+
+        console.log('totalMFData', finalData);
+        const arr = Object.keys(finalData);
+        const chartData = arr.map(g => ({
+            name: g,
+            Total: finalData[g],
+        }));
+        console.log('chartData', chartData);
+        return chartData;
+    }
+
+
+    return [];
+};

@@ -247,10 +247,14 @@ class FloodHistoryMap extends React.Component {
         const hazardTitle = [...new Set(this.props.incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
-        hazardTitle.map((layer) => {
-            this.map.setFilter(`incidents-${layer}`, filters);
-            return null;
-        });
+        const mapLayer = this.map.getLayer('Buildings');
+
+        if (typeof mapLayer !== 'undefined') {
+            hazardTitle.map((layer) => {
+                this.map.setFilter(`incidents-${layer}`, filters);
+                return null;
+            });
+        }
     }
 
     public handleInputChange = (e) => {

@@ -14,6 +14,7 @@ import {
     getbuildingVul,
     getfoundationTypeChartData,
     getsocialFactorChartData,
+    getageGroupChartData,
 } from '../../utils';
 
 // const chartData = criticalInfraData.safeShelterData;
@@ -32,6 +33,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             buildingVulnerability: { low: '-', medium: '-', high: '-' },
             foundationTypeChartData: [],
             socialFactorChartData: [],
+            ageGroupChartData: [],
         };
     }
 
@@ -42,6 +44,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             this.setState({ buildingVulnerability: getbuildingVul(vulData) });
             this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
             this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
+            this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
         }
     }
 
@@ -51,6 +54,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             if (vulData.length > 0) {
                 this.setState({ buildingVulnerability: getbuildingVul(vulData) });
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
+                this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
+                this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
             }
         }
     }
@@ -82,6 +87,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             buildingVulnerability,
             foundationTypeChartData,
             socialFactorChartData,
+            ageGroupChartData,
         } = this.state;
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
@@ -337,7 +343,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <BarChart
                                     width={350}
                                     height={600}
-                                    data={ageGrpChartData}
+                                    data={ageGroupChartData}
                                     layout="vertical"
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
