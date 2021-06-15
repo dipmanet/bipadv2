@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Education from '../../Icons/icon_set_school.svg';
-import Culture from '../../Icons/icon_set_religion.svg';
-import SafeShelter from '../../Icons/safeshelternew.svg';
+import Education from '#resources/icons/Education copy.svg';
+import Culture from '#resources/icons/culture.svg';
+import SafeShelter from '#resources/icons/safeshelter.svg';
 import Icon from '#rscg/Icon';
 
 
@@ -115,7 +115,7 @@ const EvacLegends = (props) => {
                                 src={Education}
                             />
 
-                            Educational Institution
+                            Education
                         </button>
                     </div>
 
@@ -131,7 +131,7 @@ const EvacLegends = (props) => {
                                 className={styles.svgIcon}
                                 src={Culture}
                             />
-                            Cultural Site
+                            Culture
                         </button>
                     </div>
                     <div className={styles.infraIconContainer}>

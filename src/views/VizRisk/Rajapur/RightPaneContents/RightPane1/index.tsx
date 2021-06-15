@@ -7,8 +7,6 @@ import { CartesianGrid,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
-import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
 import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
 import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
 import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
@@ -134,8 +132,8 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <p>
                     Rajapur municipality lies in the Terai region of Bardiya
                     district in Lumbini Province. It covers a  total area of
-                    127.08 sq km, and is situated at an elevation of
-                    142 m to 154 m AMSL.
+                    127.08 square km, and is situated at an elevation of
+                    142 m to 154 m from sea level.
 
                 </p>
                 <h2>Climate</h2>
