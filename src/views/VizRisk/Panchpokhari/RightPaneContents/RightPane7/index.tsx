@@ -49,13 +49,27 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
     public componentDidUpdate(prevProps) {
-        const { vulData } = this.props;
+        const { vulData, drawChartData } = this.props;
+        console.log('vulData', vulData);
         if (vulData !== prevProps.vulData) {
             if (vulData.length > 0) {
                 this.setState({ buildingVulnerability: getbuildingVul(vulData) });
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
                 this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
+            }
+        }
+        if (drawChartData !== prevProps.drawChartData) {
+            if (drawChartData.length > 0) {
+                const selectedPoints = drawChartData[0].bPoints;
+                console.log('selectedPoints', selectedPoints);
+                const selected = selectedPoints.map(sp => this.getPtSelectedData(sp, vulData));
+                console.log('selectedPoints', selectedPoints);
+                const finalArr = selected.filter(f => f !== null);
+                this.setState({ buildingVulnerability: getbuildingVul(finalArr) });
+                this.setState({ foundationTypeChartData: getfoundationTypeChartData(finalArr) });
+                this.setState({ socialFactorChartData: getsocialFactorChartData(finalArr) });
+                this.setState({ ageGroupChartData: getageGroupChartData(finalArr) });
             }
         }
     }
@@ -65,6 +79,23 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         this.setState(prevState => ({
             showReferences: !prevState.showReferences,
         }));
+    }
+
+    public getPtSelectedData = (s, vd) => {
+        const pointsUF = vd.filter(f => f.point !== undefined);
+        const points = pointsUF.map(p => p.point);
+        console.log('points', points[0]);
+
+        const a = vd.filter(v => v.point !== undefined
+            && String(v.point.coordinates[0]) === s[0].toFixed(6)
+            && String(v.point.coordinates[1]) === s[1].toFixed(6));
+
+        console.log('types ', typeof s[0].toFixed(6), typeof s[1].toFixed(6));
+        console.log('values ', s[0].toFixed(6), s[1].toFixed(6));
+        if (a.length > 0) {
+            return a[0];
+        }
+        return null;
     }
 
     public handleBackBtn = () => {
@@ -101,51 +132,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 ? drawChartData[drawChartData.length - 1].buildings
                 : 0,
         });
-        console.log('vul data', this.state.buildingVulnerability);
-
-
-        const vgofChartData = [
-            {
-                name: 'Woman Headed',
-                Total: 25000,
-            },
-            {
-                name: 'PWD',
-                Total: 1500,
-            },
-            {
-                name: 'Lactating',
-                Total: 9000,
-            },
-            {
-                name: 'Female',
-                Total: 7500,
-            },
-            {
-                name: 'Male',
-                Total: 6400,
-            },
-        ];
-
-        const ageGrpChartData = [
-            {
-                name: '>71',
-                Total: 3500,
-            },
-            {
-                name: '31-50',
-                Total: 5500,
-            },
-            {
-                name: '13-18',
-                Total: 6300,
-            },
-            {
-                name: '<5',
-                Total: 2567,
-            },
-
-        ];
 
         return (
             <div className={styles.vrSideBar}>
@@ -167,7 +153,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         Age Groups
                             </p>
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            {/* <ResponsiveContainer className=
+                            {styles.respContainer} width="100%" height={250}>
                                 <BarChart
                                     width={350}
                                     height={600}
@@ -191,7 +178,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                         radius={[0, 15, 15, 0]}
                                     />
                                 </BarChart>
-                            </ResponsiveContainer>
+                            </ResponsiveContainer> */}
 
                             <button
                                 onClick={this.handleBackBtn}

@@ -440,10 +440,13 @@ class FloodHistoryMap extends React.Component {
                     { layers: ['Forest'] },
                 );
                 const buildingsCount = ptsWithinBuildings.features.length;
+                const bPoints = ptsWithinBuildings.features.map(item => item.geometry.coordinates);
+                console.log('bpoints', bPoints);
                 result.push({
                     buildings: buildingsCount,
                     forest: forest.length,
                     farmlands: farmlands.length,
+                    bPoints,
                 });
                 handleDrawSelectedData(result);
 
