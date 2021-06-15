@@ -40,3 +40,30 @@ export const getgeoJsonLayer = (layer: string) => [
     `&typeName=Bipad:${layer}`,
     '&outputFormat=application/json',
 ].join('');
+
+export const getbuildingVul = (d) => {
+    if (d.length > 0) {
+        const arr = d.filter(item => item.vulnerabilityScore !== undefined);
+        if (arr.length > 0) {
+            const low = arr.filter(v => v.vulnerabilityScore < 50).length;
+            const med = arr.filter(v => v
+                .vulnerabilityScore >= 50 && v.vulnerabilityScore < 60).length;
+            const high = arr.filter(v => v.vulnerabilityScore >= 60).length;
+            return {
+                low,
+                med,
+                high,
+            };
+        }
+        return {
+            low: '-',
+            medium: '-',
+            high: '-',
+        };
+    }
+    return {
+        low: '-',
+        medium: '-',
+        high: '-',
+    };
+};

@@ -9,6 +9,7 @@ import {
 import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import Icon from '#rscg/Icon';
+import { getbuildingVul } from '../../utils';
 
 // const chartData = criticalInfraData.safeShelterData;
 
@@ -23,8 +24,28 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         super();
         this.state = {
             showReferences: true,
+            buildingVulnerability: {},
         };
     }
+
+
+    public componentDidMount() {
+        const { vulData } = this.props;
+        if (vulData.length > 0) {
+            this.setState({ buildingVulnerability: getbuildingVul(vulData) });
+        }
+    }
+
+    public componentDidUpdate(prevProps) {
+        const { vulData } = this.props;
+        if (vulData !== prevProps.vulData) {
+            if (vulData.length > 0) {
+                // eslint-disable-next-line react/no-did-update-set-state
+                this.setState({ buildingVulnerability: getbuildingVul(vulData) });
+            }
+        }
+    }
+
 
     public handleRefClick = () => {
         this.setState(prevState => ({
@@ -45,9 +66,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             pagenumber,
             totalPages,
             drawChartData,
+            vulData,
         } = this.props;
-        console.log('vul data in left pane:', drawChartData);
-
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
@@ -60,8 +80,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 ? drawChartData[drawChartData.length - 1].buildings
                 : 0,
         });
-
-        console.log('chartdata:', chartData);
+        console.log('vul data', this.state.buildingVulnerability);
         const voBChartData = [
             {
                 name: 'Category R3 Flat Roof',
@@ -129,7 +148,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h1>Vulnerability of people and infrastructures </h1>
+                <h1>Vulnerability of People and Households </h1>
                 { this.props.singularBuilding
                     ? (
                         <>
@@ -186,34 +205,34 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     : (
                         <>
                             <p>
-                Vulnerability is the conditions which increase the susceptibility
-                of an individual, household or community to the impact of hazards.
-                The vulnerability level of each household has been visualized in the
-                map in 3 different colors. Red siginifies the high vulnerability level,
-                orange denotes moderate and yellow denotes the low vulnerability level.
-                Physical, social and economic facors were considered to identify the
-                vulnerability of each household.
+                                Vulnerability is the conditions which increase
+                                the susceptibility
+                                of an individual, household or community to
+                                the impact of hazards.
+                                The vulnerability level of each household has
+                                been visualized in the
+                                map in 3 different colors. Red siginifies the
+                                high vulnerability level,
+                                orange denotes moderate and yellow denotes the
+                                low vulnerability level.
+                                Physical, social and economic facors were considered to identify the
+                                vulnerability of each household.
                             </p>
-                            <p>
-                CLASSIFICATION OF BUILDINGS BASED ON THE VULNERABILITY
-                            </p>
+                            <p>Vulnerability of Buildings </p>
                             <div className={styles.buildingClassContainer}>
                                 <div className={styles.levelContainer}>
                                     <span>
-                            High
+                                         High
                                     </span>
                                     <div className={styles.iconLevel}>
-                                        {/* <ScalableVectorGraphics
-                                className={styles.high}
-                                src={Home}
-                            /> */}
+
                                         <Icon
                                             name="home"
                                             className={styles.high}
                                         />
                                         <span className={styles.number}>
                                             {'> '}
-                                0
+                                            0
                                         </span>
                                     </div>
                                 </div>

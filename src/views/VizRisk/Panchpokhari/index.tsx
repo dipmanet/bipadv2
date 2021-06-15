@@ -145,6 +145,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    vulnerabilityData: {
+        url: '/vizrisk-building/',
+        method: methods.GET,
+        query: () => ({
+            municipality: 23010,
+            limit: -1,
+        }),
+        onSuccess: ({ params, response }) => {
+            const { results: vulData = [] } = response;
+            params.setVulData(vulData);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 class Jugal extends React.Component {
@@ -175,6 +189,7 @@ class Jugal extends React.Component {
             singularBuilding: false,
             score: 7,
             buildings: [],
+            vulData: [],
         };
 
         const { requests:
@@ -182,6 +197,7 @@ class Jugal extends React.Component {
                 incidentsGetRequest,
                 cIGetRequest,
                 buildingsGetRequest,
+                vulnerabilityData,
             } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
@@ -194,6 +210,9 @@ class Jugal extends React.Component {
         buildingsGetRequest.setDefaultParams({
             setBuilding: this.setBuilding,
             url: getgeoJsonLayer('panchpokhari_buildings'),
+        });
+        vulnerabilityData.setDefaultParams({
+            setVulData: this.setVulData,
         });
     }
 
@@ -211,6 +230,11 @@ class Jugal extends React.Component {
 
     public setBuilding = (buildings) => {
         this.setState({ buildings });
+    }
+
+    public setVulData = (vulData) => {
+        this.setState({ vulData });
+        console.log('vulData:', vulData);
     }
 
     public setSingularBuilding = (singularBuilding) => {
@@ -397,6 +421,7 @@ class Jugal extends React.Component {
             sesmicLayer,
             cI,
             buildings,
+            vulData,
         } = this.state;
 
         const {
@@ -644,6 +669,7 @@ class Jugal extends React.Component {
                             incidentFilterYear={incidentFilterYear}
                             drawChartData={drawChartData}
                             sesmicLayer={sesmicLayer}
+                            vulData={vulData}
 
                         />
                         <VRLegend>
@@ -690,8 +716,7 @@ class Jugal extends React.Component {
                             singularBuilding={this.state.singularBuilding}
                             score={this.state.score}
                             setSingularBuilding={this.setSingularBuilding}
-
-
+                            vulData={vulData}
                         />
                         {/* <VRLegend>
                             <SesmicHazardLegend
