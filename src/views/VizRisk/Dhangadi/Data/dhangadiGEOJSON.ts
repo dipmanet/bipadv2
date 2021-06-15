@@ -1,4 +1,4 @@
-export default {
+const Data = () => ({
     schools: {
         type: 'FeatureCollection',
 
@@ -249,5 +249,6 @@ export default {
             { type: 'Feature', properties: { Type: 'Culture', icon: 'culture', Name: 'Pashupati Mandir', Longitude: 80.5887592, Latitude: 28.7017231 }, geometry: { type: 'Point', coordinates: [80.5887592, 28.7017231] } },
         ],
     },
+});
 
-};
+export default Data;

@@ -1,6 +1,8 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
+import { isDefined } from '@togglecorp/fujs';
 import { mapSources } from '#constants';
 import SchoolGeoJSON from '../Data/BiratnagarGEOJSON';
 import demographicsData from '../Data/demographicsData';
@@ -53,27 +55,23 @@ const populationWardExpression = [
     17, '#fed990', 18, '#fed990', 19, '#fed990',
 ];
 const {
-    criticalinfrastructures,
+    // criticalinfrastructures,
     evaccenters,
 } = SchoolGeoJSON;
-
-const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-    item => item.properties.Type,
-))];
+console.log('Evac', evaccenters);
+// const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
+//     item => item.properties.Type,
+// ))];
 
 const categoriesEvac = [...new Set(evaccenters.features.map(
     item => item.properties.Type,
 ))];
-
-const rasterLayersYears = [5, 50, 100, 500];
-const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
-const arrCritical = categoriesCritical.map(
-    layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
-);
 const arrEvac = categoriesEvac.map(
     layer => [`evac-count-${layer}`, `evac-unclustered-${layer}`, `evac-${layer}`],
 );
-const criticalInfraClusters = [].concat(...arrCritical);
+const rasterLayersYears = [5, 50, 100, 500];
+const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
+
 const evacClusters = [].concat(...arrEvac);
 
 
@@ -98,18 +96,6 @@ const slideFourLayers = ['bridgeBiratnagar', 'water', 'waterway',
     'BiratnagarRoads',
     'municipalityFill'];
 
-const slideFiveLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'bridgeBiratnagar', 'water', 'waterway',
-    'canalBiratnagar', 'BiratnagarBuildings',
-    'BiratnagarRoads', 'municipalityFill',
-
-];
-const slideSixLayers = [
-    'safeshelterBiratnagarimage', 'safeshelterBiratnagarIcon', ...criticalInfraClusters, ...rasterLayers, 'bridgeBiratnagar', 'water', 'waterway',
-    'canalBiratnagar',
-    'BiratnagarRoads',
-    'municipalityFill',
-];
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -120,8 +106,12 @@ class FloodHistoryMap extends React.Component {
             lng: 87.27721567619342,
             zoom: 11,
             wardNumber: 'Hover to see ward number',
+            criticalInfraClusters: [],
+            slideFiveLayers: [],
+            slideSixLayers: [],
         };
     }
+
 
     public componentDidMount() {
         const {
@@ -134,7 +124,7 @@ class FloodHistoryMap extends React.Component {
             selectedMunicipalityId: municipalityId,
             criticalInfrastructureData,
         } = this.props;
-
+        console.log('criticalInfrastructureData', criticalInfrastructureData);
         const mapping = [];
         if (wards) {
             wards.map((item) => {
@@ -226,66 +216,66 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            categoriesCritical.map((layer) => {
-                this.map.addSource(layer, {
-                    type: 'geojson',
-                    data: this.getGeoJSON(layer, criticalinfrastructures),
-                    cluster: true,
-                    clusterRadius: 50,
-                });
-                this.map.addLayer({
-                    id: `clusters-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'],
-                            '#a4ac5e',
-                            100,
-                            '#a4ac5e',
-                        ],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'],
-                            20,
-                            100,
-                            30,
-                            750,
-                            40,
-                        ],
-                    },
-                });
+            // categoriesCritical.map((layer) => {
+            //     this.map.addSource(layer, {
+            //         type: 'geojson',
+            //         data: this.getGeoJSON(layer, criticalinfrastructures),
+            //         cluster: true,
+            //         clusterRadius: 50,
+            //     });
+            //     this.map.addLayer({
+            //         id: `clusters-${layer}`,
+            //         type: 'circle',
+            //         source: layer,
+            //         filter: ['has', 'point_count'],
+            //         paint: {
+            //             'circle-color': [
+            //                 'step',
+            //                 ['get', 'point_count'],
+            //                 '#a4ac5e',
+            //                 100,
+            //                 '#a4ac5e',
+            //             ],
+            //             'circle-radius': [
+            //                 'step',
+            //                 ['get', 'point_count'],
+            //                 20,
+            //                 100,
+            //                 30,
+            //                 750,
+            //                 40,
+            //             ],
+            //         },
+            //     });
 
-                this.map.addLayer({
-                    id: `unclustered-point-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-                        'icon-image': ['get', 'icon'],
-                        'icon-size': 0.3,
-                    },
-                });
+            //     this.map.addLayer({
+            //         id: `unclustered-point-${layer}`,
+            //         type: 'symbol',
+            //         source: layer,
+            //         filter: ['!', ['has', 'point_count']],
+            //         layout: {
+            //             'icon-image': ['get', 'icon'],
+            //             'icon-size': 0.3,
+            //         },
+            //     });
 
-                this.map.addLayer({
-                    id: `clusters-count-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12,
-                    },
-                });
+            //     this.map.addLayer({
+            //         id: `clusters-count-${layer}`,
+            //         type: 'symbol',
+            //         source: layer,
+            //         layout: {
+            //             'text-field': '{point_count_abbreviated}',
+            //             'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            //             'text-size': 12,
+            //         },
+            //     });
 
-                this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+            //     this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+            //     this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+            //     this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
 
-                return null;
-            });
+            //     return null;
+            // });
 
             categoriesEvac.map((layer) => {
                 this.map.addSource(`evac${layer}`, {
@@ -511,7 +501,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.getCanvas().style.cursor = '';
                 popup.remove();
             }));
-            categoriesCritical.map(layer => this.map.on('mousemove', `unclustered-point-${layer}`, (e) => {
+            this.state.categoriesCritical.map(layer => this.map.on('mousemove', `unclustered-point-${layer}`, (e) => {
                 if (e) {
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
@@ -525,7 +515,7 @@ class FloodHistoryMap extends React.Component {
                     ).addTo(this.map);
                 }
             }));
-            categoriesCritical.map(layer => this.map.on('mouseleave', `unclustered-point-${layer}`, () => {
+            this.state.categoriesCritical.map(layer => this.map.on('mouseleave', `unclustered-point-${layer}`, () => {
                 this.map.getCanvas().style.cursor = '';
                 popup.remove();
             }));
@@ -657,7 +647,7 @@ class FloodHistoryMap extends React.Component {
                         ],
                     });
                     this.toggleVisiblity(slideThreeLayers, 'none');
-                    this.toggleVisiblity(slideFiveLayers, 'none');
+                    this.toggleVisiblity(this.state.slideFiveLayers, 'none');
                     this.toggleVisiblity(slideFourLayers, 'visible');
 
                     this.orderLayers(slideFourLayers);
@@ -674,10 +664,10 @@ class FloodHistoryMap extends React.Component {
                         ],
                     });
                     this.toggleVisiblity(slideFourLayers, 'none');
-                    this.toggleVisiblity(slideSixLayers, 'none');
-                    this.toggleVisiblity(slideFiveLayers, 'visible');
+                    this.toggleVisiblity(this.state.slideSixLayers, 'none');
+                    this.toggleVisiblity(this.state.slideFiveLayers, 'visible');
 
-                    this.orderLayers(slideFiveLayers);
+                    this.orderLayers(this.state.slideFiveLayers);
                     this.handleInfraClusterSwitch(criticalFlood);
                     this.handleFloodRasterSwitch('5');
                 } else if (nextProps.rightElement === 5) {
@@ -690,12 +680,99 @@ class FloodHistoryMap extends React.Component {
                             26.449432670637346,
                         ],
                     });
-                    this.toggleVisiblity(slideFiveLayers, 'none');
-                    this.toggleVisiblity(slideSixLayers, 'visible');
-                    this.orderLayers(slideSixLayers);
+                    this.toggleVisiblity(this.state.slideFiveLayers, 'none');
+                    this.toggleVisiblity(this.state.slideSixLayers, 'visible');
+                    this.orderLayers(this.state.slideSixLayers);
                     this.handleFloodRasterSwitch('5');
                     this.handleEvacClusterSwitch(evacElement);
                 }
+            }
+        }
+    }
+
+    public componentDidUpdate(prevProps) {
+        const { criticalInfrastructureData } = this.props;
+        if (prevProps.criticalInfrastructureData !== criticalInfrastructureData) {
+            if (isDefined(criticalInfrastructureData.features)) {
+                const categoriesCritical = [...new Set(criticalInfrastructureData.features.map(
+                    item => item.properties.Type,
+                ))];
+                const arrCritical = categoriesCritical.map(
+                    layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
+                );
+                this.setState({ criticalInfraClusters: [].concat(...arrCritical) });
+                this.setState({ slideFiveLayers: [
+                    ...[].concat(...arrCritical), ...rasterLayers, 'bridgeBiratnagar', 'water', 'waterway',
+                    'canalBiratnagar', 'BiratnagarBuildings',
+                    'BiratnagarRoads', 'municipalityFill',
+
+                ] });
+
+                this.setState({
+                    slideSixLayers: [
+                        'safeshelterBiratnagarimage', 'safeshelterBiratnagarIcon', ...[].concat(...arrCritical), ...rasterLayers, 'bridgeBiratnagar', 'water', 'waterway',
+                        'canalBiratnagar',
+                        'BiratnagarRoads',
+                        'municipalityFill',
+                    ],
+                });
+
+                categoriesCritical.map((layer) => {
+                    this.map.addSource(layer, {
+                        type: 'geojson',
+                        data: this.getGeoJSON(layer, criticalInfrastructureData),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#a4ac5e',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `unclustered-point-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['get', 'icon'],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `clusters-count-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                        },
+                    });
+                    return null;
+                });
             }
         }
     }
@@ -743,7 +820,7 @@ class FloodHistoryMap extends React.Component {
 
 
     public resetClusters = () => {
-        categoriesCritical.map((layer) => {
+        this.state.categoriesCritical.map((layer) => {
             this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
             this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
             this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
@@ -797,7 +874,7 @@ class FloodHistoryMap extends React.Component {
         this.resetClusters();
 
         if (layer === 'all') {
-            categoriesCritical.map((item) => {
+            this.state.categoriesCritical.map((item) => {
                 this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
@@ -870,7 +947,7 @@ class FloodHistoryMap extends React.Component {
             top: 0,
             bottom: 0,
         };
-
+        console.log('This', categoriesEvac);
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />

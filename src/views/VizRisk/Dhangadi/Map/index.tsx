@@ -2,7 +2,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/dhangadiGEOJSON';
+import Data from '../Data/dhangadiGEOJSON';
 import demographicsData from '../Data/demographicsData';
 import styles from './styles.scss';
 import {
@@ -57,7 +57,7 @@ const populationWardExpression = [
 const {
     criticalinfrastructures,
     evaccenters,
-} = SchoolGeoJSON;
+} = Data();
 
 const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
     item => item.properties.Type,
