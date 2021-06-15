@@ -67,3 +67,48 @@ export const getbuildingVul = (d) => {
         high: '-',
     };
 };
+
+export const getfoundationTypeChartData = (d) => {
+    if (d.length > 0) {
+        const typeArr = [...new Set(
+            d.map(i => i.foundationType).filter(f => f !== undefined),
+        )];
+
+        return typeArr.map(ftype => ({
+            name: ftype,
+            Total: d.filter(f => f.foundationType === ftype).length,
+        }));
+    }
+    return [];
+};
+
+export const getsocialFactorChartData = (d) => {
+    const socialChartref = {
+        noOfMale: 'Male',
+        noOfFemale: 'Female',
+        peopleWithDisability: 'PWD',
+        ownership: 'Women Headed',
+    };
+    if (d.length > 0) {
+        const totalMFData = d.reduce((a, b) => (
+            {
+                noOfMale: (a.noOfMale || 0) + (b.noOfMale || 0),
+                noOfFemale: (a.noOfFemale || 0) + (b.noOfFemale || 0),
+                peopleWithDisability: (a.peopleWithDisability || 0) + (b.peopleWithDisability || 0),
+            }
+        ));
+
+        totalMFData.ownership = d.filter(wh => wh.ownership === 'Female').length;
+        console.log('totalMFData', totalMFData);
+        const arr = Object.keys(totalMFData);
+        const chartData = arr.map(g => ({
+            name: socialChartref[g],
+            Total: totalMFData[g],
+        }));
+        console.log('chartData', chartData);
+        return chartData;
+    }
+
+
+    return [];
+};

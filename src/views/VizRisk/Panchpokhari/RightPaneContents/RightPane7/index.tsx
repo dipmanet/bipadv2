@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 
 import {
@@ -9,7 +10,11 @@ import {
 import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import Icon from '#rscg/Icon';
-import { getbuildingVul } from '../../utils';
+import {
+    getbuildingVul,
+    getfoundationTypeChartData,
+    getsocialFactorChartData,
+} from '../../utils';
 
 // const chartData = criticalInfraData.safeShelterData;
 
@@ -24,7 +29,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         super();
         this.state = {
             showReferences: true,
-            buildingVulnerability: {},
+            buildingVulnerability: { low: '-', medium: '-', high: '-' },
+            foundationTypeChartData: [],
+            socialFactorChartData: [],
         };
     }
 
@@ -33,6 +40,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         const { vulData } = this.props;
         if (vulData.length > 0) {
             this.setState({ buildingVulnerability: getbuildingVul(vulData) });
+            this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
+            this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
         }
     }
 
@@ -40,8 +49,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         const { vulData } = this.props;
         if (vulData !== prevProps.vulData) {
             if (vulData.length > 0) {
-                // eslint-disable-next-line react/no-did-update-set-state
                 this.setState({ buildingVulnerability: getbuildingVul(vulData) });
+                this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
             }
         }
     }
@@ -68,6 +77,12 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             drawChartData,
             vulData,
         } = this.props;
+
+        const {
+            buildingVulnerability,
+            foundationTypeChartData,
+            socialFactorChartData,
+        } = this.state;
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
@@ -81,26 +96,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 : 0,
         });
         console.log('vul data', this.state.buildingVulnerability);
-        const voBChartData = [
-            {
-                name: 'Category R3 Flat Roof',
-                Total: drawChartData[drawChartData.length - 1]
-                    ? Math.round(drawChartData[drawChartData.length - 1].buildings / 3)
-                    : 0,
-            },
-            {
-                name: 'Category R2 Heavy Weight',
-                Total: drawChartData[drawChartData.length - 1]
-                    ? Math.round(drawChartData[drawChartData.length - 1].buildings / 2)
-                    : 0,
-            },
-            {
-                name: 'Category R1 Light Wight',
-                Total: drawChartData[drawChartData.length - 1]
-                    ? Math.round(drawChartData[drawChartData.length - 1].buildings / 6)
-                    : 0,
-            },
-        ];
 
 
         const vgofChartData = [
@@ -231,8 +226,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                             className={styles.high}
                                         />
                                         <span className={styles.number}>
-                                            {'> '}
-                                            0
+                                            {' '}
+                                            {buildingVulnerability.high}
+                                            {' '}
                                         </span>
                                     </div>
                                 </div>
@@ -241,15 +237,15 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             Medium
                                     </span>
                                     <div className={styles.iconLevel}>
-                                        {/* <ScalableVectorGraphics
-                                className={styles.med}
-                                src={Home}
-                            /> */}
                                         <Icon
                                             name="home"
                                             className={styles.med}
                                         />
-                                        <span className={styles.number}>1</span>
+                                        <span className={styles.number}>
+                                            {' '}
+                                            {buildingVulnerability.medium}
+                                            {' '}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className={styles.levelContainer}>
@@ -257,32 +253,31 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             Low
                                     </span>
                                     <div className={styles.iconLevel}>
-                                        {/* <ScalableVectorGraphics
-                                className={styles.low}
-                                src={Home}
-                            /> */}
                                         <Icon
                                             name="home"
                                             className={styles.low}
                                         />
                                         <span className={styles.number}>
                                             {' '}
-                                            {'< '}
-                                    3
+                                            {buildingVulnerability.low}
+                                            {' '}
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
                             <p>
-                    VULNERABILITY OF BUILDINGS
+                                PHYSICAL, SOCIAL AND ECONOMIC FACTORS
+                            </p>
+                            <p>
+                                Physical: Foundation Type
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                                 <BarChart
                                     width={350}
                                     height={600}
-                                    data={voBChartData}
+                                    data={foundationTypeChartData}
                                     layout="vertical"
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
@@ -305,14 +300,14 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             </ResponsiveContainer>
 
                             <p>
-                     VULNERABLE GROUPS OF PEOPLE
+                                Social Factors
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                                 <BarChart
                                     width={350}
                                     height={600}
-                                    data={vgofChartData}
+                                    data={socialFactorChartData}
                                     layout="vertical"
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
@@ -335,7 +330,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             </ResponsiveContainer>
 
                             <p>
-                     AGE GROUPS
+                                AGE GROUPS
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
