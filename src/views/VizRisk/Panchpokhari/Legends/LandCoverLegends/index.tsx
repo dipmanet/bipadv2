@@ -1,10 +1,6 @@
 import React from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
-<<<<<<< HEAD:src/views/VizRisk/Rajapur/Legends/LandCoverLegends/index.tsx
-import AgriPattern from '../../Icons/agrihexagon.svg';
-=======
->>>>>>> feature/JugalPanckpokhari:src/views/VizRisk/Panchpokhari/Legends/LandCoverLegends/index.tsx
 
 const LandCoverLegends = () => (
     <>
@@ -54,15 +50,8 @@ const LandCoverLegends = () => (
                     className={styles.agricultureIcon}
                 />
 
-<<<<<<< HEAD:src/views/VizRisk/Rajapur/Legends/LandCoverLegends/index.tsx
-            </span> */}
-            <img src={AgriPattern} alt="agriculture legend" className={styles.agricultureIcon} />
-            <span className={styles.legendText}>Agricultural Land</span>
-
-=======
             </span>
                             Agricultural Land
->>>>>>> feature/JugalPanckpokhari:src/views/VizRisk/Panchpokhari/Legends/LandCoverLegends/index.tsx
         </p>
         <p className={styles.landcoverIconContainer}>
             <span>
@@ -81,15 +70,6 @@ const LandCoverLegends = () => (
 
         </p>
 
-<<<<<<< HEAD:src/views/VizRisk/Rajapur/Legends/LandCoverLegends/index.tsx
-        <div className={styles.landcoverIconContainer}>
-            <div className={styles.canalIcon} />
-
-            <span className={styles.legendText}>Canals</span>
-
-        </div>
-=======
->>>>>>> feature/JugalPanckpokhari:src/views/VizRisk/Panchpokhari/Legends/LandCoverLegends/index.tsx
 
         <div className={styles.landcoverIconContainer}>
             <div className={styles.roadIcon} />

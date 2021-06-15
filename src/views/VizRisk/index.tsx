@@ -7,17 +7,16 @@ import Button from '#rsca/Button';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Panchpokhari from './Panchpokhari';
 import Jugal from './Jugal';
+// eslint-disable-next-line import/no-unresolved
+import Rajapur from './Rajapur';
 
 
 const slides = [
-<<<<<<< HEAD
     <Rajapur />,
     // <BarabiseLandslide />,
     // <Gulariya />,
-=======
     <Panchpokhari />,
     <Jugal />,
->>>>>>> feature/JugalPanckpokhari
 
 ];
 
@@ -42,10 +41,10 @@ const VizRiskMainPage = () => {
             setCurrentPage(1);
             setTitle('Visualising Landslide Exposure');
         } else if (municipality === 'jugal') {
-            setCurrentPage(1);
+            setCurrentPage(2);
             setTitle('Visualising Flood Exposure');
         } else if (municipality === 'pachpokhari') {
-            setCurrentPage(0);
+            setCurrentPage(1);
             setTitle('Visualising Multihazard Exposure');
         }
     };
@@ -111,6 +110,22 @@ const VizRiskMainPage = () => {
                 <div className={styles.vizrisknmenupagecontainer}>
                     {showMenu ? (
                         <div className={styles.vizrisknmenupage}>
+                            <p className={styles.menuTitle}>Visualizing Flood Exposure </p>
+                            <div className={styles.vizriskmunicipalityName}>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('rajapur')}
+
+                                >
+                                    <h1
+                                        className={styles.menuItems}
+                                    >
+                                            Rajapur Municipality
+                                    </h1>
+
+                                </Button>
+
+                            </div>
                             <p className={styles.menuTitle}>Visualizing Multi Hazard Exposure </p>
 
                             <div className={styles.vizriskmunicipalityName}>
@@ -126,13 +141,10 @@ const VizRiskMainPage = () => {
                                     </h1>
 
                                 </Button>
-<<<<<<< HEAD
-                                {/* <Button
-=======
+
                             </div>
                             <div className={styles.vizriskmunicipalityName}>
                                 <Button
->>>>>>> feature/JugalPanckpokhari
                                     transparent
                                     onClick={() => handleMenuTitleClick('jugal')}
 
@@ -143,20 +155,9 @@ const VizRiskMainPage = () => {
                                             Jugal Municipality
                                     </h1>
 
-                                </Button> */}
+                                </Button>
+
                             </div>
-<<<<<<< HEAD
-                            {/* <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick('bharabise')}
-
-                            >
-                                <h1 className={styles.menuItems}>Bharabise Municipality</h1>
-
-                            </Button> */}
-=======
->>>>>>> feature/JugalPanckpokhari
 
 
                         </div>
