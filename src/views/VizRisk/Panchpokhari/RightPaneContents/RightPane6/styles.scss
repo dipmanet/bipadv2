@@ -1,0 +1,155 @@
+
+ .vrSideBar::-webkit-scrollbar {
+    display: none;
+  }
+  .heading-style{
+    font-family: 'Playfair Display';
+    font-size: 28px;
+    color: white;
+    line-height: 1.4em;
+}
+.para-style{
+    color:white;
+    font-size: 15px;
+    font-family: 'Source Sans Pro';
+    padding: 0 10px 0 0;
+    opacity: 0.87;
+    line-height: 1.4em;
+
+}
+    .vrSideBar{
+        scrollbar-width: none;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color:rgb(12,36,50);
+        color:#b6d6e4;
+        padding: 40px 20px 20px 30px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        left: 0;
+        overflow-y: scroll;
+        .respContainer{
+            right: 25px;
+            position: relative;
+            // border: 1px solid red;
+        }
+        .chartContainer{
+            // border: 1px solid red;
+            height: 600px;
+            padding-top:0;
+            width: 360px;
+        }
+        .lastPara{
+            z-index: 2;
+            background-color:#112330;
+        }
+    
+        .chartContainer{
+            margin-top: 20px;
+            position: relative;
+            right: 35px;
+        }
+       
+        h1{
+            @extend .heading-style;
+        }
+        h2{
+            @extend .heading-style;
+            opacity: 0.9 !important;
+        }
+        p{
+            @extend .para-style;
+        }
+        .climateLegendContainer{
+            display:flex;
+            justify-content: flex-start;
+            margin-left: 55px;
+            min-width: 200px;
+         
+            .climatelegend{
+            display:flex;
+            padding-right: 20px;
+                .legendMax{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #ffbf00;
+                    padding-right: 4px;
+                    margin-right: 3px;
+                }
+                .legendMin{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #347eff;
+                    // border: 1px solid #1f59be;
+                    margin-right: 3px;
+
+                }
+                .legendDaily{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #00d725;
+                    // border: 1px solid #047a18;
+                    margin-right: 3px;
+                
+                }
+                .legendText{
+                    color: #6490a4;
+                    // opacity: 0.45;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+        .incidentsLegendsContainer{
+            .hazardItemContainer{
+                display: flex;
+                padding: 0;
+                margin: 0;
+               .legendBtnSelected{
+                font-size: 11px;
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+                // opacity: 0.87;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                text-transform: uppercase;
+
+                .educationHexagon{
+                    width: 11px;
+                    margin: 0 7px 0 0;
+                }
+               }
+                .legendBtn{
+                    font-size: 14px;
+                    display: flex;
+                    background-color: transparent;
+                    border: none;
+                    color: white; 
+                    opacity: 0.37;
+                    margin-bottom: 5px;
+                    align-items: center;
+                    font-family: 'Source Sans Pro';
+                    filter: saturate(100%);
+                    cursor: pointer;
+                    font-size: 11px;
+                    text-transform: uppercase;
+                    .educationHexagon{
+                        width: 11px;
+                        margin: 0 7px 0 0;
+                    }
+                }
+            }
+        
+        }
+
+    }
+
+
+

@@ -204,7 +204,8 @@ export interface Inventory {
 }
 
 export interface Loss {
-    id: number;
+    [x: string]: any;
+    id?: number;
     description?: string;
     estimatedLoss?: number;
     peopleDeathCount?: number;

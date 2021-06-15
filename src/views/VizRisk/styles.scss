@@ -1,9 +1,14 @@
+.mapboxgl-ctrl-group .mapboxgl-ctrl{
+    position: relative !important;
+    top: 500px !important;
+    border: 1px solid red !important;
+}
 .mainVzContainer{
     position: relative;
     width: 100vw;
     background: #193341;
     height:100%;
-    margin-top: -12px;
+    // margin-top: -12px;
     z-index: 2;
     .vizrisknmenupagecontainer{
         .vizrisknmenupage{
@@ -23,6 +28,7 @@
             .vizriskmunicipalityName{
                 display: flex;
                 flex-direction: column;
+                align-items: flex-start;
             }
         }
        
@@ -59,32 +65,66 @@
             }
         }
         .hamburgerBtnContainer{
-            position: relative;
-            top: 30px;
-            left: 20px;
-            width: 50%;
-            // border: 1px solid red;
-            height: 8 0px;
-            margin-bottom: 40px;
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;   
+            right: 72%;        
+            top: 10px; 
             .hamburgerBtn{
                 color: white;
-                opacity: 0.67;
                 display: flex;
                align-items: center;
+            //    border: 1px solid red;
+            padding: 0;
+
                filter:saturate(100%);
                 .hamburgerBtnIcon{
-                    font-size: 40px;  
+                font-size: 30px;  
                 color: rgb(175, 220, 241);
-                margin-right: 10px;
                 }
                 .strong{
                     color: rgb(175, 220, 241);
                     // opacity: 0.87;
+                    display: none;
                 }
             
             }
-          
-    
+            
+            
+        }
+        .hamburgerBtnContainerOther{
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;   
+            right: 95%;        
+            top: 10px; 
+            .hamburgerBtn{
+                color: white;
+                display: flex;
+               align-items: center;
+            //    border: 1px solid red;
+            padding: 0;
+
+               filter:saturate(100%);
+                .hamburgerBtnIcon{
+                font-size: 30px;  
+                color: rgb(175, 220, 241);
+                }
+                .strong{
+                    color: rgb(175, 220, 241);
+                    // opacity: 0.87;
+                    display: none;
+                }
+            
+            }
+            
+            
+        }
+        .hamburgerBtnContMenu{
+            @extend .hamburgerBtnContainer;
+            right: 95%;
         }
 
   

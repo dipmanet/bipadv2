@@ -1,0 +1,54 @@
+
+    
+   
+
+    .hazardItemContainer{
+        display: flex;
+        padding: 0;
+        margin: 0;
+        width: 200px;
+       .legendBtnSelected{
+        font-size: 11px;
+        display: flex;
+        background-color: transparent;
+        border: none;
+        color: #036ef0; 
+        // opacity: 0.87;
+        margin: 5px 0;
+        align-items: center;
+        font-family: 'Source Sans Pro';
+        filter: saturate(100%);
+        cursor: pointer;
+        text-transform: uppercase;
+
+        .educationHexagon{
+            width: 12px;
+            // padding: 0 7px 0 0;
+            margin-right: 4px;
+
+        }
+       }
+        .legendBtn{
+            font-size: 11px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            opacity: 0.67;
+            margin: 5px 0;
+
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+            text-transform: uppercase;
+            .educationHexagon{
+            margin-right: 4px;
+            width: 12px;
+                // padding: 0 7px 0 0;
+            }
+        }
+    }
+
+
+
