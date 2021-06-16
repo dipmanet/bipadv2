@@ -13,19 +13,30 @@ const DemoGraphicsLegends = (props) => {
     const handlePopulationClick = (val) => {
         if (val === 'sus') {
             if (showSus) {
+                setshowSus(false);
+                // setshowSes(false);
                 handleSesmicLayerChange('susHide');
             } else {
+                setshowSus(true);
+                if (showSes) {
+                    setshowSes(false);
+                    handleSesmicLayerChange('sesHide');
+                }
                 handleSesmicLayerChange('sus');
             }
-            setshowSus(!showSus);
         }
         if (val === 'ses') {
             if (showSes) {
+                setshowSes(false);
                 handleSesmicLayerChange('sesHide');
             } else {
+                setshowSes(true);
+                if (showSus) {
+                    setshowSus(false);
+                    handleSesmicLayerChange('susHide');
+                }
                 handleSesmicLayerChange('ses');
             }
-            setshowSes(!showSes);
         }
     };
 

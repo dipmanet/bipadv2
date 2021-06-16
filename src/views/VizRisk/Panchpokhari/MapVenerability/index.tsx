@@ -1,7 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import { isDefined } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
@@ -77,13 +77,14 @@ class FloodHistoryMap extends React.Component {
             osmID: 0,
             points: [],
             buildingpoints: [],
-            opacity: 0.5,
+            opacitySes: 0.5,
+            opacitySus: 0.5,
         };
     }
 
     public componentDidMount() {
         const {
-            lng, lat, zoom, opacity,
+            lng, lat, zoom, opacitySes, opacitySus,
         } = this.state;
 
 
@@ -504,7 +505,7 @@ class FloodHistoryMap extends React.Component {
                         visibility: 'none',
                     },
                     paint: {
-                        'raster-opacity': Number(opacity),
+                        'raster-opacity': Number(opacitySus),
                     },
                 },
             );
@@ -523,7 +524,7 @@ class FloodHistoryMap extends React.Component {
                         visibility: 'none',
                     },
                     paint: {
-                        'raster-opacity': Number(opacity),
+                        'raster-opacity': Number(opacitySes),
                     },
                 },
             );
@@ -538,10 +539,12 @@ class FloodHistoryMap extends React.Component {
             console.log('in child', this.props.sesmicLayer);
             if (this.props.sesmicLayer === 'ses') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'visible');
+                this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
             } else if (this.props.sesmicLayer === 'sesHide') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
             } else if (this.props.sesmicLayer === 'sus') {
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
+                this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
             } else if (this.props.sesmicLayer === 'susHide') {
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
             }
@@ -619,14 +622,13 @@ class FloodHistoryMap extends React.Component {
 
     public handleInputChange = (e) => {
         const val = e.target.value;
-        this.setState({ opacity: String(e.target.value) });
+        this.setState({ opacitySus: String(e.target.value) });
         this.map.setPaintProperty('jugallsSuslayer', 'raster-opacity', Number(val));
-        console.log(val);
     }
 
     public handleInputChangeSes = (e) => {
         const val = e.target.value;
-        this.setState({ opacity: String(e.target.value) });
+        this.setState({ opacitySes: String(e.target.value) });
         this.map.setPaintProperty('jugallseicHazard', 'raster-opacity', Number(val));
     }
 
@@ -696,6 +698,9 @@ class FloodHistoryMap extends React.Component {
                         this.props.sesmicLayer === 'sus'
                 && (
                     <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
                         <input
                             onChange={this.handleInputChange}
                             id="slider"
@@ -703,7 +708,7 @@ class FloodHistoryMap extends React.Component {
                             min="0"
                             max="1"
                             step="0.05"
-                            value={String(this.state.opacity)}
+                            value={String(this.state.opacitySus)}
                             className={styles.slider}
                         />
                         <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
@@ -714,6 +719,9 @@ class FloodHistoryMap extends React.Component {
                         this.props.sesmicLayer === 'ses'
                 && (
                     <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
                         <input
                             onChange={this.handleInputChangeSes}
                             id="slider"
@@ -721,7 +729,7 @@ class FloodHistoryMap extends React.Component {
                             min="0"
                             max="1"
                             step="0.05"
-                            value={String(this.state.opacity)}
+                            value={String(this.state.opacitySes)}
                             className={styles.slider}
                         />
                         <EarthquakeHazardLegends layer={this.props.sesmicLayer} />

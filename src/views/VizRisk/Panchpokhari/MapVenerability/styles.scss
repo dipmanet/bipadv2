@@ -39,7 +39,13 @@ input::placeholder{
 }
 }
 
-
+.sliderLabel{
+  position: fixed;
+  right: 70px;
+  bottom: 130px;
+  color: white;
+  z-index: 201;
+}
 .slider {
   z-index: 201;
   -webkit-appearance: none;
