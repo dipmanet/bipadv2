@@ -137,7 +137,6 @@ export const getageGroupChartData = (d) => {
 };
 
 export const getownershipChartData = (d) => {
-    console.log('ownership filtered data:', d);
     if (d.length > 0) {
         const typeArr = [...new Set(
             d.map(i => i.ownership).filter(f => f !== undefined),
@@ -169,13 +168,31 @@ export const getaverageAnnualincomeChartData = (d) => {
         const typeArr = [...new Set(
             d.map(i => i.averageAnnualIncome).filter(f => f !== undefined),
         )];
-            // const arr = {
-
-        // }
-        return typeArr.map(ftype => ({
-            name: ftype,
-            Total: d.filter(f => f.averageAnnualIncome === ftype).length,
-        }));
+        const arr = [
+            {
+                name: '>500000',
+                Total: d.filter(item => item.averageAnnualIncome >= 50000).length,
+            },
+            {
+                name: '300000-500000',
+                Total: d.filter(item => item.averageAnnualIncome >= 300000
+                    && item.averageAnnualIncome < 500000).length,
+            },
+            {
+                name: '100000-300000',
+                Total: d.filter(item => item.averageAnnualIncome >= 100000
+                    && item.averageAnnualIncome < 300000).length,
+            },
+            {
+                name: '<100000',
+                Total: d.filter(item => item.averageAnnualIncome < 100000).length,
+            },
+        ];
+        return arr;
+        // return typeArr.map(ftype => ({
+        //     name: ftype,
+        //     Total: d.filter(f => f.averageAnnualIncome === ftype).length,
+        // }));
     }
     return [];
 };

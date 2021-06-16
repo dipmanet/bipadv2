@@ -258,7 +258,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
-                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
+                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
                 <div className={styles.climateChart}>
                     <ResponsiveContainer className={styles.chartContainer} height={300}>
                         <LineChart

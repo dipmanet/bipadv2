@@ -178,7 +178,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             averageAnnualincomeChartData,
         } = this.state;
 
-        console.log('ownershipChartData', ownershipChartData);
 
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
@@ -619,13 +618,13 @@ Vulnerability of People and Households
                                 Average Annual Income
                             </p>
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={1000}>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
                                 <BarChart
-                                    width={360}
+                                    width={340}
                                     height={600}
                                     data={averageAnnualincomeChartData}
                                     layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 40 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }}>
