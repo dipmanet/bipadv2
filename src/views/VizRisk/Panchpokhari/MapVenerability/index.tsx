@@ -452,9 +452,14 @@ class FloodHistoryMap extends React.Component {
                 });
             };
 
+            const resetArea = () => {
+                this.props.handleDrawResetData();
+            };
+
             this.map.addControl(draw, 'top-right');
 
             this.map.on('draw.create', updateArea);
+            this.map.on('draw.delete', resetArea);
         }
 
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');

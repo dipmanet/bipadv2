@@ -54,6 +54,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             drawChartData,
             singularBuldingData,
             singularBuilding,
+            resetDrawData,
         } = this.props;
         if (vulData !== prevProps.vulData) {
             if (vulData.length > 0) {
@@ -72,6 +73,14 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(finalArr) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(finalArr) });
                 this.setState({ ageGroupChartData: getageGroupChartData(finalArr) });
+            }
+        }
+        if (resetDrawData !== prevProps.resetDrawData) {
+            if (vulData.length > 0 && resetDrawData === true) {
+                this.setState({ buildingVulnerability: getbuildingVul(vulData) });
+                this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
+                this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
+                this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
             }
         }
     }

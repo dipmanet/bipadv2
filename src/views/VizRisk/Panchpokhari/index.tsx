@@ -191,6 +191,7 @@ class Jugal extends React.Component {
             buildings: [],
             vulData: [],
             singularBuldingData: [],
+            resetDrawData: false,
         };
 
         const { requests:
@@ -277,6 +278,10 @@ class Jugal extends React.Component {
 
     public handleSesmicLayerChange = (sesmicLayer) => {
         this.setState({ sesmicLayer });
+    }
+
+    public handleDrawResetData = () => {
+        this.setState(prevState => ({ resetDrawData: !prevState.resetDrawData }));
     }
 
     public setIncidents = (incidents) => {
@@ -425,6 +430,7 @@ class Jugal extends React.Component {
             buildings,
             vulData,
             singularBuldingData,
+            resetDrawData,
         } = this.state;
 
         const {
@@ -702,6 +708,7 @@ class Jugal extends React.Component {
                             CIData={cI}
                             buildings={vulData}
                             buildinggeojson={buildings}
+                            handleDrawResetData={this.handleDrawResetData}
 
                         />
                         <RightElement7
@@ -722,6 +729,7 @@ class Jugal extends React.Component {
                             setSingularBuilding={this.setSingularBuilding}
                             singularBuldingData={singularBuldingData}
                             vulData={vulData}
+                            resetDrawData={resetDrawData}
 
                         />
                         {/* <VRLegend>
