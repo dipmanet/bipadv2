@@ -29,6 +29,11 @@ $button-color: rgb(0,170,223);
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+        .singularPaneTable{
+            td{
+                color: white;
+            }
+        }
         .backButton{
             background-color: transparent;
             border: 1px solid $button-color;

@@ -49,8 +49,12 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
     public componentDidUpdate(prevProps) {
-        const { vulData, drawChartData } = this.props;
-        console.log('vulData', vulData);
+        const {
+            vulData,
+            drawChartData,
+            singularBuldingData,
+            singularBuilding,
+        } = this.props;
         if (vulData !== prevProps.vulData) {
             if (vulData.length > 0) {
                 this.setState({ buildingVulnerability: getbuildingVul(vulData) });
@@ -61,10 +65,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         }
         if (drawChartData !== prevProps.drawChartData) {
             if (drawChartData.length > 0) {
-                const selectedPoints = drawChartData[0].bPoints;
-                console.log('selectedPoints', selectedPoints);
+                const selectedPoints = drawChartData[drawChartData.length - 1].bPoints;
                 const selected = selectedPoints.map(sp => this.getPtSelectedData(sp, vulData));
-                console.log('selectedPoints', selectedPoints);
                 const finalArr = selected.filter(f => f !== null);
                 this.setState({ buildingVulnerability: getbuildingVul(finalArr) });
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(finalArr) });
@@ -84,14 +86,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     public getPtSelectedData = (s, vd) => {
         const pointsUF = vd.filter(f => f.point !== undefined);
         const points = pointsUF.map(p => p.point);
-        console.log('points', points[0]);
 
         const a = vd.filter(v => v.point !== undefined
             && String(v.point.coordinates[0]) === s[0].toFixed(6)
             && String(v.point.coordinates[1]) === s[1].toFixed(6));
 
-        console.log('types ', typeof s[0].toFixed(6), typeof s[1].toFixed(6));
-        console.log('values ', s[0].toFixed(6), s[1].toFixed(6));
         if (a.length > 0) {
             return a[0];
         }
@@ -100,6 +99,18 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
     public handleBackBtn = () => {
         this.props.setSingularBuilding(false);
+    }
+
+    public getVulnerabilityLvl = (v) => {
+        if (v) {
+            if (v < 50) {
+                return 'Low';
+            } if (v >= 50 && v < 60) {
+                return 'Medium';
+            }
+            return 'High';
+        }
+        return '-';
     }
 
     public render() {
@@ -112,6 +123,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             totalPages,
             drawChartData,
             vulData,
+            singularBuilding,
         } = this.props;
 
         const {
@@ -119,6 +131,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             foundationTypeChartData,
             socialFactorChartData,
             ageGroupChartData,
+            singularAgeGroupsChart,
         } = this.state;
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
@@ -136,29 +149,126 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1>Vulnerability of People and Households </h1>
-                { this.props.singularBuilding
+                { singularBuilding
                     ? (
                         <>
                             <p>
-                        Showing the elements that are vulnerable to multiple
-                        hazards and showing the data in terms of Vulnerability
-                        Score of the building.
-                            </p>
-                            <h1>
-                       Vulnerability:
+                            House ID No:
                                 {' '}
-                                Medium
-                            </h1>
-                            <p>
-                        Age Groups
+                                {singularBuilding.houseOwnerId || '-'}
+                                {' '}
                             </p>
+                            <div className={styles.vulScoreRow}>
+                                <span>VULNERABILITY OF THE HOUSEHOLD</span>
+                                {this.getVulnerabilityLvl(singularBuilding.vulnerabilityScore)}
+                            </div>
 
-                            {/* <ResponsiveContainer className=
-                            {styles.respContainer} width="100%" height={250}>
+                            <p>
+                                The physical, social and economic fators were
+                                considered to identify the vulnerability of
+                                the household
+                            </p>
+                            <p>
+                                Physical Factors
+                            </p>
+                            <table className={styles.singularPaneTable}>
+                                <tr>
+                                    <td>
+                                        Roof Type
+                                    </td>
+                                    <td>
+                                        {singularBuilding.foundationType || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Storey
+                                    </td>
+                                    <td>
+                                        {singularBuilding.storeys || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Ground surface
+                                    </td>
+                                    <td>
+                                        {singularBuilding.groundSurface || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Building condition
+                                    </td>
+                                    <td>
+                                        {singularBuilding.buildingCondition || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Damage Grade
+                                    </td>
+                                    <td>
+                                        {singularBuilding.buildingCondition || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Distance from road (m)
+                                    </td>
+                                    <td>
+                                        {singularBuilding.roadDistance || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    Drinking water distance (m)
+                                    </td>
+                                    <td>
+                                        {singularBuilding.drinkingWaterDistance || '-'}
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p>
+                                Social Factors
+                            </p>
+                            <table className={styles.singularPaneTable}>
+                                <tr>
+                                    <td>Number of people</td>
+                                    {singularBuilding.totalPopulation || '-'}
+                                </tr>
+                                <tr>
+                                    <td>Ownership of house</td>
+                                    {singularBuilding.ownership || '-'}
+                                </tr>
+                                <tr>
+                                    <td>People with disability</td>
+                                    {singularBuilding.peopleWithDisability || '-'}
+                                </tr>
+                                <tr>
+                                    <td>Medical centers</td>
+                                    {singularBuilding.medicalCenter || '-'}
+                                </tr>
+                                <tr>
+                                    <td>Distance from Security centers</td>
+                                    {singularBuilding.policeStationDistance || '-'}
+                                </tr>
+                                <tr>
+                                    <td>Distance from Schools</td>
+                                    {singularBuilding.schoolDistance || '-'}
+                                </tr>
+                                <tr>
+                                    <td>Distance from open space</td>
+                                    {singularBuilding.openSafeSpaceDistance || '-'}
+                                </tr>
+                            </table>
+
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                                 <BarChart
                                     width={350}
                                     height={600}
-                                    data={ageGrpChartData}
+                                    data={getageGroupChartData(singularBuilding)}
                                     layout="vertical"
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
@@ -178,8 +288,25 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                         radius={[0, 15, 15, 0]}
                                     />
                                 </BarChart>
-                            </ResponsiveContainer> */}
+                            </ResponsiveContainer>
+                            <p>
+                                Economic Factors
+                                <ul>
+                                    <li>
+Main source of income:
+                                        {' '}
+                                        {singularBuilding.majorOccupation || '-'}
+                                        {' '}
+                                    </li>
+                                    <li>
+Average yearly income:
+                                        {' '}
+                                        {singularBuilding.averageAnnualIncome || '-'}
+                                        {' '}
+                                    </li>
 
+                                </ul>
+                            </p>
                             <button
                                 onClick={this.handleBackBtn}
                                 type="button"
@@ -351,17 +478,17 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     />
                                 </BarChart>
                             </ResponsiveContainer>
+                            <NavButtons
+                                handleNext={handleNext}
+                                handlePrev={handlePrev}
+                                disableNavLeftBtn={disableNavLeftBtn}
+                                disableNavRightBtn={disableNavRightBtn}
+                                pagenumber={pagenumber}
+                                totalPages={totalPages}
+                            />
                         </>
                     )
                 }
-                <NavButtons
-                    handleNext={handleNext}
-                    handlePrev={handlePrev}
-                    disableNavLeftBtn={disableNavLeftBtn}
-                    disableNavRightBtn={disableNavRightBtn}
-                    pagenumber={pagenumber}
-                    totalPages={totalPages}
-                />
 
 
                 {/* <SourceInfo /> */}

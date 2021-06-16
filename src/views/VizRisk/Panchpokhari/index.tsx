@@ -190,6 +190,7 @@ class Jugal extends React.Component {
             score: 7,
             buildings: [],
             vulData: [],
+            singularBuldingData: [],
         };
 
         const { requests:
@@ -234,11 +235,12 @@ class Jugal extends React.Component {
 
     public setVulData = (vulData) => {
         this.setState({ vulData });
-        console.log('vulData:', vulData);
+        console.log('vulData length:', vulData.length);
     }
 
-    public setSingularBuilding = (singularBuilding) => {
+    public setSingularBuilding = (singularBuilding, singularBuldingData) => {
         this.setState({ singularBuilding });
+        this.setState({ singularBuldingData });
     }
 
     public setScore = (score) => {
@@ -422,6 +424,7 @@ class Jugal extends React.Component {
             cI,
             buildings,
             vulData,
+            singularBuldingData,
         } = this.state;
 
         const {
@@ -697,7 +700,8 @@ class Jugal extends React.Component {
                             setSingularBuilding={this.setSingularBuilding}
                             setScore={this.setScore}
                             CIData={cI}
-                            buildings={buildings}
+                            buildings={vulData}
+                            buildinggeojson={buildings}
 
                         />
                         <RightElement7
@@ -716,7 +720,9 @@ class Jugal extends React.Component {
                             singularBuilding={this.state.singularBuilding}
                             score={this.state.score}
                             setSingularBuilding={this.setSingularBuilding}
+                            singularBuldingData={singularBuldingData}
                             vulData={vulData}
+
                         />
                         {/* <VRLegend>
                             <SesmicHazardLegend

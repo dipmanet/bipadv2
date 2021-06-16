@@ -99,13 +99,11 @@ export const getsocialFactorChartData = (d) => {
         ));
 
         totalMFData.ownership = d.filter(wh => wh.ownership === 'Female').length;
-        console.log('totalMFData', totalMFData);
         const arr = Object.keys(totalMFData);
         const chartData = arr.map(g => ({
             name: socialChartref[g],
             Total: totalMFData[g],
         }));
-        console.log('chartData', chartData);
         return chartData;
     }
 
@@ -129,16 +127,26 @@ export const getageGroupChartData = (d) => {
             '<5': totalMFData.childrenUnder5,
         };
 
-        console.log('totalMFData', finalData);
         const arr = Object.keys(finalData);
         const chartData = arr.map(g => ({
             name: g,
             Total: finalData[g],
         }));
-        console.log('chartData', chartData);
         return chartData;
     }
 
 
     return [];
+};
+
+export const getSingularBuildingData = (osmID, buildingsData) => {
+    console.log('osmid for search:', osmID);
+    console.log('osmid type:', typeof osmID);
+    if (osmID) {
+        const d = buildingsData.filter(o => o.osmId === Number(osmID));
+        if (d.length > 0) {
+            return d[0];
+        }
+    }
+    return {};
 };
