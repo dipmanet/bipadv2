@@ -43,6 +43,7 @@ import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
 import MapWithTimeline from './MapWithTimeline';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';
+import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
 import LandCoverLegends from './Legends/LandCoverLegends';
@@ -184,7 +185,7 @@ class Jugal extends React.Component {
             incidentFilterYear: '2011',
             incidentDetailsData: [],
             drawChartData: [],
-            sesmicLayer: 'ses',
+            sesmicLayer: 'sus',
             cI: [],
             singularBuilding: false,
             score: 7,
@@ -192,6 +193,7 @@ class Jugal extends React.Component {
             vulData: [],
             singularBuldingData: [],
             resetDrawData: false,
+            sesmicLayerVul: '',
         };
 
         const { requests:
@@ -280,6 +282,11 @@ class Jugal extends React.Component {
 
     public handleSesmicLayerChange = (sesmicLayer) => {
         this.setState({ sesmicLayer });
+    }
+
+    public handleSesmicLayerChangeVUL = (sesmicLayerVul) => {
+        console.log('sesmicLayerVul in parent:', sesmicLayerVul);
+        this.setState({ sesmicLayerVul });
     }
 
     public handleDrawResetData = () => {
@@ -433,6 +440,7 @@ class Jugal extends React.Component {
             vulData,
             singularBuldingData,
             resetDrawData,
+            sesmicLayerVul,
         } = this.state;
 
         const {
@@ -703,7 +711,7 @@ class Jugal extends React.Component {
                             incidentFilterYear={incidentFilterYear}
                             handleIncidentChange={this.handleIncidentChange}
                             handleDrawSelectedData={this.handleDrawSelectedData}
-                            sesmicLayer={sesmicLayer}
+                            sesmicLayer={sesmicLayerVul}
                             singularBuilding={this.state.singularBuilding}
                             setSingularBuilding={this.setSingularBuilding}
                             setScore={this.setScore}
@@ -734,11 +742,11 @@ class Jugal extends React.Component {
                             resetDrawData={resetDrawData}
 
                         />
-                        {/* <VRLegend>
-                            <SesmicHazardLegend
-                                handleSesmicLayerChange={this.handleSesmicLayerChange}
+                        <VRLegend>
+                            <SesmicHazardVULLegend
+                                handleSesmicLayerChange={this.handleSesmicLayerChangeVUL}
                             />
-                        </VRLegend> */}
+                        </VRLegend>
                     </>
                 )
                 }

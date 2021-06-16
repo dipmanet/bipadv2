@@ -14,7 +14,6 @@ interface Props{
 
 const TimelineSlider = (props: Props) => {
     const { onChange, min, max, step, value, playState, onPlayBtnClick } = props;
-    console.log(props);
 
     return (
         <div className={styles.incidentsSlider}>

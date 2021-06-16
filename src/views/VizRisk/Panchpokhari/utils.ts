@@ -85,21 +85,19 @@ export const getfoundationTypeChartData = (d) => {
 
 export const getsocialFactorChartData = (d) => {
     const socialChartref = {
-        noOfMale: 'Male',
         noOfFemale: 'Female',
-        peopleWithDisability: 'PWD',
-        ownership: 'Women Headed',
+        peopleWithDisability: 'People with Disability',
+        totalPopulation: 'Number of People',
     };
     if (d.length > 0) {
         const totalMFData = d.reduce((a, b) => (
             {
-                noOfMale: (a.noOfMale || 0) + (b.noOfMale || 0),
+                totalPopulation: (a.totalPopulation || 0) + (b.totalPopulation || 0),
                 noOfFemale: (a.noOfFemale || 0) + (b.noOfFemale || 0),
                 peopleWithDisability: (a.peopleWithDisability || 0) + (b.peopleWithDisability || 0),
             }
         ));
 
-        totalMFData.ownership = d.filter(wh => wh.ownership === 'Female').length;
         const arr = Object.keys(totalMFData);
         const chartData = arr.map(g => ({
             name: socialChartref[g],
@@ -135,10 +133,50 @@ export const getageGroupChartData = (d) => {
         }));
         return chartData;
     }
-
-
     return [];
 };
+
+export const getownershipChartData = (d) => {
+    if (d.length > 0) {
+        const typeArr = [...new Set(
+            d.map(i => i.ownership).filter(f => f !== undefined),
+        )];
+
+        return typeArr.map(ftype => ({
+            name: ftype,
+            Total: d.filter(f => f.ownership === ftype).length,
+        }));
+    }
+    return [];
+};
+
+export const getsourceofIncomeChartData = (d) => {
+    if (d.length > 0) {
+        const typeArr = [...new Set(
+            d.map(i => i.majorOccupation).filter(f => f !== undefined),
+        )];
+
+        return typeArr.map(ftype => ({
+            name: ftype,
+            Total: d.filter(f => f.majorOccupation === ftype).length,
+        }));
+    }
+    return [];
+};
+export const getaverageAnnualincomeChartData = (d) => {
+    if (d.length > 0) {
+        const typeArr = [...new Set(
+            d.map(i => i.averageAnnualIncome).filter(f => f !== undefined),
+        )];
+
+        return typeArr.map(ftype => ({
+            name: ftype,
+            Total: d.filter(f => f.averageAnnualIncome === ftype).length,
+        }));
+    }
+    return [];
+};
+
 export const getsingleageGroupChartData = (d) => {
     if (Object.keys(d).length > 0) {
         const finalData = {
@@ -160,8 +198,6 @@ export const getsingleageGroupChartData = (d) => {
 };
 
 export const getSingularBuildingData = (osmID, buildingsData) => {
-    console.log('osmid for search:', osmID);
-    console.log('osmid type:', typeof osmID);
     if (osmID) {
         const d = buildingsData.filter(o => o.osmId === Number(osmID));
         if (d.length > 0) {

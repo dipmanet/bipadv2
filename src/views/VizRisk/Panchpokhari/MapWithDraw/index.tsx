@@ -4,11 +4,9 @@ import mapboxgl from 'mapbox-gl';
 import { isDefined } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import { VectorTile } from '@mapbox/vector-tile';
 import * as turf from '@turf/turf';
-import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
-import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Panchpokhari/utils';
+import { getHillShadeLayer } from '#views/VizRisk/Panchpokhari/utils';
 import '@watergis/mapbox-gl-legend/css/styles.css';
 
 import styles from './styles.scss';
@@ -992,24 +990,6 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-                <div className={styles.searchBox}>
-                    <button
-                        type="button"
-                        onClick={this.handleSearch}
-                        className={styles.searchbutton}
-                    >
-                        <Icon
-                            name="search"
-                            className={styles.searchIcon}
-                        />
-                    </button>
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={this.handleSearchTerm}
-                        placeholder={'Enter house id'}
-                    />
-                </div>
                 <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
             </div>
         );

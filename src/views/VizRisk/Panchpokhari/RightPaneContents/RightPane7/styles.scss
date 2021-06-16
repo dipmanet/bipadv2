@@ -29,6 +29,10 @@ $button-color: rgb(0,170,223);
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+        .infoIcon{
+            font-size: 16px;
+            color: white;
+        }
         .vulScoreRow{
             display: flex;
             justify-content: space-between;
@@ -146,6 +150,17 @@ $button-color: rgb(0,170,223);
        
         h1{
             @extend .heading-style;
+            z-index: 3;
+
+            button{
+                padding: 3px 10px 10px 10px;
+                z-index: 3;
+                opacity: 0.87;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                filter: saturate(100%);
+            }
         }
         h2{
             @extend .heading-style;

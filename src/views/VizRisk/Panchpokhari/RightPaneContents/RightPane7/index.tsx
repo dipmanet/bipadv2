@@ -16,6 +16,9 @@ import {
     getsocialFactorChartData,
     getageGroupChartData,
     getsingleageGroupChartData,
+    getownershipChartData,
+    getsourceofIncomeChartData,
+    getaverageAnnualincomeChartData,
 } from '../../utils';
 
 // const chartData = criticalInfraData.safeShelterData;
@@ -35,6 +38,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             foundationTypeChartData: [],
             socialFactorChartData: [],
             ageGroupChartData: [],
+            foundationChartData: [],
+            ownershipChartData: [],
+            sourceofIncomeChartData: [],
+            averageAnnualincomeChartData: [],
         };
     }
 
@@ -46,6 +53,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
             this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
             this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
+            this.setState({ ownershipChartData: getownershipChartData(vulData) });
+            this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(vulData) });
+            this.setState({
+                averageAnnualincomeChartData: getaverageAnnualincomeChartData(vulData),
+            });
         }
     }
 
@@ -145,6 +157,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             socialFactorChartData,
             ageGroupChartData,
             singularAgeGroupsChart,
+            ownershipChartData,
+            sourceofIncomeChartData,
+            averageAnnualincomeChartData,
         } = this.state;
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
@@ -175,7 +190,32 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     )
                 }
 
-                <h1>Vulnerability of People and Households </h1>
+                <h1>
+Vulnerability of People and Households
+                    <button
+                        type="button"
+                        onClick={e => e.preventDefault()}
+                        title="Vulnerability is the conditions which increase
+                     the susceptibility
+                     of an individual, household or community to
+                     the impact of hazards.
+                     The vulnerability level of each household has
+                     been visualized in the
+                     map in 3 different colors. Red siginifies the
+                     high vulnerability level,
+                     orange denotes moderate and yellow denotes the
+                     low vulnerability level.
+                     Physical, social and economic facors were considered to identify the
+                     vulnerability of each household."
+                    >
+
+                        <Icon
+                            name="info"
+                            className={styles.infoIcon}
+                        />
+                    </button>
+
+                </h1>
                 { singularBuilding
                     ? (
                         <>
@@ -256,7 +296,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     </td>
                                 </tr>
                             </table>
-
                             <p>
                                 Social Factors
                             </p>
@@ -348,20 +387,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                     : (
                         <>
-                            <p>
-                                Vulnerability is the conditions which increase
-                                the susceptibility
-                                of an individual, household or community to
-                                the impact of hazards.
-                                The vulnerability level of each household has
-                                been visualized in the
-                                map in 3 different colors. Red siginifies the
-                                high vulnerability level,
-                                orange denotes moderate and yellow denotes the
-                                low vulnerability level.
-                                Physical, social and economic facors were considered to identify the
-                                vulnerability of each household.
-                            </p>
                             <p>Vulnerability of Buildings </p>
                             <div className={styles.buildingClassContainer}>
                                 <div className={styles.levelContainer}>
@@ -414,21 +439,20 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     </div>
                                 </div>
                             </div>
-
                             <p>
                                 PHYSICAL, SOCIAL AND ECONOMIC FACTORS
                             </p>
                             <p>
-                                Physical: Foundation Type
+                                Foundation type of the buildings
                             </p>
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={400}>
                                 <BarChart
                                     width={350}
                                     height={600}
                                     data={foundationTypeChartData}
                                     layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 30 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" tick={{ fill: '#94bdcf' }} />
@@ -449,16 +473,16 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             </ResponsiveContainer>
 
                             <p>
-                                Social Factors
+                                Population distribution in the household
                             </p>
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
                                 <BarChart
                                     width={350}
                                     height={600}
                                     data={socialFactorChartData}
                                     layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 15 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" tick={{ fill: '#94bdcf' }} />
@@ -479,7 +503,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             </ResponsiveContainer>
 
                             <p>
-                                AGE GROUPS
+                                Agewise Population Distribution
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
@@ -507,6 +531,99 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     />
                                 </BarChart>
                             </ResponsiveContainer>
+
+
+                            <p>
+                                Ownership of the house
+                            </p>
+
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                                <BarChart
+                                    width={350}
+                                    height={600}
+                                    data={ownershipChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(213,81,76)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+
+
+                            <p>
+                                Major source of income
+                            </p>
+
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                                <BarChart
+                                    width={360}
+                                    height={600}
+                                    data={sourceofIncomeChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(213,81,76)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+
+                            <p>
+                                Average Annual Income
+                            </p>
+
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={1000}>
+                                <BarChart
+                                    width={360}
+                                    height={600}
+                                    data={averageAnnualincomeChartData}
+                                    layout="vertical"
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }} />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Tooltip />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(213,81,76)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+
                             <NavButtons
                                 handleNext={handleNext}
                                 handlePrev={handlePrev}
