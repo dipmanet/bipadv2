@@ -137,6 +137,7 @@ export const getageGroupChartData = (d) => {
 };
 
 export const getownershipChartData = (d) => {
+    console.log('ownership filtered data:', d);
     if (d.length > 0) {
         const typeArr = [...new Set(
             d.map(i => i.ownership).filter(f => f !== undefined),
@@ -168,7 +169,9 @@ export const getaverageAnnualincomeChartData = (d) => {
         const typeArr = [...new Set(
             d.map(i => i.averageAnnualIncome).filter(f => f !== undefined),
         )];
+            // const arr = {
 
+        // }
         return typeArr.map(ftype => ({
             name: ftype,
             Total: d.filter(f => f.averageAnnualIncome === ftype).length,

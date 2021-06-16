@@ -4,6 +4,7 @@ import React from 'react';
 import {
     Bar, BarChart,
     CartesianGrid,
+    Label,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
@@ -75,6 +76,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
                 this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
+                this.setState({ ownershipChartData: getownershipChartData(vulData) });
+                this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(vulData) });
+                this.setState({
+                    averageAnnualincomeChartData: getaverageAnnualincomeChartData(vulData),
+                });
             }
         }
         if (drawChartData !== prevProps.drawChartData) {
@@ -86,6 +92,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(finalArr) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(finalArr) });
                 this.setState({ ageGroupChartData: getageGroupChartData(finalArr) });
+                this.setState({ ownershipChartData: getownershipChartData(finalArr) });
+                this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(finalArr) });
+                this.setState({
+                    averageAnnualincomeChartData: getaverageAnnualincomeChartData(finalArr),
+                });
             }
         }
         if (resetDrawData !== prevProps.resetDrawData) {
@@ -94,6 +105,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });
                 this.setState({ ageGroupChartData: getageGroupChartData(vulData) });
+                this.setState({ ownershipChartData: getownershipChartData(vulData) });
+                this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(vulData) });
+                this.setState({
+                    averageAnnualincomeChartData: getaverageAnnualincomeChartData(vulData),
+                });
             }
         }
     }
@@ -161,6 +177,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             sourceofIncomeChartData,
             averageAnnualincomeChartData,
         } = this.state;
+
+        console.log('ownershipChartData', ownershipChartData);
+
         const chartDataTitlesuf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesuf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
@@ -281,7 +300,7 @@ Vulnerability of People and Households
                                 </tr>
                                 <tr>
                                     <td>
-                                    Distance from road (m)
+                                    Distance from road (meter)
                                     </td>
                                     <td>
                                         {singularBuldingData.roadDistance || '-'}
@@ -289,7 +308,7 @@ Vulnerability of People and Households
                                 </tr>
                                 <tr>
                                     <td>
-                                    Drinking water distance (m)
+                                    Drinking water distance (minutes)
                                     </td>
                                     <td>
                                         {singularBuldingData.drinkingWaterDistance || '-'}
@@ -317,15 +336,15 @@ Vulnerability of People and Households
                                     <td>{singularBuldingData.medicalCenter || '-'}</td>
                                 </tr>
                                 <tr>
-                                    <td>Distance from Security centers</td>
+                                    <td>Distance from Security centers (minutes)</td>
                                     <td>{singularBuldingData.policeStationDistance || '-'}</td>
                                 </tr>
                                 <tr>
-                                    <td>Distance from Schools</td>
+                                    <td>Distance from Schools (minutes)</td>
                                     <td>{singularBuldingData.schoolDistance || '-'}</td>
                                 </tr>
                                 <tr>
-                                    <td>Distance from open space</td>
+                                    <td>Distance from open space (minutes)</td>
                                     <td>{singularBuldingData.openSafeSpaceDistance || '-'}</td>
                                 </tr>
                             </table>
@@ -365,7 +384,7 @@ Vulnerability of People and Households
                                         {' '}
                                     </li>
                                     <li>
-                                        Average yearly income:
+                                        Average yearly income (NPR):
                                         {' '}
                                         {singularBuldingData.averageAnnualIncome || '-'}
                                         {' '}
@@ -408,7 +427,7 @@ Vulnerability of People and Households
                                 </div>
                                 <div className={styles.levelContainer}>
                                     <span>
-                            Medium
+                                        Medium
                                     </span>
                                     <div className={styles.iconLevel}>
                                         <Icon
@@ -424,7 +443,7 @@ Vulnerability of People and Households
                                 </div>
                                 <div className={styles.levelContainer}>
                                     <span>
-                            Low
+                                        Low
                                     </span>
                                     <div className={styles.iconLevel}>
                                         <Icon
@@ -473,7 +492,7 @@ Vulnerability of People and Households
                             </ResponsiveContainer>
 
                             <p>
-                                Population distribution in the household
+                                Population distribution in the households
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
@@ -534,7 +553,7 @@ Vulnerability of People and Households
 
 
                             <p>
-                                Ownership of the house
+                                Ownership of the houses
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
@@ -577,7 +596,9 @@ Vulnerability of People and Households
                                     margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                        <Label value="No. of Households" offset={10} position="bottom" />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"
@@ -607,7 +628,9 @@ Vulnerability of People and Households
                                     margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }} />
+                                    <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }}>
+                                        <Label value="No. of Households" offset={10} position="bottom" />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"
