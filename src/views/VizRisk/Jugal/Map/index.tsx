@@ -274,7 +274,10 @@ class JugalMap extends React.Component<Props, State> {
                     this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
                     return null;
                 });
-                this.jugalMap.setLayoutProperty('National Park', 'visibility', 'none');
+                this.jugalMap.setLayoutProperty('National Park', 'visibility', 'visible');
+                this.jugalMap.setPaintProperty('National Park', 'fill-color', 'rgb(247,229,184)');
+                this.jugalMap.moveLayer('National Park');
+
 
                 this.jugalMap.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
                 this.jugalMap.setLayoutProperty('Jugal Contour', 'visibility', 'none');

@@ -144,9 +144,9 @@ class Rajapur extends React.PureComponent<Props, State> {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
-                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
-                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                    <p>{`Avg Max: ${payload[0].payload.Max} ℃`}</p>
+                    <p>{`Avg Min: ${payload[0].payload.Min} ℃`}</p>
+                    <p>{`Daily Avg: ${payload[0].payload.Avg} ℃`}</p>
                 </div>
             );
         }
@@ -261,6 +261,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                 </div>
 
                 <div className={styles.climateChart}>
+                    <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
                     <ResponsiveContainer className={styles.chartContainer} height={300}>
                         <LineChart
                             margin={{ top: 0, right: 10, left: 10, bottom: 10 }}

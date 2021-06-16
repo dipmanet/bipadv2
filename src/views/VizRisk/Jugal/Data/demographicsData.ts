@@ -21,9 +21,9 @@ export default {
         {
             name: 'Ward 6', MalePop: 908, FemalePop: 912, TotalHousehold: 378,
         },
-        {
-            name: 'Ward 99', MalePop: 0, FemalePop: 0, TotalHousehold: 0,
-        },
+        // {
+        //     name: 'Ward 99', MalePop: 0, FemalePop: 0, TotalHousehold: 0,
+        // },
     ],
 
 };

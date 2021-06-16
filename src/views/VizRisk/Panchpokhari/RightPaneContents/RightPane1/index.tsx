@@ -144,9 +144,9 @@ class Rajapur extends React.PureComponent<Props, State> {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
-                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
-                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                    <p>{`Avg Max: ${payload[0].payload.Max} ℃`}</p>
+                    <p>{`Avg Min: ${payload[0].payload.Min} ℃`}</p>
+                    <p>{`Daily Avg: ${payload[0].payload.Avg} ℃`}</p>
                 </div>
             );
         }

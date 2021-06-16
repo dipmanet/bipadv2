@@ -143,11 +143,10 @@ const VizRiskMainPage = () => {
                                 </Button>
 
                             </div>
-                            {/* <div className={styles.vizriskmunicipalityName}>
+                            <div className={styles.vizriskmunicipalityName}>
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('jugal')}
-
                                 >
                                     <h1
                                         className={styles.menuItems}
@@ -157,7 +156,7 @@ const VizRiskMainPage = () => {
 
                                 </Button>
 
-                            </div> */}
+                            </div>
 
 
                         </div>

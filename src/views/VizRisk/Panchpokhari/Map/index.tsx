@@ -479,8 +479,9 @@ class FloodHistoryMap extends React.Component {
                 className: 'popup',
             });
             const { CIData } = this.props;
+            const inci = this.map.getLayer('Buildings');
             // if (CIData.length > 0) {
-            if (isDefined(CIData.features)) {
+            if (isDefined(CIData.features) && typeof inci !== 'undefined') {
                 const categoriesCritical = [...new Set(CIData.features.map(
                     item => item.properties.Type,
                 ))];
