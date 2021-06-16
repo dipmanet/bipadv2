@@ -15,6 +15,7 @@ import {
     getfoundationTypeChartData,
     getsocialFactorChartData,
     getageGroupChartData,
+    getsingleageGroupChartData,
 } from '../../utils';
 
 // const chartData = criticalInfraData.safeShelterData;
@@ -111,13 +112,15 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
     public getVulnerabilityLvl = (v) => {
-        if (v) {
+        console.log('score:', v);
+        if (typeof v === 'number') {
             if (v < 50) {
                 return 'Low';
             } if (v >= 50 && v < 60) {
                 return 'Medium';
+            } if (v >= 60) {
+                return 'High';
             }
-            return 'High';
         }
         return '-';
     }
@@ -133,6 +136,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             drawChartData,
             vulData,
             singularBuilding,
+            singularBuldingData,
         } = this.props;
 
         const {
@@ -178,12 +182,12 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <p>
                             House ID No:
                                 {' '}
-                                {singularBuilding.houseOwnerId || '-'}
+                                {singularBuldingData.id || '-'}
                                 {' '}
                             </p>
                             <div className={styles.vulScoreRow}>
                                 <span>VULNERABILITY OF THE HOUSEHOLD</span>
-                                {this.getVulnerabilityLvl(singularBuilding.vulnerabilityScore)}
+                                {this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)}
                             </div>
 
                             <p>
@@ -200,7 +204,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                         Roof Type
                                     </td>
                                     <td>
-                                        {singularBuilding.foundationType || '-'}
+                                        {singularBuldingData.foundationType || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -208,7 +212,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Storey
                                     </td>
                                     <td>
-                                        {singularBuilding.storeys || '-'}
+                                        {singularBuldingData.storeys || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -216,7 +220,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Ground surface
                                     </td>
                                     <td>
-                                        {singularBuilding.groundSurface || '-'}
+                                        {singularBuldingData.groundSurface || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -224,7 +228,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Building condition
                                     </td>
                                     <td>
-                                        {singularBuilding.buildingCondition || '-'}
+                                        {singularBuldingData.buildingCondition || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -232,7 +236,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Damage Grade
                                     </td>
                                     <td>
-                                        {singularBuilding.buildingCondition || '-'}
+                                        {singularBuldingData.buildingCondition || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -240,7 +244,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Distance from road (m)
                                     </td>
                                     <td>
-                                        {singularBuilding.roadDistance || '-'}
+                                        {singularBuldingData.roadDistance || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -248,7 +252,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Drinking water distance (m)
                                     </td>
                                     <td>
-                                        {singularBuilding.drinkingWaterDistance || '-'}
+                                        {singularBuldingData.drinkingWaterDistance || '-'}
                                     </td>
                                 </tr>
                             </table>
@@ -259,31 +263,31 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <table className={styles.singularPaneTable}>
                                 <tr>
                                     <td>Number of people</td>
-                                    <td>{singularBuilding.totalPopulation || '-'}</td>
+                                    <td>{singularBuldingData.totalPopulation || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Ownership of house</td>
-                                    {singularBuilding.ownership || '-'}
+                                    {singularBuldingData.ownership || '-'}
                                 </tr>
                                 <tr>
                                     <td>People with disability</td>
-                                    <td>{singularBuilding.peopleWithDisability || '-'}</td>
+                                    <td>{singularBuldingData.peopleWithDisability || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Medical centers</td>
-                                    <td>{singularBuilding.medicalCenter || '-'}</td>
+                                    <td>{singularBuldingData.medicalCenter || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from Security centers</td>
-                                    <td>{singularBuilding.policeStationDistance || '-'}</td>
+                                    <td>{singularBuldingData.policeStationDistance || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from Schools</td>
-                                    <td>{singularBuilding.schoolDistance || '-'}</td>
+                                    <td>{singularBuldingData.schoolDistance || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from open space</td>
-                                    <td>{singularBuilding.openSafeSpaceDistance || '-'}</td>
+                                    <td>{singularBuldingData.openSafeSpaceDistance || '-'}</td>
                                 </tr>
                             </table>
 
@@ -291,7 +295,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <BarChart
                                     width={350}
                                     height={600}
-                                    data={getageGroupChartData(singularBuilding)}
+                                    data={getsingleageGroupChartData(singularBuldingData)}
                                     layout="vertical"
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
@@ -316,15 +320,15 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 Economic Factors
                                 <ul>
                                     <li>
-Main source of income:
+                                            Main source of income:
                                         {' '}
-                                        {singularBuilding.majorOccupation || '-'}
+                                        {singularBuldingData.majorOccupation || '-'}
                                         {' '}
                                     </li>
                                     <li>
-Average yearly income:
+                                        Average yearly income:
                                         {' '}
-                                        {singularBuilding.averageAnnualIncome || '-'}
+                                        {singularBuldingData.averageAnnualIncome || '-'}
                                         {' '}
                                     </li>
 

@@ -49,6 +49,7 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
+const { buildingColor } = expressions;
 
 const ciRef = {
     'Water sources': 'Water Source',
@@ -487,7 +488,7 @@ class FloodHistoryMap extends React.Component {
                 tiles: [this.getRasterLayer()],
                 tileSize: 256,
             });
-            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
 
             this.map.addSource('lsSusep', {
                 type: 'raster',

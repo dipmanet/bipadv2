@@ -43,15 +43,16 @@ export const getgeoJsonLayer = (layer: string) => [
 
 export const getbuildingVul = (d) => {
     if (d.length > 0) {
-        const arr = d.filter(item => item.vulnerabilityScore !== undefined);
+        const arr = d.filter(item => typeof item.vulnerabilityScore === 'number');
+        console.log('getting vul data', arr);
         if (arr.length > 0) {
             const low = arr.filter(v => v.vulnerabilityScore < 50).length;
-            const med = arr.filter(v => v
+            const medium = arr.filter(v => v
                 .vulnerabilityScore >= 50 && v.vulnerabilityScore < 60).length;
             const high = arr.filter(v => v.vulnerabilityScore >= 60).length;
             return {
                 low,
-                med,
+                medium,
                 high,
             };
         }
@@ -125,6 +126,25 @@ export const getageGroupChartData = (d) => {
             '>65': totalMFData.seniorCitizens,
             '6-64': totalMFData.totalPopulation - totalMFData.seniorCitizens - totalMFData.childrenUnder5,
             '<5': totalMFData.childrenUnder5,
+        };
+
+        const arr = Object.keys(finalData);
+        const chartData = arr.map(g => ({
+            name: g,
+            Total: finalData[g],
+        }));
+        return chartData;
+    }
+
+
+    return [];
+};
+export const getsingleageGroupChartData = (d) => {
+    if (Object.keys(d).length > 0) {
+        const finalData = {
+            '>65': d.seniorCitizens,
+            '6-64': d.totalPopulation - d.seniorCitizens - d.childrenUnder5,
+            '<5': d.childrenUnder5,
         };
 
         const arr = Object.keys(finalData);
