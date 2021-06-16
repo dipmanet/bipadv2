@@ -1343,6 +1343,7 @@ class FloodHistoryMap extends React.Component {
             top: 0,
             // bottom: 0,
             height: '100vh',
+            zIndex: 20,
         };
 
         return (

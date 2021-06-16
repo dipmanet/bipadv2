@@ -148,6 +148,20 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
+                { singularBuilding
+                    && (
+                        <div className={styles.backBtnContainer}>
+                            <button
+                                onClick={this.handleBackBtn}
+                                type="button"
+                                className={styles.backButton}
+                            >
+                                    Back
+                            </button>
+                        </div>
+                    )
+                }
+
                 <h1>Vulnerability of People and Households </h1>
                 { singularBuilding
                     ? (
@@ -236,7 +250,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <table className={styles.singularPaneTable}>
                                 <tr>
                                     <td>Number of people</td>
-                                    {singularBuilding.totalPopulation || '-'}
+                                    <td>{singularBuilding.totalPopulation || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Ownership of house</td>
@@ -244,23 +258,23 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 </tr>
                                 <tr>
                                     <td>People with disability</td>
-                                    {singularBuilding.peopleWithDisability || '-'}
+                                    <td>{singularBuilding.peopleWithDisability || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Medical centers</td>
-                                    {singularBuilding.medicalCenter || '-'}
+                                    <td>{singularBuilding.medicalCenter || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from Security centers</td>
-                                    {singularBuilding.policeStationDistance || '-'}
+                                    <td>{singularBuilding.policeStationDistance || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from Schools</td>
-                                    {singularBuilding.schoolDistance || '-'}
+                                    <td>{singularBuilding.schoolDistance || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from open space</td>
-                                    {singularBuilding.openSafeSpaceDistance || '-'}
+                                    <td>{singularBuilding.openSafeSpaceDistance || '-'}</td>
                                 </tr>
                             </table>
 
@@ -307,13 +321,15 @@ Average yearly income:
 
                                 </ul>
                             </p>
-                            <button
-                                onClick={this.handleBackBtn}
-                                type="button"
-                                className={styles.backButton}
-                            >
-                                Back
-                            </button>
+                            <div className={styles.backBtnContainer}>
+                                <button
+                                    onClick={this.handleBackBtn}
+                                    type="button"
+                                    className={styles.backButton}
+                                >
+                                    Back
+                                </button>
+                            </div>
                         </>
                     )
 
