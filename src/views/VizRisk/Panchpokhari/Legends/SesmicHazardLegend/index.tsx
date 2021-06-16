@@ -3,8 +3,8 @@ import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 
 const DemoGraphicsLegends = (props) => {
-    const [showSus, setshowSus] = useState(false);
-    const [showSes, setshowSes] = useState(true);
+    const [showSus, setshowSus] = useState(true);
+    const [showSes, setshowSes] = useState(false);
     const {
         handleSesmicLayerChange,
     } = props;

@@ -88,15 +88,6 @@ class FloodHistoryMap extends React.Component {
         } = this.state;
 
 
-        this.interval = setInterval(() => {
-            this.setState((prevState) => {
-                if (Number(prevState.incidentYear) < 10) {
-                    return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
-                }
-                return ({ incidentYear: '0' });
-            });
-        }, 1000);
-
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
@@ -106,6 +97,7 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
+        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
@@ -461,8 +453,6 @@ class FloodHistoryMap extends React.Component {
             this.map.on('draw.delete', resetArea);
         }
 
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-
 
         this.map.on('style.load', () => {
             // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#ff6595');
@@ -484,11 +474,20 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('panchpokhari_meteor_seismic_hazard_002')],
+                tiles: [this.getRasterLayer()],
                 tileSize: 256,
             });
-            console.log('map:', this.map);
-
+            this.map.addLayer(
+                {
+                    id: 'raster-hillshade',
+                    type: 'raster',
+                    source: 'hillshadePachpokhari',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
 
             this.map.addSource('lsSusep', {
                 type: 'raster',
@@ -577,7 +576,6 @@ class FloodHistoryMap extends React.Component {
 
     public componentWillUnmount() {
         this.map.remove();
-        clearInterval(this.interval);
     }
 
     public getTitleFromLatLng = (featureObject, cidata) => {
@@ -659,6 +657,21 @@ class FloodHistoryMap extends React.Component {
             alert('No data available');
         }
     };
+
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Panchpokhari_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public render() {
         const { searchTerm } = this.state;

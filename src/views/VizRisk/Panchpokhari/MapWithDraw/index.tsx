@@ -1,7 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import { isDefined } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
@@ -73,13 +73,14 @@ class FloodHistoryMap extends React.Component {
             categoriesCritical: [],
             points: [],
             buildingpoints: [],
-
+            opacitySes: 0.5,
+            opacitySus: 0.5,
         };
     }
 
     public componentDidMount() {
         const {
-            lng, lat, zoom,
+            lng, lat, zoom, opacitySes, opacitySus,
         } = this.state;
 
 
@@ -101,6 +102,7 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
+        this.map.addControl(new mapboxgl.ScaleControl(), 'top-right');
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         const { CIData: cidata, buildings } = this.props;
@@ -451,8 +453,6 @@ class FloodHistoryMap extends React.Component {
             this.map.on('draw.create', updateArea);
         }
 
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-
 
         this.map.on('style.load', () => {
             this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
@@ -491,10 +491,10 @@ class FloodHistoryMap extends React.Component {
                     type: 'raster',
                     source: 'lsSusep',
                     layout: {
-                        visibility: 'none',
+                        visibility: 'visible',
                     },
                     paint: {
-                        'raster-opacity': 0.6,
+                        'raster-opacity': Number(opacitySus),
                     },
                 },
             );
@@ -510,11 +510,11 @@ class FloodHistoryMap extends React.Component {
                     type: 'raster',
                     source: 'seicHazard',
                     layout: {
-                        visibility: 'visible',
+                        visibility: 'none',
 
                     },
                     paint: {
-                        'raster-opacity': 0.6,
+                        'raster-opacity': Number(opacitySes),
                     },
                 },
             );
@@ -923,6 +923,18 @@ class FloodHistoryMap extends React.Component {
         return [];
     }
 
+    public handleInputChange = (e) => {
+        const val = e.target.value;
+        this.setState({ opacitySus: String(e.target.value) });
+        this.map.setPaintProperty('jugallsSuslayer', 'raster-opacity', Number(val));
+    }
+
+    public handleInputChangeSes = (e) => {
+        const val = e.target.value;
+        this.setState({ opacitySes: String(e.target.value) });
+        this.map.setPaintProperty('jugallseicHazard', 'raster-opacity', Number(val));
+    }
+
     public zoomToBbox = (data) => {
         const coordList = data
             .map(position => [parseFloat(position[0]), parseFloat(position[1])]);
@@ -951,33 +963,9 @@ class FloodHistoryMap extends React.Component {
         ).addTo(this.map);
     };
 
-    public handleSearch = () => {
-        // get the searchID
-        const searchId = this.state.searchTerm;
-
-        // get the coordinates of the builing
-        const coordinatesObj = this.props.buildings
-            .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
-        // zoom to this coordinate with some padding
-        // this.zoomTo(polygonData);
-        let cood = [];
-        if (coordinatesObj.length > 0) {
-            cood = coordinatesObj[0].geometry.coordinates;
-            this.map.easeTo({
-                zoom: 19,
-                duration: 1000,
-                center: cood,
-            });
-            // show popup
-            this.showPopupOnBldgs(cood, searchId);
-            this.setState({ searchTerm: '' });
-        } else {
-            alert('Please enter valid building id');
-        }
-    };
+    ;
 
     public render() {
-        const { searchTerm } = this.state;
         const mapStyle = {
             position: 'absolute',
             width: '70%',
@@ -990,7 +978,51 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-                <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+
+                <div className={styles.sliderandLegendContainer}>
+                    {
+                        this.props.sesmicLayer === 'sus'
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
+                        <input
+                            onChange={this.handleInputChange}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(this.state.opacitySus)}
+                            className={styles.slider}
+                        />
+                        <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                    </>
+                )
+                    }
+                    {
+                        this.props.sesmicLayer === 'ses'
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
+                        <input
+                            onChange={this.handleInputChangeSes}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(this.state.opacitySes)}
+                            className={styles.slider}
+                        />
+                        <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                    </>
+                )
+                    }
+                </div>
             </div>
         );
     }
