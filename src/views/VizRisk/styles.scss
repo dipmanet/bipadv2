@@ -5,7 +5,7 @@
 }
 .mainVzContainer{
     position: relative;
-    width: 100vw;
+    width:calc(100vw) ;
     background: #193341;
     height:100%;
     // margin-top: -12px;
@@ -31,16 +31,14 @@
                 align-items: flex-start;
             }
         }
-       
     }
     
     .navBtnsContainer{
         display: flex;
         position: absolute;
-        height: 85px;
+        // height: 5px;
         top: 10px;
         right: 0px;
-        z-index: 50;
         justify-content: space-between;
         align-items: center;
         background-color: transparent;
@@ -131,15 +129,6 @@
   
     }
     
-}
-
-.map2{
-    width: 75vw;
-    height: 100vh;
-    border: 5px solid red;
-    position: absolute;
-    top: 0;
-    left:0;
 }
 
 
