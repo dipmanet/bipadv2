@@ -31,7 +31,7 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
-class SlideFivePane extends React.PureComponent<Props, State> {
+class SlideFivePane extends React.Component<Props, State> {
     public constructor(props) {
         super();
         this.state = {
@@ -85,6 +85,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 });
             }
         }
+        if (singularBuldingData !== prevProps.singularBuldingData) {
+            this.setState({
+                singularAgeGroupsChart: getsingularAgeGroupsChart(singularBuldingData),
+            });
+        }
         if (drawChartData !== prevProps.drawChartData) {
             if (drawChartData.length > 0) {
                 const selectedPoints = drawChartData[drawChartData.length - 1].bPoints;
@@ -98,9 +103,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(finalArr) });
                 this.setState({
                     averageAnnualincomeChartData: getaverageAnnualincomeChartData(finalArr),
-                });
-                this.setState({
-                    singularAgeGroupsChart: getsingularAgeGroupsChart(singularBuldingData),
                 });
             }
         }

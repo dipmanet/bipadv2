@@ -8,6 +8,7 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
+import { isDefined } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import Icon from '#rscg/Icon';
@@ -16,7 +17,7 @@ import {
     getfoundationTypeChartData,
     getsocialFactorChartData,
     getageGroupChartData,
-    getsingleageGroupChartData,
+    getsingularAgeGroupsChart,
     getownershipChartData,
     getsourceofIncomeChartData,
     getaverageAnnualincomeChartData,
@@ -83,6 +84,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 });
             }
         }
+        if (singularBuldingData !== prevProps.singularBuldingData) {
+            this.setState({
+                singularAgeGroupsChart: getsingularAgeGroupsChart(singularBuldingData),
+            });
+        }
         if (drawChartData !== prevProps.drawChartData) {
             if (drawChartData.length > 0) {
                 const selectedPoints = drawChartData[drawChartData.length - 1].bPoints;
@@ -96,9 +102,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(finalArr) });
                 this.setState({
                     averageAnnualincomeChartData: getaverageAnnualincomeChartData(finalArr),
-                });
-                this.setState({
-                    singularAgeGroupsChart: getsingleageGroupChartData(singularBuldingData),
                 });
             }
         }
@@ -243,7 +246,10 @@ Vulnerability of People and Households
                             <p>
                             House ID No:
                                 {' '}
-                                {singularBuldingData.id || '-'}
+                                {isDefined(singularBuldingData.houseOwnerId)
+                                    ? singularBuldingData.houseOwnerId
+                                    : '-'
+                                }
                                 {' '}
                             </p>
                             <div className={styles.vulScoreRow}>

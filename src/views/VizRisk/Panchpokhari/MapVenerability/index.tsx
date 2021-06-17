@@ -632,6 +632,14 @@ class FloodHistoryMap extends React.Component {
         this.map.setPaintProperty('jugallseicHazard', 'raster-opacity', Number(val));
     }
 
+    public getHouseId = (id) => {
+        const houseID = this.props.buildings.filter(item => item.osmId === id);
+        if (houseID.length > 0) {
+            return `House Owner Id: ${houseID[0].houseOwnerId}`;
+        }
+        return 'OSM Id missing';
+    }
+
     public handleBuildingClick = () => {
         const searchId = this.state.searchTerm;
         const coordinatesObj = this.props.buildinggeojson
@@ -649,7 +657,8 @@ class FloodHistoryMap extends React.Component {
                     duration: 500,
                     center: cood,
                 });
-                this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
+                // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
+                this.showPopupOnBldgs(cood, this.getHouseId(searchId));
             } else {
                 this.showPopupOnBldgs(cood, 'No data available on this building');
                 this.setState({ searchTerm: '' });
@@ -707,7 +716,7 @@ class FloodHistoryMap extends React.Component {
                         type="text"
                         value={searchTerm}
                         onChange={this.handleSearchTerm}
-                        placeholder={'Enter house id'}
+                        placeholder={'Enter OSM id'}
                     />
                 </div>
                 <div className={styles.sliderandLegendContainer}>

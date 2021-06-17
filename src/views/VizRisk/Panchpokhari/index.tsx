@@ -191,7 +191,7 @@ class Jugal extends React.Component {
             score: 7,
             buildings: [],
             vulData: [],
-            singularBuldingData: [],
+            singularBuldingData: {},
             resetDrawData: false,
             sesmicLayerVul: '',
         };
@@ -238,9 +238,9 @@ class Jugal extends React.Component {
 
     public setVulData = (vulData) => {
         this.setState({ vulData });
-        console.log('data with vulnerability score:',
-            vulData.filter(item => item.vulnerabilityScore !== undefined)
-                .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
+        // console.log('data with vulnerability score:',
+        //     vulData.filter(item => item.vulnerabilityScore !== undefined)
+        //         .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
     }
 
     public setSingularBuilding = (singularBuilding, singularBuldingData) => {
@@ -285,13 +285,11 @@ class Jugal extends React.Component {
     }
 
     public handleSesmicLayerChangeVUL = (sesmicLayerVul) => {
-        console.log('sesmicLayerVul in parent:', sesmicLayerVul);
         this.setState({ sesmicLayerVul });
     }
 
     public handleDrawResetData = () => {
         this.setState(prevState => ({ resetDrawData: !prevState.resetDrawData }));
-        console.log('resetDrawData', this.state.resetDrawData);
     }
 
     public setIncidents = (incidents) => {
@@ -444,6 +442,7 @@ class Jugal extends React.Component {
             sesmicLayerVul,
         } = this.state;
 
+        console.log('singular b data in render: ', singularBuldingData);
         const {
             incidentList,
             regions,
@@ -743,7 +742,7 @@ class Jugal extends React.Component {
                             singularBuilding={this.state.singularBuilding}
                             score={this.state.score}
                             setSingularBuilding={this.setSingularBuilding}
-                            singularBuldingData={singularBuldingData}
+                            singularBuldingData={this.state.singularBuldingData}
                             vulData={vulData}
                             resetDrawData={resetDrawData}
 

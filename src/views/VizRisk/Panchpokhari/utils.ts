@@ -200,7 +200,9 @@ export const getaverageAnnualincomeChartData = (d) => {
 };
 
 export const getsingularAgeGroupsChart = (d) => {
-    if (Object.keys(d).length > 0) {
+    console.log('d recievd:', d);
+    console.log('Object.keys(d).length', Object.keys(d).length);
+    if (d) {
         const finalData = {
             '>65': d.seniorCitizens,
             '6-64': d.totalPopulation - d.seniorCitizens - d.childrenUnder5,
