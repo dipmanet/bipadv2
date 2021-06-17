@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 
 import {
@@ -6,6 +7,7 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
+import { isDefined } from '@togglecorp/fujs';
 import styles from './styles.scss';
 
 import NavButtons from '../../Components/NavButtons';
@@ -23,6 +25,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         super();
         this.state = {
             showReferences: true,
+            areaSelected: 'MUNICIPALITY',
         };
     }
 
@@ -30,6 +33,69 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         this.setState(prevState => ({
             showReferences: !prevState.showReferences,
         }));
+    }
+
+    public componentDidMount() {
+        const { CIData, buildings } = this.props;
+        if (isDefined(CIData.features) && CIData.features.length > 0 && buildings.features) {
+            const chartDataTitlesUf = [...new Set(CIData
+                .features.map(item => item.properties.Type))];
+            const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+            const temp = chartDataTitles.map(h => ({
+                name: h,
+                Total: CIData.features.filter(i => i.properties.Type === h).length,
+            }));
+            temp.push({
+                name: 'Buildings',
+                Total: buildings.features ? buildings.features.length : 0,
+            });
+            this.setState({ chartData: temp });
+        }
+    }
+
+    public componentDidUpdate(prevProps) {
+        const {
+            CIData,
+            drawChartData,
+            buildings,
+            resetDrawData,
+        } = this.props;
+        if (prevProps.drawChartData !== drawChartData) {
+        // if (resetDrawData && CIData.features && CIData.features.length > 0) {
+            const chartDataTitlesUf = [...new Set(drawChartData
+                .map(item => item.hazardTitle))];
+            const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+            const chartData = chartDataTitles.map(h => ({
+                name: h,
+                Total: drawChartData.filter(i => i.hazardTitle === h).length,
+            }));
+            chartData.push({
+                name: 'Buildings',
+                Total: drawChartData[drawChartData.length - 1]
+                    ? drawChartData[drawChartData.length - 1].buildings
+                    : 0,
+            });
+            this.setState({ chartData });
+            this.setState({ areaSelected: 'THE AREA SELECTED' });
+        }
+
+        if (resetDrawData !== prevProps.resetDrawData) {
+            this.setState({ areaSelected: 'MUNICIPALITY' });
+            if (isDefined(CIData.features) && CIData.features.length > 0 && buildings.features) {
+                const chartDataTitlesUf = [...new Set(CIData
+                    .features.map(item => item.properties.Type))];
+                const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+                const temp = chartDataTitles.map(h => ({
+                    name: h,
+                    Total: CIData.features.filter(i => i.properties.Type === h).length,
+                }));
+                temp.push({
+                    name: 'Buildings',
+                    Total: buildings.features ? buildings.features.length : 0,
+                });
+                this.setState({ chartData: temp });
+            }
+        }
     }
 
     public render() {
@@ -42,20 +108,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             totalPages,
             drawChartData,
             resetDrawData,
+            buildings,
+            CIData,
         } = this.props;
 
-        const chartDataTitlesUf = [...new Set(drawChartData.map(item => item.hazardTitle))];
-        const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
-        const chartData = chartDataTitles.map(h => ({
-            name: h,
-            Total: drawChartData.filter(i => i.hazardTitle === h).length,
-        }));
-        chartData.push({
-            name: 'Buildings',
-            Total: drawChartData[drawChartData.length - 1]
-                ? drawChartData[drawChartData.length - 1].buildings
-                : 0,
-        });
+        const { chartData } = this.state;
 
         return (
             <div className={styles.vrSideBar}>
@@ -89,8 +146,11 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 </p>
 
                                 <p>
-                         CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE
+                                    CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                                    {' '}
+                                    {this.state.areaSelected}
                                 </p>
+
                             </>
                         )
                         : (
@@ -121,7 +181,9 @@ Its impacts can be reduced through risk-sensitive
                                     re-thinking long term spatial planning in the region.
                                 </p>
                                 <p>
-                        CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO LANDSLIDE
+                        CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO LANDSLIDE WITHIN
+                                    {' '}
+                                    {this.state.areaSelected}
                                 </p>
                             </>
                         )

@@ -291,6 +291,7 @@ class Jugal extends React.Component {
 
     public handleDrawResetData = () => {
         this.setState(prevState => ({ resetDrawData: !prevState.resetDrawData }));
+        console.log('resetDrawData', this.state.resetDrawData);
     }
 
     public setIncidents = (incidents) => {
@@ -674,6 +675,7 @@ class Jugal extends React.Component {
                             handleDrawSelectedData={this.handleDrawSelectedData}
                             sesmicLayer={sesmicLayer}
                             CIData={cI}
+                            handleDrawResetData={this.handleDrawResetData}
                             buildings={buildings}
 
                         />
@@ -691,7 +693,9 @@ class Jugal extends React.Component {
                             drawChartData={drawChartData}
                             sesmicLayer={sesmicLayer}
                             vulData={vulData}
-
+                            buildings={buildings}
+                            resetDrawData={resetDrawData}
+                            CIData={cI}
                         />
                         <VRLegend>
                             <SesmicHazardLegend
@@ -742,6 +746,7 @@ class Jugal extends React.Component {
                             singularBuldingData={singularBuldingData}
                             vulData={vulData}
                             resetDrawData={resetDrawData}
+
 
                         />
                         <VRLegend>
