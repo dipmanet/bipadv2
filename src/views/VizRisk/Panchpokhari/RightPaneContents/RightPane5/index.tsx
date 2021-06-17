@@ -43,6 +43,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         );
     }
 
+
     public render() {
         // const { clickedItem } = this.state;
         const {
@@ -59,7 +60,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             incidentDetailsData,
         } = this.props;
 
-        console.log('incidentDetailsData', incidentDetailsData);
         const hazardTitle = [...new Set(incidentList.features.map(
             item => item.properties.hazardTitle,
         ))];
@@ -74,6 +74,16 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 .length,
         }));
 
+        const arr = hazardTitle.map((item) => {
+            if (chartData.filter(n => n.name === item).length > 0) {
+                if (chartData.filter(n => n.name === item).Total !== 0) {
+                    return item;
+                }
+            }
+            return null;
+        });
+        console.log('arr', arr);
+        const nonZeroArr = arr.filter(n => n !== null);
 
         return (
             <div className={styles.vrSideBar}>
@@ -88,8 +98,30 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {' '}
                     {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
                     {' '}
-                incidents of Landslide, Fire
-                and Thunderbolt have been reported in Jugal Rural Municipality.
+                incidents
+                    {nonZeroArr.length > 0 ? ' of ' : ''}
+                    {nonZeroArr.map((item, i) => {
+                        if (
+                            i === hazardTitle.length - 1
+                            && i === 0
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return ` ${item} `;
+                        }
+                        if (
+                            i !== hazardTitle.length - 1
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return `, ${item} `;
+                        }
+                        if (
+                            i === hazardTitle.length - 1
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return ` and ${item} `;
+                        }
+
+
+                        return '';
+                    })}
+               have been reported in Panch Pokhari Thangpal Rural Municipality.
                 These incidents have caused
                     {' '}
                     {incidentDetailsData.peopleDeathCount}

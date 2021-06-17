@@ -393,6 +393,8 @@ class JugalMap extends React.Component<Props, State> {
         }
         if (this.props.criticalElement !== prevProps.criticalElement) {
             this.resetClusters();
+            console.log('CI categories', this.state.categoriesCritical);
+
             const layer = this.props.criticalElement;
             if (layer === 'all') {
                 this.state.categoriesCritical.map((item) => {
@@ -407,45 +409,53 @@ class JugalMap extends React.Component<Props, State> {
                 this.jugalMap.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
                 this.jugalMap.moveLayer('clusters-count-Health');
             } else if (layer === 'Bank') {
-                this.jugalMap.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-count-Bank', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
-                this.jugalMap.moveLayer('clusters-count-Bank');
+                this.jugalMap.setLayoutProperty('unclustered-point-Finance', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-count-Finance', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Finance', 'visibility', 'visible');
+                this.jugalMap.moveLayer('clusters-count-Finance');
             } else if (layer === 'Governance') {
-                this.jugalMap.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-count-Governance', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
-                this.jugalMap.moveLayer('clusters-count-Bank');
+                this.jugalMap.setLayoutProperty('unclustered-point-Government Buildings', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-count-Government Buildings', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Government Buildings', 'visibility', 'visible');
+                this.jugalMap.moveLayer('clusters-count-Government Buildings');
             } else if (layer === 'Industry') {
-                this.jugalMap.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-count-Industry', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
-                this.jugalMap.moveLayer('clusters-count-Industry');
+                this.jugalMap.setLayoutProperty('unclustered-point-Industry/ hydropower', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-count-Industry/ hydropower', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Industry/ hydropower', 'visibility', 'visible');
+                this.jugalMap.moveLayer('clusters-count-Industry/ hydropower');
             } else if (layer === 'Education') {
                 this.jugalMap.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('clusters-count-Education', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('clusters-Education', 'visibility', 'visible');
                 this.jugalMap.moveLayer('clusters-count-Education');
             } else if (layer === 'Culture') {
-                this.jugalMap.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-count-Culture', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
-                this.jugalMap.moveLayer('clusters-count-Culture');
+                this.jugalMap.setLayoutProperty('unclustered-point-Community buildings', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-count-Community buildings', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Community buildings', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('unclustered-point-Cultural heritage sites', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-count-Cultural heritage sites', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Cultural heritage sites', 'visibility', 'visible');
+                this.jugalMap.moveLayer('clusters-count-Community buildings');
             } else if (layer === 'Tourism') {
-                this.jugalMap.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-count-Tourism', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
-                this.jugalMap.moveLayer('clusters-count-Tourism');
+                this.jugalMap.setLayoutProperty('unclustered-point-Hotel/resort/homestay', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-count-Hotel/resort/homestay', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Hotel/resort/homestay', 'visibility', 'visible');
+                this.jugalMap.moveLayer('clusters-count-Hotel/resort/homestay');
             } else if (layer === 'Water sources') {
                 this.jugalMap.setLayoutProperty('unclustered-point-Water sources', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('clusters-count-Water sources', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('clusters-Water sources', 'visibility', 'visible');
                 this.jugalMap.moveLayer('clusters-count-Water sources');
             } else if (layer === 'Trade and business') {
-                this.jugalMap.setLayoutProperty('unclustered-point-Trade and business', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-count-Trade and business', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('clusters-Trade and business', 'visibility', 'visible');
-                this.jugalMap.moveLayer('clusters-count-Trade and business');
+                this
+                    .jugalMap
+                    .setLayoutProperty(
+                        'unclustered-point-Trade and business (groceries, meat, textiles)',
+                        'visibility', 'visible',
+                    );
+                this.jugalMap.setLayoutProperty('clusters-count-Trade and business (groceries, meat, textiles)', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('clusters-Trade and business (groceries, meat, textiles)', 'visibility', 'visible');
+                this.jugalMap.moveLayer('clusters-count-Trade and business (groceries, meat, textiles)');
             }
         }
         if (prevProps.CIData !== this.props.CIData) {

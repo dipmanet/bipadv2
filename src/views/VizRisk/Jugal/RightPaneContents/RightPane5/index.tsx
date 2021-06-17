@@ -76,17 +76,55 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 )
                 .length,
         }));
+        const arr = hazardTitle.map((item) => {
+            if (chartData.filter(n => n.name === item).length > 0) {
+                if (chartData.filter(n => n.name === item).Total !== 0) {
+                    return item;
+                }
+            }
+            return null;
+        });
+        console.log('arr', arr);
+        const nonZeroArr = arr.filter(n => n !== null);
+
         return (
             <div className={styles.vrSideBar}>
                 <h1>Past Disaster Events in Jugal Rural Municipality</h1>
                 <p>
-                In the past 1 year, total
+                In the year
+                    {' '}
+                    {incidentFilterYear}
+                    {' '}
+                , total
 
                     {' '}
-                    {chartData.length > 0 ? chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total : '-'}
+                    {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
                     {' '}
-                incidents of Earthquake, Landslide, Windstorm
-                and Thunderbolt have been reported in Jugal Rural Municipality.
+                incidents
+                    {nonZeroArr.length > 0 ? ' of ' : ''}
+                    {nonZeroArr.map((item, i) => {
+                        if (
+                            i === hazardTitle.length - 1
+                            && i === 0
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return ` ${item} `;
+                        }
+                        if (
+                            i !== hazardTitle.length - 1
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return `, ${item} `;
+                        }
+                        if (
+                            i === hazardTitle.length - 1
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return ` and ${item} `;
+                        }
+
+
+                        return '';
+                    })}
+
+                have been reported in Jugal Rural Municipality.
                 These incidents have caused
                     {' '}
                     {incidentDetailsData.peopleDeathCount}
@@ -95,9 +133,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {' '}
                     {incidentDetailsData.infrastructureDestroyedHouseCount}
                     {' '}
-                 houses were destroyed causing economic loss of about
-                    {incidentDetailsData.infrastructureEconomicLoss}
-                 NPR.
+                 houses were destroyed.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>

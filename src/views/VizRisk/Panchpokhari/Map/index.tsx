@@ -274,9 +274,9 @@ class FloodHistoryMap extends React.Component {
             }
 
             if (this.props.rightElement === 0) {
+                this.map.setLayoutProperty('National Park', 'visibility', 'visible');
                 this.map.setLayoutProperty('raster-hillshade', 'visibility', 'visible');
                 this.map.moveLayer('raster-hillshade');
-                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
                 this.map.setLayoutProperty('Snow', 'visibility', 'none');
                 this.map.setLayoutProperty('Shrub', 'visibility', 'none');
                 this.map.setLayoutProperty('Forest', 'visibility', 'none');
@@ -285,7 +285,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
             if (this.props.rightElement === 2) {
-                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
                 this.map.setLayoutProperty('Snow', 'visibility', 'visible');
                 this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
                 this.map.setLayoutProperty('Forest', 'visibility', 'visible');
@@ -295,7 +294,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('National Park', 'visibility', 'none');
             }
             if (this.props.rightElement === 3) {
-                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
                 this.map.setLayoutProperty('Snow', 'visibility', 'visible');
                 this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
                 this.map.setLayoutProperty('Forest', 'visibility', 'visible');
@@ -311,8 +309,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Ward No.', 'visibility', 'visible');
                 this.map.moveLayer('Ward No.');
                 this.map.setLayoutProperty('raster-hillshade', 'visibility', 'none');
+                this.map.setLayoutProperty('National Park', 'visibility', 'visible');
 
-                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
                 this.map.setLayoutProperty('Snow', 'visibility', 'none');
                 this.map.setLayoutProperty('Shrub', 'visibility', 'none');
                 this.map.setLayoutProperty('Forest', 'visibility', 'none');

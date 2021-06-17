@@ -24,9 +24,6 @@ export default {
         {
             name: 'Ward 7', MalePop: 2770, FemalePop: 2652, TotalHousehold: 1414,
         },
-        {
-            name: 'Ward 99', MalePop: 0, FemalePop: 0, TotalHousehold: 0,
-        },
 
     ],
 };

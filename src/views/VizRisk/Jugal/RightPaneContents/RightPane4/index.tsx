@@ -113,7 +113,7 @@ class SlideFourPane extends React.Component<Props, State> {
                         height={600}
                         data={this.state.chartData}
                         layout="vertical"
-                        margin={{ left: 50, right: 20 }}
+                        margin={{ left: 20, right: 20 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" />
