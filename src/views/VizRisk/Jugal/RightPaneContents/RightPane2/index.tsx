@@ -256,6 +256,14 @@ class RightPane extends React.PureComponent<Props, State> {
                         />
                     ))}
                 </div>
+                {/* <NavButtons
+                    handleNext={handleNext}
+                    handlePrev={handlePrev}
+                    disableNavLeftBtn={disableNavLeftBtn}
+                    disableNavRightBtn={disableNavRightBtn}
+                    pagenumber={pagenumber}
+                    totalPages={totalPages}
+                /> */}
                 <NavButtons
                     handleNext={handleNext}
                     handlePrev={handlePrev}

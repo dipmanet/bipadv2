@@ -8,6 +8,7 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
+import { isDefined } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import Icon from '#rscg/Icon';
@@ -244,7 +245,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <p>
                             House ID No:
                                 {' '}
-                                {singularBuldingData.id || '-'}
+                                {isDefined(singularBuldingData.houseOwnerId)
+                                    ? singularBuldingData.houseOwnerId
+                                    : '-'
+                                }
                                 {' '}
                             </p>
                             <div className={styles.vulScoreRow}>
