@@ -47,6 +47,7 @@ import { AppState } from '#store/types';
 import Loading from '#components/Loading';
 
 import styles from './styles.scss';
+import style from '#mapStyles/rasterStyle';
 
 interface PropsFromDispatch {
     setDataArchiveRainList: typeof setDataArchiveRainListAction;
@@ -127,7 +128,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/rain-stations/',
         method: methods.GET,
         query: () => ({
-            fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point'],
+            fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point', 'status'],
         }),
         onSuccess: ({ response, props: { setDataArchiveRainStations } }) => {
             interface Response { results: RainStation[] }
@@ -227,6 +228,9 @@ const Rain = (props: Props) => {
                 />
                 <div className={styles.note}>
                     {!pending && <Note />}
+                </div>
+                <div className={styles.basin}>
+                    {typeof rainFilters.basin === 'string' ? `Selected basin: ${rainFilters.basin}` : ''}
                 </div>
             </div>
             {/* {rainList && rainList.length > 0 && rainList.map(item => item.id)} */}

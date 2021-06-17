@@ -9,8 +9,17 @@
         padding: var(--spacing-medium);
         background-color: var(--color-foreground);
     }
+    
 }
 .message {
     flex-grow: 1;
     height: 100%;
+}
+
+.basin {
+    padding: var(--spacing-medium);
+    background-color: var(--color-foreground);
+    color: #4881B1;
+    font-weight: bold;
+    // border: 1px solid red;
 }

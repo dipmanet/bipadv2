@@ -16,6 +16,7 @@ interface Props {
 const BasinKeySelector = (r: BasinData) => r.title;
 const BasinLabelSelector = (r: BasinData) => r.title;
 
+
 const mapStateToProps = (state: AppState) => ({
     rainStations: dataArchiveRainListSelector(state),
     basinStations: rainStationsSelector(state),
@@ -25,9 +26,12 @@ const BasinSelector = (props: Props) => {
     const { onChange: onChangeFromProps,
         stations: stationsFromProps,
         rainStations,
-        basinStations } = props;
+        basinStations,
+        value: { id } } = props;
 
-    const [selectedBasin, setSelectedBasin] = useState();
+    const [selectedBasin, setSelectedBasin] = useState(id);
+    console.log('seleced basin:', selectedBasin);
+    console.log('test', BasinKeySelector, BasinLabelSelector);
 
     const handleBasinChange = (basinName: string) => {
         setSelectedBasin(basinName);
@@ -35,6 +39,7 @@ const BasinSelector = (props: Props) => {
     };
     const tempBasins = [...new Set(basinStations.map(item => item.basin))];
     const uniqueBasins = tempBasins.filter(item => item !== '');
+    // const test = uniqueBasins.filter(item => item !== null);
     const BasinData = uniqueBasins.map((item, i) => ({
         id: i + 1,
         title: item,

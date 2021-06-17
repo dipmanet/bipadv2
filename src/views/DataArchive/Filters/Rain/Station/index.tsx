@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaramInputElement } from '@togglecorp/faram';
 import { connect } from 'react-redux';
-import { useEventCallback } from '@material-ui/core';
 import SelectInput from '#rsci/SelectInput';
 
 import styles from './styles.scss';
@@ -40,6 +39,7 @@ const StationSelector = (props: Props) => {
         rainFilters,
         value: { id } } = props;
 
+    console.log('station list', mystationsFromProps, stationKeySelector, StationLabelSelector);
     const [stationsFromProps, setStationsFromProps] = useState(mystationsFromProps);
     // stationsFromProps = mystationsFromProps;
 

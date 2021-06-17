@@ -15,12 +15,13 @@ import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-import { dataArchiveRainListSelector, rainFiltersSelector, resourceListSelectorRP } from '#selectors';
+import { dataArchiveRainListSelector, rainFiltersSelector, rainStationsSelector } from '#selectors';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     rainFilters: rainFiltersSelector(state),
     rainList: dataArchiveRainListSelector(state),
+    rainStation: rainStationsSelector(state),
 });
 
 
@@ -61,6 +62,30 @@ const rainToGeojson = (rainList) => {
                     description: rain.description,
                     basin: rain.basin,
                     status: rain.status,
+                },
+            })),
+    };
+    return geojson;
+};
+
+const rainStationToGeojson = (rainStation) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: rainStation
+            .filter(station => station.point)
+            .map(station => ({
+                id: station.id,
+                type: 'Feature',
+                geometry: {
+                    ...station.point,
+                },
+                properties: {
+                    ...station,
+                    rainId: station.id,
+                    title: station.title,
+                    description: station.description,
+                    basin: station.basin,
+                    status: station.status,
                 },
             })),
     };
@@ -117,7 +142,7 @@ class RainMap extends React.PureComponent {
                 const mydata = this.props.rainList.filter(item => item.basin === this.props.rainFilters.basin);
                 if (mydata.length > 0) {
                     basinCoordinates = mydata[0].point.coordinates;
-                    const test = [
+                    const tile = [
                         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
                         '&service=WMS',
                         '&version=1.1.1',
@@ -134,7 +159,7 @@ class RainMap extends React.PureComponent {
                         `&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
                     ].join('');
 
-                    const ourAarray = [{ key: `basin-${this.props.rainFilters.basin}`, layername: `layer-basin-${this.props.rainFilters.basin}`, tiles: test }];
+                    const ourAarray = [{ key: `basin-${this.props.rainFilters.basin}`, layername: `layer-basin-${this.props.rainFilters.basin}`, tiles: tile }];
                     if (typeof this.props.rainFilters.basin === 'object') {
                         // eslint-disable-next-line react/no-did-update-set-state
                         this.setState({ rasterLayers: [] });
@@ -152,6 +177,9 @@ class RainMap extends React.PureComponent {
     }
 
     getRainFeatureCollection = memoize(rainToGeojson);
+
+    getRainStationFeatureCollection = memoize(rainStationToGeojson);
+
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
         const mapPaddings = getMapPaddings();
@@ -262,6 +290,12 @@ class RainMap extends React.PureComponent {
         const rainFeatureCollection = this.getRainFeatureCollection(
             data,
         );
+
+        const rainStationFeatureCollection = this.getRainStationFeatureCollection(
+            this.props.rainStation,
+        );
+
+        console.log('rain station', this.props.rainStation);
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
         const { station: { point, municipality } } = rainFilters;
         const tooltipOptions = {
@@ -353,7 +387,7 @@ class RainMap extends React.PureComponent {
 
                 <MapSource
                     sourceKey="real-time-rain-points"
-                    geoJson={rainFeatureCollection}
+                    geoJson={rainStationFeatureCollection}
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >
