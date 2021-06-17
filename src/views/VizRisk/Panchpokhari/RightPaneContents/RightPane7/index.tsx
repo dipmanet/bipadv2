@@ -16,7 +16,7 @@ import {
     getfoundationTypeChartData,
     getsocialFactorChartData,
     getageGroupChartData,
-    getsingleageGroupChartData,
+    getsingularAgeGroupsChart,
     getownershipChartData,
     getsourceofIncomeChartData,
     getaverageAnnualincomeChartData,
@@ -43,6 +43,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             ownershipChartData: [],
             sourceofIncomeChartData: [],
             averageAnnualincomeChartData: [],
+            singularAgeGroupsChart: [],
         };
     }
 
@@ -96,6 +97,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 this.setState({ sourceofIncomeChartData: getsourceofIncomeChartData(finalArr) });
                 this.setState({
                     averageAnnualincomeChartData: getaverageAnnualincomeChartData(finalArr),
+                });
+                this.setState({
+                    singularAgeGroupsChart: getsingularAgeGroupsChart(singularBuldingData),
                 });
             }
         }
@@ -348,11 +352,15 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 </tr>
                             </table>
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            <ResponsiveContainer
+                                className={styles.respContainer}
+                                width="100%"
+                                height={250}
+                            >
                                 <BarChart
                                     width={350}
                                     height={600}
-                                    data={getsingleageGroupChartData(singularBuldingData)}
+                                    data={singularAgeGroupsChart}
                                     layout="vertical"
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >

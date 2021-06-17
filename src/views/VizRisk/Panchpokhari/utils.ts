@@ -199,7 +199,7 @@ export const getaverageAnnualincomeChartData = (d) => {
     return [];
 };
 
-export const getsingleageGroupChartData = (d) => {
+export const getsingularAgeGroupsChart = (d) => {
     if (Object.keys(d).length > 0) {
         const finalData = {
             '>65': d.seniorCitizens,

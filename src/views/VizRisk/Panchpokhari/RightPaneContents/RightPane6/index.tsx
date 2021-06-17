@@ -41,7 +41,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             pagenumber,
             totalPages,
             drawChartData,
+            resetDrawData,
         } = this.props;
+
         const chartDataTitlesUf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
