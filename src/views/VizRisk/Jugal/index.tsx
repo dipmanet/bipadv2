@@ -669,6 +669,7 @@ class Jugal extends React.Component {
                                 incidentFilterYear={incidentFilterYear}
                                 handleIncidentChange={this.handleIncidentChange}
                                 handleDrawSelectedData={this.handleDrawSelectedData}
+                                handleDrawResetData={this.handleDrawResetData}
                                 sesmicLayer={sesmicLayer}
                                 CIData={cI}
                                 buildings={buildings}
@@ -687,7 +688,9 @@ class Jugal extends React.Component {
                                 drawChartData={drawChartData}
                                 sesmicLayer={sesmicLayer}
                                 vulData={vulData}
-
+                                buildings={buildings}
+                                resetDrawData={resetDrawData}
+                                CIData={cI}
                             />
                             <VRLegend>
                                 <SesmicHazardLegend

@@ -103,7 +103,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             }
         }
         if (resetDrawData !== prevProps.resetDrawData) {
-            if (vulData.length > 0 && resetDrawData === true) {
+            if (vulData.length > 0 && prevProps.resetDrawData !== resetDrawData) {
                 this.setState({ buildingVulnerability: getbuildingVul(vulData) });
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(vulData) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(vulData) });

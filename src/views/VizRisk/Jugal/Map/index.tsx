@@ -204,7 +204,7 @@ class JugalMap extends React.Component<Props, State> {
                             this.jugalMap.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.title;
+                            const ciName = e.features[0].properties.Name;
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>
@@ -519,11 +519,12 @@ class JugalMap extends React.Component<Props, State> {
                     });
                     categoriesCritical.map(ci => this.jugalMap.on('mousemove', `unclustered-point-${ci}`, (e) => {
                         if (e) {
-                            console.log('efeatures', e.features);
                             this.jugalMap.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.title;
+                            const ciName = e.features[0].properties.Name;
+                            console.log('name', e.features[0].properties.Name);
+                            console.log('properties', e.features[0].properties);
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>

@@ -26,6 +26,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         this.state = {
             showReferences: true,
             areaSelected: 'MUNICIPALITY',
+            chartData: [],
         };
     }
 

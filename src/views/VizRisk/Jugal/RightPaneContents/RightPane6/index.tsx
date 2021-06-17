@@ -1,3 +1,5 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable max-len */
 import React from 'react';
 
 import {
@@ -6,6 +8,7 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
+import { isDefined } from '@togglecorp/fujs';
 import styles from './styles.scss';
 
 import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
@@ -19,11 +22,27 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
+const ciRef = {
+    'Water sources': 'Water Source',
+    'Trade and business (groceries, meat, textiles)': 'Trade and business',
+    'Industry/ hydropower': 'Industry',
+    'Hotel/resort/homestay': 'Hotel or Restaurant',
+    Health: 'Hospital',
+    'Government Buildings': 'Government Building',
+    Bridge: 'Bridge',
+    'Community buildings': 'Community Building',
+    'Cultural heritage sites': 'Cultural Heritage',
+    Finance: 'Financial Institution',
+    Education: 'Education Instution',
+};
+
 class SlideFivePane extends React.PureComponent<Props, State> {
     public constructor(props) {
         super();
         this.state = {
             showReferences: true,
+            areaSelected: 'MUNICIPALITY',
+            chartData: [],
         };
     }
 
@@ -31,6 +50,69 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         this.setState(prevState => ({
             showReferences: !prevState.showReferences,
         }));
+    }
+
+    public componentDidMount() {
+        const { CIData, buildings } = this.props;
+        if (isDefined(CIData.features) && CIData.features.length > 0) {
+            const chartDataTitlesUf = [...new Set(CIData
+                .features.map(item => item.properties.CI))];
+            const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+            const temp = chartDataTitles.map(h => ({
+                name: ciRef[h],
+                Total: CIData.features.filter(i => i.properties.CI === h).length,
+            }));
+            temp.push({
+                name: 'Buildings',
+                Total: buildings.features ? buildings.features.length : 0,
+            });
+            this.setState({ chartData: temp });
+        }
+    }
+
+    public componentDidUpdate(prevProps) {
+        const {
+            CIData,
+            drawChartData,
+            buildings,
+            resetDrawData,
+        } = this.props;
+        if (prevProps.drawChartData !== drawChartData && drawChartData.length > 0) {
+        // if (resetDrawData && CIData.features && CIData.features.length > 0) {
+            const chartDataTitlesUf = [...new Set(drawChartData
+                .map(item => item.hazardTitle))];
+            const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+            const chartData = chartDataTitles.map(h => ({
+                name: h,
+                Total: drawChartData.filter(i => i.hazardTitle === h).length,
+            }));
+            chartData.push({
+                name: 'Buildings',
+                Total: drawChartData[drawChartData.length - 1]
+                    ? drawChartData[drawChartData.length - 1].buildings
+                    : 0,
+            });
+            this.setState({ chartData });
+            this.setState({ areaSelected: 'THE AREA SELECTED' });
+        }
+
+        if (resetDrawData !== prevProps.resetDrawData) {
+            this.setState({ areaSelected: 'MUNICIPALITY' });
+            if (isDefined(CIData.features) && CIData.features.length > 0 && buildings.features) {
+                const chartDataTitlesUf = [...new Set(CIData
+                    .features.map(item => item.properties.CI))];
+                const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+                const temp = chartDataTitles.map(h => ({
+                    name: h,
+                    Total: CIData.features.filter(i => i.properties.CI === h).length,
+                }));
+                temp.push({
+                    name: 'Buildings',
+                    Total: buildings.features ? buildings.features.length : 0,
+                });
+                this.setState({ chartData: temp });
+            }
+        }
     }
 
     public render() {
@@ -43,18 +125,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             totalPages,
             drawChartData,
         } = this.props;
-        const chartDataTitlesUf = [...new Set(drawChartData.map(item => item.hazardTitle))];
-        const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
-        const chartData = chartDataTitles.map(h => ({
-            name: h,
-            Total: drawChartData.filter(i => i.hazardTitle === h).length,
-        }));
-        chartData.push({
-            name: 'Buildings',
-            Total: drawChartData[drawChartData.length - 1]
-                ? drawChartData[drawChartData.length - 1].buildings
-                : 0,
-        });
+
+        const { chartData } = this.state;
 
         return (
             <div className={styles.vrSideBar}>
@@ -62,28 +134,37 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 {
                     this.props.sesmicLayer === 'ses'
                         ? (
-                            <p>
-                        The map shows the exposure of critical infrastructures
-                        and assets to earthquake. The seismic hazard map is the
-                        base map which depicts the peak ground acceleration values
-                        due to earthquake ground shaking with 2% probability of
-                        exceedance in 50 years.
-                            </p>
+                            <>
+                                <p>The map shows the exposure of critical infrastructures and assets to earthquake.This visualization allows the super imposition of the seimic hazard map with details of landuse and critical infrastructures. The map shows the peak ground acceleration values due to earthquake ground shaking with 10% probability of exceedance in 50 years. </p>
+
+                                <p>This visualization helps understand the population, elements and assets that are at threat to earthquake hazard in the region. </p>
+
+                                <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region. </p>
+                                <p>
+                                CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                                    {' '}
+                                    {this.state.areaSelected}
+                                </p>
+                            </>
                         ) : (
-                            <p>
-                        The map shows the exposure of critical infrastructures and assets
-                        to landslide. The landslide susceptibility map is the base map, which
-                        represents the relative indication of the probability of sesimically
-                        triggered landslides.
-                            </p>
+                            <>
+                                <p>The map shows the exposure of critical infrastructures and assets to landslide.  This visualization allows the super imposition of the landslide susceptibility map with details of landuse and critical infrastructures. The map shows the relative indication of the probability of rainfall triggered landslides.</p>
+
+                                <p>This visualization helps understand the population, elements and assets that are at threat to earthquake hazard in the region. </p>
+
+                                <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region.</p>
+                                <p>
+                                CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                                    {' '}
+                                    {this.state.areaSelected}
+                                </p>
+                            </>
                         )}
-                <p>
-                     CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE
-                </p>
+
                 {
                     chartData.length > 0
                         ? (
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={500}>
                                 <BarChart
                                     width={350}
                                     height={600}

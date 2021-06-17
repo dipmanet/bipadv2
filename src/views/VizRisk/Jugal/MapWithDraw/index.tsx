@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
-import { getHillShadeLayer } from '#views/VizRisk/Jugal/utils';
+import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 import '@watergis/mapbox-gl-legend/css/styles.css';
+
 
 import styles from './styles.scss';
 
@@ -447,11 +448,19 @@ class FloodHistoryMap extends React.Component {
             };
 
             this.map.addControl(draw, 'top-right');
-
+            const resetArea = () => {
+                this.props.handleDrawResetData();
+            };
+            this.map.on('draw.delete', resetArea);
             this.map.on('draw.create', updateArea);
         }
 
         this.map.on('style.load', () => {
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],
@@ -506,6 +515,92 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
+
+            const { CIData } = this.props;
+
+            // if (CIData.length > 0) {
+            if (isDefined(CIData.features)) {
+                const categoriesCritical = [...new Set(CIData.features.map(
+                    item => item.properties.CI,
+                ))];
+                    // eslint-disable-next-line react/no-did-update-set-state
+                this.setState({ categoriesCritical });
+
+                categoriesCritical.map((layer) => {
+                    this.map.addSource(layer, {
+                        type: 'geojson',
+                        data: getGeoJSON(layer, CIData),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#a4ac5e',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `unclustered-point-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['downcase', ['get', 'CI']],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `clusters-count-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                        },
+                    });
+                    categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
+                        if (e) {
+                            this.map.getCanvas().style.cursor = 'pointer';
+                            const { lngLat } = e;
+                            const coordinates = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.Name;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                            ).addTo(this.map);
+                        }
+                    }));
+                    categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
+                        this.map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    }));
+                    return null;
+                });
+            }
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('Population Density', 'visibility', 'none');
             this.map.moveLayer('Buildings');
@@ -872,6 +967,10 @@ class FloodHistoryMap extends React.Component {
                     };
 
                     this.map.addControl(draw, 'top-right');
+                    const resetArea = () => {
+                        this.props.handleDrawResetData();
+                    };
+                    this.map.on('draw.delete', resetArea);
 
                     this.map.on('draw.create', updateArea);
                 }
