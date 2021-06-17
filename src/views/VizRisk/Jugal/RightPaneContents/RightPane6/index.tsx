@@ -43,7 +43,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             totalPages,
             drawChartData,
         } = this.props;
-        const chartDataTitles = [...new Set(drawChartData.map(item => item.hazardTitle))];
+        const chartDataTitlesUf = [...new Set(drawChartData.map(item => item.hazardTitle))];
+        const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
             name: h,
             Total: drawChartData.filter(i => i.hazardTitle === h).length,
@@ -54,7 +55,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 ? drawChartData[drawChartData.length - 1].buildings
                 : 0,
         });
-        console.log('incidents list with result:', drawChartData);
 
         return (
             <div className={styles.vrSideBar}>
@@ -89,7 +89,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     height={600}
                                     data={chartData}
                                     layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                    margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" tick={{ fill: '#94bdcf' }} />

@@ -165,9 +165,11 @@ export const getsourceofIncomeChartData = (d) => {
 };
 export const getaverageAnnualincomeChartData = (d) => {
     if (d.length > 0) {
-        const typeArr = [...new Set(
-            d.map(i => i.averageAnnualIncome).filter(f => f !== undefined),
-        )];
+        // const typeArr = [...new Set(
+        //     d.map(i => i.averageAnnualIncome).filter(f => f !== undefined),
+        // )];
+
+        console.log('avg income chart data:', d);
         const arr = [
             {
                 name: '>500000',

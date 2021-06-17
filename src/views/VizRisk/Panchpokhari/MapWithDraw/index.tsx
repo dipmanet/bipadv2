@@ -22,9 +22,7 @@ import {
     selectedProvinceIdSelector,
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
-    incidentListSelectorIP,
 } from '#selectors';
-import Icon from '#rscg/Icon';
 
 const ciRef = {
     'Water sources': 'Water Source',
@@ -511,7 +509,6 @@ class FloodHistoryMap extends React.Component {
                     source: 'seicHazard',
                     layout: {
                         visibility: 'none',
-
                     },
                     paint: {
                         'raster-opacity': Number(opacitySes),

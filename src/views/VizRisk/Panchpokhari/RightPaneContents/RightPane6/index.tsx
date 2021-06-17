@@ -42,21 +42,18 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             totalPages,
             drawChartData,
         } = this.props;
-        console.log('draw chart data:', drawChartData);
         const chartDataTitlesUf = [...new Set(drawChartData.map(item => item.hazardTitle))];
         const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
         const chartData = chartDataTitles.map(h => ({
             name: h,
             Total: drawChartData.filter(i => i.hazardTitle === h).length,
         }));
-        console.log('chart data:', chartData);
         chartData.push({
             name: 'Buildings',
             Total: drawChartData[drawChartData.length - 1]
                 ? drawChartData[drawChartData.length - 1].buildings
                 : 0,
         });
-        console.log('incidents list with result:', drawChartData);
 
         return (
             <div className={styles.vrSideBar}>

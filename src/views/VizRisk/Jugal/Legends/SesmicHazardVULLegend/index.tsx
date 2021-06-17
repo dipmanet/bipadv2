@@ -3,7 +3,7 @@ import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 
 const DemoGraphicsLegends = (props) => {
-    const [showSus, setshowSus] = useState(true);
+    const [showSus, setshowSus] = useState(false);
     const [showSes, setshowSes] = useState(false);
     const {
         handleSesmicLayerChange,
@@ -11,16 +11,32 @@ const DemoGraphicsLegends = (props) => {
 
 
     const handlePopulationClick = (val) => {
-        handleSesmicLayerChange(val);
-
         if (val === 'sus') {
-            setshowSus(true);
-            setshowSes(false);
+            if (showSus) {
+                setshowSus(false);
+                // setshowSes(false);
+                handleSesmicLayerChange('susHide');
+            } else {
+                setshowSus(true);
+                if (showSes) {
+                    setshowSes(false);
+                    handleSesmicLayerChange('sesHide');
+                }
+                handleSesmicLayerChange('sus');
+            }
         }
-
         if (val === 'ses') {
-            setshowSus(false);
-            setshowSes(true);
+            if (showSes) {
+                setshowSes(false);
+                handleSesmicLayerChange('sesHide');
+            } else {
+                setshowSes(true);
+                if (showSus) {
+                    setshowSus(false);
+                    handleSesmicLayerChange('susHide');
+                }
+                handleSesmicLayerChange('ses');
+            }
         }
     };
 

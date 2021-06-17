@@ -1,4 +1,4 @@
-
+$button-color: rgb(0,170,223);
  .vrSideBar::-webkit-scrollbar {
     display: none;
   }
@@ -24,11 +24,68 @@
         flex-direction: column;
         background-color:rgb(12,36,50);
         color:#b6d6e4;
-        padding: 40px 20px 20px 30px;
+        padding: 28px 20px 20px 30px;
         width: calc(30% - 60px);
         height: 100vh;
         left: 0;
         overflow-y: scroll;
+        .infoIcon{
+            font-size: 16px;
+            color: white;
+        }
+        .vulScoreRow{
+            display: flex;
+            justify-content: space-between;
+            padding-right: 20px;
+        }
+        .singularPaneTable{
+                margin-top: 0px;
+                border-collapse: collapse;
+                width: 100%;
+                th{
+                padding: 0.5rem;
+                text-align: left;
+               
+                }
+                td{
+                border-top: 1px solid rgb(12, 87, 128);
+                border-bottom: 1px solid rgb(12, 87, 128);
+                padding: 0.5rem;
+                text-align: left;
+                color: white;
+                }
+                tr:nth-child(even) {
+                    background-color:transparent;
+               
+                
+                }
+                tr:nth-child(odd) {
+                    background-color:rgb(3,66,100);
+                }
+        
+        }
+
+        .backBtnContainer{
+            width: 100%;
+            display:flex;
+            justify-content: flex-end;
+            padding-right: 20px;
+            padding-bottom: 20px;
+            z-index: 3;
+            .backButton{
+                background-color: transparent;
+                border: 1px solid $button-color;
+                filter: saturate(100%);
+                color: $button-color;
+                cursor:pointer;
+                padding: 5px 10px;
+                margin-left: 5px;
+                font-size: 10px;
+                text-transform: uppercase;
+                width: 50px;
+    
+            }
+        }
 
         .buildingClassContainer{
             display: flex;
@@ -46,20 +103,20 @@
                     .high{
                         // path: {fill:rgb(197,44,56); }
                         font-size: 30px;
-                        color:#ff0000;
+                        color:#af4042;
                         margin-right: 5px;
                     }
                     .med{
                         // path: {fill:rgb(193,127,90); }
                         font-size: 30px;
                         margin-right: 5px;
-                        color: #0000ff;
+                        color: #c1805a;
                     }
                     .low{
                         // path: {fill: rgb(153,171,182);}
                         font-size: 30px;
                         margin-right: 5px;
-                        color: #eeeeee;
+                        color: #444444;
                     }
                     .number{
                         font-size: 12px;
@@ -93,6 +150,17 @@
        
         h1{
             @extend .heading-style;
+            z-index: 3;
+
+            button{
+                padding: 3px 10px 10px 10px;
+                z-index: 3;
+                opacity: 0.87;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                filter: saturate(100%);
+            }
         }
         h2{
             @extend .heading-style;

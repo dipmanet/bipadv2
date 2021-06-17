@@ -209,7 +209,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 }
 
                 <h1>
-Vulnerability of People and Households
+            Vulnerability of People and Households
                     <button
                         type="button"
                         onClick={e => e.preventDefault()}

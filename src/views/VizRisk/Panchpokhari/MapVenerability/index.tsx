@@ -482,7 +482,9 @@ class FloodHistoryMap extends React.Component {
                     id: 'raster-hillshade',
                     type: 'raster',
                     source: 'hillshadePachpokhari',
-                    layout: {},
+                    layout: {
+                        visibility: 'visible',
+                    },
                     paint: {
                         'raster-opacity': 0.25,
                     },
@@ -654,7 +656,9 @@ class FloodHistoryMap extends React.Component {
                 this.props.setSingularBuilding(false, {});
             }
         } else {
-            alert('No data available');
+            this.showPopupOnBldgs(cood, 'No data available on this building');
+            this.setState({ searchTerm: '' });
+            this.props.setSingularBuilding(false, {});
         }
     };
 

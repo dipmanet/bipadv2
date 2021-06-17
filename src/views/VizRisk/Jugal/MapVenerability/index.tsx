@@ -1,7 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
-import { isDefined } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import { VectorTile } from '@mapbox/vector-tile';
@@ -9,7 +9,7 @@ import * as turf from '@turf/turf';
 import Pbf from 'pbf';
 import Zlib from 'zlib';
 import MapboxLegendControl from '@watergis/mapbox-gl-legend';
-import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
+import { getHillShadeLayer, getSingularBuildingData } from '#views/VizRisk/Jugal/utils';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
 import '@watergis/mapbox-gl-legend/css/styles.css';
@@ -31,7 +31,7 @@ import {
 } from '#selectors';
 import Icon from '#rscg/Icon';
 
-
+const { buildingColor } = expressions;
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
@@ -68,8 +68,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lat: 28.015490220644214,
             lng: 85.79108507481781,
+            lat: 28.015490220644214,
             zoom: 9.8,
             incidentYear: '0',
             playState: true,
@@ -104,6 +104,7 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
+        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         const { CIData: cidata, buildings } = this.props;
@@ -117,11 +118,9 @@ class FloodHistoryMap extends React.Component {
             const points = turf.points(arr);
             this.setState({ points });
         }
-        if (isDefined(buildings.features)) {
-            const buildingsD = buildings.features.map(item => [
-                Number(item.geometry.coordinates[0].toFixed(7)),
-                Number(item.geometry.coordinates[1].toFixed(7)),
-            ]);
+        if (buildings.length > 0) {
+            const buildingsD = buildings.filter(item => item.point !== undefined)
+                .map(p => p.point.coordinates);
             const buildingpointsData = turf.points(buildingsD);
             this.setState({ buildingpoints: buildingpointsData });
 
@@ -437,10 +436,12 @@ class FloodHistoryMap extends React.Component {
                     { layers: ['Forest'] },
                 );
                 const buildingsCount = ptsWithinBuildings.features.length;
+                const bPoints = ptsWithinBuildings.features.map(item => item.geometry.coordinates);
                 result.push({
                     buildings: buildingsCount,
                     forest: forest.length,
                     farmlands: farmlands.length,
+                    bPoints: bPoints || [],
                 });
                 handleDrawSelectedData(result);
 
@@ -449,25 +450,53 @@ class FloodHistoryMap extends React.Component {
                 });
             };
 
+            const resetArea = () => {
+                this.props.handleDrawResetData();
+            };
+
             this.map.addControl(draw, 'top-right');
 
             this.map.on('draw.create', updateArea);
+            this.map.on('draw.delete', resetArea);
         }
-
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-
 
         this.map.on('style.load', () => {
             this.map.on('click', 'Buildings', (e) => {
                 this.setState({ osmID: e.features[0].properties.osm_id });
-                const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
-                this.map.setFilter('Buildings', filter);
+                this.setState({ searchTerm: e.features[0].properties.osm_id });
+                this.handleBuildingClick();
+                // const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
+                // this.map.setFilter('Buildings', filter);
+                // here
             });
             // this.map.setLayoutProperty('Buildings2D', 'visibility', 'visible');
 
-            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
 
-
+            this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+            this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
+            this.map.setLayoutProperty('Forest', 'visibility', 'visible');
+            this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
+            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            this.map.addSource('hillshadeJugal', {
+                type: 'raster',
+                tiles: [this.getRasterLayer()],
+                tileSize: 256,
+            });
+            this.map.addLayer(
+                {
+                    id: 'raster-hillshade',
+                    type: 'raster',
+                    source: 'hillshadeJugal',
+                    layout: {
+                        visibility: 'visible',
+                    },
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             this.map.addSource('lsSusep', {
                 type: 'raster',
                 tiles: [getHillShadeLayer('jugal_durham_landslide_susceptibility')],
@@ -479,7 +508,9 @@ class FloodHistoryMap extends React.Component {
                     id: 'jugallsSuslayer',
                     type: 'raster',
                     source: 'lsSusep',
-                    layout: {},
+                    layout: {
+                        visibility: 'none',
+                    },
                     paint: {
                         'raster-opacity': 1,
                     },
@@ -496,7 +527,9 @@ class FloodHistoryMap extends React.Component {
                     id: 'jugallseicHazard',
                     type: 'raster',
                     source: 'seicHazard',
-                    layout: {},
+                    layout: {
+                        visibility: 'none',
+                    },
                     paint: {
                         'raster-opacity': 1,
                     },
@@ -889,7 +922,7 @@ class FloodHistoryMap extends React.Component {
             && fC.geometry.coordinates[1] === latToCompare)[0];
 
         if (hT.properties) {
-            return hT.properties.CI;
+            return hT.properties.Type;
         }
         return [];
     }
@@ -922,31 +955,61 @@ class FloodHistoryMap extends React.Component {
         ).addTo(this.map);
     };
 
+    public handleInputChange = (e) => {
+        const val = e.target.value;
+        this.setState({ opacitySus: String(e.target.value) });
+        this.map.setPaintProperty('jugallsSuslayer', 'raster-opacity', Number(val));
+    }
 
-    public handleSearch = () => {
-        // get the searchID
+    public handleInputChangeSes = (e) => {
+        const val = e.target.value;
+        this.setState({ opacitySes: String(e.target.value) });
+        this.map.setPaintProperty('jugallseicHazard', 'raster-opacity', Number(val));
+    }
+
+    public handleBuildingClick = () => {
         const searchId = this.state.searchTerm;
-
-        // get the coordinates of the builing
-        const coordinatesObj = this.props.buildings
+        const coordinatesObj = this.props.buildinggeojson
             .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
-        // zoom to this coordinate with some padding
-        // this.zoomTo(polygonData);
         let cood = [];
         if (coordinatesObj.length > 0) {
             cood = coordinatesObj[0].geometry.coordinates;
-            this.map.easeTo({
-                zoom: 19,
-                duration: 500,
-                center: cood,
-            });
-            // show popup
-            this.showPopupOnBldgs(cood, searchId);
-            this.setState({ searchTerm: '' });
+            const singularBData = getSingularBuildingData(searchId, this.props.buildings);
+            console.log('singular data:', singularBData);
+            if (Object.keys(singularBData).length > 0) {
+                this.props.setSingularBuilding(true, singularBData);
+                this.setState({ searchTerm: '' });
+                this.map.easeTo({
+                    zoom: 19,
+                    duration: 500,
+                    center: cood,
+                });
+                this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
+            } else {
+                this.showPopupOnBldgs(cood, 'No data available on this building');
+                this.setState({ searchTerm: '' });
+                this.props.setSingularBuilding(false, {});
+            }
         } else {
-            alert('Please enter valid building id');
+            this.setState({ searchTerm: '' });
+            alert(`No data available for Building id: ${this.state.searchTerm}`);
         }
     };
+
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Jugal_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public render() {
         const { searchTerm } = this.state;
@@ -965,7 +1028,7 @@ class FloodHistoryMap extends React.Component {
                 <div className={styles.searchBox}>
                     <button
                         type="button"
-                        onClick={this.handleSearch}
+                        onClick={this.handleBuildingClick}
                         className={styles.searchbutton}
                     >
                         <Icon
@@ -980,7 +1043,52 @@ class FloodHistoryMap extends React.Component {
                         placeholder={'Enter house id'}
                     />
                 </div>
-                <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                <div className={styles.sliderandLegendContainer}>
+                    {
+                        this.props.sesmicLayer === 'sus'
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
+                        <input
+                            onChange={this.handleInputChange}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(this.state.opacitySus)}
+                            className={styles.slider}
+                        />
+                        <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                    </>
+                )
+                    }
+                    {
+                        this.props.sesmicLayer === 'ses'
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
+                        <input
+                            onChange={this.handleInputChangeSes}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(this.state.opacitySes)}
+                            className={styles.slider}
+                        />
+                        <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
+                    </>
+                )
+                    }
+                </div>
+
+
             </div>
         );
     }

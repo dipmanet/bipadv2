@@ -518,6 +518,7 @@ class Jugal extends React.Component {
                             disableNavRightBtn={disableNavRightBtn}
                             pagenumber={rightElement + 1}
                             totalPages={rightelements.length}
+                            CIData={cI}
                         />
                     </>
 
@@ -614,6 +615,7 @@ class Jugal extends React.Component {
                             handleIncidentItemClick={this.handleIncidentItemClick}
                             incidentFilterYear={incidentFilterYear}
                             getIncidentData={this.setIncidentList}
+                            CIData={cI}
 
                         />
                     </>
