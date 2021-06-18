@@ -140,7 +140,6 @@ class RainFilters extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const { rainFilters: faramValues } = this.props;
         this.setState({ faramValues });
-        console.log('rain filter', faramValues);
     }
 
     private views = {
@@ -150,7 +149,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="basin"
                     wardsHidden
-                    stations={this.props.basinStations}
+                    basins={this.props.basinStations}
                     // autoFocus
                 />
             ),

@@ -39,7 +39,6 @@ const StationSelector = (props: Props) => {
         rainFilters,
         value: { id } } = props;
 
-    console.log('station list', mystationsFromProps, stationKeySelector, StationLabelSelector);
     const [stationsFromProps, setStationsFromProps] = useState(mystationsFromProps);
     // stationsFromProps = mystationsFromProps;
 

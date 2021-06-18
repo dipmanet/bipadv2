@@ -111,7 +111,6 @@ const Filters = (props: Props) => {
         setErrors(faramErrors);
         if (faramErrors.length === 0) {
             handleFilterValues(faramValue);
-            console.log('faram value test:', faramValue);
             const { dataDateRange, period } = faramValue;
             const { startDate, endDate } = dataDateRange;
             const { periodCode } = period;

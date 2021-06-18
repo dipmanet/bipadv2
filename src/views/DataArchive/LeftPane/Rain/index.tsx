@@ -128,7 +128,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/rain-stations/',
         method: methods.GET,
         query: () => ({
-            fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point', 'status'],
+            fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point', 'status', 'description'],
         }),
         onSuccess: ({ response, props: { setDataArchiveRainStations } }) => {
             interface Response { results: RainStation[] }

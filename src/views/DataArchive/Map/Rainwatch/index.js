@@ -81,7 +81,7 @@ const rainStationToGeojson = (rainStation) => {
                 },
                 properties: {
                     ...station,
-                    rainId: station.id,
+                    stationId: station.id,
                     title: station.title,
                     description: station.description,
                     basin: station.basin,
@@ -213,7 +213,7 @@ class RainMap extends React.PureComponent {
                 description,
                 basin,
                 status,
-                station: stationId,
+                stationId,
             },
             geometry,
         } = feature;
@@ -295,7 +295,6 @@ class RainMap extends React.PureComponent {
             this.props.rainStation,
         );
 
-        console.log('rain station', this.props.rainStation);
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
         const { station: { point, municipality } } = rainFilters;
         const tooltipOptions = {

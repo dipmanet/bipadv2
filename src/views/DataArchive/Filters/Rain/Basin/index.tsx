@@ -30,8 +30,6 @@ const BasinSelector = (props: Props) => {
         value: { id } } = props;
 
     const [selectedBasin, setSelectedBasin] = useState(id);
-    console.log('seleced basin:', selectedBasin);
-    console.log('test', BasinKeySelector, BasinLabelSelector);
 
     const handleBasinChange = (basinName: string) => {
         setSelectedBasin(basinName);
