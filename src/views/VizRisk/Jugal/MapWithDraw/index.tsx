@@ -498,7 +498,7 @@ class FloodHistoryMap extends React.Component {
             );
             this.map.addSource('seicHazard', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('jugal_meteor_seismic_hazard_002')],
+                tiles: [getHillShadeLayer('jugal_meteor_seismic_hazard_10')],
                 tileSize: 256,
             });
 
