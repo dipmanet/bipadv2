@@ -408,7 +408,7 @@ class JugalMap extends React.Component<Props, State> {
                 this.jugalMap.setLayoutProperty('clusters-count-Health', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
                 this.jugalMap.moveLayer('clusters-count-Health');
-            } else if (layer === 'Bank') {
+            } else if (layer === 'Finance') {
                 this.jugalMap.setLayoutProperty('unclustered-point-Finance', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('clusters-count-Finance', 'visibility', 'visible');
                 this.jugalMap.setLayoutProperty('clusters-Finance', 'visibility', 'visible');

@@ -975,8 +975,19 @@ class FloodHistoryMap extends React.Component {
         return 'OSM Id missing';
     }
 
+    public getOSMidFromHouseId = (houseID) => {
+        const osmId = this.props.buildings
+            .filter(item => Number(item.houseOwnerId) === Number(houseID));
+        console.log('search returned', osmId);
+        if (osmId.length > 0) {
+            return osmId[0].osmId;
+        }
+        return null;
+    }
+
     public handleBuildingClick = () => {
-        const searchId = this.state.searchTerm;
+        const housId = this.state.searchTerm;
+        const searchId = this.getOSMidFromHouseId(housId);
         const coordinatesObj = this.props.buildinggeojson
             .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
         let cood = [];
@@ -1049,7 +1060,7 @@ class FloodHistoryMap extends React.Component {
                         type="text"
                         value={searchTerm}
                         onChange={this.handleSearchTerm}
-                        placeholder={'Enter OSM id'}
+                        placeholder={'Enter House Id'}
                     />
                 </div>
                 <div className={styles.sliderandLegendContainer}>

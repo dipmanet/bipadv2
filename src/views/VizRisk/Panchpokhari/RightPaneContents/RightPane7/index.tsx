@@ -264,15 +264,24 @@ class SlideFivePane extends React.Component<Props, State> {
                                 the household
                             </p>
                             <p>
-                                Physical Factors
+                                PHYSICAL FACTORS
                             </p>
+
                             <table className={styles.singularPaneTable}>
+                                <tr>
+                                    <td>
+                                        Foundation Type
+                                    </td>
+                                    <td>
+                                        {singularBuldingData.foundationType || '-'}
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         Roof Type
                                     </td>
                                     <td>
-                                        {singularBuldingData.foundationType || '-'}
+                                        {singularBuldingData.roofType || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -578,7 +587,17 @@ class SlideFivePane extends React.Component<Props, State> {
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                        <Label
+                                            value="No. of households"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"
@@ -610,7 +629,15 @@ class SlideFivePane extends React.Component<Props, State> {
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label value="No. of Households" offset={10} position="bottom" />
+                                        <Label
+                                            value="No. of households"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
                                     </XAxis>
                                     <YAxis
                                         type="category"
@@ -642,7 +669,15 @@ class SlideFivePane extends React.Component<Props, State> {
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label value="No. of Households" offset={10} position="bottom" />
+                                        <Label
+                                            value="No. of households"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
                                     </XAxis>
                                     <YAxis
                                         type="category"

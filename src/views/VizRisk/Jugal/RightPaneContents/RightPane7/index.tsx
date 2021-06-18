@@ -268,10 +268,18 @@ Vulnerability of People and Households
                             <table className={styles.singularPaneTable}>
                                 <tr>
                                     <td>
-                                        Roof Type
+                                        Foundation Type
                                     </td>
                                     <td>
                                         {singularBuldingData.foundationType || '-'}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Roof Type
+                                    </td>
+                                    <td>
+                                        {singularBuldingData.roofType || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -487,6 +495,7 @@ Vulnerability of People and Households
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+
                                     <YAxis
                                         type="category"
                                         dataKey="name"
@@ -577,7 +586,17 @@ Vulnerability of People and Households
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                        <Label
+                                            value="No. of households"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"
@@ -609,7 +628,15 @@ Vulnerability of People and Households
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label value="No. of Households" offset={10} position="bottom" />
+                                        <Label
+                                            value="No. of households"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
                                     </XAxis>
                                     <YAxis
                                         type="category"
@@ -641,7 +668,15 @@ Vulnerability of People and Households
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label value="No. of Households" offset={10} position="bottom" />
+                                        <Label
+                                            value="No. of households"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
                                     </XAxis>
                                     <YAxis
                                         type="category"

@@ -428,11 +428,11 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('clusters-count-Health', 'visibility', 'visible');
                 this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
                 this.map.moveLayer('clusters-count-Health');
-            } else if (layer === 'Bank') {
-                this.map.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Bank', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Bank');
+            } else if (layer === 'Finance') {
+                this.map.setLayoutProperty('unclustered-point-Finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-Finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-Finance', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-Finance');
             } else if (layer === 'Governance') {
                 this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
                 this.map.setLayoutProperty('clusters-count-Governance', 'visibility', 'visible');

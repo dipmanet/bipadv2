@@ -715,7 +715,6 @@ class Jugal extends React.Component {
                                 sesmicLayer={sesmicLayerVul}
                                 singularBuilding={this.state.singularBuilding}
                                 setSingularBuilding={this.setSingularBuilding}
-                                setScore={this.setScore}
                                 CIData={cI}
                                 buildings={vulData}
                                 buildinggeojson={buildings}
