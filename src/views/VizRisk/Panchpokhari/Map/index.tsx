@@ -123,7 +123,6 @@ class FloodHistoryMap extends React.Component {
                 closeOnClick: false,
                 className: 'popup',
             });
-            console.log('right element', this.props.rightElement);
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],
@@ -212,7 +211,6 @@ class FloodHistoryMap extends React.Component {
                     // here
                     categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
                         if (e) {
-                            console.log('efeatures', e.features);
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
@@ -270,7 +268,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Forest', 'visibility', 'none');
                 this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-                this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
 
             if (this.props.rightElement === 0) {
@@ -282,7 +279,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Forest', 'visibility', 'none');
                 this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-                this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
             if (this.props.rightElement === 2) {
                 this.map.setLayoutProperty('Snow', 'visibility', 'visible');
@@ -290,7 +286,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Forest', 'visibility', 'visible');
                 this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+                this.map.setLayoutProperty('Road', 'visibility', 'visible');
                 this.map.setLayoutProperty('National Park', 'visibility', 'none');
             }
             if (this.props.rightElement === 3) {
@@ -299,7 +295,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Forest', 'visibility', 'visible');
                 this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+                this.map.setLayoutProperty('Road', 'visibility', 'visible');
                 this.map.setLayoutProperty('National Park', 'visibility', 'none');
             }
             if (this.props.rightElement === 1) {
@@ -316,7 +312,6 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('Forest', 'visibility', 'none');
                 this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
                 this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-                this.map.setLayoutProperty('Roads', 'visibility', 'none');
             }
 
             mapping.forEach((attribute) => {
@@ -357,8 +352,6 @@ class FloodHistoryMap extends React.Component {
                         );
                     }
                     hoveredWardId = e.features[0].id;
-                    console.log('hoveredWardId,', hoveredWardId);
-                    console.log('e.features[0]', e.features[0]);
                     this.map.setFeatureState(
                         {
                             id: hoveredWardId,
@@ -542,7 +535,6 @@ class FloodHistoryMap extends React.Component {
                     });
                     categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
                         if (e) {
-                            console.log('efeatures', e.features);
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
@@ -677,7 +669,6 @@ class FloodHistoryMap extends React.Component {
     }
 
     public handleInputChange = (e) => {
-        console.log('e:', e.target.value);
     }
 
     public render() {

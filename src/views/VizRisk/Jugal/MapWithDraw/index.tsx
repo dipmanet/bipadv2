@@ -603,6 +603,12 @@ class FloodHistoryMap extends React.Component {
             }
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('Population Density', 'visibility', 'none');
+            const landCoverLayers = ['Rock-Stone', 'Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            landCoverLayers.map((l) => {
+                this.map.setLayoutProperty(l, 'visibility', 'visible');
+                return null;
+            });
             this.map.moveLayer('Buildings');
             this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
 

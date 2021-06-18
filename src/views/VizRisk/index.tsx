@@ -25,7 +25,6 @@ const VizRiskMainPage = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [title, setTitle] = useState('');
     const [mun, setMun] = useState('');
-    // console.log(props);
 
     const handleMenuIconClick = () => {
         setShowMenu(true);

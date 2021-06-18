@@ -474,6 +474,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
 
             this.map.setLayoutProperty('Snow', 'visibility', 'visible');
+            this.map.setLayoutProperty('Roads', 'visibility', 'visible');
             this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
             this.map.setLayoutProperty('Forest', 'visibility', 'visible');
             this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
@@ -546,9 +547,13 @@ class FloodHistoryMap extends React.Component {
             if (this.props.sesmicLayer === 'ses') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'visible');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
-            } else {
+            } else if (this.props.sesmicLayer === 'sesHide') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
+            } else if (this.props.sesmicLayer === 'sus') {
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
+                this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
+            } else if (this.props.sesmicLayer === 'susHide') {
+                this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
             }
         }
         if (this.props.buildings !== prevProps.buildings
@@ -978,7 +983,6 @@ class FloodHistoryMap extends React.Component {
     public getOSMidFromHouseId = (houseID) => {
         const osmId = this.props.buildings
             .filter(item => Number(item.houseOwnerId) === Number(houseID));
-        console.log('search returned', osmId);
         if (osmId.length > 0) {
             return osmId[0].osmId;
         }
@@ -994,7 +998,6 @@ class FloodHistoryMap extends React.Component {
         if (coordinatesObj.length > 0) {
             cood = coordinatesObj[0].geometry.coordinates;
             const singularBData = getSingularBuildingData(searchId, this.props.buildings);
-            console.log('singular data:', singularBData);
             if (Object.keys(singularBData).length > 0) {
                 this.props.setSingularBuilding(true, singularBData);
                 this.setState({ searchTerm: '' });

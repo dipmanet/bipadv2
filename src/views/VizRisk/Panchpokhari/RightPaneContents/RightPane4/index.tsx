@@ -25,7 +25,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        console.log('ci data:', this.props.CIData);
         const { CIData: criticalinfrastructures } = this.props;
         if (isDefined(criticalinfrastructures.features)) {
             const categoriesCriticalArr = [...new Set(criticalinfrastructures.features.map(

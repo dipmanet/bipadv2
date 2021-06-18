@@ -470,7 +470,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('Forest', 'visibility', 'visible');
             this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-            this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+            this.map.setLayoutProperty('Road', 'visibility', 'visible');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
@@ -591,7 +591,6 @@ class FloodHistoryMap extends React.Component {
                     // here
                     categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
                         if (e) {
-                            console.log('efeatures', e.features);
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];

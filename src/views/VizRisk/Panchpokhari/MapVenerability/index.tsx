@@ -472,6 +472,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            this.map.setLayoutProperty('Road', 'visibility', 'visible');
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],
@@ -537,7 +538,6 @@ class FloodHistoryMap extends React.Component {
 
     public componentDidUpdate(prevProps) {
         if (this.props.sesmicLayer !== prevProps.sesmicLayer) {
-            console.log('in child', this.props.sesmicLayer);
             if (this.props.sesmicLayer === 'ses') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'visible');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
@@ -643,7 +643,6 @@ class FloodHistoryMap extends React.Component {
     public getOSMidFromHouseId = (houseID) => {
         const osmId = this.props.buildings
             .filter(item => Number(item.houseOwnerId) === Number(houseID));
-        console.log('search returned', osmId);
         if (osmId.length > 0) {
             return osmId[0].osmId;
         }
@@ -659,7 +658,6 @@ class FloodHistoryMap extends React.Component {
         if (coordinatesObj.length > 0) {
             cood = coordinatesObj[0].geometry.coordinates;
             const singularBData = getSingularBuildingData(searchId, this.props.buildings);
-            console.log('singular data:', singularBData);
             if (Object.keys(singularBData).length > 0) {
                 this.props.setSingularBuilding(true, singularBData);
                 this.setState({ searchTerm: '' });

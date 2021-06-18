@@ -200,8 +200,6 @@ class JugalMap extends React.Component<Props, State> {
                     });
                     categoriesCritical.map(ci => this.jugalMap.on('mousemove', `unclustered-point-${ci}`, (e) => {
                         if (e) {
-                            console.log('efeatures', e.features);
-                            this.jugalMap.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
                             const ciName = e.features[0].properties.Name;
@@ -262,21 +260,21 @@ class JugalMap extends React.Component<Props, State> {
                 },
                 filter: getWardFilter(3, 24, 23007, wards),
             });
-            console.log('jugal map:', this.jugalMap);
             if (rightElement === 0) {
                 this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'visible');
                 this.jugalMap.moveLayer('Buildings');
                 this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'none');
             }
             if (rightElement === 1) {
-                console.log('rightElement', rightElement);
                 popDensityLayers.map((l) => {
                     this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
                     return null;
                 });
                 this.jugalMap.setLayoutProperty('National Park', 'visibility', 'visible');
+                this.jugalMap.setLayoutProperty('National Park Text', 'visibility', 'visible');
                 this.jugalMap.setPaintProperty('National Park', 'fill-color', 'rgb(247,229,184)');
                 this.jugalMap.moveLayer('National Park');
+                this.jugalMap.moveLayer('National Park Text');
 
 
                 this.jugalMap.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
@@ -393,7 +391,6 @@ class JugalMap extends React.Component<Props, State> {
         }
         if (this.props.criticalElement !== prevProps.criticalElement) {
             this.resetClusters();
-            console.log('CI categories', this.state.categoriesCritical);
 
             const layer = this.props.criticalElement;
             if (layer === 'all') {
@@ -533,8 +530,6 @@ class JugalMap extends React.Component<Props, State> {
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
                             const ciName = e.features[0].properties.Name;
-                            console.log('name', e.features[0].properties.Name);
-                            console.log('properties', e.features[0].properties);
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>

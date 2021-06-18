@@ -155,7 +155,6 @@ class Rajapur extends React.PureComponent<Props, State> {
     };
 
     public CustomTooltipRain = ({ active, payload, label }) => {
-        console.log('Payload', payload);
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>

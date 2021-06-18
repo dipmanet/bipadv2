@@ -104,7 +104,6 @@ export default class Rajapur extends React.Component {
 
     public handleMoveEnd = (value) => {
         this.setState({ disableNavBtns: false });
-        // console.log('moveend: ', value);
     }
 
     public handlePopulationChange =(showPopulation) => {

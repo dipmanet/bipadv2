@@ -44,7 +44,6 @@ export const getgeoJsonLayer = (layer: string) => [
 export const getbuildingVul = (d) => {
     if (d.length > 0) {
         const arr = d.filter(item => typeof item.vulnerabilityScore === 'number');
-        console.log('getting vul data', arr);
         if (arr.length > 0) {
             const low = arr.filter(v => v.vulnerabilityScore < 50).length;
             const medium = arr.filter(v => v
@@ -169,7 +168,6 @@ export const getaverageAnnualincomeChartData = (d) => {
         //     d.map(i => i.averageAnnualIncome).filter(f => f !== undefined),
         // )];
 
-        console.log('avg income chart data:', d);
         const arr = [
             {
                 name: '>500000',

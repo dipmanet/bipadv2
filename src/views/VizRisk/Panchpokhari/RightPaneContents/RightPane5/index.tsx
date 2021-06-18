@@ -82,7 +82,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             }
             return null;
         });
-        console.log('arr', arr);
         const nonZeroArr = arr.filter(n => n !== null);
 
         return (

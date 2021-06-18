@@ -147,7 +147,6 @@ class SlideFivePane extends React.Component<Props, State> {
     }
 
     public getVulnerabilityLvl = (v) => {
-        console.log('score:', v);
         if (typeof v === 'number') {
             if (v < 50) {
                 return 'Low';

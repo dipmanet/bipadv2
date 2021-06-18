@@ -269,9 +269,9 @@ class Jugal extends React.Component {
 
     public setVulData = (vulData) => {
         this.setState({ vulData });
-        console.log('data with vulnerability score:',
-            vulData.filter(item => item.vulnerabilityScore !== undefined)
-                .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
+        // console.log('data with vulnerability score:',
+        //     vulData.filter(item => item.vulnerabilityScore !== undefined)
+        //         .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
     }
 
     public setSingularBuilding = (singularBuilding, singularBuldingData) => {
@@ -284,7 +284,6 @@ class Jugal extends React.Component {
     };
 
     public handleSesmicLayerChangeVUL = (sesmicLayerVul) => {
-        console.log('sesmicLayerVul in parent:', sesmicLayerVul);
         this.setState({ sesmicLayerVul });
     }
 
@@ -350,7 +349,6 @@ class Jugal extends React.Component {
 
     public handleMoveEnd = (value) => {
         this.setState({ disableNavBtns: false });
-        // console.log('moveend: ', value);
     }
 
     public handlePopulationChange =(showPopulation) => {

@@ -93,29 +93,13 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            // const updateArea = (e) => {
-            //     console.log(e);
-            // };
-            // const draw = new MapboxDraw({
-            //     displayControlsDefault: false,
-            //     controls: {
-            //         polygon: true,
-            //         trash: true,
-            //     },
-            //     defaultMode: 'draw_polygon',
-            // });
-            // this.map.addControl(draw, 'top-right');
-
-            // this.map.on('draw.create', updateArea);
-            // this.map.on('draw.delete', updateArea);
-            // this.map.on('draw.update', updateArea);
             this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
             this.map.setLayoutProperty('Snow', 'visibility', 'visible');
             this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
             this.map.setLayoutProperty('Forest', 'visibility', 'visible');
             this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-            this.map.setLayoutProperty('Roads', 'visibility', 'visible');
+            this.map.setLayoutProperty('Road', 'visibility', 'visible');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',

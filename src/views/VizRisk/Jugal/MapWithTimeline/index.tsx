@@ -44,6 +44,9 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
+const landCoverLayers = ['Rock-Stone', 'Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
+
+
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
         super(props);
@@ -89,17 +92,12 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        this.map.on('idle', () => {
-            const { rightElement, enableNavBtns } = this.props;
-            if (rightElement === 0) {
-                enableNavBtns('Right');
-            } else if (rightElement === 5) {
-                enableNavBtns('Left');
-            } else {
-                enableNavBtns('both');
-            }
-        });
         this.map.on('style.load', () => {
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            landCoverLayers.map((l) => {
+                this.map.setLayoutProperty(l, 'visibility', 'visible');
+                return null;
+            });
             this.map.addSource('jugalHillshade', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],

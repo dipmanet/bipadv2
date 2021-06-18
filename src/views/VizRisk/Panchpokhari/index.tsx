@@ -354,7 +354,6 @@ class Jugal extends React.Component {
 
     public handleMoveEnd = (value) => {
         this.setState({ disableNavBtns: false });
-        // console.log('moveend: ', value);
     }
 
     public handlePopulationChange =(showPopulation) => {
@@ -442,7 +441,6 @@ class Jugal extends React.Component {
             sesmicLayerVul,
         } = this.state;
 
-        console.log('singular b data in render: ', singularBuldingData);
         const {
             incidentList,
             regions,
