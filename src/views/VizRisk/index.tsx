@@ -137,7 +137,7 @@ const VizRiskMainPage = () => {
                                     <h1
                                         className={styles.menuItems}
                                     >
-                                            Panchpokhari Thangpal Municipality
+                                            Panchpokhari Thangpal Rural Municipality
                                     </h1>
 
                                 </Button>
@@ -151,7 +151,7 @@ const VizRiskMainPage = () => {
                                     <h1
                                         className={styles.menuItems}
                                     >
-                                            Jugal Municipality
+                                            Jugal Rural Municipality
                                     </h1>
 
                                 </Button>
