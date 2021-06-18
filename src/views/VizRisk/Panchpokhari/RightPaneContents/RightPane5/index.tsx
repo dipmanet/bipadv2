@@ -73,10 +73,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 )
                 .length,
         }));
-
         const arr = hazardTitle.map((item) => {
             if (chartData.filter(n => n.name === item).length > 0) {
-                if (chartData.filter(n => n.name === item).Total !== 0) {
+                console.log('type:', typeof chartData.filter(n => n.name === item)[0].Total);
+                if (chartData.filter(n => n.name === item)[0].Total !== 0) {
                     return item;
                 }
             }
@@ -101,20 +101,26 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                     {nonZeroArr.length > 0 ? ' of ' : ''}
                     {nonZeroArr.map((item, i) => {
                         if (
-                            i === hazardTitle.length - 1
+                            i === nonZeroArr.length - 1
                             && i === 0
                             && chartData.filter(n => n.name === item)[0].Total !== 0) {
                             return ` ${item} `;
                         }
                         if (
-                            i !== hazardTitle.length - 1
+                            i !== nonZeroArr.length - 1
+                            && i === 0
                             && chartData.filter(n => n.name === item)[0].Total !== 0) {
-                            return `, ${item} `;
+                            return ` ${item} `;
                         }
                         if (
-                            i === hazardTitle.length - 1
+                            i === nonZeroArr.length - 1
                             && chartData.filter(n => n.name === item)[0].Total !== 0) {
                             return ` and ${item} `;
+                        }
+                        if (
+                            i !== nonZeroArr.length - 1
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                            return `, ${item} `;
                         }
 
 
