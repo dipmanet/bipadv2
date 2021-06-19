@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
@@ -9,7 +10,7 @@ import { mapSources } from '#constants';
 import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
 import styles from './styles.scss';
 import '@watergis/mapbox-gl-legend/css/styles.css';
-import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Panchpokhari/utils';
+import { getgeoJsonLayer, getGeoJSONPH } from '#views/VizRisk/Panchpokhari/utils';
 
 import {
     // provincesSelector,
@@ -478,6 +479,59 @@ class FloodHistoryMap extends React.Component {
                 ))];
                 // eslint-disable-next-line react/no-did-update-set-state
                 this.setState({ categoriesCritical });
+
+                // this.map.addSource('education', {
+                //     type: 'geojson',
+                //     data: getgeoJsonLayer('Panchpokhari_CI_Education'),
+                //     cluster: true,
+                //     clusterRadius: 50,
+                // });
+                // this.map.addLayer({
+                //     id: 'clusters-Education',
+                //     type: 'circle',
+                //     source: 'education',
+                //     filter: ['has', 'point_count'],
+                //     paint: {
+                //         'circle-color': [
+                //             'step',
+                //             ['get', 'point_count'],
+                //             '#a4ac5e',
+                //             100,
+                //             '#a4ac5e',
+                //         ],
+                //         'circle-radius': [
+                //             'step',
+                //             ['get', 'point_count'],
+                //             20,
+                //             100,
+                //             30,
+                //             750,
+                //             40,
+                //         ],
+                //     },
+                // });
+                // this.map.addLayer({
+                //     id: 'unclustered-point-Education',
+                //     type: 'symbol',
+                //     source: 'education',
+                //     filter: ['!', ['has', 'point_count']],
+                //     layout: {
+                //         'icon-image': ['downcase', ['get', 'Type']],
+                //         'icon-size': 0.3,
+                //         'icon-anchor': 'bottom',
+                //     },
+                // });
+
+                // this.map.addLayer({
+                //     id: 'clusters-count-Education',
+                //     type: 'symbol',
+                //     source: 'education',
+                //     layout: {
+                //         'text-field': '{point_count_abbreviated}',
+                //         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                //         'text-size': 12,
+                //     },
+                // });
 
                 categoriesCritical.map((layer) => {
                     this.map.addSource(layer, {

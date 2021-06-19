@@ -158,6 +158,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ params, response }) => {
             const { results: vulData = [] } = response;
             params.setVulData(vulData);
+            params.setPending(false);
         },
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
@@ -196,7 +197,7 @@ class Jugal extends React.Component {
             singularBuldingData: [],
             resetDrawData: false,
             sesmicLayerVul: '',
-
+            pending: true,
         };
 
         const { requests:
@@ -220,6 +221,7 @@ class Jugal extends React.Component {
         });
         vulnerabilityData.setDefaultParams({
             setVulData: this.setVulData,
+            setPending: this.setPending,
         });
     }
 
@@ -229,6 +231,10 @@ class Jugal extends React.Component {
             return date.split('-')[0];
         }
         return 0;
+    }
+
+    public setPending = (pending) => {
+        this.setState({ pending });
     }
 
     public setCI = (cI) => {
@@ -434,6 +440,7 @@ class Jugal extends React.Component {
             singularBuldingData,
             resetDrawData,
             sesmicLayerVul,
+            pending,
         } = this.state;
 
         const {
@@ -482,6 +489,7 @@ class Jugal extends React.Component {
                                 disableNavRightBtn={disableNavRightBtn}
                                 pagenumber={rightElement + 1}
                                 totalPages={rightelements.length}
+                                pending={pending}
                             />
                         </>
                     )

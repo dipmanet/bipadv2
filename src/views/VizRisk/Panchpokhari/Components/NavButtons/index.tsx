@@ -21,6 +21,7 @@ const NavButtons = (props: Props) => {
         disableNavRightBtn,
         pagenumber,
         totalPages,
+        pending,
     } = props;
 
     return (
@@ -47,8 +48,9 @@ const NavButtons = (props: Props) => {
                 <button
                     type="button"
                     onClick={handleNext}
-                    className={pagenumber === totalPages ? styles.btnDisable : styles.navbutton}
-                    disabled={pagenumber === totalPages}
+                    className={pagenumber === totalPages || pending === true
+                        ? styles.btnDisable : styles.navbutton}
+                    disabled={pagenumber === totalPages || pending === true}
                 >
                   Next
                 </button>

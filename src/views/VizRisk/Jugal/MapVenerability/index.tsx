@@ -5,6 +5,7 @@ import { isDefined, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import { VectorTile } from '@mapbox/vector-tile';
+import Loader from 'react-loader';
 import * as turf from '@turf/turf';
 import Pbf from 'pbf';
 import Zlib from 'zlib';
@@ -78,6 +79,7 @@ class FloodHistoryMap extends React.Component {
             osmID: 0,
             points: [],
             buildingpoints: [],
+            pending: false,
         };
     }
 
@@ -403,6 +405,7 @@ class FloodHistoryMap extends React.Component {
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
                 const { points, buildingpoints } = this.state;
+                // this.setPending(true);
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
                 const searchWithin = turf.multiPolygon([dataArr], {});
@@ -444,7 +447,7 @@ class FloodHistoryMap extends React.Component {
                     bPoints: bPoints || [],
                 });
                 handleDrawSelectedData(result);
-
+                this.setPending(false);
                 this.map.fitBounds(bbox, {
                     padding: 20,
                 });
@@ -855,6 +858,7 @@ class FloodHistoryMap extends React.Component {
                 const updateArea = (e) => {
                     const { handleDrawSelectedData } = this.props;
                     const { points, buildingpoints } = this.state;
+                    this.setPending(true);
                     const datad = draw.getAll();
                     const dataArr = datad.features[0].geometry.coordinates;
                     const searchWithin = turf.multiPolygon([dataArr], {});
@@ -902,7 +906,7 @@ class FloodHistoryMap extends React.Component {
                         farmlands: farmlands.length,
                     });
                     handleDrawSelectedData(result);
-
+                    this.setPending(false);
                     this.map.fitBounds(bbox, {
                         padding: 20,
                     });
@@ -940,6 +944,10 @@ class FloodHistoryMap extends React.Component {
         this.map.fitBounds(bbox, {
             padding: 20,
         });
+    }
+
+    public setPending = (pending) => {
+        this.setState({ pending });
     }
 
     public handleSearchTerm = (e) => {
@@ -1053,6 +1061,14 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
+                {
+                    this.state.pending
+                    && (
+                        <div className={styles.loaderClass}>
+                            <Loader color="#fff" />
+                        </div>
+                    )}
+
                 <div className={styles.searchBox}>
                     <button
                         type="button"
