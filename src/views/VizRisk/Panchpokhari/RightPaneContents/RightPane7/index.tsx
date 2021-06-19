@@ -240,13 +240,13 @@ class SlideFivePane extends React.Component<Props, State> {
                     </button>
 
                 </h1>
-                { singularBuilding
+                { singularBuilding && singularBuldingData
                     ? (
                         <>
                             <p>
                             House ID No:
                                 {' '}
-                                {isDefined(singularBuldingData.houseOwnerId)
+                                {singularBuldingData && isDefined(singularBuldingData.houseOwnerId)
                                     ? singularBuldingData.houseOwnerId
                                     : '-'
                                 }

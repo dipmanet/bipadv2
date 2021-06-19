@@ -239,13 +239,13 @@ Vulnerability of People and Households
                     </button>
 
                 </h1>
-                { singularBuilding
+                { singularBuilding && singularBuldingData
                     ? (
                         <>
                             <p>
                             House ID No:
                                 {' '}
-                                {isDefined(singularBuldingData.houseOwnerId)
+                                {singularBuldingData && isDefined(singularBuldingData.houseOwnerId)
                                     ? singularBuldingData.houseOwnerId
                                     : '-'
                                 }
