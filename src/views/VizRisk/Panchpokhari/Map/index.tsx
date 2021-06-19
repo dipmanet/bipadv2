@@ -441,11 +441,11 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('clusters-count-Education', 'visibility', 'visible');
                 this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
                 this.map.moveLayer('clusters-count-Education');
-            } else if (layer === 'Culture') {
-                this.map.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Culture', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Culture');
+            } else if (layer === 'Cultural') {
+                this.map.setLayoutProperty('unclustered-point-Cultural', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-Cultural', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-Cultural', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-Cultural');
             } else if (layer === 'Tourism') {
                 this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
                 this.map.setLayoutProperty('clusters-count-Tourism', 'visibility', 'visible');
