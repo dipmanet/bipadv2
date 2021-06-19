@@ -200,7 +200,7 @@ class SlideFivePane extends React.Component<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                { singularBuilding
+                {/* { singularBuilding
                     && (
                         <div className={styles.backBtnContainer}>
                             <button
@@ -212,7 +212,7 @@ class SlideFivePane extends React.Component<Props, State> {
                             </button>
                         </div>
                     )
-                }
+                } */}
 
                 <h1>
             Vulnerability of People and Households
