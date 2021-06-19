@@ -464,7 +464,7 @@ class FloodHistoryMap extends React.Component {
             this.map.on('click', 'Buildings', (e) => {
                 this.setState({ osmID: e.features[0].properties.osm_id });
                 this.setState({ searchTerm: e.features[0].properties.osm_id });
-                this.handleBuildingClick();
+                this.handleBuildingClick(true);
                 // const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
                 // this.map.setFilter('Buildings', filter);
                 // here
@@ -989,9 +989,14 @@ class FloodHistoryMap extends React.Component {
         return null;
     }
 
-    public handleBuildingClick = () => {
-        const housId = this.state.searchTerm;
-        const searchId = this.getOSMidFromHouseId(housId);
+    public handleBuildingClick = (clicked) => {
+        let searchId;
+        if (!clicked) {
+            const housId = this.state.searchTerm;
+            searchId = this.getOSMidFromHouseId(housId);
+        } else {
+            searchId = this.state.searchTerm;
+        }
         const coordinatesObj = this.props.buildinggeojson
             .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
         let cood = [];
@@ -1051,7 +1056,7 @@ class FloodHistoryMap extends React.Component {
                 <div className={styles.searchBox}>
                     <button
                         type="button"
-                        onClick={this.handleBuildingClick}
+                        onClick={() => this.handleBuildingClick(false)}
                         className={styles.searchbutton}
                     >
                         <Icon
