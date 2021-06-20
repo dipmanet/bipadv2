@@ -149,9 +149,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         if (typeof v === 'number') {
             if (v < 50) {
                 return 'Low';
-            } if (v >= 50 && v < 60) {
+            } if (v >= 50 && v <= 60) {
                 return 'Medium';
-            } if (v >= 60) {
+            } if (v > 60) {
                 return 'High';
             }
         }
@@ -214,7 +214,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 } */}
 
                 <h1>
-Vulnerability of People and Households
+                    Vulnerability of People and Households
                     <button
                         type="button"
                         onClick={e => e.preventDefault()}

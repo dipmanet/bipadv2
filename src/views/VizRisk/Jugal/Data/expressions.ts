@@ -13,7 +13,7 @@ export default {
     buildingColor: [
         'case',
         ['all',
-            ['>', ['get', 'vul'], 50],
+            ['>=', ['get', 'vul'], 50],
             ['<=', ['get', 'vul'], 60],
         ],
         '#c1805a',
@@ -22,7 +22,7 @@ export default {
         ],
         '#af4042',
         ['all',
-            ['<=', ['get', 'vul'], 50],
+            ['<', ['get', 'vul'], 50],
         ],
         '#afaf40',
         '#d5d3d3'],

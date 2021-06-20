@@ -278,6 +278,8 @@ class Jugal extends React.Component {
         // console.log('data with vulnerability score:',
         //     vulData.filter(item => item.vulnerabilityScore !== undefined)
         //         .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
+        console.log('total data from API',
+            vulData.length);
     }
 
     public setSingularBuilding = (singularBuilding, singularBuldingData) => {

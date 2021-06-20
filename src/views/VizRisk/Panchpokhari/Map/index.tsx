@@ -215,7 +215,7 @@ class FloodHistoryMap extends React.Component {
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.title;
+                            const ciName = e.features[0].properties.Title;
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>
@@ -592,6 +592,7 @@ class FloodHistoryMap extends React.Component {
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
+                            console.log('properties:', e.features[0].properties);
                             const ciName = e.features[0].properties.title;
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
