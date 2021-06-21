@@ -464,6 +464,7 @@ class FloodHistoryMap extends React.Component {
         }
 
         this.map.on('style.load', () => {
+            console.log('this map:', this.map);
             this.map.on('click', 'Buildings', (e) => {
                 this.setState({ osmID: e.features[0].properties.osm_id });
                 this.setState({ searchTerm: e.features[0].properties.osm_id });
@@ -473,9 +474,22 @@ class FloodHistoryMap extends React.Component {
                 // here
             });
             // this.map.setLayoutProperty('Buildings2D', 'visibility', 'visible');
-
+            buildings.map((row) => {
+                // if (isDefined(row.vulnerabilityScore)) {
+                this.map.setFeatureState(
+                    {
+                        id: row.osmId || 0,
+                        source: 'composite',
+                        sourceLayer: 'jugalBuildings',
+                    },
+                    {
+                        vuln: row.vulnerabilityScore || -1,
+                    },
+                );
+                // }
+                return null;
+            });
             this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
-
             this.map.setLayoutProperty('Snow', 'visibility', 'visible');
             this.map.setLayoutProperty('Roads', 'visibility', 'visible');
             this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
@@ -1005,29 +1019,33 @@ class FloodHistoryMap extends React.Component {
         } else {
             searchId = this.state.searchTerm;
         }
-        const coordinatesObj = this.props.buildinggeojson
-            .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
-        let cood = [];
-        if (coordinatesObj.length > 0) {
-            cood = coordinatesObj[0].geometry.coordinates;
-            const singularBData = getSingularBuildingData(searchId, this.props.buildings);
-            if (Object.keys(singularBData).length > 0) {
-                this.props.setSingularBuilding(true, singularBData);
-                this.setState({ searchTerm: '' });
-                this.map.easeTo({
-                    zoom: 19,
-                    duration: 500,
-                    center: cood,
-                });
-                this.showPopupOnBldgs(cood, this.getHouseId(searchId));
+        if (searchId) {
+            const coordinatesObj = this.props.buildinggeojson
+                .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
+            let cood = [];
+            if (coordinatesObj.length > 0) {
+                cood = coordinatesObj[0].geometry.coordinates;
+                const singularBData = getSingularBuildingData(searchId, this.props.buildings);
+                if (Object.keys(singularBData).length > 0) {
+                    this.props.setSingularBuilding(true, singularBData);
+                    this.setState({ searchTerm: '' });
+                    this.map.easeTo({
+                        zoom: 19,
+                        duration: 500,
+                        center: cood,
+                    });
+                    this.showPopupOnBldgs(cood, this.getHouseId(searchId));
+                } else {
+                    this.showPopupOnBldgs(cood, 'No data available on this building');
+                    this.setState({ searchTerm: '' });
+                    this.props.setSingularBuilding(false, {});
+                }
             } else {
-                this.showPopupOnBldgs(cood, 'No data available on this building');
                 this.setState({ searchTerm: '' });
-                this.props.setSingularBuilding(false, {});
+                alert('No data available');
             }
         } else {
-            this.setState({ searchTerm: '' });
-            alert(`No data available for Building id: ${this.state.searchTerm}`);
+            alert('No data available');
         }
     };
 

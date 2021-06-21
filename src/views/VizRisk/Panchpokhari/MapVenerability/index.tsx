@@ -455,6 +455,22 @@ class FloodHistoryMap extends React.Component {
 
         this.map.on('style.load', () => {
             // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#ff6595');
+            // console.log('map:', this.map);
+            buildings.map((row) => {
+                // if (isDefined(row.vulnerabilityScore)) {
+                this.map.setFeatureState(
+                    {
+                        id: row.osmId || 0,
+                        source: 'composite',
+                        sourceLayer: 'ppkrBuildingsWithIDs',
+                    },
+                    {
+                        vuln: row.vulnerabilityScore || -1,
+                    },
+                );
+                // }
+                return null;
+            });
             this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
             this.map.on('click', 'Buildings', (e) => {
                 this.setState({ osmID: e.features[0].properties.osm_id });
@@ -643,6 +659,7 @@ class FloodHistoryMap extends React.Component {
     public getOSMidFromHouseId = (houseID) => {
         const osmId = this.props.buildings
             .filter(item => Number(item.houseOwnerId) === Number(houseID));
+
         if (osmId.length > 0) {
             return osmId[0].osmId;
         }
@@ -657,32 +674,36 @@ class FloodHistoryMap extends React.Component {
         } else {
             searchId = this.state.searchTerm;
         }
-        const coordinatesObj = this.props.buildinggeojson
-            .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
-        let cood = [];
-        if (coordinatesObj.length > 0) {
-            cood = coordinatesObj[0].geometry.coordinates;
-            const singularBData = getSingularBuildingData(searchId, this.props.buildings);
-            console.log('singularBData', singularBData);
-            if (Object.keys(singularBData).length > 0) {
-                this.props.setSingularBuilding(true, singularBData);
-                this.setState({ searchTerm: '' });
-                this.map.easeTo({
-                    zoom: 19,
-                    duration: 500,
-                    center: cood,
-                });
-                // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
-                this.showPopupOnBldgs(cood, this.getHouseId(searchId));
+        if (searchId) {
+            const coordinatesObj = this.props.buildinggeojson
+                .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
+            let cood = [];
+            if (coordinatesObj.length > 0) {
+                cood = coordinatesObj[0].geometry.coordinates;
+                const singularBData = getSingularBuildingData(searchId, this.props.buildings);
+                console.log('singularBData', singularBData);
+                if (Object.keys(singularBData).length > 0) {
+                    this.props.setSingularBuilding(true, singularBData);
+                    this.setState({ searchTerm: '' });
+                    this.map.easeTo({
+                        zoom: 19,
+                        duration: 500,
+                        center: cood,
+                    });
+                    // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
+                    this.showPopupOnBldgs(cood, this.getHouseId(searchId));
+                } else {
+                    this.showPopupOnBldgs(cood, 'No data available on this building');
+                    this.setState({ searchTerm: '' });
+                    this.props.setSingularBuilding(false, {});
+                }
             } else {
                 this.showPopupOnBldgs(cood, 'No data available on this building');
                 this.setState({ searchTerm: '' });
                 this.props.setSingularBuilding(false, {});
             }
         } else {
-            this.showPopupOnBldgs(cood, 'No data available on this building');
-            this.setState({ searchTerm: '' });
-            this.props.setSingularBuilding(false, {});
+            alert('No data available');
         }
     };
 

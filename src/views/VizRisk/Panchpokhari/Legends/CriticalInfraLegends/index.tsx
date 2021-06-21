@@ -173,7 +173,7 @@ const LandCoverLegends = (props) => {
                                 />
 
 
-                Show All
+                              Show All
                             </button>
 
                         </div>
@@ -195,7 +195,21 @@ const LandCoverLegends = (props) => {
                                  Educational Institution
                             </button>
                         </div>
-
+                        <div className={styles.infraIconContainer}>
+                            <button
+                                type="button"
+                                className={showFinance
+                                    ? styles.criticalButtonSelected
+                                    : styles.criticalButton}
+                                onClick={() => handleCriticalclick('Finance')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.svgIcon}
+                                    src={Bank}
+                                />
+                                Finance
+                            </button>
+                        </div>
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
@@ -212,6 +226,24 @@ const LandCoverLegends = (props) => {
                              Cultural Site
                             </button>
 
+                        </div>
+                        <div className={styles.infraIconContainer}>
+                            <button
+                                type="button"
+                                className={showGovernemnt
+                                    ? styles.criticalButtonSelected
+                                    : styles.criticalButton}
+                                onClick={() => handleCriticalclick('Governance')}
+                            >
+
+                                <ScalableVectorGraphics
+                                    className={styles.svgIcon}
+                                    src={Governance}
+                                />
+
+
+                                 Government Buildings
+                            </button>
                         </div>
 
                         <div className={styles.infraIconContainer}>
@@ -232,26 +264,22 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-
                         <div className={styles.infraIconContainer}>
-
                             <button
                                 type="button"
-                                className={showFinance
+                                className={showTourism
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Finance')}
+                                onClick={() => handleCriticalclick('Tourism')}
                             >
+
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Bank}
+                                    src={Tourism}
                                 />
-
-                                 Finance
+                                Hotels/Restaurants
                             </button>
-
                         </div>
-
                     </div>
 
 
