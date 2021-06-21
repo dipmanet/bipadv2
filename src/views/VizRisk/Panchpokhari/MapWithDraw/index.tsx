@@ -587,7 +587,7 @@ class FloodHistoryMap extends React.Component {
                             'text-size': 12,
                         },
                     });
-
+                    this.map.moveLayer('Buildings');
                     this.map.moveLayer(`unclustered-point-${layer}`);
                     this.map.moveLayer(`clusters-${layer}`);
                     this.map.moveLayer(`clusters-count-${layer}`);
@@ -597,7 +597,7 @@ class FloodHistoryMap extends React.Component {
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.Name;
+                            const ciName = e.features[0].properties.Title;
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>
@@ -617,7 +617,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('Population Density', 'visibility', 'none');
             this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
-            this.map.moveLayer('Buildings');
+
 
             // this.map.on('draw.delete', resetArea);
             // this.map.on('draw.update', updateArea);
