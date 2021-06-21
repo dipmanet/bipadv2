@@ -137,6 +137,7 @@ class RainFilters extends React.PureComponent<Props, State> {
         error: '',
     };
 
+
     public componentDidMount() {
         const { rainFilters: faramValues } = this.props;
         this.setState({ faramValues });
@@ -149,7 +150,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="basin"
                     wardsHidden
-                    basins={this.props.basinStations}
+                    basins={this.props.rainFilters.basin}
                     // autoFocus
                 />
             ),
@@ -312,7 +313,6 @@ class RainFilters extends React.PureComponent<Props, State> {
         );
 
         const { activeView } = this.state;
-
 
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView

@@ -48,6 +48,7 @@ import Loading from '#components/Loading';
 
 import styles from './styles.scss';
 import style from '#mapStyles/rasterStyle';
+import { getCategoryForContinuousColorScheme } from '#rsu/ColorScheme';
 
 interface PropsFromDispatch {
     setDataArchiveRainList: typeof setDataArchiveRainListAction;
@@ -109,7 +110,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         onSuccess: ({ params, response, props: { setDataArchiveRainList } }) => {
             interface Response { results: PageType.DataArchiveRain[] }
             const { results: dataArchiveRainList = [] } = response as Response;
-            if (typeof params.basinFilter !== 'object') {
+
+            if (params.basinFilter !== undefined) {
                 setDataArchiveRainList({ dataArchiveRainList:
                     dataArchiveRainList.filter(item => item.basin === params.basinFilter) });
             } else {
@@ -130,10 +132,20 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         query: () => ({
             fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point', 'status', 'description'],
         }),
-        onSuccess: ({ response, props: { setDataArchiveRainStations } }) => {
+        onSuccess: ({ params, response, props: { setDataArchiveRainStations } }) => {
             interface Response { results: RainStation[] }
+
             const { results: dataArchiveRainStations = [] } = response as Response;
-            setDataArchiveRainStations({ dataArchiveRainStations });
+
+            if (params.basinFilter !== undefined) {
+                setDataArchiveRainStations({ dataArchiveRainStations:
+                    dataArchiveRainStations.filter(item => item.basin === params.basinFilter) });
+            } else {
+                setDataArchiveRainStations({ dataArchiveRainStations });
+            }
+        },
+        onPropsChanged: {
+            rainFilters: true,
         },
         onMount: true,
     },
@@ -151,9 +163,12 @@ const Rain = (props: Props) => {
 
 
     requests.dataArchiveRainRequest.setDefaultParams({
-        basinFilter: rainFilters.basin,
+        basinFilter: (rainFilters.basin) ? rainFilters.basin.title : '',
     });
 
+    requests.rainStationRequest.setDefaultParams({
+        basinFilter: (rainFilters.basin) ? rainFilters.basin.title : '',
+    });
 
     useEffect(() => {
         if (setData) {
@@ -163,9 +178,15 @@ const Rain = (props: Props) => {
 
     useEffect(() => {
         if (rainFilters.basin) {
-            if (rainList && rainList.length > 0) {
+            if (props.rainStations && props.rainStations.length > 0) {
+                props.setDataArchiveRainStations({ dataArchiveRainStations:
+                    props.rainStations.filter(item => item.basin === rainFilters.basin.title) });
+            }
+        }
+        if (rainFilters.basin) {
+            if (props.rainList && props.rainList.length > 0) {
                 props.setDataArchiveRainList({ dataArchiveRainList:
-                    rainList.filter(item => item.basin === rainFilters.basin) });
+                    props.rainList.filter(item => item.basin === rainFilters.basin.title) });
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,7 +251,7 @@ const Rain = (props: Props) => {
                     {!pending && <Note />}
                 </div>
                 <div className={styles.basin}>
-                    {typeof rainFilters.basin === 'string' ? `Selected basin: ${rainFilters.basin}` : ''}
+                    { (rainFilters.basin.title) ? `Selected basin: ${rainFilters.basin.title}` : ''}
                 </div>
             </div>
             {/* {rainList && rainList.length > 0 && rainList.map(item => item.id)} */}

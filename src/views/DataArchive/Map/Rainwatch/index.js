@@ -125,21 +125,13 @@ class RainMap extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        // eslint-disable-next-line max-len
-        if (this.props.rainFilters && this.props.rainFilters.basin !== prevProps.rainFilters.basin) {
-            if (typeof this.props.rainFilters.basin === 'object') {
-                // eslint-disable-next-line react/no-did-update-set-state
-                this.setState({ rasterLayers: [] });
-            }
-        }
-
-        if (prevProps.rainList !== this.props.rainList) {
+        if (prevProps.rainStation !== this.props.rainStation) {
             // eslint-disable-next-line prefer-const
             let basinCoordinates = [];
 
-            if (this.props.rainList.length > 0) {
+            if (this.props.rainFilters.basin != null) {
                 // eslint-disable-next-line max-len
-                const mydata = this.props.rainList.filter(item => item.basin === this.props.rainFilters.basin);
+                const mydata = this.props.rainStation.filter(item => item.basin === this.props.rainFilters.basin.title);
                 if (mydata.length > 0) {
                     basinCoordinates = mydata[0].point.coordinates;
                     const tile = [
@@ -159,8 +151,9 @@ class RainMap extends React.PureComponent {
                         `&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
                     ].join('');
 
-                    const ourAarray = [{ key: `basin-${this.props.rainFilters.basin}`, layername: `layer-basin-${this.props.rainFilters.basin}`, tiles: tile }];
-                    if (typeof this.props.rainFilters.basin === 'object') {
+                    const ourAarray = [{ key: `basin-${this.props.rainFilters.basin.title}`, layername: `layer-basin-${this.props.rainFilters.basin.title}`, tiles: tile }];
+                    // eslint-disable-next-line max-len
+                    if (!(this.props.rainFilters.basin && Object.keys(this.props.rainFilters.basin).length)) {
                         // eslint-disable-next-line react/no-did-update-set-state
                         this.setState({ rasterLayers: [] });
                     } else {
@@ -235,19 +228,19 @@ class RainMap extends React.PureComponent {
     rainTooltipRenderer = ({ title, basin }) => (
         <div className={styles.mainWrapper}>
             <div className={styles.tooltip}>
-                <div className={styles.header}>
+                {/* <div className={styles.header}>
                     <h3>{`Heavy Rainfall at ${title || 'N/A'}`}</h3>
+                </div> */}
+                <div className={styles.description}>
+                    <div className={styles.key}>STATION NAME:</div>
+                    <div className={styles.value}>{title || 'N/A'}</div>
                 </div>
-
                 <div className={styles.description}>
                     <div className={styles.key}>BASIN:</div>
                     <div className={styles.value}>{basin || 'N/A'}</div>
                 </div>
 
-                <div className={styles.description}>
-                    <div className={styles.key}>STATION NAME:</div>
-                    <div className={styles.value}>{title || 'N/A'}</div>
-                </div>
+
             </div>
             <div className={styles.line} />
             <div
@@ -305,7 +298,7 @@ class RainMap extends React.PureComponent {
 
         const { showModal } = this.state;
 
-        const bounds = zoomToData(data);
+        // const bounds = zoomToData(data);
 
         const { title: stationName, stationId, geometry } = tooltipParams || {};
         const region = { adminLevel: 3, geoarea: municipality || undefined };
@@ -317,12 +310,12 @@ class RainMap extends React.PureComponent {
                     boundsPadding={boundsPadding}
                     region={municipality ? region : undefined}
                 />
-                {bounds && typeof this.props.rainFilters.basin !== 'object' && (
+                {/* {bounds && typeof this.props.rainFilters.basin !== 'object' && (
                     <MapBounds
                         bounds={bounds}
                         padding={boundsPadding}
                     />
-                )}
+                )} */}
                 {coordinates && (
                     <MapTooltip
                         coordinates={coordinates}
