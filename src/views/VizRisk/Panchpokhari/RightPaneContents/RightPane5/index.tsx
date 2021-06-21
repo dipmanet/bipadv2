@@ -75,7 +75,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         }));
         const arr = hazardTitle.map((item) => {
             if (chartData.filter(n => n.name === item).length > 0) {
-                console.log('type:', typeof chartData.filter(n => n.name === item)[0].Total);
                 if (chartData.filter(n => n.name === item)[0].Total !== 0) {
                     return item;
                 }
@@ -126,6 +125,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
 
                         return '';
                     })}
+                    {' '}
                have been reported in Panch Pokhari Thangpal Rural Municipality.
                 These incidents have caused
                     {' '}
