@@ -597,7 +597,7 @@ class FloodHistoryMap extends React.Component {
                             this.map.getCanvas().style.cursor = 'pointer';
                             const { lngLat } = e;
                             const coordinates = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.title;
+                            const ciName = e.features[0].properties.Name;
                             popup.setLngLat(coordinates).setHTML(
                                 `<div style="padding: 5px;border-radius: 5px">
                             <p>${ciName}</p>
