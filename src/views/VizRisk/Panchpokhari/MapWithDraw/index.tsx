@@ -588,7 +588,10 @@ class FloodHistoryMap extends React.Component {
                         },
                     });
 
-                    // here
+                    this.map.moveLayer(`unclustered-point-${layer}`);
+                    this.map.moveLayer(`clusters-${layer}`);
+                    this.map.moveLayer(`clusters-count-${layer}`);
+
                     categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
                         if (e) {
                             this.map.getCanvas().style.cursor = 'pointer';
