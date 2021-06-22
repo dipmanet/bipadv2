@@ -729,8 +729,9 @@ class Jugal extends React.Component {
                             setSingularBuilding={this.setSingularBuilding}
                             setScore={this.setScore}
                             CIData={cI}
-                            buildings={vulData}
-                            buildinggeojson={buildings}
+                            buildings={buildings}
+                            // buildings={vulData}
+                            // buildinggeojson={buildings}
                             handleDrawResetData={this.handleDrawResetData}
 
                         />

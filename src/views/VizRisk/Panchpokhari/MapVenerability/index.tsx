@@ -111,9 +111,11 @@ class FloodHistoryMap extends React.Component {
             const points = turf.points(arr);
             this.setState({ points });
         }
-        if (buildings.length > 0) {
-            const buildingsD = buildings.filter(item => item.point !== undefined)
-                .map(p => p.point.coordinates);
+        if (isDefined(buildings.features)) {
+            const buildingsD = buildings.features.map(item => [
+                Number(item.geometry.coordinates[0].toFixed(7)),
+                Number(item.geometry.coordinates[1].toFixed(7)),
+            ]);
             const buildingpointsData = turf.points(buildingsD);
             this.setState({ buildingpoints: buildingpointsData });
 
@@ -450,6 +452,7 @@ class FloodHistoryMap extends React.Component {
             this.map.addControl(draw, 'top-right');
 
             this.map.on('draw.create', updateArea);
+            this.map.on('draw.update', updateArea);
             this.map.on('draw.delete', resetArea);
         }
 

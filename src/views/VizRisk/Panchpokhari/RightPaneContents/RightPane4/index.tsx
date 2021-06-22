@@ -14,6 +14,15 @@ interface ComponentProps {}
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
+const ciRef = {
+    Health: 'Hospitals',
+    Governance: 'Government Buildings',
+    Bridge: 'Bridges',
+    Cultural: 'Cultural Heritages',
+    Finance: 'Financial Institutions',
+    Education: 'Education Institutions',
+    Tourism: 'Hotels / Restaurants',
+};
 
 class SlideFourPane extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -32,7 +41,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             ))];
             const categoriesCritical = categoriesCriticalArr.filter(item => item !== undefined);
             const chartD = categoriesCritical.map(item => ({
-                name: item,
+                name: ciRef[item],
                 Total: criticalinfrastructures.features
                     .filter(ci => ci.properties.Type === item).length,
             }));
@@ -50,7 +59,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 const categoriesCritical = categoriesCriticalArr.filter(item => item !== undefined);
 
                 const chartD = categoriesCritical.map(item => ({
-                    name: item,
+                    name: ciRef[item],
                     Total: criticalinfrastructures.features
                         .filter(ci => ci.properties.CI === item).length,
                 }));

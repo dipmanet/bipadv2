@@ -453,6 +453,7 @@ class FloodHistoryMap extends React.Component {
             };
             this.map.on('draw.delete', resetArea);
             this.map.on('draw.create', updateArea);
+            this.map.on('draw.update', updateArea);
         }
 
 

@@ -124,7 +124,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <h1>Earthquake Exposure </h1>
 
                                 <p>
-                                The map shows the exposure of critical infrastructures
+                                The map shows the exposure of elements
                                 and assets to earthquake.
                                 This visualization allows the super imposition of the
                                 seimic hazard map with landcover and critical infrastructures.
@@ -135,7 +135,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                                 <p>
                                 This visualization helps understand the population,
-                                elements and assets that are at threat to
+                                critical infrastructures and assets that are at threat to
                                 earthquake hazard in the region.
                                 </p>
                                 <p>
@@ -170,7 +170,7 @@ The map shows the exposure of critical
 
                                 <p>
 This visualization helps understand the population,
-                                    elements and assets that are at threat to earthquake
+critical infrastructures and assets that are at threat to earthquake
                                     hazard in the region.
                                     {' '}
 
