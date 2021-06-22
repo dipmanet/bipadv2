@@ -71,6 +71,7 @@ export interface DARainFiltersElement {
 }
 
 export interface DARiverFiltersElement {
+    basin: Basin;
     station: RiverStation;
     dataDateRange: DataDateRangeValueElement;
 }

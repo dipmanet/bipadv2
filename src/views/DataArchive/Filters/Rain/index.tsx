@@ -122,6 +122,8 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARainFiltersElement) =
     return false;
 };
 
+let filteredStation;
+
 class RainFilters extends React.PureComponent<Props, State> {
     public state = {
         activeView: undefined,
@@ -161,7 +163,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="station"
                     wardsHidden
-                    stations={this.props.rainStations}
+                    stations={(filteredStation) || this.props.rainStations}
                     // autoFocus
                 />
             ),
@@ -215,7 +217,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                 station: {},
                 basin: {},
             } });
-
+        filteredStation = '';
         const { setDataArchiveRainFilter } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {
@@ -228,6 +230,12 @@ class RainFilters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: DARainFiltersElement) => {
+        if (faramValues.basin !== '') {
+            // eslint-disable-next-line max-len
+            filteredStation = this.props.rainStations.filter(r => r.basin === faramValues.basin.title);
+        } else {
+            filteredStation = this.props.rainStations;
+        }
         this.setState({ faramValues });
     }
 
