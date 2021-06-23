@@ -196,6 +196,7 @@ class Jugal extends React.Component {
             resetDrawData: false,
             sesmicLayerVul: '',
             pending: true,
+            indexArray: [],
         };
 
         const { requests:
@@ -246,6 +247,14 @@ class Jugal extends React.Component {
 
     public setVulData = (vulData) => {
         this.setState({ vulData });
+        const indexArray = {};
+        vulData.map((item, i) => {
+            const dd = String(item.point.coordinates);
+            indexArray[dd] = vulData[i];
+            return null;
+        });
+        this.setState({ indexArray });
+
         // console.log('data with vulnerability score:',
         //     vulData.filter(item => item.vulnerabilityScore !== undefined)
         //         .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
@@ -296,8 +305,8 @@ class Jugal extends React.Component {
         this.setState({ sesmicLayerVul });
     }
 
-    public handleDrawResetData = () => {
-        this.setState(prevState => ({ resetDrawData: !prevState.resetDrawData }));
+    public handleDrawResetData = (resetDrawData) => {
+        this.setState({ resetDrawData });
     }
 
     public setIncidents = (incidents) => {
@@ -448,6 +457,7 @@ class Jugal extends React.Component {
             resetDrawData,
             sesmicLayerVul,
             pending,
+            indexArray,
         } = this.state;
 
         const {
@@ -684,9 +694,9 @@ class Jugal extends React.Component {
                             CIData={cI}
                             handleDrawResetData={this.handleDrawResetData}
                             buildings={buildings}
-
                         />
                         <RightElement6
+                            handleDrawResetData={this.handleDrawResetData}
                             handleNext={this.handleNext}
                             handlePrev={this.handlePrev}
                             disableNavLeftBtn={disableNavLeftBtn}
@@ -729,13 +739,13 @@ class Jugal extends React.Component {
                             setSingularBuilding={this.setSingularBuilding}
                             setScore={this.setScore}
                             CIData={cI}
-                            buildings={buildings}
-                            // buildings={vulData}
-                            // buildinggeojson={buildings}
+                            buildings={vulData}
+                            buildinggeojson={buildings}
                             handleDrawResetData={this.handleDrawResetData}
-
                         />
+
                         <RightElement7
+                            handleDrawResetData={this.handleDrawResetData}
                             handleNext={this.handleNext}
                             handlePrev={this.handlePrev}
                             disableNavLeftBtn={disableNavLeftBtn}
@@ -754,8 +764,7 @@ class Jugal extends React.Component {
                             singularBuldingData={this.state.singularBuldingData}
                             vulData={vulData}
                             resetDrawData={resetDrawData}
-
-
+                            indexArray={indexArray}
                         />
                         <VRLegend>
                             <SesmicHazardVULLegend

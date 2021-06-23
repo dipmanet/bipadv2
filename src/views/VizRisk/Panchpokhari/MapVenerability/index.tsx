@@ -111,11 +111,9 @@ class FloodHistoryMap extends React.Component {
             const points = turf.points(arr);
             this.setState({ points });
         }
-        if (isDefined(buildings.features)) {
-            const buildingsD = buildings.features.map(item => [
-                Number(item.geometry.coordinates[0].toFixed(7)),
-                Number(item.geometry.coordinates[1].toFixed(7)),
-            ]);
+        if (isDefined(buildings.length > 0)) {
+            const buildingsD = buildings.filter(item => item.point !== undefined)
+                .map(p => p.point.coordinates);
             const buildingpointsData = turf.points(buildingsD);
             this.setState({ buildingpoints: buildingpointsData });
 
@@ -395,9 +393,11 @@ class FloodHistoryMap extends React.Component {
                 ],
                 defaultMode: 'draw_polygon',
             });
+
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
                 const { points, buildingpoints } = this.state;
+                console.time('function start');
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
                 const searchWithin = turf.multiPolygon([dataArr], {});
@@ -431,7 +431,11 @@ class FloodHistoryMap extends React.Component {
                     { layers: ['Forest'] },
                 );
                 const buildingsCount = ptsWithinBuildings.features.length;
+                console.timeEnd('function start');
+
+                console.time('bpoints array making');
                 const bPoints = ptsWithinBuildings.features.map(item => item.geometry.coordinates);
+                console.timeEnd('bpoints array making');
                 result.push({
                     buildings: buildingsCount,
                     forest: forest.length,
@@ -445,15 +449,28 @@ class FloodHistoryMap extends React.Component {
                 });
             };
 
-            const resetArea = () => {
-                this.props.handleDrawResetData();
-            };
 
+            this.map.on('draw.modechange', (e) => {
+                const data = draw.getAll();
+                if (draw.getMode() === 'draw_polygon') {
+                    const pids = [];
+                    this.props.handleDrawResetData(true);
+                    // ID of the added template empty feature
+                    const lid = data.features[data.features.length - 1].id;
+
+                    data.features.forEach((f) => {
+                        if (f.geometry.type === 'Polygon' && f.id !== lid) {
+                            pids.push(f.id);
+                        }
+                    });
+                    draw.delete(pids);
+                }
+            });
             this.map.addControl(draw, 'top-right');
 
             this.map.on('draw.create', updateArea);
             this.map.on('draw.update', updateArea);
-            this.map.on('draw.delete', resetArea);
+            this.map.on('draw.delete', this.resetArea);
         }
 
         this.map.on('style.load', () => {
@@ -555,6 +572,7 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
+
     public componentDidUpdate(prevProps) {
         if (this.props.sesmicLayer !== prevProps.sesmicLayer) {
             if (this.props.sesmicLayer === 'ses') {
@@ -598,6 +616,10 @@ class FloodHistoryMap extends React.Component {
     public componentWillUnmount() {
         this.map.remove();
     }
+
+    public resetArea = () => {
+        this.props.handleDrawResetData(true);
+    };
 
     public getTitleFromLatLng = (featureObject, cidata) => {
         const latToCompare = featureObject.geometry.coordinates[1];

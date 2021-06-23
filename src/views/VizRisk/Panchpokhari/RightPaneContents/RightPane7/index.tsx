@@ -71,6 +71,8 @@ class SlideFivePane extends React.Component<Props, State> {
             singularBuldingData,
             singularBuilding,
             resetDrawData,
+            indexArray,
+            handleDrawResetData,
         } = this.props;
         if (vulData !== prevProps.vulData) {
             if (vulData.length > 0) {
@@ -92,9 +94,12 @@ class SlideFivePane extends React.Component<Props, State> {
         }
         if (drawChartData !== prevProps.drawChartData) {
             if (drawChartData.length > 0) {
+                console.time('chart functions');
                 const selectedPoints = drawChartData[drawChartData.length - 1].bPoints;
-                const selected = selectedPoints.map(sp => this.getPtSelectedData(sp, vulData));
+                const selected = selectedPoints
+                    .map(sp => this.getPtSelectedData(sp, indexArray));
                 const finalArr = selected.filter(f => f !== null);
+                console.timeEnd('chart functions');
                 this.setState({ buildingVulnerability: getbuildingVul(finalArr) });
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(finalArr) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(finalArr) });
@@ -117,6 +122,7 @@ class SlideFivePane extends React.Component<Props, State> {
                 this.setState({
                     averageAnnualincomeChartData: getaverageAnnualincomeChartData(vulData),
                 });
+                handleDrawResetData(false);
             }
         }
     }
@@ -128,16 +134,10 @@ class SlideFivePane extends React.Component<Props, State> {
         }));
     }
 
-    public getPtSelectedData = (s, vd) => {
-        const pointsUF = vd.filter(f => f.point !== undefined);
-        const points = pointsUF.map(p => p.point);
-
-        const a = vd.filter(v => v.point !== undefined
-            && String(v.point.coordinates[0]) === s[0].toFixed(6)
-            && String(v.point.coordinates[1]) === s[1].toFixed(6));
-
-        if (a.length > 0) {
-            return a[0];
+    public getPtSelectedData = (s, iA) => {
+        const idx = String(s);
+        if (isDefined(iA[idx])) {
+            return iA[idx];
         }
         return null;
     }
@@ -365,7 +365,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                     <td>{singularBuldingData.openSafeSpaceDistance || '-'}</td>
                                 </tr>
                             </table>
-
+                            <p>
+                               Agewise Population Distribution
+                            </p>
                             <ResponsiveContainer
                                 className={styles.respContainer}
                                 width="100%"
@@ -379,7 +381,17 @@ class SlideFivePane extends React.Component<Props, State> {
                                     margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                        <Label
+                                            value="Age in Years"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"

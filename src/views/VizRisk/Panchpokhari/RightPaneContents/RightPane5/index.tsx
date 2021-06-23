@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import {
     Bar, BarChart,
@@ -21,28 +22,150 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         super();
         this.state = {
             showLandcover: false,
+            fullhazardTitle: [],
+            hazardTitle: [],
+            chartData: [],
+            nonZeroArr: [],
         };
     }
 
 
-    // public handlePopulationClick = (clickedItem: string) => {
-    //     this.setState({ clickedItem });
-    // };
+    public componentDidMount() {
+        const {
+            incidentList,
+            incidentFilterYear,
+            clickedItem,
+        } = this.props;
+        const chartData = this
+            .getChartData(clickedItem, incidentFilterYear, incidentList);
+        this.setState({ chartData });
+        const nonZeroArr = this
+            .getArrforDesc(clickedItem, chartData, incidentList);
+        const fullhazardTitle = [...new Set(incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+        this.setState({ fullhazardTitle });
+        this.setState({ nonZeroArr });
+    }
+
     public componentDidUpdate(prevProps) {
-        const { incidentFilterYear, getIncidentData } = this.props;
+        const {
+            incidentList,
+            incidentFilterYear,
+            getIncidentData,
+            clickedItem,
+        } = this.props;
+
+        const { chartData } = this.state;
         if (prevProps.incidentFilterYear !== incidentFilterYear) {
             getIncidentData(incidentFilterYear);
+            this.setState({ chartData: this
+                .getChartData(clickedItem, incidentFilterYear, incidentList) });
+            this.setState({ nonZeroArr: this
+                .getArrforDesc(
+                    clickedItem,
+                    this.getChartData(clickedItem, incidentFilterYear, incidentList),
+                    incidentList,
+                ) });
+        }
+        if (prevProps.clickedItem !== clickedItem) {
+            // getIncidentData(incidentFilterYear);
+            this.setState({ chartData: this
+                .getChartData(clickedItem, incidentFilterYear, incidentList) });
+            this.setState({ nonZeroArr: this
+                .getArrforDesc(
+                    clickedItem,
+                    this.getChartData(clickedItem, incidentFilterYear, incidentList),
+                    incidentList,
+                ) });
         }
     }
 
-    public handleShowLandCover= () => {
-        this.setState(
-            prevState => ({
-                showLandcover: !prevState.showLandcover,
-            }),
-        );
+    public getChartData = (clickedItem, incidentFilterYear, incidentList) => {
+        let fullhazardTitle = [];
+
+        if (clickedItem !== 'all') {
+            fullhazardTitle = [clickedItem];
+        } else {
+            fullhazardTitle = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+        }
+        return fullhazardTitle.map(item => ({
+            name: item,
+            Total: incidentList.features
+                .filter(
+                    ht => ht.properties.hazardTitle === item
+                && new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
+                )
+                .length,
+        }));
     }
 
+    public getDescription= () => {
+        const { nonZeroArr, chartData } = this.state;
+        const { clickedItem } = this.props;
+        console.log('clickedItem', clickedItem);
+        if (clickedItem === 'all') {
+            if (nonZeroArr.length > 0) {
+                return nonZeroArr.map((item, i) => {
+                    if (
+                        i === nonZeroArr.length - 1
+                            && i === 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return ` ${item} `;
+                    }
+                    if (
+                        i !== nonZeroArr.length - 1
+                            && i === 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return ` ${item} `;
+                    }
+                    if (
+                        i === nonZeroArr.length - 1
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return ` and ${item} `;
+                    }
+                    if (
+                        i !== nonZeroArr.length - 1
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return `, ${item} `;
+                    }
+                    return '';
+                });
+            }
+        } else {
+            return ` of ${clickedItem} `;
+        }
+        return '';
+    }
+
+    public getArrforDesc = (clickedItem, chartData, incidentList) => {
+        let fullhazardTitle = [];
+
+        if (clickedItem !== 'all') {
+            fullhazardTitle = [clickedItem];
+        } else {
+            fullhazardTitle = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+        }
+        console.log('fullhazardTitle', fullhazardTitle);
+        const arr = fullhazardTitle.map((item) => {
+            if (chartData.filter(n => n.name === item).length > 0) {
+                if (chartData.filter(n => n.name === item)[0].Total !== 0) {
+                    return item;
+                }
+            }
+            return null;
+        });
+        console.log('arr', arr);
+        return arr.filter(n => n !== null);
+    }
 
     public render() {
         // const { clickedItem } = this.state;
@@ -59,85 +182,81 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             incidentFilterYear,
             incidentDetailsData,
         } = this.props;
-
-        const hazardTitle = [...new Set(incidentList.features.map(
-            item => item.properties.hazardTitle,
-        ))];
-
-        const chartData = hazardTitle.map(item => ({
-            name: item,
-            Total: incidentList.features
-                .filter(
-                    ht => ht.properties.hazardTitle === item
-                && new Date(ht.properties.incidentOn).getFullYear() === Number(incidentFilterYear),
-                )
-                .length,
-        }));
-        const arr = hazardTitle.map((item) => {
-            if (chartData.filter(n => n.name === item).length > 0) {
-                if (chartData.filter(n => n.name === item)[0].Total !== 0) {
-                    return item;
-                }
-            }
-            return null;
-        });
-        const nonZeroArr = arr.filter(n => n !== null);
+        const {
+            hazardTitle,
+            chartData,
+            fullhazardTitle,
+            nonZeroArr,
+        } = this.state;
 
         return (
             <div className={styles.vrSideBar}>
-                <h1>Past Disaster Incidents</h1>
-                <p>
+                {
+                    chartData.length > 0
+                    && (
+                        <>
+                            <h1>
+                                Past Disaster Events in Panch
+                                Pokhari Thangpal Rural Municipality
+                            </h1>
+                            <p>
                 In the year
-                    {' '}
-                    {incidentFilterYear}
-                    {' '}
+                                {' '}
+                                {incidentFilterYear}
+                                {' '}
                 , total
 
-                    {' '}
-                    {chartData.reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
-                    {' '}
+                                {' '}
+                                {chartData
+                                    .reduce((a, b) => ({ Total: a.Total + b.Total || 0 })).Total}
+                                {' '}
                 incidents
-                    {nonZeroArr.length > 0 ? ' of ' : ''}
-                    {nonZeroArr.map((item, i) => {
-                        if (
-                            i === nonZeroArr.length - 1
-                            && i === 0
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
-                            return ` ${item} `;
-                        }
-                        if (
-                            i !== nonZeroArr.length - 1
-                            && i === 0
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
-                            return ` ${item} `;
-                        }
-                        if (
-                            i === nonZeroArr.length - 1
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
-                            return ` and ${item} `;
-                        }
-                        if (
-                            i !== nonZeroArr.length - 1
-                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
-                            return `, ${item} `;
-                        }
+                                {' '}
+                                {nonZeroArr.length > 0 ? ' of ' : ''}
+                                {
+                                    this.getDescription()
+                                }
 
-
-                        return '';
-                    })}
-                    {' '}
-               have been reported in Panch Pokhari Thangpal Rural Municipality.
+                have been reported in Panch Pokhari Thangpal Rural Municipality.
                 These incidents have caused
-                    {' '}
-                    {incidentDetailsData.peopleDeathCount}
-                    {' '}
+                                {' '}
+                                {incidentDetailsData.peopleDeathCount}
+                                {' '}
                  deaths and
-                    {' '}
-                    {incidentDetailsData.infrastructureDestroyedHouseCount}
-                    {' '}
+                                {' '}
+                                {incidentDetailsData.infrastructureDestroyedHouseCount}
+                                {' '}
                  houses were destroyed.
-                </p>
+                            </p>
 
+                            <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
+                                <BarChart
+                                    width={300}
+                                    height={700}
+                                    data={chartData}
+                                    layout="vertical"
+                                    margin={{ left: 20, right: 20 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,219,95)"
+                                        barSize={15}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        tick={{ fill: '#94bdcf' }}
+                                        radius={[0, 15, 15, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </>
+                    )
+                }
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
                     <BarChart
                         width={300}
@@ -187,8 +306,8 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             </button>
                         </div>
                         {
-                            hazardTitle.length > 0
-                            && hazardTitle.map(item => (
+                            fullhazardTitle.length > 0
+                            && fullhazardTitle.map(item => (
                                 <div className={styles.hazardItemContainer}>
                                     <button
                                         type="button"

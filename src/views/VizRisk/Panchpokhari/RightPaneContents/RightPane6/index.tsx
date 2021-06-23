@@ -60,29 +60,36 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             drawChartData,
             buildings,
             resetDrawData,
+            handleDrawResetData,
         } = this.props;
-        if (prevProps.drawChartData !== drawChartData) {
-        // if (resetDrawData && CIData.features && CIData.features.length > 0) {
-            const chartDataTitlesUf = [...new Set(drawChartData
-                .map(item => item.hazardTitle))];
-            const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
-            const chartData = chartDataTitles.map(h => ({
-                name: h,
-                Total: drawChartData.filter(i => i.hazardTitle === h).length,
-            }));
-            chartData.push({
-                name: 'Buildings',
-                Total: drawChartData[drawChartData.length - 1]
-                    ? drawChartData[drawChartData.length - 1].buildings
-                    : 0,
-            });
-            this.setState({ chartData });
-            this.setState({ areaSelected: 'THE AREA SELECTED' });
+        if (drawChartData !== prevProps.drawChartData) {
+            if (drawChartData.length > 0) {
+                // if (resetDrawData && CIData.features && CIData.features.length > 0) {
+                const chartDataTitlesUf = [...new Set(drawChartData
+                    .map(item => item.hazardTitle))];
+                const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
+                const chartData = chartDataTitles.map(h => ({
+                    name: h,
+                    Total: drawChartData.filter(i => i.hazardTitle === h).length,
+                }));
+                chartData.push({
+                    name: 'Buildings',
+                    Total: drawChartData[drawChartData.length - 1]
+                        ? drawChartData[drawChartData.length - 1].buildings
+                        : 0,
+                });
+                this.setState({ chartData });
+                this.setState({ areaSelected: 'THE AREA SELECTED' });
+                handleDrawResetData(false);
+            }
         }
 
         if (resetDrawData !== prevProps.resetDrawData) {
-            this.setState({ areaSelected: 'MUNICIPALITY' });
-            if (isDefined(CIData.features) && CIData.features.length > 0 && buildings.features) {
+            if (isDefined(CIData.features)
+            && CIData.features.length > 0
+            && buildings.features
+            && resetDrawData === true
+            ) {
                 const chartDataTitlesUf = [...new Set(CIData
                     .features.map(item => item.properties.Type))];
                 const chartDataTitles = chartDataTitlesUf.filter(item => item !== undefined);
