@@ -129,15 +129,19 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     rainStationRequest: {
         url: '/rain-stations/',
         method: methods.GET,
-        query: () => ({
-            fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point', 'status', 'description'],
-        }),
+        // query: () => ({
+        // eslint-disable-next-line max-len
+        //     fields: ['id', 'province', 'basin', 'district', 'municipality', 'ward', 'title', 'point', 'status', 'description', 'measuredOn', 'averages', 'modifiedOn'],
+        // }),
         onSuccess: ({ params, response, props: { setDataArchiveRainStations } }) => {
             interface Response { results: RainStation[] }
 
             const { results: dataArchiveRainStations = [] } = response as Response;
 
-            if (params.basinFilter !== undefined) {
+            if (params.stationFilter !== undefined) {
+                setDataArchiveRainStations({ dataArchiveRainStations:
+                    dataArchiveRainStations.filter(item => item.id === params.stationFilter) });
+            } else if (params.basinFilter !== undefined) {
                 setDataArchiveRainStations({ dataArchiveRainStations:
                     dataArchiveRainStations.filter(item => item.basin === params.basinFilter) });
             } else {
@@ -168,6 +172,7 @@ const Rain = (props: Props) => {
 
     requests.rainStationRequest.setDefaultParams({
         basinFilter: (rainFilters.basin) ? rainFilters.basin.title : '',
+        stationFilter: (rainFilters.station) ? rainFilters.station.id : '',
     });
 
     useEffect(() => {
@@ -183,14 +188,21 @@ const Rain = (props: Props) => {
                     props.rainStations.filter(item => item.basin === rainFilters.basin.title) });
             }
         }
+
         if (rainFilters.basin) {
             if (props.rainList && props.rainList.length > 0) {
                 props.setDataArchiveRainList({ dataArchiveRainList:
                     props.rainList.filter(item => item.basin === rainFilters.basin.title) });
             }
         }
+        if (rainFilters.station) {
+            if (props.rainStations && props.rainStations.length > 0) {
+                props.setDataArchiveRainStations({ dataArchiveRainStations:
+                    props.rainStations.filter(item => item.id === rainFilters.station.id) });
+            }
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rainFilters.basin]);
+    }, [rainFilters.basin, rainFilters.station]);
 
 
     const { station: { title: location } } = rainFilters;

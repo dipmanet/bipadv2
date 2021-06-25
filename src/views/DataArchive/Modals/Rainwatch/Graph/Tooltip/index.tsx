@@ -83,11 +83,11 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accHourly === 0 ? 'N/A' : `${innerPayload.accHourly} mm`}
+                        {innerPayload.accHourly === 0 ? 'N/A' : `${innerPayload.accHourly.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeHourData === 0 ? 'N/A' : `${innerPayload.cumulativeHourData} mm`}
+                        {innerPayload.cumulativeHourData === 0 ? 'N/A' : `${innerPayload.cumulativeHourData.toFixed(2)} mm`}
                     </div>
 
                 </div>
@@ -102,11 +102,11 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accDaily === 0 ? 'N/A' : `${innerPayload.accDaily} mm`}
+                        {innerPayload.accDaily === 0 ? 'N/A' : `${innerPayload.accDaily.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeDailyData === 0 ? 'N/A' : `${innerPayload.cumulativeDailyData} mm`}
+                        {innerPayload.cumulativeDailyData === 0 ? 'N/A' : `${innerPayload.cumulativeDailyData.toFixed(2)} mm`}
                     </div>
 
                 </div>
@@ -121,11 +121,11 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accMonthly === 0 ? 'N/A' : `${innerPayload.accMonthly} mm`}
+                        {innerPayload.accMonthly === 0 ? 'N/A' : `${innerPayload.accMonthly.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeMonthlyData === 0 ? 'N/A' : `${innerPayload.cumulativeMonthlyData} mm`}
+                        {innerPayload.cumulativeMonthlyData === 0 ? 'N/A' : `${innerPayload.cumulativeMonthlyData.toFixed(2)} mm`}
                     </div>
 
                 </div>

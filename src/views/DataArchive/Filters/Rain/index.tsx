@@ -230,11 +230,15 @@ class RainFilters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: DARainFiltersElement) => {
-        if (faramValues.basin !== '') {
+        if (faramValues.basin && faramValues.basin !== '') {
             // eslint-disable-next-line max-len
             filteredStation = this.props.rainStations.filter(r => r.basin === faramValues.basin.title);
         } else {
             filteredStation = this.props.rainStations;
+        }
+        if (typeof faramValues.basin === 'object' && Object.keys(faramValues.basin).length === 0) {
+            filteredStation = this.props.rainStations;
+            this.handleResetFiltersButtonClick();
         }
         this.setState({ faramValues });
     }

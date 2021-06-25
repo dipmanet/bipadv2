@@ -26,7 +26,8 @@
     }
 }
 .tooltip {
-
+    max-height:20vh;
+    overflow: auto;
     .header {
       display: flex;
       justify-content: space-between;
@@ -67,6 +68,38 @@
       .value {
         font-size: var(--font-size-medium-alt);
       }
+
+
+    .rainfall {
+      .title {
+        text-transform: uppercase;
+        font-weight: bold;
+        padding: var(--spacing-small) var(--spacing-medium-alt);
+        font-size: 0.8rem;
+      }
+    }
+      
+      .rainfall-list {
+        
+        .rainfall-item {
+          display: flex;
+          padding: var(--spacing-medium) var(--spacing-medium-alt);
+          justify-content: space-between;
+          border-bottom: 1px solid #ececec;
+          color: var(--color-text-placeholder);
+          font-weight: 400;
+        }
+      }
+      .source {
+        padding: var(--spacing-small) var(--spacing-medium-alt);
+
+      .title {
+        font-weight: bold;
+      }
+      .value {
+        color: red;
+      }
+    }
 }
 
 .data-archive-rain-map {

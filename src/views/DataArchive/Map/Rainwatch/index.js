@@ -24,10 +24,9 @@ const mapStateToProps = state => ({
     rainStation: rainStationsSelector(state),
 });
 
-
 const tileUrl = [
     `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-    '&version=1.1.1',
+    '&version=1.1.0',
     '&service=WMS',
     '&request=GetMap',
     '&layers=Bipad:watershed-area',
@@ -86,6 +85,8 @@ const rainStationToGeojson = (rainStation) => {
                     description: station.description,
                     basin: station.basin,
                     status: station.status,
+                    measuredOn: station.measuredOn,
+                    averages: station.averages,
                 },
             })),
     };
@@ -132,6 +133,7 @@ class RainMap extends React.PureComponent {
             if (this.props.rainFilters.basin != null) {
                 // eslint-disable-next-line max-len
                 const mydata = this.props.rainStation.filter(item => item.basin === this.props.rainFilters.basin.title);
+
                 if (mydata.length > 0) {
                     basinCoordinates = mydata[0].point.coordinates;
                     const tile = [
@@ -207,9 +209,13 @@ class RainMap extends React.PureComponent {
                 basin,
                 status,
                 stationId,
+                measuredOn,
+                averages,
             },
+
             geometry,
         } = feature;
+        const avg = averages ? JSON.parse(averages) : undefined;
         this.setState({
             tooltipRenderer: this.rainTooltipRenderer,
             tooltipParams: {
@@ -219,42 +225,86 @@ class RainMap extends React.PureComponent {
                 status,
                 stationId,
                 geometry,
+                measuredOn,
+                averages: avg,
             },
+
             coordinates: lngLat,
         });
         return true;
     }
 
-    rainTooltipRenderer = ({ title, basin }) => (
-        <div className={styles.mainWrapper}>
-            <div className={styles.tooltip}>
-                {/* <div className={styles.header}>
+    rainTooltipRenderer = ({ title, basin, measuredOn, averages }) => {
+        const date = measuredOn.split('T')[0];
+        const time = measuredOn.split('T')[1].split('+')[0];
+        const timeOnly = time.split(':').slice(0, 2).join(':');
+
+        const oneHourInterval = averages[0].value || 'N/A';
+        const threeHourInterval = averages[1].value || 'N/A';
+        const sixHourInterval = averages[2].value || 'N/A';
+        const twelveHourInterval = averages[3].value || 'N/A';
+        const twentyFourHourInterval = averages[4].value || 'N/A';
+        return (
+            <div className={styles.mainWrapper}>
+                <div className={styles.tooltip}>
+                    {/* <div className={styles.header}>
                     <h3>{`Heavy Rainfall at ${title || 'N/A'}`}</h3>
                 </div> */}
-                <div className={styles.description}>
-                    <div className={styles.key}>STATION NAME:</div>
-                    <div className={styles.value}>{title || 'N/A'}</div>
-                </div>
-                <div className={styles.description}>
-                    <div className={styles.key}>BASIN:</div>
-                    <div className={styles.value}>{basin || 'N/A'}</div>
-                </div>
+                    <div className={styles.description}>
+                        <div className={styles.key}>STATION NAME:</div>
+                        <div className={styles.value}>{title || 'N/A'}</div>
+                    </div>
+                    <div className={styles.description}>
+                        <div className={styles.key}>BASIN:</div>
+                        <div className={styles.value}>{basin || 'N/A'}</div>
+                    </div>
+                    <div className={styles.description}>
+                        <div className={styles.key}>Measured On:</div>
+                        <div className={styles.value}>{`${date} | ${timeOnly} (NPT)` || 'N/A'}</div>
+                    </div>
+                    <div className={styles.rainfall}>
+                        <div className={styles.title}>
+                        Accumulated Rainfall:
+                        </div>
+                        <div className={styles.rainfallList}>
+                            <div className={styles.rainfallItem}>
+                                <div className={styles.hour}>1 Hour</div>
+                                <div className={styles.value}>{`${oneHourInterval} mm`}</div>
+                            </div>
+                            <div className={styles.rainfallItem}>
+                                <div className={styles.hour}>3 Hour</div>
+                                <div className={styles.value}>{`${threeHourInterval} mm`}</div>
+                            </div>
+                            <div className={styles.rainfallItem}>
+                                <div className={styles.hour}>6 Hour</div>
+                                <div className={styles.value}>{`${sixHourInterval} mm`}</div>
+                            </div>
+                            <div className={styles.rainfallItem}>
+                                <div className={styles.hour}>12 Hour</div>
+                                <div className={styles.value}>{`${twelveHourInterval} mm`}</div>
+                            </div>
+                            <div className={styles.rainfallItem}>
+                                <div className={styles.hour}>24 Hour</div>
+                                <div className={styles.value}>{`${twentyFourHourInterval} mm`}</div>
+                            </div>
+                        </div>
+                    </div>
 
-
-            </div>
-            <div className={styles.line} />
-            <div
-                className={styles.getDetails}
-            >
-                <span
-                    onClick={() => this.setState({ showModal: true })}
-                    role="presentation"
+                </div>
+                <div className={styles.line} />
+                <div
+                    className={styles.getDetails}
                 >
+                    <span
+                        onClick={() => this.setState({ showModal: true })}
+                        role="presentation"
+                    >
                     Get Details
-                </span>
+                    </span>
+                </div>
             </div>
-        </div>
-    )
+        );
+    }
 
     handleTooltipClose = () => {
         this.setState({
@@ -410,5 +460,4 @@ class RainMap extends React.PureComponent {
         );
     }
 }
-RainMap.contextType = MapChildContext;
 export default connect(mapStateToProps, [])(RainMap);

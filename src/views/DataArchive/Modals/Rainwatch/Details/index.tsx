@@ -17,6 +17,7 @@ const Details = (props: Props) => {
         description,
         province,
         district,
+        basin,
     } = rainDetails || emptyObject;
     const { coordinates } = point || emptyObject;
     const [longitude, latitude] = coordinates || defaltLngLat;
@@ -30,6 +31,7 @@ const Details = (props: Props) => {
         { title: 'Longitude', value: longitude || 'N/A', style: styles.full },
         { title: 'Latitude', value: latitude || 'N/A', style: styles.full },
         { title: 'District', value: districtTitle || 'N/A', style: styles.full },
+        { title: 'Basin', value: basin || 'N/A', style: styles.full },
         { title: 'Description', value: description || 'N/A', style: styles.full },
     ];
     return (

@@ -7,6 +7,7 @@ import styles from './styles.scss';
 
 import { RainStation } from '#types';
 import { rainFiltersSelector } from '#selectors';
+import { getCategoryForContinuousColorScheme } from '#rsu/ColorScheme';
 
 interface Props {
     onChange: Function;
