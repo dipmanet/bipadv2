@@ -230,7 +230,11 @@ class SlideFivePane extends React.Component<Props, State> {
                      orange denotes moderate and yellow denotes the
                      low vulnerability level.
                      Physical, social and economic facors were considered to identify the
-                     vulnerability of each household."
+                     vulnerability of each household. The vulnerability level has been calculated for
+                     buildings that have complete data on all the physical,
+                     social, and economic parameters used for the
+                     vulnerability score calculation. Buildings for which the
+                     score was not calculated are being displayed in black."
                     >
 
                         <Icon
@@ -246,11 +250,7 @@ class SlideFivePane extends React.Component<Props, State> {
                     && (
                         <>
                             <p>
-                        The vulnerability level has been calculated for
-                        buildings that have complete data on all the physical,
-                        social, and economic parameters used for the
-                        vulnerability score calculation. Buildings for which the
-                        score was not calculated are being displayed in black.
+                                There is no data for the selected building at present.
                             </p>
                             <div className={styles.backBtnContainer}>
                                 <button
