@@ -146,8 +146,14 @@ const getMinuteValues = (dateTime: string) => {
 
 const getHourlyValues = (dateTime: string) => {
     const dateWithHour = dateTime.substr(0, dateTime.indexOf(':'));
+    const dateOnly = dateTime.substr(0, dateTime.indexOf('T'));
     const hour = new Date(dateTime).getHours();
-    const hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
+    let hourName;
+    if (hour !== 0) {
+        hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
+    } else {
+        hourName = `${dateOnly} ${hour} AM`;
+    }
     return [dateWithHour, hourName];
 };
 

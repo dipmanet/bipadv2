@@ -12,6 +12,8 @@ import {
     BarChart,
     Bar,
     ComposedChart,
+    ReferenceLine,
+    Label,
 } from 'recharts';
 import Button from '#rsca/Button';
 import {
@@ -77,15 +79,10 @@ const getPeriod = (periodCode: string) => {
 };
 
 const getChartTitle = (
-    intervalCode: string,
-    periodCode: string,
+    chartTitle: string,
     stationName: string,
     date: string,
-) => {
-    const interval = getinterval(intervalCode);
-    const period = getPeriod(periodCode);
-    return `${period} ${interval} readings, ${stationName}, ${date}`;
-};
+) => `${chartTitle}, ${stationName}, ${date}`;
 
 const Graph = (props: Props) => {
     const {
@@ -153,8 +150,7 @@ const Graph = (props: Props) => {
 
     const date = `${startDate} to ${endDate}`;
     const calculatedTitle = getChartTitle(
-        intervalCode || '',
-        periodCode || '',
+        chartTitle || '',
         stationName,
         date,
     );
@@ -192,7 +188,7 @@ const Graph = (props: Props) => {
                 </header>
                 <div className={styles.chartWrapper} id={downloadId || DEFAULT_DOWNLOAD_ID}>
                     <h4 className={styles.heading}>
-                        {chartTitle || calculatedTitle || DEFAULT_CHART_TITLE}
+                        { calculatedTitle || DEFAULT_CHART_TITLE}
                     </h4>
                     <div
                         className={styles.chart}
@@ -236,7 +232,7 @@ const Graph = (props: Props) => {
                                                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                                             >
                                                 <CartesianGrid stroke="#f5f5f5" />
-                                                <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
+                                                <XAxis dataKey="label" interval={0} angle={-45} dx={-15} dy={25} height={70} />
                                                 <YAxis domain={['accHourly', 'auto']} />
                                                 <Tooltip
                                                     content={(
@@ -246,6 +242,16 @@ const Graph = (props: Props) => {
                                                         />
                                                     )}
                                                 />
+                                                <ReferenceLine
+                                                    y={60}
+                                                    stroke="red"
+                                                    strokeWidth={2}
+                                                    isFront
+                                                    strokeDasharray="3 2"
+                                                    alwaysShow
+                                                >
+                                                    <Label value="Warning level (60mm)" position="insideTopLeft" />
+                                                </ReferenceLine>
 
                                                 <Legend />
                                                 <Bar name="Accumulated Rain(mm)" dataKey="accHourly" fill="#82ca9d" />
@@ -264,7 +270,7 @@ const Graph = (props: Props) => {
                                                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                                             >
                                                 <CartesianGrid stroke="#f5f5f5" />
-                                                <XAxis dataKey="label" interval={0} angle={-45} dy={15} height={70} />
+                                                <XAxis dataKey="label" interval={0} angle={-45} dx={-25} dy={25} height={70} />
                                                 <YAxis domain={['accDaily', 'auto']} />
                                                 <Tooltip
                                                     content={(
@@ -274,6 +280,16 @@ const Graph = (props: Props) => {
                                                         />
                                                     )}
                                                 />
+                                                <ReferenceLine
+                                                    y={140}
+                                                    stroke="red"
+                                                    strokeWidth={2}
+                                                    isFront
+                                                    strokeDasharray="3 2"
+                                                    alwaysShow
+                                                >
+                                                    <Label value="Warning level (140mm)" position="insideTopLeft" />
+                                                </ReferenceLine>
 
                                                 <Legend />
                                                 <Bar name="Accumulated Rain(mm)" dataKey="accDaily" fill="#82ca9d" />

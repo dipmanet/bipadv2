@@ -25,7 +25,9 @@ const RiverPill = (props: Props) => {
     const { waterLevel, status } = props;
     return (
         <div className={_cs(styles.riverPill, pillClassSelector(status))}>
-            {`${waterLevel.toFixed(2)} m`}
+            {/* {`${waterLevel} m`} */}
+
+            {(waterLevel) ? `${waterLevel.toFixed(2)} m` : 'N/A'}
         </div>
     );
 };

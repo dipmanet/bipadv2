@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { FaramInputElement } from '@togglecorp/faram';
 import SelectInput from '#rsci/SelectInput';
-import { dataArchiveRainListSelector, rainStationsSelector } from '#selectors';
+import { dataArchiveRainListSelector } from '#selectors';
 import styles from './styles.scss';
 
 import { RainStation } from '#types';
@@ -44,7 +44,6 @@ const basinData = [
 ];
 const mapStateToProps = (state: AppState) => ({
     rainStations: dataArchiveRainListSelector(state),
-    // basinStations: rainStationsSelector(state),
 });
 
 const BasinSelector = (props: Props) => {
@@ -58,13 +57,6 @@ const BasinSelector = (props: Props) => {
         const basin = basinData.filter(s => s.id === basinId)[0];
         onChangeFromProps(basin || {});
     };
-    // const tempBasins = [...new Set(basinStations.map(item => item.basin))];
-    // const uniqueBasins = tempBasins.filter(item => item !== '' && item !== undefined);
-
-    // const BasinData = uniqueBasins.map((item, i) => ({
-    //     id: i + 1,
-    //     title: item,
-    // }));
 
     return (
         <div className={styles.basinSelector}>

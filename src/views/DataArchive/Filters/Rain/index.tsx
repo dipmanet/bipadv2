@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
@@ -122,10 +123,11 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARainFiltersElement) =
     return false;
 };
 
-let filteredStation;
 
 class RainFilters extends React.PureComponent<Props, State> {
     public state = {
+        filteredStation: [],
+        allStations: [],
         activeView: undefined,
         faramValues: {
             dataDateRange: {
@@ -143,6 +145,18 @@ class RainFilters extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const { rainFilters: faramValues } = this.props;
         this.setState({ faramValues });
+    }
+
+    public componentDidUpdate(prevProps) {
+        // eslint-disable-next-line max-len
+        if (this.props.rainStations !== prevProps.rainStations && this.props.rainStations.length > 0) {
+        // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ filteredStation: this.props.rainStations });
+        }
+        if (this.props.rainStations.length > 275) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ allStations: this.props.rainStations });
+        }
     }
 
     private views = {
@@ -163,7 +177,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="station"
                     wardsHidden
-                    stations={(filteredStation) || this.props.rainStations}
+                    stations={this.state.filteredStation}
                     // autoFocus
                 />
             ),
@@ -217,7 +231,7 @@ class RainFilters extends React.PureComponent<Props, State> {
                 station: {},
                 basin: {},
             } });
-        filteredStation = '';
+        // filteredStation = undefined;
         const { setDataArchiveRainFilter } = this.props;
         const { faramValues } = this.state;
         if (faramValues) {
@@ -230,15 +244,21 @@ class RainFilters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: DARainFiltersElement) => {
-        if (faramValues.basin && faramValues.basin !== '') {
+        if (faramValues.basin !== '') {
+            if (faramValues.basin.title !== undefined) {
             // eslint-disable-next-line max-len
-            filteredStation = this.props.rainStations.filter(r => r.basin === faramValues.basin.title);
+                const filteredStation = this.state.allStations.filter(r => r.basin === faramValues.basin.title);
+                this.setState({ filteredStation });
+            } else {
+                const filteredStation = this.state.allStations;
+                this.setState({ filteredStation });
+            }
+        } else if (Object.keys(faramValues.basin).length === 0) {
+            const filteredStation = this.state.allStations;
+            this.setState({ filteredStation });
         } else {
-            filteredStation = this.props.rainStations;
-        }
-        if (typeof faramValues.basin === 'object' && Object.keys(faramValues.basin).length === 0) {
-            filteredStation = this.props.rainStations;
-            this.handleResetFiltersButtonClick();
+            const filteredStation = this.state.allStations;
+            this.setState({ filteredStation });
         }
         this.setState({ faramValues });
     }

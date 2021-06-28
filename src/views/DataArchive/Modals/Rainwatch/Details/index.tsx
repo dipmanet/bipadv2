@@ -33,6 +33,8 @@ const Details = (props: Props) => {
         { title: 'District', value: districtTitle || 'N/A', style: styles.full },
         { title: 'Basin', value: basin || 'N/A', style: styles.full },
         { title: 'Description', value: description || 'N/A', style: styles.full },
+        { title: 'Warning level in 1 hr', value: '60 mm', style: styles.full },
+        { title: 'Warning level in 24 hr', value: '140 mm', style: styles.full },
     ];
     return (
         <div className={styles.details}>
