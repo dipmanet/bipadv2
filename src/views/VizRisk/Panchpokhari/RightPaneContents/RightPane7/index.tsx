@@ -240,8 +240,30 @@ class SlideFivePane extends React.Component<Props, State> {
                     </button>
 
                 </h1>
-                { singularBuilding && singularBuldingData
-                    ? (
+                {singularBuilding && Object.keys(singularBuldingData).length === 0
+                    && (
+                        <>
+                            <p>
+                        The vulnerability level has been calculated for
+                        buildings that have complete data on all the physical,
+                        social, and economic parameters used for the
+                        vulnerability score calculation. Buildings for which the
+                        score was not calculated are being displayed in black.
+                            </p>
+                            <div className={styles.backBtnContainer}>
+                                <button
+                                    onClick={this.handleBackBtn}
+                                    type="button"
+                                    className={styles.backButton}
+                                >
+                              Back
+                                </button>
+                            </div>
+                        </>
+                    )
+                }
+                { singularBuilding && Object.keys(singularBuldingData).length > 0
+                    && (
                         <>
                             <p>
                             House ID No:
@@ -436,8 +458,9 @@ class SlideFivePane extends React.Component<Props, State> {
                             </div>
                         </>
                     )
-
-                    : (
+                }
+                { !singularBuilding
+                    && (
                         <>
                             <p>Vulnerability of Buildings </p>
                             <div className={styles.buildingClassContainer}>

@@ -3,6 +3,7 @@ import React from 'react';
 import {
     Bar, BarChart,
     CartesianGrid,
+    Label,
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
@@ -15,7 +16,6 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFourPane extends React.PureComponent<Props, State> {
     public constructor(props) {
@@ -56,9 +56,8 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             clickedItem,
         } = this.props;
 
-        const { chartData } = this.state;
         if (prevProps.incidentFilterYear !== incidentFilterYear) {
-            getIncidentData(incidentFilterYear);
+            getIncidentData(incidentFilterYear, clickedItem);
             this.setState({ chartData: this
                 .getChartData(clickedItem, incidentFilterYear, incidentList) });
             this.setState({ nonZeroArr: this
@@ -70,6 +69,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         }
         if (prevProps.clickedItem !== clickedItem) {
             // getIncidentData(incidentFilterYear);
+            getIncidentData(incidentFilterYear, clickedItem);
             this.setState({ chartData: this
                 .getChartData(clickedItem, incidentFilterYear, incidentList) });
             this.setState({ nonZeroArr: this
@@ -176,14 +176,12 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             disableNavRightBtn,
             pagenumber,
             totalPages,
-            incidentList,
             clickedItem,
             handleIncidentItemClick,
             incidentFilterYear,
             incidentDetailsData,
         } = this.props;
         const {
-            hazardTitle,
             chartData,
             fullhazardTitle,
             nonZeroArr,
@@ -238,7 +236,17 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                                     margin={{ left: 20, right: 20 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" />
+                                    <XAxis type="number">
+                                        <Label
+                                            value="No. of incidents"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"
@@ -257,31 +265,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                         </>
                     )
                 }
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
-                    <BarChart
-                        width={300}
-                        height={600}
-                        data={chartData}
-                        layout="vertical"
-                        margin={{ left: 20, right: 20 }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" />
-                        <YAxis
-                            type="category"
-                            dataKey="name"
-                            tick={{ fill: '#94bdcf' }}
-                        />
-                        <Bar
-                            dataKey="Total"
-                            fill="rgb(0,219,95)"
-                            barSize={15}
-                            label={{ position: 'right', fill: '#ffffff' }}
-                            tick={{ fill: '#94bdcf' }}
-                            radius={[0, 15, 15, 0]}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
                 <VRLegend>
 
                     <div className={styles.incidentsLegendsContainer}>

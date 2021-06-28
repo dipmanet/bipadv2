@@ -3,6 +3,7 @@ import React from 'react';
 import {
     Bar, BarChart,
     CartesianGrid,
+    Label,
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
@@ -65,7 +66,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
 
         const { chartData } = this.state;
         if (prevProps.incidentFilterYear !== incidentFilterYear) {
-            getIncidentData(incidentFilterYear);
+            getIncidentData(incidentFilterYear, clickedItem);
             this.setState({ chartData: this
                 .getChartData(clickedItem, incidentFilterYear, incidentList) });
             this.setState({ nonZeroArr: this
@@ -77,6 +78,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         }
         if (prevProps.clickedItem !== clickedItem) {
             // getIncidentData(incidentFilterYear);
+            getIncidentData(incidentFilterYear, clickedItem);
             this.setState({ chartData: this
                 .getChartData(clickedItem, incidentFilterYear, incidentList) });
             this.setState({ nonZeroArr: this
@@ -135,7 +137,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     public getDescription= () => {
         const { nonZeroArr, chartData } = this.state;
         const { clickedItem } = this.props;
-        console.log('clickedItem', clickedItem);
         if (clickedItem === 'all') {
             if (nonZeroArr.length > 0) {
                 return nonZeroArr.map((item, i) => {
@@ -198,10 +199,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             nonZeroArr,
         } = this.state;
 
-        console.log('chartData:', chartData);
-        console.log('nonZeroArr:', nonZeroArr);
-
-
         return (
             <div className={styles.vrSideBar}>
                 {
@@ -228,15 +225,16 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                                 }
 
                 have been reported in Jugal Rural Municipality.
+
                 These incidents have caused
                                 {' '}
-                                {incidentDetailsData.peopleDeathCount}
+                                {incidentDetailsData.peopleDeathCount }
                                 {' '}
-                 deaths and
+                deaths and
                                 {' '}
                                 {incidentDetailsData.infrastructureDestroyedHouseCount}
                                 {' '}
-                 houses were destroyed.
+                houses were destroyed.
                             </p>
 
                             <ResponsiveContainer className={styles.respContainer} width="100%" height={'75%'}>
@@ -248,7 +246,17 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                                     margin={{ left: 20, right: 20 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" />
+                                    <XAxis type="number">
+                                        <Label
+                                            value="No. of incidents"
+                                            offset={0}
+                                            position="insideBottom"
+                                            style={{
+                                                textAnchor: 'middle',
+                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                            }}
+                                        />
+                                    </XAxis>
                                     <YAxis
                                         type="category"
                                         dataKey="name"

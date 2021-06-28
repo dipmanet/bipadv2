@@ -192,24 +192,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 ? drawChartData[drawChartData.length - 1].buildings
                 : 0,
         });
-
+        console.log('singularBuilding', singularBuilding, 'singularBuldingData', singularBuldingData);
 
         return (
             <div className={styles.vrSideBar}>
-                {/* { singularBuilding
-                    && (
-                        <div className={styles.backBtnContainer}>
-                            <button
-                                onClick={this.handleBackBtn}
-                                type="button"
-                                className={styles.backButton}
-                            >
-                                    Back
-                            </button>
-                        </div>
-                    )
-                } */}
-
                 <h1>
                     Vulnerability of People and Households
                     <button
@@ -236,8 +222,30 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                     </button>
 
                 </h1>
-                { singularBuilding && singularBuldingData
-                    ? (
+                {singularBuilding && Object.keys(singularBuldingData).length === 0
+                    && (
+                        <>
+                            <p>
+                        The vulnerability level has been calculated for
+                        buildings that have complete data on all the physical,
+                        social, and economic parameters used for the
+                        vulnerability score calculation. Buildings for which the
+                        score was not calculated are being displayed in black.
+                            </p>
+                            <div className={styles.backBtnContainer}>
+                                <button
+                                    onClick={this.handleBackBtn}
+                                    type="button"
+                                    className={styles.backButton}
+                                >
+                              Back
+                                </button>
+                            </div>
+                        </>
+                    )
+                }
+                { singularBuilding && Object.keys(singularBuldingData).length > 0
+                    && (
                         <>
                             <p>
                             House ID No:
@@ -432,286 +440,291 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         </>
                     )
 
-                    : (
-                        <>
-                            <p>Vulnerability of Buildings </p>
-                            <div className={styles.buildingClassContainer}>
-                                <div className={styles.levelContainer}>
-                                    <span>
-                                         High
-                                    </span>
-                                    <div className={styles.iconLevel}>
 
-                                        <Icon
-                                            name="home"
-                                            className={styles.high}
-                                        />
-                                        <span className={styles.number}>
-                                            {' '}
-                                            {buildingVulnerability.high}
-                                            {' '}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className={styles.levelContainer}>
-                                    <span>
-                                        Medium
+                }
+                { !singularBuilding
+                && (
+                    <>
+                        <p>Vulnerability of Buildings </p>
+                        <div className={styles.buildingClassContainer}>
+                            <div className={styles.levelContainer}>
+                                <span>
+                                     High
+                                </span>
+                                <div className={styles.iconLevel}>
+
+                                    <Icon
+                                        name="home"
+                                        className={styles.high}
+                                    />
+                                    <span className={styles.number}>
+                                        {' '}
+                                        {buildingVulnerability.high}
+                                        {' '}
                                     </span>
-                                    <div className={styles.iconLevel}>
-                                        <Icon
-                                            name="home"
-                                            className={styles.med}
-                                        />
-                                        <span className={styles.number}>
-                                            {' '}
-                                            {buildingVulnerability.medium}
-                                            {' '}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className={styles.levelContainer}>
-                                    <span>
-                                        Low
-                                    </span>
-                                    <div className={styles.iconLevel}>
-                                        <Icon
-                                            name="home"
-                                            className={styles.low}
-                                        />
-                                        <span className={styles.number}>
-                                            {' '}
-                                            {buildingVulnerability.low}
-                                            {' '}
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
-                            <p>
-                                PHYSICAL, SOCIAL AND ECONOMIC FACTORS
-                            </p>
-                            <p>
-                                Foundation type of the buildings
-                            </p>
-
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={400}>
-                                <BarChart
-                                    width={350}
-                                    height={600}
-                                    data={foundationTypeChartData}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 30 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
+                            <div className={styles.levelContainer}>
+                                <span>
+                                    Medium
+                                </span>
+                                <div className={styles.iconLevel}>
+                                    <Icon
+                                        name="home"
+                                        className={styles.med}
                                     />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(0,219,95)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
+                                    <span className={styles.number}>
+                                        {' '}
+                                        {buildingVulnerability.medium}
+                                        {' '}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={styles.levelContainer}>
+                                <span>
+                                    Low
+                                </span>
+                                <div className={styles.iconLevel}>
+                                    <Icon
+                                        name="home"
+                                        className={styles.low}
                                     />
-                                </BarChart>
-                            </ResponsiveContainer>
+                                    <span className={styles.number}>
+                                        {' '}
+                                        {buildingVulnerability.low}
+                                        {' '}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <p>
+                            PHYSICAL, SOCIAL AND ECONOMIC FACTORS
+                        </p>
+                        <p>
+                            Foundation type of the buildings
+                        </p>
 
-                            <p>
-                                Population distribution in the households
-                            </p>
+                        <ResponsiveContainer className={styles.respContainer} width="100%" height={400}>
+                            <BarChart
+                                width={350}
+                                height={600}
+                                data={foundationTypeChartData}
+                                layout="vertical"
+                                margin={{ top: 10, bottom: 10, right: 25, left: 30 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }} />
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
-                                <BarChart
-                                    width={350}
-                                    height={600}
-                                    data={socialFactorChartData}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 15 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="Total"
+                                    fill="rgb(0,219,95)"
+                                    barSize={15}
+                                    label={{ position: 'right', fill: '#ffffff' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+
+                        <p>
+                            Population distribution in the households
+                        </p>
+
+                        <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
+                            <BarChart
+                                width={350}
+                                height={600}
+                                data={socialFactorChartData}
+                                layout="vertical"
+                                margin={{ top: 10, bottom: 10, right: 25, left: 15 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="Total"
+                                    fill="rgb(0,149,215)"
+                                    barSize={15}
+                                    label={{ position: 'right', fill: '#ffffff' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+
+                        <p>
+                            Agewise Population Distribution
+                        </p>
+
+                        <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            <BarChart
+                                width={350}
+                                height={600}
+                                data={ageGroupChartData}
+                                layout="vertical"
+                                margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="Total"
+                                    fill="rgb(213,81,76)"
+                                    barSize={15}
+                                    label={{ position: 'right', fill: '#ffffff' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+
+
+                        <p>
+                            Ownership of the houses
+                        </p>
+
+                        <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            <BarChart
+                                width={350}
+                                height={600}
+                                data={ownershipChartData}
+                                layout="vertical"
+                                margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                    <Label
+                                        value="No. of households"
+                                        offset={0}
+                                        position="insideBottom"
+                                        style={{
+                                            textAnchor: 'middle',
+                                            fill: 'rgba(255, 255, 255, 0.87)',
+                                        }}
                                     />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(0,149,215)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
+                                </XAxis>
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="Total"
+                                    fill="rgb(213,81,76)"
+                                    barSize={15}
+                                    label={{ position: 'right', fill: '#ffffff' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+
+
+                        <p>
+                            Major source of income
+                        </p>
+
+                        <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                            <BarChart
+                                width={360}
+                                height={600}
+                                data={sourceofIncomeChartData}
+                                layout="vertical"
+                                margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                    <Label
+                                        value="No. of households"
+                                        offset={0}
+                                        position="insideBottom"
+                                        style={{
+                                            textAnchor: 'middle',
+                                            fill: 'rgba(255, 255, 255, 0.87)',
+                                        }}
                                     />
-                                </BarChart>
-                            </ResponsiveContainer>
+                                </XAxis>
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="Total"
+                                    fill="rgb(213,81,76)"
+                                    barSize={15}
+                                    label={{ position: 'right', fill: '#ffffff' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
 
-                            <p>
-                                Agewise Population Distribution
-                            </p>
+                        <p>
+                            Average Annual Income
+                        </p>
 
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                                <BarChart
-                                    width={350}
-                                    height={600}
-                                    data={ageGroupChartData}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
+                        <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
+                            <BarChart
+                                width={340}
+                                height={600}
+                                data={averageAnnualincomeChartData}
+                                layout="vertical"
+                                margin={{ top: 10, bottom: 10, right: 25, left: 40 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }}>
+                                    <Label
+                                        value="No. of households"
+                                        offset={0}
+                                        position="insideBottom"
+                                        style={{
+                                            textAnchor: 'middle',
+                                            fill: 'rgba(255, 255, 255, 0.87)',
+                                        }}
                                     />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(213,81,76)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
+                                </XAxis>
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="Total"
+                                    fill="rgb(213,81,76)"
+                                    barSize={15}
+                                    label={{ position: 'right', fill: '#ffffff' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+
+                        <NavButtons
+                            handleNext={handleNext}
+                            handlePrev={handlePrev}
+                            disableNavLeftBtn={disableNavLeftBtn}
+                            disableNavRightBtn={disableNavRightBtn}
+                            pagenumber={pagenumber}
+                            totalPages={totalPages}
+                        />
+                    </>
+                )
 
 
-                            <p>
-                                Ownership of the houses
-                            </p>
-
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                                <BarChart
-                                    width={350}
-                                    height={600}
-                                    data={ownershipChartData}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label
-                                            value="No. of households"
-                                            offset={0}
-                                            position="insideBottom"
-                                            style={{
-                                                textAnchor: 'middle',
-                                                fill: 'rgba(255, 255, 255, 0.87)',
-                                            }}
-                                        />
-                                    </XAxis>
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
-                                    />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(213,81,76)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
-
-
-                            <p>
-                                Major source of income
-                            </p>
-
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                                <BarChart
-                                    width={360}
-                                    height={600}
-                                    data={sourceofIncomeChartData}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 20 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label
-                                            value="No. of households"
-                                            offset={0}
-                                            position="insideBottom"
-                                            style={{
-                                                textAnchor: 'middle',
-                                                fill: 'rgba(255, 255, 255, 0.87)',
-                                            }}
-                                        />
-                                    </XAxis>
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
-                                    />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(213,81,76)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
-
-                            <p>
-                                Average Annual Income
-                            </p>
-
-                            <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
-                                <BarChart
-                                    width={340}
-                                    height={600}
-                                    data={averageAnnualincomeChartData}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 40 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis interval={0} type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label
-                                            value="No. of households"
-                                            offset={0}
-                                            position="insideBottom"
-                                            style={{
-                                                textAnchor: 'middle',
-                                                fill: 'rgba(255, 255, 255, 0.87)',
-                                            }}
-                                        />
-                                    </XAxis>
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
-                                    />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(213,81,76)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
-
-                            <NavButtons
-                                handleNext={handleNext}
-                                handlePrev={handlePrev}
-                                disableNavLeftBtn={disableNavLeftBtn}
-                                disableNavRightBtn={disableNavRightBtn}
-                                pagenumber={pagenumber}
-                                totalPages={totalPages}
-                            />
-                        </>
-                    )
                 }
 
 

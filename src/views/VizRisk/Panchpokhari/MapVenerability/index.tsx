@@ -718,16 +718,17 @@ class FloodHistoryMap extends React.Component {
                     // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
                     this.showPopupOnBldgs(cood, this.getHouseId(searchId));
                 } else {
-                    this.showPopupOnBldgs(cood, 'No data available on this building');
+                    alert('No data available');
                     this.setState({ searchTerm: '' });
-                    this.props.setSingularBuilding(false, {});
+                    this.props.setSingularBuilding(true, {});
                 }
             } else {
-                this.showPopupOnBldgs(cood, 'No data available on this building');
+                alert('No data available');
                 this.setState({ searchTerm: '' });
-                this.props.setSingularBuilding(false, {});
+                this.props.setSingularBuilding(true, {});
             }
         } else {
+            this.props.setSingularBuilding(true, {});
             alert('No data available');
         }
     };

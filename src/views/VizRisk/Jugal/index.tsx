@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -246,10 +247,18 @@ class Jugal extends React.Component {
         this.setState({ buildings });
     }
 
-    public setIncidentList = (year: string) => {
+    public setIncidentList = (year: string, hazard) => {
         const { incidentList } = this.props;
-        if (incidentList.length > 0) {
-            const inciTotal = incidentList
+        let filteredIL;
+        console.log('hazard', hazard);
+        if (hazard !== 'all') {
+            filteredIL = incidentList.filter(item => item.hazardInfo.title === hazard);
+        } else {
+            filteredIL = incidentList;
+        }
+        console.log('filteredIL', filteredIL);
+        if (filteredIL.length > 0) {
+            const inciTotal = filteredIL
                 .filter(y => this.getIncidentYear(y.incidentOn) === year)
                 .map(item => item.loss)
                 .filter(f => f !== undefined);
@@ -258,18 +267,29 @@ class Jugal extends React.Component {
                 const incidentDetails = inciTotal.reduce((a, b) => ({
                     peopleDeathCount: (a.peopleDeathCount || 0) + (b.peopleDeathCount || 0),
                     infrastructureDestroyedHouseCount:
-                    a.infrastructureDestroyedHouseCount + b.infrastructureDestroyedHouseCount,
+                    (a.infrastructureDestroyedHouseCount || 0) + (b.infrastructureDestroyedHouseCount || 0),
                     infrastructureAffectedHouseCount:
-                    a.infrastructureAffectedHouseCount + b.infrastructureAffectedHouseCount,
+                    (a.infrastructureAffectedHouseCount || 0) + (b.infrastructureAffectedHouseCount || 0),
                     peopleMissingCount:
-                    a.peopleMissingCount + b.peopleMissingCount,
+                    (a.peopleMissingCount || 0) + (b.peopleMissingCount || 0),
                     infrastructureEconomicLoss:
-                    a.infrastructureEconomicLoss + b.infrastructureEconomicLoss,
+                    (a.infrastructureEconomicLoss || 0) + (b.infrastructureEconomicLoss || 0),
                     agricultureEconomicLoss:
-                    a.agricultureEconomicLoss + b.agricultureEconomicLoss,
-                    totalAnnualincidents: inciTotal.length,
+                    (a.agricultureEconomicLoss || 0) + (b.agricultureEconomicLoss || 0),
+                    totalAnnualincidents: inciTotal.length || 0,
                 }));
                 this.setState({ incidentDetailsData: incidentDetails });
+            } else {
+                const incidentDetailsData = {
+                    peopleDeathCount: 0,
+                    infrastructureDestroyedHouseCount: 0,
+                    infrastructureAffectedHouseCount: 0,
+                    peopleMissingCount: 0,
+                    infrastructureEconomicLoss: 0,
+                    agricultureEconomicLoss: 0,
+                    totalAnnualincidents: 0,
+                };
+                this.setState({ incidentDetailsData });
             }
         }
     }
