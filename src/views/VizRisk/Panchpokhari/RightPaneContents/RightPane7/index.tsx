@@ -240,7 +240,9 @@ class SlideFivePane extends React.Component<Props, State> {
                     </button>
 
                 </h1>
-                {singularBuilding && Object.keys(singularBuldingData).length === 0
+                {singularBuilding
+                && singularBuldingData
+                && Object.keys(singularBuldingData).length === 0
                     && (
                         <>
                             <p>
