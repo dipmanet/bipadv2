@@ -115,7 +115,7 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARainFiltersElement) =
     if (Array.isArray(filter)) {
         return filter.length !== 0;
     }
-    // issue here
+
     if (filter) {
         const filterKeys = Object.keys(filter);
         return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
@@ -245,6 +245,17 @@ class RainFilters extends React.PureComponent<Props, State> {
 
     private handleFaramChange = (faramValues: DARainFiltersElement) => {
         if (faramValues.basin !== '') {
+            this.setState((prevState) => {
+                if (prevState.faramValues.basin !== faramValues.basin) {
+                    return { faramValues: {
+                        dataDateRange: faramValues.dataDateRange,
+                        basin: faramValues.basin,
+                        station: {},
+                    } };
+                }
+                return ({ faramValues });
+            });
+
             if (faramValues.basin.title !== undefined) {
             // eslint-disable-next-line max-len
                 const filteredStation = this.state.allStations.filter(r => r.basin === faramValues.basin.title);
@@ -260,7 +271,6 @@ class RainFilters extends React.PureComponent<Props, State> {
             const filteredStation = this.state.allStations;
             this.setState({ filteredStation });
         }
-        this.setState({ faramValues });
     }
 
     private handleSubmitClick = () => {
