@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
@@ -55,13 +57,10 @@ const populationWardExpression = [
     9, '#fed990', 10, '#d95f0e',
 ];
 const {
-    criticalinfrastructures,
+    // criticalinfrastructures,
     evaccenters,
 } = SchoolGeoJSON;
 
-const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-    item => item.properties.Type,
-))];
 
 const categoriesEvac = [...new Set(evaccenters.features.map(
     item => item.properties.Type,
@@ -69,13 +68,11 @@ const categoriesEvac = [...new Set(evaccenters.features.map(
 
 const rasterLayersYears = [5, 50, 100, 500];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
-const arrCritical = categoriesCritical.map(
-    layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
-);
+
 const arrEvac = categoriesEvac.map(
     layer => [`evac-count-${layer}`, `evac-unclustered-${layer}`, `evac-${layer}`],
 );
-const criticalInfraClusters = [].concat(...arrCritical);
+
 const evacClusters = [].concat(...arrEvac);
 
 
@@ -94,17 +91,6 @@ const slideThreeLayers = ['wardNumbers', 'water', 'wardOutline',
     'ward-fill-local', 'bufferRajapur',
     'population-extruded'];
 
-const slideFourLayers = [
-    ...criticalInfraClusters, 'water', 'wardOutline',
-    'bridgeRajapur', 'canalRajapur',
-    'waterway', 'rajapurRoads', 'wardFill',
-];
-
-const slideFiveLayers = [
-    ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
-    'bridgeRajapur', 'canalRajapur', 'waterway',
-    'rajapurRoads', 'wardOutline', 'wardFill',
-];
 const slideSixLayers = [
     'safeshelterRajapurIcon', 'safeshelterRajapur',
     ...evacClusters, ...rasterLayers, 'water',
@@ -121,8 +107,12 @@ class FloodHistoryMap extends React.Component {
             lng: 81.12424608127894,
             zoom: 11,
             wardNumber: 'Hover to see ward number',
+            categoriesCritical: [],
+            slideFourLayers: [],
+            slideFiveLayers: [],
         };
     }
+
 
     public componentDidMount() {
         const {
@@ -133,7 +123,36 @@ class FloodHistoryMap extends React.Component {
             selectedProvinceId: provinceId,
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
+            cI: criticalinfrastructures,
         } = this.props;
+        if (criticalinfrastructures && criticalinfrastructures.features) {
+            console.log('criticalinfrastructures', criticalinfrastructures);
+            const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
+                item => item.properties.Type,
+            ))];
+            this.setState({ categoriesCritical });
+            const arrCritical = categoriesCritical.map(
+                layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
+            );
+            const criticalInfraClusters = [].concat(...arrCritical);
+
+
+            const slideFourLayers = [
+                ...criticalInfraClusters, 'water', 'wardOutline',
+                'bridgeRajapur', 'canalRajapur',
+                'waterway', 'rajapurRoads', 'wardFill',
+            ];
+
+            const slideFiveLayers = [
+                ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
+                'bridgeRajapur', 'canalRajapur', 'waterway',
+                'rajapurRoads', 'wardOutline', 'wardFill',
+            ];
+
+            this.setState({ slideFourLayers });
+            this.setState({ slideFiveLayers });
+        }
+
 
         const mapping = [];
         if (wards) {
@@ -199,125 +218,127 @@ class FloodHistoryMap extends React.Component {
             }
         });
         this.map.on('style.load', () => {
-            categoriesCritical.map((layer) => {
-                this.map.addSource(layer, {
-                    type: 'geojson',
-                    data: this.getGeoJSON(layer, criticalinfrastructures),
-                    cluster: true,
-                    clusterRadius: 50,
-                });
-                this.map.addLayer({
-                    id: `clusters-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'],
-                            '#a4ac5e',
-                            100,
-                            '#a4ac5e',
-                        ],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'],
-                            20,
-                            100,
-                            30,
-                            750,
-                            40,
-                        ],
-                    },
-                });
+            // if (this.state.categoriesCritical.length > 0) {
+            //     this.state.categoriesCritical.map((layer) => {
+            //         this.map.addSource(layer, {
+            //             type: 'geojson',
+            //             data: this.getGeoJSON(layer, criticalinfrastructures),
+            //             cluster: true,
+            //             clusterRadius: 50,
+            //         });
+            //         this.map.addLayer({
+            //             id: `clusters-${layer}`,
+            //             type: 'circle',
+            //             source: layer,
+            //             filter: ['has', 'point_count'],
+            //             paint: {
+            //                 'circle-color': [
+            //                     'step',
+            //                     ['get', 'point_count'],
+            //                     '#a4ac5e',
+            //                     100,
+            //                     '#a4ac5e',
+            //                 ],
+            //                 'circle-radius': [
+            //                     'step',
+            //                     ['get', 'point_count'],
+            //                     20,
+            //                     100,
+            //                     30,
+            //                     750,
+            //                     40,
+            //                 ],
+            //             },
+            //         });
 
-                this.map.addLayer({
-                    id: `unclustered-point-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-                        'icon-image': ['get', 'icon'],
-                        'icon-size': 0.3,
-                    },
-                });
+            //         this.map.addLayer({
+            //             id: `unclustered-point-${layer}`,
+            //             type: 'symbol',
+            //             source: layer,
+            //             filter: ['!', ['has', 'point_count']],
+            //             layout: {
+            //                 'icon-image': ['get', 'icon'],
+            //                 'icon-size': 0.3,
+            //             },
+            //         });
 
-                this.map.addLayer({
-                    id: `clusters-count-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12,
-                    },
-                });
+            //         this.map.addLayer({
+            //             id: `clusters-count-${layer}`,
+            //             type: 'symbol',
+            //             source: layer,
+            //             layout: {
+            //                 'text-field': '{point_count_abbreviated}',
+            //                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            //                 'text-size': 12,
+            //             },
+            //         });
 
-                this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+            //         this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+            //         this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+            //         this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
 
-                return null;
-            });
+            //         return null;
+            //     });
+            // }
 
-            categoriesEvac.map((layer) => {
-                this.map.addSource(`evac${layer}`, {
-                    type: 'geojson',
-                    data: this.getGeoJSON(layer, evaccenters),
-                    cluster: true,
-                    clusterRadius: 50,
-                });
-                this.map.addLayer({
-                    id: `evac-${layer}`,
-                    type: 'circle',
-                    source: `evac${layer}`,
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'],
-                            '#a4ac5e',
-                            100,
-                            '#a4ac5e',
-                        ],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'],
-                            20,
-                            100,
-                            30,
-                            750,
-                            40,
-                        ],
-                    },
-                });
-                this.map.addLayer({
-                    id: `evac-count-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12,
-                    },
-                });
-                this.map.addLayer({
-                    id: `evac-unclustered-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-                        'icon-image': ['get', 'icon'],
-                        'icon-size': 0.3,
-                    },
-                });
+            // categoriesEvac.map((layer) => {
+            //     this.map.addSource(`evac${layer}`, {
+            //         type: 'geojson',
+            //         data: this.getGeoJSON(layer, evaccenters),
+            //         cluster: true,
+            //         clusterRadius: 50,
+            //     });
+            //     this.map.addLayer({
+            //         id: `evac-${layer}`,
+            //         type: 'circle',
+            //         source: `evac${layer}`,
+            //         filter: ['has', 'point_count'],
+            //         paint: {
+            //             'circle-color': [
+            //                 'step',
+            //                 ['get', 'point_count'],
+            //                 '#a4ac5e',
+            //                 100,
+            //                 '#a4ac5e',
+            //             ],
+            //             'circle-radius': [
+            //                 'step',
+            //                 ['get', 'point_count'],
+            //                 20,
+            //                 100,
+            //                 30,
+            //                 750,
+            //                 40,
+            //             ],
+            //         },
+            //     });
+            //     this.map.addLayer({
+            //         id: `evac-count-${layer}`,
+            //         type: 'symbol',
+            //         source: layer,
+            //         layout: {
+            //             'text-field': '{point_count_abbreviated}',
+            //             'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            //             'text-size': 12,
+            //         },
+            //     });
+            //     this.map.addLayer({
+            //         id: `evac-unclustered-${layer}`,
+            //         type: 'symbol',
+            //         source: layer,
+            //         filter: ['!', ['has', 'point_count']],
+            //         layout: {
+            //             'icon-image': ['get', 'icon'],
+            //             'icon-size': 0.3,
+            //         },
+            //     });
 
-                this.map.setLayoutProperty(`evac-${layer}`, 'visibility', 'none');
-                this.map.setLayoutProperty(`evac-count-${layer}`, 'visibility', 'none');
-                this.map.setLayoutProperty(`evac-unclustered-${layer}`, 'visibility', 'none');
+            //     this.map.setLayoutProperty(`evac-${layer}`, 'visibility', 'none');
+            //     this.map.setLayoutProperty(`evac-count-${layer}`, 'visibility', 'none');
+            //     this.map.setLayoutProperty(`evac-unclustered-${layer}`, 'visibility', 'none');
 
-                return null;
-            });
+            //     return null;
+            // });
 
             rasterLayersYears.map((layer) => {
                 this.map.addSource(`rasterrajapur${layer}`, {
@@ -505,6 +526,7 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
+
     public componentWillReceiveProps(nextProps) {
         const {
             rasterLayer,
@@ -564,34 +586,140 @@ class FloodHistoryMap extends React.Component {
                     this.orderLayers(slideTwoLayers);
                 } else if (nextProps.rightElement === 2) {
                     this.toggleVisiblity(slideTwoLayers, 'none');
-                    this.toggleVisiblity(slideFourLayers, 'none');
+                    this.toggleVisiblity(this.state.slideFourLayers, 'none');
                     this.toggleVisiblity(slideThreeLayers, 'visible');
                     this.orderLayers(slideThreeLayers);
                     this.resetClusters();
                 } else if (nextProps.rightElement === 3) {
                     this.toggleVisiblity(slideThreeLayers, 'none');
-                    this.toggleVisiblity(slideFiveLayers, 'none');
-                    this.toggleVisiblity(slideFourLayers, 'visible');
+                    this.toggleVisiblity(this.state.slideFiveLayers, 'none');
+                    this.toggleVisiblity(this.state.slideFourLayers, 'visible');
 
-                    this.orderLayers(slideFourLayers);
+                    this.orderLayers(this.state.slideFourLayers);
                     this.handleInfraClusterSwitch(criticalElement);
                     this.hideFloodRasters();
                 } else if (nextProps.rightElement === 4) {
-                    this.toggleVisiblity(slideFourLayers, 'none');
+                    this.toggleVisiblity(this.state.slideFourLayers, 'none');
                     this.toggleVisiblity(slideSixLayers, 'none');
-                    this.toggleVisiblity(slideFiveLayers, 'visible');
+                    this.toggleVisiblity(this.state.slideFiveLayers, 'visible');
 
-                    this.orderLayers(slideFiveLayers);
+                    this.orderLayers(this.state.slideFiveLayers);
                     this.handleInfraClusterSwitch(criticalFlood);
                     this.handleFloodRasterSwitch('5');
                 } else if (nextProps.rightElement === 5) {
-                    this.toggleVisiblity(slideFiveLayers, 'none');
+                    this.toggleVisiblity(this.state.slideFiveLayers, 'none');
                     this.toggleVisiblity(slideSixLayers, 'visible');
                     this.orderLayers(slideSixLayers);
                     this.handleFloodRasterSwitch('5');
                     this.handleEvacClusterSwitch(evacElement);
                 }
             }
+        }
+    }
+
+    public componentDidUpdate(prevProps) {
+        const {
+            wards,
+            cI: criticalinfrastructures,
+        } = this.props;
+
+        if (prevProps.cI !== this.props.cI && this.props.cI.features.length > 0) {
+            console.log('criticalinfrastructures', criticalinfrastructures);
+            const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
+                item => item.properties.Type,
+            ))];
+            this.setState({ categoriesCritical });
+            const arrCritical = categoriesCritical.map(
+                layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
+            );
+            const criticalInfraClusters = [].concat(...arrCritical);
+
+
+            const slideFourLayers = [
+                ...criticalInfraClusters, 'water', 'wardOutline',
+                'bridgeRajapur', 'canalRajapur',
+                'waterway', 'rajapurRoads', 'wardFill',
+            ];
+
+            const slideFiveLayers = [
+                ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
+                'bridgeRajapur', 'canalRajapur', 'waterway',
+                'rajapurRoads', 'wardOutline', 'wardFill',
+            ];
+
+            this.setState({ slideFourLayers });
+            this.setState({ slideFiveLayers });
+
+
+            console.log('categoriesCritical', categoriesCritical);
+            console.log('slideFourLayers', slideFourLayers);
+            console.log('slideFiveLayers', slideFiveLayers);
+            console.log('map', this.map);
+            categoriesCritical.map((layer) => {
+                this.map.addSource(layer, {
+                    type: 'geojson',
+                    data: this.getGeoJSON(layer, criticalinfrastructures),
+                    // cluster: true,
+                    // clusterRadius: 50,
+                });
+                console.log('geojson returned',
+                    JSON.stringify(this.getGeoJSON(layer, criticalinfrastructures)));
+                this.map.addLayer({
+                    id: `clusters-${layer}`,
+                    type: 'circle',
+                    source: layer,
+                    // filter: ['has', 'point_count'],
+                    paint: {
+                        // 'circle-color': [
+                        //     'step',
+                        //     ['get', 'point_count'],
+                        //     '#a4ac5e',
+                        //     100,
+                        //     '#a4ac5e',
+                        // ],
+                        'circle-color': '#a4ac5e',
+
+                        // 'circle-radius': [
+                        //     'step',
+                        //     ['get', 'point_count'],
+                        //     20,
+                        //     100,
+                        //     30,
+                        //     750,
+                        //     40,
+                        // ],
+                        'circle-radius': 20,
+                    },
+                });
+
+                this.map.addLayer({
+                    id: `unclustered-point-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    // filter: ['!', ['has', 'point_count']],
+                    layout: {
+                        'icon-image': ['get', 'icon'],
+                        'icon-size': 0.3,
+                    },
+                });
+
+                this.map.addLayer({
+                    id: `clusters-count-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12,
+                    },
+                });
+
+                this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+
+                return null;
+            });
         }
     }
 
@@ -638,28 +766,28 @@ class FloodHistoryMap extends React.Component {
 
 
     public resetClusters = () => {
-        categoriesCritical.map((layer) => {
+        this.state.categoriesCritical.map((layer) => {
             this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
             this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
             this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
 
             return null;
         });
-        categoriesEvac.map((layer) => {
-            this.map.setLayoutProperty(
-                `evac-${layer}`, 'visibility', 'none',
-            );
-            this.map.setLayoutProperty(
-                `evac-count-${layer}`, 'visibility', 'none',
-            );
-            this.map.setLayoutProperty(
-                `evac-unclustered-${layer}`, 'visibility', 'none',
-            );
+        // categoriesEvac.map((layer) => {
+        //     this.map.setLayoutProperty(
+        //         `evac-${layer}`, 'visibility', 'none',
+        //     );
+        //     this.map.setLayoutProperty(
+        //         `evac-count-${layer}`, 'visibility', 'none',
+        //     );
+        //     this.map.setLayoutProperty(
+        //         `evac-unclustered-${layer}`, 'visibility', 'none',
+        //     );
 
-            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'none');
-            return null;
-        });
+        //     this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'none');
+        //     this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'none');
+        //     return null;
+        // });
     }
 
     public toggleVisiblity = (layers, state) => {
@@ -692,7 +820,7 @@ class FloodHistoryMap extends React.Component {
         this.resetClusters();
 
         if (layer === 'all') {
-            categoriesCritical.map((item) => {
+            this.state.categoriesCritical.map((item) => {
                 this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
                 this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');

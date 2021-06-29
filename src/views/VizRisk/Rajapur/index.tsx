@@ -1,4 +1,6 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -18,6 +20,15 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
 import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+import { getgeoJsonLayer } from './utils';
+
+
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 
 const rightelements = [
     <RightElement1 />,
@@ -28,7 +39,21 @@ const rightelements = [
     <RightElement6 />,
 ];
 
-export default class Rajapur extends React.Component {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    cIGetRequest: {
+        url: ({ params }) => params.url,
+        method: methods.GET,
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results: cI = [] } = response as Response;
+            params.setCI(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
+};
+
+class Rajapur extends React.Component {
     public constructor(props) {
         super(props);
 
@@ -47,7 +72,15 @@ export default class Rajapur extends React.Component {
             showPopulation: 'ward',
             evacElement: 'all',
             showCriticalElements: true,
+            cI: [],
         };
+
+        const { requests: { cIGetRequest } } = this.props;
+
+        cIGetRequest.setDefaultParams({
+            setCI: this.setCI,
+            url: getgeoJsonLayer('CI_Tikapur'),
+        });
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -152,6 +185,10 @@ export default class Rajapur extends React.Component {
         }
     }
 
+    public setCI = (cI) => {
+        this.setState({ cI });
+        console.log('CI Data:', cI);
+    }
 
     public render() {
         const {
@@ -166,6 +203,7 @@ export default class Rajapur extends React.Component {
             evacElement,
             criticalFlood,
             showCriticalElements,
+            cI,
         } = this.state;
 
         return (
@@ -216,6 +254,7 @@ export default class Rajapur extends React.Component {
                     evacElement={evacElement}
                     disableNavBtns={this.disableNavBtns}
                     enableNavBtns={this.enableNavBtns}
+                    cI={cI}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1
@@ -311,3 +350,9 @@ export default class Rajapur extends React.Component {
         );
     }
 }
+
+export default compose(
+    connect(undefined, undefined),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
+)(Rajapur);
