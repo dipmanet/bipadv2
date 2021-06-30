@@ -136,7 +136,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 This visualization allows the super imposition of the
                                 seimic hazard map with landcover and critical infrastructures.
                                 The map shows the peak ground acceleration values
-                                due to earthquake ground shaking with 2% probability
+                                due to earthquake ground shaking with 10% probability
                                 of exceedance in 50 years.
                                 </p>
 
