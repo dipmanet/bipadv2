@@ -131,7 +131,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <h1>Earthquake Exposure </h1>
 
                                 <p>
-                                The map shows the exposure of elements
+                                The map shows the exposure of critical infrastructures
                                 and assets to earthquake.
                                 This visualization allows the super imposition of the
                                 seimic hazard map with landcover and critical infrastructures.
@@ -154,7 +154,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 </p>
 
                                 <p>
-                                    CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                                ELEMENTS THAT ARE EXPOSED TO EARTHQUAKE WITHIN
                                     {' '}
                                     {this.state.areaSelected}
                                 </p>
@@ -165,7 +165,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <>
                                 <h1>Landslide Exposure </h1>
                                 <p>
-The map shows the exposure of critical
+                                    The map shows the exposure of critical
                                     infrastructures and assets to landslide.
                                     This visualization allows the super imposition
                                     of the landslide susceptibility map with details
@@ -176,20 +176,20 @@ The map shows the exposure of critical
                                 </p>
 
                                 <p>
-This visualization helps understand the population,
-critical infrastructures and assets that are at threat to earthquake
+                                    This visualization helps understand the population,
+                                    critical infrastructures and
+                                    assets that are at threat to earthquake
                                     hazard in the region.
                                     {' '}
-
                                 </p>
 
                                 <p>
-Its impacts can be reduced through risk-sensitive
+                                    Its impacts can be reduced through risk-sensitive
                                     land use planning and this visualization allows
                                     re-thinking long term spatial planning in the region.
                                 </p>
                                 <p>
-                        CRITICAL INFRASTRUCTURES THAT ARE EXPOSED TO LANDSLIDE WITHIN
+                                ELEMENTS THAT ARE EXPOSED TO LANDSLIDE WITHIN
                                     {' '}
                                     {this.state.areaSelected}
                                 </p>

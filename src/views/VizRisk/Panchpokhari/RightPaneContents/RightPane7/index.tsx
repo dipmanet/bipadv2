@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 
@@ -278,7 +279,10 @@ class SlideFivePane extends React.Component<Props, State> {
                             </p>
                             <div className={styles.vulScoreRow}>
                                 <span>VULNERABILITY OF THE HOUSEHOLD</span>
-                                {this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)}
+                                {isDefined(singularBuldingData.vulnerabilityScore)
+                                    ? this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)
+                                    : '-'
+                                }
                             </div>
 
                             <p>

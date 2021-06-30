@@ -144,13 +144,13 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         ? (
                             <>
                                 <h1>Earthquake Exposure in Jugal </h1>
-                                <p>The map shows the exposure of elements and assets to earthquake.This visualization allows the super imposition of the seimic hazard map with details of landuse and critical infrastructures. The map shows the peak ground acceleration values due to earthquake ground shaking with 10% probability of exceedance in 50 years. </p>
+                                <p>The map shows the exposure of critical infrastructures and assets to earthquake.This visualization allows the super imposition of the seimic hazard map with details of landuse and critical infrastructures. The map shows the peak ground acceleration values due to earthquake ground shaking with 10% probability of exceedance in 50 years. </p>
 
                                 <p>This visualization helps understand the population, critical infrastructures and assets that are at threat to earthquake hazard in the region. </p>
 
                                 <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region. </p>
                                 <p>
-                                critical infrastructures THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                                ELEMENTS THAT ARE EXPOSED TO EARTHQUAKE WITHIN
                                     {' '}
                                     {this.state.areaSelected}
                                 </p>
@@ -164,7 +164,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                                 <p>Its impacts can be reduced through risk-sensitive land use planning and this visualization allows re-thinking long term spatial planning in the region.</p>
                                 <p>
-                                CRITICAL INFRASTRUCTURE THAT ARE EXPOSED TO EARTHQUAKE WITHIN
+                                ELEMENTS THAT ARE EXPOSED TO EARTHQUAKE WITHIN
                                     {' '}
                                     {this.state.areaSelected}
                                 </p>
