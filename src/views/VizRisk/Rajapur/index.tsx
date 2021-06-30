@@ -79,7 +79,7 @@ class Rajapur extends React.Component {
 
         cIGetRequest.setDefaultParams({
             setCI: this.setCI,
-            url: getgeoJsonLayer('CI_Tikapur'),
+            url: getgeoJsonLayer('CI_Rajapur'),
         });
     }
 
