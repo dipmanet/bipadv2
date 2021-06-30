@@ -1,4 +1,6 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -49,7 +51,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-export default class Gulariya extends React.Component {
+class Gulariya extends React.Component {
     public constructor(props) {
         super(props);
 
@@ -77,6 +79,11 @@ export default class Gulariya extends React.Component {
             setCI: this.setCI,
             url: getgeoJsonLayer('CI_Gulariya'),
         });
+    }
+
+    public setCI = (cI) => {
+        this.setState({ cI });
+        console.log('CI Data:', cI);
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -343,3 +350,9 @@ export default class Gulariya extends React.Component {
         );
     }
 }
+
+export default compose(
+    connect(undefined, undefined),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
+)(Gulariya);

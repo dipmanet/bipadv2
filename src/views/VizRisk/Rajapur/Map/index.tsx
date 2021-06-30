@@ -243,36 +243,6 @@ class FloodHistoryMap extends React.Component {
                 );
             });
 
-            this.map.on('click', 'ward-fill-local', (e) => {
-                if (e.features.length > 0) {
-                    if (hoveredWardId) {
-                        this.setState({ wardNumber: hoveredWardId });
-                        this.map.setFeatureState(
-                            {
-                                id: hoveredWardId,
-                                source: 'vizrisk-fills',
-                                // paint: { 'fill-color': '#eee' },
-                                sourceLayer: mapSources.nepal.layers.ward,
-                            },
-                            { hover: false },
-                        );
-                        this.map.setPaintProperty('ward-fill-local', 'fill-color', '#112330');
-                        // this.map.setZoom(14);
-                        // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 0.3);
-                    }
-                    hoveredWardId = e.features[0].id;
-                    this.map.setFeatureState(
-                        {
-                            id: hoveredWardId,
-                            source: 'vizrisk-fills',
-                            // paint: { 'fill-color': '#eee' },
-                            sourceLayer: mapSources.nepal.layers.ward,
-
-                        },
-                        { hover: true },
-                    );
-                }
-            });
 
             const popup = new mapboxgl.Popup({
                 closeButton: false,
