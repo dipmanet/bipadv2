@@ -644,7 +644,7 @@ class FloodHistoryMap extends React.Component {
                         type: 'Feature',
                         geometry: {
                             type: 'Point',
-                            coordinates: item.geometry.coordinates[0],
+                            coordinates: item.geometry.coordinates,
                         },
                     };
                 });
@@ -659,7 +659,7 @@ class FloodHistoryMap extends React.Component {
                 features: [...evacCulture, ...evacEducation],
             };
             const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-                item => item.properties.Type,
+                item => item.properties.results__r,
             ))];
             this.setState({ categoriesCritical });
             this.setState({ categoriesEvac });
@@ -693,6 +693,7 @@ class FloodHistoryMap extends React.Component {
 
 
             console.log('evaccenters', evaccenters);
+            console.log('criticalinfrastructures', criticalinfrastructures);
             // console.log('slideFourLayers', slideFourLayers);
             // console.log('slideFiveLayers', slideFiveLayers);
             // console.log('map', this.map);
@@ -755,12 +756,13 @@ class FloodHistoryMap extends React.Component {
                         },
                     });
 
-                    this.map.setLayoutProperty(`evac-unclustered-point-${layer}`, 'visibility', 'visible');
-                    this.map.setLayoutProperty(`evac-clusters-${layer}`, 'visibility', 'visible');
-                    this.map.setLayoutProperty(`evac-clusters-count-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`evac-unclustered-point-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`evac-clusters-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`evac-clusters-count-${layer}`, 'visibility', 'none');
 
                     return null;
                 });
+                console.log('categoriesCritical', categoriesCritical);
                 categoriesCritical.map((layer) => {
                     this.map.addSource(layer, {
                         type: 'geojson',
@@ -818,6 +820,11 @@ class FloodHistoryMap extends React.Component {
                             'text-size': 12,
                         },
                     });
+
+
+                    this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
                     return null;
                 });
             }
@@ -852,7 +859,7 @@ class FloodHistoryMap extends React.Component {
         temp.crs.properties = {};
         temp.crs.properties.name = 'urn:ogc:def:crs:OGC:1.3:CRS84';
         temp.features = [];
-        const ourD = data.features.filter(item => item.properties.Type === filterBy);
+        const ourD = data.features.filter(item => item.properties.results__r === filterBy);
         temp.features.push(...ourD);
         return temp;
     }
