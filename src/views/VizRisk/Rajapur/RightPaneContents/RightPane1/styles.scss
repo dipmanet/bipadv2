@@ -12,6 +12,17 @@
         height: 100vh;
         right: 0;
         overflow-y: scroll;
+
+        .source {
+            display: flex;
+            justify-content: flex-end;
+            color: #A7B3BB;
+            margin-right: 30px;
+        }
+
+        .climateChart{
+            margin-top: 10px;
+        }
         .iconRow{
             display: flex;
             padding-left: 30px;

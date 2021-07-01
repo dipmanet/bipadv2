@@ -225,7 +225,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                             <div className={styles.iconText}>
                             Maximum
                                 <br />
-                            Temperature in Summer
+                            Temperature in
+                                <br />
+                            Summer
                             </div>
 
                         </div>
@@ -240,7 +242,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                             <div className={styles.iconText}>
                             Minimum
                                 <br />
-                            Temeperature in Winter
+                            Temeperature in
+                                <br />
+                             Winter
                             </div>
 
                         </div>
@@ -275,7 +279,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
-
+                <div className={styles.source}>Source: DHM, 2020 Data </div>
                 <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}>Temperature</p>
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart
