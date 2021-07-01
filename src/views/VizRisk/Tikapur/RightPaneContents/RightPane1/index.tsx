@@ -194,22 +194,16 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Tikapur Municipality  </h1>
                 <p>
-                Tikapur Municipality is located in Kailali
-                 district of Sudurpaschim province.
-                Tikapur municipality has a total area of 118
-                square km and is situated at an elevation of
-                 145m to 161m AMSL.
+                Tikapur Municipality is located in Kailali district of Sudurpaschim province.
+                Tikapur municipality has a total area of 118 sq.km and is situated
+                 at an elevation of 145m to 161m AMSL.
 
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Gulariya experiences a sub tropical climate.
-                Summer starts from March (Chaitra)
-                 and lasts till June (Jestha). Winter begins
-                  in November (Mangsir) and lasts till
-                 February(Magh). Gulariya faces heavy downpours
-                  during the monsoon, from June (Jestha)
-                 to October (Ashwin).
+                Summer starts from March and lasts till June. Winter begins in November
+                 and lasts till February. Tikapur faces heavy downpours during the monsoon,
+                  from June to October.
 
                 </p>
                 <div className={styles.iconRow}>

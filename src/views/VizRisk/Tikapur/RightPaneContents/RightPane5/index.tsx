@@ -31,24 +31,21 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Flood Exposure </h1>
                 <p>
-                This visualization allows the superimposition of
-                flood hazard maps for the different return periods
-                 of flood with land use details. Return period is the
-                  probability of experiencing a given water depth within
-                   a single year; i.e. ‘1-in-100 year’ means 1 in 100 (1%)
-                   chance of occurrence in any given year.
+                    This visualization allows the superimposition of flood hazard maps for the
+                    different return periods of flood with land use details. Return period is
+                    the probability of experiencing a given water depth within a single year;
+                    i.e. ‘1-in-100 year’ means 1 in 100 (1%) chance of occurrence in any given year.
                 </p>
                 <p>
-                This visualization helps understand the population, elements,
-                 and assets that are at threat to modeled flood hazards in the
-                  region. During the extreme flood, water cut across the ox-bows,
-                  damaging structures and fields, scouring the land, and depositing
-                  sediments.
+                    This visualization helps understand the population, elements, and assets
+                    that are at threat to modeled flood hazards in the region. During the extreme
+                    flood, water cut across the ox-bows, damaging structures and fields, scouring
+                    the land, and depositing sediments.
                 </p>
                 <p>
-                The impact of flooding can be greatly reduced through flood-sensitive
-                 land use planning and this visualization allows re-thinking long-term
-                  spatial planning in the region.
+                    The impact of flooding can be greatly reduced through flood-sensitive land use
+                    planning and this visualization allows re-thinking long-term spatial planning
+                    in the region.
                 </p>
                 {/* <SourceInfo /> */}
 

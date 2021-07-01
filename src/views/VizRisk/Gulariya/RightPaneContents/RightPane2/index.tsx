@@ -158,15 +158,10 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <h1>Land Cover</h1>
 
-                {/* <p>
-                    {' '}
-                    Located in the Terai region and lying close to water bodies,
-                    Rajapur has fertile and arable land.
-
-                </p> */}
                 <p>
-                Most of the land is used for agriculture. Other areas are covered by forest,
-                 built-up area, waterbodies, conservation areas.
+                    Out of a total area of 118 sq. km, 72.4% of the land is covered by farmland,
+                    6.4% by forests. Other areas are covered by water bodies, grassland, sand
+                    and built-up area.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart

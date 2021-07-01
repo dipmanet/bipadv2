@@ -169,9 +169,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Out of a total area of 118 square km, 63.30% of the land is used
-                for agriculture.Forests cover 12.63%, water bodies cover 5.17%
-                and buildings cover 1.43% of the land.
+                Out of a total area of 118 sq.km, 36.3% of the land is used for agriculture.
+                 Forests cover 12.6%, water bodies cover 5.2% and buildings cover 1.4% of
+                  the land area. Other areas in Tikpaur are covered by sand, grassland and shrubs.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
