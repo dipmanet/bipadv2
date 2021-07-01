@@ -555,7 +555,6 @@ class FloodHistoryMap extends React.Component {
             );
 
             const evacClusters = [].concat(...arrEvac);
-            console.log('cI from server', cI);
             const featuresArr = cI.features
                 .filter(item => item.geometry !== undefined)
                 .map(item => ({
@@ -609,13 +608,6 @@ class FloodHistoryMap extends React.Component {
             this.setState({ slideFourLayers });
             this.setState({ slideFiveLayers });
             this.setState({ slideSixLayers });
-
-
-            console.log('evaccenters', evaccenters);
-            console.log('criticalinfrastructures', criticalinfrastructures);
-            // console.log('slideFourLayers', slideFourLayers);
-            // console.log('slideFiveLayers', slideFiveLayers);
-            // console.log('map', this.map);
             const mapLayer = this.map.getLayer('clusters-finance');
             if (typeof mapLayer === 'undefined') {
                 categoriesEvac.map((layer) => {

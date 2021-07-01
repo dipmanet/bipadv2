@@ -311,6 +311,7 @@ class FloodHistoryMap extends React.Component {
             criticalElement,
             criticalFlood,
             rightElement,
+            evacElement,
         } = this.props;
 
         // disable the button
@@ -330,7 +331,9 @@ class FloodHistoryMap extends React.Component {
             if (nextProps.rasterLayer !== rasterLayer) {
                 this.handleFloodRasterSwitch(nextProps.rasterLayer);
             }
-
+            if (nextProps.evacElement !== evacElement) {
+                this.handleEvacClusterSwitch(nextProps.evacElement);
+            }
             if (nextProps.criticalElement !== criticalElement) {
                 this.handleInfraClusterSwitch(nextProps.criticalElement);
             }
@@ -444,6 +447,14 @@ class FloodHistoryMap extends React.Component {
         // const { criticalinfrastructures } = SchoolGeoJSON;
 
         if (this.props.cI !== prevProps.cI && this.props.cI.features.length > 0) {
+            const evacCulture = cI.features.filter(item => item.properties.results__r === 'cultural');
+            const evaceducation = cI.features.filter(item => item.properties.results__r === 'education');
+            const categoriesEvac = ['cultural', 'education'];
+            const arrEvac = categoriesEvac.map(
+                layer => [`evac-clusters-count-${layer}`, `evac-unclustered-point-${layer}`, `evac-clusters-${layer}`],
+            );
+            const evacClusters = [].concat(...arrEvac);
+
             const featuresArr = cI.features
                 .filter(item => item.geometry !== undefined)
                 .map((item) => {
@@ -462,47 +473,48 @@ class FloodHistoryMap extends React.Component {
                 name: 'CI',
                 features: featuresArr,
             };
-
+            const evaccenters = {
+                type: 'FeatureCollection',
+                name: 'CI',
+                features: [...evacCulture, ...evaceducation],
+            };
             const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
                 item => item.properties.results__r,
             ))];
             this.setState({ categoriesCritical });
+            this.setState({ categoriesEvac });
             const arrCritical = categoriesCritical.map(
                 layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
             );
             const criticalInfraClusters = [].concat(...arrCritical);
 
 
-            const slideFourLayers = [
-                ...criticalInfraClusters, 'water', 'wardOutline',
-                'bridgeRajapur', 'canalRajapur',
-                'waterway', 'rajapurRoads', 'wardFill',
-            ];
+            const slideFourLayers = ['bridgeTikapur', 'water', 'waterway',
+                'canalTikapur',
+                'TikapurRoads',
+                'municipalityFill'];
 
             const slideFiveLayers = [
-                ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
-                'bridgeRajapur', 'canalRajapur', 'waterway',
-                'rajapurRoads', 'wardOutline', 'wardFill',
+                ...criticalInfraClusters, ...rasterLayers, 'bridgeTikapur', 'water', 'waterway',
+                'canalTikapur', 'TikapurBuildings',
+                'TikapurRoads', 'municipalityFill',
+
             ];
             const slideSixLayers = [
-                'safeshelterRajapurIcon', 'safeshelterRajapur',
-                ...rasterLayers, 'water',
-                'bridgeRajapur', 'rajapurRoads', 'canalRajapur', 'waterway',
-                'wardOutline', 'wardFill',
+                ...evacClusters, ...rasterLayers, 'bridgeTikapur', 'water', 'waterway',
+                'canalTikapur',
+                'TikapurRoads',
+                'municipalityFill',
             ];
+
 
             this.setState({ slideFourLayers });
             this.setState({ slideFiveLayers });
             this.setState({ slideSixLayers });
 
 
-            console.log('criticalinfrastructures', criticalinfrastructures);
-            // console.log('slideFourLayers', slideFourLayers);
-            // console.log('slideFiveLayers', slideFiveLayers);
-            // console.log('map', this.map);
             const mapLayer = this.map.getLayer('clusters-finance');
             if (typeof mapLayer === 'undefined') {
-                console.log('categoriesCritical', categoriesCritical);
                 categoriesCritical.map((layer) => {
                     this.map.addSource(layer, {
                         type: 'geojson',
@@ -567,6 +579,68 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
                     return null;
                 });
+                categoriesEvac.map((layer) => {
+                    this.map.addSource(`evac-${layer}`, {
+                        type: 'geojson',
+                        data: this.getGeoJSON(layer, evaccenters),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+
+                    this.map.addLayer({
+                        id: `evac-clusters-${layer}`,
+                        type: 'circle',
+                        source: `evac-${layer}`,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#a4ac5e',
+                                100,
+                                '#a4ac5e',
+                            ],
+
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `evac-unclustered-point-${layer}`,
+                        type: 'symbol',
+                        source: `evac-${layer}`,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['downcase', ['get', 'results__r']],
+                            'icon-size': 0.3,
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `evac-clusters-count-${layer}`,
+                        type: 'symbol',
+                        source: `evac-${layer}`,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                        },
+                    });
+
+                    this.map.setLayoutProperty(`evac-unclustered-point-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`evac-clusters-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`evac-clusters-count-${layer}`, 'visibility', 'none');
+
+                    return null;
+                });
             }
         }
     }
@@ -621,6 +695,18 @@ class FloodHistoryMap extends React.Component {
 
             return null;
         });
+        this.state.categoriesEvac.map((layer) => {
+            this.map.setLayoutProperty(
+                `evac-clusters-${layer}`, 'visibility', 'none',
+            );
+            this.map.setLayoutProperty(
+                `evac-clusters-count-${layer}`, 'visibility', 'none',
+            );
+            this.map.setLayoutProperty(
+                `evac-unclustered-point-${layer}`, 'visibility', 'none',
+            );
+            return null;
+        });
     }
 
     public toggleVisiblity = (layers, state) => {
@@ -663,6 +749,26 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
             this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
             this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+        }
+    };
+
+    public handleEvacClusterSwitch = (layer) => {
+        this.resetClusters();
+        if (layer === 'all') {
+            this.state.categoriesEvac.map((item) => {
+                this.map.setLayoutProperty(`evac-unclustered-point-${item}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`evac-clusters-${item}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`evac-clusters-count-${item}`, 'visibility', 'visible');
+                return null;
+            });
+        } else if (layer === 'education') {
+            this.map.setLayoutProperty('evac-clusters-education', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-education', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-education', 'visibility', 'visible');
+        } else if (layer === 'cultural') {
+            this.map.setLayoutProperty('evac-clusters-cultural', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-cultural', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-cultural', 'visibility', 'visible');
         }
     };
 
