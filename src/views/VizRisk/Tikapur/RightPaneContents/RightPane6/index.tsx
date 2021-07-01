@@ -38,18 +38,16 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Evacuation Centers </h1>
                 <p>
-                Evacuation centers provide temporary shelter for
-                 people displaced from their homes following a flooding event.
-                   The  schools and cultural heritage sites  can also be used
-                   for evacuation during floods. However, their functionality
-                   during floods are contingent upon several factors including
-                    building types and their exposure, whether they are located
-                    in flood prone or flood safe areas.
-
+                    Evacuation centers provide temporary shelter for people displaced from their
+                    homes following a flooding event. The schools and cultural heritage sites
+                    can also be used for evacuation during floods. However, their
+                    functionality during floods are contingent upon several factors including
+                    building types and their exposure, whether they are located in flood
+                    prone or flood safe areas.
                 </p>
                 <p>
-                A present, the data on safe shelter is not available and therefore
-                not visualized in the map.
+                    A present, the data on safe shelter is not available and
+                    therefore not visualized in the map.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
                     <BarChart

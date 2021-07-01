@@ -22,23 +22,22 @@ class SlideFourPane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
+
+
                 <p>
-                Dhangadhi sub metropolitan has two major rivers
-                 flowing north-south: Khutiya river and Mohana river.
+                Dhangadhi sub metropolitan has two major rivers flowing north-south:
+                 Khutiya river and Mohana river.
+                In addition, there are many other streams such as Kailali Nala, Seti Nala etc.
+                flowing in the municipality.
+                 These streams ultimately meet the Mohana river in the south.
                 </p>
                 <p>
-In addition, there are many other streams such as Kailali Nala, Seti Nala etc.
-flowing in the municipality.
-                     These streams ultimately meet the Mohana river in the south.
+                All of the residential and governmental buildings, religious and cultural sites,
+                 banking institutions, critical infrastructures such as hospitals, schools,
+                  bridges in Dhangadhi are at constant threat of flooding every monsoon.
 
                 </p>
-                <p>
-                All of the residential and governmental buildings, religious and cultural
-                sites, banking institutions,
-                 critical infrastructures such as hospitals, schools, bridges in Dhangadhi
-                  are at constant threat of
-                 flooding every monsoon.
-                </p>
+
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'45%'}>
                     <BarChart
