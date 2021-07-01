@@ -425,6 +425,11 @@ class FloodHistoryMap extends React.Component {
             cI,
         } = this.props;
         // const { criticalinfrastructures } = SchoolGeoJSON;
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'popup',
+        });
 
 
         if (this.props.cI !== prevProps.cI && this.props.cI.features.length > 0) {
@@ -561,9 +566,49 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty(`evac-clusters-${layer}`, 'visibility', 'none');
                     this.map.setLayoutProperty(`evac-clusters-count-${layer}`, 'visibility', 'none');
 
+
                     return null;
                 });
                 console.log('categoriesCritical', categoriesCritical);
+
+                categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
+                    if (e) {
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Title;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                        <p>${ciName}</p>
+                    </div>
+                    `,
+                        ).addTo(this.map);
+                    }
+                }));
+                categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+
+                categoriesEvac.map(ci => this.map.on('mousemove', `evac-unclustered-point-${ci}`, (e) => {
+                    if (e) {
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Title;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                        <p>${ciName}</p>
+                    </div>
+                    `,
+                        ).addTo(this.map);
+                    }
+                }));
+                categoriesEvac.map(ci => this.map.on('mouseleave', `evac-unclustered-point-${ci}`, () => {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+
                 categoriesCritical.map((layer) => {
                     this.map.addSource(layer, {
                         type: 'geojson',
