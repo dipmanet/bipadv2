@@ -100,13 +100,13 @@ const VizRiskMainPage = () => {
                         <div className={styles.vizrisknmenupage}>
                             <p className={styles.menuTitle}>Visualizing Flood Exposure</p>
                             <div className={styles.vizriskmunicipalityName}>
-                                {/* <Button
+                                <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('rajapur')}
                                 >
                                     <h1 className={styles.menuItems}>Rajapur Municipality</h1>
 
-                                </Button> */}
+                                </Button>
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('tikapur')}

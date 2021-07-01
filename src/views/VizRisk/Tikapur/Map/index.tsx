@@ -559,6 +559,8 @@ class FloodHistoryMap extends React.Component {
                         layout: {
                             'icon-image': ['downcase', ['get', 'results__r']],
                             'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+
                         },
                     });
 
@@ -621,6 +623,8 @@ class FloodHistoryMap extends React.Component {
                         layout: {
                             'icon-image': ['downcase', ['get', 'results__r']],
                             'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+
                         },
                     });
 
