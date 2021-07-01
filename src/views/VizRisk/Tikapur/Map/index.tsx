@@ -445,7 +445,11 @@ class FloodHistoryMap extends React.Component {
             cI,
         } = this.props;
         // const { criticalinfrastructures } = SchoolGeoJSON;
-
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'popup',
+        });
         if (this.props.cI !== prevProps.cI && this.props.cI.features.length > 0) {
             const evacCulture = cI.features.filter(item => item.properties.results__r === 'cultural');
             const evaceducation = cI.features.filter(item => item.properties.results__r === 'education');
@@ -645,6 +649,43 @@ class FloodHistoryMap extends React.Component {
 
                     return null;
                 });
+                categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
+                    if (e) {
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.results__t;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                        <p>${ciName}</p>
+                    </div>
+                    `,
+                        ).addTo(this.map);
+                    }
+                }));
+                categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+
+                categoriesEvac.map(ci => this.map.on('mousemove', `evac-unclustered-point-${ci}`, (e) => {
+                    if (e) {
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.results__t;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                        <p>${ciName}</p>
+                    </div>
+                    `,
+                        ).addTo(this.map);
+                    }
+                }));
+                categoriesEvac.map(ci => this.map.on('mouseleave', `evac-unclustered-point-${ci}`, () => {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
             }
         }
     }
