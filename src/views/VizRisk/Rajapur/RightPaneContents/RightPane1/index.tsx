@@ -119,13 +119,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Max
+                    Max
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                       Avg Min
+                    Min
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
@@ -145,7 +145,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Rainfall
+                    Rainfall
                     </div>
                 </div>
 
@@ -158,9 +158,9 @@ class Rajapur extends React.PureComponent<Props, State> {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
-                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
-                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                    <p>{`Max: ${payload[0].payload.AvgMax} ℃`}</p>
+                    <p>{`Min: ${payload[0].payload.AvgMin} ℃`}</p>
+                    <p>{`Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
                 </div>
             );
         }
@@ -173,7 +173,7 @@ class Rajapur extends React.PureComponent<Props, State> {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
+                    <p>{`Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
 
                 </div>
             );
