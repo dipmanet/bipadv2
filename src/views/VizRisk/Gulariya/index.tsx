@@ -204,6 +204,7 @@ class Gulariya extends React.Component {
             showCriticalElements,
             disableNavLeftBtn,
             disableNavRightBtn,
+            cI,
         } = this.state;
 
         return (
@@ -255,6 +256,7 @@ class Gulariya extends React.Component {
                     evacElement={evacElement}
                     enableNavBtns={this.enableNavBtns}
                     disableNavBtns={this.disableNavBtns}
+                    cI={cI}
                 />
                 {rightelements[rightElement]}
                 {rightElement === 1

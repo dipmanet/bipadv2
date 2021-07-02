@@ -53,7 +53,7 @@ const populationWardExpression = [
     11, '#bd6705', 12, '#bd6705',
 ];
 
-const rasterLayersYears = [5, 50, 100, 500];
+const rasterLayersYears = [5, 20, 50, 100];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 
 
@@ -458,22 +458,25 @@ class FloodHistoryMap extends React.Component {
             cI,
         } = this.props;
         // const { criticalinfrastructures } = SchoolGeoJSON;
-
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'popup',
+        });
 
         if (this.props.cI !== prevProps.cI && this.props.cI.features.length > 0) {
-            const evacCulture = cI.features.filter(item => item.properties.Type === 'cultural');
-            const evaceducation = cI.features.filter(item => item.properties.Type === 'education');
+            const evacCulture = cI.features.filter(item => item.properties.Type === 'Cultural');
+            const evaceducation = cI.features.filter(item => item.properties.Type === 'Education');
 
-            const categoriesEvac = ['cultural', 'education'];
+            const categoriesEvac = ['Cultural'];
             // const categoriesEvac = [...new Set(evaccenters.features.map(
             //     item => item.properties.Type,
             // ))];
             const arrEvac = categoriesEvac.map(
-                layer => [`evac-count-${layer}`, `evac-unclustered-${layer}`, `evac-${layer}`],
+                layer => [`evac-clusters-count-${layer}`, `evac-unclustered-point-${layer}`, `evac-clusters-${layer}`],
             );
 
             const evacClusters = [].concat(...arrEvac);
-            console.log('cI from server', cI);
             const featuresArr = cI.features
                 .filter(item => item.geometry !== undefined)
                 .map((item) => {
@@ -500,8 +503,6 @@ class FloodHistoryMap extends React.Component {
             const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
                 item => item.properties.Type,
             ))];
-            console.log('categoriesCritical', categoriesCritical);
-            console.log('criticalinfrastructures', criticalinfrastructures);
 
             this.setState({ categoriesCritical });
             this.setState({ categoriesEvac });
@@ -511,23 +512,24 @@ class FloodHistoryMap extends React.Component {
             const criticalInfraClusters = [].concat(...arrCritical);
 
 
-            const slideFourLayers = [
-                ...criticalInfraClusters, 'water', 'wardOutline',
-                'bridgeRajapur', 'canalRajapur',
-                'waterway', 'rajapurRoads', 'wardFill',
-            ];
+            const slideFourLayers = ['bridgeGulariya', 'water', 'waterway',
+                'canalGulariya',
+                'GulariyaRoads',
+                'municipalityFill'];
 
             const slideFiveLayers = [
-                ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
-                'bridgeRajapur', 'canalRajapur', 'waterway',
-                'rajapurRoads', 'wardOutline', 'wardFill',
+                ...criticalInfraClusters, ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
+                'canalGulariya', 'gulariyaBuildings',
+                'GulariyaRoads', 'municipalityFill',
+
             ];
             const slideSixLayers = [
-                'safeshelterRajapurIcon', 'safeshelterRajapur',
-                ...evacClusters, ...rasterLayers, 'water',
-                'bridgeRajapur', 'rajapurRoads', 'canalRajapur', 'waterway',
-                'wardOutline', 'wardFill',
+                ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
+                'canalGulariya',
+                'GulariyaRoads',
+                'municipalityFill',
             ];
+
 
             this.setState({ slideFourLayers });
             this.setState({ slideFiveLayers });
@@ -552,7 +554,7 @@ class FloodHistoryMap extends React.Component {
                             'circle-color': [
                                 'step',
                                 ['get', 'point_count'],
-                                '#ff0000',
+                                '#a4ac5e',
                                 100,
                                 '#a4ac5e',
                             ],
@@ -664,6 +666,44 @@ class FloodHistoryMap extends React.Component {
                     this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
                     return null;
                 });
+
+                categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
+                    if (e) {
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Name;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                        <p>${ciName}</p>
+                    </div>
+                    `,
+                        ).addTo(this.map);
+                    }
+                }));
+                categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+
+                categoriesEvac.map(ci => this.map.on('mousemove', `evac-unclustered-point-${ci}`, (e) => {
+                    if (e) {
+                        this.map.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Name;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                        <p>${ciName}</p>
+                    </div>
+                    `,
+                        ).addTo(this.map);
+                    }
+                }));
+                categoriesEvac.map(ci => this.map.on('mouseleave', `evac-unclustered-point-${ci}`, () => {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
             }
         }
     }
@@ -720,17 +760,15 @@ class FloodHistoryMap extends React.Component {
         });
         this.state.categoriesEvac.map((layer) => {
             this.map.setLayoutProperty(
-                `evac-${layer}`, 'visibility', 'none',
+                `evac-clusters-${layer}`, 'visibility', 'none',
             );
             this.map.setLayoutProperty(
-                `evac-count-${layer}`, 'visibility', 'none',
+                `evac-clusters-count-${layer}`, 'visibility', 'none',
             );
             this.map.setLayoutProperty(
-                `evac-unclustered-${layer}`, 'visibility', 'none',
+                `evac-unclustered-point-${layer}`, 'visibility', 'none',
             );
 
-            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'none');
-            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'none');
             return null;
         });
     }
@@ -763,7 +801,6 @@ class FloodHistoryMap extends React.Component {
 
     public handleInfraClusterSwitch = (layer) => {
         this.resetClusters();
-
         if (layer === 'all') {
             this.state.categoriesCritical.map((item) => {
                 this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
@@ -771,41 +808,10 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
                 return null;
             });
-        } else if (layer === 'health') {
-            this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Health', 'visibility', 'visible');
-            this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Health');
-        } else if (layer === 'bank') {
-            this.map.setLayoutProperty('unclustered-point-Bank', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Bank', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Bank', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Bank');
-        } else if (layer === 'governance') {
-            this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Governance', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Bank');
-        } else if (layer === 'industry') {
-            this.map.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Industry', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Industry');
-        } else if (layer === 'education') {
-            this.map.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Education');
-        } else if (layer === 'culture') {
-            this.map.setLayoutProperty('unclustered-point-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Culture', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Culture');
-        } else if (layer === 'tourism') {
-            this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-count-Tourism', 'visibility', 'visible');
-            this.map.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
-            this.map.moveLayer('clusters-count-Tourism');
+        } else {
+            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
         }
     };
 
@@ -813,19 +819,19 @@ class FloodHistoryMap extends React.Component {
         this.resetClusters();
         if (layer === 'all') {
             this.state.categoriesEvac.map((item) => {
-                this.map.setLayoutProperty(`evac-count-${item}`, 'visibility', 'visible');
-                this.map.setLayoutProperty(`evac-${item}`, 'visibility', 'visible');
-                this.map.setLayoutProperty(`evac-unclustered-${item}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`evac-unclustered-point-${item}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`evac-clusters-${item}`, 'visibility', 'visible');
+                this.map.setLayoutProperty(`evac-clusters-count-${item}`, 'visibility', 'visible');
                 return null;
             });
-        } else if (layer === 'education') {
-            this.map.setLayoutProperty('evac-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-count-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-unclustered-Education', 'visibility', 'visible');
-        } else if (layer === 'culture') {
-            this.map.setLayoutProperty('evac-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-count-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-unclustered-Culture', 'visibility', 'visible');
+        } else if (layer === 'Education') {
+            this.map.setLayoutProperty('evac-clusters-Education', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-Education', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-Education', 'visibility', 'visible');
+        } else if (layer === 'Culture') {
+            this.map.setLayoutProperty('evac-clusters-Culture', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-Culture', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-Culture', 'visibility', 'visible');
         } else if (layer === 'safe') {
             this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
             this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
@@ -836,14 +842,12 @@ class FloodHistoryMap extends React.Component {
         this.hideFloodRasters();
         if (layer === '5') {
             this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
-        } else if (layer === '10') {
-            this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+        } else if (layer === '20') {
+            this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'visible');
         } else if (layer === '50') {
             this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
         } else if (layer === '100') {
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
-        } else if (layer === '500') {
-            this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
         }
     }
 

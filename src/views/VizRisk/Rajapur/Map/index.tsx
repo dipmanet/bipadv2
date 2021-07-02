@@ -58,7 +58,7 @@ const populationWardExpression = [
 ];
 
 
-const rasterLayersYears = [5, 50, 100, 500];
+const rasterLayersYears = [5, 20, 50, 100];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 
 const slideOneLayers = ['wardNumbers',
@@ -445,7 +445,6 @@ class FloodHistoryMap extends React.Component {
             );
 
             const evacClusters = [].concat(...arrEvac);
-            console.log('cI from server', cI);
             const featuresArr = cI.features
                 .filter(item => item.geometry !== undefined)
                 .map((item) => {
@@ -814,14 +813,12 @@ class FloodHistoryMap extends React.Component {
         this.hideFloodRasters();
         if (layer === '5') {
             this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
-        } else if (layer === '10') {
-            this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
+        } else if (layer === '20') {
+            this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'visible');
         } else if (layer === '50') {
             this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
         } else if (layer === '100') {
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
-        } else if (layer === '500') {
-            this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
         }
     }
 

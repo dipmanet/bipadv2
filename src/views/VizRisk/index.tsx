@@ -115,13 +115,13 @@ const VizRiskMainPage = () => {
 
                                 </Button>
 
-                                {/* <Button
+                                <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('gulariya')}
                                 >
                                     <h1 className={styles.menuItems}>Gulariya Municipality</h1>
 
-                                </Button> */}
+                                </Button>
                                 {/* <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('biratnagar')}
