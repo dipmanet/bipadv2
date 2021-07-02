@@ -795,6 +795,8 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`evac-clusters-count-${item}`, 'visibility', 'visible');
                 return null;
             });
+            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
+            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
         } else if (layer === 'Education') {
             this.map.setLayoutProperty('evac-clusters-Education', 'visibility', 'visible');
             this.map.setLayoutProperty('evac-clusters-count-Education', 'visibility', 'visible');

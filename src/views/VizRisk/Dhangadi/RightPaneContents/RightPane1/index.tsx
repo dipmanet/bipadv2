@@ -195,7 +195,7 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h2> Dhangadhi Sub-Metropolitan City  </h2>
                 <p>
-                Dhangadi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
+                Dhangadhi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
                  It covers a total area of  260.92 sq. km and
                   is located at the altitude of 109 m a.s.l.
                 </p>

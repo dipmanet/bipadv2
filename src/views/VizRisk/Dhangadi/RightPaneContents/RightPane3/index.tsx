@@ -76,7 +76,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1,47741</div>
+                            <div className={styles.iconTitle}>1,47,741</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>

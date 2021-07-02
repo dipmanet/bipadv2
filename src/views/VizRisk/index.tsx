@@ -137,7 +137,7 @@ const VizRiskMainPage = () => {
                                     onClick={() => handleMenuTitleClick('dhangadi')}
                                 >
                                     <h1 className={styles.menuItems}>
-                                        Dhangadi Sub-MetroPolitican City
+                                        Dhangadhi Sub-Metropolitan City
 
                                     </h1>
 

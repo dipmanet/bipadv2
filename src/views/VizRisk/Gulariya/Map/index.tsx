@@ -45,12 +45,12 @@ const populationWardExpression = [
     'interpolate',
     ['linear'],
     ['feature-state', 'value'],
-    1, '#bd6705', 2, '#fe9b2a ',
-    3, '#fe9b2a ', 4, '#9a3404',
-    5, '#fe9b2a', 6, '#fe9b2a',
-    7, '#fe9b2a', 8, '#bd6705',
-    9, '#bd6705', 10, '#bd6705',
-    11, '#bd6705', 12, '#bd6705',
+    1, '#fe9b2a', 2, '#fed990 ',
+    3, '#fed990 ', 4, '#9a3404',
+    5, '#ffffd6', 6, '#ffffd6',
+    7, '#ffffd6', 8, '#fe9b2a',
+    9, '#bd6705', 10, '#fe9b2a',
+    11, '#fe9b2a', 12, '#fe9b2a',
 ];
 
 const rasterLayersYears = [5, 20, 50, 100];
@@ -524,7 +524,7 @@ class FloodHistoryMap extends React.Component {
 
             ];
             const slideSixLayers = [
-                ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
+                ...evacClusters, ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
                 'canalGulariya',
                 'GulariyaRoads',
                 'municipalityFill',
@@ -536,134 +536,140 @@ class FloodHistoryMap extends React.Component {
             this.setState({ slideSixLayers });
 
             const mapLayer = this.map.getLayer('clusters-finance');
+
             if (typeof mapLayer === 'undefined') {
                 categoriesEvac.map((layer) => {
-                    this.map.addSource(`evac-${layer}`, {
-                        type: 'geojson',
-                        data: this.getGeoJSON(layer, evaccenters),
-                        cluster: true,
-                        clusterRadius: 50,
-                    });
+                    const mapSource = this.map.getSource(`evac-${layer}`);
+                    if (typeof mapSource === 'undefined') {
+                        this.map.addSource(`evac-${layer}`, {
+                            type: 'geojson',
+                            data: this.getGeoJSON(layer, evaccenters),
+                            cluster: true,
+                            clusterRadius: 50,
+                        });
 
-                    this.map.addLayer({
-                        id: `evac-clusters-${layer}`,
-                        type: 'circle',
-                        source: `evac-${layer}`,
-                        filter: ['has', 'point_count'],
-                        paint: {
-                            'circle-color': [
-                                'step',
-                                ['get', 'point_count'],
-                                '#a4ac5e',
-                                100,
-                                '#a4ac5e',
-                            ],
+                        this.map.addLayer({
+                            id: `evac-clusters-${layer}`,
+                            type: 'circle',
+                            source: `evac-${layer}`,
+                            filter: ['has', 'point_count'],
+                            paint: {
+                                'circle-color': [
+                                    'step',
+                                    ['get', 'point_count'],
+                                    '#a4ac5e',
+                                    100,
+                                    '#a4ac5e',
+                                ],
 
-                            'circle-radius': [
-                                'step',
-                                ['get', 'point_count'],
-                                20,
-                                100,
-                                30,
-                                750,
-                                40,
-                            ],
-                        },
-                    });
+                                'circle-radius': [
+                                    'step',
+                                    ['get', 'point_count'],
+                                    20,
+                                    100,
+                                    30,
+                                    750,
+                                    40,
+                                ],
+                            },
+                        });
 
-                    this.map.addLayer({
-                        id: `evac-unclustered-point-${layer}`,
-                        type: 'symbol',
-                        source: `evac-${layer}`,
-                        filter: ['!', ['has', 'point_count']],
-                        layout: {
-                            'icon-image': ['get', 'icon'],
-                            'icon-size': 0.3,
-                            'icon-anchor': 'bottom',
-                        },
-                    });
+                        this.map.addLayer({
+                            id: `evac-unclustered-point-${layer}`,
+                            type: 'symbol',
+                            source: `evac-${layer}`,
+                            filter: ['!', ['has', 'point_count']],
+                            layout: {
+                                'icon-image': ['downcase', ['get', 'Type']],
+                                'icon-size': 0.3,
+                                'icon-anchor': 'bottom',
+                            },
+                        });
 
-                    this.map.addLayer({
-                        id: `evac-clusters-count-${layer}`,
-                        type: 'symbol',
-                        source: `evac-${layer}`,
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                        },
-                    });
+                        this.map.addLayer({
+                            id: `evac-clusters-count-${layer}`,
+                            type: 'symbol',
+                            source: `evac-${layer}`,
+                            layout: {
+                                'text-field': '{point_count_abbreviated}',
+                                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                                'text-size': 12,
+                            },
+                        });
 
-                    this.map.setLayoutProperty(`evac-unclustered-point-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`evac-clusters-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`evac-clusters-count-${layer}`, 'visibility', 'none');
-
+                        this.map.setLayoutProperty(`evac-unclustered-point-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`evac-clusters-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`evac-clusters-count-${layer}`, 'visibility', 'none');
+                    }
                     return null;
                 });
 
                 categoriesCritical.map((layer) => {
-                    this.map.addSource(layer, {
-                        type: 'geojson',
-                        data: this.getGeoJSON(layer, criticalinfrastructures),
-                        cluster: true,
-                        clusterRadius: 50,
-                    });
+                    const mapSource = this.map.getSource(layer);
+                    if (typeof mapSource === 'undefined') {
+                        this.map.addSource(layer, {
+                            type: 'geojson',
+                            data: this.getGeoJSON(layer, criticalinfrastructures),
+                            cluster: true,
+                            clusterRadius: 50,
+                        });
 
-                    this.map.addLayer({
-                        id: `clusters-${layer}`,
-                        type: 'circle',
-                        source: layer,
-                        filter: ['has', 'point_count'],
-                        paint: {
+                        this.map.addLayer({
+                            id: `clusters-${layer}`,
+                            type: 'circle',
+                            source: layer,
+                            filter: ['has', 'point_count'],
+                            paint: {
                             // 'circle-color': '#a4ac5e',
                             // 'circle-radius': 20,
-                            'circle-color': [
-                                'step',
-                                ['get', 'point_count'],
-                                '#a4ac5e',
-                                100,
-                                '#a4ac5e',
-                            ],
+                                'circle-color': [
+                                    'step',
+                                    ['get', 'point_count'],
+                                    '#a4ac5e',
+                                    100,
+                                    '#a4ac5e',
+                                ],
 
-                            'circle-radius': [
-                                'step',
-                                ['get', 'point_count'],
-                                20,
-                                100,
-                                30,
-                                750,
-                                40,
-                            ],
-                        },
-                    });
+                                'circle-radius': [
+                                    'step',
+                                    ['get', 'point_count'],
+                                    20,
+                                    100,
+                                    30,
+                                    750,
+                                    40,
+                                ],
+                            },
+                        });
 
-                    this.map.addLayer({
-                        id: `unclustered-point-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        filter: ['!', ['has', 'point_count']],
-                        layout: {
-                            'icon-image': ['downcase', ['get', 'Type']],
-                            'icon-size': 0.3,
-                            'icon-anchor': 'bottom',
-                        },
-                    });
+                        this.map.addLayer({
+                            id: `unclustered-point-${layer}`,
+                            type: 'symbol',
+                            source: layer,
+                            filter: ['!', ['has', 'point_count']],
+                            layout: {
+                                'icon-image': ['downcase', ['get', 'Type']],
+                                'icon-size': 0.3,
+                                'icon-anchor': 'bottom',
+                            },
+                        });
 
-                    this.map.addLayer({
-                        id: `clusters-count-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                        },
-                    });
+                        this.map.addLayer({
+                            id: `clusters-count-${layer}`,
+                            type: 'symbol',
+                            source: layer,
+                            layout: {
+                                'text-field': '{point_count_abbreviated}',
+                                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                                'text-size': 12,
+                            },
+                        });
 
 
-                    this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                    this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                        this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                    }
                     return null;
                 });
 
@@ -731,10 +737,6 @@ class FloodHistoryMap extends React.Component {
         const temp = {};
         temp.type = 'FeatureCollection';
         temp.name = filterBy;
-        temp.crs = {};
-        temp.crs.type = 'name';
-        temp.crs.properties = {};
-        temp.crs.properties.name = 'urn:ogc:def:crs:OGC:1.3:CRS84';
         temp.features = [];
         const ourD = data.features.filter(item => item.properties.Type === filterBy);
         temp.features.push(...ourD);

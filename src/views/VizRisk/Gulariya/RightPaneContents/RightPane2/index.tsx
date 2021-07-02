@@ -213,7 +213,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         barColor={COLORS_CHART[0]}
                         background={'#eee'}
                         data={'85.38 sq km / 72.38'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 0}
                     />
                     <CustomChartLegend
                         text={data[1].name}
@@ -228,35 +228,35 @@ class RightPane extends React.PureComponent<Props, State> {
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
                         data={'7.52 sq km / 6.38'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS_CHART[3]}
                         background={'#eee'}
                         data={'5.17 sq km / 4.38'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
                         background={'#eee'}
                         data={'2.52 sq km / 2.14'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 4}
                     />
                     <CustomChartLegend
                         text={data[5].name}
                         barColor={COLORS_CHART[5]}
                         background={'#eee'}
                         data={'2.48 sq km / 2.10'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 5}
                     />
                     <CustomChartLegend
                         text={data[6].name}
                         barColor={COLORS_CHART[6]}
                         background={'#eee'}
                         data={'1.51 sq km / 1.28'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 6}
                     />
 
                 </div>

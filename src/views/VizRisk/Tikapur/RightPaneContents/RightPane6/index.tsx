@@ -82,21 +82,18 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 </button>
                 {showReferences && (
                     <ul className={styles.referencesText}>
+
                         <li>
-                            Modeling Exposure Through Earth Observations Routines
-                            (METEOR) ,UK Space Agency, https://meteor-project.org/
+                            Modeling Exposure Through Earth Observations Routines (METEOR) ,
+                            UK Space Agency, https://meteor-project.org/
                         </li>
                         <li>
-                            Risk Nexus, Urgent case for recovery. What we can
-                            learn from the August 2014 Karnali River floods in Nepal.
-                            Zurich Insurance Group Ltd and ISET-International, 2015
+                            Central Bureau of Statistics, 2011
                         </li>
                         <li>
-                             Central Bureau of Statistics, 2011
+                            Municipality Profile, 2075
                         </li>
-                        <li>
-                             Rajapur Municipality Profile, 2075
-                        </li>
+
                     </ul>
                 )
                 }

@@ -86,11 +86,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             (METEOR) ,UK Space Agency, https://meteor-project.org/
                         </li>
                         <li>
-                            Risk Nexus, Urgent case for recovery. What we can
-                            learn from the August 2014 Karnali River floods in Nepal.
-                            Zurich Insurance Group Ltd and ISET-International, 2015
-                        </li>
-                        <li>
                              Central Bureau of Statistics, 2011
                         </li>
                         <li>
