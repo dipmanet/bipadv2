@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -246,20 +247,31 @@ class Dhangadi extends React.Component {
                 )}
 
 
-                <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    enableNavBtns={this.enableNavBtns}
-                    cI={cI}
-                    disableNavBtns={this.disableNavBtns}
-                />
+                {
+                    cI.features && cI.features.length > 0
+                        ? (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                enableNavBtns={this.enableNavBtns}
+                                cI={cI}
+                                disableNavBtns={this.disableNavBtns}
+                            />
+                        )
+                        : (
+                            <div className={styles.loaderClass}>
+                                <Loader color="#fff" />
+                            </div>
+                        )
+
+                }
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (

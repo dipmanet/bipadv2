@@ -40,3 +40,12 @@
         }
     }
 }
+.loaderClass{
+    position: fixed;
+  top: 54%;
+  left: 35%;
+  z-index: 203;
+    .loader{
+        background-color: white;
+    }
+  }

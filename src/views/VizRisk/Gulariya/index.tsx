@@ -1,7 +1,9 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import Map from './Map';
+
 // import Legends from './Legends';
 import styles from './styles.scss';
 import RightElement1 from './RightPaneContents/RightPane1';
@@ -244,20 +246,31 @@ class Gulariya extends React.Component {
                 )}
 
 
-                <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    enableNavBtns={this.enableNavBtns}
-                    disableNavBtns={this.disableNavBtns}
-                    cI={cI}
-                />
+                {
+                    cI.features && cI.features.length > 0
+                        ? (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                enableNavBtns={this.enableNavBtns}
+                                cI={cI}
+                                disableNavBtns={this.disableNavBtns}
+                            />
+                        )
+                        : (
+                            <div className={styles.loaderClass}>
+                                <Loader color="#fff" />
+                            </div>
+                        )
+
+                }
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (

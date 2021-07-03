@@ -271,20 +271,7 @@ class Tikapur extends React.Component {
                         )
 
                 }
-                {/* <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    enableNavBtns={this.enableNavBtns}
-                    cI={cI}
-                    disableNavBtns={this.disableNavBtns}
-                /> */}
+
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (
