@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import Loader from 'react-loader';
+import { isDefined } from '@togglecorp/fujs';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -16,7 +18,6 @@ import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardLegends from './Legends/FloodHazardLegends';
 import FloodDepthLegend from './Legends/FloodDepthLegend';
 import { getgeoJsonLayer } from './utils';
-
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
@@ -245,8 +246,32 @@ class Tikapur extends React.Component {
                     </div>
                 )}
 
+                {
+                    cI.features && cI.features.length > 0
+                        ? (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                enableNavBtns={this.enableNavBtns}
+                                cI={cI}
+                                disableNavBtns={this.disableNavBtns}
+                            />
+                        )
+                        : (
+                            <div className={styles.loaderClass}>
+                                <Loader color="#fff" />
+                            </div>
+                        )
 
-                <Map
+                }
+                {/* <Map
                     showRaster={showRaster}
                     rasterLayer={rasterLayer}
                     exposedElement={exposedElement}
@@ -259,7 +284,7 @@ class Tikapur extends React.Component {
                     enableNavBtns={this.enableNavBtns}
                     cI={cI}
                     disableNavBtns={this.disableNavBtns}
-                />
+                /> */}
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (
