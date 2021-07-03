@@ -574,7 +574,7 @@ class JugalMap extends React.Component<Props, State> {
         const mapStyle = {
             position: 'absolute',
             width: '70%',
-            left: 'calc(30% - 60px)',
+            left: 'calc(30%)',
             top: 0,
             height: '100vh',
         };

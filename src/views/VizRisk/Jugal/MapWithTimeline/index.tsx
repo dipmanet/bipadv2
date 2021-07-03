@@ -271,7 +271,7 @@ class FloodHistoryMap extends React.Component {
         const mapStyle = {
             position: 'absolute',
             width: '70%',
-            left: 'calc(30% - 60px)',
+            left: 'calc(30%)',
             top: 0,
             // bottom: 0,
             height: '100vh',
