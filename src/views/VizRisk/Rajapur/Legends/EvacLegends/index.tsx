@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Education from '#resources/icons/Education copy.svg';
-import Culture from '#resources/icons/culture.svg';
-import SafeShelter from '#resources/icons/safeshelter.svg';
+import Education from '../../Icons/icon_set_school.svg';
+import Culture from '../../Icons/icon_set_religion.svg';
+import SafeShelter from '../../Icons/safeshelternew.svg';
 import Icon from '#rscg/Icon';
 
 
@@ -25,13 +25,13 @@ const EvacLegends = (props) => {
             if (evacElement === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (evacElement === 'education') {
+            } else if (evacElement === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
             } else if (evacElement === 'safe') {
                 resetCriticalLayers();
                 setshowSafe(true);
-            } else if (evacElement === 'culture') {
+            } else if (evacElement === 'Culture') {
                 resetCriticalLayers();
                 setshowCulture(true);
             }
@@ -47,12 +47,12 @@ const EvacLegends = (props) => {
             setshowAll(true);
         }
 
-        if (layer === 'education') {
+        if (layer === 'Education') {
             resetCriticalLayers();
             setshowEducation(true);
         }
 
-        if (layer === 'culture') {
+        if (layer === 'Culture') {
             resetCriticalLayers();
             setshowCulture(true);
         }
@@ -94,7 +94,7 @@ const EvacLegends = (props) => {
                             className={showEducation
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('education')}
+                            onClick={() => handleEvacclick('Education')}
                         >
                             {/* <Hexagon
                                 style={{
@@ -125,7 +125,7 @@ const EvacLegends = (props) => {
                             className={showCulture
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('culture')}
+                            onClick={() => handleEvacclick('Culture')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}

@@ -2,12 +2,15 @@ import { _cs } from '@togglecorp/fujs';
 import React, { useState } from 'react';
 import styles from './styles.scss';
 
-const HexagonBtn = props => (
-    <div className={styles.hex}>
-        <div className={_cs('inner', 'hex')}>
-            <div className={_cs('inner2', 'hex')} />
+const HexagonBtn = (props) => {
+    console.log(props);
+    return (
+        <div className={styles.hex}>
+            <div className={_cs('inner', 'hex')}>
+                <div className={_cs('inner2', 'hex')} />
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default HexagonBtn;

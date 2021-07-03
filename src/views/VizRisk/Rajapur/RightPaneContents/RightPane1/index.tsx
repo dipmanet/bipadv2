@@ -7,6 +7,8 @@ import { CartesianGrid,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
+import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
 import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
 import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
 import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
@@ -58,6 +60,47 @@ const lineData = [
         name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
     },
 ];
+
+
+const rainfallData = [
+    {
+        name: 'Jan', Rainfall: 86.4,
+    },
+    {
+        name: 'Feb', Rainfall: 26,
+    },
+    {
+        name: 'Mar', Rainfall: 6,
+    },
+    {
+        name: 'Apr', Rainfall: 26,
+    },
+    {
+        name: 'May', Rainfall: 64.3,
+    },
+    {
+        name: 'Jun', Rainfall: 125.5,
+    },
+    {
+        name: 'Jul', Rainfall: 451.1,
+    },
+    {
+        name: 'Aug', Rainfall: 1146.4,
+    },
+    {
+        name: 'Sep', Rainfall: 199.9,
+    },
+    {
+        name: 'Oct', Rainfall: 0,
+    },
+    {
+        name: 'Nov', Rainfall: 0,
+    },
+    {
+        name: 'Dec', Rainfall: 0,
+    },
+];
+
 class Rajapur extends React.PureComponent<Props, State> {
     public static contextType = VizRiskContext;
 
@@ -76,13 +119,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMax} />
                     <div className={styles.legendText}>
-                       Avg Max
+                    Max
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
                     <div className={styles.legendMin} />
                     <div className={styles.legendText}>
-                       Avg Min
+                    Min
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
@@ -95,20 +138,49 @@ class Rajapur extends React.PureComponent<Props, State> {
         );
     }
 
+    public renderLegendRainfall = (props) => {
+        const { payload } = props;
+        return (
+            <div className={styles.climateLegendContainer}>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMax} />
+                    <div className={styles.legendText}>
+                    Rainfall
+                    </div>
+                </div>
+
+            </div>
+        );
+    }
+
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
-                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
-                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                    <p>{`Max: ${payload[0].payload.AvgMax} ℃`}</p>
+                    <p>{`Min: ${payload[0].payload.AvgMin} ℃`}</p>
+                    <p>{`Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
                 </div>
             );
         }
 
         return null;
     };
+
+    public CustomTooltipRain = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
+
+                </div>
+            );
+        }
+        return null;
+    };
+
 
     public render() {
         const { currentPage } = this.context;
@@ -154,9 +226,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>41℃</div>
                             <div className={styles.iconText}>
-                            Average Maximum
+                            Maximum
                                 <br />
-                            Temperature in Summer
+                            Temperature in
+                                <br />
+                            Summer
                             </div>
 
                         </div>
@@ -169,9 +243,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>7℃</div>
                             <div className={styles.iconText}>
-                            Average Minimum
+                            Minimum
                                 <br />
-                            Temeperature in Winter
+                            Temeperature in
+                                <br />
+                            Winter
                             </div>
 
                         </div>
@@ -186,7 +262,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>1900mm</div>
                             <div className={styles.iconText}>
-                            Average Annual
+                            Annual
                             Rainfall
                             </div>
 
@@ -205,8 +281,9 @@ class Rajapur extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
-                </div>
 
+                </div>
+                <div className={styles.source}>Source: DHM, 2020 Data </div>
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart
                         margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
@@ -242,6 +319,42 @@ class Rajapur extends React.PureComponent<Props, State> {
                 </ResponsiveContainer>
 
                 {/* <SourceInfo /> */}
+                <div className={styles.climateChart}>
+                    <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
+                    <ResponsiveContainer className={styles.chartContainer} height={300}>
+                        <LineChart
+                            margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                            data={rainfallData}
+                        >
+                            <CartesianGrid
+                                vertical={false}
+                                strokeDasharray="3 3"
+                            />
+                            <XAxis
+                                dataKey="name"
+                                interval="preserveStart"
+                                tick={{ fill: '#94bdcf' }}
+                            />
+                            <YAxis
+                                unit={'mm'}
+                                axisLine={false}
+                                domain={[0, 1150]}
+                                padding={{ top: 20 }}
+                                tick={{ fill: '#94bdcf' }}
+                                tickCount={10}
+                                interval="preserveEnd"
+                                allowDataOverflow
+                            />
+                            <Legend iconType="square" iconSize={10} align="center" content={this.renderLegendRainfall} />
+                            <Tooltip
+                                content={this.CustomTooltipRain}
+                            />
+                            <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
+
+                        </LineChart>
+                    </ResponsiveContainer>
+
+                </div>
 
 
             </div>

@@ -33,7 +33,7 @@ const data = [
     { name: 'Other', value: 21.5 },
     { name: 'Buildings', value: 0.959 },
 ].sort(({ value: a }, { value: b }) => b - a);
-
+console.log('This >>>>', data);
 const COLORS_CHART = [
     '#d3e378',
     '#b4b4b4',
@@ -105,6 +105,8 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
+            console.log('payload', payload);
+            // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
                     <p>{`${((payload[0].value / 127.02) * 100).toFixed(2)} % `}</p>

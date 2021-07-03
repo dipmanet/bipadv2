@@ -10,10 +10,10 @@ import {
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#resources/icons/ManWoman.svg';
-import Male from '#resources/icons/male.svg';
-import Female from '#resources/icons/female.svg';
-import Home from '#resources/icons/homeNew.svg';
+import ManWoman from '#views/VizRisk/Rajapur/Icons/ManWoman.svg';
+import Male from '#views/VizRisk/Rajapur/Icons/male.svg';
+import Female from '#views/VizRisk/Rajapur/Icons/female.svg';
+import Home from '#views/VizRisk/Rajapur/Icons/homeNew.svg';
 
 import Disclaimer from '../../Components/Disclaimer';
 
@@ -58,16 +58,16 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven
-                with some pockets of dense settlements. This map allows
-                viewing the population distribution within each ward and
-                helps to locate the region of dense and sparse settlements.
+                    Population distribution in the region is largely uneven
+                    with some pockets of dense settlements. This map allows
+                    viewing the population distribution within each ward and
+                    helps to locate the region of dense and sparse settlements.
                 </p>
                 <p>
-                Ward number 4 has the highest number of population with 1693
-                households. Notably, these high populations ward lies very close
-                to the western tributary of the Karnali river.  Ward number 7 has
-                the least number of households comprising of 766 numbers.
+                    Ward number 4 has the highest number of population with 1693
+                    households. Notably, these high populations ward lies very close
+                    to the western tributary of the Karnali river.  Ward number 7 has
+                    the least number of households comprising of 766 numbers.
                 </p>
 
                 <div className={styles.iconRow}>
