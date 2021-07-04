@@ -213,7 +213,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>36.6℃</div>
+                            <div className={styles.iconTitle}>41℃</div>
                             <div className={styles.iconText}>
                             Maximum
                                 <br />
@@ -230,7 +230,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>9.3℃</div>
+                            <div className={styles.iconTitle}>23℃</div>
                             <div className={styles.iconText}>
                             Minimum
                                 <br />
