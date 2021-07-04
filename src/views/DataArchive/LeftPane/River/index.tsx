@@ -114,10 +114,15 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
             expand: ['district'],
             limit: -1,
         }),
-        onSuccess: ({ response, props: { setDataArchiveRiverList } }) => {
+        onSuccess: ({ params, response, props: { setDataArchiveRiverList } }) => {
             interface Response { results: PageType.DataArchiveRiver[] }
             const { results: dataArchiveRiverList = [] } = response as Response;
-            setDataArchiveRiverList({ dataArchiveRiverList });
+            if (params.basinFilter !== undefined) {
+                setDataArchiveRiverList({ dataArchiveRiverList:
+                    dataArchiveRiverList.filter(item => item.basin === params.basinFilter) });
+            } else {
+                setDataArchiveRiverList({ dataArchiveRiverList });
+            }
         },
         onPropsChanged: {
             riverFilters: true,
@@ -130,13 +135,27 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     riverStationRequest: {
         url: '/river-stations/',
         method: methods.GET,
-        query: () => ({
-            fields: ['id', 'province', 'district', 'municipality', 'ward', 'title', 'point'],
-        }),
-        onSuccess: ({ response, props: { setDataArchiveRiverStations } }) => {
+        // query: () => ({
+        //     fields: ['id', 'province', 'district', 'municipality', 'ward', 'title', 'point'],
+        // }),
+        onSuccess: ({ params, response, props: { setDataArchiveRiverStations } }) => {
             interface Response { results: RiverStation[] }
             const { results: dataArchiveRiverStations = [] } = response as Response;
-            setDataArchiveRiverStations({ dataArchiveRiverStations });
+
+            if (params.stationFilter !== undefined) {
+                setDataArchiveRiverStations({ dataArchiveRiverStations:
+                    dataArchiveRiverStations.filter(item => item.id === params.stationFilter) });
+            } else if (params.basinFilter !== undefined) {
+                setDataArchiveRiverStations({ dataArchiveRiverStations:
+                    dataArchiveRiverStations.filter(item => item.basin === params.basinFilter) });
+            } else {
+                setDataArchiveRiverStations({ dataArchiveRiverStations });
+            }
+
+            // setDataArchiveRiverStations({ dataArchiveRiverStations });
+        },
+        onPropsChanged: {
+            riverFilters: true,
         },
         onMount: true,
     },
@@ -152,6 +171,15 @@ const River = (props: Props) => {
     const {
         setData,
     }: DataArchiveContextProps = useContext(DataArchiveContext);
+
+    requests.dataArchiveRiverRequest.setDefaultParams({
+        basinFilter: (riverFilters.basin) ? riverFilters.basin.title : '',
+    });
+
+    requests.riverStationRequest.setDefaultParams({
+        basinFilter: (riverFilters.basin) ? riverFilters.basin.title : '',
+        stationFilter: (riverFilters.station) ? riverFilters.station.id : '',
+    });
 
     useEffect(() => {
         if (setData) {
@@ -216,6 +244,9 @@ const River = (props: Props) => {
                 />
                 <div className={styles.note}>
                     {!pending && <Note />}
+                </div>
+                <div className={styles.basin}>
+                    { (riverFilters.basin.title) ? `Selected basin: ${riverFilters.basin.title}` : ''}
                 </div>
             </div>
             { groupedRiverList.map((group) => {

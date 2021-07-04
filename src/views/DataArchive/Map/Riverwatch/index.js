@@ -13,14 +13,30 @@ import {
     mapStyles,
     getMapPaddings,
 } from '#constants';
-import { riverFiltersSelector } from '#selectors';
+import { riverFiltersSelector, riverStationsSelector } from '#selectors';
 import { getDate, getTime } from '#views/DataArchive/utils';
 
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     riverFilters: riverFiltersSelector(state),
+    riverStation: riverStationsSelector(state),
 });
+
+const tileUrl = [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    '&version=1.1.0',
+    '&service=WMS',
+    '&request=GetMap',
+    '&layers=Bipad:watershed-area',
+    '&tiled=true',
+    '&width=256',
+    '&height=256',
+    '&srs=EPSG:3857',
+    '&bbox={bbox-epsg-3857}',
+    '&transparent=true',
+    '&format=image/png',
+].join('');
 
 const RiverToolTip = ({ renderer: Renderer, params }) => (
     <Renderer {...params} />
@@ -51,6 +67,32 @@ const riverToGeojson = (riverList) => {
     return geojson;
 };
 
+const riverStationToGeojson = (riverStation) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: riverStation
+            .filter(river => river.point)
+            .map(river => ({
+                id: river.id,
+                type: 'Feature',
+                geometry: {
+                    ...river.point,
+                },
+                properties: {
+                    ...river,
+                    riverId: river.id,
+                    title: river.title,
+                    description: river.description,
+                    basin: river.basin,
+                    status: river.status,
+                    steady: river.steady,
+                },
+            })),
+    };
+    return geojson;
+};
+
+
 const compare = (a, b) => {
     if (a.waterLevelOn < b.waterLevelOn) {
         return 1;
@@ -68,10 +110,59 @@ class RiverMap extends React.PureComponent {
             coordinates: undefined,
             tooltipParams: null,
             showModal: false,
+            rasterLayers: [],
         };
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.riverStation !== this.props.riverStation) {
+            // eslint-disable-next-line prefer-const
+            let basinCoordinates = [];
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ rasterLayers: [] });
+            if (this.props.riverFilters.basin != null) {
+                // eslint-disable-next-line max-len
+                const mydata = this.props.riverStation.filter(item => item.basin === this.props.riverFilters.basin.title);
+                if (mydata.length > 0) {
+                    if (this.props.riverFilters.basin.title === 'Mahakali') {
+                        basinCoordinates = [80.415089, 29.130931];
+                    } else {
+                        basinCoordinates = mydata[0].point.coordinates;
+                    }
+                    const tile = [
+                        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+                        '&service=WMS',
+                        '&version=1.1.1',
+                        '&request=GetMap',
+                        '&layers=Bipad:watershed-area',
+                        '&tiled=true',
+                        '&width=256',
+                        '&height=256',
+                        '&srs=EPSG:3857',
+                        '&bbox={bbox-epsg-3857}',
+                        '&transparent=true',
+                        '&format=image/png',
+                        // eslint-disable-next-line max-len
+                        `&CQL_FILTER=INTERSECTS(the_geom,%20POINT%20(${basinCoordinates[0]}%20${basinCoordinates[1]}))`,
+                    ].join('');
+
+                    const ourAarray = [{ key: `basin-${this.props.riverFilters.basin.title}`, layername: `layer-basin-${this.props.riverFilters.basin.title}`, tiles: tile }];
+                    // eslint-disable-next-line max-len
+                    if ((Object.keys(this.props.riverFilters.basin).length === 0)) {
+                        // eslint-disable-next-line react/no-did-update-set-state
+                        this.setState({ rasterLayers: [] });
+                    } else {
+                    // eslint-disable-next-line react/no-did-update-set-state
+                        this.setState({ rasterLayers: [ourAarray[0]] });
+                    }
+                }
+            }
+        }
+    }
+
     getRiverFeatureCollection = memoize(riverToGeojson);
+
+    getRiverStationFeatureCollection = memoize(riverStationToGeojson);
 
     getBoundsPadding = memoize((leftPaneExpanded, rightPaneExpanded) => {
         const mapPaddings = getMapPaddings();
@@ -185,6 +276,7 @@ class RiverMap extends React.PureComponent {
             tooltipRenderer,
             tooltipParams,
             coordinates,
+            rasterLayers,
         } = this.state;
 
         // sorting to get latest value on map
@@ -195,6 +287,11 @@ class RiverMap extends React.PureComponent {
         const riverFeatureCollection = this.getRiverFeatureCollection(
             data,
         );
+
+        const riverStationFeatureCollection = this.getRiverStationFeatureCollection(
+            this.props.riverStation,
+        );
+
         const boundsPadding = this.getBoundsPadding(leftPaneExpanded, rightPaneExpanded);
         const { station: { point, municipality } } = riverFilters;
         const tooltipOptions = {
@@ -225,9 +322,57 @@ class RiverMap extends React.PureComponent {
                         />
                     </MapTooltip>
                 )}
+                {(rasterLayers.length === 0)
+                    && (
+                        <MapSource
+                            key="basin-key"
+                            sourceKey="basin-key"
+                            sourceOptions={{
+                                type: 'raster',
+                                tiles: [tileUrl],
+                                tileSize: 256,
+                            }}
+                        >
+
+                            <MapLayer
+                                layerKey="raster-layer"
+                                layerOptions={{
+                                    type: 'raster',
+                                    paint: {
+                                        'raster-opacity': 0.9,
+                                    },
+                                }}
+                            />
+                        </MapSource>
+                    )
+                }
+                { rasterLayers.map(layer => (
+                    <MapSource
+                        key={`key${layer.key}`}
+                        sourceKey={`source${layer.key}`}
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [layer.tiles],
+                            tileSize: 256,
+                        }}
+                    >
+
+                        <MapLayer
+                            layerKey={`${layer.layername}`}
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': 0.9,
+                                },
+                            }}
+                        />
+                    </MapSource>
+                ))
+                }
                 <MapSource
                     sourceKey="real-time-river-points"
-                    geoJson={riverFeatureCollection}
+                    // geoJson={riverFeatureCollection}
+                    geoJson={riverStationFeatureCollection}
                     sourceOptions={{ type: 'geojson' }}
                     supportHover
                 >

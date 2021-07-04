@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
@@ -16,6 +17,8 @@ import { AppState } from '#store/types';
 import { DARiverFiltersElement, RiverStation } from '#types';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 import StationSelector from './Station';
+import BasinSelector from './Basin';
+
 import { getDateDiff, isValidDate } from '#views/DataArchive/utils';
 import styles from './styles.scss';
 
@@ -23,6 +26,7 @@ interface ComponentProps {
     className?: string;
     extraContent?: React.ReactNode;
     extraContentContainerClassName?: string;
+    hideBasinFilter?: boolean;
     hideLocationFilter?: boolean;
     hideDataRangeFilter?: boolean;
 }
@@ -54,11 +58,12 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     ),
 });
 
-type TabKey = 'station' | 'dataRange' | 'others';
+type TabKey = 'basin' | 'station' | 'dataRange' | 'others';
 
 const iconNames: {
     [key in TabKey]: string;
 } = {
+    basin: 'basin',
     station: 'gps',
     dataRange: 'dataRange',
     others: 'filter',
@@ -89,6 +94,7 @@ const riverFilterSchema = {
     fields: {
         dataDateRange: [],
         station: [],
+        basin: [],
     },
 };
 
@@ -99,6 +105,7 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARiverFiltersElement) 
     const tabKeyToFilterMap: {
         [key in Exclude<TabKey, 'others'>]: keyof DARiverFiltersElement;
     } = {
+        basin: 'basin',
         station: 'station',
         dataRange: 'dataDateRange',
     };
@@ -108,12 +115,17 @@ const getIsFiltered = (key: TabKey | undefined, filters: DARiverFiltersElement) 
         return filter.length !== 0;
     }
 
-    const filterKeys = Object.keys(filter);
-    return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
+    if (filter) {
+        const filterKeys = Object.keys(filter);
+        return filterKeys.length !== 0 && filterKeys.every(k => !!filter[k]);
+    }
+    return null;
 };
 
 class RiverFilters extends React.PureComponent<Props, State> {
     public state = {
+        filteredStation: [],
+        allStations: [],
         activeView: undefined,
         faramValues: {
             dataDateRange: {
@@ -122,6 +134,7 @@ class RiverFilters extends React.PureComponent<Props, State> {
                 endDate: undefined,
             },
             station: {},
+            basin: {},
         },
         error: '',
     };
@@ -131,14 +144,36 @@ class RiverFilters extends React.PureComponent<Props, State> {
         this.setState({ faramValues });
     }
 
+    public componentDidUpdate(prevProps) {
+        // eslint-disable-next-line max-len
+        if (this.props.riverStations !== prevProps.riverStations && this.props.riverStations.length > 0) {
+        // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ filteredStation: this.props.riverStations });
+        }
+        if (this.props.riverStations.length > 120) {
+            // eslint-disable-next-line react/no-did-update-set-state
+            this.setState({ allStations: this.props.riverStations });
+        }
+    }
+
     private views = {
+        basin: {
+            component: () => (
+                <BasinSelector
+                    className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                    faramElementName="basin"
+                    wardsHidden
+                    basins={this.props.riverFilters.basin}
+                />
+            ),
+        },
         station: {
             component: () => (
                 <StationSelector
                     className={_cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                     faramElementName="station"
                     wardsHidden
-                    stations={this.props.riverStations}
+                    stations={this.state.filteredStation}
                     // autoFocus
                 />
             ),
@@ -190,6 +225,7 @@ class RiverFilters extends React.PureComponent<Props, State> {
                     endDate: undefined,
                 },
                 station: {},
+                basin: {},
             } });
 
         const { setDataArchiveRiverFilter } = this.props;
@@ -204,9 +240,33 @@ class RiverFilters extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: DARiverFiltersElement) => {
-        // const { setFilters } = this.props;
-        // setFilters({ filters: faramValues });
-        this.setState({ faramValues });
+        if (faramValues.basin !== '') {
+            this.setState((prevState) => {
+                if (prevState.faramValues.basin !== faramValues.basin) {
+                    return { faramValues: {
+                        dataDateRange: faramValues.dataDateRange,
+                        basin: faramValues.basin,
+                        station: {},
+                    } };
+                }
+                return ({ faramValues });
+            });
+
+            if (faramValues.basin.title !== undefined) {
+            // eslint-disable-next-line max-len
+                const filteredStation = this.state.allStations.filter(r => r.basin === faramValues.basin.title);
+                this.setState({ filteredStation });
+            } else {
+                const filteredStation = this.state.allStations;
+                this.setState({ filteredStation });
+            }
+        } else if (Object.keys(faramValues.basin).length === 0) {
+            const filteredStation = this.state.allStations;
+            this.setState({ filteredStation });
+        } else {
+            const filteredStation = this.state.allStations;
+            this.setState({ filteredStation });
+        }
     }
 
     private handleSubmitClick = () => {
@@ -245,6 +305,7 @@ class RiverFilters extends React.PureComponent<Props, State> {
             [key in TabKey]?: string;
         } => {
             const tabs = {
+                basin: 'Basin',
                 station: 'Stations',
                 dataRange: 'Data range',
                 others: 'Others',
@@ -272,12 +333,14 @@ class RiverFilters extends React.PureComponent<Props, State> {
             extraContent,
             hideDataRangeFilter,
             hideLocationFilter,
+            hideBasinFilter,
         } = this.props;
 
         const { faramValues: fv } = this.state;
 
         const tabs = this.getTabs(
             extraContent,
+            hideBasinFilter,
             hideLocationFilter,
             hideDataRangeFilter,
         );

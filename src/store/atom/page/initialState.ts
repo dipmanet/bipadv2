@@ -60,6 +60,7 @@ const state: PageState = {
 
     daRiverFilter: {
         station: {},
+        basin: {},
         dataDateRange: {
             rangeInDays: 7,
             startDate: undefined,
