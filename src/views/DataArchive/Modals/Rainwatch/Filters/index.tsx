@@ -98,6 +98,7 @@ const Filters = (props: Props) => {
     const [faramValue, setFaramValue] = useState(initialFaramValue);
     const [submittedStartDate, setSubmittedStartDate] = useState('');
     const [submittedEndDate, setSubmittedEndDate] = useState('');
+    const [submittedPeriod, setSubmittedPeriod] = useState('');
     const [errors, setErrors] = useState<Errors[]>([]);
 
     const { handleFilterValues,
@@ -123,10 +124,13 @@ const Filters = (props: Props) => {
                 isHourly = 2;
                 isDaily = 1;
             }
-            if (submittedStartDate !== startDate || submittedEndDate !== endDate) {
+            console.log('daily, hourly', isDaily, isHourly);
+            // eslint-disable-next-line max-len
+            if (submittedStartDate !== startDate || submittedEndDate !== endDate || submittedPeriod !== periodCode) {
                 stationRequest.do({ dataDateRange, isDaily, isHourly });
                 setSubmittedStartDate(startDate);
                 setSubmittedEndDate(endDate);
+                setSubmittedPeriod(periodCode);
             }
         }
     };
