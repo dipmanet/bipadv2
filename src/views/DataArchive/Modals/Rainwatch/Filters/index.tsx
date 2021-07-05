@@ -61,16 +61,35 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
             }
             const { startDate, endDate } = params.dataDateRange;
 
+            let measuredOnGt;
+            let measuredOnLt;
+            if (params.isHourly === 2) {
+                measuredOnGt = `${startDate}T01:00:00+05:45`;
+                // eslint-disable-next-line prefer-const
+                const [year, month, day] = endDate.split('-');
+                // eslint-disable-next-line radix
+                const day1 = parseInt(day) + 1;
+                // const date = new Date(`${endDate}Z`);
+                measuredOnLt = `${year}-${month}-${day1}T00:00:00+05:45`;
+            } else {
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                measuredOnGt = `${startDate}T00:00:00+05:45`;
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                measuredOnLt = `${endDate}T23:59:59+05:45`;
+            }
+
             return {
                 station: stationId,
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 is_hourly: params.isHourly,
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 is_daily: params.isDaily,
+
                 // eslint-disable-next-line @typescript-eslint/camelcase
-                measured_on__gt: `${startDate}T00:00:00+05:45`,
+                measured_on__gt: measuredOnGt,
                 // eslint-disable-next-line @typescript-eslint/camelcase
-                measured_on__lt: `${endDate}T23:59:59+05:45`,
+                measured_on__lt: measuredOnLt,
+
                 fields: [
                     'id',
                     'created_on',
@@ -124,7 +143,6 @@ const Filters = (props: Props) => {
                 isHourly = 2;
                 isDaily = 1;
             }
-            console.log('daily, hourly', isDaily, isHourly);
             // eslint-disable-next-line max-len
             if (submittedStartDate !== startDate || submittedEndDate !== endDate || submittedPeriod !== periodCode) {
                 stationRequest.do({ dataDateRange, isDaily, isHourly });
