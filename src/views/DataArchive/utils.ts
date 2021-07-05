@@ -159,7 +159,7 @@ export const getDatesFromFilters = (filters: Filters) => {
 };
 
 // for Table View
-export const getPostHour = (initialHour: string) => {
+export const getPostHour = (initialHour: number) => {
     const hour = Number(initialHour);
     if (hour === 23) {
         return '23:59';
@@ -171,9 +171,21 @@ export const getPostHour = (initialHour: string) => {
 
 export const getDateWithRange = (measuredOn: string) => {
     const [year, fullTime] = measuredOn.split('T');
-    const [initialHour] = fullTime.split(':');
+    const [time] = fullTime.split(':');
+
+    let initialHour;
+    const date = new Date(year);
+    let lastYear;
+    if (Number(time) === 0) {
+        initialHour = 23;
+        const temp = new Date(date.setDate(date.getDate() - 1));
+        lastYear = temp.toISOString().slice(0, 10);
+    } else {
+        initialHour = Number(time) - 1;
+        lastYear = year;
+    }
     const indicator = Number(initialHour) < 12 ? 'AM' : 'PM';
     const postHour = getPostHour(initialHour);
-    const dateWithRange = `${year} ${initialHour}:00-${postHour} ${indicator}`;
+    const dateWithRange = `${lastYear} ${initialHour}:00-${postHour} ${indicator}`;
     return dateWithRange;
 };

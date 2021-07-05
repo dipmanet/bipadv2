@@ -70,7 +70,7 @@ const requests: { [key: string]: ClientAttributes<OwnProps, Params> } = {
                 // eslint-disable-next-line radix
                 const day1 = parseInt(day) + 1;
                 // const date = new Date(`${endDate}Z`);
-                measuredOnLt = `${year}-${month}-${day1}T00:00:00+05:45`;
+                measuredOnLt = `${year}-${month}-${day1}T01:00:00+05:45`;
             } else {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 measuredOnGt = `${startDate}T00:00:00+05:45`;

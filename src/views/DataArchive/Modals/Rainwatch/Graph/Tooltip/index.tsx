@@ -60,12 +60,12 @@ const Tooltip = (props: TooltipProps) => {
         let measuredOn;
         let date;
         let time;
-        let dateTImeForHourly;
+        let dateTimeForHourly;
         if (periodCode !== 'monthly') {
             measuredOn = innerPayload.measuredOn;
             date = getDate(measuredOn);
             time = getTimeWithIndictor(measuredOn);
-            dateTImeForHourly = getDateWithRange(measuredOn);
+            dateTimeForHourly = getDateWithRange(measuredOn);
         }
         // const minuteWise = periodCode === 'minute';
 
@@ -79,15 +79,15 @@ const Tooltip = (props: TooltipProps) => {
                 <div className={styles.tooltip}>
                     <div className={styles.value}>
                         <b>Date: </b>
-                        {dateTImeForHourly}
+                        {dateTimeForHourly}
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accHourly === 0 ? 'N/A' : `${innerPayload.accHourly.toFixed(2)} mm`}
+                        {innerPayload.accHourly === null ? 'N/A' : `${innerPayload.accHourly.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeHourData === 0 ? 'N/A' : `${innerPayload.cumulativeHourData.toFixed(2)} mm`}
+                        {innerPayload.cumulativeHourData === null ? 'N/A' : `${innerPayload.cumulativeHourData.toFixed(2)} mm`}
                     </div>
 
                 </div>
