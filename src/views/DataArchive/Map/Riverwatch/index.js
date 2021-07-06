@@ -80,7 +80,7 @@ const riverStationToGeojson = (riverStation) => {
                 },
                 properties: {
                     ...river,
-                    riverId: river.id,
+                    station: river.id,
                     title: river.title,
                     description: river.description,
                     basin: river.basin,
