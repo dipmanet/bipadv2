@@ -159,6 +159,7 @@ const Graph = (props: Props) => {
                                     strokeWidth={2}
                                     isFront
                                     strokeDasharray="3 2"
+                                    alwaysShow
                                 >
                                     <Label value="Warning Level" position="insideTopLeft" />
                                 </ReferenceLine>
@@ -168,6 +169,7 @@ const Graph = (props: Props) => {
                                     strokeWidth={2}
                                     isFront
                                     strokeDasharray="3 2"
+                                    alwaysShow
                                 >
                                     <Label value="Danger Level" position="insideTopLeft" />
                                 </ReferenceLine>
