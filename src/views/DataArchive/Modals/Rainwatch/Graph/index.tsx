@@ -232,7 +232,7 @@ const Graph = (props: Props) => {
                                                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                                             >
                                                 <CartesianGrid stroke="#f5f5f5" />
-                                                <XAxis dataKey="label" interval={0} angle={-45} dx={-15} dy={25} height={70} />
+                                                <XAxis dataKey="label" angle={-45} dx={-10} dy={30} height={100} />
                                                 <YAxis domain={['accHourly', 'auto']} />
                                                 <Tooltip
                                                     content={(

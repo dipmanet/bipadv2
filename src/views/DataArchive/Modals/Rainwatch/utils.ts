@@ -147,16 +147,16 @@ const getMinuteValues = (dateTime: string) => {
 const getHourlyValues = (dateTime: string) => {
     const dateWithHour = dateTime.substr(0, dateTime.indexOf(':'));
     const dateOnly = dateTime.substr(0, dateTime.indexOf('T'));
-    const hour = new Date(dateTime).getHours() - 1;
+    const date = new Date(dateOnly);
+    const temp = new Date(date.setDate(date.getDate() - 1));
+    const adjustedDate = temp.toISOString().slice(0, 10);
+    const hour = new Date(dateTime).getHours();
     let hourName;
 
     if (hour !== 0) {
         hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
     } else {
-        hourName = `${dateOnly} ${hour} AM`;
-    }
-    if (hour === -1) {
-        hourName = '23 PM';
+        hourName = `${adjustedDate} 23:59 PM`;
     }
     return [dateWithHour, hourName];
 };

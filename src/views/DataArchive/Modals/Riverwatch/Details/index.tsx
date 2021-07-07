@@ -17,12 +17,14 @@ const Details = (props: Props) => {
         description,
         province,
         district,
+        dangerLevel,
+        warningLevel,
     } = riverDetails || emptyObject;
     const { coordinates } = point || emptyObject;
     const [longitude, latitude] = coordinates || defaltLngLat;
     const { title: provinceTitle } = province || emptyObject;
     const { title: districtTitle } = district || emptyObject;
-
+    console.log('test:', props);
     const details = [
         // { title: 'Station Name', value: title || 'N/A', style: styles.full },
         // { title: 'Province', value: provinceTitle || 'N/A', style: styles.full },
@@ -31,6 +33,8 @@ const Details = (props: Props) => {
         { title: 'Longitude', value: longitude || 'N/A', style: styles.full },
         { title: 'Latitude', value: latitude || 'N/A', style: styles.full },
         { title: 'Description', value: description || 'N/A', style: styles.full },
+        { title: 'Danger Lavel', value: dangerLevel || 'N/A', style: styles.full },
+        { title: 'Warning Lavel', value: warningLevel || 'N/A', style: styles.full },
     ];
     return (
         <div className={styles.details}>

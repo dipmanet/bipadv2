@@ -26,7 +26,7 @@ const riverSelector = (river: ChartData) => river.waterLevelOn;
 
 const defaultSort = {
     key: 'year',
-    order: 'dsc',
+    order: 'asc',
 };
 
 const getPeriodWiseDate = (dateTime: string, periodCode?: string) => {

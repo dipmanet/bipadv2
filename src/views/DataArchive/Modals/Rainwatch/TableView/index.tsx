@@ -161,7 +161,7 @@ const TableView = (props: Props) => {
             comparator: (a, b) => compareNumber(a.accHourly, b.accHourly),
             modifier: (row: ChartData) => {
                 const min = row.accHourly;
-                return (min) ? `${min.toFixed(2)}` : undefined;
+                return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
         },
         {
@@ -173,7 +173,7 @@ const TableView = (props: Props) => {
             modifier: (row: ChartData) => {
                 // setCumu(row.accHour);
                 const min = row.cumulativeHourData;
-                return (min) ? `${min.toFixed(2)}` : undefined;
+                return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
         },
     ];
@@ -198,7 +198,7 @@ const TableView = (props: Props) => {
             comparator: (a, b) => compareNumber(a.accDaily, b.accDaily),
             modifier: (row: ChartData) => {
                 const min = row.accDaily;
-                return (min) ? `${min.toFixed(2)}` : undefined;
+                return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
         },
         {
@@ -210,7 +210,7 @@ const TableView = (props: Props) => {
             modifier: (row: ChartData) => {
                 // setCumu(row.accHour);
                 const min = row.cumulativeDailyData;
-                return (min) ? `${min.toFixed(2)}` : undefined;
+                return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
         },
     ];
@@ -235,7 +235,7 @@ const TableView = (props: Props) => {
             comparator: (a, b) => compareNumber(a.accMonthly, b.accMonthly),
             modifier: (row: ChartData) => {
                 const min = row.accMonthly;
-                return (min) ? `${min.toFixed(2)}` : undefined;
+                return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
         },
         {
@@ -247,7 +247,7 @@ const TableView = (props: Props) => {
             modifier: (row: ChartData) => {
                 // setCumu(row.accHour);
                 const min = row.cumulativeMonthlyData;
-                return (min) ? `${min.toFixed(2)}` : undefined;
+                return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
         },
     ];
