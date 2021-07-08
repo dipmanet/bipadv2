@@ -2,7 +2,7 @@
     position: absolute;
     width: 100%;
     bottom:40px;
-    right: 100px;
+    // right: 100px;
     z-index: 2;
     height: 25px;
     display: flex;
@@ -10,7 +10,8 @@
     align-items: center;
     .navText{
         color: white;
-        opacity: 0.67;
+        text-shadow: 2px 2px 2px #000000;
+        opacity: 0.87;
     }
     .navbutton{
         // width: 50px;
@@ -19,6 +20,8 @@
         color: white;
         .btnDisable{
             color: gray;
+            text-shadow: 2px 2px 2px #646464;
+            opacity: 0.87;
             cursor:not-allowed;
             padding:5px;
             display: flex;
@@ -28,6 +31,8 @@
         }
         .nextPrevBtn{
             color: white;
+            text-shadow: 2px 2px 2px #000000;
+            opacity: 0.87;
             cursor:pointer;
             padding: 5px;
             display: flex;

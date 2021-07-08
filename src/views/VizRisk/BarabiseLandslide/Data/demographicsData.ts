@@ -1,34 +1,31 @@
 export default {
     demographicsData: [
         {
-            name: 'Ward 4', MalePop: 3300, FemalePop: 3779, TotalHousehold: 1693,
+            name: 'Ward 1', MalePop: 658, FemalePop: 653, FamilyCount: 1311,
         },
         {
-            name: 'Ward 10', MalePop: 3213, FemalePop: 3343, TotalHousehold: 1268,
+            name: 'Ward 6', MalePop: 862, FemalePop: 807, FamilyCount: 1669,
         },
         {
-            name: 'Ward 5', MalePop: 2938, FemalePop: 3373, TotalHousehold: 1360,
+            name: 'Ward 5', MalePop: 980, FemalePop: 955, FamilyCount: 1935,
         },
         {
-            name: 'Ward 2', MalePop: 2729, FemalePop: 3012, TotalHousehold: 1251,
+            name: 'Ward 9', MalePop: 1476, FemalePop: 1397, FamilyCount: 2873,
         },
         {
-            name: 'Ward 3', MalePop: 2499, FemalePop: 3195, TotalHousehold: 1255,
+            name: 'Ward 4', MalePop: 1736, FemalePop: 1643, FamilyCount: 3383,
         },
         {
-            name: 'Ward 6', MalePop: 2583, FemalePop: 3034, TotalHousehold: 1185,
+            name: 'Ward 8', MalePop: 1672, FemalePop: 1737, FamilyCount: 3409,
         },
         {
-            name: 'Ward 1', MalePop: 2357, FemalePop: 3040, TotalHousehold: 1283,
+            name: 'Ward 2', MalePop: 1761, FemalePop: 1733, FamilyCount: 3494,
         },
         {
-            name: 'Ward 8', MalePop: 2339, FemalePop: 2815, TotalHousehold: 1059,
+            name: 'Ward 7', MalePop: 1913, FemalePop: 1839, FamilyCount: 3752,
         },
         {
-            name: 'Ward 9', MalePop: 2056, FemalePop: 2607, TotalHousehold: 1018,
-        },
-        {
-            name: 'Ward 7', MalePop: 1505, FemalePop: 1867, TotalHousehold: 766,
+            name: 'Ward 3', MalePop: 2199, FemalePop: 2089, FamilyCount: 4288,
         },
 
     ],
