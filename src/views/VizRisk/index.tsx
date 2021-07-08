@@ -9,6 +9,7 @@ import Tikapur from './Tikapur';
 import Dhangadi from './Dhangadi';
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Biratnagar from './Biratnagar';
+import Barabise from './BarabiseLandslide';
 // import BarabiseLandslide from './BarabiseLandslide';
 
 
@@ -18,6 +19,7 @@ const slides = [
     <Gulariya />,
     <Biratnagar />,
     <Dhangadi />,
+    <Barabise />,
 
 ];
 
@@ -25,6 +27,7 @@ const VizRiskMainPage = () => {
     const [showMenu, setShowMenu] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [title, setTitle] = useState('');
+    const [mun, setMun] = useState('');
     // console.log(props);
 
     const handleMenuIconClick = () => {
@@ -33,6 +36,7 @@ const VizRiskMainPage = () => {
 
     const handleMenuTitleClick = (municipality) => {
         setShowMenu(false);
+        setMun(municipality);
         if (municipality === 'rajapur') {
             setCurrentPage(0);
             setTitle('Visualising Flood Exposure');
@@ -48,6 +52,9 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'dhangadi') {
             setCurrentPage(4);
             setTitle('Visualising Flood Exposure');
+        } else if (municipality === 'barabise') {
+            setCurrentPage(5);
+            setTitle('Visualising Landslide Exposure');
         }
     };
 
@@ -59,6 +66,20 @@ const VizRiskMainPage = () => {
         floodInfraChosen: 'all',
         evacChosen: 'all',
     };
+    const getBtnStyle = () => {
+        if (mun === 'pachpokhari' || mun === 'jugal' || mun === 'barabise') {
+            if (showMenu) {
+                return styles.hamburgerBtnContMenu;
+            }
+            return styles.hamburgerBtnContainer;
+        }
+
+        if (showMenu) {
+            return styles.hamburgerBtnContainerOther;
+        }
+        return styles.hamburgerBtnContMenu;
+    };
+
 
     return (
         <VizRiskContext.Provider value={vrcontextProps}>
@@ -70,7 +91,7 @@ const VizRiskMainPage = () => {
                 <div className={styles.navBtnsContainer}>
 
 
-                    <div className={styles.hamburgerBtnContainer}>
+                    <div className={getBtnStyle()}>
                         <Button
                             transparent
                             onClick={handleMenuIconClick}
@@ -144,15 +165,15 @@ const VizRiskMainPage = () => {
                                 </Button>
 
                             </div>
-                            {/* <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
+                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
                             <Button
                                 transparent
-                                onClick={() => handleMenuTitleClick('bharabise')}
+                                onClick={() => handleMenuTitleClick('barabise')}
 
                             >
                                 <h1 className={styles.menuItems}>Bharabise Municipality</h1>
 
-                            </Button> */}
+                            </Button>
 
 
                         </div>
