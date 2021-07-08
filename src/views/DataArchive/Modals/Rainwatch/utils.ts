@@ -119,7 +119,7 @@ export const parseInterval = (rainDetails: ArchiveRain[]) => {
     const withInterval = temp.map((detail) => {
         const { averages } = detail;
         averages.forEach((avg) => {
-            const { value = 0, interval } = avg;
+            const { value, interval } = avg;
             const intervalCode = getIntervalCode(interval);
             Object.assign(detail, { [intervalCode]: value });
         });
@@ -154,9 +154,9 @@ const getHourlyValues = (dateTime: string) => {
     let hourName;
 
     if (hour !== 0) {
-        hourName = hour < 12 ? `${hour} AM` : `${hour} PM`;
+        hourName = hour < 12 ? `${dateOnly}:${hour} AM` : `${dateOnly}:${hour} PM`;
     } else {
-        hourName = `${adjustedDate} 23:59 PM`;
+        hourName = `${adjustedDate}:23:59 PM`;
     }
     return [dateWithHour, hourName];
 };
@@ -249,8 +249,8 @@ export const getChartData = (
 
         return {
             key,
-            accHourly: Number(avgOneHour) || 0,
-            accDaily: Number(avgTwentyFourHour) || 0,
+            accHourly: Number(avgOneHour),
+            accDaily: Number(avgTwentyFourHour),
             label: String(label || ''),
             createdOn: String(createdOn || ''),
             measuredOn: String(measuredOn || ''),

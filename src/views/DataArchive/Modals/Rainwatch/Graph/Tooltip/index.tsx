@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import React from 'react';
 
 import { getDate, getTimeWithIndictor, getDateWithRange } from '#views/DataArchive/utils';
@@ -83,11 +84,11 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accHourly === null ? 'N/A' : `${innerPayload.accHourly.toFixed(2)} mm`}
+                        {(innerPayload.accHourly === null || isNaN(Number(innerPayload.accHourly))) ? 'N/A' : `${innerPayload.accHourly.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeHourData === null ? 'N/A' : `${innerPayload.cumulativeHourData.toFixed(2)} mm`}
+                        {(innerPayload.cumulativeHourData === null || isNaN(Number(innerPayload.cumulativeHourData))) ? 'N/A' : `${innerPayload.cumulativeHourData.toFixed(2)} mm`}
                     </div>
 
                 </div>
@@ -102,11 +103,11 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accDaily === 0 ? 'N/A' : `${innerPayload.accDaily.toFixed(2)} mm`}
+                        {(innerPayload.accDaily === null || isNaN(Number(innerPayload.accDaily))) ? 'N/A' : `${innerPayload.accDaily.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeDailyData === 0 ? 'N/A' : `${innerPayload.cumulativeDailyData.toFixed(2)} mm`}
+                        {(innerPayload.cumulativeDailyData === null || isNaN(Number(innerPayload.cumulativeDailyData))) ? 'N/A' : `${innerPayload.cumulativeDailyData.toFixed(2)} mm`}
                     </div>
 
                 </div>
@@ -121,11 +122,11 @@ const Tooltip = (props: TooltipProps) => {
                     </div>
                     <div className={styles.value}>
                         <b>Accumulated Rain: </b>
-                        {innerPayload.accMonthly === 0 ? 'N/A' : `${innerPayload.accMonthly.toFixed(2)} mm`}
+                        {(innerPayload.accMonthly === null || isNaN(Number(innerPayload.accMonthly))) ? 'N/A' : `${innerPayload.accMonthly.toFixed(2)} mm`}
                     </div>
                     <div className={styles.value}>
                         <b>Cumulative Rain: </b>
-                        {innerPayload.cumulativeMonthlyData === 0 ? 'N/A' : `${innerPayload.cumulativeMonthlyData.toFixed(2)} mm`}
+                        {(innerPayload.cumulativeMonthlyData === null || isNaN(Number(innerPayload.cumulativeMonthlyData))) ? 'N/A' : `${innerPayload.cumulativeMonthlyData.toFixed(2)} mm`}
                     </div>
 
                 </div>

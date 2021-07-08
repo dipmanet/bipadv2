@@ -24,7 +24,7 @@ const Details = (props: Props) => {
     const [longitude, latitude] = coordinates || defaltLngLat;
     const { title: provinceTitle } = province || emptyObject;
     const { title: districtTitle } = district || emptyObject;
-    console.log('test:', props);
+
     const details = [
         // { title: 'Station Name', value: title || 'N/A', style: styles.full },
         // { title: 'Province', value: provinceTitle || 'N/A', style: styles.full },

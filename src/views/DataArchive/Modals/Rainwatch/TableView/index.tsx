@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 
@@ -99,8 +100,10 @@ const TableView = (props: Props) => {
             let cumulative = 0;
             let cumulativeDaily = 0;
             const datawithCumulative = data.map((item) => {
-                cumulative += item.accHourly;
-                cumulativeDaily += item.accDaily;
+                // eslint-disable-next-line no-restricted-globals
+                if (!isNaN(item.accHourly)) { cumulative += item.accHourly; } else { cumulative += 0; }
+                // eslint-disable-next-line no-restricted-globals
+                if (!isNaN(item.accDaily)) { cumulativeDaily += item.accDaily; } else { cumulativeDaily += 0; }
                 return ({
                     ...item,
                     cumulativeHourData: cumulative,
@@ -115,11 +118,19 @@ const TableView = (props: Props) => {
 
     useEffect(() => {
         if (cumulativeData && cumulativeData.length > 0) {
-            const getAccRain = (key: string) => cumulativeData
-                .filter(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}` === key)
-                .reduce((a, b) => ({
-                    accDaily: a.accDaily + b.accDaily,
-                }));
+            const getAccRain = (key: string) => {
+                const ourArray = cumulativeData
+                    .filter(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}` === key)
+                    .filter(daily => !isNaN(daily.accDaily));
+
+                if (ourArray.length > 0) {
+                    return ourArray.reduce((a, b) => ({
+                        accDaily: a.accDaily + b.accDaily,
+                    }));
+                }
+                return [];
+            };
+
 
             const uniquemonthArr = [...new Set(cumulativeData.map(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}`))];
             const monthlychartData = uniquemonthArr.map(key => ({
@@ -127,8 +138,10 @@ const TableView = (props: Props) => {
                 accMonthly: getAccRain(key).accDaily,
             }));
             let cumulativeMth = 0;
+
             const monthlyCumulativeCrtData = monthlychartData.map((item) => {
-                cumulativeMth += item.accMonthly;
+                // eslint-disable-next-line no-restricted-globals
+                if (!isNaN(item.accMonthly)) { cumulativeMth += item.accMonthly; } else { cumulativeMth += 0; }
                 return {
                     ...item,
                     cumulativeMonthlyData: cumulativeMth,
