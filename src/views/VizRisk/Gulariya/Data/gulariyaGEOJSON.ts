@@ -39,4 +39,16 @@ export default {
         ],
     },
 
+    evaccenters: {
+        type: 'FeatureCollection',
+        icon: 'education',
+        name: 'evaccenters',
+        crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+        features: [
+            { type: 'Feature', properties: { Title: 'Tharu mahila uthhan kendra', Type: 'Culture', icon: 'culture', Latitude: 28.2227572, Longitude: 81.3289397 }, geometry: { type: 'Point', coordinates: [81.3289397, 28.2227572] } },
+            { type: 'Feature', properties: { Title: 'Kotahi Mandir', Type: 'Culture', icon: 'culture', Latitude: 28.219331, Longitude: 81.3489201 }, geometry: { type: 'Point', coordinates: [81.3489201, 28.219331] } },
+            { type: 'Feature', properties: { Title: 'Bageshwori Mandir', Type: 'Culture', icon: 'culture', Latitude: 28.2038848, Longitude: 81.34079 }, geometry: { type: 'Point', coordinates: [81.34079, 28.2038848] } },
+        ],
+    },
+
 };

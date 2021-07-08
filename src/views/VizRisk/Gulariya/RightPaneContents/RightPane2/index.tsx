@@ -27,19 +27,23 @@ import styles from './styles.scss';
 import Disclaimer from '../../Components/Disclaimer';
 
 const data = [
-    { name: 'Agricultural land', value: 94.07 },
-    { name: 'Forest', value: 5.99 },
-    { name: 'Water bodies', value: 5.18 },
-    { name: 'Other', value: 21.5 },
-    { name: 'Buildings', value: 0.959 },
+    { name: 'Agricultural land', value: 85.38 },
+    { name: 'Forest', value: 7.52 },
+    { name: 'Meadow', value: 5.17 },
+    { name: 'Sand', value: 2.48 },
+    { name: 'Water bodies', value: 2.52 },
+    { name: 'Buildings', value: 1.51 },
+    { name: 'Other ', value: 13.36 },
 ].sort(({ value: a }, { value: b }) => b - a);
 
 const COLORS_CHART = [
-    '#d3e378',
-    '#b4b4b4',
-    '#00a811',
-    '#2b4253',
-    '#d5d3d3',
+    '#d3e378', // agriculture
+    '#d5d3d3', // other
+    '#00a811', // forest
+    '#afeb0a', // meadow
+    '#0765AA', // water bodies
+    '#effdc9', // sand
+    '#F2F2F2', // building
 ];
 
 
@@ -109,7 +113,7 @@ class RightPane extends React.PureComponent<Props, State> {
             // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 127.02) * 100).toFixed(2)} % `}</p>
+                    <p>{`${((payload[0].value / 117.949) * 100).toFixed(2)} % `}</p>
                 </div>
             );
         }
@@ -148,31 +152,18 @@ class RightPane extends React.PureComponent<Props, State> {
 
     public render() {
         const { activeIndex, showInfo } = this.state;
-
+        console.log('data', data);
         return (
             <div className={styles.vrSideBar}>
 
                 <h1>Land Cover</h1>
 
-                {/* <p>
-                    {' '}
-                    Located in the Terai region and lying close to water bodies,
-                    Rajapur has fertile and arable land.
-
-                </p> */}
                 <p>
-                Gulariya has total area of 118.21square km, out of which, 84.11% of
-                land is used for agriculture.
-                Major crops grown in this municipality are rice, maize, and wheat.
-                Forest area covers 5.98% of
-                land while built-in area and water bodies occupy 7.66% and 3.41% of
-                total land respectively.
-                Krishnasaar Conservation Area, a home to Blackbuck (Antelope Cervicapra)
-                 locally named as Krishnasaar,
-                along with different flora and fauna is also situated in Gulariya
-                 Municipality.
+                    Out of a total area of 118 sq. km, 72.4% of the land is covered by farmland,
+                    6.4% by forests. Other areas are covered by water bodies, grassland, sand
+                    and built-up area.
                 </p>
-                {/* <ResponsiveContainer className={styles.respContainer} height={200}>
+                <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
                         width={200}
                         height={150}
@@ -193,8 +184,12 @@ class RightPane extends React.PureComponent<Props, State> {
                             stroke="none"
                         >
                             {
-                                data.map((entry, index) => <Cell key={`cell-${entry.name}`}
-                                 fill={COLORS_CHART[index % COLORS_CHART.length]} />)
+                                data.map((entry, index) => (
+                                    <Cell
+                                        key={`cell-${entry.name}`}
+                                        fill={COLORS_CHART[index % COLORS_CHART.length]}
+                                    />
+                                ))
                             }
                             <Label
                                 width={30}
@@ -202,7 +197,7 @@ class RightPane extends React.PureComponent<Props, State> {
                                 content={(
                                     <CustomLabel
                                         value1={`${data[activeIndex].value} sq km`}
-                                        value2={` / ${((data[activeIndex].value / 127.02)
+                                        value2={` / ${((data[activeIndex].value / 117.949)
                                              * 100).toFixed(2)}%`}
                                     />
                                 )}
@@ -210,50 +205,63 @@ class RightPane extends React.PureComponent<Props, State> {
                         </Pie>
                         <Tooltip content={this.CustomTooltip} />
                     </PieChart>
-                </ResponsiveContainer> */}
+                </ResponsiveContainer>
 
-                {/* <div className={styles.customChartLegend}>
+                <div className={styles.customChartLegend}>
                     <CustomChartLegend
                         text={data[0].name}
                         barColor={COLORS_CHART[0]}
                         background={'#eee'}
-                        data={'94.07 sq km / 74.06'}
+                        data={'85.38 sq km / 72.38'}
                         selected={activeIndex === 0}
+                    />
+                    <CustomChartLegend
+                        text={data[1].name}
+                        barColor={COLORS_CHART[1]}
+                        background={'#eee'}
+                        data={'13.369 sq km / 11.33'}
+                        selected={activeIndex === 1}
                     />
 
                     <CustomChartLegend
                         text={data[2].name}
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
-                        data={'5.99 sq km / 4.72'}
+                        data={'7.52 sq km / 6.38'}
                         selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS_CHART[3]}
                         background={'#eee'}
-                        data={'5.18 sq km / 4.08'}
+                        data={'5.17 sq km / 4.38'}
                         selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
-                        background={'#444'}
-                        data={'0.959 sq km / 0.75'}
+                        background={'#eee'}
+                        data={'2.52 sq km / 2.14'}
                         selected={activeIndex === 4}
-                        builtupArea
                     />
                     <CustomChartLegend
-                        text={data[1].name}
-                        barColor={COLORS_CHART[1]}
-                        background={'#444'}
-                        data={'21.5 sq km / 16.93'}
-                        selected={activeIndex === 1}
+                        text={data[5].name}
+                        barColor={COLORS_CHART[5]}
+                        background={'#eee'}
+                        data={'2.48 sq km / 2.10'}
+                        selected={activeIndex === 5}
+                    />
+                    <CustomChartLegend
+                        text={data[6].name}
+                        barColor={COLORS_CHART[6]}
+                        background={'#eee'}
+                        data={'1.51 sq km / 1.28'}
+                        selected={activeIndex === 6}
                     />
 
-                </div> */}
+                </div>
                 {/* <SourceInfo /> */}
-                <Disclaimer />
+                {/* <Disclaimer /> */}
             </div>
         );
     }

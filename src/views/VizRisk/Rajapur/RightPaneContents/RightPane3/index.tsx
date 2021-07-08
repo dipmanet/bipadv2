@@ -58,16 +58,16 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven
-                with some pockets of dense settlements. This map allows
-                viewing the population distribution within each ward and
-                helps to locate the region of dense and sparse settlements.
+                    Population distribution in the region is largely uneven
+                    with some pockets of dense settlements. This map allows
+                    viewing the population distribution within each ward and
+                    helps to locate the region of dense and sparse settlements.
                 </p>
                 <p>
-                Ward number 4 has the highest number of population with 1693
-                households. Notably, these high populations ward lies very close
-                to the western tributary of the Karnali river.  Ward number 7 has
-                the least number of households comprising of 766 numbers.
+                    Ward number 4 has the highest number of population with 1693
+                    households. Notably, these high populations ward lies very close
+                    to the western tributary of the Karnali river.  Ward number 7 has
+                    the least number of households comprising of 766 numbers.
                 </p>
 
                 <div className={styles.iconRow}>

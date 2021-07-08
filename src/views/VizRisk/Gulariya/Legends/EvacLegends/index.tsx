@@ -70,7 +70,7 @@ const EvacLegends = (props) => {
             <div className={styles.criticalIcons}>
 
                 <div className={styles.toggleContainer}>
-                    <div className={styles.infraIconContainer}>
+                    {/* <div className={styles.infraIconContainer}>
 
                         <button
                             type="button"
@@ -87,8 +87,8 @@ const EvacLegends = (props) => {
                                 Show All
                         </button>
 
-                    </div>
-                    <div className={styles.infraIconContainer}>
+                    </div> */}
+                    {/* <div className={styles.infraIconContainer}>
                         <button
                             type="button"
                             className={showEducation
@@ -96,20 +96,6 @@ const EvacLegends = (props) => {
                                 : styles.criticalButton}
                             onClick={() => handleEvacclick('education')}
                         >
-                            {/* <Hexagon
-                                style={{
-                                    stroke: '#ffdd00',
-                                    // stroke: showEducation ? '#9bb4be' : '#9bb4bf',
-                                    strokeWidth: 50,
-                                    // fill: showEducation ? '#ffdd00' : '#456172' }}
-                                    // fill: '#ffdd00',
-                                    fill: showEducation
-                                    || showAll
-                                        ? '#ffdd00' : 'transparent',
-
-                                }}
-                                className={styles.educationHexagon}
-                            /> */}
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
                                 src={Education}
@@ -117,14 +103,14 @@ const EvacLegends = (props) => {
 
                             Education
                         </button>
-                    </div>
+                    </div> */}
 
                     <div className={styles.infraIconContainer}>
                         <button
                             type="button"
                             className={showCulture
                                 ? styles.criticalButtonSelected
-                                : styles.criticalButton}
+                                : styles.criticalButtonSelected}
                             onClick={() => handleEvacclick('culture')}
                         >
                             <ScalableVectorGraphics
@@ -134,7 +120,7 @@ const EvacLegends = (props) => {
                             Culture
                         </button>
                     </div>
-                    <div className={styles.infraIconContainer}>
+                    {/* <div className={styles.infraIconContainer}>
                         <button
                             type="button"
                             className={showSafe
@@ -148,7 +134,7 @@ const EvacLegends = (props) => {
                             />
                             Safe Shelter
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
 

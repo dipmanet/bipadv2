@@ -43,25 +43,25 @@ const LandCoverLegends = (props) => {
             if (criticalFlood === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (criticalFlood === 'education') {
+            } else if (criticalFlood === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'culture') {
+            } else if (criticalFlood === 'Cultural') {
                 resetCriticalLayers();
                 setshowCulture(true);
-            } else if (criticalFlood === 'governance') {
+            } else if (criticalFlood === 'Governance') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
-            } else if (criticalFlood === 'health') {
+            } else if (criticalFlood === 'Health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'industry') {
+            } else if (criticalFlood === 'Industry') {
                 resetCriticalLayers();
                 setshowIndustry(true);
-            } else if (criticalFlood === 'bank') {
+            } else if (criticalFlood === 'Finance') {
                 resetCriticalLayers();
                 setshowFinance(true);
-            } else if (criticalFlood === 'tourism') {
+            } else if (criticalFlood === 'Tourism') {
                 resetCriticalLayers();
                 setshowTourism(true);
             }
@@ -75,36 +75,35 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowAll(true);
         }
-        if (layer === 'education') {
+        if (layer === 'Education') {
             resetCriticalLayers();
             setshowEducation(true);
         }
-        if (layer === 'governance') {
+        if (layer === 'Governance') {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
-        if (layer === 'culture') {
+        if (layer === 'Cultural') {
             resetCriticalLayers();
             setshowCulture(true);
         }
-        if (layer === 'health') {
+        if (layer === 'Health') {
             resetCriticalLayers();
             setshowHospital(true);
         }
-        if (layer === 'industry') {
+        if (layer === 'Industry') {
             resetCriticalLayers();
             setshowIndustry(true);
         }
-        if (layer === 'bank') {
+        if (layer === 'Finance') {
             resetCriticalLayers();
             setshowFinance(true);
         }
-        if (layer === 'tourism') {
+        if (layer === 'Tourism') {
             resetCriticalLayers();
             setshowTourism(true);
         }
     };
-
 
     return (
         <>
@@ -165,7 +164,7 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-                        <div className={styles.infraIconContainer}>
+                        {/* <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showEducation
@@ -178,23 +177,9 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Education}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#ffdd00',
-                    // stroke: showEducation ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showEducation ? '#ffdd00' : '#456172' }}
-                    // fill: '#ffdd00',
-                    fill: showEducation || showAll ? '#ffdd00' : 'transparent',
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
-
-
-            Educational Institution
+                                 Educational Institution
                             </button>
-                        </div>
+                        </div> */}
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -202,24 +187,12 @@ const LandCoverLegends = (props) => {
                                 className={showGovernemnt
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('governance')}
+                                onClick={() => handleCriticalclick('Governance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Governance}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#66dff4',
-                    // stroke: showGovernemnt ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showGovernemnt ? '#66dff4' : '#456172' }}
-                    // fill: '#66dff4',
-                    fill: showGovernemnt || showAll ? '#66dff4' : 'transparent',
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
             Government Building
                             </button>
 
@@ -230,25 +203,12 @@ const LandCoverLegends = (props) => {
                                 className={showCulture
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('culture')}
+                                onClick={() => handleCriticalclick('Cultural')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Culture}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#c8b0b8',
-                    // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
-
-                    strokeWidth: 50,
-                    // fill: '#c8b0b8',
-                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
-
-                }}
-                        // fill: showCulture ? '#c8b0b8' : '#456172' }}
-                className={styles.educationHexagon}
-            /> */}
             Cultural Site
                             </button>
 
@@ -261,30 +221,17 @@ const LandCoverLegends = (props) => {
                                 className={showHospital
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('health')}
+                                onClick={() => handleCriticalclick('Health')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Health}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#c8b09a',
-                    // stroke: showHospital ? '#9bb4be' : '#9bb4bf',
-
-                    strokeWidth: 50,
-                    // fill: showHospital ? '#c8b09a' : '#456172' }}
-                    // fill: '#c8b09a',
-                    fill: showHospital || showAll ? '#c8b09a' : 'transparent',
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
             Hospital
                             </button>
 
                         </div>
-                        <div className={styles.infraIconContainer}>
+                        {/* <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showIndustry
@@ -296,25 +243,12 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Industry}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#a4ac5e',
-                    // stroke: showIndustry ? '#9bb4be' : '#9bb4bf',
 
-                    strokeWidth: 50,
-                    // fill: showIndustry ? '#a4ac5e' : '#456172'
-                    // fill: '#a4ac5e',
-                    fill: showIndustry || showAll ? '#a4ac5e' : 'transparent',
-
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
-            Industry
+                                Industry
                             </button>
 
-                        </div>
-                        <div className={styles.infraIconContainer}>
+                        </div> */}
+                        {/* <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -327,20 +261,10 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Tourism}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#62d480',
-                    // stroke: '#9bb4be',
-                    strokeWidth: 50,
-                    // fill: showTourism ? '#62d480' : '#456172'
-                    fill: showTourism || showAll ? '#62d480' : 'transparent',
-                }}
-                className={styles.educationHexagon}
-            /> */}
-                Hotel or Restaurant
+                             Hotel or Restaurant
                             </button>
 
-                        </div>
+                        </div> */}
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -348,24 +272,13 @@ const LandCoverLegends = (props) => {
                                 className={showFinance
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('bank')}
+                                onClick={() => handleCriticalclick('Finance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Bank}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#c58dbf',
-                    // stroke: showFinance ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showFinance ? '#c58dbf' : '#456172'
-                    // fill: '#c58dbf',
-                    fill: showFinance || showAll ? '#c58dbf' : 'transparent',
-                }}
-                className={styles.educationHexagon}
-            /> */}
-             Bank
+                           Bank
                             </button>
 
                         </div>

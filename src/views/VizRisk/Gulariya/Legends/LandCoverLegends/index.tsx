@@ -71,7 +71,34 @@ const LandCoverLegends = () => (
             </span>
                             Forest
         </p>
+        <p className={styles.landcoverIconContainer}>
+            <span>
+                <Hexagon
+                    style={{
+                        stroke: '#fff',
+                        strokeWidth: 50,
+                        fill: '#afeb0a',
 
+                    }}
+                    className={styles.otherIcon}
+                />
+            </span>
+                            Meadow
+        </p>
+        <p className={styles.landcoverIconContainer}>
+            <span>
+                <Hexagon
+                    style={{
+                        stroke: '#fff',
+                        strokeWidth: 50,
+                        fill: '#effdc9',
+
+                    }}
+                    className={styles.otherIcon}
+                />
+            </span>
+                            Sand
+        </p>
         <div className={styles.landcoverIconContainer}>
             <div className={styles.canalIcon} />
 

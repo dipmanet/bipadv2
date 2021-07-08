@@ -10,10 +10,10 @@ import {
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Gulariya/Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Rajapur/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Rajapur/Icons/male.svg';
-import Female from '#views/VizRisk/Rajapur/Icons/female.svg';
-import Home from '#views/VizRisk/Rajapur/Icons/homeNew.svg';
+import ManWoman from '#views/VizRisk/Gulariya/Icons/ManWoman.svg';
+import Male from '#views/VizRisk/Gulariya/Icons/male.svg';
+import Female from '#views/VizRisk/Gulariya/Icons/female.svg';
+import Home from '#views/VizRisk/Gulariya/Icons/home.svg';
 
 import Disclaimer from '../../Components/Disclaimer';
 
@@ -58,12 +58,14 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Gulariya Municipality is divided into 12 wards with
-                a total population of 71,991 equating to around 13,831 families.
-                Male population is larger than female with the total male and female
-                population counting to 36972 and 35019 respectively. Ward number 4 has
-                the largest number of families that equals to 1786 while ward number 5
-                has the least comprising of only 782 number of families.
+                    Population distribution in the region is largely uneven with some pockets of
+                    dense settlements. This map allows viewing the population distribution within
+                    each ward and helps to locate the region of dense and sparse settlements.
+                </p>
+                <p>
+                    Gulariya Municipality has a total polulation of 71,991. Ward number 4 has
+                    the highest number of population with  1786 number of families.
+                    Ward number 5 has the least population (4335) with 782 families.
                 </p>
 
 
@@ -127,7 +129,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 </div>
 
 
-                <ResponsiveContainer width="100%" height={'50%'}>
+                <ResponsiveContainer width="100%">
                     <BarChart
                         width={350}
                         height={600}

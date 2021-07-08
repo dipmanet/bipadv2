@@ -158,7 +158,7 @@ const LandCoverLegends = (props) => {
                     fill: showAll ? '#ffffff' : 'transparent',
 
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
 
                 Show All
@@ -188,7 +188,7 @@ const LandCoverLegends = (props) => {
                     fill: showEducation || showAll ? '#ffdd00' : 'transparent',
 
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
 
 
@@ -218,7 +218,7 @@ const LandCoverLegends = (props) => {
                     fill: showGovernemnt || showAll ? '#66dff4' : 'transparent',
 
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
             Government Building
                             </button>
@@ -247,7 +247,7 @@ const LandCoverLegends = (props) => {
 
                 }}
                         // fill: showCulture ? '#c8b0b8' : '#456172' }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
             Cultural Site
                             </button>
@@ -278,7 +278,7 @@ const LandCoverLegends = (props) => {
                     fill: showHospital || showAll ? '#c8b09a' : 'transparent',
 
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
             Hospital
                             </button>
@@ -308,7 +308,7 @@ const LandCoverLegends = (props) => {
 
 
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
             Industry
                             </button>
@@ -335,7 +335,7 @@ const LandCoverLegends = (props) => {
                     // fill: showTourism ? '#62d480' : '#456172'
                     fill: showTourism || showAll ? '#62d480' : 'transparent',
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
                 Hotel or Restaurant
                             </button>
@@ -363,7 +363,7 @@ const LandCoverLegends = (props) => {
                     // fill: '#c58dbf',
                     fill: showFinance || showAll ? '#c58dbf' : 'transparent',
                 }}
-                className={styles.EducationHexagon}
+                className={styles.educationHexagon}
             /> */}
              Bank
                             </button>

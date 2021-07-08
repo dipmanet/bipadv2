@@ -151,7 +151,7 @@ const FloodHistoryLegends = (props: Props) => {
                             <Hexagon
                                 style={{
                                     stroke: '#9dc7fa',
-                                    strokeWidth: 20,
+                                    strokeWidth: 50,
                                     fill: activeRasterLayer === '20' ? '#036ef0' : 'transparent',
 
                                 }}
