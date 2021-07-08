@@ -154,9 +154,9 @@ const getHourlyValues = (dateTime: string) => {
     let hourName;
 
     if (hour !== 0) {
-        hourName = hour < 12 ? `${dateOnly}:${hour} AM` : `${dateOnly}:${hour} PM`;
+        hourName = hour < 12 ? `${dateOnly} ${hour} AM` : `${dateOnly} ${hour} PM`;
     } else {
-        hourName = `${adjustedDate}:23:59 PM`;
+        hourName = `${adjustedDate} 23:59 PM`;
     }
     return [dateWithHour, hourName];
 };

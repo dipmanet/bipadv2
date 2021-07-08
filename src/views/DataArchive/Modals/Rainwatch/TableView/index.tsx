@@ -110,6 +110,7 @@ const TableView = (props: Props) => {
                     cumulativeDailyData: cumulativeDaily,
                 });
             });
+            setCmd([]);
             setCD(datawithCumulative);
             // props.handleTableData(datawithCumulative);
         }
@@ -235,9 +236,8 @@ const TableView = (props: Props) => {
             sortable: true,
             comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
             modifier: (row: ChartData) => {
-                const { measuredOn } = row;
-
-                return row.key;
+                const { key } = row;
+                return key;
             },
         },
         {
@@ -334,29 +334,17 @@ const TableView = (props: Props) => {
                     />
                 </DownloadButton>
             </div>
-            {
-                monthlyChartData && monthlyChartData.length > 0 && periodCode === 'monthly'
-                    ? (
-                        <Table
-                            // rowClassNameSelector={getClassName}
-                            className={styles.rainTable}
-                            data={monthlyChartData}
-                            headers={header}
-                            keySelector={rainSelector}
-                            defaultSort={defaultSort}
-                        />
-                    )
-                    : (
-                        <Table
-                            // rowClassNameSelector={getClassName}
-                            className={styles.rainTable}
-                            data={cumulativeData}
-                            headers={header}
-                            keySelector={rainSelector}
-                            defaultSort={defaultSort}
-                        />
-                    )
-            }
+
+
+            <Table
+                // rowClassNameSelector={getClassName}
+                className={styles.rainTable}
+                data={(monthlyChartData && monthlyChartData.length > 0 && periodCode === 'monthly')
+                    ? monthlyChartData : cumulativeData}
+                headers={header}
+                keySelector={rainSelector}
+                defaultSort={defaultSort}
+            />
 
 
         </div>
