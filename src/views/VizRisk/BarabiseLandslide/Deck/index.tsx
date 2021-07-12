@@ -24,6 +24,7 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import styles from './styles.scss';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -49,7 +50,7 @@ const Deck = (props) => {
     const mapRef = useRef(null);
     const [radiusChange, setRadiusChange] = useState(false);
     const [allDataVisible, setAllDataVisible] = useState(true);
-    const [landSlidePointsVisible, setLandslideVisible] = useState(false);
+    const [landSlidePointsVisible, setLandslideVisible] = useState(true);
     const [mapanimationDuration, setMapAnimateDuration] = useState(30000);
     const [reAnimate, setReAnimate] = useState(false);
     const [delay, setMapDelay] = useState(4000);
@@ -466,7 +467,7 @@ const Deck = (props) => {
         if (!mapRef.current) {
             return;
         }
-        if (currentPage === 1) {
+        if (currentPage === 0) {
             const map = mapRef.current.getMap();
             handleFlyTo(Locations.nepal);
             setAllDataVisible(true);
@@ -477,7 +478,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-        } else if (currentPage === 2) {
+        } else if (currentPage === 1) {
             const map = mapRef.current.getMap();
 
             props.setNarrationDelay(1000);
@@ -499,7 +500,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-        } else if (currentPage === 3) {
+        } else if (currentPage === 2) {
             const map = mapRef.current.getMap();
 
             setReAnimate(true);
@@ -515,7 +516,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-        } else if (currentPage === 4) {
+        } else if (currentPage === 3) {
             const map = mapRef.current.getMap();
 
             setReAnimate(true);
@@ -532,7 +533,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-        } else if (currentPage === 6) {
+        } else if (currentPage === 5) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
             MapLayers.demography.map((layer) => {
@@ -547,7 +548,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-        } else if (currentPage === 7) {
+        } else if (currentPage === 6) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
 
@@ -563,7 +564,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-        } else if (currentPage === 8) {
+        } else if (currentPage === 7) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
 
@@ -624,10 +625,10 @@ const Deck = (props) => {
                             radiusMinPixels: 3,
                             // visible: allDataVisible,
                             animationProgress: springProps.enterProgress,
-                            visible: landSlidePointsVisible,
-                            getDelayFactor: d => (delayProp === 'longitude'
-                                ? longitudeDelayScale(d.date)
-                                : targetDelayScale(d.distToTarget)),
+                            visible: currentPage === 1,
+                            // getDelayFactor: d => (delayProp === 'longitude'
+                            //     ? longitudeDelayScale(d.date)
+                            //     : targetDelayScale(d.distToTarget)),
                             // parameters: {
                             //     // prevent flicker from z-fighting
                             //     // [GL.DEPTH_TEST]: false,
@@ -657,34 +658,45 @@ const Deck = (props) => {
                     ];
                     return (
                         <>
-                            <DeckGL
-                                ref={deckRef}
-                                layers={librariesLayer1}
-                                initialViewState={Locations.nepal}
-                                controller
-                                onWebGLInitialized={setGLContext}
-                                viewState={viewState}
-                                onViewStateChange={onViewStateChange}
-                                getTooltip={getToolTip}
-                                glOptions={{
+                            <div className={styles.container}>
+
+
+                                <DeckGL
+                                    ref={deckRef}
+                                    layers={librariesLayer1}
+                                    initialViewState={Locations.nepal}
+                                    controller
+                                    onWebGLInitialized={setGLContext}
+                                    viewState={viewState}
+                                    onViewStateChange={onViewStateChange}
+                                    getTooltip={getToolTip}
+                                // style={{ width: '50%', right: '60px', position: 'fixed' }}
+                                    glOptions={{
                                     /* To render vector tile polygons correctly */
-                                    stencil: true,
-                                }}
-                            >
-                                {glContext && (
-                                    <StaticMap
-                                        ref={mapRef}
-                                        gl={glContext}
-                                        mapStyle={
-                                            process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE
-                                        }
-                                        mapboxApiAccessToken={
-                                            process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
-                                        }
-                                        onLoad={onMapLoad}
-                                    />
-                                )}
-                            </DeckGL>
+                                        stencil: true,
+                                    }}
+                                    width={'70%'}
+                                    height={'100vh'}
+                                    right={'60px'}
+                                    position={'absolute'}
+                                    style={{ position: 'absolute', right: '60px' }}
+                                    className={styles.deck}
+                                >
+                                    {glContext && (
+                                        <StaticMap
+                                            ref={mapRef}
+                                            gl={glContext}
+                                            mapStyle={
+                                                process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE
+                                            }
+                                            mapboxApiAccessToken={
+                                                process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
+                                            }
+                                            onLoad={onMapLoad}
+                                        />
+                                    )}
+                                </DeckGL>
+                            </div>
                         </>
                     );
                 }

@@ -10,7 +10,7 @@ export default {
     nepal: {
         longitude: 84.43773084899824,
         latitude: 27.968289420586316,
-        zoom: 6.5,
+        zoom: 6.3,
         pitch: 0,
         bearing: 0,
     },

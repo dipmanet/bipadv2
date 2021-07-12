@@ -53,7 +53,6 @@ import {
     setIncidentListActionIP,
     setEventListAction,
 } from '#actionCreators';
-import NavButtons from './Components/NavButtons';
 import styles from './styles.scss';
 import LandslideData from './Data/librariesData';
 import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
@@ -61,6 +60,10 @@ import Narratives from './Narratives';
 import legendList from './Components/Legends/legends';
 import chartData from './Data/demographicsData';
 import CriticalInfraLegends from './Components/CriticalInfraLegends';
+import LeftPaneContainer from '../Common/LeftPaneContainer';
+import NavButtons from '../Common/NavButtons';
+import LeftPane1 from './Narratives/LeftPane1';
+import LeftPane2 from './Narratives/LeftPane2';
 
 interface Params {
 }
@@ -152,16 +155,27 @@ const transformFilters = ({
 //         // extras: { schemaName: 'incidentResponse' },
 //     },
 // };
+
+
+const leftElements = [
+    <LeftPane1 />,
+    <LeftPane2 />,
+
+];
+
 const BarabiseLandslide = (props) => {
     const [landSlidePoints, setlandSlidePoints] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const [destination, setDestination] = useState(1);
     const [location, setLocation] = useState(Locations.nepal);
     const [viewState, setViewState] = useState(Locations.nepal);
     const [transitionEnd, setTransitionEnd] = useState(false);
     const [reAnimate, setReanimate] = useState(false);
-    const [delay, setDelay] = useState(10000);
+    const [delay, setDelay] = useState(4000);
     const [showDemoChart, setShowDemoChart] = useState(true);
+    const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
+    const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
+    const [pending, setPending] = useState(false);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const {
         // incidentList,
@@ -205,6 +219,43 @@ const BarabiseLandslide = (props) => {
         });
     };
 
+
+    const disableNavBtns = (val) => {
+        if (val === 'Right') {
+            setdisableNavRightBtn(true);
+        } else if (val === 'Left') {
+            setdisableNavLeftBtn(true);
+        } else {
+            setdisableNavLeftBtn(true);
+            setdisableNavRightBtn(true);
+        }
+    };
+
+    const enableNavBtns = (val) => {
+        if (val === 'Right') {
+            setdisableNavRightBtn(false);
+        } else if (val === 'Left') {
+            setdisableNavLeftBtn(false);
+        } else {
+            setdisableNavLeftBtn(false);
+            setdisableNavRightBtn(false);
+        }
+    };
+
+    const handleNext = () => {
+        if (currentPage < leftElements.length) {
+            setCurrentPage(currentPage + 1);
+            disableNavBtns('both');
+        }
+    };
+
+    const handlePrev = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+            disableNavBtns('both');
+        }
+    };
+
     return (
         <>
             {
@@ -221,11 +272,11 @@ const BarabiseLandslide = (props) => {
                 />
             }
 
-            <NavButtons
+            {/* <NavButtons
                 getPage={setPage}
                 maxPage={Object.keys(Narratives).length}
                 setDestination={setDestinationhandle}
-            />
+            /> */}
             <Spring
                 from={{ opacity: 0 }}
                 to={{ opacity: 1 }}
@@ -238,20 +289,20 @@ const BarabiseLandslide = (props) => {
             >
                 {
                     springProps => (
-                        <div
-                            style={{
-                                opacity: springProps.opacity,
-                            }}
-                            className={styles.narrativesContainer}
-                        >
-                            {/* {Narratives.currentPage} */}
-                            <div className={styles.narrativeTitle}>
-                                {Narratives[currentPage].title}
+
+                        <LeftPaneContainer render={p => (
+                            <div className={styles.leftPane}>
+                                {leftElements[currentPage]}
+                                <NavButtons
+                                    handleNext={handleNext}
+                                    handlePrev={handlePrev}
+                                    pagenumber={currentPage + 1}
+                                    totalPages={leftElements.length}
+                                    pending={pending}
+                                />
                             </div>
-                            <div className={styles.narrativeDescription}>
-                                {Narratives[currentPage].description}
-                            </div>
-                        </div>
+                        )}
+                        />
                     )
 
                 }

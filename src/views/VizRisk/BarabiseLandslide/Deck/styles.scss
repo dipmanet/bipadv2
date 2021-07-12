@@ -3,6 +3,16 @@
     top: 100px;
     left: 50%;
 }
+.deck{
+    position: fixed !important;
+    left: 600px !important;
+    border: 1px solid red;
+}
+.container{
+    position: absolute;
+    width: 100%;
+    left: calc(30% - 60px) !important;
+}
 
 
 
