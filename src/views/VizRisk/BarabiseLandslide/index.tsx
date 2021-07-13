@@ -64,6 +64,7 @@ import LeftPaneContainer from '../Common/LeftPaneContainer';
 import NavButtons from '../Common/NavButtons';
 import LeftPane1 from './Narratives/LeftPane1';
 import LeftPane2 from './Narratives/LeftPane2';
+import LeftPane3 from './Narratives/LeftPane3';
 
 interface Params {
 }
@@ -160,6 +161,7 @@ const transformFilters = ({
 const leftElements = [
     <LeftPane1 />,
     <LeftPane2 />,
+    <LeftPane3 />,
 
 ];
 

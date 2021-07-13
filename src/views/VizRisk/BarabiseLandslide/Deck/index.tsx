@@ -113,9 +113,13 @@ const Deck = (props) => {
     const onMapLoad = useCallback(() => {
         const map = mapRef.current.getMap();
         const { deck } = deckRef.current;
-        console.log('our ref: ', mapRef.current);
         map.addLayer(
             new MapboxLayer({ id: 'landslide-scatterplot', deck }),
+            // Optionally define id from Mapbox layer stack under which to add deck layer
+            // 'water',
+        );
+        map.addLayer(
+            new MapboxLayer({ id: 'landslide-barabise', deck }),
             // Optionally define id from Mapbox layer stack under which to add deck layer
             // 'water',
         );
@@ -500,6 +504,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
+            console.log('map', map);
         } else if (currentPage === 2) {
             const map = mapRef.current.getMap();
 
@@ -617,27 +622,28 @@ const Deck = (props) => {
                             // },
                         }),
                         new DelayedPointLayer({
-                            id: 'landslide-scatterplot2',
+                            id: 'landslide-barabise',
                             data: props.bahrabiseLandSlide,
                             getPosition: d => d.position,
                             getFillColor: [209, 203, 111],
                             getRadius: 500,
                             radiusMinPixels: 3,
+                            pickable: true,
                             // visible: allDataVisible,
                             animationProgress: springProps.enterProgress,
                             visible: currentPage === 1,
-                            // getDelayFactor: d => (delayProp === 'longitude'
-                            //     ? longitudeDelayScale(d.date)
-                            //     : targetDelayScale(d.distToTarget)),
-                            // parameters: {
-                            //     // prevent flicker from z-fighting
-                            //     // [GL.DEPTH_TEST]: false,
+                            getDelayFactor: d => (delayProp === 'longitude'
+                                ? longitudeDelayScale(d.date)
+                                : targetDelayScale(d.distToTarget)),
+                            parameters: {
+                                // prevent flicker from z-fighting
+                                // [GL.DEPTH_TEST]: false,
 
-                        //     [GL.BLEND]: true,
-                        //     [GL.BLEND_SRC_RGB]: GL.ONE,
-                        //     [GL.BLEND_DST_RGB]: GL.ONE,
-                        //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
-                        // },
+                                [GL.BLEND]: true,
+                                [GL.BLEND_SRC_RGB]: GL.ONE,
+                                [GL.BLEND_DST_RGB]: GL.ONE,
+                                [GL.BLEND_EQUATION]: GL.FUNC_ADD,
+                            },
                         }),
                         new PolygonLayer({
                             id: 'population-polygons',
