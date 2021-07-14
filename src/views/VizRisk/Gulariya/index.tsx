@@ -1,5 +1,9 @@
 import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import Map from './Map';
+
 // import Legends from './Legends';
 import styles from './styles.scss';
 import RightElement1 from './RightPaneContents/RightPane1';
@@ -13,11 +17,19 @@ import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import FloodHazardLegends from './Legends/FloodHazardLegends';
 import FloodDepthLegend from './Legends/FloodDepthLegend';
+import { getgeoJsonLayer } from './utils';
 
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
 import VRLegend from '#views/VizRisk/Rajapur/Components/VRLegend';
+
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 
 const rightelements = [
     <RightElement1 />,
@@ -27,8 +39,21 @@ const rightelements = [
     <RightElement5 />,
     <RightElement6 />,
 ];
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    cIGetRequest: {
+        url: ({ params }) => params.url,
+        method: methods.GET,
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results: cI = [] } = response as Response;
+            params.setCI(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
+};
 
-export default class Gulariya extends React.Component {
+class Gulariya extends React.Component {
     public constructor(props) {
         super(props);
 
@@ -48,7 +73,19 @@ export default class Gulariya extends React.Component {
             showCriticalElements: true,
             disableNavRightBtn: false,
             disableNavLeftBtn: false,
+            cI: [],
         };
+        const { requests: { cIGetRequest } } = this.props;
+
+        cIGetRequest.setDefaultParams({
+            setCI: this.setCI,
+            url: getgeoJsonLayer('CI_Gulariya'),
+        });
+    }
+
+    public setCI = (cI) => {
+        this.setState({ cI });
+        console.log('CI Data:', cI);
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -169,6 +206,7 @@ export default class Gulariya extends React.Component {
             showCriticalElements,
             disableNavLeftBtn,
             disableNavRightBtn,
+            cI,
         } = this.state;
 
         return (
@@ -208,19 +246,31 @@ export default class Gulariya extends React.Component {
                 )}
 
 
-                <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    enableNavBtns={this.enableNavBtns}
-                    disableNavBtns={this.disableNavBtns}
-                />
+                {
+                    cI.features && cI.features.length > 0
+                        ? (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                enableNavBtns={this.enableNavBtns}
+                                cI={cI}
+                                disableNavBtns={this.disableNavBtns}
+                            />
+                        )
+                        : (
+                            <div className={styles.loaderClass}>
+                                <Loader color="#fff" />
+                            </div>
+                        )
+
+                }
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (
@@ -315,3 +365,9 @@ export default class Gulariya extends React.Component {
         );
     }
 }
+
+export default compose(
+    connect(undefined, undefined),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
+)(Gulariya);

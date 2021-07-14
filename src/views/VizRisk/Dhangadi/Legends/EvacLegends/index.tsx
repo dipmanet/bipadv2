@@ -31,7 +31,7 @@ const EvacLegends = (props) => {
             } else if (evacElement === 'safe') {
                 resetCriticalLayers();
                 setshowSafe(true);
-            } else if (evacElement === 'culture') {
+            } else if (evacElement === 'cultural') {
                 resetCriticalLayers();
                 setshowCulture(true);
             }
@@ -52,7 +52,7 @@ const EvacLegends = (props) => {
             setshowEducation(true);
         }
 
-        if (layer === 'culture') {
+        if (layer === 'cultural') {
             resetCriticalLayers();
             setshowCulture(true);
         }
@@ -111,7 +111,7 @@ const EvacLegends = (props) => {
                             className={showCulture
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('culture')}
+                            onClick={() => handleEvacclick('cultural')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}

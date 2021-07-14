@@ -169,9 +169,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Out of a total area of 118 square km, 63.30% of the land is used
-                for agriculture.Forests cover 12.63%, water bodies cover 5.17%
-                and buildings cover 1.43% of the land.
+                Out of a total area of 118 sq.km, 63.3% of the land is used for agriculture.
+                 Forests cover 12.6%, water bodies cover 5.2% and buildings cover 1.4% of
+                  the land area. Other areas in Tikpaur are covered by sand, grassland and shrubs.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -223,7 +223,7 @@ class RightPane extends React.PureComponent<Props, State> {
                         barColor={COLORS_CHART[0]}
                         background={'#eee'}
                         data={'74.71 sq km / 63.30'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 0}
                     />
                     <CustomChartLegend
                         text={data[1].name}
@@ -238,42 +238,42 @@ class RightPane extends React.PureComponent<Props, State> {
                         barColor={COLORS_CHART[2]}
                         background={'#eee'}
                         data={'14.91 sq km / 12.63'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 2}
                     />
                     <CustomChartLegend
                         text={data[3].name}
                         barColor={COLORS_CHART[3]}
                         background={'#eee'}
                         data={'6.11 sq km / 5.18'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 3}
                     />
                     <CustomChartLegend
                         text={data[4].name}
                         barColor={COLORS_CHART[4]}
                         background={'#eee'}
                         data={'1.69 sq km / 1.43'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 4}
                     />
                     <CustomChartLegend
                         text={data[5].name}
                         barColor={COLORS_CHART[5]}
                         background={'#eee'}
                         data={'1.06 sq km / 0.90'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 5}
                     />
                     <CustomChartLegend
                         text={data[6].name}
                         barColor={COLORS_CHART[6]}
                         background={'#eee'}
                         data={'0.83 sq km / 0.70'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 6}
                     />
                     <CustomChartLegend
                         text={data[7].name}
                         barColor={COLORS_CHART[7]}
                         background={'#eee'}
                         data={'0.51 sq km / 0.43'}
-                        selected={activeIndex === 1}
+                        selected={activeIndex === 7}
                     />
 
 

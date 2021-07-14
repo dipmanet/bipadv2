@@ -24,40 +24,40 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const lineData = [
     {
-        name: 'Jan', AvgMax: 18.6, DailyAvg: 13.95, AvgMin: 9.3,
+        name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
     },
     {
-        name: 'Feb', AvgMax: 23.5, DailyAvg: 17.95, AvgMin: 12.4,
+        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
     },
     {
-        name: 'Mar', AvgMax: 28.6, DailyAvg: 21.8, AvgMin: 15,
+        name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
     },
     {
-        name: 'Apr', AvgMax: 34, DailyAvg: 26.55, AvgMin: 19.1,
+        name: 'Apr', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
     },
     {
-        name: 'May', AvgMax: 35.8, DailyAvg: 29.2, AvgMin: 22.6,
+        name: 'May', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
     },
     {
-        name: 'Jun', AvgMax: 36.6, DailyAvg: 30.65, AvgMin: 24.7,
+        name: 'Jun', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
     },
     {
-        name: 'Jul', AvgMax: 34.2, DailyAvg: 30.25, AvgMin: 26.3,
+        name: 'Jul', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
     },
     {
-        name: 'Aug', AvgMax: 0, DailyAvg: 24.9, AvgMin: 24.9,
+        name: 'Aug', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
     },
     {
-        name: 'Sep', AvgMax: 0, DailyAvg: 25, AvgMin: 25,
+        name: 'Sep', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
     },
     {
-        name: 'Oct', AvgMax: 33.7, DailyAvg: 27.9, AvgMin: 22.1,
+        name: 'Oct', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
     },
     {
-        name: 'Nov', AvgMax: 28.7, DailyAvg: 22.25, AvgMin: 15.8,
+        name: 'Nov', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
     },
     {
-        name: 'Dec', AvgMax: 23.2, DailyAvg: 16.85, AvgMin: 10.5,
+        name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
     },
 ];
 const rainfallData = [
@@ -195,22 +195,15 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h2> Dhangadhi Sub-Metropolitan City  </h2>
                 <p>
-                Dhangadi Sub-Metropolitan City is in the Terai region
-                of Kailali
-                 district of Sudurpaschim province. It covers a
-                 total area of  271.74 square km and is  situated at an elevation of
-                  109 m from
-                sea level.
+                Dhangadhi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
+                 It covers a total area of  260.92 sq. km and
+                  is located at the altitude of 109 m a.s.l.
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Gulariya experiences a sub tropical climate.
-                Summer starts from March (Chaitra)
-                 and lasts till June (Jestha). Winter begins
-                  in November (Mangsir) and lasts till
-                 February(Magh). Gulariya faces heavy downpours
-                  during the monsoon, from June (Jestha)
-                 to October (Ashwin).
+                Summer starts from March and lasts till June. Winter begins in November (Mangsir)
+                 and lasts till February. Dhangadhi faces heavy downpours during the monsoon,
+                  from June to October.
 
                 </p>
                 <div className={styles.iconRow}>
@@ -220,11 +213,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>36.6℃</div>
+                            <div className={styles.iconTitle}>41℃</div>
                             <div className={styles.iconText}>
                             Maximum
                                 <br />
-                            Temperature in Summer
+                            Temperature in
+                                <br />
+                            Summer
                             </div>
 
                         </div>
@@ -235,11 +230,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>9.3℃</div>
+                            <div className={styles.iconTitle}>23℃</div>
                             <div className={styles.iconText}>
                             Minimum
                                 <br />
-                            Temeperature in Winter
+                            Temeperature in
+                                <br />
+                            Winter
                             </div>
 
                         </div>
@@ -260,6 +257,7 @@ class Rajapur extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
+
                     <div className={styles.infoIconsContainerHidden}>
                         <ScalableVectorGraphics
                             className={styles.infoIcon}
@@ -274,6 +272,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
+                <div className={styles.source}>Source: DHM, 2020 Data </div>
                 <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}>Temperature</p>
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart

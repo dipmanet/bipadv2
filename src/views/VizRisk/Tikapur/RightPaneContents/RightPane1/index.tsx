@@ -22,44 +22,119 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const lineData = [
-    {
-        name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
-    },
-    {
-        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
-    },
-    {
-        name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
-    },
-    {
-        name: 'Apr', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
-    },
-    {
-        name: 'May', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
-    },
-    {
-        name: 'Jun', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
-    },
-    {
-        name: 'Jul', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
-    },
-    {
-        name: 'Aug', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
-    },
-    {
-        name: 'Sep', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
-    },
-    {
-        name: 'Oct', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
-    },
-    {
-        name: 'Nov', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
-    },
-    {
-        name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
-    },
-];
+
+
+const lineData = [{
+    name: 'Jan',
+    max: 20.4,
+    min: 6.2,
+},
+{
+    name: 'Feb',
+    max: 23.7,
+    min: 8.1,
+},
+{
+    name: 'Mar',
+    max: 29.1,
+    min: 13.3,
+},
+{
+    name: 'Apr',
+    max: 34.8,
+    min: 16.8,
+},
+{
+    name: 'May',
+    max: 35.3,
+    min: 20.2,
+},
+{
+    name: 'Jun',
+    max: 34.1,
+    min: 22.7,
+},
+{
+    name: 'Jul',
+    max: 34,
+    min: 23.7,
+},
+{
+    name: 'Aug',
+    max: 34.3,
+    min: 23.8,
+},
+{
+    name: 'Sep',
+    max: 34.4,
+    min: 22.8,
+},
+{
+    name: 'Oct',
+    max: 33.9,
+    min: 16.4,
+},
+{
+    name: 'Nov',
+    max: 28.2,
+    min: 9.4,
+},
+{
+    name: 'Dec',
+    max: 27.7,
+    min: 0.5,
+}];
+
+const rainfallData = [{
+    name: 'Jan',
+    Rainfall: 153.6,
+},
+{
+    name: 'Feb',
+    Rainfall: 37.9,
+},
+{
+    name: 'Mar',
+    Rainfall: 33.4,
+},
+{
+    name: 'Apr',
+    Rainfall: 23.1,
+},
+{
+    name: 'May',
+    Rainfall: 97.4,
+},
+{
+    name: 'Jun',
+    Rainfall: 343.7,
+},
+{
+    name: 'Jul',
+    Rainfall: 209.4,
+},
+{
+    name: 'Aug',
+    Rainfall: 570.3,
+},
+{
+    name: 'Sep',
+    Rainfall: 172.2,
+},
+{
+    name: 'Oct',
+    Rainfall: 0,
+},
+{
+    name: 'Nov',
+    Rainfall: 2.6,
+},
+{
+    name: 'Dec',
+    Rainfall: 0,
+}];
+
+
 class Rajapur extends React.PureComponent<Props, State> {
     public static contextType = VizRiskContext;
 
@@ -97,18 +172,45 @@ class Rajapur extends React.PureComponent<Props, State> {
         );
     }
 
+    public renderLegendRainfall = (props) => {
+        const { payload } = props;
+        return (
+            <div className={styles.climateLegendContainer}>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMax} />
+                    <div className={styles.legendText}>
+                       Avg Rainfall
+                    </div>
+                </div>
+
+            </div>
+        );
+    }
+
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Avg Max: ${payload[0].payload.AvgMax} ℃`}</p>
-                    <p>{`Avg Min: ${payload[0].payload.AvgMin} ℃`}</p>
-                    <p>{`Daily Avg: ${payload[0].payload.DailyAvg} ℃`}</p>
+                    <p>{`Max: ${payload[0].payload.max} ℃`}</p>
+                    <p>{`Min: ${payload[0].payload.min} ℃`}</p>
                 </div>
             );
         }
 
+        return null;
+    };
+
+    public CustomTooltipRain = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Avg Rainfall: ${payload[0].payload.Rainfall} mm`}</p>
+
+                </div>
+            );
+        }
         return null;
     };
 
@@ -127,22 +229,16 @@ class Rajapur extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1> Tikapur Municipality  </h1>
                 <p>
-                Tikapur Municipality is located in Kailali
-                 district of Sudurpaschim province.
-                Tikapur municipality has a total area of 118
-                square km and is situated at an elevation of
-                 145m to 161m AMSL.
+                Tikapur Municipality is located in Kailali district of Sudurpaschim province.
+                Tikapur municipality has a total area of 118 sq.km and is situated
+                at an elevation of 145m to 161m AMSL.
 
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Gulariya experiences a sub tropical climate.
-                Summer starts from March (Chaitra)
-                 and lasts till June (Jestha). Winter begins
-                  in November (Mangsir) and lasts till
-                 February(Magh). Gulariya faces heavy downpours
-                  during the monsoon, from June (Jestha)
-                 to October (Ashwin).
+                Summer starts from March and lasts till June. Winter begins in November
+                and lasts till February. Tikapur faces heavy downpours during the monsoon,
+                from June to October.
 
                 </p>
                 <div className={styles.iconRow}>
@@ -152,11 +248,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>41℃</div>
+                            <div className={styles.iconTitle}>35.3℃</div>
                             <div className={styles.iconText}>
-                            Average Maximum
+                            Maximum
                                 <br />
-                            Temperature in Summer
+                            Temperature in
+                                <br />
+                            Summer
                             </div>
 
                         </div>
@@ -167,11 +265,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>7℃</div>
+                            <div className={styles.iconTitle}>0.5℃</div>
                             <div className={styles.iconText}>
-                            Average Minimum
+                            Minimum
                                 <br />
-                            Temeperature in Winter
+                            Temperature in
+                                <br />
+                            Winter
                             </div>
 
                         </div>
@@ -184,10 +284,9 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1900mm</div>
+                            <div className={styles.iconTitle}>1643.6mm</div>
                             <div className={styles.iconText}>
-                            Average Annual
-                            Rainfall
+                            Annual Rainfall
                             </div>
 
                         </div>
@@ -206,6 +305,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
+                <div className={styles.source}>Source: DHM, 2020 Data </div>
 
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart
@@ -235,14 +335,48 @@ class Rajapur extends React.PureComponent<Props, State> {
                         <Tooltip
                             content={this.CustomTooltip}
                         />
-                        <Line type="monotone" dataKey="AvgMax" stroke="#ffbf00" />
-                        <Line type="monotone" dataKey="DailyAvg" stroke="#00d725" />
-                        <Line type="monotone" dataKey="AvgMin" stroke="#347eff" />
+                        <Line type="monotone" dataKey="max" stroke="#ffbf00" />
+                        <Line type="monotone" dataKey="min" stroke="#347eff" />
                     </LineChart>
                 </ResponsiveContainer>
 
                 {/* <SourceInfo /> */}
+                <div className={styles.climateChart}>
+                    <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
+                    <ResponsiveContainer className={styles.chartContainer} height={300}>
+                        <LineChart
+                            margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                            data={rainfallData}
+                        >
+                            <CartesianGrid
+                                vertical={false}
+                                strokeDasharray="3 3"
+                            />
+                            <XAxis
+                                dataKey="name"
+                                interval="preserveStart"
+                                tick={{ fill: '#94bdcf' }}
+                            />
+                            <YAxis
+                                unit={'mm'}
+                                axisLine={false}
+                                domain={[0, 600]}
+                                padding={{ top: 20 }}
+                                tick={{ fill: '#94bdcf' }}
+                                tickCount={10}
+                                interval="preserveEnd"
+                                allowDataOverflow
+                            />
+                            <Legend iconType="square" iconSize={10} align="center" content={this.renderLegendRainfall} />
+                            <Tooltip
+                                content={this.CustomTooltipRain}
+                            />
+                            <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
 
+                        </LineChart>
+                    </ResponsiveContainer>
+
+                </div>
 
             </div>
         );

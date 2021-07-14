@@ -170,8 +170,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                Most of the land is used for agriculture. Other areas are covered by forest,
-                 built-up area, waterbodies, conservation areas.
+                Out of a total area of 260.92 sq. km, 45.8% of the land is covered
+                 by Farmland and 34.2% by forests.
+                 Other areas are covered by water bodies, grassland, sand and built-up area.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart

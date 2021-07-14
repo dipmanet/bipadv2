@@ -58,16 +58,14 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely
-                 uneven with some pockets of dense settlements.
-                 This map allows viewing the population distribution
-                 within each ward and helps to locate the region of
-                 dense and sparse settlements.
+                This map allows viewing the population distribution within each ward
+                 and helps to locate the region of dense and sparse settlements.
                 </p>
                 <p>
-                Ward number 1 has the highest number of population(14333) with
-                  1181 number of families. Ward number 9 has the least
-                   population (3280) with 3105 families.
+                Dhangadhi Sub-Metropolitan City has the total population of 147,741
+                 with 73462 males and 74279 females. Total household number counts
+                  to 29143. Ward number 9 has the largest household number of 3105,
+                   while ward number 19 has the least comprising of only 559 number of household.
                 </p>
 
 
@@ -78,7 +76,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1,47741</div>
+                            <div className={styles.iconTitle}>1,47,741</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>

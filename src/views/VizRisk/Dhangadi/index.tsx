@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -21,6 +22,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import { getgeoJsonLayer } from './utils';
 
 import EvacLegends from './Legends/EvacLegends';
 import Icon from '#rscg/Icon';
@@ -35,31 +37,21 @@ const rightelements = [
     <RightElement6 />,
 ];
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    GetCriticalInfrastructure: {
-        url: `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/ows`,
+    cIGetRequest: {
+        url: ({ params }) => params.url,
         method: methods.GET,
-        query: ({ params }) => ({
-            version: '1.0.0',
-            service: 'WFS',
-            request: 'GetFeature',
-            typeName: 'Bipad:CI_Dhangadhi',
-            outputFormat: 'application/json',
-
-        }),
-        onSuccess: ({ response, params }) => {
-            if (params && params.CriticalInfraData) {
-                params.CriticalInfraData(response);
-            }
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results: cI = [] } = response as Response;
+            params.setCI(response);
         },
-
         onMount: true,
-
+        // extras: { schemaName: 'incidentResponse' },
     },
 };
 class Dhangadi extends React.Component {
     public constructor(props) {
         super(props);
-        const { requests: { GetCriticalInfrastructure } } = props;
         this.state = {
             showRaster: true,
             rasterLayer: '5',
@@ -76,10 +68,14 @@ class Dhangadi extends React.Component {
             showCriticalElements: true,
             disableNavRightBtn: false,
             disableNavLeftBtn: false,
+            cI: [],
             criticalInfrastructureData: [],
         };
-        GetCriticalInfrastructure.setDefaultParams({
-            CriticalInfraData: this.handleCriticalInfraData,
+        const { requests: { cIGetRequest } } = this.props;
+
+        cIGetRequest.setDefaultParams({
+            setCI: this.setCI,
+            url: getgeoJsonLayer('CI_Dhangadhi'),
         });
     }
 
@@ -87,6 +83,10 @@ class Dhangadi extends React.Component {
         this.setState({
             showCriticalElements,
         });
+    }
+
+    public setCI = (cI) => {
+        this.setState({ cI });
     }
 
     public handleCriticalFlood = (criticalFlood: string) => {
@@ -205,6 +205,7 @@ class Dhangadi extends React.Component {
             showCriticalElements,
             disableNavLeftBtn,
             disableNavRightBtn,
+            cI,
             criticalInfrastructureData,
         } = this.state;
         console.log('criticalInfrastructureData', criticalInfrastructureData);
@@ -246,19 +247,31 @@ class Dhangadi extends React.Component {
                 )}
 
 
-                <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    enableNavBtns={this.enableNavBtns}
-                    disableNavBtns={this.disableNavBtns}
-                />
+                {
+                    cI.features && cI.features.length > 0
+                        ? (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                enableNavBtns={this.enableNavBtns}
+                                cI={cI}
+                                disableNavBtns={this.disableNavBtns}
+                            />
+                        )
+                        : (
+                            <div className={styles.loaderClass}>
+                                <Loader color="#fff" />
+                            </div>
+                        )
+
+                }
                 {rightelements[rightElement]}
                 {rightElement === 1
                     ? (
