@@ -311,7 +311,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.addLayer({
                     id: `evac-count-${layer}`,
                     type: 'symbol',
-                    source: layer,
+                    source: `evac${layer}`,
                     layout: {
                         'text-field': '{point_count_abbreviated}',
                         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
@@ -321,7 +321,7 @@ class FloodHistoryMap extends React.Component {
                 this.map.addLayer({
                     id: `evac-unclustered-${layer}`,
                     type: 'symbol',
-                    source: layer,
+                    source: `evac${layer}`,
                     filter: ['!', ['has', 'point_count']],
                     layout: {
                         'icon-image': ['get', 'icon'],
@@ -697,6 +697,7 @@ class FloodHistoryMap extends React.Component {
                 const categoriesCritical = [...new Set(criticalInfrastructureData.features.map(
                     item => item.properties.Type,
                 ))];
+                console.log('Critical category', categoriesCritical);
                 const arrCritical = categoriesCritical.map(
                     layer => [`clusters-count-${layer}`, `unclustered-point-${layer}`, `clusters-${layer}`],
                 );
