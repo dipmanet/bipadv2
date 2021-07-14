@@ -13,7 +13,11 @@ import {
     Bar,
     Pie,
     Cell,
+    Tooltip,
+    LabelList,
+    Label,
 } from 'recharts';
+
 
 import Button from '#rsca/Button';
 
@@ -55,11 +59,21 @@ export default class Visualizations extends React.PureComponent {
             incident => incident.hazard,
         );
 
+        console.log('This is test', freqCount);
+        const test = freqCount.map(item => item.value.map(data => data.loss));
+        const final = test.map(i => i
+            .reduce((total, currentValue) => total + currentValue.peopleDeathCount || total, 0));
+
+        console.log('This is test', final);
         return freqCount.map(h => (
             {
                 label: (hazardTypes[h.key] || {}).title,
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
+                deathCount: (freqCount && h.value.map(data => data.loss))
+                    // eslint-disable-next-line max-len
+                    .map(i => i).reduce((total, currentValue) => total + currentValue.peopleDeathCount || total, 0),
+
             }
         )).sort((a, b) => (a.value - b.value));
     })
@@ -69,7 +83,6 @@ export default class Visualizations extends React.PureComponent {
             incidentList.filter(i => i.severity),
             incident => incident.severity,
         );
-
         return freqCount.map(s => (
             {
                 label: s.key,
@@ -98,7 +111,7 @@ export default class Visualizations extends React.PureComponent {
         const severitySummary = this.getSeveritySummary(incidentList);
         const hazardSummary = this.getHazardSummary(incidentList);
         // const eventSummary = this.getEventSummary(incidentList);
-
+        console.log('This final value', hazardSummary);
         return (
             <div className={styles.visualizations}>
                 <div
@@ -120,7 +133,9 @@ export default class Visualizations extends React.PureComponent {
                         className={styles.chart}
                         id="hazardSummary"
                     >
+                        <h2>Number of Incidents</h2>
                         <ResponsiveContainer>
+
                             <BarChart
                                 layout="vertical"
                                 data={hazardSummary}
@@ -128,8 +143,12 @@ export default class Visualizations extends React.PureComponent {
                             >
                                 <YAxis dataKey="label" type="category" />
                                 <XAxis dataKey="value" type="number" />
+
+
+                                {/* <Tooltip /> */}
                                 <Bar
                                     dataKey="value"
+
                                 >
                                     { hazardSummary.map(hazard => (
                                         <Cell
@@ -137,6 +156,12 @@ export default class Visualizations extends React.PureComponent {
                                             fill={hazard.color}
                                         />
                                     ))}
+                                    <LabelList
+                                        dataKey="value"
+                                        position="right"
+                                        angle={0}
+                                        className={styles.labelList}
+                                    />
                                 </Bar>
                             </BarChart>
                         </ResponsiveContainer>
@@ -165,7 +190,7 @@ export default class Visualizations extends React.PureComponent {
                         </h4>
                     </header>
                     <div className={styles.chart}>
-                        <ResponsiveContainer>
+                        {/* <ResponsiveContainer>
                             <PieChart>
                                 <Pie
                                     dataKey="value"
@@ -184,6 +209,38 @@ export default class Visualizations extends React.PureComponent {
                                 </Pie>
                                 <Legend />
                             </PieChart>
+                        </ResponsiveContainer> */}
+                        <h2>Hazard Severity (Fatality due to Hazard)</h2>
+                        <ResponsiveContainer>
+
+                            <BarChart
+                                layout="vertical"
+                                data={hazardSummary}
+                                margin={{ top: 20, right: 10, left: 20, bottom: 5 }}
+                            >
+                                <YAxis dataKey="label" type="category" />
+                                <XAxis dataKey="deathCount" type="number" />
+
+
+                                {/* <Tooltip /> */}
+                                <Bar
+                                    dataKey="deathCount"
+
+                                >
+                                    { hazardSummary.map(hazard => (
+                                        <Cell
+                                            key={hazard.label}
+                                            fill={hazard.color}
+                                        />
+                                    ))}
+                                    <LabelList
+                                        dataKey="deathCount"
+                                        position="right"
+                                        angle={0}
+                                        className={styles.labelList}
+                                    />
+                                </Bar>
+                            </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>

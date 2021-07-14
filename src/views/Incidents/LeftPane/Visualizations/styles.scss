@@ -23,6 +23,11 @@
 
         .chart {
             height: 320px;
+            h2{
+                display: table;
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
     }
 
@@ -36,6 +41,18 @@
 
         .chart {
             height: 220px;
+            h2{
+                display: table;
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
+    }
+    .label-list {
+        // fonts: '1rem', fontWeight: 'bold', fill: '#E35163'
+        font-size: 1rem;
+        font-weight: normal;
+        fill: black;
+        margin: 10rem;
     }
 }
