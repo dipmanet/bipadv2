@@ -71,6 +71,26 @@ export default class Visualizations extends React.PureComponent {
         )).sort((a, b) => (a.value - b.value));
     })
 
+    getLifeLossSummary = memoize((incidentList) => {
+        const { hazardTypes } = this.props;
+
+        const freqCount = groupList(
+            incidentList.filter(i => i.hazard),
+            incident => incident.hazard,
+        );
+        return freqCount.map(h => (
+            {
+                label: (hazardTypes[h.key] || {}).title,
+                value: h.value.length,
+                color: (hazardTypes[h.key] || {}).color,
+                deathCount: (freqCount && h.value.map(data => data.loss))
+                    // eslint-disable-next-line max-len
+                    .map(i => i).reduce((total, currentValue) => total + currentValue.peopleDeathCount || total, 0),
+
+            }
+        )).sort((a, b) => (a.deathCount - b.deathCount));
+    })
+
     getSeveritySummary = memoize((incidentList) => {
         const freqCount = groupList(
             incidentList.filter(i => i.severity),
@@ -103,6 +123,7 @@ export default class Visualizations extends React.PureComponent {
 
         const severitySummary = this.getSeveritySummary(incidentList);
         const hazardSummary = this.getHazardSummary(incidentList);
+        const lifeLossSummary = this.getLifeLossSummary(incidentList);
         // const eventSummary = this.getEventSummary(incidentList);
 
         return (
@@ -127,12 +148,12 @@ export default class Visualizations extends React.PureComponent {
                         id="hazardSummary"
                     >
                         <h2>Number of Incidents</h2>
-                        <ResponsiveContainer>
+                        <ResponsiveContainer height={300}>
 
                             <BarChart
                                 layout="vertical"
                                 data={hazardSummary}
-                                margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
                             >
                                 <YAxis dataKey="label" type="category" />
                                 <XAxis dataKey="value" type="number" />
@@ -208,8 +229,8 @@ export default class Visualizations extends React.PureComponent {
 
                             <BarChart
                                 layout="vertical"
-                                data={hazardSummary}
-                                margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
+                                data={lifeLossSummary}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
                             >
                                 <YAxis dataKey="label" type="category" interval={0} />
                                 <XAxis dataKey="deathCount" type="number" />
