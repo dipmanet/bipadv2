@@ -522,22 +522,11 @@ const Deck = (props) => {
             });
         } else if (currentPage === 4) {
             const map = mapRef.current.getMap();
-
-            setReAnimate(true);
-
+            // setReAnimate(true);
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-            MapLayers.criticalinfra.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
-                return null;
-            });
-            MapLayers.demography.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
-                return null;
-            });
-            map.moveLayer('bahrabiseWardOutline');
         } else if (currentPage === 5) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
@@ -645,22 +634,22 @@ const Deck = (props) => {
                                 [GL.BLEND_EQUATION]: GL.FUNC_ADD,
                             },
                         }),
-                        // new PolygonLayer({
-                        //     id: 'population-polygons',
-                        //     data: wardfill.wards,
-                        //     pickable: true,
-                        //     stroked: true,
-                        //     filled: true,
-                        //     wireframe: true,
-                        //     extruded: true,
-                        //     lineWidthMinPixels: 1,
-                        //     visible: currentPage === 4,
-                        //     getPolygon: d => d.coordinates,
-                        //     getElevation: d => (d.femalepopulation + d.malepopulation) / 5,
-                        //     getFillColor: d => d.color,
-                        //     getLineColor: [80, 80, 80],
-                        //     getLineWidth: 1,
-                        // }),
+                        new PolygonLayer({
+                            id: 'population-polygons',
+                            data: wardfill.wards,
+                            pickable: true,
+                            stroked: true,
+                            filled: true,
+                            wireframe: true,
+                            extruded: true,
+                            lineWidthMinPixels: 1,
+                            visible: currentPage === 4,
+                            getPolygon: d => d.coordinates,
+                            getElevation: d => (d.femalepopulation + d.malepopulation) / 5,
+                            getFillColor: d => d.color,
+                            getLineColor: [80, 80, 80],
+                            getLineWidth: 1,
+                        }),
                     ];
                     return (
                         <>
