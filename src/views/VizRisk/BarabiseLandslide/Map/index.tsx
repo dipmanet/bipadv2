@@ -144,7 +144,7 @@ class FloodHistoryMap extends React.Component {
                     { value: attribute.value },
                 );
             });
-
+            this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'visible');
 
             this.map.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
