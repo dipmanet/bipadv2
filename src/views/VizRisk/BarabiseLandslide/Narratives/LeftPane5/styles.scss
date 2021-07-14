@@ -94,6 +94,28 @@
             .climatelegend{
             display:flex;
             padding-right: 20px;
+            .legendMale{
+                width: 15px;
+                height: 15px;
+                background-color: #ffbf00;
+                padding-right: 4px;
+                margin-right: 3px;
+            }
+            .legendFemale{
+                width: 15px;
+                height: 15px;
+                background-color: #00d725;
+                // border: 1px solid #1f59be;
+                margin-right: 3px;
+
+            }
+            .legendTotHH{
+                width: 15px;
+                height: 15px;
+                background-color: #347eff;
+                margin-right: 3px;
+            
+            }
                 .legendMax{
                     width: 15px;
                     height: 15px;

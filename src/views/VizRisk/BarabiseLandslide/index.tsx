@@ -20,7 +20,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import Deck from './Deck';
-// import Map from './MapOriginal';
+import Map from './Map';
 import Legends from './Components/Legends';
 import {
     createConnectedRequestCoordinator,
@@ -265,17 +265,25 @@ const BarabiseLandslide = (props) => {
     return (
         <>
             {
-                <Deck
-                    librariesData={librariesData}
-                    location={location}
-                    viewState={viewState}
-                    onViewStateChange={handleChangeViewState}
-                    libraries={LandslideData.librariesData}
-                    bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
-                    currentPage={currentPage}
-                    handleFlyTo={handleFlyTo}
-                    setNarrationDelay={setNarrationDelay}
-                />
+                currentPage < 4
+                && (
+                    <Deck
+                        librariesData={librariesData}
+                        location={location}
+                        viewState={viewState}
+                        onViewStateChange={handleChangeViewState}
+                        libraries={LandslideData.librariesData}
+                        bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
+                        currentPage={currentPage}
+                        handleFlyTo={handleFlyTo}
+                        setNarrationDelay={setNarrationDelay}
+                    />
+                )
+            }
+            {
+                currentPage === 4
+                && <Map />
+
             }
 
             {/* <NavButtons

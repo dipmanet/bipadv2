@@ -152,31 +152,56 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
     // dynamic texts function
 
 
-    // public renderLegend = (props) => {
-    //     const { payload } = props;
-    //     return (
-    //         <div className={styles.climateLegendContainer}>
-    //             <div className={styles.climatelegend}>
-    //                 <div className={styles.legendMax} />
-    //                 <div className={styles.legendText}>
-    //                    Avg Max
-    //                 </div>
-    //             </div>
-    //             <div className={styles.climatelegend}>
-    //                 <div className={styles.legendMin} />
-    //                 <div className={styles.legendText}>
-    //                    Avg Min
-    //                 </div>
-    //             </div>
-    //             <div className={styles.climatelegend}>
-    //                 <div className={styles.legendDaily} />
-    //                 <div className={styles.legendText}>
-    //                    Daily Avg
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
+    public renderLegend = (props) => {
+        const { payload } = props;
+        return (
+            <div className={styles.climateLegendContainer}>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMax} />
+                    <div className={styles.legendText}>
+                       Avg Max
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMin} />
+                    <div className={styles.legendText}>
+                       Avg Min
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendDaily} />
+                    <div className={styles.legendText}>
+                       Daily Avg
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    public renderLegendDemo = props => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMale} />
+                <div className={styles.legendText}>
+                       Male Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendFemale} />
+                <div className={styles.legendText}>
+                    Female Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendTotHH} />
+                <div className={styles.legendText}>
+                       Total Household
+                </div>
+            </div>
+        </div>
+    )
 
     // public getChartData = (clickedItem, incidentFilterYear, incidentList) => {
     //     let fullhazardTitle = [];
@@ -265,31 +290,6 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
     //     return arr.filter(n => n !== null);
     // }
 
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
-                       Avg Max
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
-                       Avg Min
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
-                       Daily Avg
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     public render() {
         const { render } = this.props;
@@ -301,7 +301,7 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
                     render({
                         customTooltip: this.customTooltip,
                         customTooltipRain: this.customTooltipRain,
-                        renderLegend: this.renderLegend,
+                        renderLegendDemo: this.renderLegendDemo,
                         onPieEnter: this.onPieEnter,
                         renderActiveShape: this.renderActiveShape,
                         activeIndex,

@@ -1,24 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
+    Bar,
+    BarChart,
     CartesianGrid,
-    Cell,
-    Label,
     Legend,
-    Line,
-    LineChart,
-    Pie,
-    PieChart,
     ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
-import CustomChartLegend from '#views/VizRisk/Common/ChartComps/CustomChartLegend';
-import LandCover from '../../Data/LandCoverChartData';
+import Demo from '../../Data/demographicsData';
 
-const demoChartdata = LandCover.chartData;
+const demoChartdata = Demo.demographicsData;
 
 interface Props{
     handleNext: () => void;
@@ -31,12 +25,34 @@ interface Props{
 
 
 const LeftPane4 = (props: Props) => {
-    const { data: {
-        renderActiveShape,
-        onPieEnter,
-        customTooltip,
-        activeIndex,
-    } } = props;
+    // const { data: {
+    //     renderLegendDemo,
+    // } } = props;
+
+    const renderLegendDemo = () => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMale} />
+                <div className={styles.legendText}>
+                       Male Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendFemale} />
+                <div className={styles.legendText}>
+                    Female Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendTotHH} />
+                <div className={styles.legendText}>
+                       Total Household
+                </div>
+            </div>
+        </div>
+    );
 
     return (
         <div className={styles.vrSideBar}>
@@ -48,7 +64,43 @@ const LeftPane4 = (props: Props) => {
             households (1195) while ward 1 has the least number of
             households (310).
             </p>
+            <div className={styles.chartContainer}>
+                <ResponsiveContainer width="100%" height={600}>
+                    <BarChart
+                        // width={350}
+                        // height={600}
+                        data={demoChartdata}
+                        layout="vertical"
+                        margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" tick={{ fill: '#94bdcf' }} />
+                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
+                        <Tooltip />
+                        <Legend iconType="square" iconSize={10} align="center" content={renderLegendDemo} />
+                        <Bar
+                            dataKey="MalePop"
+                            fill="#ffbf00"
+                            barSize={10}
+                            stackId="a"
+                        />
+                        <Bar
+                            dataKey="FemalePop"
+                            radius={[0, 10, 10, 0]}
+                            fill="#00d725"
+                            barSize={10}
+                            stackId="a"
 
+                        />
+                        <Bar
+                            dataKey="FamilyCount"
+                            radius={[0, 10, 10, 0]}
+                            fill="#347eff"
+                            barSize={10}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
 
         </div>
 

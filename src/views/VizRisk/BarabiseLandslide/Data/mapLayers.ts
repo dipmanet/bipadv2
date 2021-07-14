@@ -20,10 +20,7 @@ export default {
         'bahrabiseContourVals',
         'bahrabiseContourLines',
     ],
-    demography: [
-        'bahrabiseWardOutline',
-        'ward-fill-local',
-    ],
+
     criticalinfra: [
         'clusters-ci',
         'unclustered-point-ci',
