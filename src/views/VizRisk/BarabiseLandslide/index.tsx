@@ -65,6 +65,8 @@ import NavButtons from '../Common/NavButtons';
 import LeftPane1 from './Narratives/LeftPane1';
 import LeftPane2 from './Narratives/LeftPane2';
 import LeftPane3 from './Narratives/LeftPane3';
+import LeftPane4 from './Narratives/LeftPane4';
+import LeftPane5 from './Narratives/LeftPane5';
 
 interface Params {
 }
@@ -162,6 +164,8 @@ const leftElements = [
     <LeftPane1 />,
     <LeftPane2 />,
     <LeftPane3 />,
+    <LeftPane4 />,
+    <LeftPane5 />,
 
 ];
 
@@ -292,9 +296,48 @@ const BarabiseLandslide = (props) => {
                 {
                     springProps => (
 
-                        <LeftPaneContainer render={p => (
+                        <LeftPaneContainer render={props => (
                             <div className={styles.leftPane}>
-                                {leftElements[currentPage]}
+                                {
+                                    currentPage === 0
+                                    && (
+                                        <LeftPane1
+                                            data={props}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 1
+                                    && (
+                                        <LeftPane2
+                                            data={props}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 2
+                                    && (
+                                        <LeftPane3
+                                            data={props}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 3
+                                    && (
+                                        <LeftPane4
+                                            data={props}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 4
+                                    && (
+                                        <LeftPane5
+                                            data={props}
+                                        />
+                                    )
+                                }
                                 <NavButtons
                                     handleNext={handleNext}
                                     handlePrev={handlePrev}
@@ -309,13 +352,11 @@ const BarabiseLandslide = (props) => {
 
                 }
             </Spring>
-            {currentPage === 4
-                ? (
+            {/* currentPage === 4
+                && (
                     <div className={styles.chartDiv}>
                         <ResponsiveContainer width="70%" height={'80%'}>
                             <BarChart
-                            // width={1000}
-                            // height={1000}
                                 data={chartData.demographicsData}
                                 layout="vertical"
                                 margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
@@ -324,18 +365,15 @@ const BarabiseLandslide = (props) => {
                                 <XAxis type="number" tick={{ fill: '#94bdcf' }} />
                                 <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
                                 <Tooltip />
-                                {/* <Legend /> */}
-                                {/* <Legend iconType="square" iconSize={10}
-                            align="center" content={this.renderLegend} /> */}
+
                                 <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
                                 <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
                                 <Bar dataKey="TotalHousehold" fill="#347eff" />
-                                {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
-                ) : ''
-            }
+                )
+                */}
             {currentPage === 6
                 ? (
                     <CriticalInfraLegends />

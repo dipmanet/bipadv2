@@ -23,6 +23,7 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
 
         this.state = {
             showInfo: false,
+            activeIndex: 0,
         };
     }
 
@@ -32,7 +33,7 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
             incidentFilterYear,
             clickedItem,
         } = this.props;
-        const chartData = this;
+        // const chartData = this
         //     .getChartData(clickedItem, incidentFilterYear, incidentList);
         // this.setState({ chartData });
         // const nonZeroArr = this
@@ -77,7 +78,7 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
         // }
     }
 
-    public CustomTooltipRain = ({ active, payload, label }) => {
+    public customTooltipRain = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
@@ -107,11 +108,11 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
         });
     };
 
-    public CustomTooltip = ({ active, payload, label }) => {
+    public customTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 436.09) * 100).toFixed(2)} % `}</p>
+                    <p>{`${((payload[0].value / 134.653) * 100).toFixed(2)} % `}</p>
                 </div>
             );
         }
@@ -264,28 +265,48 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
     //     return arr.filter(n => n !== null);
     // }
 
+    public renderLegend = (props) => {
+        const { payload } = props;
+        return (
+            <div className={styles.climateLegendContainer}>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMax} />
+                    <div className={styles.legendText}>
+                       Avg Max
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendMin} />
+                    <div className={styles.legendText}>
+                       Avg Min
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
+                    <div className={styles.legendDaily} />
+                    <div className={styles.legendText}>
+                       Daily Avg
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     public render() {
-        const { currentPage } = this.context;
-
-        const {
-            municipalities,
-            handleNext,
-            handlePrev,
-            disableNavLeftBtn,
-            disableNavRightBtn,
-            pagenumber,
-            totalPages,
-            pending,
-        } = this.props;
-
-        const {
-            showInfo,
-        } = this.state;
+        const { render } = this.props;
+        const { activeIndex } = this.state;
 
         return (
             <>
-                {this.props.render()}
+                {
+                    render({
+                        customTooltip: this.customTooltip,
+                        customTooltipRain: this.customTooltipRain,
+                        renderLegend: this.renderLegend,
+                        onPieEnter: this.onPieEnter,
+                        renderActiveShape: this.renderActiveShape,
+                        activeIndex,
+                    })
+                }
             </>
         );
     }

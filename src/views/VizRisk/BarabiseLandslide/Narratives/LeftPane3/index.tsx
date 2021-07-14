@@ -101,7 +101,7 @@ const rainfallData = [
     },
 ];
 
-const LeftPane1 = (props: Props) => {
+const LeftPane3 = (props: Props) => {
     const { pending,
         totalPages,
         pagenumber,
@@ -208,9 +208,9 @@ const LeftPane1 = (props: Props) => {
                             interval="preserveEnd"
                             allowDataOverflow
                         />
-                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
+                        <Legend iconType="square" iconSize={10} align="center" content={props.renderLegend} />
                         <Tooltip
-                            content={this.CustomTooltip}
+                            content={props.customTooltip}
                         />
                         <Line type="monotone" dataKey="Max" stroke="#ffbf00" />
                         <Line type="monotone" dataKey="Avg" stroke="#00d725" />
@@ -244,9 +244,10 @@ const LeftPane1 = (props: Props) => {
                             interval="preserveEnd"
                             allowDataOverflow
                         />
-                        <Legend iconType="square" iconSize={10} align="center" content={this.renderLegendRainfall} />
+                        {/* <Legend iconType="square" iconSize={10}
+                        align="center" content={renderLegendRainfall} /> */}
                         <Tooltip
-                            content={this.CustomTooltipRain}
+                            content={props.customTooltipRain}
                         />
                         <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
 
@@ -260,4 +261,4 @@ const LeftPane1 = (props: Props) => {
     );
 };
 
-export default LeftPane1;
+export default LeftPane3;

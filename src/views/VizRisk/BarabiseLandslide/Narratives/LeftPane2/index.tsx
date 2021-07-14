@@ -10,7 +10,7 @@ interface Props{
     pending: boolean;
 
 }
-const LeftPane1 = (props: Props) => {
+const LeftPane2 = (props: Props) => {
     const { pending,
         totalPages,
         pagenumber,
@@ -40,4 +40,4 @@ const LeftPane1 = (props: Props) => {
     );
 };
 
-export default LeftPane1;
+export default LeftPane2;

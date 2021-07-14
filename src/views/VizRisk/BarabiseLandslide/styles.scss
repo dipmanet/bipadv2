@@ -9,13 +9,18 @@
     flex-direction: column;
 }
 .leftPane{
-    position: fixed;
+    scrollbar-width: none;
+    position: absolute;
     left: 0;
     // display: flex;
     width: calc(30% - 60px);
     height: 100vh;
     background-color:rgb(12,36,50);
+    overflow-y: scroll;
 }
+.leftPane::-webkit-scrollbar {
+    display: none;
+  }
 .narrativesContainer{
     background-color: transparent;
     position: fixed;

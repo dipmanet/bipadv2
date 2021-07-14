@@ -24,6 +24,7 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import Demographics from '../Data/demographicsData';
 import styles from './styles.scss';
 
 const mapStateToProps = (state, props) => ({
@@ -31,7 +32,7 @@ const mapStateToProps = (state, props) => ({
     wards: wardsSelector(state),
 });
 
-
+const { demographicsData } = Demographics;
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
 const populationWardExpression = [
     'interpolate',
@@ -123,7 +124,12 @@ const Deck = (props) => {
             // Optionally define id from Mapbox layer stack under which to add deck layer
             // 'water',
         );
-
+        // map.addLayer(
+        //     new MapboxLayer({ id: 'population-polygons', deck }),
+        //     // Optionally define id from Mapbox layer stack under which to add deck layer
+        //     // 'water',
+        // );
+        map.moveLayer('landslide-barabise');
         map.addSource('hillshadeBahrabiseLocal', {
             type: 'raster',
             tiles: [getHillshadeLayer()],
@@ -137,9 +143,9 @@ const Deck = (props) => {
                 source: 'hillshadeBahrabiseLocal',
                 layout: {},
                 paint: {
-                    'raster-opacity': 0.20,
+                    'raster-opacity': 0.25,
                 },
-            }, 'bahrabiseFarmland',
+            },
         );
 
         map.addSource('suseptibilityBahrabise', {
@@ -348,37 +354,55 @@ const Deck = (props) => {
             );
         });
 
-        // const popup = new mapboxgl.Popup({
-        //     closeButton: false,
-        //     closeOnClick: false,
-        //     className: 'popup',
-        // });
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: true,
+            className: 'popup',
+        });
 
         let hoveredWardId = null;
 
-        map.on('click', 'ward-fill-local', (e) => {
+        map.on('mousemove', 'ward-fill-local', (e) => {
+            console.log('e', e);
             if (e.features.length > 0) {
+                map.getCanvas().style.cursor = 'pointer';
+                console.log('e: ', e);
+                const { lngLat } = e;
+                const coordinates = [lngLat.lng, lngLat.lat];
+                const wardno = e.features[0].properties.title;
+                const details = demographicsData
+                    .filter(item => item.name === `Ward ${wardno}`);
+                const totalPop = details[0].MalePop + details[0].FemalePop;
+                const description = (
+                    `Ward No:
+                        ${wardno}
+                    Male Population: ${details[0].MalePop}
+                    Female Population: ${details[0].FemalePop}
+                    Total Household: ${details[0].TotalHousehold}
+                        `
+                );
+                popup.setLngLat(coordinates).setHTML(
+                    `<div style="padding: 5px;border-radius: 5px">
+                       ${description}
+                    </div>
+                    `,
+                ).addTo(map);
                 if (hoveredWardId) {
                     map.setFeatureState(
                         {
-                            id: hoveredWardId,
+                            value: hoveredWardId,
                             source: 'vizrisk-fills',
-                            // paint: { 'fill-color': '#eee' },
-                            sourceLayer: mapSources.nepal.layers.ward,
+                            sourceLayer: 'bipadWardBarabise-85z7ha',
                         },
                         { hover: false },
                     );
-                    map.setPaintProperty('ward-fill-local', 'fill-color', '#112330');
-                    // this.map.setZoom(14);
-                    // this.map.setLayoutProperty('ward-fill-local', 'fill-opacity', 0.3);
                 }
                 hoveredWardId = e.features[0].id;
                 map.setFeatureState(
                     {
-                        id: hoveredWardId,
+                        value: hoveredWardId,
                         source: 'vizrisk-fills',
-                        // paint: { 'fill-color': '#eee' },
-                        sourceLayer: mapSources.nepal.layers.ward,
+                        sourceLayer: 'bipadWardBarabise-85z7ha',
 
                     },
                     { hover: true },
@@ -386,58 +410,9 @@ const Deck = (props) => {
             }
         });
 
-
-        map.on('mousemove', 'ward-fill-local', (e) => {
-            console.log(e);
-            if (e.features.length > 0) {
-                map.getCanvas().style.cursor = 'pointer';
-                console.log('e: ', e);
-                const { lngLat } = e;
-                const coordinates = [lngLat.lng, lngLat.lat];
-                // const wardno = e.features[0].properties.title;
-                // const details = demographicsData.demographicsData
-                //     .filter(item => item.name === `Ward ${wardno}`);
-                // const totalPop = details[0].MalePop + details[0].FemalePop;
-                // const description = (
-                //     `Ward No:
-                //         ${wardno}
-                //     Male Population: ${details[0].MalePop}
-                //     Female Population: ${details[0].FemalePop}
-                //     Total Household: ${details[0].TotalHousehold}
-                //         `
-                // );
-                // popup.setLngLat(coordinates).setHTML(
-                //     `<div style="padding: 5px;border-radius: 5px">
-                //         <p> Total Population:   </p>
-                //     </div>
-                //     `,
-                // ).addTo(map);
-                // if (hoveredWardId) {
-                //     map.setFeatureState(
-                //         {
-                //             value: hoveredWardId,
-                //             source: 'vizrisk-fills',
-                //             sourceLayer: 'bipadWardBarabise-85z7ha',
-                //         },
-                //         { hover: false },
-                //     );
-                // }
-                // hoveredWardId = e.features[0].id;
-                // map.setFeatureState(
-                //     {
-                //         value: hoveredWardId,
-                //         source: 'vizrisk-fills',
-                //         sourceLayer: 'bipadWardBarabise-85z7ha',
-
-                //     },
-                //     { hover: true },
-                // );
-            }
-        });
-
         map.on('mouseleave', 'ward-fill-local', () => {
             map.getCanvas().style.cursor = '';
-            // popup.remove();
+            popup.remove();
             if (hoveredWardId) {
                 map.setFeatureState(
                     {
@@ -463,7 +438,7 @@ const Deck = (props) => {
 
             return null;
         });
-        map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
+        // map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -513,6 +488,30 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
+
+            MapLayers.landuse.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+            MapLayers.landslide.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+
+            console.log('map slide 3:', map);
+        } else if (currentPage === 3) {
+            const map = mapRef.current.getMap();
+
+            setReAnimate(true);
+
+            // MapLayers.criticalinfra.map((layer) => {
+            //     map.setLayoutProperty(layer, 'visibility', 'none');
+            //     return null;
+            // });
+            // MapLayers.demography.map((layer) => {
+            //     map.setLayoutProperty(layer, 'visibility', 'none');
+            //     return null;
+            // });
             MapLayers.landslide.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
@@ -521,7 +520,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
-        } else if (currentPage === 3) {
+        } else if (currentPage === 4) {
             const map = mapRef.current.getMap();
 
             setReAnimate(true);
@@ -538,6 +537,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
+            map.moveLayer('bahrabiseWardOutline');
         } else if (currentPage === 5) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
@@ -645,22 +645,22 @@ const Deck = (props) => {
                                 [GL.BLEND_EQUATION]: GL.FUNC_ADD,
                             },
                         }),
-                        new PolygonLayer({
-                            id: 'population-polygons',
-                            data: wardfill.wards,
-                            pickable: true,
-                            stroked: true,
-                            filled: true,
-                            wireframe: true,
-                            extruded: true,
-                            lineWidthMinPixels: 1,
-                            visible: currentPage === 5,
-                            getPolygon: d => d.coordinates,
-                            getElevation: d => (d.femalepopulation + d.malepopulation) / 5,
-                            getFillColor: d => d.color,
-                            getLineColor: [80, 80, 80],
-                            getLineWidth: 1,
-                        }),
+                        // new PolygonLayer({
+                        //     id: 'population-polygons',
+                        //     data: wardfill.wards,
+                        //     pickable: true,
+                        //     stroked: true,
+                        //     filled: true,
+                        //     wireframe: true,
+                        //     extruded: true,
+                        //     lineWidthMinPixels: 1,
+                        //     visible: currentPage === 4,
+                        //     getPolygon: d => d.coordinates,
+                        //     getElevation: d => (d.femalepopulation + d.malepopulation) / 5,
+                        //     getFillColor: d => d.color,
+                        //     getLineColor: [80, 80, 80],
+                        //     getLineWidth: 1,
+                        // }),
                     ];
                     return (
                         <>

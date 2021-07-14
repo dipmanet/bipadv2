@@ -1,9 +1,9 @@
 export default {
     landslide: [
         'bahrabiseTitle',
-        'bahrabiseWardOutline',
+        // 'bahrabiseWardOutline',
         'bahrabiseFill',
-        'bahrabiseHillshadeLocal',
+        // 'bahrabiseHillshadeLocal',
         'bahrabiseContourVals',
         'bahrabiseContourLines',
     ],
@@ -16,7 +16,7 @@ export default {
         'bahrabiseRoads',
         'bahrabiseFarmland',
         'bahrabiseFill',
-        'bahrabiseHillshadeLocal',
+        // 'bahrabiseHillshadeLocal',
         'bahrabiseContourVals',
         'bahrabiseContourLines',
     ],
