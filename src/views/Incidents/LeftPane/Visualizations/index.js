@@ -58,13 +58,6 @@ export default class Visualizations extends React.PureComponent {
             incidentList.filter(i => i.hazard),
             incident => incident.hazard,
         );
-
-        console.log('This is test', freqCount);
-        const test = freqCount.map(item => item.value.map(data => data.loss));
-        const final = test.map(i => i
-            .reduce((total, currentValue) => total + currentValue.peopleDeathCount || total, 0));
-
-        console.log('This is test', final);
         return freqCount.map(h => (
             {
                 label: (hazardTypes[h.key] || {}).title,
@@ -111,7 +104,7 @@ export default class Visualizations extends React.PureComponent {
         const severitySummary = this.getSeveritySummary(incidentList);
         const hazardSummary = this.getHazardSummary(incidentList);
         // const eventSummary = this.getEventSummary(incidentList);
-        console.log('This final value', hazardSummary);
+
         return (
             <div className={styles.visualizations}>
                 <div
@@ -139,7 +132,7 @@ export default class Visualizations extends React.PureComponent {
                             <BarChart
                                 layout="vertical"
                                 data={hazardSummary}
-                                margin={{ top: 20, right: 10, left: 20, bottom: 5 }}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
                             >
                                 <YAxis dataKey="label" type="category" />
                                 <XAxis dataKey="value" type="number" />
@@ -211,14 +204,14 @@ export default class Visualizations extends React.PureComponent {
                             </PieChart>
                         </ResponsiveContainer> */}
                         <h2>Hazard Severity (Fatality due to Hazard)</h2>
-                        <ResponsiveContainer>
+                        <ResponsiveContainer height={300}>
 
                             <BarChart
                                 layout="vertical"
                                 data={hazardSummary}
-                                margin={{ top: 20, right: 10, left: 20, bottom: 5 }}
+                                margin={{ top: 20, right: 20, left: 20, bottom: 5 }}
                             >
-                                <YAxis dataKey="label" type="category" />
+                                <YAxis dataKey="label" type="category" interval={0} />
                                 <XAxis dataKey="deathCount" type="number" />
 
 
