@@ -34,8 +34,16 @@ const DemoGraphicsLegends = (props) => {
         'rgb(255,235,198)',
     ];
 
-    const getLegendStyle = (i, c) => {
-        if (i === colors.length - 1) {
+    const densityColors = [
+        '#ff6e00',
+        '#ff8c00',
+        '#ffa857',
+        '#ffca8a',
+        '#ffebcc',
+    ];
+
+    const getLegendStyle = (i, c, colorsArr) => {
+        if (i === colorsArr.length - 1) {
             return {
                 width: '12px',
                 height: '25px',
@@ -90,7 +98,7 @@ const DemoGraphicsLegends = (props) => {
                                 {colors.map((c, i) => (
                                     <div
                                         key={c}
-                                        style={getLegendStyle(i, c)}
+                                        style={getLegendStyle(i, c, colors)}
                                     />
                                 ))}
                             </div>
@@ -125,10 +133,10 @@ const DemoGraphicsLegends = (props) => {
 
                         <div className={styles.populationContainer}>
                             <div className={styles.populationIndContainer}>
-                                {colors.map((c, i) => (
+                                {densityColors.map((c, i) => (
                                     <div
                                         key={c}
-                                        style={getLegendStyle(i, c)}
+                                        style={getLegendStyle(i, c, densityColors)}
                                     />
                                 ))}
                             </div>

@@ -39,6 +39,14 @@
                 display: flex;
                 margin: 15px 15px 15px 0;
                 flex: 1;
+                .infoIconHH{
+                    margin: 0px 15px 0 5px;
+                    width: 32px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+                }
                 .infoIcon{
                     margin: 0px 15px 0 5px;
                     width: 32px;

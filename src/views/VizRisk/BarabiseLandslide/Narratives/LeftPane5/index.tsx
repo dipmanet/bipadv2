@@ -11,6 +11,11 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 import Demo from '../../Data/demographicsData';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
+import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
+import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
+import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
 
 const demoChartdata = Demo.demographicsData;
 
@@ -64,6 +69,66 @@ const LeftPane4 = (props: Props) => {
             households (1195) while ward 1 has the least number of
             households (310).
             </p>
+            <div className={styles.iconRow}>
+                <div className={styles.infoIconsContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.infoIcon}
+                        src={ManWoman}
+                    />
+                    <div className={styles.descriptionCotainer}>
+                        <div className={styles.iconTitle}>1,47,741</div>
+                        <div className={styles.iconText}>
+                                Total Population
+                        </div>
+
+                    </div>
+                </div>
+                <div className={styles.infoIconsContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.infoIconHH}
+                        src={Home}
+                    />
+                    <div className={styles.descriptionCotainer}>
+                        <div className={styles.iconTitle}>29,143</div>
+                        <div className={styles.iconText}>
+                             Total Family Count
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div className={styles.iconRow}>
+                <div className={styles.infoIconsContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.infoIcon}
+                        src={Male}
+                    />
+                    <div className={styles.descriptionCotainer}>
+                        <div className={styles.iconTitle}>73,462</div>
+                        <div className={styles.iconText}>
+                             Male Population
+                        </div>
+
+                    </div>
+                </div>
+                <div className={styles.infoIconsContainer}>
+                    <ScalableVectorGraphics
+                        className={styles.infoIcon}
+                        src={Female}
+                    />
+                    <div className={styles.descriptionCotainer}>
+                        <div className={styles.iconTitle}>74,279</div>
+                        <div className={styles.iconText}>
+                             Female Population
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
             <div className={styles.chartContainer}>
                 <ResponsiveContainer width="100%" height={600}>
                     <BarChart
