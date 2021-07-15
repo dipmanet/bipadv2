@@ -126,6 +126,7 @@ export default class Visualizations extends React.PureComponent {
         const lifeLossSummary = this.getLifeLossSummary(incidentList);
         // const eventSummary = this.getEventSummary(incidentList);
 
+
         return (
             <div className={styles.visualizations}>
                 <div
@@ -154,6 +155,7 @@ export default class Visualizations extends React.PureComponent {
                                 layout="vertical"
                                 data={hazardSummary}
                                 margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+
                             >
                                 <YAxis dataKey="label" type="category" />
                                 <XAxis dataKey="value" type="number" />
@@ -178,6 +180,7 @@ export default class Visualizations extends React.PureComponent {
                                     />
                                 </Bar>
                             </BarChart>
+
                         </ResponsiveContainer>
                     </div>
                 </div>
@@ -196,14 +199,14 @@ export default class Visualizations extends React.PureComponent {
                     </div> */}
                 <div
                     className={styles.severitySummary}
-                    id="hazardSeverity"
+
                 >
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
                             Severity
                         </h4>
                     </header>
-                    <div className={styles.chart}>
+                    <div className={styles.chart} id="hazardSeverity">
                         {/* <ResponsiveContainer>
                             <PieChart>
                                 <Pie
@@ -241,7 +244,7 @@ export default class Visualizations extends React.PureComponent {
                                     dataKey="deathCount"
 
                                 >
-                                    { hazardSummary.map(hazard => (
+                                    { lifeLossSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}
