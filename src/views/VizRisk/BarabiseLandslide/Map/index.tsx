@@ -145,6 +145,8 @@ class FloodHistoryMap extends React.Component {
                 );
             });
             this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'visible');
+            this.map.moveLayer('bahrabiseWardOutline');
+            this.map.moveLayer('bahrabiseWardText');
 
             this.map.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
@@ -204,6 +206,17 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
+    public componentDidUpdate(prevProps) {
+        const { population } = this.props;
+        if (population !== prevProps.population) {
+            if (population === 'ward') {
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+            }
+            if (population === 'popdensity') {
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            }
+        }
+    }
 
     public componentWillUnmount() {
         this.map.remove();

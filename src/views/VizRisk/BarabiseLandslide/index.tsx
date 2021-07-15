@@ -61,6 +61,7 @@ import legendList from './Components/Legends/legends';
 import chartData from './Data/demographicsData';
 import CriticalInfraLegends from './Components/CriticalInfraLegends';
 import LeftPaneContainer from '../Common/LeftPaneContainer';
+import DemographicsLegends from '../Common/Legends/DemographicsLegends';
 import NavButtons from '../Common/NavButtons';
 import LeftPane1 from './Narratives/LeftPane1';
 import LeftPane2 from './Narratives/LeftPane2';
@@ -183,6 +184,7 @@ const BarabiseLandslide = (props) => {
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
     const [pending, setPending] = useState(false);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
+    const [population, setPopulation] = useState('ward');
     const {
         // incidentList,
         hazardTypes,
@@ -225,6 +227,9 @@ const BarabiseLandslide = (props) => {
         });
     };
 
+    const handlePopulationChange = (population) => {
+        setPopulation(population);
+    };
 
     const disableNavBtns = (val) => {
         if (val === 'Right') {
@@ -282,7 +287,11 @@ const BarabiseLandslide = (props) => {
             }
             {
                 currentPage === 4
-                && <Map />
+                && (
+                    <Map
+                        population={population}
+                    />
+                )
 
             }
 
@@ -385,6 +394,13 @@ const BarabiseLandslide = (props) => {
             {currentPage === 6
                 ? (
                     <CriticalInfraLegends />
+                ) : ''
+            }
+            {currentPage === 4
+                ? (
+                    <DemographicsLegends
+                        handlePopulationChange={handlePopulationChange}
+                    />
                 ) : ''
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1
