@@ -133,9 +133,9 @@ export default class Visualizations extends React.PureComponent {
                     className={styles.hazardStatisticsChart}
                 >
                     <header className={styles.header}>
-                        <h4 className={styles.heading}>
+                        {/* <h4 className={styles.heading}>
                             Hazard Occurence Statistics
-                        </h4>
+                        </h4> */}
                         <Button
                             title="Download Chart"
                             className={styles.chartDownload}
@@ -148,7 +148,7 @@ export default class Visualizations extends React.PureComponent {
                         className={styles.chart}
                         id="hazardSummary"
                     >
-                        <h2>Number of Incidents</h2>
+                        <h4>Number of Incidents</h4>
                         <ResponsiveContainer height={300}>
 
                             <BarChart
@@ -202,9 +202,9 @@ export default class Visualizations extends React.PureComponent {
 
                 >
                     <header className={styles.header}>
-                        <h4 className={styles.heading}>
+                        {/* <h4 className={styles.heading}>
                             Severity
-                        </h4>
+                        </h4> */}
                     </header>
                     <div className={styles.chart} id="hazardSeverity">
                         {/* <ResponsiveContainer>
@@ -227,7 +227,7 @@ export default class Visualizations extends React.PureComponent {
                                 <Legend />
                             </PieChart>
                         </ResponsiveContainer> */}
-                        <h2>Hazard Severity (Fatality due to Hazard)</h2>
+                        <h4>Hazard Severity (Fatality due to Hazard)</h4>
                         <ResponsiveContainer height={300}>
 
                             <BarChart

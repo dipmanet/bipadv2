@@ -10,8 +10,8 @@
     .hazard-statistics-chart {
         .header {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            // align-items: center;
+            justify-content: flex-end;
             .heading {
                 padding: 0 $spacing-medium;
                 color: $color-accent;
@@ -23,8 +23,9 @@
 
         .chart {
             height: 320px;
-            h2{
-                text-align: center;
+            h4{
+                padding: 0 $spacing-medium;
+                color: $color-accent;
                 
             }
         }
@@ -41,8 +42,9 @@
 
         .chart {
             height: 320px;
-            h2{
-                text-align: center;
+            h4{
+                padding: 0 $spacing-medium;
+                color: $color-accent;
             }
         }
     }
