@@ -53,6 +53,7 @@ class RiskInfo extends React.PureComponent<Props> {
             resourceIdForLegend,
             droneImagePending,
         } = this.state;
+
         return (
             <>
                 <RiskInfoMap />
