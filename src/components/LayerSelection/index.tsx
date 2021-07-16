@@ -26,6 +26,7 @@ class LayerSelection extends React.PureComponent<Props> {
             pending,
         } = this.props;
 
+
         return (
             <ListView
                 className={_cs(styles.layerSelection, className)}
