@@ -15,7 +15,7 @@ import { scaleThreshold } from 'd3-scale';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
 import Locations from '../Data/locations';
 import MapLayers from '../Data/mapLayers';
-import criticalinfrastructures from '../Data/criticalInfraGeoJSON';
+// import criticalinfrastructures from '../Data/criticalInfraGeoJSON';
 import wardfill from '../Data/wardFill';
 import { mapSources } from '#constants';
 import {
@@ -53,6 +53,7 @@ const Deck = (props) => {
     const [mapanimationDuration, setMapAnimateDuration] = useState(30000);
     const [reAnimate, setReAnimate] = useState(false);
     const [delay, setMapDelay] = useState(4000);
+    const [ciGeo, setCiGeo] = useState({});
     // eslint-disable-next-line no-shadow
     const {
         viewState,
@@ -61,6 +62,7 @@ const Deck = (props) => {
         currentPage,
         handleFlyTo,
         wards,
+        ci,
     } = props;
     const getToolTip = ({ object }) => (
         object && currentPage === 5 && {
@@ -169,64 +171,7 @@ const Deck = (props) => {
         //     item => item.properties.resourceType,
         // ))];
         // categoriesCritical.map((layer) => {
-        map.addSource('cilayer', {
-            type: 'geojson',
-            data: criticalinfrastructures.criticalData,
-            cluster: true,
-            clusterRadius: 50,
-        });
-        map.addLayer({
-            id: 'clusters-ci',
-            type: 'circle',
-            source: 'cilayer',
-            filter: ['has', 'point_count'],
-            paint: {
-                'circle-color': [
-                    'step',
-                    ['get', 'point_count'],
-                    // '#a4ac5e',
-                    '#3b5bc2',
-                    100,
-                    '#a4ac5e',
-                ],
-                'circle-radius': [
-                    'step',
-                    ['get', 'point_count'],
-                    20,
-                    100,
-                    30,
-                    750,
-                    40,
-                ],
-            },
-            layout: {
-                visibility: 'none',
-            },
-        });
 
-        map.addLayer({
-            id: 'unclustered-point-ci',
-            type: 'symbol',
-            source: 'cilayer',
-            filter: ['!', ['has', 'point_count']],
-            layout: {
-                'icon-image': ['get', 'icon'],
-                'icon-size': 0.3,
-                visibility: 'none',
-            },
-        });
-
-        map.addLayer({
-            id: 'clusters-count-ci',
-            type: 'symbol',
-            source: 'cilayer',
-            layout: {
-                'text-field': '{point_count_abbreviated}',
-                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12,
-                visibility: 'none',
-            },
-        });
 
         //     return null;
         // });
@@ -315,14 +260,14 @@ const Deck = (props) => {
             const map = mapRef.current.getMap();
             setReAnimate(true);
 
-            MapLayers.suseptibility.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
-                return null;
-            });
-            MapLayers.criticalinfra.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
-                return null;
-            });
+            // MapLayers.suseptibility.map((layer) => {
+            //     map.setLayoutProperty(layer, 'visibility', 'none');
+            //     return null;
+            // });
+            // MapLayers.criticalinfra.map((layer) => {
+            //     map.setLayoutProperty(layer, 'visibility', 'visible');
+            //     return null;
+            // });
         } else if (currentPage === 6) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
@@ -355,6 +300,13 @@ const Deck = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
+
+    // useEffect(() => {
+    //     if (!mapRef.current) {
+    //         return;
+    //     }
+
+    // }, [ci]);
     return (
         <Spring
             from={{ enterProgress: 0 }}
@@ -374,7 +326,7 @@ const Deck = (props) => {
                             getFillColor: [209, 203, 111],
                             getRadius: radiusChange ? 500 : 5000,
                             radiusMinPixels: 3,
-                            visible: allDataVisible,
+                            visible: allDataVisible && currentPage === 0,
                             animationProgress: springProps.enterProgress,
                             pointDuration: 0.25,
                             getDelayFactor: d => (delayProp === 'longitude'

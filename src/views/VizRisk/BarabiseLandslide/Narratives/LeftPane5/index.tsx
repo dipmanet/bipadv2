@@ -64,8 +64,8 @@ const LeftPane4 = (props: Props) => {
             <h1>Demography</h1>
             <p>
             Barhabise municipality has a total population of 26,114
-            with 13257 males and 12853 females residing in a total
-            of 7660 households. Ward 3 has the largest number of
+            with 13,257 males and 12,853 females residing in a total
+            of 7,660 households. Ward 3 has the largest number of
             households (1195) while ward 1 has the least number of
             households (310).
             </p>
@@ -76,7 +76,7 @@ const LeftPane4 = (props: Props) => {
                         src={ManWoman}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>1,47,741</div>
+                        <div className={styles.iconTitle}>26,114</div>
                         <div className={styles.iconText}>
                                 Total Population
                         </div>
@@ -89,7 +89,7 @@ const LeftPane4 = (props: Props) => {
                         src={Home}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>29,143</div>
+                        <div className={styles.iconTitle}>7,660</div>
                         <div className={styles.iconText}>
                              Total Family Count
                         </div>
@@ -106,7 +106,7 @@ const LeftPane4 = (props: Props) => {
                         src={Male}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>73,462</div>
+                        <div className={styles.iconTitle}>13,257</div>
                         <div className={styles.iconText}>
                              Male Population
                         </div>
@@ -119,7 +119,7 @@ const LeftPane4 = (props: Props) => {
                         src={Female}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>74,279</div>
+                        <div className={styles.iconTitle}>12,853</div>
                         <div className={styles.iconText}>
                              Female Population
                         </div>

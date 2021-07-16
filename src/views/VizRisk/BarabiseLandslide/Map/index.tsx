@@ -66,6 +66,8 @@ class FloodHistoryMap extends React.Component {
             zoom: 11,
             wardNumber: 'Hover to see ward number',
             categoriesCritical: [],
+            resourceArr: [],
+
         };
     }
 
@@ -79,6 +81,7 @@ class FloodHistoryMap extends React.Component {
             selectedDistrictId: districtId,
             selectedMunicipalityId: municipalityId,
             incidentList,
+            ci,
         } = this.props;
 
 
@@ -110,7 +113,84 @@ class FloodHistoryMap extends React.Component {
                 className: 'popup',
             });
 
+            if (ci.length > 0) {
+                // const this.map = this.mapRef.current.getthis.Map();
+                const features = ci.map(f => ({
+                    properties: {
+                        resourceType: f.resourceType,
+                        title: f.title,
+                        id: f.id,
+                    },
+                    geometry: f.point,
+                }));
+                const geoArr = {
+                    type: 'FeatureCollection',
+                    features,
+                };
+                const resourceArr = [...new Set(ci.map(c => c.resourceType))];
+                this.setState({ resourceArr });
+                resourceArr.map((layer) => {
+                    this.map.addSource(`${layer}`, {
+                        type: 'geojson',
+                        data: this.getGeoJSON(layer, geoArr),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-ci-${layer}`,
+                        type: 'circle',
+                        source: `${layer}`,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                // '#a4ac5e',
+                                '#3b5bc2',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                        layout: {
+                            visibility: 'none',
+                        },
+                    });
 
+                    this.map.addLayer({
+                        id: `unclustered-ci-${layer}`,
+                        type: 'symbol',
+                        source: `${layer}`,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['get', 'resourceType'],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                            visibility: 'none',
+                        },
+                    });
+                    this.map.addLayer({
+                        id: `clusters-count-ci-${layer}`,
+                        type: 'symbol',
+                        source: `${layer}`,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                            visibility: 'none',
+                        },
+                    });
+                    return null;
+                });
+            }
             this.map.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
@@ -207,7 +287,8 @@ class FloodHistoryMap extends React.Component {
     }
 
     public componentDidUpdate(prevProps) {
-        const { population } = this.props;
+        const { population, currentPage } = this.props;
+        const { resourceArr } = this.state;
         if (population !== prevProps.population) {
             if (population === 'ward') {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
@@ -216,12 +297,101 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
             }
         }
+        if (currentPage !== prevProps.currentPage) {
+            if (currentPage === 5) {
+                resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'visible');
+                    return null;
+                });
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
+                this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
+            }
+        }
+        if (this.props.criticalElement !== prevProps.criticalElement) {
+            this.resetClusters();
+            const layer = this.props.criticalElement;
+            if (layer === 'all') {
+                resourceArr.map((item) => {
+                    this.map.setLayoutProperty(`unclustered-ci-${item}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-ci-${item}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-count-ci-${item}`, 'visibility', 'visible');
+                    return null;
+                });
+            } else if (layer === 'health') {
+                this.map.setLayoutProperty('clusters-ci-health', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-health', 'visibility', 'visible');
+                this.map.setLayoutProperty('unclustered-ci-health', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-health');
+            } else if (layer === 'finance') {
+                this.map.setLayoutProperty('unclustered-ci-finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-finance', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-finance');
+            } else if (layer === 'Governance') {
+                this.map.setLayoutProperty('unclustered-ci-Governance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-Governance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-Governance', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-Governance');
+            } else if (layer === 'Industry') {
+                this.map.setLayoutProperty('unclustered-ci-Industry', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-Industry', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-Industry', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-Industry');
+            } else if (layer === 'education') {
+                this.map.setLayoutProperty('unclustered-ci-education', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-education', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-education', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-education');
+            } else if (layer === 'Culture') {
+                this.map.setLayoutProperty('unclustered-ci-Cultural', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-Cultural', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-Cultural', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-Cultural');
+            } else if (layer === 'Tourism') {
+                this.map.setLayoutProperty('unclustered-ci-Tourism', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-Tourism', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-Tourism', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-Tourism');
+            } else if (layer === 'Water sources') {
+                this.map.setLayoutProperty('unclustered-ci-Water sources', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-Water sources', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-Water sources', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-Water sources');
+            } else if (layer === 'Trade and business') {
+                this.map.setLayoutProperty('unclustered-ci-Trade and business', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-Trade and business', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-Trade and business', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-Trade and business');
+            }
+        }
     }
 
     public componentWillUnmount() {
         this.map.remove();
     }
 
+    public resetClusters = () => {
+        this.state.resourceArr.map((layer) => {
+            this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+
+            return null;
+        });
+    }
+
+    public getGeoJSON = (filterBy: string, data: any) => {
+        const geoObj = {};
+        geoObj.type = 'FeatureCollection';
+        geoObj.name = filterBy;
+        geoObj.features = [];
+        const d = data.features.filter(item => item.properties.resourceType === filterBy);
+        geoObj.features.push(...d);
+        return geoObj;
+    }
 
     public render() {
         const mapStyle = {
