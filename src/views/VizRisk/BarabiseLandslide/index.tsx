@@ -16,6 +16,7 @@ import { Spring } from 'react-spring/renderprops';
 
 import Deck from './Deck';
 import Map from './Map';
+import MapWithTimeline from './MapWithTimeline';
 import Legends from './Components/Legends';
 import {
     createConnectedRequestCoordinator,
@@ -198,6 +199,7 @@ const BarabiseLandslide = (props) => {
     const [population, setPopulation] = useState('ward');
     const [criticalElement, setCriticalElement] = useState('all');
     const [ci, setCI] = useState([]);
+    const [incidentFilterYear, setincidentFilterYear] = useState('2011');
     const {
         // incidentList,
         hazardTypes,
@@ -294,6 +296,11 @@ const BarabiseLandslide = (props) => {
         setCriticalElement(data);
     };
 
+    const handleIncidentChange = (incidentYear) => {
+        const y = `${Number(incidentYear) + 2011}`;
+        setincidentFilterYear(y);
+    };
+
     return (
         <>
             {
@@ -313,19 +320,7 @@ const BarabiseLandslide = (props) => {
                     />
                 )
             }
-            {
-                currentPage >= 4
-                && (
-                    <Map
-                        population={population}
-                        ci={ci}
-                        currentPage={currentPage}
-                        criticalElement={criticalElement}
 
-                    />
-                )
-
-            }
             {
                 (currentPage === 4
                 || currentPage === 5)
@@ -344,17 +339,9 @@ const BarabiseLandslide = (props) => {
                 currentPage === 6
 
                 && (
-                    <Deck
-                        librariesData={librariesData}
-                        location={location}
-                        viewState={viewState}
-                        onViewStateChange={handleChangeViewState}
-                        libraries={LandslideData.librariesData}
+                    <MapWithTimeline
                         bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
-                        currentPage={currentPage}
-                        handleFlyTo={handleFlyTo}
-                        setNarrationDelay={setNarrationDelay}
-                        ci={ci}
+                        handleIncidentChange={handleIncidentChange}
                     />
                 )
 
@@ -421,6 +408,15 @@ const BarabiseLandslide = (props) => {
                                     currentPage === 5
                                     && (
                                         <LeftPane6
+                                            data={props}
+                                            ci={ci}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 6
+                                    && (
+                                        <LeftPane7
                                             data={props}
                                             ci={ci}
                                         />

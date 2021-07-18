@@ -1,8 +1,6 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import '@watergis/mapbox-gl-legend/css/styles.css';
-
 
 import {
     // provincesSelector,
@@ -42,8 +40,8 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lng: 85.64347922706821,
-            lat: 28.013604885888867,
+            lng: 85.90010912899756,
+            lat: 27.821772478807212,
             zoom: 9.8,
             incidentYear: '0',
             playState: true,
@@ -55,7 +53,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { clickedItem, incidentList } = this.props;
+        const { bahrabiseLandSlide } = this.props;
         this.interval = setInterval(() => {
             this.setState((prevState) => {
                 if (Number(prevState.incidentYear) < 10) {
@@ -68,7 +66,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
+            style: process.env.REACT_APP_VIZRISK_BAHRABISE_LANDSLIDE,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -82,63 +80,44 @@ class FloodHistoryMap extends React.Component {
 
         // this.map.addControl(new MapboxLegendControl({},
         // { reverseOrder: false }), 'bottom-right');
-        this.map.on('idle', () => {
-            const { rightElement, enableNavBtns } = this.props;
-            if (rightElement === 0) {
-                enableNavBtns('Right');
-            } else if (rightElement === 5) {
-                enableNavBtns('Left');
-            } else {
-                enableNavBtns('both');
-            }
-        });
+
         this.map.on('style.load', () => {
-            this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
-            this.map.setLayoutProperty('Snow', 'visibility', 'visible');
-            this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
-            this.map.setLayoutProperty('Forest', 'visibility', 'visible');
-            this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
-            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-            this.map.setLayoutProperty('Road', 'visibility', 'visible');
-            this.map.setLayoutProperty('National Park', 'visibility', 'none');
-            this.map.addSource('hillshadePachpokhari', {
-                type: 'raster',
-                tiles: [this.getRasterLayer()],
-                tileSize: 256,
+            this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseForest', 'visibility', 'none');
+
+            const features = this.props.bahrabiseLandSlide.map(item => ({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: item.position,
+                },
+                properties: {
+                    date: item.date,
+                },
+            }));
+            const geoData = {
+                type: 'FeatureCollection',
+                features,
+            };
+            console.log('geodata: ', geoData);
+            this.map.addSource('incidents', {
+                type: 'geojson',
+                data: geoData,
             });
             this.map.addLayer(
                 {
-                    id: 'raster-hillshade',
-                    type: 'raster',
-                    source: 'hillshadePachpokhari',
+                    id: 'incidents-layer',
+                    type: 'circle',
+                    source: 'incidents',
                     layout: {},
                     paint: {
-                        'raster-opacity': 0.25,
+                        'circle-color': '#ff0000',
                     },
                 },
             );
-            const hazardTitle = [...new Set(incidentList.features.map(
-                item => item.properties.hazardTitle,
-            ))];
-            hazardTitle.map((layer) => {
-                this.map.addSource(layer, {
-                    type: 'geojson',
-                    data: this.getGeoJSON(layer, incidentList),
-                });
-                this.map.addLayer(
-                    {
-                        id: `incidents-${layer}`,
-                        type: 'circle',
-                        source: layer,
-                        layout: {},
-                        paint: {
-                            'circle-color': ['get', 'hazardColor'],
-                        },
-                    },
-                );
-
-                return null;
-            });
+            console.log('map:', this.map);
+            this.map.moveLayer('incidents-layer');
         });
     }
 
@@ -146,28 +125,6 @@ class FloodHistoryMap extends React.Component {
         if (this.state.playState) {
             this.handleStateChange();
         }
-        if (prevProps.clickedItem !== this.props.clickedItem) {
-            this.handleStateChange();
-        }
-        const hazardTitle = [...new Set(this.props.incidentList.features.map(
-            item => item.properties.hazardTitle,
-        ))];
-
-        if (prevProps.clickedItem !== this.props.clickedItem) {
-            if (this.props.clickedItem === 'all') {
-                hazardTitle.map((ht) => {
-                    this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
-                    return null;
-                });
-            } else {
-                hazardTitle.map((ht) => {
-                    this.map.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
-                    return null;
-                });
-                this.map.setLayoutProperty(`incidents-${this.props.clickedItem}`, 'visibility', 'visible');
-            }
-        }
-        // const inci = this.map.getLayer('incidents-Earthquake');
     }
 
     public componentWillUnmount() {
@@ -220,24 +177,26 @@ class FloodHistoryMap extends React.Component {
         const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
         const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
         let filters = [];
-        if (this.props.clickedItem === 'all') {
-            filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
-        } else {
-            filters = ['all',
-                ['>', 'incidentOn', yearInt],
-                ['<', 'incidentOn', nextYear],
-                ['==', 'hazardTitle', this.props.clickedItem]];
-        }
-        const hazardTitle = [...new Set(this.props.incidentList.features.map(
-            item => item.properties.hazardTitle,
-        ))];
-        const mapLayer = this.map.getLayer('Buildings');
+        // if (this.props.clickedItem === 'all') {
+        filters = ['all', ['>', 'date', yearInt], ['<', 'date', nextYear]];
+        // }
+
+        // else {
+        //     filters = ['all',
+        //         ['>', 'incidentOn', yearInt],
+        //         ['<', 'incidentOn', nextYear],
+        //         ['==', 'hazardTitle', this.props.clickedItem]];
+        // }
+        // const hazardTitle = [...new Set(this.props.incidentList.features.map(
+        //     item => item.properties.hazardTitle,
+        // ))];
+        const mapLayer = this.map.getLayer('bahrabiseBuildings');
 
         if (typeof mapLayer !== 'undefined') {
-            hazardTitle.map((layer) => {
-                this.map.setFilter(`incidents-${layer}`, filters);
-                return null;
-            });
+            // hazardTitle.map((layer) => {
+            this.map.setFilter('incidents-layer', filters);
+            // return null;
+            // });
         }
     }
 
@@ -259,7 +218,7 @@ class FloodHistoryMap extends React.Component {
         const mapStyle = {
             position: 'absolute',
             width: '70%',
-            left: 'calc(30%)',
+            left: 'calc(30% - 60px)',
             top: 0,
             // bottom: 0,
             height: '100vh',

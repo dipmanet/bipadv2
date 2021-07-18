@@ -25,7 +25,9 @@
         color:#b6d6e4;
         padding: 40px 20px 20px 30px;
         overflow-y: scroll;
-        // height: 200vh;
+        // height: 100vh;
+        // border: 1px solid red;
+        // display: none;
         .climateChart{
             margin-top: 10px;
         }
@@ -93,68 +95,7 @@
         p{
             @extend .para-style;
         }
-        .climateLegendContainer{
-            display:flex;
-            justify-content: flex-start;
-            margin-left: 55px;
-            min-width: 200px;
-         
-            .climatelegend{
-            display:flex;
-            padding-right: 20px;
-            .legendMale{
-                width: 15px;
-                height: 15px;
-                background-color: #ffbf00;
-                padding-right: 4px;
-                margin-right: 3px;
-            }
-            .legendFemale{
-                width: 15px;
-                height: 15px;
-                background-color: #00d725;
-                // border: 1px solid #1f59be;
-                margin-right: 3px;
-
-            }
-            .legendTotHH{
-                width: 15px;
-                height: 15px;
-                background-color: #347eff;
-                margin-right: 3px;
-            
-            }
-                .legendMax{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #ffbf00;
-                    padding-right: 4px;
-                    margin-right: 3px;
-                }
-                .legendMin{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #347eff;
-                    // border: 1px solid #1f59be;
-                    margin-right: 3px;
-
-                }
-                .legendDaily{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #00d725;
-                    // border: 1px solid #047a18;
-                    margin-right: 3px;
-                
-                }
-                .legendText{
-                    color: #6490a4;
-                    // opacity: 0.45;
-                    font-size: 10px;
-                    text-transform: uppercase;
-                }
-            }
-        }
+   
 
     }
   
