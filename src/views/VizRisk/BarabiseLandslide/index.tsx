@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Anime from 'react-anime';
+import Loader from 'react-loader';
 
 import {
     _cs,
@@ -50,7 +52,6 @@ import {
 } from '#actionCreators';
 import styles from './styles.scss';
 import LandslideData from './Data/librariesData';
-import ItemDrag from '#rscv/SortableListView/ListView/ListItem/ItemDrag';
 import legendList from './Components/Legends/legends';
 import chartData from './Data/demographicsData';
 import LeftPaneContainer from '../Common/LeftPaneContainer';
@@ -64,6 +65,7 @@ import LeftPane4 from './Narratives/LeftPane4';
 import LeftPane5 from './Narratives/LeftPane5';
 import LeftPane6 from './Narratives/LeftPane6';
 import LeftPane7 from './Narratives/LeftPane7';
+import LandslideLegend from './Components/LandslideLegend';
 
 interface Params {
 }
@@ -121,12 +123,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         // We have to transform dateRange to incident_on__lt and incident_on__gt
         query: () => {
             const filters = {
-                region: {},
+                // municipality: 23002,
                 hazard: [17],
                 dataDateRange: {
                     rangeInDays: 'custom',
                     startDate: '2011-01-01',
-                    endDate: '2021-01-01',
+                    endDate: new Date().toISOString().substring(0, 10),
                 },
             };
             return ({
@@ -136,23 +138,40 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 limit: -1,
             });
         },
-        onSuccess: ({ response, props: { setIncidentList } }) => {
+        onSuccess: ({ response, params }) => {
             interface Response { results: PageType.Incident[] }
             const { results: incidentList = [] } = response as Response;
-            setIncidentList({ incidentList });
+            params.setIncidentList(incidentList);
         },
-        onMount: false,
-        onPropsChanged: {
-            filters: ({
-                props: { filters },
-                prevProps: { filters: prevFilters },
-            }) => {
-                const shouldRequest = filters !== prevFilters;
-
-                return shouldRequest;
-            },
+        onMount: true,
+    },
+    incidentsGetRequestBB: {
+        url: '/incident/',
+        method: methods.GET,
+        // We have to transform dateRange to incident_on__lt and incident_on__gt
+        query: () => {
+            const filters = {
+                municipality: 23002,
+                hazard: [17],
+                dataDateRange: {
+                    rangeInDays: 'custom',
+                    startDate: '2011-01-01',
+                    endDate: new Date().toISOString().substring(0, 10),
+                },
+            };
+            return ({
+                ...transformFilters(filters),
+                expand: ['loss', 'event', 'wards'],
+                ordering: '-incident_on',
+                limit: -1,
+            });
         },
-        // extras: { schemaName: 'incidentResponse' },
+        onSuccess: ({ response, params }) => {
+            interface Response { results: PageType.Incident[] }
+            const { results: incidentList = [] } = response as Response;
+            params.setBarabiseIncidents(incidentList);
+        },
+        onMount: true,
     },
     ciRequest: {
         url: '/resource/',
@@ -194,18 +213,22 @@ const BarabiseLandslide = (props) => {
     const [showDemoChart, setShowDemoChart] = useState(true);
     const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
-    const [pending, setPending] = useState(false);
+    const [pending, setPending] = useState(true);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const [population, setPopulation] = useState('ward');
     const [criticalElement, setCriticalElement] = useState('all');
     const [ci, setCI] = useState([]);
     const [incidentFilterYear, setincidentFilterYear] = useState('2011');
+    const [incidents, setIncidents] = useState([]);
+    const [bahrabiseIncidents, setBarabise] = useState([]);
     const {
         // incidentList,
         hazardTypes,
         regions,
         requests: {
             ciRequest,
+            incidentsGetRequest,
+            incidentsGetRequestBB,
         },
     } = props;
     const handleAnimationStart = () => setReanimate(false);
@@ -230,18 +253,44 @@ const BarabiseLandslide = (props) => {
 
     const librariesData = Object.values(cood).map(item => ({ position: item }));
     const setNarrationDelay = delayinMS => setDelay(delayinMS);
-    const setPage = (val: number) => {
-        setCurrentPage(val);
-        setReanimate(true);
-    };
+
     const handleCI = (data) => {
         setCI(data);
-        console.log('CI:', data);
     };
 
     ciRequest.setDefaultParams({
         handleCI,
     });
+    const setIncidentData = (data) => {
+        const a = data.map(inc => ({
+            position: inc.point.coordinates,
+            date: new Date(inc.incidentOn).getTime(),
+            title: inc.title,
+            loss: inc.loss || {},
+        }));
+        setIncidents(a);
+        setPending(false);
+        console.log('a', a);
+    };
+
+    const setBarabiseIncidents = (data) => {
+        const bi = data.map(inc => ({
+            position: inc.point.coordinates,
+            date: new Date(inc.incidentOn).getTime(),
+            title: inc.title,
+            loss: inc.loss || {},
+        }));
+        setBarabise(bi);
+    };
+
+    incidentsGetRequest.setDefaultParams({
+        setIncidentList: setIncidentData,
+        setPending,
+    });
+    incidentsGetRequestBB.setDefaultParams({
+        setBarabiseIncidents,
+    });
+
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
     const handleFlyTo = (destination) => {
         setViewState({
@@ -257,9 +306,9 @@ const BarabiseLandslide = (props) => {
     };
 
     const disableNavBtns = (val) => {
-        if (val === 'Right') {
+        if (val === 'Right' || pending) {
             setdisableNavRightBtn(true);
-        } else if (val === 'Left') {
+        } else if (val === 'Left' || pending) {
             setdisableNavLeftBtn(true);
         } else {
             setdisableNavLeftBtn(true);
@@ -301,17 +350,27 @@ const BarabiseLandslide = (props) => {
         setincidentFilterYear(y);
     };
 
+
     return (
         <>
+            { pending
+                && (
+                    <div className={styles.loaderClass}>
+                        <Loader color="#fff" />
+                        <p>Loading Data...</p>
+                    </div>
+                )
+            }
             {
                 (currentPage < 4)
+                && !pending
                 && (
                     <Deck
                         librariesData={librariesData}
                         location={location}
                         viewState={viewState}
                         onViewStateChange={handleChangeViewState}
-                        libraries={LandslideData.librariesData}
+                        libraries={incidents}
                         bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
                         currentPage={currentPage}
                         handleFlyTo={handleFlyTo}
@@ -339,10 +398,13 @@ const BarabiseLandslide = (props) => {
                 currentPage === 6
 
                 && (
-                    <MapWithTimeline
-                        bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
-                        handleIncidentChange={handleIncidentChange}
-                    />
+                    <>
+                        <MapWithTimeline
+                            bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
+                            handleIncidentChange={handleIncidentChange}
+                        />
+                        <LandslideLegend />
+                    </>
                 )
 
 
@@ -419,6 +481,10 @@ const BarabiseLandslide = (props) => {
                                         <LeftPane7
                                             data={props}
                                             ci={ci}
+                                            incidentFilterYear={incidentFilterYear}
+                                            bahrabiseLandSlide={incidents}
+                                            landSlide={bahrabiseIncidents}
+
                                         />
                                     )
                                 }

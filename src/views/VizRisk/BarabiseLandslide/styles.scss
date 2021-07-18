@@ -54,3 +54,18 @@
     justify-content: flex-start;
     align-items: center;
 }
+
+.loaderClass{
+    position: fixed;
+  top: 50%;
+  left: 61%;
+  z-index: 203;
+    .loader{
+        background-color: white;
+    }
+    p{
+        color: white;
+        position: relative;
+        top: 35px;
+    }
+  }

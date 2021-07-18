@@ -42,7 +42,7 @@ class FloodHistoryMap extends React.Component {
         this.state = {
             lng: 85.90010912899756,
             lat: 27.821772478807212,
-            zoom: 9.8,
+            zoom: 11,
             incidentYear: '0',
             playState: true,
         };
@@ -112,7 +112,7 @@ class FloodHistoryMap extends React.Component {
                     source: 'incidents',
                     layout: {},
                     paint: {
-                        'circle-color': '#ff0000',
+                        'circle-color': '#923f3f',
                     },
                 },
             );

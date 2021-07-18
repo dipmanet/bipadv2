@@ -1,0 +1,30 @@
+.landslideLegend{
+    display: flex;
+    // flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: fixed;
+    right: 70px;
+    bottom: 60px;
+    background: rgb(18,29,59);
+    color: white;
+    opacity: 0.85;
+    height: 150px;
+    padding: 7px;
+    .circles{
+        display: flex;
+        height: 150px;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            top: 5px;
+
+            .row{
+                display: flex;
+                align-items: center;
+                p{
+                    font-size: 11px;
+                }
+            }
+        }
+}
