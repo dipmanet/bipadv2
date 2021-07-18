@@ -1,29 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import DeckGL from '@deck.gl/react';
-import mapboxgl from 'mapbox-gl';
-import { PolygonLayer } from '@deck.gl/layers';
-import MapGL, { StaticMap, FlyToInterpolator } from 'react-map-gl';
-import { easeBackInOut } from 'd3-ease';
+import { ScatterplotLayer } from '@deck.gl/layers';
+import { StaticMap } from 'react-map-gl';
 import * as d3 from 'd3';
 import { MapboxLayer } from '@deck.gl/mapbox';
-import Anime from 'react-anime';
 import { Spring } from 'react-spring/renderprops';
-import GL from '@luma.gl/constants';
 import { connect } from 'react-redux';
-import { scaleThreshold } from 'd3-scale';
+import { DataFilterExtension } from '@deck.gl/extensions';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
 import Locations from '../Data/locations';
 import MapLayers from '../Data/mapLayers';
 // import criticalinfrastructures from '../Data/criticalInfraGeoJSON';
-import wardfill from '../Data/wardFill';
-import { mapSources } from '#constants';
 import {
     wardsSelector,
 } from '#selectors';
-import {
-    getWardFilter,
-} from '#utils/domain';
+import RangeInput from '../Components/RangeInput';
 import styles from './styles.scss';
 
 const mapStateToProps = (state, props) => ({
@@ -54,6 +46,8 @@ const Deck = (props) => {
     const [reAnimate, setReAnimate] = useState(false);
     const [delay, setMapDelay] = useState(4000);
     const [ciGeo, setCiGeo] = useState({});
+    const [filter, setFilter] = useState(null);
+
     // eslint-disable-next-line no-shadow
     const {
         viewState,
@@ -102,6 +96,42 @@ const Deck = (props) => {
         '&transparent=true',
         '&format=image/png',
     ].join('');
+    const data = props.bahrabiseLandSlide.map(row => ({
+        timestamp: row.date,
+        latitude: Number(row.position[1]),
+        longitude: Number(row.position[0]),
+        // depth: Number(row.Depth),
+        // magnitude: Number(row.Magnitude)
+    }));
+    const formatLabel = (t) => {
+        const date = new Date(t);
+        return `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}`;
+    };
+    const dataFilter = new DataFilterExtension({
+        filterSize: 1,
+        // Enable for higher precision, e.g. 1 second granularity
+        // See DataFilterExtension documentation for how to pick precision
+        fp64: false,
+    });
+    const MS_PER_DAY = 2.64e7;
+    const getTimeRange = (datas) => {
+        if (!datas) {
+            return null;
+        }
+        return datas.reduce(
+            (range, d) => {
+                const t = d.timestamp;
+                // eslint-disable-next-line no-param-reassign
+                range[0] = Math.min(range[0], t);
+                // eslint-disable-next-line no-param-reassign
+                range[1] = Math.max(range[1], t);
+                return range;
+            },
+            [Infinity, -Infinity],
+        );
+    };
+    const timeRange = useMemo(() => getTimeRange(data), [data]);
+    const filterValue = filter || timeRange;
 
 
     const longitudeDelayScale = d3.scaleLinear()
@@ -368,6 +398,31 @@ const Deck = (props) => {
                             //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
                             // },
                         }),
+                        new ScatterplotLayer({
+                            id: 'landslide-barabise1',
+                            data: props.bahrabiseLandSlide,
+                            opacity: 1,
+                            radiusScale: 300,
+                            radiusMinPixels: 1,
+                            wrapLongitude: true,
+                            visible: currentPage === 6,
+                            getPosition: d => d.position,
+                            // getRadius: d => Math.pow(2, d.magnitude),
+                            getRadius: 500,
+                            // getFillColor: () => {
+                            //     const r = Math.sqrt(Math.max(50, 0));
+                            //     return [255 - r * 15, r * 5, r * 10];
+                            // },
+                            getFillColor: [208, 208, 96],
+                            getFilterValue: d => d.timestamp,
+                            filterRange: [filterValue[0], filterValue[1]],
+                            filterSoftRange: [
+                                filterValue[0] * 0.9 + filterValue[1] * 0.1,
+                                filterValue[0] * 0.1 + filterValue[1] * 0.9,
+                            ],
+                            extensions: [dataFilter],
+                            pickable: true,
+                        }),
                         // new PolygonLayer({
                         //     id: 'population-polygons',
                         //     data: wardfill.wards,
@@ -418,6 +473,18 @@ const Deck = (props) => {
                                         />
                                     )}
                                 </DeckGL>
+                                {timeRange && currentPage === 6
+                                    ? (
+                                        <RangeInput
+                                            min={timeRange[0]}
+                                            max={timeRange[1]}
+                                            value={filterValue}
+                                            animationSpeed={MS_PER_DAY * 30}
+                                            formatLabel={formatLabel}
+                                            onChange={setFilter}
+                                        />
+                                    )
+                                    : ''}
                             </div>
                         </>
                     );

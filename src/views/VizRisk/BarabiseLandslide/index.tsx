@@ -62,6 +62,7 @@ import LeftPane3 from './Narratives/LeftPane3';
 import LeftPane4 from './Narratives/LeftPane4';
 import LeftPane5 from './Narratives/LeftPane5';
 import LeftPane6 from './Narratives/LeftPane6';
+import LeftPane7 from './Narratives/LeftPane7';
 
 interface Params {
 }
@@ -176,6 +177,7 @@ const leftElements = [
     <LeftPane4 />,
     <LeftPane5 />,
     <LeftPane6 />,
+    <LeftPane7 />,
 
 ];
 
@@ -322,6 +324,40 @@ const BarabiseLandslide = (props) => {
 
                     />
                 )
+
+            }
+            {
+                (currentPage === 4
+                || currentPage === 5)
+                && (
+                    <Map
+                        population={population}
+                        ci={ci}
+                        currentPage={currentPage}
+                        criticalElement={criticalElement}
+
+                    />
+                )
+
+            }
+            {
+                currentPage === 6
+
+                && (
+                    <Deck
+                        librariesData={librariesData}
+                        location={location}
+                        viewState={viewState}
+                        onViewStateChange={handleChangeViewState}
+                        libraries={LandslideData.librariesData}
+                        bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
+                        currentPage={currentPage}
+                        handleFlyTo={handleFlyTo}
+                        setNarrationDelay={setNarrationDelay}
+                        ci={ci}
+                    />
+                )
+
 
             }
 

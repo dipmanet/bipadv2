@@ -919,6 +919,13 @@
   dependencies:
     "@luma.gl/shadertools" "^8.4.1"
 
+"@deck.gl/extensions@^8.4.20":
+  version "8.4.20"
+  resolved "https://registry.yarnpkg.com/@deck.gl/extensions/-/extensions-8.4.20.tgz#cfaa906497c6912ddecad660f4ae8770542882c8"
+  integrity sha512-U0xKlHuRM2kuRZgk9eNMHmoLKiVfkVcOe7aNcXcdQN25Cxy8i4Cmc5gWbw51x8wXZ6SP81FZqF7o5vGN3qT2bw==
+  dependencies:
+    "@luma.gl/shadertools" "^8.4.1"
+
 "@deck.gl/geo-layers@8.4.10":
   version "8.4.10"
   resolved "https://registry.yarnpkg.com/@deck.gl/geo-layers/-/geo-layers-8.4.10.tgz#e50fba4c5332aa767979da592495d81e6de9ba44"
@@ -1557,6 +1564,13 @@
     prop-types "^15.7.2"
     react-is "^16.8.0"
     react-transition-group "^4.4.0"
+
+"@material-ui/icons@^4.11.2":
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.11.2.tgz#b3a7353266519cd743b6461ae9fdfcb1b25eb4c5"
+  integrity sha512-fQNsKX2TxBmqIGJCSi3tGTO/gZ+eJgWmMJkgDiOfyNaunNaxcklJQFaFogYcFl0qFuaEz1qaXYXboa/bUXVSOQ==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
 
 "@material-ui/styles@^4.10.0":
   version "4.10.0"
@@ -12340,6 +12354,7 @@ react-loader@^2.4.7:
     create-react-class "^15.5.2"
     prop-types "^15.5.8"
     spin.js "2.x"
+
 react-map-gl@^6.1.10:
   version "6.1.10"
   resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-6.1.10.tgz#8616562d1439f5718c02e5a69379d8f200f7a099"
