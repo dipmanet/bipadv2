@@ -405,11 +405,6 @@ const BarabiseLandslide = (props) => {
                 }
             </Spring>
 
-            {currentPage === 6
-                ? (
-                    <CriticalInfraLegends />
-                ) : ''
-            }
             {currentPage === 4
                 ? (
                     <DemographicsLegends

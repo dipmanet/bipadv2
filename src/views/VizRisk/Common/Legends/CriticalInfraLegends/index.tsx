@@ -137,7 +137,7 @@ const LandCoverLegends = (props) => {
                 bottom: '20px',
                 right: '75px',
                 zIndex: 200,
-                backgroundColor: 'rgb(18,51,67)',
+                backgroundColor: 'rgb(18,31,57)',
                 padding: '15px',
 
             }}

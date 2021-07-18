@@ -180,7 +180,7 @@ const Deck = (props) => {
 
             return null;
         });
-        map.moveLayer('landslide-barabise');
+        // map.moveLayer('landslide-barabise');
 
         // map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -214,6 +214,7 @@ const Deck = (props) => {
             setAllDataVisible(false);
             setLandslideVisible(true);
 
+            map.setLayoutProperty('landslide-barabise', 'visibility', 'visible');
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
@@ -350,22 +351,22 @@ const Deck = (props) => {
                             getFillColor: [209, 203, 111],
                             getRadius: 500,
                             radiusMinPixels: 3,
-                            pickable: true,
+                            // pickable: true,
                             // visible: allDataVisible,
                             animationProgress: springProps.enterProgress,
                             visible: currentPage === 1,
-                            getDelayFactor: d => (delayProp === 'longitude'
-                                ? longitudeDelayScale(d.date)
-                                : targetDelayScale(d.distToTarget)),
-                            parameters: {
-                                // prevent flicker from z-fighting
-                                // [GL.DEPTH_TEST]: false,
+                            // getDelayFactor: d => (delayProp === 'longitude'
+                            //     ? longitudeDelayScale(d.date)
+                            //     : targetDelayScale(d.distToTarget)),
+                            // parameters: {
+                            //     // prevent flicker from z-fighting
+                            //     [GL.DEPTH_TEST]: false,
 
-                                [GL.BLEND]: true,
-                                [GL.BLEND_SRC_RGB]: GL.ONE,
-                                [GL.BLEND_DST_RGB]: GL.ONE,
-                                [GL.BLEND_EQUATION]: GL.FUNC_ADD,
-                            },
+                            //     [GL.BLEND]: true,
+                            //     [GL.BLEND_SRC_RGB]: GL.ONE,
+                            //     [GL.BLEND_DST_RGB]: GL.ONE,
+                            //     [GL.BLEND_EQUATION]: GL.FUNC_ADD,
+                            // },
                         }),
                         // new PolygonLayer({
                         //     id: 'population-polygons',

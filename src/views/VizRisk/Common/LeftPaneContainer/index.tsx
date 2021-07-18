@@ -33,16 +33,21 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
             incidentFilterYear,
             clickedItem,
         } = this.props;
-        // const chartData = this
-        //     .getChartData(clickedItem, incidentFilterYear, incidentList);
-        // this.setState({ chartData });
-        // const nonZeroArr = this
-        //     .getArrforDesc(clickedItem, chartData, incidentList);
-        // const fullhazardTitle = [...new Set(incidentList.features.map(
-        //     item => item.properties.hazardTitle,
-        // ))];
-        // this.setState({ fullhazardTitle });
-        // this.setState({ nonZeroArr });
+        let fullhazardTitle;
+        const chartData = this
+            .getChartData(clickedItem, incidentFilterYear, incidentList);
+        this.setState({ chartData });
+        const nonZeroArr = this
+            .getArrforDesc(clickedItem, chartData, incidentList);
+        if (incidentList) {
+            fullhazardTitle = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+        } else {
+            fullhazardTitle = [];
+        }
+        this.setState({ fullhazardTitle });
+        this.setState({ nonZeroArr });
     }
 
     public componentDidUpdate(prevProps) {
@@ -53,29 +58,29 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
             clickedItem,
         } = this.props;
 
-        // if (prevProps.incidentFilterYear !== incidentFilterYear) {
-        //     getIncidentData(incidentFilterYear, clickedItem);
-        //     this.setState({ chartData: this
-        //         .getChartData(clickedItem, incidentFilterYear, incidentList) });
-        //     this.setState({ nonZeroArr: this
-        //         .getArrforDesc(
-        //             clickedItem,
-        //             this.getChartData(clickedItem, incidentFilterYear, incidentList),
-        //             incidentList,
-        //         ) });
-        // }
-        // if (prevProps.clickedItem !== clickedItem) {
-        //     // getIncidentData(incidentFilterYear);
-        //     getIncidentData(incidentFilterYear, clickedItem);
-        //     this.setState({ chartData: this
-        //         .getChartData(clickedItem, incidentFilterYear, incidentList) });
-        //     this.setState({ nonZeroArr: this
-        //         .getArrforDesc(
-        //             clickedItem,
-        //             this.getChartData(clickedItem, incidentFilterYear, incidentList),
-        //             incidentList,
-        //         ) });
-        // }
+        if (prevProps.incidentFilterYear !== incidentFilterYear) {
+            getIncidentData(incidentFilterYear, clickedItem);
+            this.setState({ chartData: this
+                .getChartData(clickedItem, incidentFilterYear, incidentList) });
+            this.setState({ nonZeroArr: this
+                .getArrforDesc(
+                    clickedItem,
+                    this.getChartData(clickedItem, incidentFilterYear, incidentList),
+                    incidentList,
+                ) });
+        }
+        if (prevProps.clickedItem !== clickedItem) {
+            // getIncidentData(incidentFilterYear);
+            getIncidentData(incidentFilterYear, clickedItem);
+            this.setState({ chartData: this
+                .getChartData(clickedItem, incidentFilterYear, incidentList) });
+            this.setState({ nonZeroArr: this
+                .getArrforDesc(
+                    clickedItem,
+                    this.getChartData(clickedItem, incidentFilterYear, incidentList),
+                    incidentList,
+                ) });
+        }
     }
 
     public customTooltipRain = ({ active, payload, label }) => {
@@ -203,92 +208,93 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
         </div>
     )
 
-    // public getChartData = (clickedItem, incidentFilterYear, incidentList) => {
-    //     let fullhazardTitle = [];
+    public getChartData = (clickedItem, incidentFilterYear, incidentList) => {
+        let fullhazardTitle = [];
 
-    //     if (clickedItem !== 'all') {
-    //         fullhazardTitle = [clickedItem];
-    //     } else {
-    //         fullhazardTitle = [...new Set(incidentList.features.map(
-    //             item => item.properties.hazardTitle,
-    //         ))];
-    //     }
-    //     return fullhazardTitle.map(item => ({
-    //         name: item,
-    //         Total: incidentList.features
-    //             .filter(
-    //                 ht => ht.properties.hazardTitle === item
-    //             && new Date(ht.properties.incidentOn).getFullYear()
-    // === Number(incidentFilterYear),
-    //             )
-    //             .length,
-    //     }));
-    // }
+        if (clickedItem !== 'all') {
+            fullhazardTitle = [clickedItem];
+        } else if (incidentList && incidentList.features) {
+            fullhazardTitle = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+        }
+        return fullhazardTitle.map(item => ({
+            name: item,
+            Total: incidentList
+                ? incidentList.features
+                    .filter(
+                        ht => ht.properties.hazardTitle === item
+                && new Date(ht.properties.incidentOn).getFullYear()
+                    === Number(incidentFilterYear),
+                    ).length
+                : 0,
+        }));
+    }
 
-    // public getDescription= () => {
-    //     const { nonZeroArr, chartData } = this.state;
-    //     const { clickedItem } = this.props;
-    //     console.log('clickedItem', clickedItem);
-    //     if (clickedItem === 'all') {
-    //         if (nonZeroArr.length > 0) {
-    //             return nonZeroArr.map((item, i) => {
-    //                 if (
-    //                     i === nonZeroArr.length - 1
-    //                         && i === 0
-    //                         // && chartData.filter(n => n.name === item)[0]
-    //                         && chartData.filter(n => n.name === item)[0].Total !== 0) {
-    //                     return ` ${item} `;
-    //                 }
-    //                 if (
-    //                     i !== nonZeroArr.length - 1
-    //                         && i === 0
-    //                         // && chartData.filter(n => n.name === item)[0]
-    //                         && chartData.filter(n => n.name === item)[0].Total !== 0) {
-    //                     return ` ${item} `;
-    //                 }
-    //                 if (
-    //                     i === nonZeroArr.length - 1
-    //                         // && chartData.filter(n => n.name === item)[0]
-    //                         && chartData.filter(n => n.name === item)[0].Total !== 0) {
-    //                     return ` and ${item} `;
-    //                 }
-    //                 if (
-    //                     i !== nonZeroArr.length - 1
-    //                         // && chartData.filter(n => n.name === item)[0]
-    //                         && chartData.filter(n => n.name === item)[0].Total !== 0) {
-    //                     return `, ${item} `;
-    //                 }
-    //                 return '';
-    //             });
-    //         }
-    //     } else {
-    //         return ` of ${clickedItem} `;
-    //     }
-    //     return '';
-    // }
+    public getDescription= () => {
+        const { nonZeroArr, chartData } = this.state;
+        const { clickedItem } = this.props;
+        console.log('clickedItem', clickedItem);
+        if (clickedItem === 'all') {
+            if (nonZeroArr.length > 0) {
+                return nonZeroArr.map((item, i) => {
+                    if (
+                        i === nonZeroArr.length - 1
+                            && i === 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return ` ${item} `;
+                    }
+                    if (
+                        i !== nonZeroArr.length - 1
+                            && i === 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return ` ${item} `;
+                    }
+                    if (
+                        i === nonZeroArr.length - 1
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return ` and ${item} `;
+                    }
+                    if (
+                        i !== nonZeroArr.length - 1
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].Total !== 0) {
+                        return `, ${item} `;
+                    }
+                    return '';
+                });
+            }
+        } else {
+            return ` of ${clickedItem} `;
+        }
+        return '';
+    }
 
-    // public getArrforDesc = (clickedItem, chartData, incidentList) => {
-    //     let fullhazardTitle = [];
+    public getArrforDesc = (clickedItem, chartData, incidentList) => {
+        let fullhazardTitle = [];
 
-    //     if (clickedItem !== 'all') {
-    //         fullhazardTitle = [clickedItem];
-    //     } else {
-    //         fullhazardTitle = [...new Set(incidentList.features.map(
-    //             item => item.properties.hazardTitle,
-    //         ))];
-    //     }
-    //     console.log('fullhazardTitle', fullhazardTitle);
-    //     const arr = fullhazardTitle.map((item) => {
-    //         if (chartData.filter(n => n.name === item).length > 0) {
-    //             if (chartData.filter(n => n.name === item)[0].Total !== 0) {
-    //                 return item;
-    //             }
-    //         }
-    //         return null;
-    //     });
-    //     console.log('arr', arr);
-    //     return arr.filter(n => n !== null);
-    // }
+        if (clickedItem !== 'all') {
+            fullhazardTitle = [clickedItem];
+        } else {
+            fullhazardTitle = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+        }
+        console.log('fullhazardTitle', fullhazardTitle);
+        const arr = fullhazardTitle.map((item) => {
+            if (chartData.filter(n => n.name === item).length > 0) {
+                if (chartData.filter(n => n.name === item)[0].Total !== 0) {
+                    return item;
+                }
+            }
+            return null;
+        });
+        console.log('arr', arr);
+        return arr.filter(n => n !== null);
+    }
 
 
     public render() {
