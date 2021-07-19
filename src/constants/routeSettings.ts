@@ -38,6 +38,7 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         iconName: 'dashboard',
     },
+
     {
         name: 'incident',
         title: 'Incident',

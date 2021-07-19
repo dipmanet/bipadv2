@@ -524,6 +524,7 @@ class Login extends React.PureComponent<Props, State> {
                 },
             },
         } = this.props;
+
         let displayElement;
         if (pageAction === 'loginPage') {
             displayElement = (

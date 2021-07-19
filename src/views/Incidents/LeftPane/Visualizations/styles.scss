@@ -10,8 +10,8 @@
     .hazard-statistics-chart {
         .header {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            // align-items: center;
+            justify-content: flex-end;
             .heading {
                 padding: 0 $spacing-medium;
                 color: $color-accent;
@@ -23,10 +23,16 @@
 
         .chart {
             height: 320px;
+            h4{
+                padding: 0 $spacing-medium;
+                color: $color-accent;
+                
+            }
         }
     }
 
     .severity-summary {
+       
         .header {
             .heading {
                 padding: 0 $spacing-medium;
@@ -35,7 +41,18 @@
         }
 
         .chart {
-            height: 220px;
+            height: 320px;
+            h4{
+                padding: 0 $spacing-medium;
+                color: $color-accent;
+            }
         }
+    }
+    .label-list {
+        // fonts: '1rem', fontWeight: 'bold', fill: '#E35163'
+        font-size: 1rem;
+        font-weight: normal;
+        fill: black;
+        margin: 10rem;
     }
 }
