@@ -3,6 +3,7 @@ import React from 'react';
 import {
     _cs,
 } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -11,6 +12,11 @@ import RiverIcon from '#resources/icons/Wave.svg';
 import EarthquakeIcon from '#resources/icons/Earthquake.svg';
 import PollutionIcon from '#resources/icons/AirQuality.svg';
 
+import {
+    userSelector,
+} from '#selectors';
+import { AppState } from '#types';
+
 type Options = 'Rain' | 'River' | 'Earthquake' | 'Pollution' | undefined;
 
 interface Props {
@@ -18,16 +24,36 @@ interface Props {
     handleOptionClick: Function;
     chosenOption: Options;
 }
+const mapStateToProps = (state: AppState) => ({
+    user: userSelector(state),
+});
 
-const miniOptions = [
-    { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
-    { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
-    { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
-    { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
-];
+
+// const miniOptions = [
+//     { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
+//     { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
+//     { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
+//     { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
+// ];
 
 const MiniOption = (props: Props) => {
     const { handleMiniOptionsClick, handleOptionClick, chosenOption } = props;
+    let miniOptions;
+    if (!props.user) {
+        miniOptions = [
+            { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
+            { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
+        ];
+    // setTest(test1);
+    } else {
+        miniOptions = [
+            { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
+            { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
+            { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
+            { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
+        ];
+    // setTest(test1);
+    }
     return (
         <div
             className={styles.miniOption}
@@ -57,4 +83,4 @@ const MiniOption = (props: Props) => {
     );
 };
 
-export default MiniOption;
+export default connect(mapStateToProps)(MiniOption);

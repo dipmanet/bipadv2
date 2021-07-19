@@ -160,6 +160,7 @@ class RegularPage extends React.PureComponent <Props, State> {
                             chosenOption={chosenOption}
                         />
                     )}
+
                     <Page
                         hideHazardFilter
                         hideFilter

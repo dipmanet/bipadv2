@@ -1,10 +1,16 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 import icons from './icons';
 import Option from '../Option';
 import Loading from '#components/Loading';
 
+import {
+    userSelector,
+} from '#selectors';
+import { AppState } from '#types';
 
 interface View {
     id: string;
@@ -22,7 +28,13 @@ interface Props {
 //     [key in string]: { count: number };
 // }, element: string): (number | string) => (countObj[element] ? countObj[element].count : 'N/A');
 
+const mapStateToProps = (state: AppState) => ({
+    user: userSelector(state),
+});
+
+
 const LandingPage = (props: Props) => {
+    const [permission, setPermission] = useState(false);
     // const [counts, setCounts] = useState({});
 
     // const getDataCount = async () => {
@@ -34,7 +46,7 @@ const LandingPage = (props: Props) => {
     //         .catch(err => console.warn('Cannot get counts !!!', err));
     // };
 
-    const { handleOptionClick } = props;
+    const { handleOptionClick, user } = props;
     const {
         RainIcon,
         RiverIcon,
@@ -45,14 +57,41 @@ const LandingPage = (props: Props) => {
     // useEffect(() => {
     //     getDataCount();
     // }, []);
+    // const [views, setTest] = useState();
+    let views;
+    // console.log('user', user);
 
-    const views: View[] = [
-        // { id: 'rain', title: 'Rain', alt: 'rain',icon: RainIcon, count:getCount(counts, 'rain')},
-        { id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon },
-        { id: 'river', title: 'River', alt: 'river', icon: RiverIcon },
-        { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
-        { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
-    ];
+    // const checkPermission = (codeName) => {
+    //     if (!user) {
+    //         setPermission(false);
+    //     } else if (user.isSuperuser) {
+    //         setPermission(true);
+    //     } else if (user.groups)
+    // };
+
+
+    if (!user) {
+        views = [
+            { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
+            { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
+        ];
+        // setTest(test1);
+    } else {
+        views = [
+            { id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon },
+            { id: 'river', title: 'River', alt: 'river', icon: RiverIcon },
+            { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
+            { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
+        ];
+        // setTest(test1);
+    }
+
+    // const views: View[] = [
+    //     { id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon },
+    //     { id: 'river', title: 'River', alt: 'river', icon: RiverIcon },
+    //     { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
+    //     { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
+    // ];
     // const pending = Object.keys(counts).length === 0;
     return (
         <div className={styles.initialPage}>
@@ -83,4 +122,4 @@ const LandingPage = (props: Props) => {
     );
 };
 
-export default LandingPage;
+export default connect(mapStateToProps)(LandingPage);
