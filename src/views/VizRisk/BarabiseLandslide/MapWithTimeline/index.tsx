@@ -54,14 +54,16 @@ class FloodHistoryMap extends React.Component {
         } = this.state;
 
         const { bahrabiseLandSlide, currentPage } = this.props;
-        this.interval = setInterval(() => {
-            this.setState((prevState) => {
-                if (Number(prevState.incidentYear) < 10) {
-                    return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
-                }
-                return ({ incidentYear: '0' });
-            });
-        }, 1000);
+        if (currentPage === 6) {
+            this.interval = setInterval(() => {
+                this.setState((prevState) => {
+                    if (Number(prevState.incidentYear) < 10) {
+                        return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
+                    }
+                    return ({ incidentYear: '0' });
+                });
+            }, 1000);
+        }
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -141,18 +143,24 @@ class FloodHistoryMap extends React.Component {
     }
 
     public componentDidUpdate(prevProps) {
-        if (this.state.playState) {
-            this.handleStateChange();
-        }
         const { currentPage } = this.props;
+        if (currentPage === 6) {
+            if (this.state.playState) {
+                this.handleStateChange();
+            }
+        }
         if (currentPage !== prevProps.currentPage && currentPage === 7) {
             this.map.setLayoutProperty('lsPoly', 'visibility', 'visible');
         }
     }
 
     public componentWillUnmount() {
+        const { currentPage } = this.props;
+
         this.map.remove();
-        clearInterval(this.interval);
+        if (currentPage === 6) {
+            clearInterval(this.interval);
+        }
     }
 
     public getGeoJSON = (filterBy: string, data: any) => {

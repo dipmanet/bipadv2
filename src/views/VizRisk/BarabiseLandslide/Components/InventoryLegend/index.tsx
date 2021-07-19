@@ -24,17 +24,20 @@ const LandCoverLegends = (props) => {
     const [selectedArr, setSelectedArr] = useState(arr);
 
     const handleyearClick = (year) => {
-        console.log('year', year);
-        const array = [...selectedArr];
-        console.log('array', array);
-        const index = selectedArr.indexOf(year);
-        console.log('index', index);
-        if (index === -1) {
-            const newArr = [...array, year];
-            setSelectedArr(newArr);
+        if (year === 'all') {
+            setSelectedArr(arr);
+            setshowAll(true);
         } else {
-            const newArr = array.filter(y => y !== year);
-            setSelectedArr(newArr);
+            setshowAll(false);
+            const array = [...selectedArr];
+            const index = selectedArr.indexOf(year);
+            if (index === -1) {
+                const newArr = [...array, year];
+                setSelectedArr(newArr);
+            } else {
+                const newArr = array.filter(y => y !== year);
+                setSelectedArr(newArr);
+            }
         }
     };
 
