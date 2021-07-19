@@ -3,6 +3,7 @@
     position: fixed;
     bottom: 30px;
     right: 70px;
+    padding: 10px;
     .toggleCritical{
         background: transparent;
         border: none;
@@ -18,9 +19,9 @@
         padding-bottom: 4px;
     
         }
-        h2{
-            color: white;
-        }
+    }
+    h2{
+        color: white !important;
     }
     .criticalIcons{
         .toggleContainer{
