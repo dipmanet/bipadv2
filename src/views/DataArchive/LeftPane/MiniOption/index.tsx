@@ -11,6 +11,7 @@ import RainIcon from '#resources/icons/Rain.svg';
 import RiverIcon from '#resources/icons/Wave.svg';
 import EarthquakeIcon from '#resources/icons/Earthquake.svg';
 import PollutionIcon from '#resources/icons/AirQuality.svg';
+import { checkPermission } from '#views/DataArchive/utils';
 
 import {
     userSelector,
@@ -37,22 +38,20 @@ const mapStateToProps = (state: AppState) => ({
 // ];
 
 const MiniOption = (props: Props) => {
-    const { handleMiniOptionsClick, handleOptionClick, chosenOption } = props;
-    let miniOptions;
-    if (!props.user) {
-        miniOptions = [
-            { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
-            { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
-        ];
-    // setTest(test1);
-    } else {
-        miniOptions = [
-            { id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon },
-            { id: 'river', option: 'River', alt: 'River', icon: RiverIcon },
-            { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
-            { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
-        ];
-    // setTest(test1);
+    const { handleMiniOptionsClick, handleOptionClick, chosenOption, user } = props;
+    const rainPermisssion = checkPermission(user, 'view_rain', 'realtime');
+    const riverPermission = checkPermission(user, 'view_river', 'realtime');
+
+    const miniOptions = [
+        { id: 'earthquake', option: 'Earthquake', alt: 'Earthquake', icon: EarthquakeIcon },
+        { id: 'pollution', option: 'Pollution', alt: 'Pollution', icon: PollutionIcon },
+    ];
+
+    if (rainPermisssion) {
+        miniOptions.push({ id: 'rain', option: 'Rain', alt: 'Rain', icon: RainIcon });
+    }
+    if (riverPermission) {
+        miniOptions.push({ id: 'river', option: 'River', alt: 'River', icon: RiverIcon });
     }
     return (
         <div

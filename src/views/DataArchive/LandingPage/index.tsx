@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 import icons from './icons';
 import Option from '../Option';
 import Loading from '#components/Loading';
+import { checkPermission } from '../utils';
 
 import {
     userSelector,
@@ -34,7 +35,6 @@ const mapStateToProps = (state: AppState) => ({
 
 
 const LandingPage = (props: Props) => {
-    const [permission, setPermission] = useState(false);
     // const [counts, setCounts] = useState({});
 
     // const getDataCount = async () => {
@@ -58,32 +58,52 @@ const LandingPage = (props: Props) => {
     //     getDataCount();
     // }, []);
     // const [views, setTest] = useState();
-    let views;
-    // console.log('user', user);
 
-    // const checkPermission = (codeName) => {
+    // const checkPermission = (codeName, app) => {
+    //     let permission = false;
     //     if (!user) {
-    //         setPermission(false);
+    //         permission = false;
     //     } else if (user.isSuperuser) {
-    //         setPermission(true);
-    //     } else if (user.groups)
+    //         permission = true;
+    //     }
+    //     if (user && user.groups) {
+    //         user.groups.forEach((group) => {
+    //             if (group.permissions) {
+    //                 group.permissions.forEach((p) => {
+    //                     if (p.codename === codeName && p.app === app) {
+    //                         permission = true;
+    //                     }
+    //                 });
+    //             } else {
+    //                 permission = false;
+    //             }
+    //         });
+    //     }
+    //     if (user && user.userPermissions) {
+    //         user.userPermissions.forEach((a) => {
+    //             if (a.codename === codeName && a.app === app) {
+    //                 permission = true;
+    //             }
+    //         });
+    //     } else {
+    //         permission = false;
+    //     }
+    //     return permission;
     // };
 
+    const rainPermisssion = checkPermission(user, 'view_rain', 'realtime');
+    const riverPermission = checkPermission(user, 'view_river', 'realtime');
 
-    if (!user) {
-        views = [
-            { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
-            { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
-        ];
-        // setTest(test1);
-    } else {
-        views = [
-            { id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon },
-            { id: 'river', title: 'River', alt: 'river', icon: RiverIcon },
-            { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
-            { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
-        ];
-        // setTest(test1);
+    const views = [
+        { id: 'earthquake', title: 'Earthquake', alt: 'earthquake', icon: EarthquakeIcon },
+        { id: 'pollution', title: 'Pollution', alt: 'pollution', icon: PollutionIcon },
+    ];
+
+    if (rainPermisssion) {
+        views.push({ id: 'rain', title: 'Rain', alt: 'rain', icon: RainIcon });
+    }
+    if (riverPermission) {
+        views.push({ id: 'river', title: 'River', alt: 'river', icon: RiverIcon });
     }
 
     // const views: View[] = [

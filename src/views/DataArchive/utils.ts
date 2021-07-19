@@ -189,3 +189,36 @@ export const getDateWithRange = (measuredOn: string) => {
     const dateWithRange = `${lastYear} ${initialHour}:00-${postHour} ${indicator}`;
     return dateWithRange;
 };
+
+// Check permission for the user
+export const checkPermission = (user, codeName, app) => {
+    let permission = false;
+    if (!user) {
+        permission = false;
+    } else if (user.isSuperuser) {
+        permission = true;
+    }
+    if (user && user.groups) {
+        user.groups.forEach((group) => {
+            if (group.permissions) {
+                group.permissions.forEach((p) => {
+                    if (p.codename === codeName && p.app === app) {
+                        permission = true;
+                    }
+                });
+            } else {
+                permission = false;
+            }
+        });
+    }
+    if (user && user.userPermissions) {
+        user.userPermissions.forEach((a) => {
+            if (a.codename === codeName && a.app === app) {
+                permission = true;
+            }
+        });
+    } else {
+        permission = false;
+    }
+    return permission;
+};
