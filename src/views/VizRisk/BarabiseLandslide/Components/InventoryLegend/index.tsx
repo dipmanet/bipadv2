@@ -9,8 +9,9 @@ const LandCoverLegends = (props) => {
 
 
     const generateYearsArr = () => {
-        const max = new Date().getFullYear();
-        const min = max - 10;
+        // const max = new Date().getFullYear() ;
+        const max = 2020;
+        const min = max - 6;
         const years = [];
         // eslint-disable-next-line no-plusplus
         for (let i = max; i >= min; i--) {
@@ -26,6 +27,7 @@ const LandCoverLegends = (props) => {
     const handleyearClick = (year) => {
         if (year === 'all') {
             setSelectedArr(arr);
+            handleYearSelect(arr);
             setshowAll(true);
         } else {
             setshowAll(false);
@@ -34,9 +36,11 @@ const LandCoverLegends = (props) => {
             if (index === -1) {
                 const newArr = [...array, year];
                 setSelectedArr(newArr);
+                handleYearSelect(newArr);
             } else {
                 const newArr = array.filter(y => y !== year);
                 setSelectedArr(newArr);
+                handleYearSelect(newArr);
             }
         }
     };

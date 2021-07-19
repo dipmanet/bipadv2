@@ -200,7 +200,6 @@ const leftElements = [
     <LeftPane6 />,
     <LeftPane7 />,
     <LeftPane8 />,
-
 ];
 
 const BarabiseLandslide = (props) => {
@@ -223,7 +222,8 @@ const BarabiseLandslide = (props) => {
     const [incidentFilterYear, setincidentFilterYear] = useState('2011');
     const [incidents, setIncidents] = useState([]);
     const [bahrabiseIncidents, setBarabise] = useState([]);
-    const [setLandSlideYear, landslideYear] = useState('2011');
+    const [landslideYear, setLandSlideYear] = useState([]);
+    const [yearClicked, setyearClicked] = useState(false);
     const {
         // incidentList,
         hazardTypes,
@@ -320,17 +320,6 @@ const BarabiseLandslide = (props) => {
         }
     };
 
-    const enableNavBtns = (val) => {
-        if (val === 'Right') {
-            setdisableNavRightBtn(false);
-        } else if (val === 'Left') {
-            setdisableNavLeftBtn(false);
-        } else {
-            setdisableNavLeftBtn(false);
-            setdisableNavRightBtn(false);
-        }
-    };
-
     const handleNext = () => {
         console.log('leftElements.length', leftElements.length);
         console.log('currentPage', currentPage);
@@ -358,6 +347,7 @@ const BarabiseLandslide = (props) => {
 
     const handleYearSelect = (landSlideYear) => {
         setLandSlideYear(landSlideYear);
+        setyearClicked(!yearClicked);
     };
 
 
@@ -412,6 +402,8 @@ const BarabiseLandslide = (props) => {
                             currentPage={currentPage}
                             bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
                             handleIncidentChange={handleIncidentChange}
+                            landslideYear={landslideYear}
+                            yearClicked={yearClicked}
                         />
                     </>
                 )

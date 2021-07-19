@@ -15,7 +15,7 @@ import MapLayers from '../Data/mapLayers';
 import {
     wardsSelector,
 } from '#selectors';
-import RangeInput from '../Components/RangeInput';
+// import RangeInput from '../Components/RangeInput';
 import styles from './styles.scss';
 
 const mapStateToProps = (state, props) => ({
@@ -473,7 +473,7 @@ const Deck = (props) => {
                                         />
                                     )}
                                 </DeckGL>
-                                {timeRange && currentPage === 6
+                                {/* {timeRange && currentPage === 6
                                     ? (
                                         <RangeInput
                                             min={timeRange[0]}
@@ -484,7 +484,7 @@ const Deck = (props) => {
                                             onChange={setFilter}
                                         />
                                     )
-                                    : ''}
+                                    : ''} */}
                             </div>
                         </>
                     );

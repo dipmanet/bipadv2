@@ -123,7 +123,6 @@ class FloodHistoryMap extends React.Component {
                 type: 'FeatureCollection',
                 features,
             };
-            console.log('geodata: ', geoData);
             this.map.addSource('incidents', {
                 type: 'geojson',
                 data: geoData,
@@ -139,20 +138,22 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
-            console.log('map:', this.map);
             this.map.moveLayer('incidents-layer');
         });
     }
 
     public componentDidUpdate(prevProps) {
-        const { currentPage } = this.props;
+        const { yearClicked, currentPage, landslideYear } = this.props;
         if (currentPage === 6) {
             if (this.state.playState) {
                 this.handleStateChange();
             }
         }
         if (currentPage !== prevProps.currentPage && currentPage === 7) {
-            this.map.setLayoutProperty('lsPoly', 'visibility', 'visible');
+            this.generateYearsArr().map((layer) => {
+                this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                return null;
+            });
 
             // const draw = new MapboxDraw({
             //     displayControlsDefault: false,
@@ -500,6 +501,16 @@ class FloodHistoryMap extends React.Component {
             // this.map.on('draw.create', updateArea);
             // this.map.on('draw.update', updateArea);
         }
+
+        if (currentPage === 7) {
+            if (yearClicked !== prevProps.yearClicked) {
+                this.resetPolyLayers();
+                landslideYear.map((layer) => {
+                    this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                    return null;
+                });
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -509,6 +520,26 @@ class FloodHistoryMap extends React.Component {
         if (currentPage === 6) {
             clearInterval(this.interval);
         }
+    }
+
+    public generateYearsArr = () => {
+        // const max = new Date().getFullYear() ;
+        const max = 2020;
+        const min = max - 6;
+        const years = [];
+        // eslint-disable-next-line no-plusplus
+        for (let i = max; i >= min; i--) {
+            years.push(i);
+        }
+
+        return years;
+    };
+
+    public resetPolyLayers = () => {
+        this.generateYearsArr().map((l) => {
+            this.map.setLayoutProperty(`${l}`, 'visibility', 'none');
+            return null;
+        });
     }
 
     public getGeoJSON = (filterBy: string, data: any) => {
