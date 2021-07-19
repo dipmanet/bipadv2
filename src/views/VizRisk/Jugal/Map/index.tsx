@@ -1,13 +1,11 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { isDefined } from '@togglecorp/fujs';
 import { mapSources } from '#constants';
 import demographicsData from '../Data/demographicsData';
 import expressions from '../Data/expressions';
 import * as PageTypes from '#store/atom/page/types';
-import '@watergis/mapbox-gl-legend/css/styles.css';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 
 import {
@@ -573,8 +571,8 @@ class JugalMap extends React.Component<Props, State> {
     public render() {
         const mapStyle = {
             position: 'absolute',
-            width: '70%',
-            left: 'calc(30%)',
+            width: 'calc(70%)',
+            left: 'calc(30% - 60px)',
             top: 0,
             height: '100vh',
         };

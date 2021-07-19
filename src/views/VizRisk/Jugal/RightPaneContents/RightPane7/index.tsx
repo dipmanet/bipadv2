@@ -260,7 +260,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <div className={styles.vulScoreRow}>
                                 <span>VULNERABILITY OF THE HOUSEHOLD</span>
                                 {
-                                    isDefined(singularBuldingData.vulnerabilityScore)
+                                    singularBuldingData && isDefined(singularBuldingData.vulnerabilityScore)
                                         ? this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)
                                         : '-'
                                 }
@@ -280,7 +280,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                         Foundation Type
                                     </td>
                                     <td>
-                                        {singularBuldingData.foundationType || '-'}
+                                        {(singularBuldingData && singularBuldingData.foundationType) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -288,7 +288,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                         Roof Type
                                     </td>
                                     <td>
-                                        {singularBuldingData.roofType || '-'}
+                                        {(singularBuldingData && singularBuldingData.roofType) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -296,7 +296,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Storey
                                     </td>
                                     <td>
-                                        {singularBuldingData.storeys || '-'}
+                                        {(singularBuldingData && singularBuldingData.storeys) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -304,7 +304,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Ground surface
                                     </td>
                                     <td>
-                                        {singularBuldingData.groundSurface || '-'}
+                                        {(singularBuldingData && singularBuldingData.groundSurface) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -312,7 +312,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Building condition
                                     </td>
                                     <td>
-                                        {singularBuldingData.buildingCondition || '-'}
+                                        {(singularBuldingData && singularBuldingData.buildingCondition) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -320,7 +320,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Damage Grade
                                     </td>
                                     <td>
-                                        {singularBuldingData.buildingCondition || '-'}
+                                        {(singularBuldingData && singularBuldingData.buildingCondition) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -328,7 +328,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Distance from road (meter)
                                     </td>
                                     <td>
-                                        {singularBuldingData.roadDistance || '-'}
+                                        {(singularBuldingData && singularBuldingData.roadDistance) || '-'}
                                     </td>
                                 </tr>
                                 <tr>
@@ -336,7 +336,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     Drinking water distance (minutes)
                                     </td>
                                     <td>
-                                        {singularBuldingData.drinkingWaterDistance || '-'}
+                                        {(singularBuldingData && singularBuldingData.drinkingWaterDistance) || '-'}
                                     </td>
                                 </tr>
                             </table>
@@ -346,31 +346,31 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             <table className={styles.singularPaneTable}>
                                 <tr>
                                     <td>Number of people</td>
-                                    <td>{singularBuldingData.totalPopulation || '-'}</td>
+                                    <td>{(singularBuldingData && singularBuldingData.totalPopulation) || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Ownership of house</td>
-                                    {singularBuldingData.ownership || '-'}
+                                    {(singularBuldingData && singularBuldingData.ownership) || '-'}
                                 </tr>
                                 <tr>
                                     <td>People with disability</td>
-                                    <td>{singularBuldingData.peopleWithDisability || '-'}</td>
+                                    <td>{(singularBuldingData && singularBuldingData.peopleWithDisability) || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Medical centers</td>
-                                    <td>{singularBuldingData.medicalCenter || '-'}</td>
+                                    <td>{(singularBuldingData && singularBuldingData.medicalCenter) || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from Security centers (minutes)</td>
-                                    <td>{singularBuldingData.policeStationDistance || '-'}</td>
+                                    <td>{(singularBuldingData && singularBuldingData.policeStationDistance) || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from Schools (minutes)</td>
-                                    <td>{singularBuldingData.schoolDistance || '-'}</td>
+                                    <td>{(singularBuldingData && singularBuldingData.schoolDistance) || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td>Distance from open space (minutes)</td>
-                                    <td>{singularBuldingData.openSafeSpaceDistance || '-'}</td>
+                                    <td>{(singularBuldingData && singularBuldingData.openSafeSpaceDistance) || '-'}</td>
                                 </tr>
                             </table>
                             <p>
@@ -421,13 +421,13 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     <li>
                                             Main source of income:
                                         {' '}
-                                        {singularBuldingData.majorOccupation || '-'}
+                                        {(singularBuldingData && singularBuldingData.majorOccupation) || '-'}
                                         {' '}
                                     </li>
                                     <li>
                                         Average yearly income (NPR):
                                         {' '}
-                                        {singularBuldingData.averageAnnualIncome || '-'}
+                                        {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
                                         {' '}
                                     </li>
 

@@ -1,13 +1,8 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import MapboxLegendControl from '@watergis/mapbox-gl-legend';
-import { mapSources } from '#constants';
-import demographicsData from '../Data/demographicsData';
 import Icon from '#rscg/Icon';
 import styles from './styles.scss';
-import '@watergis/mapbox-gl-legend/css/styles.css';
 
 
 import {
@@ -270,8 +265,8 @@ class FloodHistoryMap extends React.Component {
     public render() {
         const mapStyle = {
             position: 'absolute',
-            width: '70%',
-            left: 'calc(30%)',
+            width: 'calc(70%)',
+            left: 'calc(30% - 60px)',
             top: 0,
             // bottom: 0,
             height: '100vh',

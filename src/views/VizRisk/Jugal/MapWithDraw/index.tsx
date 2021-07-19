@@ -7,7 +7,6 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
-import '@watergis/mapbox-gl-legend/css/styles.css';
 
 
 import styles from './styles.scss';
@@ -701,8 +700,8 @@ class FloodHistoryMap extends React.Component {
         const { searchTerm } = this.state;
         const mapStyle = {
             position: 'absolute',
-            width: '70%',
-            left: 'calc(30%)',
+            width: 'calc(70%)',
+            left: 'calc(30% - 60px)',
             top: 0,
             // bottom: 0,
             height: '100vh',
