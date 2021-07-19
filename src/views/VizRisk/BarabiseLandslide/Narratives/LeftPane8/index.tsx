@@ -10,15 +10,7 @@ import {
     YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import Demo from '../../Data/demographicsData';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
-import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
-import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
 
-
-const demoChartdata = Demo.demographicsData;
 
 interface Props{
     handleNext: () => void;
@@ -59,7 +51,7 @@ const getTotalLoss = (year, arr) => {
     return 0;
 };
 
-const LeftPane7 = (props: Props) => {
+const LeftPane8 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
     const { incidentFilterYear, bahrabiseLandSlide, landSlide } = props;
@@ -91,15 +83,25 @@ const LeftPane7 = (props: Props) => {
 
     return (
         <div className={styles.vrSideBar}>
-            <h1>Past Landslide Incidents</h1>
+            <h1>Landslide Inventory</h1>
             <p>
-                In the year 2020, 3 landslides have
-               occurred in the municipality. 18 people lost
-               their lives, 32 went missing and 47 infrastructures
-               were destroyed due to the incidents.
+                The map shows the distribution of landslides that
+                occurred in the past. The landslide inventory data
+                of the year 2014 to 2020 has been visualized in the map.
+                It is known that a significant proportion of landslide
+                risk in the earthquake affected areas comes from the
+                reactivation of existing landslides, so this map is
+                useful for identifying landslides even high on the
+                mountainsides above, and for visualising if and how they have changed.
+            </p>
+            <p>
+                After Gorkha Earthquake 2015, 451 landslide incidents were
+                seen in the post monsoon season. Likewise,  the higher number
+                of post monsoon landslide incidents till date occurred in the
+                year 2020 i.e. 543.
             </p>
 
-            <p>NO. OF INCIDENTS</p>
+            <p>NO. OF LANDSLIDES</p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
                 <BarChart
                     width={300}
@@ -125,37 +127,8 @@ const LeftPane7 = (props: Props) => {
                     />
                 </BarChart>
             </ResponsiveContainer>
-
-            <p>LOSS INFORMATION</p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={lossChart}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
-
-
         </div>
     );
 };
 
-export default LeftPane7;
+export default LeftPane8;

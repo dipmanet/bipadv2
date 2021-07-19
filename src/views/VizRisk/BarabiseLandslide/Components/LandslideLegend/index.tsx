@@ -19,7 +19,7 @@ const LandslideLegend = (props) => {
                                     style={{
                                         fontSize: `${r}px`,
                                         marginRight: `${40 - (10 * i)}px`,
-                                        marginLeft: `${10 - (r / 10)}px`,
+                                        marginLeft: `${10 - (r / 3)}px`,
                                     }}
                                 />
                                 {
@@ -34,16 +34,6 @@ const LandslideLegend = (props) => {
                         ))
                     }
                 </div>
-                {/* <div className={styles.text}>
-                    {
-                        text.map((r, i) => (
-                            <p>
-                                {text[i]}
-                            </p>
-
-                        ))
-                    }
-                </div> */}
             </div>
 
         </>

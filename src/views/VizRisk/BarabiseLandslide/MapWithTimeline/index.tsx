@@ -53,7 +53,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { bahrabiseLandSlide } = this.props;
+        const { bahrabiseLandSlide, currentPage } = this.props;
         this.interval = setInterval(() => {
             this.setState((prevState) => {
                 if (Number(prevState.incidentYear) < 10) {
@@ -85,6 +85,25 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseForest', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseRoads', 'visibility', 'none');
+            this.map.addSource('hillshadeBahrabiseLocal', {
+                type: 'raster',
+                tiles: [this.getHillshadeLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'bahrabiseHillshadeLocal',
+                    type: 'raster',
+                    source: 'hillshadeBahrabiseLocal',
+                    layout: {},
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
+
 
             const features = this.props.bahrabiseLandSlide.map(item => ({
                 type: 'Feature',
@@ -124,6 +143,10 @@ class FloodHistoryMap extends React.Component {
     public componentDidUpdate(prevProps) {
         if (this.state.playState) {
             this.handleStateChange();
+        }
+        const { currentPage } = this.props;
+        if (currentPage !== prevProps.currentPage && currentPage === 7) {
+            this.map.setLayoutProperty('lsPoly', 'visibility', 'visible');
         }
     }
 
@@ -214,6 +237,21 @@ class FloodHistoryMap extends React.Component {
         // this.setState({ incidentYear: e.target.value });
     }
 
+    public getHillshadeLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Barhabise_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
+
     public render() {
         const mapStyle = {
             position: 'absolute',
@@ -227,17 +265,22 @@ class FloodHistoryMap extends React.Component {
         return (
             <div>
                 <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-                <TimelineSlider
-                    onChange={this.handleInputChange}
-                    id="slider"
-                    type="range"
-                    min="0"
-                    max="10"
-                    step="1"
-                    value={this.state.incidentYear}
-                    playState={this.state.playState}
-                    onPlayBtnClick={this.handlePlayPause}
-                />
+                {
+                    this.props.currentPage === 6
+                    && (
+                        <TimelineSlider
+                            onChange={this.handleInputChange}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="10"
+                            step="1"
+                            value={this.state.incidentYear}
+                            playState={this.state.playState}
+                            onPlayBtnClick={this.handlePlayPause}
+                        />
+                    )
+                }
             </div>
         );
     }

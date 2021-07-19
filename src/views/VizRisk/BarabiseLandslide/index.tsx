@@ -53,7 +53,6 @@ import {
 import styles from './styles.scss';
 import LandslideData from './Data/librariesData';
 import legendList from './Components/Legends/legends';
-import chartData from './Data/demographicsData';
 import LeftPaneContainer from '../Common/LeftPaneContainer';
 import DemographicsLegends from '../Common/Legends/DemographicsLegends';
 import CriticalInfraLegends from '../Common/Legends/CriticalInfraLegends';
@@ -65,7 +64,9 @@ import LeftPane4 from './Narratives/LeftPane4';
 import LeftPane5 from './Narratives/LeftPane5';
 import LeftPane6 from './Narratives/LeftPane6';
 import LeftPane7 from './Narratives/LeftPane7';
+import LeftPane8 from './Narratives/LeftPane8';
 import LandslideLegend from './Components/LandslideLegend';
+import InventoryLegend from './Components/InventoryLegend';
 
 interface Params {
 }
@@ -198,6 +199,7 @@ const leftElements = [
     <LeftPane5 />,
     <LeftPane6 />,
     <LeftPane7 />,
+    <LeftPane8 />,
 
 ];
 
@@ -221,6 +223,7 @@ const BarabiseLandslide = (props) => {
     const [incidentFilterYear, setincidentFilterYear] = useState('2011');
     const [incidents, setIncidents] = useState([]);
     const [bahrabiseIncidents, setBarabise] = useState([]);
+    const [setLandSlideYear, landslideYear] = useState('2011');
     const {
         // incidentList,
         hazardTypes,
@@ -261,6 +264,7 @@ const BarabiseLandslide = (props) => {
     ciRequest.setDefaultParams({
         handleCI,
     });
+
     const setIncidentData = (data) => {
         const a = data.map(inc => ({
             position: inc.point.coordinates,
@@ -328,6 +332,8 @@ const BarabiseLandslide = (props) => {
     };
 
     const handleNext = () => {
+        console.log('leftElements.length', leftElements.length);
+        console.log('currentPage', currentPage);
         if (currentPage < leftElements.length) {
             setCurrentPage(currentPage + 1);
             disableNavBtns('both');
@@ -348,6 +354,10 @@ const BarabiseLandslide = (props) => {
     const handleIncidentChange = (incidentYear) => {
         const y = `${Number(incidentYear) + 2011}`;
         setincidentFilterYear(y);
+    };
+
+    const handleYearSelect = (landSlideYear) => {
+        setLandSlideYear(landSlideYear);
     };
 
 
@@ -389,21 +399,20 @@ const BarabiseLandslide = (props) => {
                         ci={ci}
                         currentPage={currentPage}
                         criticalElement={criticalElement}
-
                     />
                 )
 
             }
             {
-                currentPage === 6
+                currentPage >= 6
 
                 && (
                     <>
                         <MapWithTimeline
+                            currentPage={currentPage}
                             bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
                             handleIncidentChange={handleIncidentChange}
                         />
-                        <LandslideLegend />
                     </>
                 )
 
@@ -488,6 +497,19 @@ const BarabiseLandslide = (props) => {
                                         />
                                     )
                                 }
+                                {
+                                    currentPage === 7
+                                    && (
+                                        <LeftPane8
+                                            data={props}
+                                            ci={ci}
+                                            incidentFilterYear={incidentFilterYear}
+                                            bahrabiseLandSlide={incidents}
+                                            landSlide={bahrabiseIncidents}
+                                            landslideYear={landslideYear}
+                                        />
+                                    )
+                                }
                                 <NavButtons
                                     handleNext={handleNext}
                                     handlePrev={handlePrev}
@@ -504,20 +526,34 @@ const BarabiseLandslide = (props) => {
             </Spring>
 
             {currentPage === 4
-                ? (
+                && (
                     <DemographicsLegends
                         handlePopulationChange={handlePopulationChange}
                     />
-                ) : ''
+                )
             }
             {currentPage === 5
-                ? (
+                && (
                     <CriticalInfraLegends
                         handlePopulationChange={handlePopulationChange}
                         handleCritical={handleCritical}
                         criticalElement={criticalElement}
                     />
-                ) : ''
+                )
+            }
+            {currentPage === 6
+                && (
+                    <LandslideLegend />
+
+                )
+            }
+            {currentPage === 7
+                && (
+                    <InventoryLegend
+                        handleYearSelect={handleYearSelect}
+                    />
+
+                )
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1
                 ? <Legends page={currentPage} />

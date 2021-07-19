@@ -36,7 +36,7 @@ export default {
             { key: 4, color: 'rgb(254, 230, 206)', label: '1000-2000' },
         ],
     },
-    7: {
+    8: {
         title: 'LandSlide Suseptibility',
         type: 'square',
         legends: [
@@ -64,7 +64,7 @@ export default {
 
         ],
     },
-    8: {
+    9: {
         title: 'LandSlide Risk',
         type: 'square',
         legends: [
