@@ -270,7 +270,7 @@ const Graph = (props: Props) => {
                                                     strokeWidth={2}
                                                     isFront
                                                     strokeDasharray="3 2"
-                                                    alwaysShow
+
                                                 >
                                                     <Label value="Warning level (60mm)" position="insideTopLeft" />
                                                 </ReferenceLine>
@@ -292,7 +292,7 @@ const Graph = (props: Props) => {
                                                 margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                                             >
                                                 <CartesianGrid stroke="#f5f5f5" />
-                                                <XAxis dataKey="label" interval={0} angle={-45} dx={-25} dy={25} height={70} />
+                                                <XAxis dataKey="label" angle={-45} dx={-25} dy={25} height={70} />
                                                 <YAxis domain={['accDaily', 'auto']} />
                                                 <Tooltip
                                                     content={(
@@ -308,7 +308,7 @@ const Graph = (props: Props) => {
                                                     strokeWidth={2}
                                                     isFront
                                                     strokeDasharray="3 2"
-                                                    alwaysShow
+
                                                 >
                                                     <Label value="Warning level (140mm)" position="insideTopLeft" />
                                                 </ReferenceLine>

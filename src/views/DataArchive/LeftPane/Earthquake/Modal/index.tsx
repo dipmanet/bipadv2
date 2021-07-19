@@ -97,19 +97,14 @@ class EarthquakeModal extends React.PureComponent<Props> {
 
     private getClassName = (row: DataArchiveEarthquake) => {
         const { magnitude } = row;
-        if (magnitude <= 3) {
-            return styles.minor;
-        }
-        if (magnitude <= 4) {
-            return styles.minor;
-        }
-        if (magnitude <= 5) {
+
+        if (magnitude < 5) {
             return styles.light;
         }
-        if (magnitude <= 6) {
+        if (magnitude < 6) {
             return styles.moderate;
         }
-        if (magnitude <= 7) {
+        if (magnitude < 7) {
             return styles.strong;
         }
         if (magnitude < 8) {
