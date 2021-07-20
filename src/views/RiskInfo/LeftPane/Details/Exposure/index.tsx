@@ -193,7 +193,6 @@ class Exposure extends React.PureComponent<Props, State> {
         // });
         const exposureLayer = layers.filter(item => item.category === 'exposure');
         const { selectedId } = this.state;
-
         // const layers = [{ id: 22,
         //     title: 'Building Footprints',
         //     category: 'exposure',

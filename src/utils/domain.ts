@@ -820,6 +820,7 @@ export function getRasterLegendUrl(layer: { layername: string }) {
         '&legend_options=fontAntiAliasing:true;layout:vertical;columnheight:100;dpi:96;labelMargin:2;fontSize:9;',
         '&width=12',
         '&height=12',
+        '&scale=1',
     ].join('');
 
     return legendUrl;
