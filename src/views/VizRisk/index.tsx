@@ -51,20 +51,17 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'gulariya') {
             setCurrentPage(2);
             setTitle('Visualising Flood Exposure');
-        } else if (municipality === 'biratnagar') {
+        } else if (municipality === 'dhangadi') {
             setCurrentPage(3);
             setTitle('Visualising Flood Exposure');
-        } else if (municipality === 'dhangadi') {
-            setCurrentPage(4);
-            setTitle('Visualising Flood Exposure');
         } else if (municipality === 'barabise') {
-            setCurrentPage(5);
+            setCurrentPage(4);
             setTitle('Visualising Landslide Exposure');
         } else if (municipality === 'pachpokhari') {
-            setCurrentPage(6);
+            setCurrentPage(5);
             setTitle('Visualising Multihazard Exposure');
         } else if (municipality === 'jugal') {
-            setCurrentPage(7);
+            setCurrentPage(6);
             setTitle('Visualising Multihazard Exposure');
         }
     };
