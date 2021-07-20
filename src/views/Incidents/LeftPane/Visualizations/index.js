@@ -154,7 +154,7 @@ export default class Visualizations extends React.PureComponent {
                             <BarChart
                                 layout="vertical"
                                 data={hazardSummary}
-                                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                                margin={{ top: 20, right: 50, left: 20, bottom: 20 }}
 
                             >
                                 <YAxis dataKey="label" type="category" />
@@ -233,7 +233,7 @@ export default class Visualizations extends React.PureComponent {
                             <BarChart
                                 layout="vertical"
                                 data={lifeLossSummary}
-                                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                                margin={{ top: 20, right: 50, left: 20, bottom: 20 }}
                             >
                                 <YAxis dataKey="label" type="category" interval={0} />
                                 <XAxis dataKey="deathCount" type="number" />
