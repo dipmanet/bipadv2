@@ -7,7 +7,7 @@ import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
 import Tikapur from './Tikapur';
 import Dhangadi from './Dhangadi';
-import Biratnagar from './Biratnagar';
+// import Biratnagar from './Biratnagar';
 import Barabise from './BarabiseLandslide';
 // import BarabiseLandslide from './BarabiseLandslide';
 
@@ -21,7 +21,7 @@ const slides = [
     <Rajapur />,
     <Tikapur />,
     <Gulariya />,
-    <Biratnagar />,
+    // <Biratnagar />,
     <Dhangadi />,
     <Barabise />,
     <Panchpokhari />,
