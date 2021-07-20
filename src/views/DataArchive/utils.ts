@@ -177,11 +177,11 @@ export const getDateWithRange = (measuredOn: string) => {
     const date = new Date(year);
     let lastYear;
     if (Number(time) === 0) {
-        initialHour = 23;
-        const temp = new Date(date.setDate(date.getDate() - 1));
+        initialHour = 0;
+        const temp = new Date(date.setDate(date.getDate()));
         lastYear = temp.toISOString().slice(0, 10);
     } else {
-        initialHour = Number(time) - 1;
+        initialHour = Number(time);
         lastYear = year;
     }
     const indicator = Number(initialHour) < 12 ? 'AM' : 'PM';

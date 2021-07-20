@@ -94,7 +94,7 @@ const TableView = (props: Props) => {
 
     const [cumulativeData, setCD] = useState([]);
     const [monthlyChartData, setCmd] = useState([]);
-
+    const [tableData, setTableData] = useState([]);
     useEffect(() => {
         if (data && data.length > 0) {
             let cumulative = 0;
@@ -118,41 +118,54 @@ const TableView = (props: Props) => {
 
 
     useEffect(() => {
-        if (cumulativeData && cumulativeData.length > 0) {
-            const getAccRain = (key: string) => {
-                const ourArray = cumulativeData
-                    .filter(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}` === key)
-                    .filter(daily => !isNaN(daily.accDaily));
+        if (periodCode === 'monthly') {
+            if (cumulativeData && cumulativeData.length > 0) {
+                const getAccRain = (key: string) => {
+                    const ourArray = cumulativeData
+                        .filter(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}` === key)
+                        .filter(daily => !isNaN(daily.accDaily));
 
-                if (ourArray.length > 0) {
-                    return ourArray.reduce((a, b) => ({
-                        accDaily: a.accDaily + b.accDaily,
-                    }));
-                }
-                return [];
-            };
-
-
-            const uniquemonthArr = [...new Set(cumulativeData.map(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}`))];
-            const monthlychartData = uniquemonthArr.map(key => ({
-                key,
-                accMonthly: getAccRain(key).accDaily,
-            }));
-            let cumulativeMth = 0;
-
-            const monthlyCumulativeCrtData = monthlychartData.map((item) => {
-                // eslint-disable-next-line no-restricted-globals
-                if (!isNaN(item.accMonthly)) { cumulativeMth += item.accMonthly; } else { cumulativeMth += 0; }
-                return {
-                    ...item,
-                    cumulativeMonthlyData: cumulativeMth,
+                    if (ourArray.length > 0) {
+                        return ourArray.reduce((a, b) => ({
+                            accDaily: a.accDaily + b.accDaily,
+                        }));
+                    }
+                    return [];
                 };
-            });
-            setCmd(monthlyCumulativeCrtData);
-            // props.handleTableData(monthlyCumulativeCrtData);
+
+
+                const uniquemonthArr = [...new Set(cumulativeData.map(item => `${item.key.split('-')[0]}-${item.key.split('-')[1]}`))];
+                const monthlychartData = uniquemonthArr.map(key => ({
+                    key,
+                    accMonthly: getAccRain(key).accDaily,
+                }));
+                let cumulativeMth = 0;
+
+                const monthlyCumulativeCrtData = monthlychartData.map((item) => {
+                    // eslint-disable-next-line no-restricted-globals
+                    if (!isNaN(item.accMonthly)) { cumulativeMth += item.accMonthly; } else { cumulativeMth += 0; }
+                    return {
+                        ...item,
+                        cumulativeMonthlyData: cumulativeMth,
+                    };
+                });
+                setCmd(monthlyCumulativeCrtData);
+                // props.handleTableData(monthlyCumulativeCrtData);
+            }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cumulativeData]);
+    // let mydata;
+    useEffect(() => {
+        console.log('monthly chart and period', monthlyChartData, periodCode);
+        if (monthlyChartData.length > 0 && periodCode === 'monthly') {
+            setTableData(monthlyChartData);
+        } else {
+            setTableData(cumulativeData);
+        }
+        // console.log('test:', mydata);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [monthlyChartData]);
 
     const rainHourlyHeader = [
         {
@@ -339,8 +352,7 @@ const TableView = (props: Props) => {
             <Table
                 // rowClassNameSelector={getClassName}
                 className={styles.rainTable}
-                data={(monthlyChartData && monthlyChartData.length > 0 && periodCode === 'monthly')
-                    ? monthlyChartData : cumulativeData}
+                data={tableData}
                 headers={header}
                 keySelector={rainSelector}
                 defaultSort={defaultSort}
