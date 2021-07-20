@@ -7,11 +7,12 @@
   border: 1px solid rgba( 255, 255, 255, 0.18 );
   padding: 10px;
   position: fixed;
-  bottom: 20px;
-  left: calc(30% - 60px);
+  bottom: 15px;
+  right: 70px;
   color: white;
   h2{
       color: white;
+      font-size: 10px;
   }
     .legendsItemsList{
         display: flex;
@@ -20,6 +21,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 0px;
+            font-size: 11px;
             .legendsHexagon{
                 width: 20px;
                 margin-right: 4px;

@@ -65,6 +65,7 @@ import LeftPane5 from './Narratives/LeftPane5';
 import LeftPane6 from './Narratives/LeftPane6';
 import LeftPane7 from './Narratives/LeftPane7';
 import LeftPane8 from './Narratives/LeftPane8';
+import LeftPane9 from './Narratives/LeftPane9';
 import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
 
@@ -200,6 +201,7 @@ const leftElements = [
     <LeftPane6 />,
     <LeftPane7 />,
     <LeftPane8 />,
+    <LeftPane9 />,
 ];
 
 const BarabiseLandslide = (props) => {
@@ -394,7 +396,7 @@ const BarabiseLandslide = (props) => {
 
             }
             {
-                currentPage >= 6
+                (currentPage === 6 || currentPage === 7)
 
                 && (
                     <>
@@ -404,6 +406,28 @@ const BarabiseLandslide = (props) => {
                             handleIncidentChange={handleIncidentChange}
                             landslideYear={landslideYear}
                             yearClicked={yearClicked}
+                        />
+                    </>
+                )
+
+
+            }
+            {
+                (currentPage === 8 || currentPage === 9)
+
+                && (
+                    <>
+                        <Deck
+                            librariesData={librariesData}
+                            location={location}
+                            viewState={viewState}
+                            onViewStateChange={handleChangeViewState}
+                            libraries={incidents}
+                            bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
+                            currentPage={currentPage}
+                            handleFlyTo={handleFlyTo}
+                            setNarrationDelay={setNarrationDelay}
+                            ci={ci}
                         />
                     </>
                 )
@@ -493,6 +517,19 @@ const BarabiseLandslide = (props) => {
                                     currentPage === 7
                                     && (
                                         <LeftPane8
+                                            data={props}
+                                            ci={ci}
+                                            incidentFilterYear={incidentFilterYear}
+                                            bahrabiseLandSlide={incidents}
+                                            landSlide={bahrabiseIncidents}
+                                            landslideYear={landslideYear}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 8
+                                    && (
+                                        <LeftPane9
                                             data={props}
                                             ci={ci}
                                             incidentFilterYear={incidentFilterYear}

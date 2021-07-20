@@ -196,6 +196,12 @@ const Deck = (props) => {
                 },
             },
         );
+
+        if (currentPage === 8) {
+            map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
+            map.moveLayer('suseptibility-bahrabise');
+            console.log('currentPage:', currentPage);
+        }
         // const criticalinfrastructuresdata = getGeoJSON(criticalinfrastructures.criticalData);
         // const categoriesCritical = [...new Set(criticalinfrastructuresdata.features.map(
         //     item => item.properties.resourceType,
@@ -299,7 +305,7 @@ const Deck = (props) => {
             //     map.setLayoutProperty(layer, 'visibility', 'visible');
             //     return null;
             // });
-        } else if (currentPage === 6) {
+        } else if (currentPage === 8) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
 
@@ -307,15 +313,17 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-            MapLayers.suseptibility.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
-                return null;
-            });
+
             MapLayers.landsliderisk.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-        } else if (currentPage === 7) {
+            map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'none');
+            MapLayers.suseptibility.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+        } else if (currentPage === 9) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
 
@@ -323,6 +331,7 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
+
             MapLayers.landsliderisk.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
