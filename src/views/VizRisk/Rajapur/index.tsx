@@ -245,28 +245,6 @@ class Rajapur extends React.Component {
 
 
                 {
-                    cI.features && cI.features.length > 0
-                        ? (
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                enableNavBtns={this.enableNavBtns}
-                                cI={cI}
-                                disableNavBtns={this.disableNavBtns}
-                            />
-                        )
-                        : (
-                            <div className={styles.loaderClass}>
-                                <Loader color="#fff" />
-                            </div>
-                        )
 
                 }
                 {rightelements[rightElement]}

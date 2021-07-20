@@ -1,0 +1,30 @@
+.wrapper {
+    background: white;
+    .header-text {
+        text-align: center;
+        font-weight: bold;
+        font-size: var(--font-size-medium-alt);
+        padding: var(--spacing-medium-alt);
+        padding-bottom: var(--spacing-extra-small);
+    }
+    .pollution-legend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        .legend-item {
+            display: flex;
+            padding: var(--spacing-small) var(--spacing-small);
+            .text {
+                font-weight: var(--font-weight-bold);
+            }
+            .icon {
+                border-radius: 5px;
+                margin-left: 3px;
+                width: 15px;
+                height: 15px;
+            }
+        }
+    }
+}

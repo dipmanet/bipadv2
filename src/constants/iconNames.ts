@@ -33,6 +33,7 @@ const iconNames = {
 
     calendar: 'ion-ios-calendar-outline',
     location: 'ion-ios-location-outline',
+    gps: 'ion-ios-location',
     distance: 'ion-android-locate',
 
     expand: 'ion-arrow-expand',
@@ -92,6 +93,13 @@ const iconNames = {
     cog: 'ion-ios-cog',
     circle: 'fa fa-circle',
     square: 'fa fa-square',
+
+    lock: 'fa fa-unlock-alt',
+    times: 'fa fa-times',
+    info: 'fa  fa-info-circle',
+
+    search: 'fa fa-search',
+    home: 'fa fa-home',
 };
 
 export default iconNames;
