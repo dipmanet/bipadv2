@@ -64,10 +64,10 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     helps to locate the region of dense and sparse settlements.
                 </p>
                 <p>
-                    Ward number 4 has the highest number of population with 1693
+                    Ward number 4 has the highest number of population with 1761
                     households. Notably, these high populations ward lies very close
                     to the western tributary of the Karnali river.  Ward number 7 has
-                    the least number of households comprising of 766 numbers.
+                    the least number of households i.e 885.
                 </p>
 
                 <div className={styles.iconRow}>
@@ -127,6 +127,19 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
+                    <div className={styles.infoIconsContainer}>
+                        <ScalableVectorGraphics
+                            className={styles.infoIcon}
+                            src={Female}
+                        />
+                        <div className={styles.descriptionCotainer}>
+                            <div className={styles.iconTitle}>3</div>
+                            <div className={styles.iconText}>
+                            Other Population
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
 
 
@@ -146,6 +159,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
                         <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
                         <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
+                        <Bar dataKey="OtherPop" stackId="a" fill="#EB7C21" />
                         <Bar dataKey="TotalHousehold" fill="#347eff" />
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
