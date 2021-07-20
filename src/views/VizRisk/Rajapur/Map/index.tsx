@@ -824,7 +824,7 @@ class FloodHistoryMap extends React.Component {
     public render() {
         const mapStyle = {
             position: 'absolute',
-            width: '70%',
+            width: 'calc(70% - 60px)',
             left: '0%',
             top: 0,
             bottom: 0,
