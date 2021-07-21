@@ -19,6 +19,7 @@
         display:flex;
         padding: 7px 0 15px 0;
         height: 50%;
+        flex-direction: column;
         .floodSubGroup{
             display: flex;
             flex-direction: column;

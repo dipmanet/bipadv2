@@ -152,7 +152,7 @@ class RightPane extends React.PureComponent<Props, State> {
         return (
             <div className={styles.vrSideBar}>
 
-                <h1>Land Cover</h1>
+                <h1>Landcover</h1>
 
                 {/* <p>
                     {' '}
@@ -161,9 +161,9 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </p> */}
                 <p>
-                    Out of total area of 127.08 square km, 74.06% of land is
-                    used for agriculture. Building covers 0.75% of land while
-                    water bodies occupies 4.08% of total land in Rajapur.
+                Out of a total area of 127.08 sq. km, 74.06% of the land is used
+                for agriculture.Building covers 0.75% of land while water bodies
+                occupy 4.08% of total land in Rajapur.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -244,7 +244,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </div>
                 {/* <SourceInfo /> */}
-                <Disclaimer />
+                <Disclaimer disclamer={'Disclaimer: Temporarily there is an inconsistency in the map layers due to different data sources'} />
             </div>
         );
     }

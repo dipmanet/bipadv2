@@ -58,24 +58,24 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                    Population distribution in the region is largely uneven
-                    with some pockets of dense settlements. This map allows
-                    viewing the population distribution within each ward and
-                    helps to locate the region of dense and sparse settlements.
+                Population distribution in the region is largely uneven with some
+                pockets of dense settlements. This map allows viewing the population
+                distribution within each ward and helps to locate the region of
+                dense and sparse settlements.
                 </p>
                 <p>
-                    Ward number 4 has the highest number of population with 1761
-                    households. Notably, these high populations ward lies very close
-                    to the western tributary of the Karnali river.  Ward number 7 has
-                    the least number of households i.e 885.
+                Ward number 4 has the highest population with 1761 households. Notably,
+                these high populations ward lies very close to the western tributary
+                of the Karnali river. Ward number 7 has the least number of households
+                comprising of 885 numbers.
                 </p>
 
                 <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
+                    <div className={styles.infoIconsContainer} style={{ flex: '1' }}>
+                        {/* <ScalableVectorGraphics
                             className={styles.infoIcon}
                             src={ManWoman}
-                        />
+                        /> */}
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>55,584</div>
                             <div className={styles.iconText}>
@@ -84,11 +84,11 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
+                    <div className={styles.infoIconsContainer} style={{ flex: '3' }}>
+                        {/* <ScalableVectorGraphics
                             className={styles.infoIconHH}
                             src={Home}
-                        />
+                        /> */}
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>12,138</div>
                             <div className={styles.iconText}>
@@ -101,11 +101,11 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
 
                 <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
+                    <div className={styles.infoIconsContainer} style={{ flex: '1' }}>
+                        {/* <ScalableVectorGraphics
                             className={styles.infoIcon}
                             src={Male}
-                        />
+                        /> */}
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>25,519</div>
                             <div className={styles.iconText}>
@@ -114,11 +114,11 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
+                    <div className={styles.infoIconsContainer} style={{ flex: '1', marginLeft: '5px' }}>
+                        {/* <ScalableVectorGraphics
                             className={styles.infoIcon}
                             src={Female}
-                        />
+                        /> */}
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>30,065</div>
                             <div className={styles.iconText}>
@@ -127,11 +127,11 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
+                    <div className={styles.infoIconsContainer} style={{ flex: '2' }}>
+                        {/* <ScalableVectorGraphics
                             className={styles.infoIcon}
                             src={Female}
-                        />
+                        /> */}
                         <div className={styles.descriptionCotainer}>
                             <div className={styles.iconTitle}>3</div>
                             <div className={styles.iconText}>
@@ -140,6 +140,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
                         </div>
                     </div>
+
                 </div>
 
 
@@ -165,7 +166,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     </BarChart>
                 </ResponsiveContainer>
                 {/* <SourceInfo /> */}
-                <Disclaimer />
+                <Disclaimer disclamer={'Disclaimer: Temporarily there is an inconsistency in the map layers due to different data sources'} />
 
             </div>
         );
