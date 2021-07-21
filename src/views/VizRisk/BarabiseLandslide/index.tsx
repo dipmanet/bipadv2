@@ -189,6 +189,22 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: true,
     },
+    buildingCountRequest: {
+        url: '/overpass-element/',
+        method: methods.GET,
+        query: ({ params: { polygon } }) => ({
+            limit: 0,
+            count: true,
+            municipality: 23002,
+            bbox: polygon,
+            selector: `${'"'}building${'"'}`,
+        }),
+        onSuccess: ({ response, params: { handleBuidingResponse } }) => {
+            // const {  buildingCount = [] } = response;
+            handleBuidingResponse(response);
+        },
+        onMount: false,
+    },
 };
 
 
@@ -221,11 +237,16 @@ const BarabiseLandslide = (props) => {
     const [population, setPopulation] = useState('ward');
     const [criticalElement, setCriticalElement] = useState('all');
     const [ci, setCI] = useState([]);
-    const [incidentFilterYear, setincidentFilterYear] = useState('2011');
+    const [incidentFilterYear, setincidentFilterYear] = useState('2020');
     const [incidents, setIncidents] = useState([]);
     const [bahrabiseIncidents, setBarabise] = useState([]);
     const [landslideYear, setLandSlideYear] = useState([]);
     const [yearClicked, setyearClicked] = useState(false);
+    const [buildingCount, setBuildingCount] = useState(0);
+    const [polygon, setPolygon] = useState([]);
+    const [drawData, setDrawData] = useState([]);
+    const [chartReset, setChartReset] = useState(false);
+
     const {
         // incidentList,
         hazardTypes,
@@ -234,6 +255,7 @@ const BarabiseLandslide = (props) => {
             ciRequest,
             incidentsGetRequest,
             incidentsGetRequestBB,
+            buildingCountRequest,
         },
     } = props;
     const handleAnimationStart = () => setReanimate(false);
@@ -289,6 +311,10 @@ const BarabiseLandslide = (props) => {
         setBarabise(bi);
     };
 
+    const handlechartReset = () => {
+        setChartReset(!chartReset);
+    };
+
     incidentsGetRequest.setDefaultParams({
         setIncidentList: setIncidentData,
         setPending,
@@ -296,6 +322,34 @@ const BarabiseLandslide = (props) => {
     incidentsGetRequestBB.setDefaultParams({
         setBarabiseIncidents,
     });
+
+    const handleBuidingResponse = (data) => {
+        console.log('response data', data);
+    };
+    const getPolygon = (p) => {
+        setPolygon(p);
+    };
+
+    buildingCountRequest.setDefaultParams({
+        handleBuidingResponse,
+        // polygon,
+    });
+
+    const getPolygonString = (p) => {
+        const poly = { type: 'Polygon', coordinates: p };
+        console.log('poly', poly);
+        return JSON.stringify(poly);
+    };
+
+    useEffect(() => {
+        if (polygon.length > 0) {
+            buildingCountRequest.do({
+                polygon: getPolygonString(polygon),
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [polygon]);
+
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
     const handleFlyTo = (destination) => {
@@ -352,6 +406,9 @@ const BarabiseLandslide = (props) => {
         setyearClicked(!yearClicked);
     };
 
+    const handleDrawSelectedData = (result) => {
+        setDrawData(result);
+    };
 
     return (
         <>
@@ -406,6 +463,11 @@ const BarabiseLandslide = (props) => {
                             handleIncidentChange={handleIncidentChange}
                             landslideYear={landslideYear}
                             yearClicked={yearClicked}
+                            getPolygon={getPolygon}
+                            cidata={ci}
+                            chartReset={chartReset}
+                            handlechartReset={handlechartReset}
+                            handleDrawSelectedData={handleDrawSelectedData}
                         />
                     </>
                 )
@@ -523,6 +585,8 @@ const BarabiseLandslide = (props) => {
                                             bahrabiseLandSlide={incidents}
                                             landSlide={bahrabiseIncidents}
                                             landslideYear={landslideYear}
+                                            drawData={drawData}
+                                            chartReset={chartReset}
                                         />
                                     )
                                 }

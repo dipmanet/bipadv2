@@ -108,7 +108,7 @@ const LeftPane7 = (props: Props) => {
                     layout="vertical"
                     margin={{ left: 20, right: 20 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis type="number" />
                     <YAxis
                         type="category"
@@ -135,7 +135,7 @@ const LeftPane7 = (props: Props) => {
                     layout="vertical"
                     margin={{ left: 20, right: 20 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis type="number" />
                     <YAxis
                         type="category"

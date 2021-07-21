@@ -54,7 +54,8 @@ const getTotalLoss = (year, arr) => {
 const LeftPane8 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
-    const { incidentFilterYear, bahrabiseLandSlide, landSlide } = props;
+    const [chartData, setChardData] = useState([]);
+    const { drawData, landSlide, chartReset, ci } = props;
 
     useEffect(() => {
         if (landSlide) {
@@ -80,6 +81,39 @@ const LeftPane8 = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (drawData) {
+            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
+            const cD = hazardArr.map(hazard => ({
+                name: hazard,
+                Total: drawData.filter(item => item.hazardTitle === hazard).length,
+            }));
+            setChardData(cD);
+        }
+    }, [drawData]);
+
+    useEffect(() => {
+        if (ci) {
+            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const cD = resArr.map(res => ({
+                name: res,
+                Total: ci.filter(item => item.resourceType === res).length,
+            }));
+            setChardData(cD);
+        }
+    }, [chartReset, ci]);
+
+    useEffect(() => {
+        if (ci) {
+            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const cD = resArr.map(res => ({
+                name: res,
+                Total: ci.filter(item => item.resourceType === res).length,
+            }));
+            setChardData(cD);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={styles.vrSideBar}>
@@ -106,7 +140,7 @@ const LeftPane8 = (props: Props) => {
                 <BarChart
                     width={300}
                     height={600}
-                    data={incidentChart}
+                    data={chartData}
                     layout="vertical"
                     margin={{ left: 20, right: 20 }}
                 >

@@ -1,4 +1,11 @@
 export default {
+    0: {
+        title: '',
+        type: 'hexagon',
+        legends: [
+            { key: 1, color: 'rgb(209,203,111)', label: 'Landslide' },
+        ],
+    },
     1: {
         title: 'Landslides in Nepal',
         type: 'hexagon',

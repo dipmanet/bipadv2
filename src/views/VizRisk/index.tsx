@@ -76,7 +76,7 @@ const VizRiskMainPage = () => {
     };
 
     const getBtnStyle = () => {
-        if (mun === 'pachpokhari' || mun === 'jugal') {
+        if (mun === 'pachpokhari' || mun === 'jugal' || mun === 'barabise') {
             if (showMenu) {
                 return styles.hamburgerBtnContMenu;
             }
