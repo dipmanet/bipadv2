@@ -26,6 +26,7 @@ interface Props {
 }
 
 const rainSelector = (rain: ChartData) => rain.measuredOn;
+const monthlyRainSelector = rain => rain.key;
 
 const defaultSort = {
     key: 'year',
@@ -94,7 +95,7 @@ const TableView = (props: Props) => {
 
     const [cumulativeData, setCD] = useState([]);
     const [monthlyChartData, setCmd] = useState([]);
-    const [tableData, setTableData] = useState([]);
+
     useEffect(() => {
         if (data && data.length > 0) {
             let cumulative = 0;
@@ -155,17 +156,6 @@ const TableView = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cumulativeData]);
-    // let mydata;
-    useEffect(() => {
-        console.log('monthly chart and period', monthlyChartData, periodCode);
-        if (monthlyChartData.length > 0 && periodCode === 'monthly') {
-            setTableData(monthlyChartData);
-        } else {
-            setTableData(cumulativeData);
-        }
-        // console.log('test:', mydata);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [monthlyChartData]);
 
     const rainHourlyHeader = [
         {
@@ -248,7 +238,7 @@ const TableView = (props: Props) => {
             order: 1,
             sortable: true,
             comparator: (a, b) => compareString(a.measuredOn, b.measuredOn),
-            modifier: (row: ChartData) => {
+            modifier: (row) => {
                 const { key } = row;
                 return key;
             },
@@ -259,7 +249,7 @@ const TableView = (props: Props) => {
             order: 2,
             sortable: true,
             comparator: (a, b) => compareNumber(a.accMonthly, b.accMonthly),
-            modifier: (row: ChartData) => {
+            modifier: (row) => {
                 const min = row.accMonthly;
                 return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
             },
@@ -270,7 +260,7 @@ const TableView = (props: Props) => {
             order: 3,
             sortable: true,
             comparator: (a, b) => compareNumber(a.cumulativeMonthlyData, b.cumulativeMonthlyData),
-            modifier: (row: ChartData) => {
+            modifier: (row) => {
                 // setCumu(row.accHour);
                 const min = row.cumulativeMonthlyData;
                 return (min === 0 || min > 0) ? `${min.toFixed(2)}` : undefined;
@@ -347,18 +337,25 @@ const TableView = (props: Props) => {
                     />
                 </DownloadButton>
             </div>
-
-
-            <Table
-                // rowClassNameSelector={getClassName}
-                className={styles.rainTable}
-                data={tableData}
-                headers={header}
-                keySelector={rainSelector}
-                defaultSort={defaultSort}
-            />
-
-
+            {(monthlyChartData.length > 0 && periodCode === 'monthly') ? (
+                <Table
+                    // rowClassNameSelector={getClassName}
+                    className={styles.rainTable}
+                    data={monthlyChartData}
+                    headers={header}
+                    keySelector={monthlyRainSelector}
+                    defaultSort={defaultSort}
+                />
+            ) : (
+                <Table
+                    // rowClassNameSelector={getClassName}
+                    className={styles.rainTable}
+                    data={cumulativeData}
+                    headers={header}
+                    keySelector={rainSelector}
+                    defaultSort={defaultSort}
+                />
+            )}
         </div>
     );
 };
