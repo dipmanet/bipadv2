@@ -62,15 +62,18 @@ const rasterLayersYears = [5, 20, 50, 100];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 
 const slideOneLayers = ['wardNumbers',
-    'water', 'waterway', 'municipalitycentroidgeo',
+    'water', 'waterway',
     'wardOutline', 'wardFill'];
 
-const slideTwoLayers = ['water',
+const slideTwoLayers = ['country-label', 'state-label', 'settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'water',
     'canalRajapur', 'rajapurbuildings', 'bridgeRajapur',
     'rajapurRoads', 'forestRajapur', 'agriculturelandRajapurPattern',
     'agriculturelandRajapur', 'wardOutline',
     'wardFill',
 ];
+// const slideTwoLayers = ['wardFill',
+
+// ];
 
 const slideThreeLayers = ['wardNumbers', 'water', 'wardOutline',
     'ward-fill-local', 'bufferRajapur',
@@ -562,7 +565,7 @@ class FloodHistoryMap extends React.Component {
                     duration: 8000,
                 });
             }, 4000);
-            this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
+            this.map.setPaintProperty('wardFill', 'fill-color', '#f3f2f2');
         });
     }
 
@@ -622,7 +625,7 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'none');
                     this.toggleVisiblity(slideTwoLayers, 'visible');
-                    this.map.setPaintProperty('wardFill', 'fill-color', '#b4b4b4');
+                    this.map.setPaintProperty('wardFill', 'fill-color', '#f3f2f2');
                     this.orderLayers(slideTwoLayers);
                 } else if (nextProps.rightElement === 2) {
                     this.toggleVisiblity(slideTwoLayers, 'none');

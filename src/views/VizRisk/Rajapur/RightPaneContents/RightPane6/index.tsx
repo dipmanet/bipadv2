@@ -36,7 +36,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         const { showReferences } = this.state;
         return (
             <div className={styles.vrSideBar}>
-                <h1>Evacuation Centers </h1>
+                <h1>Evacuation centers </h1>
                 <p>
                     Non-governmental Organizations have funded interventions in the
                     regions for strengthening early warning system and building
