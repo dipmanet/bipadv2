@@ -325,8 +325,8 @@ class RiverMap extends React.PureComponent {
                 {(rasterLayers.length === 0)
                     && (
                         <MapSource
-                            key="basin-key"
-                            sourceKey="basin-key"
+                            key="basin-river-key"
+                            sourceKey="basin-river-key"
                             sourceOptions={{
                                 type: 'raster',
                                 tiles: [tileUrl],
@@ -335,7 +335,7 @@ class RiverMap extends React.PureComponent {
                         >
 
                             <MapLayer
-                                layerKey="raster-layer"
+                                layerKey="raster-river-layer"
                                 layerOptions={{
                                     type: 'raster',
                                     paint: {

@@ -382,8 +382,8 @@ class RainMap extends React.PureComponent {
                 {(rasterLayers.length === 0)
                     && (
                         <MapSource
-                            key="basin-key"
-                            sourceKey="basin-key"
+                            key="basin-rain-key"
+                            sourceKey="basin-rain-key"
                             sourceOptions={{
                                 type: 'raster',
                                 tiles: [tileUrl],
@@ -392,7 +392,7 @@ class RainMap extends React.PureComponent {
                         >
 
                             <MapLayer
-                                layerKey="raster-layer"
+                                layerKey="raster-rain-layer"
                                 layerOptions={{
                                     type: 'raster',
                                     paint: {
