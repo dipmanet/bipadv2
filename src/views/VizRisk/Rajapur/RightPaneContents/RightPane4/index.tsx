@@ -23,15 +23,19 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
                 <p>
-                Rajapur lies in the inland delta surrounded by two tributaries of the Karnali River,
-                one of the largest rivers of Nepal. The river splits into Karnali on the western side
-                and Geruwa on the eastern side. These two tributaries flow past the Nepal-India border
-                and converge again as Ghangra river.
+                Rajapur lies in the inland delta surrounded by two
+                tributaries of the Karnali River,one of the largest
+                rivers of Nepal. The river splits into Karnali on the
+                western side and Geruwa on the eastern side. These two
+                tributaries flow past the Nepal-India border and converge
+                again as Ghangra river.
                 </p>
                 <p>
-                All of the residential and governmental buildings, religious and cultural sites, banking institutions,
-                critical infrastructures such as hospitals, schools, bridges, etc. are built near or between the Karnali
-                and the Geruwa river. These infrastructures are at constant threat of flooding every monsoon.
+                All of the residential and governmental buildings, religious
+                and cultural sites, banking institutions,critical infrastructures
+                such as hospitals, schools, bridges, etc. are built near or between
+                the Karnaliand the Geruwa river. These infrastructures are at constant
+                threat of flooding every monsoon.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'45%'}>

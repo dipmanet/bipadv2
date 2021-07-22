@@ -8,7 +8,7 @@
     left:0;
     margin-right: 15%;
     .bottomInfo{
-        font-size: 9px;
+        font-size: 12px !important;
         color: white;
         opacity: 0.5;
         padding-right: 10px;
@@ -16,7 +16,8 @@
         transform: scaleY(1);   
         transition: transform 0.26s ease-out;
         margin-top: 2px;
-        font-size: 10px;
+        width: 50%;
+        padding-bottom: 20px;
 
     }
     .bottomInfoHide{
@@ -33,6 +34,16 @@
         background-color: transparent;
         border: none;
 
+        .closeIcon{
+            color: white;
+            opacity: 0.87;
+        }
+    }
+    .infoContainerClosed{
+        margin-left: 50%;
+        background-color: transparent;
+        border: none;
+        
         .closeIcon{
             color: white;
             opacity: 0.87;

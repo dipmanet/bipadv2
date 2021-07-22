@@ -159,9 +159,9 @@ class RightPane extends React.PureComponent<Props, State> {
                 <h1>Land Cover</h1>
 
                 <p>
-                    Out of a total area of 118 sq. km, 72.4% of the land is covered by farmland,
-                    6.4% by forests. Other areas are covered by water bodies, grassland, sand
-                    and built-up area.
+                Out of a total area of 118 sq. km, 72.4% of the land is
+                covered by farmland, 6.4% by forests. Other areas are
+                covered by water bodies, grassland, sand, and built-up area.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -261,7 +261,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </div>
                 {/* <SourceInfo /> */}
-                {/* <Disclaimer /> */}
+                <Disclaimer disclamer={'Disclaimer: Temporarily there is an inconsistency in the map layers due to different data sources'} />
             </div>
         );
     }

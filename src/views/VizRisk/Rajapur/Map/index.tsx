@@ -65,7 +65,7 @@ const slideOneLayers = ['wardNumbers',
     'water', 'waterway',
     'wardOutline', 'wardFill'];
 
-const slideTwoLayers = ['country-label', 'state-label', 'settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'water',
+const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'water',
     'canalRajapur', 'rajapurbuildings', 'bridgeRajapur',
     'rajapurRoads', 'forestRajapur', 'agriculturelandRajapurPattern',
     'agriculturelandRajapur', 'wardOutline',
@@ -228,17 +228,17 @@ class FloodHistoryMap extends React.Component {
 
 
         const slideFourLayers = [
-            ...criticalInfraClusters, 'water', 'wardOutline',
+            ...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'water', 'wardOutline',
             'bridgeRajapur', 'canalRajapur',
             'waterway', 'rajapurRoads', 'wardFill',
         ];
 
         const slideFiveLayers = [
-            ...criticalInfraClusters, ...rasterLayers, 'rajapurbuildings', 'water',
+            ...criticalInfraClusters, ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'rajapurbuildings', 'water',
             'bridgeRajapur', 'canalRajapur', 'waterway',
             'rajapurRoads', 'wardOutline', 'wardFill',
         ];
-        const slideSixLayers = [
+        const slideSixLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple',
             'safeshelterRajapurIcon', 'safeshelterRajapur',
             ...evacClusters, ...rasterLayers, 'water',
             'bridgeRajapur', 'rajapurRoads', 'canalRajapur', 'waterway',

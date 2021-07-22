@@ -61,7 +61,7 @@ const slideOneLayers = ['wardNumbers',
     'water', 'waterway', 'municipalitycentroidgeo',
     'wardOutline', 'municipalityFill'];
 
-const slideTwoLayers = ['bridgeGulariya', 'water', 'waterway',
+const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'bridgeGulariya', 'water', 'waterway',
     'canalGulariya', 'gulariyaBuildings',
     'GulariyaRoads', 'forestGulariya', 'WoodforestGulariya',
     'agriculturallandGulariya', 'sandGulariya', 'meadowGulariya', 'municipalityFill',
@@ -209,19 +209,19 @@ class FloodHistoryMap extends React.Component {
         const criticalInfraClusters = [].concat(...arrCritical);
 
 
-        const slideFourLayers = ['bridgeGulariya', 'water', 'waterway',
+        const slideFourLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeGulariya', 'water', 'waterway',
             'canalGulariya',
             'GulariyaRoads',
             'municipalityFill'];
 
         const slideFiveLayers = [
-            ...criticalInfraClusters, ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
+            ...criticalInfraClusters, ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeGulariya', 'water', 'waterway',
             'canalGulariya', 'gulariyaBuildings',
             'GulariyaRoads', 'municipalityFill',
 
         ];
         const slideSixLayers = [
-            ...evacClusters, ...rasterLayers, 'bridgeGulariya', 'water', 'waterway',
+            ...evacClusters, ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeGulariya', 'water', 'waterway',
             'canalGulariya',
             'GulariyaRoads',
             'municipalityFill',
@@ -553,8 +553,8 @@ class FloodHistoryMap extends React.Component {
                     zoom: 11.4,
                     duration: 8000,
                 });
-            }, 2000);
-            this.map.setPaintProperty('municipalityFill', 'fill-color', '#e0e0e0');
+            }, 4000);
+            this.map.setPaintProperty('municipalityFill', 'fill-color', '#f3f2f2');
         });
     }
 
@@ -620,7 +620,7 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'none');
                     this.toggleVisiblity(slideTwoLayers, 'visible');
-                    this.map.setPaintProperty('municipalityFill', 'fill-color', '#b4b4b4');
+                    this.map.setPaintProperty('municipalityFill', 'fill-color', '#f3f2f2');
                     this.orderLayers(slideTwoLayers);
                 } else if (nextProps.rightElement === 2) {
                     this.map.easeTo({
