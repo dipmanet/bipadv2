@@ -160,6 +160,20 @@ class FloodHistoryMap extends React.Component {
             chartReset,
         } = this.props;
 
+        const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            userProperties: true,
+            controls: {
+                polygon: true,
+                trash: true,
+            },
+            styles: drawStyle,
+            defaultMode: 'draw_polygon',
+        });
+
+        if (currentPage === 6 && prevProps.currentPage === 7) {
+            this.map.removeControl(draw);
+        }
 
         if (currentPage === 6) {
             if (this.state.playState) {
@@ -175,17 +189,6 @@ class FloodHistoryMap extends React.Component {
             this.generateYearsArr().map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
-            });
-
-            const draw = new MapboxDraw({
-                displayControlsDefault: false,
-                userProperties: true,
-                controls: {
-                    polygon: true,
-                    trash: true,
-                },
-                styles: drawStyle,
-                defaultMode: 'draw_polygon',
             });
 
             const resetArea = () => {

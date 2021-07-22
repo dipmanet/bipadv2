@@ -469,7 +469,7 @@ const BarabiseLandslide = (props) => {
 
             }
             {
-                (currentPage === 6 || currentPage === 7)
+                (currentPage >= 6)
 
                 && (
                     <>
@@ -490,7 +490,7 @@ const BarabiseLandslide = (props) => {
 
 
             }
-            {
+            {/* {
                 (currentPage === 8 || currentPage === 9)
 
                 && (
@@ -511,7 +511,7 @@ const BarabiseLandslide = (props) => {
                 )
 
 
-            }
+            } */}
 
 
             <Spring
