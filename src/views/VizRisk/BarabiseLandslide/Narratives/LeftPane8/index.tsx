@@ -54,7 +54,9 @@ const getTotalLoss = (year, arr) => {
 const LeftPane8 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
-    const [chartData, setChardData] = useState([]);
+    const [cichartData, setCIChartData] = useState([]);
+    const [reset, setReset] = useState(true);
+    const [lschartData, setLschartData] = useState(true);
     const { drawData, landSlide, chartReset, ci } = props;
 
     useEffect(() => {
@@ -88,7 +90,8 @@ const LeftPane8 = (props: Props) => {
                 name: hazard,
                 Total: drawData.filter(item => item.hazardTitle === hazard).length,
             }));
-            setChardData(cD);
+            setCIChartData(cD);
+            setReset(false);
         }
     }, [drawData]);
 
@@ -99,7 +102,8 @@ const LeftPane8 = (props: Props) => {
                 name: res,
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
-            setChardData(cD);
+            setCIChartData(cD);
+            setReset(true);
         }
     }, [chartReset, ci]);
 
@@ -110,7 +114,7 @@ const LeftPane8 = (props: Props) => {
                 name: res,
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
-            setChardData(cD);
+            setCIChartData(cD);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -135,12 +139,50 @@ const LeftPane8 = (props: Props) => {
                 year 2020 i.e. 543.
             </p>
 
-            <p>NO. OF LANDSLIDES</p>
+            <p>
+              NO. OF LANDSLIDES
+
+                {reset ? ' (Municipality) ' : ' (Selected Area) '}
+
+
+            </p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
                 <BarChart
                     width={300}
                     height={600}
-                    data={chartData}
+                    data={lschartData}
+                    layout="vertical"
+                    margin={{ left: 20, right: 20 }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis
+                        type="category"
+                        dataKey="name"
+                        tick={{ fill: '#94bdcf' }}
+                    />
+                    <Bar
+                        dataKey="Total"
+                        fill="rgb(0,219,95)"
+                        barSize={20}
+                        label={{ position: 'right', fill: '#ffffff' }}
+                        tick={{ fill: '#94bdcf' }}
+                        radius={[0, 20, 20, 0]}
+                    />
+                </BarChart>
+            </ResponsiveContainer>
+            <p>
+               COMMUNITY INFRASTRUCTURE
+
+                {reset ? ' (Municipality) ' : ' (Selected Area) '}
+
+
+            </p>
+            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                <BarChart
+                    width={300}
+                    height={600}
+                    data={cichartData}
                     layout="vertical"
                     margin={{ left: 20, right: 20 }}
                 >

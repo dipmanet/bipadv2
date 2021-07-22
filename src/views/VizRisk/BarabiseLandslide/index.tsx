@@ -68,6 +68,7 @@ import LeftPane8 from './Narratives/LeftPane8';
 import LeftPane9 from './Narratives/LeftPane9';
 import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
+import { getgeoJsonLayer } from '#views/VizRisk/Panchpokhari/utils';
 
 interface Params {
 }
@@ -205,6 +206,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: false,
     },
+    landslidePolyRequest: {
+        url: ({ params }) => params.url,
+        method: methods.GET,
+        onSuccess: ({ params: { setPolygonResponse }, response }) => {
+            setPolygonResponse(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 
@@ -244,6 +254,7 @@ const BarabiseLandslide = (props) => {
     const [yearClicked, setyearClicked] = useState(false);
     const [buildingCount, setBuildingCount] = useState(0);
     const [polygon, setPolygon] = useState([]);
+    const [polygonResponse, setPolygonResponse] = useState({});
     const [drawData, setDrawData] = useState([]);
     const [chartReset, setChartReset] = useState(false);
 
@@ -256,6 +267,7 @@ const BarabiseLandslide = (props) => {
             incidentsGetRequest,
             incidentsGetRequestBB,
             buildingCountRequest,
+            landslidePolyRequest,
         },
     } = props;
     const handleAnimationStart = () => setReanimate(false);
@@ -287,6 +299,10 @@ const BarabiseLandslide = (props) => {
 
     ciRequest.setDefaultParams({
         handleCI,
+    });
+    landslidePolyRequest.setDefaultParams({
+        setPolygonResponse,
+        url: getgeoJsonLayer('Overall_landslide_barhabise'),
     });
 
     const setIncidentData = (data) => {

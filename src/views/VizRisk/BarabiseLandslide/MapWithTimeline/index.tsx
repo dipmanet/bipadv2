@@ -25,6 +25,8 @@ if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 
+const epochs = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
+
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -157,12 +159,19 @@ class FloodHistoryMap extends React.Component {
             cidata,
             chartReset,
         } = this.props;
+
+
         if (currentPage === 6) {
             if (this.state.playState) {
                 this.handleStateChange();
             }
         }
         if (currentPage !== prevProps.currentPage && currentPage === 7) {
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
             this.generateYearsArr().map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
@@ -182,7 +191,26 @@ class FloodHistoryMap extends React.Component {
             const resetArea = () => {
                 this.props.handlechartReset(!chartReset);
             };
-
+            epochs.map(ci => this.map.on('mouseenter', `${ci}`, (e) => {
+                if (e) {
+                    const { lngLat } = e;
+                    console.log('e', e.features[0]);
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const perimeter = e.features[0].properties.Perim_m;
+                    const area = e.features[0].properties.Area_m2;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                    <p>Perimeter: ${perimeter}</p>
+                    <p>Area: ${area}</p>
+                </div>
+                `,
+                    ).addTo(this.map);
+                }
+            }));
+            epochs.map(ci => this.map.on('mouseleave', `${ci}`, () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+            }));
             const updateArea = (e) => {
                 const { getPolygon, handleDrawSelectedData } = this.props;
                 console.log('cidata,', cidata);
