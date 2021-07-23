@@ -1,0 +1,7 @@
+.station-selector {
+    display: flex;
+    .station-input {
+        margin: var(--spacing-small) var(--spacing-medium);
+        flex: 1;
+    }    
+}

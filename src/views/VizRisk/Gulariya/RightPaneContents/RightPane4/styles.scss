@@ -1,6 +1,8 @@
 
     .vrSideBar{
         position: absolute;
+        display: flex;
+        flex-direction: column;
         background-color:#112330;
         min-width: 300px;
         color:#b6d6e4;

@@ -1,0 +1,17 @@
+.note {
+    padding: calc(var(--spacing-large) - var(--spacing-medium)) var(--spacing-medium);
+    margin: 0 var(--spacing-medium);
+    margin-bottom: var(--spacing-medium);
+    font-size: var(--font-size-medium);
+    display: flex;
+    font-weight: bold;
+    background-color: #CDE8F5;
+    color: #4881B1;
+    border: 1px solid #4881B1;
+    align-items: center;
+    .info-icon {
+        padding-right: var(--spacing-medium);
+        font-size: var(--font-size-extra-large-alt);
+    }
+
+}

@@ -1,0 +1,8 @@
+.error-message {
+    color: var(--color-accent);
+    margin-bottom: var(--spacing-medium);
+    .info-icon {
+        font-size: var(--font-size-medium);
+        padding-right: var(--spacing-small);
+    }
+}

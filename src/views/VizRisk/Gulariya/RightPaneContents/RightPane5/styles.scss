@@ -1,7 +1,10 @@
 
     .vrSideBar{
         position: absolute;
+        display: flex;
+        flex-direction: column;
         background-color:#112330;
+        min-width: 300px;
         color:#b6d6e4;
         padding: 70px 0 0 0;
         // margin-right: 60px;
@@ -9,7 +12,6 @@
         height: 100vh;
         right: 60px;
         overflow-y: scroll;
-        // top: 20%;
        
         h1{
             font-family: 'Playfair Display';

@@ -38,6 +38,7 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         iconName: 'dashboard',
     },
+
     {
         name: 'incident',
         title: 'Incident',
@@ -67,6 +68,14 @@ const routeSettings: SomeRoute[] = [
         path: '/realtime/',
         iconName: 'realtime',
         load: () => import('../views/RealTimeMonitoring'),
+        navbar: true,
+    },
+    {
+        name: 'dataArchive',
+        title: 'Data Archive',
+        path: '/data-archive/',
+        iconName: 'clipboard',
+        load: () => import('../views/DataArchive'),
         navbar: true,
     },
     {

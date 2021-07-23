@@ -1,0 +1,42 @@
+.river-modal {
+    width: 90vw;
+    height: 90vh;
+    overflow: auto;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        .modal-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            // border: 2px solid red;
+            min-height: 350px;
+            & > * {
+                // border: 1px solid red;
+                border: 1px solid rgba($color: #000000, $alpha: 0.5);
+                margin: 4px;
+                padding: 4px;
+            }
+            .modal-map {
+                .map-1 {
+                    flex-basis: calc(50% - var(--spacing-small) * 2);
+                    margin: 0 var(--spacing-small);
+                    height: 100%;
+                }
+            }
+
+            .modal-details {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-one-month {
+                overflow: scroll;
+            }
+
+            .modal-twelve-month {
+                overflow: scroll;
+            }
+        }
+    }
+}

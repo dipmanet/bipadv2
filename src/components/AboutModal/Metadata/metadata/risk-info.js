@@ -50,6 +50,7 @@ export const riskInfoHDIMetadataList = [
             ['Organization name', 'National Planning Commission'],
             ['Position name', ''],
             ['Role', ''],
+            ['Email', ''],
         ],
     },
     {
@@ -155,6 +156,7 @@ export const riskInfoHouseholdAndIndividualVulnerabalityMetadataList = [
             ['Organization name', 'Central Bureau of Statistics, Government of Nepal'],
             ['Position name', 'Director, Environment Statistics Section, Social Statistics Division'],
             ['Role', ''],
+            ['Email', ''],
         ],
     },
     {
@@ -260,6 +262,7 @@ export const riskInfoEarthquakeRiskModelingMetadataList = [
             ['Organization name', 'Durham University'],
             ['Position name', 'Researchers'],
             ['Role', ''],
+            ['Email', ''],
         ],
     },
     {
@@ -365,6 +368,7 @@ export const riskInfoFloodRiskModelingMetadataList = [
             ['Organization name', 'Water Resources Project Preparation Facility, Department of Water Resources and Irrigation'],
             ['Position name', 'Deputy Project Director/Procurement Chief'],
             ['Role', ''],
+            ['Email', ''],
         ],
     },
     {

@@ -137,10 +137,11 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { activeAttribute } = this.state;
-
         const layerList = getResults(requests, 'layerGetRequest');
+
         const layerGroupList = getResults(requests, 'layerGroupGetRequest');
         const pending = isAnyRequestPending(requests);
+
 
         const groupedLayers = this.getGroupedLayers(layerList, layerGroupList);
 

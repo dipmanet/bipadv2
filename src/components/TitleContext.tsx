@@ -11,6 +11,13 @@ export interface DamageAndLoss {
     endDate: string;
 }
 
+export interface DataArchive {
+    mainModule: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+}
+
 export interface TitleContextProps {
     dashboard?: string;
     incident?: string;
@@ -18,6 +25,7 @@ export interface TitleContextProps {
     realtime?: number;
     profile?: Profile;
     capacityAndResources?: string;
+    dataArchive?: DataArchive;
     source?: string;
     setDashboard?: Function;
     setIncident?: Function;
@@ -25,6 +33,7 @@ export interface TitleContextProps {
     setRealtime?: Function;
     setProfile?: Function;
     setCapacityAndResources?: Function;
+    setDataArchive?: Function;
     setSource?: Function;
 }
 
@@ -50,6 +59,12 @@ const TitleContextProvider = (props: Props) => {
         subModule: '',
     });
     const [capacityAndResources, setCapacityAndResources] = useState('');
+    const [dataArchive, setDataArchive] = useState({
+        mainModule: '',
+        location: '',
+        startDate: '',
+        endDate: '',
+    });
     const [source, setSource] = useState('');
 
     const titleProps = {
@@ -59,6 +74,7 @@ const TitleContextProvider = (props: Props) => {
         realtime,
         profile,
         capacityAndResources,
+        dataArchive,
         source,
         setDashboard,
         setIncident,
@@ -66,6 +82,7 @@ const TitleContextProvider = (props: Props) => {
         setRealtime,
         setProfile,
         setCapacityAndResources,
+        setDataArchive,
         setSource,
     };
 

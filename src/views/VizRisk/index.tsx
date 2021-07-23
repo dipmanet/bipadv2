@@ -7,19 +7,25 @@ import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
 import Tikapur from './Tikapur';
 import Dhangadi from './Dhangadi';
-import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
-import Biratnagar from './Biratnagar';
+// import Biratnagar from './Biratnagar';
 import Barabise from './BarabiseLandslide';
 // import BarabiseLandslide from './BarabiseLandslide';
+
+import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
+import Panchpokhari from './Panchpokhari';
+import Jugal from './Jugal';
+// eslint-disable-next-line import/no-unresolved
 
 
 const slides = [
     <Rajapur />,
     <Tikapur />,
     <Gulariya />,
-    <Biratnagar />,
+    // <Biratnagar />,
     <Dhangadi />,
     <Barabise />,
+    <Panchpokhari />,
+    <Jugal />,
 
 ];
 
@@ -28,7 +34,6 @@ const VizRiskMainPage = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [title, setTitle] = useState('');
     const [mun, setMun] = useState('');
-    // console.log(props);
 
     const handleMenuIconClick = () => {
         setShowMenu(true);
@@ -46,15 +51,18 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'gulariya') {
             setCurrentPage(2);
             setTitle('Visualising Flood Exposure');
-        } else if (municipality === 'biratnagar') {
+        } else if (municipality === 'dhangadi') {
             setCurrentPage(3);
             setTitle('Visualising Flood Exposure');
-        } else if (municipality === 'dhangadi') {
-            setCurrentPage(4);
-            setTitle('Visualising Flood Exposure');
         } else if (municipality === 'barabise') {
-            setCurrentPage(5);
+            setCurrentPage(4);
             setTitle('Visualising Landslide Exposure');
+        } else if (municipality === 'pachpokhari') {
+            setCurrentPage(5);
+            setTitle('Visualising Multihazard Exposure');
+        } else if (municipality === 'jugal') {
+            setCurrentPage(6);
+            setTitle('Visualising Multihazard Exposure');
         }
     };
 
@@ -66,8 +74,9 @@ const VizRiskMainPage = () => {
         floodInfraChosen: 'all',
         evacChosen: 'all',
     };
+
     const getBtnStyle = () => {
-        if (mun === 'pachpokhari' || mun === 'jugal' || mun === 'barabise') {
+        if (mun === 'pachpokhari' || mun === 'jugal') {
             if (showMenu) {
                 return styles.hamburgerBtnContMenu;
             }
@@ -79,7 +88,6 @@ const VizRiskMainPage = () => {
         }
         return styles.hamburgerBtnContMenu;
     };
-
 
     return (
         <VizRiskContext.Provider value={vrcontextProps}>
@@ -119,40 +127,52 @@ const VizRiskMainPage = () => {
                 <div className={styles.vizrisknmenupagecontainer}>
                     {showMenu ? (
                         <div className={styles.vizrisknmenupage}>
-                            <p className={styles.menuTitle}>Visualizing Flood Exposure</p>
+                            <p className={styles.menuTitle}>Visualizing Flood Exposure </p>
                             <div className={styles.vizriskmunicipalityName}>
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('rajapur')}
+
                                 >
-                                    <h1 className={styles.menuItems}>Rajapur Municipality</h1>
+                                    <h1
+                                        className={styles.menuItems}
+                                    >
+                                            Rajapur Municipality
+                                    </h1>
 
                                 </Button>
+
+                            </div>
+
+                            <div className={styles.vizriskmunicipalityName}>
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('tikapur')}
                                 >
-                                    <h1 className={styles.menuItems}>Tikapur Municipality</h1>
+                                    <h1 className={styles.menuItems}>
+                                        Tikapur Municipality
+                                    </h1>
 
                                 </Button>
+                            </div>
+                            <div className={styles.vizriskmunicipalityName}>
 
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('gulariya')}
-                                >
-                                    <h1 className={styles.menuItems}>Gulariya Municipality</h1>
 
-                                </Button>
-                                {/* <Button
-                                    transparent
-                                    onClick={() => handleMenuTitleClick('biratnagar')}
                                 >
-                                    <h1 className={styles.menuItems}>
-                                        Biratnagar Metropolitican City
-
+                                    <h1
+                                        className={styles.menuItems}
+                                    >
+                                            Gulariya Municipality
                                     </h1>
 
-                                </Button> */}
+                                </Button>
+                            </div>
+
+                            <div className={styles.vizriskmunicipalityName}>
+
                                 <Button
                                     transparent
                                     onClick={() => handleMenuTitleClick('dhangadi')}
@@ -163,17 +183,54 @@ const VizRiskMainPage = () => {
                                     </h1>
 
                                 </Button>
+                            </div>
+
+                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
+                            <div className={styles.vizriskmunicipalityName}>
+
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('barabise')}
+                                >
+                                    <h1 className={styles.menuItems}>
+                                        Barhabise Municipality
+
+                                    </h1>
+
+                                </Button>
 
                             </div>
-                            <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick('barabise')}
 
-                            >
-                                <h1 className={styles.menuItems}>Bharabise Municipality</h1>
+                            <p className={styles.menuTitle}>Visualizing Multi Hazard Exposure </p>
 
-                            </Button>
+                            <div className={styles.vizriskmunicipalityName}>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('jugal')}
+                                >
+                                    <h1
+                                        className={styles.menuItems}
+                                    >
+                                            Jugal Rural Municipality
+                                    </h1>
+
+                                </Button>
+
+                            </div>
+                            <div className={styles.vizriskmunicipalityName}>
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('pachpokhari')}
+                                >
+                                    <h1
+                                        className={styles.menuItems}
+                                    >
+                                            Panchpokhari Thangpal Rural Municipality
+                                    </h1>
+
+                                </Button>
+
+                            </div>
 
 
                         </div>

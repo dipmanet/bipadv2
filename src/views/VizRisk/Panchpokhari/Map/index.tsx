@@ -2,14 +2,11 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import MapboxLegendControl from '@watergis/mapbox-gl-legend';
 import { isDefined } from '@togglecorp/fujs';
 import { mapSources } from '#constants';
 // import CIData from '../RightPaneContents/RightPane4/ci';
 import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
 import styles from './styles.scss';
-import '@watergis/mapbox-gl-legend/css/styles.css';
 import { getgeoJsonLayer, getGeoJSONPH } from '#views/VizRisk/Panchpokhari/utils';
 
 import {
@@ -677,7 +674,7 @@ class FloodHistoryMap extends React.Component {
         const mapStyle = {
             position: 'absolute',
             width: '70%',
-            left: 'calc(30%)',
+            left: 'calc(30% - 60px)',
             top: 0,
             // bottom: 0,
             height: '100vh',

@@ -1,0 +1,25 @@
+
+.river-pill {
+    min-width: 70px;
+    border-radius: 3rem;
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-extra-small-alt) ;
+    text-align: center;
+}
+
+.below-warning {
+    background-color: #00ac36;
+    color: white;
+}
+
+.above-warning {
+    background-color: #f9ff00;
+    color: black;
+}
+
+.above-danger {
+    background-color: #ff0000;
+    color: white;
+}
+

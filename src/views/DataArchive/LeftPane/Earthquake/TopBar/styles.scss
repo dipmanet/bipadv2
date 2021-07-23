@@ -1,0 +1,15 @@
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .date-range {
+        display: flex;
+        flex-shrink: 0;
+    }
+
+    .show-details-button {
+        flex-shrink: 0;
+        margin: var(--spacing-extra-small) var(--spacing-medium);
+        font-size: var(--font-size-large);
+    }
+}
