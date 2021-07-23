@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
+import { mapSources } from '#constants';
 import { drawStyle } from '../Data/mapbox';
 
 import {
@@ -17,15 +18,11 @@ import {
     selectedMunicipalityIdSelector,
 } from '#selectors';
 
+import {
+    getWardFilter,
+} from '#utils/domain';
 
 import TimelineSlider from './TimelineSlider';
-
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
-if (TOKEN) {
-    mapboxgl.accessToken = TOKEN;
-}
-
-const epochs = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -38,6 +35,25 @@ const mapStateToProps = (state, props) => ({
     selectedDistrictId: selectedDistrictIdSelector(state, props),
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
+
+const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+if (TOKEN) {
+    mapboxgl.accessToken = TOKEN;
+}
+
+const epochs = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
+
+const riskExpression = [
+    'interpolate',
+    ['linear'],
+    ['feature-state', 'value'],
+    1, 'rgb(230,245,152)', 2, 'rgb(230,245,152)',
+    3, 'rgb(245,173,96)', 4, 'rgb(213,62,79)',
+    5, 'rgb(254,251,191)', 6, 'rgb(230,245,152)',
+    7, 'rgb(171,221,196)', 8, 'rgb(254,251,191)',
+    9, 'rgb(252,224,139)',
+];
+
 const ciRef = {
     health: 'Hospital',
     finance: 'Financial Institution',
@@ -74,7 +90,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { bahrabiseLandSlide, currentPage, cidata: ci } = this.props;
+        const { bahrabiseLandSlide, currentPage, cidata: ci, wards } = this.props;
 
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -94,12 +110,19 @@ class FloodHistoryMap extends React.Component {
 
         // this.map.addControl(new MapboxLegendControl({},
         // { reverseOrder: false }), 'bottom-right');
-
+        const mapping = wards.filter(item => item.municipality === 23002).map(item => ({
+            ...item,
+            value: Number(item.title),
+        }));
         this.map.on('style.load', () => {
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseForest', 'visibility', 'none');
             this.map.setLayoutProperty('bahrabiseRoads', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseScrub', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseScree', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseShingle', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseStone', 'visibility', 'none');
             this.map.addSource('hillshadeBahrabiseLocal', {
                 type: 'raster',
                 tiles: [this.getHillshadeLayer()],
@@ -171,6 +194,44 @@ class FloodHistoryMap extends React.Component {
                 },
             );
             this.map.moveLayer('incidents-layer');
+
+            this.map.addSource('vizrisk-fills', {
+                type: 'vector',
+                url: mapSources.nepal.url,
+            });
+
+            this.map.addLayer({
+                id: 'risk-fill-local',
+                source: 'vizrisk-fills',
+                'source-layer': mapSources.nepal.layers.ward,
+                type: 'fill',
+                paint: {
+                    'fill-color': riskExpression,
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0,
+                        1,
+                    ],
+                },
+                layout: {
+                    visibility: 'none',
+                },
+                filter: getWardFilter(3, 24, 23002, wards),
+            });
+
+            mapping.forEach((attribute) => {
+                this.map.setFeatureState(
+                    {
+                        id: attribute.id,
+                        source: 'vizrisk-fills',
+                        sourceLayer: mapSources.nepal.layers.ward,
+                    },
+                    { value: attribute.value },
+                );
+            });
+
+
             if (ci.length > 0) {
                 // const this.map = this.mapRef.current.getthis.Map();
                 const cifeatures = ci.map(f => ({
@@ -392,7 +453,7 @@ class FloodHistoryMap extends React.Component {
         }
 
 
-        if (currentPage === 7) {
+        if (currentPage === 7 || currentPage === 8) {
             if (yearClicked !== prevProps.yearClicked) {
                 this.resetPolyLayers();
                 landslideYear.map((layer) => {
@@ -402,12 +463,29 @@ class FloodHistoryMap extends React.Component {
             }
         }
 
+        if (currentPage !== prevProps.currentPage && currentPage === 9) {
+            // add sus layer
+
+            this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
+            // this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
+            // this.map.moveLayer('suseptibility-bahrabise');
+            landslideYear.map((layer) => {
+                this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                return null;
+            });
+            console.log('risk page and map', this.map);
+        }
+
         if (currentPage !== prevProps.currentPage && currentPage === 8) {
             // add sus layer
             this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
+            this.map.setLayoutProperty('risk-fill-local', 'visibility', 'none');
             // this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
             this.map.moveLayer('suseptibility-bahrabise');
-
+            landslideYear.map((layer) => {
+                this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                return null;
+            });
             console.log('sus page and map', this.map);
         }
 

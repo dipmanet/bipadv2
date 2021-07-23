@@ -66,6 +66,7 @@ import LeftPane6 from './Narratives/LeftPane6';
 import LeftPane7 from './Narratives/LeftPane7';
 import LeftPane8 from './Narratives/LeftPane8';
 import LeftPane9 from './Narratives/LeftPane9';
+import LeftPane10 from './Narratives/LeftPane10';
 import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
 import CISwitchLegends from './Components/CISwitchLegends';
@@ -102,6 +103,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     regions: regionsSelector(state),
     filters: filtersSelector(state),
     hazards: hazardTypesSelector(state),
+
 
 });
 
@@ -229,6 +231,7 @@ const leftElements = [
     <LeftPane7 />,
     <LeftPane8 />,
     <LeftPane9 />,
+    <LeftPane10 />,
 ];
 
 const BarabiseLandslide = (props) => {
@@ -633,6 +636,19 @@ const BarabiseLandslide = (props) => {
                                         />
                                     )
                                 }
+                                {
+                                    currentPage === 9
+                                    && (
+                                        <LeftPane10
+                                            data={props}
+                                            ci={ci}
+                                            incidentFilterYear={incidentFilterYear}
+                                            bahrabiseLandSlide={incidents}
+                                            landSlide={bahrabiseIncidents}
+                                            landslideYear={landslideYear}
+                                        />
+                                    )
+                                }
                                 <NavButtons
                                     handleNext={handleNext}
                                     handlePrev={handlePrev}
@@ -688,6 +704,9 @@ const BarabiseLandslide = (props) => {
             {currentPage === 8
                 && (
                     <>
+                        <InventoryLegend
+                            handleYearSelect={handleYearSelect}
+                        />
                         <CISwitchLegends
                             hideCILegends={hideCILegends}
                             handleCIChange={handleCIChange}
@@ -700,8 +719,13 @@ const BarabiseLandslide = (props) => {
             {currentPage === 9
                 && (
                     <>
+                        <InventoryLegend
+                            handleYearSelect={handleYearSelect}
+                        />
                         <CISwitchLegends
+                            hideCILegends={hideCILegends}
                             handleCIChange={handleCIChange}
+                            handlehideCILegends={handlehideCILegends}
                         />
                     </>
                 )

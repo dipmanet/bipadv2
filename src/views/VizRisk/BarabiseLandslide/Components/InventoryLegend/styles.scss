@@ -106,11 +106,12 @@ $button-color: rgb(0,170,223);
                     
                     .section{
                         border: 1px solid $button-color;
-                        padding: 0 5px;
+                        padding: 5px;
                         margin: 0 3px;
                         .text{
                             color: white;
                             font-size: 11px;
+                            font-weight: 600;
                         }
                         .underline{
                             width: 20px;
@@ -153,7 +154,7 @@ $button-color: rgb(0,170,223);
 
                     .section{
                         margin: 0 3px;
-                        padding: 0 5px;
+                        padding: 5px;
                         .text{
                             color: white;
                             font-size: 11px;
