@@ -68,6 +68,7 @@ import LeftPane8 from './Narratives/LeftPane8';
 import LeftPane9 from './Narratives/LeftPane9';
 import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
+import CISwitchLegends from './Components/CISwitchLegends';
 import { getgeoJsonLayer } from '#views/VizRisk/Panchpokhari/utils';
 
 interface Params {
@@ -257,6 +258,8 @@ const BarabiseLandslide = (props) => {
     const [polygonResponse, setPolygonResponse] = useState({});
     const [drawData, setDrawData] = useState([]);
     const [chartReset, setChartReset] = useState(false);
+    const [showCI, setShowCI] = useState(false);
+    const [hideCILegends, sethideCILegends] = useState(true);
 
     const {
         // incidentList,
@@ -381,6 +384,10 @@ const BarabiseLandslide = (props) => {
         setPopulation(population);
     };
 
+    const handleCIChange = (val) => {
+        setShowCI(val);
+    };
+
     const disableNavBtns = (val) => {
         if (val === 'Right' || pending) {
             setdisableNavRightBtn(true);
@@ -425,6 +432,12 @@ const BarabiseLandslide = (props) => {
     const handleDrawSelectedData = (result) => {
         setDrawData(result);
     };
+
+    const handlehideCILegends = (data) => {
+        sethideCILegends(data);
+        console.log('hide data:', data);
+    };
+
 
     return (
         <>
@@ -484,6 +497,7 @@ const BarabiseLandslide = (props) => {
                             chartReset={chartReset}
                             handlechartReset={handlechartReset}
                             handleDrawSelectedData={handleDrawSelectedData}
+                            hideCI={hideCILegends}
                         />
                     </>
                 )
@@ -641,12 +655,13 @@ const BarabiseLandslide = (props) => {
                     />
                 )
             }
-            {currentPage === 5
+            {(currentPage === 5 || currentPage === 8)
                 && (
                     <CriticalInfraLegends
                         handlePopulationChange={handlePopulationChange}
                         handleCritical={handleCritical}
                         criticalElement={criticalElement}
+                        hide={hideCILegends}
                     />
                 )
             }
@@ -658,10 +673,37 @@ const BarabiseLandslide = (props) => {
             }
             {currentPage === 7
                 && (
-                    <InventoryLegend
-                        handleYearSelect={handleYearSelect}
-                    />
+                    <>
+                        <InventoryLegend
+                            handleYearSelect={handleYearSelect}
+                        />
+                        <CISwitchLegends
+                            handleCIChange={handleCIChange}
+                            handlehideCILegends={handlehideCILegends}
+                            hideCILegends={hideCILegends}
+                        />
+                    </>
+                )
+            }
+            {currentPage === 8
+                && (
+                    <>
+                        <CISwitchLegends
+                            hideCILegends={hideCILegends}
+                            handleCIChange={handleCIChange}
+                            handlehideCILegends={handlehideCILegends}
 
+                        />
+                    </>
+                )
+            }
+            {currentPage === 9
+                && (
+                    <>
+                        <CISwitchLegends
+                            handleCIChange={handleCIChange}
+                        />
+                    </>
                 )
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1

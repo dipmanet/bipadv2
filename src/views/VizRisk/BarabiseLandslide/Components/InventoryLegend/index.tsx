@@ -2,9 +2,20 @@ import React, { useState, useEffect } from 'react';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
 
+const colorArr = [
+    '#808080',
+    '#3d26a6',
+    '#1e96eb',
+    '#80cb57',
+    '#ff5500',
+    '#a80000',
+    '#750000',
+
+];
 const LandCoverLegends = (props) => {
     const { handleYearSelect, criticalFlood } = props;
-    const [showAll, setshowAll] = useState(true);
+    const [compareMode, setCompare] = useState(false);
+    const [initial, setInitial] = useState(true);
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
 
@@ -22,15 +33,11 @@ const LandCoverLegends = (props) => {
     };
 
     const arr = generateYearsArr();
-    const [selectedArr, setSelectedArr] = useState(arr);
+    const [selectedArr, setSelectedArr] = useState([]);
 
     const handleyearClick = (year) => {
-        if (year === 'all') {
-            setSelectedArr(arr);
-            handleYearSelect(arr);
-            setshowAll(true);
-        } else {
-            setshowAll(false);
+        setInitial(false);
+        if (compareMode) {
             const array = [...selectedArr];
             const index = selectedArr.indexOf(year);
             if (index === -1) {
@@ -42,64 +49,63 @@ const LandCoverLegends = (props) => {
                 setSelectedArr(newArr);
                 handleYearSelect(newArr);
             }
+        } else {
+            const array = [year];
+            setSelectedArr(array);
+            handleYearSelect(array);
         }
     };
+
+    const handleCompareClick = () => {
+        if (compareMode) {
+            const array = [];
+            handleYearSelect([]);
+            setSelectedArr(array);
+        }
+        setInitial(false);
+        setCompare(!compareMode);
+    };
+
+    useEffect(() => {
+        handleYearSelect([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
     return (
         <>
             <div className={styles.landslideCriticalLegend}>
-
-                <h2>Years</h2>
-
                 <div className={styles.criticalIcons}>
-
-                    <div className={styles.toggleContainer}>
-                        <div className={styles.infraIconContainer}>
+                    <p>Post Monsoon Landslide</p>
+                    {arr.sort((a, b) => a - b).map((ls, i) => (
+                        <div key={ls} className={styles.infraIconContainer}>
                             <button
                                 type="button"
-                                className={showAll
+                                className={selectedArr.indexOf(ls) !== -1
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleyearClick('all')}
+                                onClick={() => handleyearClick(ls)}
                             >
-                                <Icon
-                                    name="circle"
-                                    className={showAll
-                                        ? styles.allIconSelected
-                                        : styles.allIcon
-                                    }
-                                />
-
-                                    Show All
+                                <div className={styles.section}>
+                                    <span className={styles.text}>
+                                        {ls}
+                                    </span>
+                                    <div
+                                        className={styles.underline}
+                                        style={{ backgroundColor: colorArr[i] }}
+                                    />
+                                </div>
                             </button>
                         </div>
-
-                        {arr.map((ls, i) => (
-                            <div key={ls} className={styles.infraIconContainer}>
-                                <button
-                                    type="button"
-                                    className={selectedArr.indexOf(ls) !== -1
-                                        ? styles.criticalButtonSelected
-                                        : styles.criticalButton}
-                                    onClick={() => handleyearClick(ls)}
-                                >
-
-                                    <Icon
-                                        name="circle"
-                                        className={selectedArr.indexOf(ls) !== -1
-                                            ? styles.allIconSelected
-                                            : styles.allIcon
-                                        }
-                                    />
-                                    <p>
-                                        {ls}
-                                    </p>
-                                </button>
-                            </div>
-                        ))
-                        }
-
-                    </div>
+                    ))
+                    }
+                    <button
+                        type="button"
+                        className={styles.navbutton}
+                        onClick={() => handleCompareClick()}
+                    >
+                        {compareMode ? 'RESET' : 'COMPARE'}
+                    </button>
                 </div>
             </div>
 

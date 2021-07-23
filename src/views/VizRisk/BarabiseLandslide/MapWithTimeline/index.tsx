@@ -43,6 +43,16 @@ const ciRef = {
     finance: 'Financial Institution',
     education: 'Education Instution',
 };
+const draw = new MapboxDraw({
+    displayControlsDefault: false,
+    userProperties: true,
+    controls: {
+        polygon: true,
+        trash: true,
+    },
+    styles: drawStyle,
+    defaultMode: 'draw_polygon',
+});
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -54,6 +64,8 @@ class FloodHistoryMap extends React.Component {
             zoom: 11,
             incidentYear: '9',
             playState: false,
+            geoArr: {},
+            resourceArr: [],
         };
     }
 
@@ -62,17 +74,8 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { bahrabiseLandSlide, currentPage } = this.props;
-        // if (currentPage === 6) {
-        //     this.interval = setInterval(() => {
-        //         this.setState((prevState) => {
-        //             if (Number(prevState.incidentYear) < 10) {
-        //                 return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
-        //             }
-        //             return ({ incidentYear: '0' });
-        //         });
-        //     }, 1000);
-        // }
+        const { bahrabiseLandSlide, currentPage, cidata: ci } = this.props;
+
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -126,6 +129,8 @@ class FloodHistoryMap extends React.Component {
                     date: item.date,
                 },
             }));
+
+
             const geoData = {
                 type: 'FeatureCollection',
                 features,
@@ -145,8 +150,106 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
-            this.map.moveLayer('incidents-layer');
 
+            this.map.addSource('suseptibilityBahrabise', {
+                type: 'raster',
+                tiles: [this.getSusceptibilityLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'suseptibility-bahrabise',
+                    type: 'raster',
+                    source: 'suseptibilityBahrabise',
+                    paint: {
+                        'raster-opacity': 1,
+                    },
+                    layout: {
+                        visibility: 'none',
+                    },
+                },
+            );
+            this.map.moveLayer('incidents-layer');
+            if (ci.length > 0) {
+                // const this.map = this.mapRef.current.getthis.Map();
+                const cifeatures = ci.map(f => ({
+                    properties: {
+                        resourceType: f.resourceType,
+                        title: f.title,
+                        id: f.id,
+                    },
+                    geometry: f.point,
+                }));
+                const geoArr = {
+                    type: 'FeatureCollection',
+                    features: cifeatures,
+                };
+                const resourceArr = [...new Set(ci.map(c => c.resourceType))];
+                this.setState({ resourceArr });
+                this.setState({ geoArr });
+                resourceArr.map((layer) => {
+                    this.map.addSource(`${layer}`, {
+                        type: 'geojson',
+                        data: this.getGeoJSON(layer, geoArr),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-ci-${layer}`,
+                        type: 'circle',
+                        source: `${layer}`,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                // '#a4ac5e',
+                                '#3b5bc2',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                        layout: {
+                            visibility: 'none',
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `unclustered-ci-${layer}`,
+                        type: 'symbol',
+                        source: `${layer}`,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['get', 'resourceType'],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                            visibility: 'none',
+                        },
+                    });
+                    this.map.addLayer({
+                        id: `clusters-count-ci-${layer}`,
+                        type: 'symbol',
+                        source: `${layer}`,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                            visibility: 'none',
+                        },
+                    });
+                    return null;
+                });
+            }
             // this.handlePlayPause();
         });
     }
@@ -158,20 +261,17 @@ class FloodHistoryMap extends React.Component {
             landslideYear,
             cidata,
             chartReset,
+            hideCI,
         } = this.props;
 
-        const draw = new MapboxDraw({
-            displayControlsDefault: false,
-            userProperties: true,
-            controls: {
-                polygon: true,
-                trash: true,
-            },
-            styles: drawStyle,
-            defaultMode: 'draw_polygon',
-        });
 
         if (currentPage === 6 && prevProps.currentPage === 7) {
+            this.map.removeControl(draw);
+            console.log('test');
+        }
+
+
+        if (currentPage === 7 && prevProps.currentPage === 8) {
             this.map.removeControl(draw);
         }
 
@@ -291,11 +391,41 @@ class FloodHistoryMap extends React.Component {
             this.map.on('draw.update', updateArea);
         }
 
+
         if (currentPage === 7) {
             if (yearClicked !== prevProps.yearClicked) {
                 this.resetPolyLayers();
                 landslideYear.map((layer) => {
                     this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                    return null;
+                });
+            }
+        }
+
+        if (currentPage !== prevProps.currentPage && currentPage === 8) {
+            // add sus layer
+            this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
+            // this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
+            this.map.moveLayer('suseptibility-bahrabise');
+
+            console.log('sus page and map', this.map);
+        }
+
+        if (hideCI !== prevProps.hideCI) {
+            if (!hideCI) {
+                this.state.resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'visible');
+
+                    return null;
+                });
+            } else {
+                this.state.resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+
                     return null;
                 });
             }
@@ -310,6 +440,21 @@ class FloodHistoryMap extends React.Component {
             clearInterval(this.interval);
         }
     }
+
+    public getSusceptibilityLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.0',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Barhabise_Durham_Susceptibility',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public getTitleFromLatLng = (featureObject, cidata) => {
         const latToCompare = featureObject.geometry.coordinates[1];
@@ -343,12 +488,13 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
+
     public getGeoJSON = (filterBy: string, data: any) => {
         const geoObj = {};
         geoObj.type = 'FeatureCollection';
         geoObj.name = filterBy;
         geoObj.features = [];
-        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
+        const d = data.features.filter(item => item.properties.resourceType === filterBy);
         geoObj.features.push(...d);
         return geoObj;
     }

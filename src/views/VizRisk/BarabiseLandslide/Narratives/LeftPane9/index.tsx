@@ -51,10 +51,13 @@ const getTotalLoss = (year, arr) => {
     return 0;
 };
 
-const LeftPane9 = (props: Props) => {
+const LeftPane8 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
-    const { incidentFilterYear, bahrabiseLandSlide, landSlide } = props;
+    const [cichartData, setCIChartData] = useState([]);
+    const [reset, setReset] = useState(true);
+    const [lschartData, setLschartData] = useState(true);
+    const { drawData, landSlide, chartReset, ci } = props;
 
     useEffect(() => {
         if (landSlide) {
@@ -80,24 +83,96 @@ const LeftPane9 = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (drawData) {
+            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
+            const cD = hazardArr.map(hazard => ({
+                name: hazard,
+                Total: drawData.filter(item => item.hazardTitle === hazard).length,
+            }));
+            setCIChartData(cD);
+            setReset(false);
+        }
+    }, [drawData]);
+
+    useEffect(() => {
+        if (ci) {
+            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const cD = resArr.map(res => ({
+                name: res,
+                Total: ci.filter(item => item.resourceType === res).length,
+            }));
+            setCIChartData(cD);
+            setReset(true);
+        }
+    }, [chartReset, ci]);
+
+    useEffect(() => {
+        if (ci) {
+            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const cD = resArr.map(res => ({
+                name: res,
+                Total: ci.filter(item => item.resourceType === res).length,
+            }));
+            setCIChartData(cD);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Susceptibility</h1>
             <p>
-            The map shows the area of Barhabise Municipality in
-            which landslides are likely to occur. The red color
-            signifies the higher likelihood and blue color signifies
-            the lower likelihood of landslide occurrences.
+                The map shows the area of Barhabise Municipality in
+                which landslides are likely to occur. The red color
+                signifies the higher likelihood and blue color signifies
+                the lower likelihood of landslide occurrences.
             </p>
 
+            <p>
+              NO. OF LANDSLIDES
 
-            <p>NO. OF LANDSLIDES</p>
+                {reset ? ' (Municipality) ' : ' (Selected Area) '}
+
+
+            </p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
                 <BarChart
                     width={300}
                     height={600}
-                    data={incidentChart}
+                    data={lschartData}
+                    layout="vertical"
+                    margin={{ left: 20, right: 20 }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis
+                        type="category"
+                        dataKey="name"
+                        tick={{ fill: '#94bdcf' }}
+                    />
+                    <Bar
+                        dataKey="Total"
+                        fill="rgb(0,219,95)"
+                        barSize={20}
+                        label={{ position: 'right', fill: '#ffffff' }}
+                        tick={{ fill: '#94bdcf' }}
+                        radius={[0, 20, 20, 0]}
+                    />
+                </BarChart>
+            </ResponsiveContainer>
+            <p>
+               COMMUNITY INFRASTRUCTURE
+
+                {reset ? ' (Municipality) ' : ' (Selected Area) '}
+
+
+            </p>
+            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
+                <BarChart
+                    width={300}
+                    height={600}
+                    data={cichartData}
                     layout="vertical"
                     margin={{ left: 20, right: 20 }}
                 >
@@ -122,4 +197,4 @@ const LeftPane9 = (props: Props) => {
     );
 };
 
-export default LeftPane9;
+export default LeftPane8;
