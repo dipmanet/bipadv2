@@ -43,6 +43,13 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                     </div>
                 </div>
                 <div className={styles.climatelegend}>
+                    <div className={styles.legendOther} />
+                    <div className={styles.legendText}>
+                    Other Pop
+                        <sup>n</sup>
+                    </div>
+                </div>
+                <div className={styles.climatelegend}>
                     <div className={styles.legendDaily} />
                     <div className={styles.legendText}>
                        Total Family Count
