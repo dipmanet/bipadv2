@@ -34,14 +34,15 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
                 <p>
-                    Karnali river borders the Tikapur municipality in the east. The Karnali river
-                    flows to the Terai plains from a narrow gorge at Chisapani, where it bifurcates
-                    into Geruwa and Karnali river.
+                Karnali river borders the Tikapur municipality in the east.
+                The Karnali river flows to the Terai plains from a narrow gorge
+                at Chisapani, where it bifurcates into Geruwa and Karnali rivers.
                 </p>
                 <p>
-                    All of the residential and governmental buildings, religious and cultural sites,
-                    banking institutions, critical infrastructures such as hospitals, schools,
-                    bridges in Tikapur are at constant threat of flooding every monsoon.
+                All of the residential and governmental buildings, religious and
+                cultural sites, banking institutions, critical infrastructures such
+                as hospitals, schools, bridges in Tikapur are at constant threat of
+                flooding every monsoon.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'45%'}>
@@ -66,10 +67,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             fill="#ffbf00"
                             // barCategoryGap={30}
                             barCategoryGap={20}
-
+                            label={{ position: 'insideRight' }}
                             tick={{ fill: '#94bdcf' }}
                         >
-                            <LabelList content={renderCustomizedLabel} />
+                            {/* <LabelList content={renderCustomizedLabel} /> */}
                         </Bar>
                         {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
                         {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}

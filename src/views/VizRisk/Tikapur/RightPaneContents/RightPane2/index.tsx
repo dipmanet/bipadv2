@@ -39,7 +39,7 @@ const data = [
 console.log('This is final formal>>>', data);
 const COLORS_CHART = [
     '#d3e378', // agriculture
-    '#d5d3d3', // other
+    '#f3f2f2', // other
     '#00a811', // forest
     '#0765AA', // water bodies
     '#F2F2F2', // building
@@ -161,17 +161,10 @@ class RightPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
 
                 <h1>Land Cover</h1>
-
-                {/* <p>
-                    {' '}
-                    Located in the Terai region and lying close to water bodies,
-                    Rajapur has fertile and arable land.
-
-                </p> */}
                 <p>
-                Out of a total area of 118 sq.km, 63.3% of the land is used for agriculture.
-                 Forests cover 12.6%, water bodies cover 5.2% and buildings cover 1.4% of
-                  the land area. Other areas in Tikpaur are covered by sand, grassland and shrubs.
+                Out of a total area of 118 sq. km, 63.3% of the land is used for agriculture.
+                Forests cover 12.6%, water bodies cover 5.2% and buildings cover 1.4% of the
+                land area. Other areas in Tikapur are covered by sand, meadow, and shrubs.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -279,7 +272,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </div>
                 {/* <SourceInfo /> */}
-                {/* <Disclaimer /> */}
+
             </div>
         );
     }

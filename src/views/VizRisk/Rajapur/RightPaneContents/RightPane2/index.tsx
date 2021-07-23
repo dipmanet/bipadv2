@@ -36,7 +36,7 @@ const data = [
 console.log('This >>>>', data);
 const COLORS_CHART = [
     '#d3e378',
-    '#b4b4b4',
+    '#f3f2f2',
     '#00a811',
     '#2b4253',
     '#d5d3d3',
