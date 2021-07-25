@@ -30,7 +30,7 @@ interface Props{
 }
 
 const ciRef = {
-    finance: 'Finance.',
+    finance: 'Finance',
     health: 'Hospitals',
     education: 'Educational Institutions',
 };
