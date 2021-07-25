@@ -213,8 +213,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     landslidePolyRequest: {
         url: ({ params }) => params.url,
         method: methods.GET,
-        onSuccess: ({ params: { setPolygonResponse }, response }) => {
-            setPolygonResponse(response);
+        onSuccess: ({ params: { handlePolyRes }, response }) => {
+            handlePolyRes(response);
         },
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
@@ -308,9 +308,14 @@ const BarabiseLandslide = (props) => {
     ciRequest.setDefaultParams({
         handleCI,
     });
+
+    const handlePolyRes = (res) => {
+        setPolygonResponse(res);
+    };
+
     landslidePolyRequest.setDefaultParams({
-        setPolygonResponse,
-        url: getgeoJsonLayer('Overall_landslide_barhabise'),
+        handlePolyRes,
+        url: getgeoJsonLayer('Overall_landslide_barhabise_wgs84'),
     });
 
     const setIncidentData = (data) => {
@@ -443,7 +448,6 @@ const BarabiseLandslide = (props) => {
 
     const handlehideCILegends = (data) => {
         sethideCILegends(data);
-        console.log('hide data:', data);
     };
 
 
@@ -506,6 +510,9 @@ const BarabiseLandslide = (props) => {
                             handlechartReset={handlechartReset}
                             handleDrawSelectedData={handleDrawSelectedData}
                             hideCI={hideCILegends}
+                            criticalElement={criticalElement}
+                            polygonResponse={polygonResponse}
+
                         />
                     </>
                 )
@@ -632,6 +639,7 @@ const BarabiseLandslide = (props) => {
                                             landslideYear={landslideYear}
                                             drawData={drawData}
                                             chartReset={chartReset}
+                                            polygonResponse={polygonResponse}
                                         />
                                     )
                                 }
@@ -716,6 +724,12 @@ const BarabiseLandslide = (props) => {
                             handlehideCILegends={handlehideCILegends}
                             hideCILegends={hideCILegends}
                         />
+                        <CriticalInfraLegends
+                            handlePopulationChange={handlePopulationChange}
+                            handleCritical={handleCritical}
+                            criticalElement={criticalElement}
+                            hide={hideCILegends}
+                        />
                     </>
                 )
             }
@@ -731,6 +745,7 @@ const BarabiseLandslide = (props) => {
                             handlehideCILegends={handlehideCILegends}
 
                         />
+
                     </>
                 )
             }

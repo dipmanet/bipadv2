@@ -135,13 +135,31 @@ class FloodHistoryMap extends React.Component {
                     id: 'bahrabiseHillshadeLocal',
                     type: 'raster',
                     source: 'hillshadeBahrabiseLocal',
-                    layout: {},
                     paint: {
                         'raster-opacity': 0.25,
                     },
                 },
             );
 
+            this.map.addSource('suseptibilityBahrabise', {
+                type: 'raster',
+                tiles: [this.getSusceptibilityLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'suseptibility-bahrabise',
+                    type: 'raster',
+                    source: 'suseptibilityBahrabise',
+                    paint: {
+                        'raster-opacity': 1,
+                    },
+                    layout: {
+                        visibility: 'none',
+                    },
+                },
+            );
 
             const features = this.props.bahrabiseLandSlide.map(item => ({
                 type: 'Feature',
@@ -175,25 +193,7 @@ class FloodHistoryMap extends React.Component {
                 },
             );
 
-            this.map.addSource('suseptibilityBahrabise', {
-                type: 'raster',
-                tiles: [this.getSusceptibilityLayer()],
-                tileSize: 256,
-            });
 
-            this.map.addLayer(
-                {
-                    id: 'suseptibility-bahrabise',
-                    type: 'raster',
-                    source: 'suseptibilityBahrabise',
-                    paint: {
-                        'raster-opacity': 1,
-                    },
-                    layout: {
-                        visibility: 'none',
-                    },
-                },
-            );
             this.map.moveLayer('incidents-layer');
 
             this.map.addSource('vizrisk-fills', {
@@ -266,8 +266,7 @@ class FloodHistoryMap extends React.Component {
                             'circle-color': [
                                 'step',
                                 ['get', 'point_count'],
-                                // '#a4ac5e',
-                                '#3b5bc2',
+                                '#a4ac5e',
                                 100,
                                 '#a4ac5e',
                             ],
@@ -324,8 +323,37 @@ class FloodHistoryMap extends React.Component {
             cidata,
             chartReset,
             hideCI,
+            criticalElement,
         } = this.props;
 
+        const { resourceArr } = this.state;
+        if (criticalElement !== prevProps.criticalElement) {
+            this.resetClusters();
+            const layer = criticalElement;
+            if (layer === 'all') {
+                resourceArr.map((item) => {
+                    this.map.setLayoutProperty(`unclustered-ci-${item}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-ci-${item}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-count-ci-${item}`, 'visibility', 'visible');
+                    return null;
+                });
+            } else if (layer === 'health') {
+                this.map.setLayoutProperty('clusters-ci-health', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-health', 'visibility', 'visible');
+                this.map.setLayoutProperty('unclustered-ci-health', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-health');
+            } else if (layer === 'finance') {
+                this.map.setLayoutProperty('unclustered-ci-finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-finance', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-finance');
+            } else if (layer === 'education') {
+                this.map.setLayoutProperty('unclustered-ci-education', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-education', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-education', 'visibility', 'visible');
+                this.map.moveLayer('clusters-count-ci-education');
+            }
+        }
 
         if (currentPage === 6 && prevProps.currentPage === 7) {
             this.map.removeControl(draw);
@@ -379,15 +407,20 @@ class FloodHistoryMap extends React.Component {
                 popup.remove();
             }));
             const updateArea = (e) => {
-                const { getPolygon, handleDrawSelectedData } = this.props;
+                const { polygonResponse, handleDrawSelectedData } = this.props;
                 console.log('cidata,', cidata);
                 const arr = cidata.map(item => item.point.coordinates);
                 const points = turf.points(arr);
-                // const { points, buildingpoints } = this.state;
+
+                const polyArr = polygonResponse.features.map(pItem => pItem.geometry.coordinates);
+                const polyPoints = turf.points(polyArr);
+
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
+
                 const searchWithin = turf.multiPolygon([dataArr], {});
                 const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+                const polyptsWithin = turf.pointsWithinPolygon(polyPoints, searchWithin);
                 const result = [];
                 const n = ptsWithin
                     .features
@@ -399,7 +432,16 @@ class FloodHistoryMap extends React.Component {
                             });
                         return null;
                     });
-
+                const m = polyptsWithin
+                    .features
+                    .map((j) => {
+                        result
+                            .push({
+                                geometry: j.geometry,
+                                landslideYear: this.getYearfromLatLng(j, polygonResponse),
+                            });
+                        return null;
+                    });
                 // getPolygon(dataArr);
 
                 console.log('result', result);
@@ -484,12 +526,12 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'none');
             // this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
-            this.map.moveLayer('suseptibility-bahrabise');
+            this.map.moveLayer('suseptibility-bahrabise', 'bahrabiseBuildings');
             landslideYear.map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
                 return null;
             });
-            console.log('sus page and map', this.map);
+            // console.log('sus page and map', this.map);
         }
 
         if (hideCI !== prevProps.hideCI) {
@@ -547,6 +589,29 @@ class FloodHistoryMap extends React.Component {
             return hT.resourceType;
         }
         return [];
+    }
+
+    public getYearfromLatLng = (featureObject, polyData) => {
+        const latToCompare = featureObject.geometry.coordinates[1];
+        const lngToCompare = featureObject.geometry.coordinates[0];
+        const hT = polyData.features.filter(fC => fC.geometry.coordinates[0] === lngToCompare
+            && fC.geometry.coordinates[1] === latToCompare)[0];
+
+        if (hT) {
+            const e = hT.properties.Epoch;
+            return e.substr(e.length - 4);
+        }
+        return 'nodata';
+    }
+
+    public resetClusters = () => {
+        this.state.resourceArr.map((layer) => {
+            this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+
+            return null;
+        });
     }
 
     public generateYearsArr = () => {

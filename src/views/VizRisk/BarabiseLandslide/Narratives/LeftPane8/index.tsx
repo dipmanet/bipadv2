@@ -57,7 +57,13 @@ const LeftPane8 = (props: Props) => {
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
     const [lschartData, setLschartData] = useState(true);
-    const { drawData, landSlide, chartReset, ci } = props;
+    const {
+        drawData,
+        landSlide,
+        chartReset,
+        ci,
+        polygonResponse,
+    } = props;
 
     useEffect(() => {
         if (landSlide) {
@@ -83,14 +89,28 @@ const LeftPane8 = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
     useEffect(() => {
         if (drawData) {
             const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
-            const cD = hazardArr.map(hazard => ({
+            const polyArr = [...new Set(drawData.map(h => h.landslideYear))];
+
+            const filteredHArr = hazardArr.filter(item => item !== undefined);
+            const filteredPolyArr = polyArr.filter(item => item !== undefined);
+
+
+            const cD = filteredHArr.map(hazard => ({
                 name: hazard,
                 Total: drawData.filter(item => item.hazardTitle === hazard).length,
             }));
+
+            const pcD = filteredPolyArr.map(poly => ({
+                name: poly,
+                Total: drawData.filter(item => item.landslideYear === poly).length,
+            }));
+
             setCIChartData(cD);
+            setLschartData(pcD);
             setReset(false);
         }
     }, [drawData]);
@@ -98,14 +118,32 @@ const LeftPane8 = (props: Props) => {
     useEffect(() => {
         if (ci) {
             const resArr = [...new Set(ci.map(h => h.resourceType))];
-            const cD = resArr.map(res => ({
+            const filteredArr = resArr.filter(item => item !== undefined);
+            const cD = filteredArr.map(res => ({
                 name: res,
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
             setCIChartData(cD);
             setReset(true);
         }
-    }, [chartReset, ci]);
+        if (polygonResponse) {
+            const yearArr = polygonResponse.features.map((poly) => {
+                const e = poly.properties.Epoch;
+                return e.substr(e.length - 4);
+            });
+            const uniqueArr = [...new Set(yearArr)];
+            const pcD = uniqueArr.map(year => ({
+                name: year,
+                Total: polygonResponse.features.filter((polygon) => {
+                    const f = polygon.properties.Epoch;
+                    return f.substr(f.length - 4) === year;
+                }).length,
+            }));
+
+            setLschartData(pcD);
+        }
+    }, [chartReset, ci, polygonResponse]);
+
 
     useEffect(() => {
         if (ci) {
@@ -115,6 +153,23 @@ const LeftPane8 = (props: Props) => {
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
             setCIChartData(cD);
+        }
+
+        if (polygonResponse) {
+            const yearArr = polygonResponse.features.map((poly) => {
+                const e = poly.properties.Epoch;
+                return e.substr(e.length - 4);
+            });
+            const uniqueArr = [...new Set(yearArr)];
+            const pcD = uniqueArr.map(year => ({
+                name: year,
+                Total: polygonResponse.features.filter((polygon) => {
+                    const f = polygon.properties.Epoch;
+                    return f.substr(f.length - 4) === year;
+                }).length,
+            }));
+
+            setLschartData(pcD);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

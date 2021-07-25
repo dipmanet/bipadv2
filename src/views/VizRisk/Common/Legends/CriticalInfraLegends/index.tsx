@@ -13,7 +13,7 @@ import Water from '#resources/icons/WATERVR.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
-    const { handleCritical, criticalElement, hide } = props;
+    const { handleCritical, criticalElement, hide, right } = props;
     const [showEducation, setshowEducation] = useState(false);
     const [showFinance, setshowFinance] = useState(false);
     const [showIndustry, setshowIndustry] = useState(false);
@@ -132,19 +132,33 @@ const LandCoverLegends = (props) => {
         console.log('hide:', hide);
     }, [hide]);
 
+    const styleLeft = {
+        position: 'fixed',
+        bottom: '50px',
+        left: 'calc(30% - 60px)',
+        zIndex: 200,
+        backgroundColor: 'rgb(18,31,57)',
+        padding: '15px',
+        display: hide ? 'none' : 'block',
+
+    };
+
+    const styleRight = {
+        position: 'fixed',
+        bottom: '20px',
+        right: '65px',
+        zIndex: 200,
+        backgroundColor: 'rgb(18,31,57)',
+        padding: '15px',
+        display: hide ? 'none' : 'block',
+
+    };
+
+
     return (
         <div
             className={styles.mainDiv}
-            style={{
-                position: 'fixed',
-                bottom: '15px',
-                right: props.right ? '75px' : '70%',
-                zIndex: 200,
-                backgroundColor: 'rgb(18,31,57)',
-                padding: '15px',
-                // display: hide ? 'none' : 'block',
-
-            }}
+            style={right ? styleRight : styleLeft}
         >
             <button
                 type="button"

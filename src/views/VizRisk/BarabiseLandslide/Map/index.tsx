@@ -322,8 +322,11 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
                 resourceArr.map((layer) => {
                     this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
-                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`clusters-ci-${layer}`);
                     this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`clusters-count-ci-${layer}`);
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`unclustered-ci-${layer}`);
                     return null;
                 });
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');

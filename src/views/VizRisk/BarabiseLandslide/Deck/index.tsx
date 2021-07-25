@@ -263,7 +263,7 @@ const Deck = (props) => {
             const map = mapRef.current.getMap();
             setReAnimate(true);
             handleFlyTo(Locations.bahrabise);
-            map.panBy([0, 200]);
+            // map.panBy([0, 200]);
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
