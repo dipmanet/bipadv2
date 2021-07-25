@@ -752,9 +752,6 @@ const BarabiseLandslide = (props) => {
             {currentPage === 9
                 && (
                     <>
-                        <InventoryLegend
-                            handleYearSelect={handleYearSelect}
-                        />
                         <CISwitchLegends
                             hideCILegends={hideCILegends}
                             handleCIChange={handleCIChange}

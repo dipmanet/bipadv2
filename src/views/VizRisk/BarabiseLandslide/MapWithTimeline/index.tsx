@@ -324,6 +324,7 @@ class FloodHistoryMap extends React.Component {
             chartReset,
             hideCI,
             criticalElement,
+            polygonResponse,
         } = this.props;
 
         const { resourceArr } = this.state;
@@ -389,14 +390,13 @@ class FloodHistoryMap extends React.Component {
             epochs.map(ci => this.map.on('mouseenter', `${ci}`, (e) => {
                 if (e) {
                     const { lngLat } = e;
-                    console.log('e', e.features[0]);
                     const coordinates = [lngLat.lng, lngLat.lat];
                     const perimeter = e.features[0].properties.Perim_m;
                     const area = e.features[0].properties.Area_m2;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
-                    <p>Perimeter: ${perimeter}</p>
-                    <p>Area: ${area}</p>
+                    <p>Perimeter: ${perimeter} m</p>
+                    <p>Area: ${area} sq m</p>
                 </div>
                 `,
                     ).addTo(this.map);
@@ -407,7 +407,7 @@ class FloodHistoryMap extends React.Component {
                 popup.remove();
             }));
             const updateArea = (e) => {
-                const { polygonResponse, handleDrawSelectedData } = this.props;
+                const { handleDrawSelectedData } = this.props;
                 console.log('cidata,', cidata);
                 const arr = cidata.map(item => item.point.coordinates);
                 const points = turf.points(arr);
@@ -600,6 +600,16 @@ class FloodHistoryMap extends React.Component {
         if (hT) {
             const e = hT.properties.Epoch;
             return e.substr(e.length - 4);
+        }
+        return 'nodata';
+    }
+
+    public getObjFromLatLng = (lat, lng, polyData) => {
+        const hT = polyData.features.filter(fC => fC.geometry.coordinates[0] === lng
+            && fC.geometry.coordinates[1] === lat)[0];
+
+        if (hT) {
+            return hT;
         }
         return 'nodata';
     }

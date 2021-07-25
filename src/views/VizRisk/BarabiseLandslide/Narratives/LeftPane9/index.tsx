@@ -130,38 +130,6 @@ const LeftPane8 = (props: Props) => {
             </p>
 
             <p>
-              NO. OF LANDSLIDES
-
-                {reset ? ' (Municipality) ' : ' (Selected Area) '}
-
-
-            </p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={lschartData}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
-            <p>
                COMMUNITY INFRASTRUCTURE
 
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}

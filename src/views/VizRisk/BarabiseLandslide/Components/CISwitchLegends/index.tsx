@@ -6,12 +6,16 @@ const DemoGraphicsLegends = (props) => {
     const {
         handleCIChange,
         handlehideCILegends,
+        handlehideOSM,
         hideCILegends,
+        hideOSMLayers,
+        showOSMSwitch,
     } = props;
     const [hide, sethide] = useState(hideCILegends);
+    const [hideOSM, sethideOSM] = useState(hideOSMLayers);
 
 
-    const handlePopulationClick = () => {
+    const handleCIClick = () => {
         sethide(!hide);
         handleCIChange(!hide);
         if (handlehideCILegends) {
@@ -19,26 +23,57 @@ const DemoGraphicsLegends = (props) => {
         }
     };
 
+    const handleOSMClick = () => {
+        sethideOSM(!hideOSM);
+        handleCIChange(!hideOSM);
+        if (handlehideOSM) {
+            handlehideOSM(!hideOSM);
+        }
+    };
+
     return (
 
-        <div className={styles.hazardItemContainer}>
-            <button
-                type="button"
-                className={hide ? styles.legendBtn : styles.legendBtnSelected}
-                onClick={() => handlePopulationClick()}
-            >
-                <Hexagon
-                    style={{
-                        stroke: '#fff',
-                        strokeWidth: 50,
-                        fill: hide ? 'transparent' : '#036ef0',
-                    }}
-                    className={styles.educationHexagon}
-                />
+        <>
+            <div className={styles.hazardItemContainer}>
+                <button
+                    type="button"
+                    className={hide ? styles.legendBtn : styles.legendBtnSelected}
+                    onClick={() => handleCIClick()}
+                >
+                    <Hexagon
+                        style={{
+                            stroke: '#fff',
+                            strokeWidth: 50,
+                            fill: hide ? 'transparent' : '#036ef0',
+                        }}
+                        className={styles.educationHexagon}
+                    />
                           Community Infrastructure
-            </button>
-        </div>
-
+                </button>
+            </div>
+            {
+                showOSMSwitch
+                && (
+                    <div className={styles.hazardItemContainer}>
+                        <button
+                            type="button"
+                            className={hide ? styles.legendBtn : styles.legendBtnSelected}
+                            onClick={() => handleOSMClick()}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#fff',
+                                    strokeWidth: 50,
+                                    fill: hideOSM ? 'transparent' : '#036ef0',
+                                }}
+                                className={styles.educationHexagon}
+                            />
+                          OPENSTREETMAP
+                        </button>
+                    </div>
+                )
+            }
+        </>
     );
 };
 
