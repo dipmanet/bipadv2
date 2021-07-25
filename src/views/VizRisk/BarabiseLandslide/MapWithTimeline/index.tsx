@@ -123,6 +123,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('bahrabiseScree', 'visibility', 'none');
             this.map.setLayoutProperty('bahrabiseShingle', 'visibility', 'none');
             this.map.setLayoutProperty('bahrabiseStone', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseFarmland', 'visibility', 'none');
             this.map.addSource('hillshadeBahrabiseLocal', {
                 type: 'raster',
                 tiles: [this.getHillshadeLayer()],
@@ -347,6 +348,8 @@ class FloodHistoryMap extends React.Component {
                 closeOnClick: false,
                 className: 'popup',
             });
+
+            this.map.setLayoutProperty('incidents-layer', 'visibility', 'none');
             this.generateYearsArr().map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
@@ -467,13 +470,13 @@ class FloodHistoryMap extends React.Component {
             // add sus layer
 
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
-            // this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
-            // this.map.moveLayer('suseptibility-bahrabise');
-            landslideYear.map((layer) => {
-                this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
+            epochs.map((layer) => {
+                this.map.moveLayer(`${layer}`);
+                // this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
             });
             console.log('risk page and map', this.map);
+            console.log('landslideYear', landslideYear);
         }
 
         if (currentPage !== prevProps.currentPage && currentPage === 8) {
@@ -524,7 +527,7 @@ class FloodHistoryMap extends React.Component {
         '&version=1.1.0',
         '&service=WMS',
         '&request=GetMap',
-        '&layers=Bipad:Barhabise_Durham_Susceptibility',
+        '&layers=Bipad:barhabise_durham_susceptibility',
         '&tiled=true',
         '&width=256',
         '&height=256',

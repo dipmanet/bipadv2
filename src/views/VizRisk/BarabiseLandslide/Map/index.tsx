@@ -107,11 +107,31 @@ class FloodHistoryMap extends React.Component {
 
 
         this.map.on('style.load', () => {
+            this.map.addSource('hillshadeBahrabiseLocal', {
+                type: 'raster',
+                tiles: [this.getHillshadeLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'bahrabiseHillshadeLocal',
+                    type: 'raster',
+                    source: 'hillshadeBahrabiseLocal',
+                    layout: {
+                        visibility: 'none',
+                    },
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
                 className: 'popup',
             });
+
 
             if (ci.length > 0) {
                 // const this.map = this.mapRef.current.getthis.Map();
@@ -145,8 +165,8 @@ class FloodHistoryMap extends React.Component {
                             'circle-color': [
                                 'step',
                                 ['get', 'point_count'],
-                                // '#a4ac5e',
-                                '#3b5bc2',
+                                '#a4ac5e',
+                                // '#3b5bc2',
                                 100,
                                 '#a4ac5e',
                             ],
@@ -239,9 +259,9 @@ class FloodHistoryMap extends React.Component {
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
-                            <p> Total Population: ${totalPop}</p>
-                        </div>
-                        `,
+                                <p> Total Population: ${totalPop}</p>
+                            </div>
+                            `,
                     ).addTo(this.map);
                     if (hoveredWardId) {
                         this.map.setFeatureState(
@@ -299,6 +319,7 @@ class FloodHistoryMap extends React.Component {
         }
         if (currentPage !== prevProps.currentPage) {
             if (currentPage === 5) {
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
                 resourceArr.map((layer) => {
                     this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
                     this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
@@ -308,6 +329,15 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
                 this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
                 this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
+            }
+            if (currentPage === 4) {
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
+                // resourceArr.map((ly) => {
+                //     this.map.moveLayer(`clusters-ci-${ly}`);
+                //     this.map.moveLayer(`clusters-count-ci-${ly}`);
+                //     this.map.moveLayer(`unclustered-ci-${ly}`);
+                //     return null;
+                // });
             }
         }
         if (this.props.criticalElement !== prevProps.criticalElement) {
@@ -392,6 +422,21 @@ class FloodHistoryMap extends React.Component {
         geoObj.features.push(...d);
         return geoObj;
     }
+
+    public getHillshadeLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Barhabise_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public render() {
         const mapStyle = {

@@ -137,12 +137,13 @@ const LandCoverLegends = (props) => {
             className={styles.mainDiv}
             style={{
                 position: 'fixed',
-                bottom: '100px',
-                right: '75px',
+                bottom: '15px',
+                right: props.right ? '75px' : '70%',
                 zIndex: 200,
                 backgroundColor: 'rgb(18,31,57)',
                 padding: '15px',
-                display: hide ? 'none' : 'block',
+                // display: hide ? 'none' : 'block',
+
             }}
         >
             <button

@@ -26,11 +26,22 @@ const NavButtons = (props: Props) => {
             <div className={styles.pageIndicator}>
                 Showing
                 <span className={styles.currentPageColor}>
-                    {pagenumber}
+                    {
+                        pagenumber === 1
+                    && '1'
+                    }
+                    {
+                        pagenumber === 2
+                    && '1'
+                    }
+                    {
+                        pagenumber !== 2 && pagenumber !== 1
+                    && (pagenumber - 1)
+                    }
                 </span>
                 {'/'}
                 <span className={styles.totPages}>
-                    {totalPages}
+                    {totalPages - 1}
                 </span>
             </div>
             <div className={styles.navBtnCont}>

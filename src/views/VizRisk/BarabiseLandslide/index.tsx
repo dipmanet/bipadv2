@@ -56,6 +56,7 @@ import legendList from './Components/Legends/legends';
 import LeftPaneContainer from '../Common/LeftPaneContainer';
 import DemographicsLegends from '../Common/Legends/DemographicsLegends';
 import CriticalInfraLegends from '../Common/Legends/CriticalInfraLegends';
+import LandCoverLegends from '../Common/Legends/LandCoverLegends';
 import NavButtons from '../Common/NavButtons';
 import LeftPane1 from './Narratives/LeftPane1';
 import LeftPane2 from './Narratives/LeftPane2';
@@ -263,6 +264,7 @@ const BarabiseLandslide = (props) => {
     const [chartReset, setChartReset] = useState(false);
     const [showCI, setShowCI] = useState(false);
     const [hideCILegends, sethideCILegends] = useState(true);
+    const [livesLost, setLivesLost] = useState(0);
 
     const {
         // incidentList,
@@ -319,8 +321,11 @@ const BarabiseLandslide = (props) => {
             loss: inc.loss || {},
         }));
         setIncidents(a);
+        const lossArr = a.map(item => item.loss).filter(l => l !== undefined);
+        const pdC = lossArr
+            .reduce((a, b) => ({ peopleDeathCount: (b.peopleDeathCount || 0) + a.peopleDeathCount }));
+        setLivesLost(pdC.peopleDeathCount);
         setPending(false);
-        console.log('a', a);
     };
 
     const setBarabiseIncidents = (data) => {
@@ -551,14 +556,21 @@ const BarabiseLandslide = (props) => {
                                     && (
                                         <LeftPane1
                                             data={props}
+                                            incidentsCount={incidents.length}
+                                            livesLost={livesLost}
                                         />
                                     )
                                 }
                                 {
                                     currentPage === 1
                                     && (
-                                        <LeftPane2
+                                        // <LeftPane2
+                                        //     data={props}
+                                        // />
+                                        <LeftPane1
                                             data={props}
+                                            incidentsCount={incidents.length}
+                                            livesLost={livesLost}
                                         />
                                     )
                                 }
@@ -671,6 +683,11 @@ const BarabiseLandslide = (props) => {
                     />
                 )
             }
+            {currentPage === 3
+                && (
+                    <LandCoverLegends />
+                )
+            }
             {(currentPage === 5 || currentPage === 8)
                 && (
                     <CriticalInfraLegends
@@ -678,6 +695,7 @@ const BarabiseLandslide = (props) => {
                         handleCritical={handleCritical}
                         criticalElement={criticalElement}
                         hide={hideCILegends}
+                        right={currentPage === 5}
                     />
                 )
             }

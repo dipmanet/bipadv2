@@ -44,7 +44,11 @@ const NavButtons = (props) => {
                 Prev
             </button>
             <div className={styles.navText}>
-                {`page ${page} of ${maxPage}`}
+
+                {page === 2
+                    ? `page ${1} of ${maxPage}`
+                    : `page ${page} of ${maxPage}`
+                }
             </div>
             <button
                 type="button"

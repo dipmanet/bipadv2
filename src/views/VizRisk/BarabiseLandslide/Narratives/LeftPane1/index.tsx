@@ -11,11 +11,10 @@ interface Props{
 
 }
 const LeftPane1 = (props: Props) => {
-    const { pending,
-        totalPages,
-        pagenumber,
-        handleNext,
-        handlePrev } = props;
+    const {
+        incidentsCount,
+        livesLost,
+    } = props;
 
     return (
         <div className={styles.vrSideBar}>
@@ -33,8 +32,29 @@ const LeftPane1 = (props: Props) => {
             The highest number of incidents is concentrated in Central
             Nepal and most of the deaths and loss has been higher in
             hills as compared to terai and mountain regions.
-            As of now, a total of 2,253 landslide incidents have been
-            recorded since 2011 with a loss of 1,226 lives altogether.
+            As of now, a total of
+                { ' ' }
+                { incidentsCount }
+                { ' ' }
+            landslide incidents have been
+            recorded since 2011 with a loss of
+                { ' ' }
+                {livesLost}
+                { ' ' }
+            lives altogether.
+            </p>
+            <p>
+            Central Nepal faces the most number of landslide
+            incidents and fatalities due to the ever increasing and
+            haphazard urbanization, growing population and unmanaged
+            development activities.
+            </p>
+            <p>
+            Sindhupalchowk district, located in Central Nepal,
+            faces incidents of landslides every year which causes
+            loss of lives and infrastructures. Among the most affected
+            municipalities in the district, Barhabise witnessed 3 major
+            landslides in the year 2020 alone.
             </p>
         </div>
 

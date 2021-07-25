@@ -29,6 +29,11 @@ interface Props{
 
 }
 
+const ciRef = {
+    finance: 'Finance.',
+    health: 'Hospitals',
+    education: 'Educational Institutions',
+};
 
 const LeftPane6 = (props: Props) => {
     const { ci } = props;
@@ -51,7 +56,7 @@ const LeftPane6 = (props: Props) => {
             };
             const resourceArr = [...new Set(ci.map(c => c.resourceType))];
             const chartData = resourceArr.map(res => ({
-                name: res,
+                name: ciRef[res],
                 Total: ci.filter(f => f.resourceType === res).length,
             }));
 
@@ -69,7 +74,7 @@ const LeftPane6 = (props: Props) => {
                 as critical infrastructures such as hospitals, schools, bridges
                 in the municipality are at constant threat of landslide every year.
             </p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
+            <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
                 <BarChart
                     width={300}
                     height={600}

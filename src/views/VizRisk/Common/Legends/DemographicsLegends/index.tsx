@@ -92,7 +92,7 @@ const DemoGraphicsLegends = (props) => {
             {showPopulationWard
                 ? (
                     <div>
-                        <h2>Population by ward</h2>
+                        <h2>POPULATION BY WARD</h2>
                         <div className={styles.populationContainer}>
                             <div className={styles.populationIndContainer}>
                                 {colors.map((c, i) => (

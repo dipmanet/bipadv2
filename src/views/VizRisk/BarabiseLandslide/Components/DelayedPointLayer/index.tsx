@@ -29,7 +29,7 @@ void main(void) {
   // to exceed their desired size before settling into it without clipping.
   // In theory, we could modify the vertex shader to account for this, but
   // easiser to just supply a bigger radius for now...
-  float maxSize = clamp(tSize * 0.5, 0.0, 1.0);
+  float maxSize = clamp(tSize * 0.5, 0.0, 2.0);
   float distToCenter = length(unitPosition);
   if (distToCenter > maxSize) { // @pbeshai edit - was 1.0
     discard;

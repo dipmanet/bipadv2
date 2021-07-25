@@ -243,9 +243,8 @@ const Deck = (props) => {
             props.setNarrationDelay(1000);
             setMapDelay(1000);
             setReAnimate(true);
-            setMapAnimateDuration(1000);
+            setMapAnimateDuration(8000);
 
-            handleFlyTo(Locations.bahrabise);
             setRadiusChange(true);
             setAllDataVisible(false);
             setLandslideVisible(true);
@@ -257,12 +256,14 @@ const Deck = (props) => {
             });
 
             MapLayers.landslide.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
+                map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
         } else if (currentPage === 2) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
+            handleFlyTo(Locations.bahrabise);
+            map.panBy([0, 200]);
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
@@ -389,7 +390,7 @@ const Deck = (props) => {
                             getPosition: d => d.position,
                             getFillColor: [209, 203, 111],
                             getRadius: 500,
-                            radiusMinPixels: 3,
+                            radiusMinPixels: 8,
                             // pickable: true,
                             // visible: allDataVisible,
                             animationProgress: springProps.enterProgress,
