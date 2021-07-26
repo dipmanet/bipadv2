@@ -10,7 +10,7 @@ const LandslideLegend = (props) => {
 
             <div className={styles.landslideLegend}>
                 <div className={styles.circles}>
-                    <h2>LANDSLIDES</h2>
+                    <h2>LANDSLIDES (PEOPLE DEATH)</h2>
                     {
                         radius.map((r, i) => (
                             <div className={styles.row}>

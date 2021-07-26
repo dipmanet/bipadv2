@@ -258,6 +258,7 @@ const BarabiseLandslide = (props) => {
     const [landslideYear, setLandSlideYear] = useState([]);
     const [yearClicked, setyearClicked] = useState(false);
     const [buildingCount, setBuildingCount] = useState(0);
+    const [defaultBuildcount, setDefault] = useState(0);
     const [polygon, setPolygon] = useState([]);
     const [polygonResponse, setPolygonResponse] = useState({});
     const [drawData, setDrawData] = useState([]);
@@ -357,6 +358,9 @@ const BarabiseLandslide = (props) => {
 
     const handleBuidingResponse = (data) => {
         setBuildingCount(data);
+        if (defaultBuildcount === 0) {
+            setDefault(data.count);
+        }
         setPending(false);
     };
     const getPolygon = (p) => {
@@ -575,6 +579,7 @@ const BarabiseLandslide = (props) => {
                                             data={props}
                                             incidentsCount={incidents.length}
                                             livesLost={livesLost}
+                                            currentPage={currentPage}
                                         />
                                     )
                                 }
@@ -586,6 +591,7 @@ const BarabiseLandslide = (props) => {
                                         // />
                                         <LeftPane1
                                             data={props}
+                                            currentPage={currentPage}
                                             incidentsCount={incidents.length}
                                             livesLost={livesLost}
                                         />
@@ -683,6 +689,7 @@ const BarabiseLandslide = (props) => {
                                             chartReset={chartReset}
                                             pending={pending}
                                             buildingCount={buildingCount}
+                                            overallBuildingsCount={defaultBuildcount}
                                         />
                                     )
                                 }

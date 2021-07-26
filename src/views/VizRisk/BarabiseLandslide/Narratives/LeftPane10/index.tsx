@@ -65,7 +65,15 @@ const LeftPane10 = (props: Props) => {
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
     const [lschartData, setLschartData] = useState(true);
-    const { drawData, landSlide, chartReset, ci, pending, buildingCount } = props;
+    const {
+        drawData,
+        landSlide,
+        chartReset,
+        ci,
+        pending,
+        buildingCount,
+        overallBuildingsCount,
+    } = props;
 
     useEffect(() => {
         if (landSlide) {
@@ -127,7 +135,7 @@ const LeftPane10 = (props: Props) => {
                 name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
-            cD.push({ name: 'Buildings', Total: buildingCount.count });
+            cD.push({ name: 'Buildings', Total: overallBuildingsCount });
             setCIChartData(cD);
             setReset(true);
         }
@@ -141,7 +149,7 @@ const LeftPane10 = (props: Props) => {
                 name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
-            cD.push({ name: 'Buildings', Total: buildingCount.count });
+            cD.push({ name: 'Buildings', Total: overallBuildingsCount });
             setCIChartData(cD);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps

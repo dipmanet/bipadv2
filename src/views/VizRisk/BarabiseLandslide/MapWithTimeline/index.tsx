@@ -423,6 +423,20 @@ class FloodHistoryMap extends React.Component {
                 this.handleStateChange();
             }
         }
+
+
+        if (currentPage === 7 || currentPage === 8) {
+            if (yearClicked !== prevProps.yearClicked) {
+                this.resetPolyLayers();
+                landslideYear.map((layer) => {
+                    this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                    return null;
+                });
+            }
+        }
+        if (currentPage !== prevProps.currentPage && currentPage === 6) {
+            this.map.setLayoutProperty('incidents-layer', 'visibility', 'visible');
+        }
         if (currentPage !== prevProps.currentPage && currentPage === 7) {
             const popup = new mapboxgl.Popup({
                 closeButton: false,
@@ -431,6 +445,8 @@ class FloodHistoryMap extends React.Component {
             });
 
             this.map.setLayoutProperty('incidents-layer', 'visibility', 'none');
+            this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'none');
+
             this.generateYearsArr().map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
@@ -460,7 +476,6 @@ class FloodHistoryMap extends React.Component {
             }));
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
-                console.log('cidata,', cidata);
                 const arr = cidata.map(item => item.point.coordinates);
                 const points = turf.points(arr);
 
@@ -494,33 +509,7 @@ class FloodHistoryMap extends React.Component {
                             });
                         return null;
                     });
-                // this.props.getPolygon(dataArr);
-
-                console.log('result', result);
-
-                // const coordList = dataArr[0]
-                //     .map(position => [parseFloat(position[0]), parseFloat(position[1])]);
-                // const line = turf.lineString(coordList);
-                // const bbox = turf.bbox(line);
-
-                // const point1 = this.map.project([bbox[0], bbox[1]]);
-                // const point2 = this.map.project([bbox[2], bbox[3]]);
-                // const farmlands = this.map.queryRenderedFeatures(
-                //     [point1, point2],
-                //     { layers: ['Farmlands'] },
-                // );
-                // const forest = this.map.queryRenderedFeatures(
-                //     [point1, point2],
-                //     { layers: ['Forest'] },
-                // );
-                // const buildingsCount = ptsWithinBuildings.features.length;
-                // result.push({
-                //     buildings: buildingsCount,
-                //     forest: forest.length,
-                //     farmlands: farmlands.length,
-                // });
                 handleDrawSelectedData(result, dataArr);
-
                 // this.map.fitBounds(bbox, {
                 //     padding: 20,
                 // });
@@ -549,41 +538,24 @@ class FloodHistoryMap extends React.Component {
             this.map.on('draw.update', updateArea);
         }
 
-
-        if (currentPage === 7 || currentPage === 8) {
-            if (yearClicked !== prevProps.yearClicked) {
-                this.resetPolyLayers();
-                landslideYear.map((layer) => {
-                    this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
-                    return null;
-                });
-            }
-        }
-
-        if (currentPage !== prevProps.currentPage && currentPage === 9) {
-            // add sus layer
-
-            this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
-            epochs.map((layer) => {
-                this.map.moveLayer(`${layer}`);
-                // this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
-                return null;
-            });
-            console.log('risk page and map', this.map);
-            console.log('landslideYear', landslideYear);
-        }
-
         if (currentPage !== prevProps.currentPage && currentPage === 8) {
-            // add sus layer
             this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'none');
-            // this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'none');
             this.map.moveLayer('suseptibility-bahrabise', 'bahrabiseBuildings');
             landslideYear.map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
                 return null;
             });
-            // console.log('sus page and map', this.map);
+        }
+
+        if (currentPage !== prevProps.currentPage && currentPage === 9) {
+            this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+            this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'none');
+            this.map.moveLayer('risk-fill-local', 'bahrabiseWardOutline');
+            this.map.moveLayer('bahrabiseWardText', 'bahrabiseWardOutline');
         }
 
         if (hideCI !== prevProps.hideCI) {
