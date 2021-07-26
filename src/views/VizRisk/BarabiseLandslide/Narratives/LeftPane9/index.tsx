@@ -51,6 +51,13 @@ const getTotalLoss = (year, arr) => {
     return 0;
 };
 
+const ciRef = {
+    health: 'Hospital',
+    finance: 'Financial Institution',
+    education: 'Education Institution',
+};
+
+
 const LeftPane8 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
@@ -85,7 +92,8 @@ const LeftPane8 = (props: Props) => {
 
     useEffect(() => {
         if (drawData) {
-            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
+            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))]
+                .filter(i => i !== undefined);
             const cD = hazardArr.map(hazard => ({
                 name: hazard,
                 Total: drawData.filter(item => item.hazardTitle === hazard).length,
@@ -97,9 +105,9 @@ const LeftPane8 = (props: Props) => {
 
     useEffect(() => {
         if (ci) {
-            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({
-                name: res,
+                name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
             setCIChartData(cD);
@@ -109,9 +117,9 @@ const LeftPane8 = (props: Props) => {
 
     useEffect(() => {
         if (ci) {
-            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({
-                name: res,
+                name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
             setCIChartData(cD);

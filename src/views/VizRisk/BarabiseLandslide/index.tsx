@@ -208,7 +208,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             // const {  buildingCount = [] } = response;
             handleBuidingResponse(response);
         },
-        onMount: false,
+        onMount: true,
     },
     landslidePolyRequest: {
         url: ({ params }) => params.url,
@@ -356,7 +356,8 @@ const BarabiseLandslide = (props) => {
     });
 
     const handleBuidingResponse = (data) => {
-        console.log('response data', data);
+        setBuildingCount(data);
+        setPending(false);
     };
     const getPolygon = (p) => {
         setPolygon(p);
@@ -364,6 +365,7 @@ const BarabiseLandslide = (props) => {
 
     buildingCountRequest.setDefaultParams({
         handleBuidingResponse,
+        setPending,
         // polygon,
     });
 
@@ -373,14 +375,14 @@ const BarabiseLandslide = (props) => {
         return JSON.stringify(poly);
     };
 
-    useEffect(() => {
-        if (polygon.length > 0) {
-            buildingCountRequest.do({
-                polygon: getPolygonString(polygon),
-            });
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [polygon]);
+    // useEffect(() => {
+    //     if (polygon.length > 0) {
+    //         buildingCountRequest.do({
+    //             polygon: getPolygonString(polygon),
+    //         });
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [polygon]);
 
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
@@ -442,8 +444,16 @@ const BarabiseLandslide = (props) => {
         setyearClicked(!yearClicked);
     };
 
-    const handleDrawSelectedData = (result) => {
+    const handleDrawSelectedData = (result, dataArr) => {
         setDrawData(result);
+        // buildingCountRequest.do();
+        console.log('dataArr', dataArr);
+        if (dataArr) {
+            buildingCountRequest.do({
+                polygon: getPolygonString(dataArr),
+            });
+        }
+        setPending(true);
     };
 
     const handlehideCILegends = (data) => {
@@ -653,6 +663,9 @@ const BarabiseLandslide = (props) => {
                                             bahrabiseLandSlide={incidents}
                                             landSlide={bahrabiseIncidents}
                                             landslideYear={landslideYear}
+                                            drawData={drawData}
+                                            chartReset={chartReset}
+                                            polygonResponse={polygonResponse}
                                         />
                                     )
                                 }
@@ -666,6 +679,10 @@ const BarabiseLandslide = (props) => {
                                             bahrabiseLandSlide={incidents}
                                             landSlide={bahrabiseIncidents}
                                             landslideYear={landslideYear}
+                                            drawData={drawData}
+                                            chartReset={chartReset}
+                                            pending={pending}
+                                            buildingCount={buildingCount}
                                         />
                                     )
                                 }
@@ -696,14 +713,14 @@ const BarabiseLandslide = (props) => {
                     <LandCoverLegends />
                 )
             }
-            {(currentPage === 5 || currentPage === 8)
+            {currentPage === 5
                 && (
                     <CriticalInfraLegends
                         handlePopulationChange={handlePopulationChange}
                         handleCritical={handleCritical}
                         criticalElement={criticalElement}
-                        hide={hideCILegends}
-                        right={currentPage === 5}
+                        hide={false}
+                        right
                     />
                 )
             }
@@ -745,6 +762,12 @@ const BarabiseLandslide = (props) => {
                             handlehideCILegends={handlehideCILegends}
 
                         />
+                        <CriticalInfraLegends
+                            handlePopulationChange={handlePopulationChange}
+                            handleCritical={handleCritical}
+                            criticalElement={criticalElement}
+                            hide={hideCILegends}
+                        />
 
                     </>
                 )
@@ -756,6 +779,12 @@ const BarabiseLandslide = (props) => {
                             hideCILegends={hideCILegends}
                             handleCIChange={handleCIChange}
                             handlehideCILegends={handlehideCILegends}
+                        />
+                        <CriticalInfraLegends
+                            handlePopulationChange={handlePopulationChange}
+                            handleCritical={handleCritical}
+                            criticalElement={criticalElement}
+                            hide={hideCILegends}
                         />
                     </>
                 )

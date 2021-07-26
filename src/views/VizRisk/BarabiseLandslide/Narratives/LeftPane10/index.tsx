@@ -9,6 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+import Loader from 'react-loader';
 import styles from './styles.scss';
 
 
@@ -20,6 +21,14 @@ interface Props{
     pending: boolean;
 
 }
+
+const ciRef = {
+    health: 'Hospital',
+    finance: 'Financial Institution',
+    education: 'Education Institution',
+};
+
+
 const generateYearsArr = () => {
     const max = new Date().getFullYear();
     const min = 2011;
@@ -40,7 +49,6 @@ const getTotalLoss = (year, arr) => {
             return incident.date > yearInt && incident.date < nextYear;
         })
         .map(l => l.loss);
-    console.log('temp', temp);
     if (temp.length > 0) {
         return temp
             .reduce((a, b) => ({ peopleDeathCount:
@@ -57,7 +65,7 @@ const LeftPane10 = (props: Props) => {
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
     const [lschartData, setLschartData] = useState(true);
-    const { drawData, landSlide, chartReset, ci } = props;
+    const { drawData, landSlide, chartReset, ci, pending, buildingCount } = props;
 
     useEffect(() => {
         if (landSlide) {
@@ -85,7 +93,8 @@ const LeftPane10 = (props: Props) => {
 
     useEffect(() => {
         if (drawData) {
-            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
+            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))]
+                .filter(i => i !== undefined);
             const cD = hazardArr.map(hazard => ({
                 name: hazard,
                 Total: drawData.filter(item => item.hazardTitle === hazard).length,
@@ -96,28 +105,48 @@ const LeftPane10 = (props: Props) => {
     }, [drawData]);
 
     useEffect(() => {
+        if (buildingCount) {
+            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))]
+                .filter(i => i !== undefined);
+            const cD = hazardArr.map(hazard => ({
+                name: hazard,
+                Total: drawData.filter(item => item.hazardTitle === hazard).length,
+            }));
+            cD.push({ name: 'Buildings', Total: buildingCount.count });
+            console.log('buildingCount', buildingCount);
+            setCIChartData(cD);
+            setReset(false);
+        }
+    }, [buildingCount, drawData]);
+
+    useEffect(() => {
+        console.log('reset');
         if (ci) {
-            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({
-                name: res,
+                name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
+            cD.push({ name: 'Buildings', Total: buildingCount.count });
             setCIChartData(cD);
             setReset(true);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chartReset, ci]);
 
     useEffect(() => {
         if (ci) {
-            const resArr = [...new Set(ci.map(h => h.resourceType))];
+            const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({
-                name: res,
+                name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
+            cD.push({ name: 'Buildings', Total: buildingCount.count });
             setCIChartData(cD);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     return (
         <div className={styles.vrSideBar}>
@@ -142,7 +171,7 @@ const LeftPane10 = (props: Props) => {
                     height={600}
                     data={cichartData}
                     layout="vertical"
-                    margin={{ left: 20, right: 20 }}
+                    margin={{ left: 5, right: 30 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
@@ -161,6 +190,7 @@ const LeftPane10 = (props: Props) => {
                     />
                 </BarChart>
             </ResponsiveContainer>
+
         </div>
     );
 };

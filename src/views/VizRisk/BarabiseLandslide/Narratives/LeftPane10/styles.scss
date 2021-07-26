@@ -135,10 +135,8 @@
 
 
 
-    .loaderInfo{
-        position: fixed;
-    top: 54%;
-    left: 55%;
+    .loaderClass{
+        position: relative;
         .loader{
             background-color: white;
         }

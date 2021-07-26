@@ -5,6 +5,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import { mapSources } from '#constants';
 import { drawStyle } from '../Data/mapbox';
+import RiskScores from '../Data/riskScores';
 
 import {
     // provincesSelector,
@@ -23,6 +24,8 @@ import {
 } from '#utils/domain';
 
 import TimelineSlider from './TimelineSlider';
+
+const hoveredWardId = null;
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -70,6 +73,8 @@ const draw = new MapboxDraw({
     defaultMode: 'draw_polygon',
 });
 
+const { scores } = RiskScores;
+
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
         super(props);
@@ -90,7 +95,7 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { bahrabiseLandSlide, currentPage, cidata: ci, wards } = this.props;
+        const { cidata: ci, wards } = this.props;
 
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -103,6 +108,11 @@ class FloodHistoryMap extends React.Component {
             maxZoom: 22,
         });
 
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'popup',
+        });
 
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
@@ -232,6 +242,30 @@ class FloodHistoryMap extends React.Component {
                 );
             });
 
+            this.map.on('mousemove', 'risk-fill-local', (e) => {
+                if (e.features.length > 0) {
+                    this.map.getCanvas().style.cursor = 'pointer';
+
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    console.log('e', e.features[0]);
+
+                    const wardno = e.features[0].properties.title;
+                    const riskScore = scores.filter(s => s.ward === wardno)[0].score;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                                <p> Ward No.: ${wardno} </p>
+                                <p> Risk: ${riskScore} </p>
+                            </div>
+                            `,
+                    ).addTo(this.map);
+                }
+            });
+
+            this.map.on('mouseleave', 'risk-fill-local', () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
 
             if (ci.length > 0) {
                 // const this.map = this.mapRef.current.getthis.Map();
@@ -307,6 +341,24 @@ class FloodHistoryMap extends React.Component {
                             'text-size': 12,
                             visibility: 'none',
                         },
+                    });
+                    this.map.on('mousemove', `unclustered-ci-${layer}`, (e) => {
+                        if (e) {
+                            this.map.getCanvas().style.cursor = 'pointer';
+                            const { lngLat } = e;
+                            const coordinates = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.title;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                            ).addTo(this.map);
+                        }
+                    });
+                    this.map.on('mouseleave', `unclustered-ci-${layer}`, () => {
+                        this.map.getCanvas().style.cursor = '';
+                        popup.remove();
                     });
                     return null;
                 });
@@ -442,7 +494,7 @@ class FloodHistoryMap extends React.Component {
                             });
                         return null;
                     });
-                // getPolygon(dataArr);
+                // this.props.getPolygon(dataArr);
 
                 console.log('result', result);
 
@@ -467,7 +519,7 @@ class FloodHistoryMap extends React.Component {
                 //     forest: forest.length,
                 //     farmlands: farmlands.length,
                 // });
-                handleDrawSelectedData(result);
+                handleDrawSelectedData(result, dataArr);
 
                 // this.map.fitBounds(bbox, {
                 //     padding: 20,
