@@ -727,7 +727,38 @@ export function getRasterTile(layer: { layername: string }) {
 
     return tileUrl;
 }
+// export function getRasterTileBuilding() {
+//     const tileUrl = [
+//         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+//         '&version=1.1.1',
+//         '&service=WMS',
+//         '&request=GetMap',
+//         '&layers=Bipad:NPL_buildings_exposure_total_area',
+//         '&tiled=true',
+//         '&width=256',
+//         '&height=256',
+//         '&srs=EPSG:3857',
+//         '&bbox={bbox-epsg-3857}',
+//         '&transparent=true',
+//         '&format=image/png',
+//     ].join('');
 
+//     return tileUrl;
+// }
+export const getBuildingFootprint = (years: number) => [
+    `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+    '&version=1.1.1',
+    '&service=WMS',
+    '&request=GetMap',
+    '&layers=Bipad:NPL_buildings_exposure_total_area',
+    '&tiled=true',
+    '&width=256',
+    '&height=256',
+    '&srs=EPSG:3857',
+    '&bbox={bbox-epsg-3857}',
+    '&transparent=true',
+    '&format=image/png',
+].join('');
 export function getRasterLegendUrl(layer: { layername: string }) {
     const legendUrl = [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
@@ -739,6 +770,7 @@ export function getRasterLegendUrl(layer: { layername: string }) {
         '&legend_options=fontAntiAliasing:true;layout:vertical;columnheight:100;dpi:96;labelMargin:2;fontSize:9;',
         '&width=12',
         '&height=12',
+        '&scale=1',
     ].join('');
 
     return legendUrl;
