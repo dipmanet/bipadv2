@@ -464,7 +464,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 >
                     <ModalHeader
                         className={styles.header}
-                        title="Add Resource"
+                        title="Add Data"
                         rightComponent={(
                             <DangerButton
                                 transparent
