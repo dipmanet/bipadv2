@@ -97,6 +97,7 @@ const LeftPane8 = (props: Props) => {
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
     const [lschartData, setLschartData] = useState([]);
+    const [wardwiseChartData, setwardwiseChartData] = useState([]);
     const {
         drawData,
         landSlide,
@@ -127,8 +128,29 @@ const LeftPane8 = (props: Props) => {
             setLossChart(loss);
             console.log('loss chart', loss);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        setwardwiseChartData(wardwiseData);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (landslideYear.length > 1) {
+            const arr = landslideYear.map(l => String(l));
+            arr.push('name');
+            const wwcD = wardwiseData.map(ward => Object.keys(ward)
+                .filter(key => arr.includes(key))
+                .reduce((obj, key) => {
+                    // eslint-disable-next-line no-param-reassign
+                    obj[key] = ward[key];
+                    return obj;
+                }, {}));
+
+            console.log('landslideYear', landslideYear);
+            console.log('...', [...landslideYear]);
+            setwardwiseChartData(wwcD);
+        } else {
+            setwardwiseChartData(wardwiseData);
+        }
+    }, [landslideYear]);
 
     useEffect(() => {
         let polyArr = [];
@@ -351,7 +373,7 @@ const LeftPane8 = (props: Props) => {
                 <BarChart
                     // width={300}
                     // height={600}
-                    data={wardwiseData}
+                    data={wardwiseChartData}
                     layout="vertical"
                     margin={{ left: 20, right: 20 }}
                 >
