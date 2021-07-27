@@ -4,6 +4,7 @@ export default {
             name: 'Ward 1',
             MalePop: 7326,
             FemalePop: 7007,
+            OtherPop: 0,
             TotalFamilyCount: 3105
             ,
         },
@@ -11,6 +12,7 @@ export default {
             name: 'Ward 2',
             MalePop: 6410,
             FemalePop: 6049,
+            OtherPop: 0,
             TotalFamilyCount: 2758
             ,
         },
@@ -18,6 +20,7 @@ export default {
             name: 'Ward 3',
             MalePop: 6795,
             FemalePop: 6754,
+            OtherPop: 0,
             TotalFamilyCount: 2868
             ,
         },
@@ -25,6 +28,7 @@ export default {
             name: 'Ward 4',
             MalePop: 4886,
             FemalePop: 4289,
+            OtherPop: 0,
             TotalFamilyCount: 2142
             ,
         },
@@ -39,6 +43,7 @@ export default {
             name: 'Ward 6',
             MalePop: 2610,
             FemalePop: 2755,
+            OtherPop: 0,
             TotalFamilyCount: 940
             ,
         },
@@ -46,6 +51,7 @@ export default {
             name: 'Ward 7',
             MalePop: 4610,
             FemalePop: 4433,
+            OtherPop: 0,
             TotalFamilyCount: 1706
             ,
         },
@@ -53,6 +59,7 @@ export default {
             name: 'Ward 8',
             MalePop: 3102,
             FemalePop: 2939,
+            OtherPop: 0,
             TotalFamilyCount: 1152
             ,
         },
@@ -60,6 +67,7 @@ export default {
             name: 'Ward 9',
             MalePop: 1475,
             FemalePop: 1805,
+            OtherPop: 0,
             TotalFamilyCount: 626
             ,
         },
@@ -67,6 +75,7 @@ export default {
             name: 'Ward 10',
             MalePop: 2007,
             FemalePop: 2083,
+            OtherPop: 0,
             TotalFamilyCount: 559
             ,
         },
@@ -74,6 +83,7 @@ export default {
             name: 'Ward 11',
             MalePop: 2461,
             FemalePop: 2580,
+            OtherPop: 0,
             TotalFamilyCount: 922
             ,
         },
@@ -81,6 +91,7 @@ export default {
             name: 'Ward 12',
             MalePop: 4637,
             FemalePop: 5372,
+            OtherPop: 0,
             TotalFamilyCount: 1998
             ,
         },
@@ -88,6 +99,7 @@ export default {
             name: 'Ward 13',
             MalePop: 4096,
             FemalePop: 3920,
+            OtherPop: 0,
             TotalFamilyCount: 1315
             ,
         },
@@ -95,6 +107,7 @@ export default {
             name: 'Ward 14',
             MalePop: 3711,
             FemalePop: 4401,
+            OtherPop: 0,
             TotalFamilyCount: 1616
             ,
         },
@@ -102,6 +115,7 @@ export default {
             name: 'Ward 15',
             MalePop: 2318,
             FemalePop: 2505,
+            OtherPop: 0,
             TotalFamilyCount: 762
             ,
         },
@@ -116,6 +130,7 @@ export default {
             name: 'Ward 17',
             MalePop: 2452,
             FemalePop: 2525,
+            OtherPop: 0,
             TotalFamilyCount: 869
             ,
         },
@@ -123,6 +138,7 @@ export default {
             name: 'Ward 18',
             MalePop: 2582,
             FemalePop: 2869,
+            OtherPop: 0,
             TotalFamilyCount: 1047
             ,
         },
@@ -130,6 +146,7 @@ export default {
             name: 'Ward 19',
             MalePop: 3388,
             FemalePop: 3557,
+            OtherPop: 0,
             TotalFamilyCount: 1181
             ,
         },

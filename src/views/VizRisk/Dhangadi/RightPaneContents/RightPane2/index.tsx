@@ -40,7 +40,7 @@ const data = [
 const COLORS_CHART = [
     '#d3e378', // agriculture
     '#00a811', // forest
-    '#d5d3d3', // other
+    '#f3f2f2', // other
     '#0765AA', // water bodies
     '#F2F2F2', // building
     '#effdc9', // sand
@@ -163,16 +163,10 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <h1>Land Cover</h1>
 
-                {/* <p>
-                    {' '}
-                    Located in the Terai region and lying close to water bodies,
-                    Rajapur has fertile and arable land.
-
-                </p> */}
                 <p>
                 Out of a total area of 260.92 sq. km, 45.8% of the land is covered
-                 by Farmland and 34.2% by forests.
-                 Other areas are covered by water bodies, grassland, sand and built-up area.
+                by Farmland and 34.2% by forests. Other areas are covered by water
+                bodies, grassland, sand, and built-up area.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -280,7 +274,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 </div>
                 {/* <SourceInfo /> */}
-                {/* <Disclaimer /> */}
+                <Disclaimer disclamer={'Disclaimer: Temporarily there is an inconsistency in the map layers due to different data sources'} />
             </div>
         );
     }

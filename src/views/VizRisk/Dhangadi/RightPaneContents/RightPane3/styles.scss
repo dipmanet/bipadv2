@@ -47,15 +47,16 @@
                     display: flex;
                     flex-direction: column;
                     .iconTitle{
-                    font-size: 20px;
-                    color: #A7B3BB;
-                    font-family: 'Source Sans Pro';
-    
-                    }
-                    .iconText{
-                        font-size: 12px;
-                        color: #A7B3BB;
-                    }
+                        font-size: 24px;
+                        color: #F7E4B9;
+                        font-weight: bold;
+                        font-family: 'Source Sans Pro';
+        
+                        }
+                        .iconText{
+                            font-size: 16px;
+                            color: #A7B3BB;
+                        }
                 }
             }
         }
@@ -79,6 +80,12 @@
                     width: 15px;
                     height: 15px;
                     background-color:  #00d725;;
+                    margin-right: 3px;
+                }
+                .legendOther{
+                    width: 15px;
+                    height: 15px;
+                    background-color:  #EB7C21;
                     margin-right: 3px;
                 }
                 .legendDaily{

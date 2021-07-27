@@ -115,31 +115,33 @@ const FloodHistoryLegends = (props: Props) => {
 
                         </button>
                     </div>
-                    {/* <div className={styles.floodItemContainer}>
-                     <button
-                         type="button"
-                         className={styles.legendBtn}
-                         onClick={() => handleLegendBtnClick('10')}
 
-                     >
-                         <Hexagon
-                             style={{
-                                 stroke: '#9dc7fa',
-                                 strokeWidth: 50,
-                                 fill: activeRasterLayer === '10'
-                                 ? '#036ef0' : 'transparent',
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={activeRasterLayer === '10'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('10')}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#9dc7fa',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '10' ? '#036ef0' : 'transparent',
 
-                             }}
-                             className={styles.educationHexagon}
-                         />
+                                }}
+                                className={styles.educationHexagon}
+                            />
 
 
-                         10
-                              years
-                         {' '}
+                         10years
+                            {' '}
 
-                     </button>
-                 </div> */}
+                        </button>
+                    </div>
+                </div>
+                <div className={styles.floodSubGroup}>
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
@@ -159,13 +161,10 @@ const FloodHistoryLegends = (props: Props) => {
                             />
 
 
-                         20years
-                            {' '}
-
+                         20 years
                         </button>
                     </div>
-                </div>
-                <div className={styles.floodSubGroup}>
+
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
@@ -188,7 +187,8 @@ const FloodHistoryLegends = (props: Props) => {
                          50 years
                         </button>
                     </div>
-
+                </div>
+                <div className={styles.floodSubGroup}>
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"
@@ -209,6 +209,98 @@ const FloodHistoryLegends = (props: Props) => {
 
 
                          100 years
+                        </button>
+                    </div>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={activeRasterLayer === '200'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('200')}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#9dc7fa',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '200' ? '#036ef0' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
+                            />
+
+
+                         200 years
+                        </button>
+                    </div>
+                </div>
+                <div className={styles.floodSubGroup}>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={activeRasterLayer === '250'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('250')}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#9dc7fa',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '250' ? '#036ef0' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
+                            />
+
+
+                         250 years
+                        </button>
+                    </div>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={activeRasterLayer === '500'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('500')}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#9dc7fa',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '500' ? '#036ef0' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
+                            />
+
+
+                         500 years
+                        </button>
+                    </div>
+                </div>
+                <div className={styles.floodSubGroup}>
+                    <div className={styles.floodItemContainer}>
+                        <button
+                            type="button"
+                            className={activeRasterLayer === '1000'
+                                ? styles.legendBtnSelected
+                                : styles.legendBtn}
+                            onClick={() => handleLegendBtnClick('1000')}
+                        >
+                            <Hexagon
+                                style={{
+                                    stroke: '#9dc7fa',
+                                    strokeWidth: 50,
+                                    fill: activeRasterLayer === '1000' ? '#036ef0' : 'transparent',
+
+                                }}
+                                className={styles.educationHexagon}
+                            />
+
+
+                         1000 years
                         </button>
                     </div>
                 </div>

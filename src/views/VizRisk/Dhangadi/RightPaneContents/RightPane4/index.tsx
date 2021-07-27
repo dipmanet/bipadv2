@@ -25,16 +25,15 @@ class SlideFourPane extends React.PureComponent<Props, State> {
 
 
                 <p>
-                Dhangadhi sub metropolitan has two major rivers flowing north-south:
-                 Khutiya river and Mohana river.
-                In addition, there are many other streams such as Kailali Nala, Seti Nala etc.
-                flowing in the municipality.
-                 These streams ultimately meet the Mohana river in the south.
+                Dhangadhi sub-metropolitan has two major rivers flowing north-south:
+                the Khutiya river and the Mohana river. In addition, there are many other
+                streams such as Kailali Nala, Seti Nala, etc. flowing in the municipality.
+                These streams ultimately meet the Mohana river in the south.
                 </p>
                 <p>
                 All of the residential and governmental buildings, religious and cultural sites,
-                 banking institutions, critical infrastructures such as hospitals, schools,
-                  bridges in Dhangadhi are at constant threat of flooding every monsoon.
+                banking institutions, critical infrastructures such as hospitals, schools,
+                bridges in Dhangadhi are at constant threat of flooding every monsoon.
 
                 </p>
 

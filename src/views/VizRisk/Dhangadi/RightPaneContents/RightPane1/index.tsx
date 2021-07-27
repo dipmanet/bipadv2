@@ -24,69 +24,69 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 const lineData = [
     {
-        name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
+        name: 'Jan', AvgMax: 20.4, DailyAvg: 13.3, AvgMin: 6.2,
     },
     {
-        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
+        name: 'Feb', AvgMax: 23.7, DailyAvg: 15.9, AvgMin: 8.1,
     },
     {
-        name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
+        name: 'Mar', AvgMax: 29.1, DailyAvg: 21.2, AvgMin: 13.3,
     },
     {
-        name: 'Apr', AvgMax: 40, DailyAvg: 28, AvgMin: 16,
+        name: 'Apr', AvgMax: 34.8, DailyAvg: 25.8, AvgMin: 16.8,
     },
     {
-        name: 'May', AvgMax: 41, DailyAvg: 32, AvgMin: 23,
+        name: 'May', AvgMax: 35.3, DailyAvg: 27.75, AvgMin: 20.2,
     },
     {
-        name: 'Jun', AvgMax: 40, DailyAvg: 33, AvgMin: 26,
+        name: 'Jun', AvgMax: 34.1, DailyAvg: 28.4, AvgMin: 22.7,
     },
     {
-        name: 'Jul', AvgMax: 37, DailyAvg: 31.5, AvgMin: 26,
+        name: 'Jul', AvgMax: 34, DailyAvg: 28.85, AvgMin: 23.7,
     },
     {
-        name: 'Aug', AvgMax: 33, DailyAvg: 29, AvgMin: 25,
+        name: 'Aug', AvgMax: 34.3, DailyAvg: 29.05, AvgMin: 23.8,
     },
     {
-        name: 'Sep', AvgMax: 33, DailyAvg: 27.5, AvgMin: 22,
+        name: 'Sep', AvgMax: 34.4, DailyAvg: 28.6, AvgMin: 22.8,
     },
     {
-        name: 'Oct', AvgMax: 33, DailyAvg: 23.5, AvgMin: 14,
+        name: 'Oct', AvgMax: 33.9, DailyAvg: 25.15, AvgMin: 16.4,
     },
     {
-        name: 'Nov', AvgMax: 31, DailyAvg: 20, AvgMin: 9,
+        name: 'Nov', AvgMax: 28.2, DailyAvg: 18.8, AvgMin: 9.4,
     },
     {
-        name: 'Dec', AvgMax: 27, DailyAvg: 17, AvgMin: 7,
+        name: 'Dec', AvgMax: 27.7, DailyAvg: 14.1, AvgMin: 0.5,
     },
 ];
 const rainfallData = [
     {
-        name: 'Jan', Rainfall: 134.3,
+        name: 'Jan', Rainfall: 124.1,
     },
     {
-        name: 'Feb', Rainfall: 25.3,
+        name: 'Feb', Rainfall: 17.7,
     },
     {
-        name: 'Mar', Rainfall: 84,
+        name: 'Mar', Rainfall: 19.1,
     },
     {
-        name: 'Apr', Rainfall: 31,
+        name: 'Apr', Rainfall: 72.1,
     },
     {
-        name: 'May', Rainfall: 226.7,
+        name: 'May', Rainfall: 113.2,
     },
     {
-        name: 'Jun', Rainfall: 314.5,
+        name: 'Jun', Rainfall: 218.6,
     },
     {
-        name: 'Jul', Rainfall: 668,
+        name: 'Jul', Rainfall: 532.6,
     },
     {
-        name: 'Aug', Rainfall: 644.7,
+        name: 'Aug', Rainfall: 299,
     },
     {
-        name: 'Sep', Rainfall: 229.5,
+        name: 'Sep', Rainfall: 108.1,
     },
     {
         name: 'Oct', Rainfall: 0,
@@ -196,14 +196,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <h2> Dhangadhi Sub-Metropolitan City  </h2>
                 <p>
                 Dhangadhi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
-                 It covers a total area of  260.92 sq. km and
-                  is located at the altitude of 109 m a.s.l.
+                It covers a total area of 260.92 sq. km and is located at an altitude of 109 MASL.
                 </p>
                 <h2>Climate</h2>
                 <p>
-                Summer starts from March and lasts till June. Winter begins in November (Mangsir)
-                 and lasts till February. Dhangadhi faces heavy downpours during the monsoon,
-                  from June to October.
+                Summer starts in March and lasts till June. Winter begins in November (Mangsir) and
+                lasts till February. Dhangadhi faces heavy downpours during the monsoon, from June
+                to October.
 
                 </p>
                 <div className={styles.iconRow}>
@@ -249,7 +248,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>2358 mm</div>
+                            <div className={styles.iconTitle}>1504.5 mm</div>
                             <div className={styles.iconText}>
                              Annual
                             Rainfall

@@ -58,7 +58,7 @@ const populationWardExpression = [
     19, '#fed990'];
 
 
-const rasterLayersYears = [5, 20, 50, 100];
+const rasterLayersYears = [5, 10, 20, 50, 100, 200, 250, 500, 1000];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 
 
@@ -66,7 +66,7 @@ const slideOneLayers = ['wardNumbers',
     'water', 'waterway',
     'wardOutline', 'municipalityFill'];
 
-const slideTwoLayers = ['bridgeDhangadi', 'water', 'waterway',
+const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'bridgeDhangadi', 'water', 'waterway',
     'canalDhangadi', 'DhangadiBuildings',
     'DhangadiRoads', 'forestDhangadi', 'WoodforestDhangadi',
     'agriculturallandDhangadi', 'agriculturelandDhangadiFarmyard',
@@ -247,18 +247,18 @@ class FloodHistoryMap extends React.Component {
         const criticalInfraClusters = [].concat(...arrCritical);
 
 
-        const slideFourLayers = ['bridgeDhangadi', 'water', 'waterway',
+        const slideFourLayers = [...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeDhangadi', 'water', 'waterway',
             'canalDhangadi',
             'DhangadiRoads',
             'municipalityFill'];
 
         const slideFiveLayers = [
-            ...criticalInfraClusters, 'DhangadiBuildings', ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
+            ...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'DhangadiBuildings', ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
             'canalDhangadi',
             'DhangadiRoads', 'municipalityFill',
 
         ];
-        const slideSixLayers = [
+        const slideSixLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple',
             'safeshelterDhangadiimage', 'safeshelterDhangadiIcon', ...evacClusters, ...rasterLayers, 'bridgeDhangadi', 'water', 'waterway',
             'canalDhangadi',
             'DhangadiRoads',
@@ -627,7 +627,7 @@ class FloodHistoryMap extends React.Component {
                     duration: 8000,
                 });
             }, 2000);
-            this.map.setPaintProperty('municipalityFill', 'fill-color', '#e0e0e0');
+            this.map.setPaintProperty('municipalityFill', 'fill-color', '#f3f2f2');
         });
     }
 
@@ -696,7 +696,7 @@ class FloodHistoryMap extends React.Component {
                     this.toggleVisiblity(slideThreeLayers, 'none');
                     this.toggleVisiblity(slideOneLayers, 'none');
                     this.toggleVisiblity(slideTwoLayers, 'visible');
-                    this.map.setPaintProperty('municipalityFill', 'fill-color', '#b4b4b4');
+                    this.map.setPaintProperty('municipalityFill', 'fill-color', '#f3f2f2');
                     this.orderLayers(slideTwoLayers);
                 } else if (nextProps.rightElement === 2) {
                     this.map.easeTo({
@@ -904,12 +904,22 @@ class FloodHistoryMap extends React.Component {
         this.hideFloodRasters();
         if (layer === '5') {
             this.map.setLayoutProperty('raster-rajapur-5', 'visibility', 'visible');
+        } else if (layer === '10') {
+            this.map.setLayoutProperty('raster-rajapur-10', 'visibility', 'visible');
         } else if (layer === '20') {
             this.map.setLayoutProperty('raster-rajapur-20', 'visibility', 'visible');
         } else if (layer === '50') {
             this.map.setLayoutProperty('raster-rajapur-50', 'visibility', 'visible');
         } else if (layer === '100') {
             this.map.setLayoutProperty('raster-rajapur-100', 'visibility', 'visible');
+        } else if (layer === '200') {
+            this.map.setLayoutProperty('raster-rajapur-200', 'visibility', 'visible');
+        } else if (layer === '250') {
+            this.map.setLayoutProperty('raster-rajapur-250', 'visibility', 'visible');
+        } else if (layer === '500') {
+            this.map.setLayoutProperty('raster-rajapur-500', 'visibility', 'visible');
+        } else if (layer === '1000') {
+            this.map.setLayoutProperty('raster-rajapur-1000', 'visibility', 'visible');
         }
     }
 
