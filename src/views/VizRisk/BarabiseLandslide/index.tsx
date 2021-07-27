@@ -251,15 +251,20 @@ const BarabiseLandslide = (props) => {
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const [population, setPopulation] = useState('ward');
     const [criticalElement, setCriticalElement] = useState('all');
+    // 2
     const [ci, setCI] = useState([]);
     const [incidentFilterYear, setincidentFilterYear] = useState('2020');
+    // 1
     const [incidents, setIncidents] = useState([]);
+    // 5
     const [bahrabiseIncidents, setBarabise] = useState([]);
     const [landslideYear, setLandSlideYear] = useState([]);
     const [yearClicked, setyearClicked] = useState(false);
+    // 3
     const [buildingCount, setBuildingCount] = useState(0);
     const [defaultBuildcount, setDefault] = useState(0);
     const [polygon, setPolygon] = useState([]);
+    // 4
     const [polygonResponse, setPolygonResponse] = useState({});
     const [drawData, setDrawData] = useState([]);
     const [chartReset, setChartReset] = useState(null);
@@ -267,6 +272,11 @@ const BarabiseLandslide = (props) => {
     const [hideCILegends, sethideCILegends] = useState(true);
     const [hideOSMLayers, setHideOSM] = useState(true);
     const [livesLost, setLivesLost] = useState(0);
+    const [req1, setReq1] = useState(false);
+    const [req2, setReq2] = useState(false);
+    const [req3, setReq3] = useState(false);
+    const [req4, setReq4] = useState(false);
+    const [req5, setReq5] = useState(false);
 
     const {
         // incidentList,
@@ -305,6 +315,7 @@ const BarabiseLandslide = (props) => {
 
     const handleCI = (data) => {
         setCI(data);
+        setReq2(true);
     };
 
     ciRequest.setDefaultParams({
@@ -313,6 +324,7 @@ const BarabiseLandslide = (props) => {
 
     const handlePolyRes = (res) => {
         setPolygonResponse(res);
+        setReq5(true);
     };
 
     landslidePolyRequest.setDefaultParams({
@@ -327,12 +339,14 @@ const BarabiseLandslide = (props) => {
             title: inc.title,
             loss: inc.loss || {},
         }));
+        // 1
         setIncidents(a);
         const lossArr = a.map(item => item.loss).filter(l => l !== undefined);
         const pdC = lossArr
             .reduce((a, b) => ({ peopleDeathCount: (b.peopleDeathCount || 0) + a.peopleDeathCount }));
         setLivesLost(pdC.peopleDeathCount);
-        setPending(false);
+        setReq1(true);
+        // setPending(false);
     };
 
     const setBarabiseIncidents = (data) => {
@@ -343,6 +357,7 @@ const BarabiseLandslide = (props) => {
             loss: inc.loss || {},
         }));
         setBarabise(bi);
+        setReq3(true);
     };
 
     const handlechartReset = () => {
@@ -362,7 +377,8 @@ const BarabiseLandslide = (props) => {
         if (defaultBuildcount === 0) {
             setDefault(data.count);
         }
-        setPending(false);
+        setReq4(true);
+        // setPending(false);
     };
     const getPolygon = (p) => {
         setPolygon(p);
@@ -389,6 +405,17 @@ const BarabiseLandslide = (props) => {
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [polygon]);
 
+    useEffect(() => {
+        if (req1 && req2 && req3 && req4 && req5) {
+            setPending(false);
+        } else {
+            setPending(true);
+        }
+    }, [req1,
+        req2,
+        req3,
+        req4,
+        req5]);
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
     const handleFlyTo = (destination) => {
@@ -405,10 +432,6 @@ const BarabiseLandslide = (props) => {
     };
 
     const handleCIChange = (val) => {
-        setShowCI(val);
-    };
-
-    const handleOSMChange = (val) => {
         setShowCI(val);
     };
 

@@ -377,6 +377,7 @@ class FloodHistoryMap extends React.Component {
             }
             // this.handlePlayPause();
             this.map.moveLayer('suseptibility-bahrabise', 'bahrabiseFarmland');
+            this.map.moveLayer('risk-fill-local', 'bahrabiseWardOutline');
         });
     }
 

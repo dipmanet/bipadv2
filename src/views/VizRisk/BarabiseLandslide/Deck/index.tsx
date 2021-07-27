@@ -44,7 +44,7 @@ const Deck = (props) => {
     const [landSlidePointsVisible, setLandslideVisible] = useState(true);
     const [mapanimationDuration, setMapAnimateDuration] = useState(30000);
     const [reAnimate, setReAnimate] = useState(false);
-    const [delay, setMapDelay] = useState(4000);
+    const [delay, setMapDelay] = useState(2000);
     const [ciGeo, setCiGeo] = useState({});
     const [filter, setFilter] = useState(null);
 
@@ -250,6 +250,13 @@ const Deck = (props) => {
             setRadiusChange(false);
             props.setNarrationDelay(2000);
             setLandslideVisible(false);
+            MapLayers.landslide.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'none');
+                return null;
+            });
+        } else if (currentPage === 1) {
+            const map = mapRef.current.getMap();
+            setReAnimate(true);
             MapLayers.landslide.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
