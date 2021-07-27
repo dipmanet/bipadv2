@@ -193,7 +193,7 @@ class Rajapur extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                <h2> Dhangadhi Sub-Metropolitan City  </h2>
+                <h1> Dhangadhi Sub-Metropolitan City  </h1>
                 <p>
                 Dhangadhi Sub-Metropolitan City is in the Kailali district of Sudurpaschim province.
                 It covers a total area of 260.92 sq. km and is located at an altitude of 109 MASL.
@@ -212,7 +212,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>41℃</div>
+                            <div className={styles.iconTitle}>35.3℃</div>
                             <div className={styles.iconText}>
                             Maximum
                                 <br />
@@ -229,7 +229,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>23℃</div>
+                            <div className={styles.iconTitle}>0.5℃</div>
                             <div className={styles.iconText}>
                             Minimum
                                 <br />
