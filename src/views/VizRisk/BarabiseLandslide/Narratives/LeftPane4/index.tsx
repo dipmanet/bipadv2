@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-    CartesianGrid,
     Cell,
     Label,
-    Legend,
-    Line,
-    LineChart,
     Pie,
     PieChart,
     ResponsiveContainer,
     Tooltip,
-    XAxis,
-    YAxis,
 } from 'recharts';
 import styles from './styles.scss';
 import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
@@ -29,7 +23,6 @@ interface Props{
 
 }
 
-
 const LeftPane4 = (props: Props) => {
     const { data: {
         renderActiveShape,
@@ -37,8 +30,6 @@ const LeftPane4 = (props: Props) => {
         customTooltip,
         activeIndex,
     } } = props;
-    console.log('props', props);
-
 
     return (
         <div className={styles.vrSideBar}>
@@ -50,7 +41,7 @@ const LeftPane4 = (props: Props) => {
                 the land is covered by forests, 23.64 sq km by farmland,
                 13.8 sq km by meadow, 0.112  sq km by water bodies and 8.6 sq km by
                 residential areas. Other areas in the municipality
-                is covered by scree, sand and scrubs.
+                is covered by scree, sand, scrubs, shingles and stones.
             </p>
             <div className={styles.customChartLegend}>
 
@@ -64,7 +55,7 @@ const LeftPane4 = (props: Props) => {
                             activeIndex={activeIndex}
                             activeShape={renderActiveShape}
                             data={demoChartdata}
-            // cx={150}
+                            // cx={150}
                             // cy={50}
                             innerRadius={70}
                             outerRadius={90}
@@ -82,8 +73,8 @@ const LeftPane4 = (props: Props) => {
                                 position="center"
                                 content={(
                                     <CustomLabel
-                                        value1={`${demoChartdata[activeIndex].value} sq km`}
-                                        value2={` / ${((demoChartdata[activeIndex].value / demoChartdata[0].total) * 100).toFixed(2)} sq km`}
+                                        value1={`${demoChartdata[activeIndex].value.toFixed(1)} sq km`}
+                                        value2={` / ${((demoChartdata[activeIndex].value / demoChartdata[0].total) * 100).toFixed(1)} sq km`}
                                     />
                                 )}
                             />

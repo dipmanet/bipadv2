@@ -16,18 +16,18 @@
     line-height: 1.4em;
 
 }
+
+
     .vrSideBar{
         scrollbar-width: none;
-        position: absolute;
-        display: flex;
-        flex-direction: column;
+        // position: fixed;
         background-color:rgb(12,36,50);
         color:#b6d6e4;
         padding: 40px 20px 20px 30px;
-        width: calc(30% - 60px);
-        height: 100vh;
-        left: 0;
         overflow-y: scroll;
+        min-height: 90vh;
+        // border: 1px solid red;
+        // display: none;
         .climateChart{
             margin-top: 10px;
         }
@@ -41,6 +41,14 @@
                 display: flex;
                 margin: 15px 15px 15px 0;
                 flex: 1;
+                .infoIconHH{
+                    margin: 0px 15px 0 5px;
+                    width: 32px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+                }
                 .infoIcon{
                     margin: 0px 15px 0 5px;
                     width: 32px;
@@ -87,54 +95,16 @@
         p{
             @extend .para-style;
         }
-        .climateLegendContainer{
-            display:flex;
-            justify-content: flex-start;
-            margin-left: 55px;
-            min-width: 200px;
-         
-            .climatelegend{
-            display:flex;
-            padding-right: 20px;
-                .legendMax{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #ffbf00;
-                    padding-right: 4px;
-                    margin-right: 3px;
-                }
-                .legendMin{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #347eff;
-                    // border: 1px solid #1f59be;
-                    margin-right: 3px;
-
-                }
-                .legendDaily{
-                    width: 15px;
-                    height: 15px;
-                    background-color: #00d725;
-                    // border: 1px solid #047a18;
-                    margin-right: 3px;
-                
-                }
-                .legendText{
-                    color: #6490a4;
-                    // opacity: 0.45;
-                    font-size: 10px;
-                    text-transform: uppercase;
-                }
-            }
-        }
+   
 
     }
+  
 
 
     .customTooltip{
         background-color: rgb(190, 190, 190) !important;
         color: #444;
-        padding: 5px;
+        padding-bottom: 5px;
         border-radius: 4px;
         h2{
             color: rgb(41, 40, 40) !important;
@@ -154,7 +124,7 @@
         }
     }
     .recharts-tooltip-wrapper{
-        background-color: rgb(192, 47, 47) !important;
+        background-color: white !important;
         border: 1px solid gray;
         z-index: 100;
         color: blue;
@@ -165,10 +135,8 @@
 
 
 
-    .loaderInfo{
-        position: fixed;
-    top: 54%;
-    left: 55%;
+    .loaderClass{
+        position: relative;
         .loader{
             background-color: white;
         }

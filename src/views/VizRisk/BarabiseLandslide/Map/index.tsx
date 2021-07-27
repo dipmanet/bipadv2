@@ -14,12 +14,13 @@ import {
     selectedDistrictIdSelector,
     selectedMunicipalityIdSelector,
 } from '#selectors';
-
+import LanduseLayers from '../Data/mapLayers';
 import {
     getWardFilter,
 } from '#utils/domain';
 import Demographics from '../Data/demographicsData';
 
+const { landuse } = LanduseLayers;
 
 const { demographicsData } = Demographics;
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
@@ -73,7 +74,7 @@ class FloodHistoryMap extends React.Component {
 
     public componentDidMount() {
         const {
-            lng, lat, zoom,
+            lng, lat, zoom, resourceArr,
         } = this.state;
         const {
             wards,
@@ -82,6 +83,7 @@ class FloodHistoryMap extends React.Component {
             selectedMunicipalityId: municipalityId,
             incidentList,
             ci,
+            currentPage,
         } = this.props;
 
 
@@ -107,11 +109,31 @@ class FloodHistoryMap extends React.Component {
 
 
         this.map.on('style.load', () => {
+            this.map.addSource('hillshadeBahrabiseLocal', {
+                type: 'raster',
+                tiles: [this.getHillshadeLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'bahrabiseHillshadeLocal',
+                    type: 'raster',
+                    source: 'hillshadeBahrabiseLocal',
+                    layout: {
+                        visibility: 'none',
+                    },
+                    paint: {
+                        'raster-opacity': 0.25,
+                    },
+                },
+            );
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
                 className: 'popup',
             });
+
 
             if (ci.length > 0) {
                 // const this.map = this.mapRef.current.getthis.Map();
@@ -127,9 +149,9 @@ class FloodHistoryMap extends React.Component {
                     type: 'FeatureCollection',
                     features,
                 };
-                const resourceArr = [...new Set(ci.map(c => c.resourceType))];
-                this.setState({ resourceArr });
-                resourceArr.map((layer) => {
+                const resourceAr = [...new Set(ci.map(c => c.resourceType))];
+                this.setState({ resourceArr: resourceAr });
+                resourceAr.map((layer) => {
                     this.map.addSource(`${layer}`, {
                         type: 'geojson',
                         data: this.getGeoJSON(layer, geoArr),
@@ -145,8 +167,8 @@ class FloodHistoryMap extends React.Component {
                             'circle-color': [
                                 'step',
                                 ['get', 'point_count'],
-                                // '#a4ac5e',
-                                '#3b5bc2',
+                                '#a4ac5e',
+                                // '#3b5bc2',
                                 100,
                                 '#a4ac5e',
                             ],
@@ -201,6 +223,9 @@ class FloodHistoryMap extends React.Component {
                 source: 'vizrisk-fills',
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
+                layout: {
+                    visibility: 'none',
+                },
                 paint: {
                     'fill-color': populationWardExpression,
                     'fill-opacity': [
@@ -224,7 +249,7 @@ class FloodHistoryMap extends React.Component {
                     { value: attribute.value },
                 );
             });
-            this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
             this.map.moveLayer('bahrabiseWardOutline');
             this.map.moveLayer('bahrabiseWardText');
 
@@ -239,9 +264,9 @@ class FloodHistoryMap extends React.Component {
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
-                            <p> Total Population: ${totalPop}</p>
-                        </div>
-                        `,
+                                <p> Total Population: ${totalPop}</p>
+                            </div>
+                            `,
                     ).addTo(this.map);
                     if (hoveredWardId) {
                         this.map.setFeatureState(
@@ -283,12 +308,56 @@ class FloodHistoryMap extends React.Component {
                 }
                 hoveredWardId = null;
             });
+
+            if (currentPage === 4) {
+                landuse.map((l) => {
+                    this.map.setLayoutProperty(l, 'visibility', 'none');
+                    return null;
+                });
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'none');
+                this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+                this.map.moveLayer('bahrabiseWardOutline');
+                this.map.moveLayer('bahrabiseWardText');
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+                    return null;
+                });
+            }
+
+
+            if (currentPage === 5) {
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
+                this.state.resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`clusters-ci-${layer}`);
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`clusters-count-ci-${layer}`);
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`unclustered-ci-${layer}`);
+                    return null;
+                });
+                landuse.map((l) => {
+                    this.map.setLayoutProperty(l, 'visibility', 'visible');
+                    return null;
+                });
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+                this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
+
+                this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
+                this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
+            }
         });
     }
 
     public componentDidUpdate(prevProps) {
         const { population, currentPage } = this.props;
         const { resourceArr } = this.state;
+        console.log('currentPage', currentPage);
         if (population !== prevProps.population) {
             if (population === 'ward') {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
@@ -299,15 +368,44 @@ class FloodHistoryMap extends React.Component {
         }
         if (currentPage !== prevProps.currentPage) {
             if (currentPage === 5) {
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
                 resourceArr.map((layer) => {
                     this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
-                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`clusters-ci-${layer}`);
                     this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`clusters-count-ci-${layer}`);
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.moveLayer(`unclustered-ci-${layer}`);
+                    return null;
+                });
+                landuse.map((l) => {
+                    this.map.setLayoutProperty(l, 'visibility', 'visible');
                     return null;
                 });
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
                 this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
+
+                this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'none');
                 this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
+            }
+            if (currentPage === 4) {
+                landuse.map((l) => {
+                    this.map.setLayoutProperty(l, 'visibility', 'none');
+                    return null;
+                });
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'none');
+                this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+                this.map.moveLayer('bahrabiseWardOutline');
+                this.map.moveLayer('bahrabiseWardText');
+                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+                resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+                    return null;
+                });
             }
         }
         if (this.props.criticalElement !== prevProps.criticalElement) {
@@ -392,6 +490,21 @@ class FloodHistoryMap extends React.Component {
         geoObj.features.push(...d);
         return geoObj;
     }
+
+    public getHillshadeLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:Barhabise_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public render() {
         const mapStyle = {

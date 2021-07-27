@@ -44,7 +44,7 @@ const Deck = (props) => {
     const [landSlidePointsVisible, setLandslideVisible] = useState(true);
     const [mapanimationDuration, setMapAnimateDuration] = useState(30000);
     const [reAnimate, setReAnimate] = useState(false);
-    const [delay, setMapDelay] = useState(4000);
+    const [delay, setMapDelay] = useState(2000);
     const [ciGeo, setCiGeo] = useState({});
     const [filter, setFilter] = useState(null);
 
@@ -197,6 +197,7 @@ const Deck = (props) => {
             },
         );
 
+
         if (currentPage === 8) {
             map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
             map.moveLayer('suseptibility-bahrabise');
@@ -216,6 +217,22 @@ const Deck = (props) => {
 
             return null;
         });
+
+        if (currentPage === 3) {
+            MapLayers.landuse.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+        }
+
+        if (currentPage === 0) {
+            MapLayers.landslide.map((layer) => {
+                map.setLayoutProperty(layer, 'visibility', 'visible');
+                return null;
+            });
+
+            // map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+        }
         // map.moveLayer('landslide-barabise');
 
         // map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
@@ -239,30 +256,16 @@ const Deck = (props) => {
             });
         } else if (currentPage === 1) {
             const map = mapRef.current.getMap();
-
-            props.setNarrationDelay(1000);
-            setMapDelay(1000);
             setReAnimate(true);
-            setMapAnimateDuration(1000);
-
-            handleFlyTo(Locations.bahrabise);
-            setRadiusChange(true);
-            setAllDataVisible(false);
-            setLandslideVisible(true);
-
-            map.setLayoutProperty('landslide-barabise', 'visibility', 'visible');
-            MapLayers.landuse.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
-                return null;
-            });
-
             MapLayers.landslide.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
+                map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
         } else if (currentPage === 2) {
             const map = mapRef.current.getMap();
             setReAnimate(true);
+            handleFlyTo(Locations.bahrabise);
+            // map.panBy([0, 200]);
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
@@ -389,7 +392,7 @@ const Deck = (props) => {
                             getPosition: d => d.position,
                             getFillColor: [209, 203, 111],
                             getRadius: 500,
-                            radiusMinPixels: 3,
+                            radiusMinPixels: 8,
                             // pickable: true,
                             // visible: allDataVisible,
                             animationProgress: springProps.enterProgress,

@@ -5,12 +5,17 @@
     align-items: flex-start;
     position: fixed;
     right: 70px;
-    bottom: 60px;
-    background: rgb(18,29,59);
+    bottom: 20px;
+    // background: rgb(18,29,59);
     color: white;
-    // opacity: 0.85;
-    // height: 150px;
-    padding: 7px;
+
+    background: rgba( 19, 32, 55, 1 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 12.0px );
+    -webkit-backdrop-filter: blur( 12.0px );
+    border-radius: 5px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    padding: 10px;
     .circles{
         display: flex;
         // height: 150px;
@@ -18,7 +23,9 @@
             justify-content: space-between;
             align-items: flex-start;
             top: 5px;
-
+            h2{
+                font-size: 12px;
+            }
             .row{
                 display: flex;
                 align-items: center;

@@ -56,6 +56,7 @@ import legendList from './Components/Legends/legends';
 import LeftPaneContainer from '../Common/LeftPaneContainer';
 import DemographicsLegends from '../Common/Legends/DemographicsLegends';
 import CriticalInfraLegends from '../Common/Legends/CriticalInfraLegends';
+import LandCoverLegends from '../Common/Legends/LandCoverLegends';
 import NavButtons from '../Common/NavButtons';
 import LeftPane1 from './Narratives/LeftPane1';
 import LeftPane2 from './Narratives/LeftPane2';
@@ -66,8 +67,11 @@ import LeftPane6 from './Narratives/LeftPane6';
 import LeftPane7 from './Narratives/LeftPane7';
 import LeftPane8 from './Narratives/LeftPane8';
 import LeftPane9 from './Narratives/LeftPane9';
+import LeftPane10 from './Narratives/LeftPane10';
 import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
+import CISwitchLegends from './Components/CISwitchLegends';
+import { getgeoJsonLayer } from '#views/VizRisk/Panchpokhari/utils';
 
 interface Params {
 }
@@ -100,6 +104,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     regions: regionsSelector(state),
     filters: filtersSelector(state),
     hazards: hazardTypesSelector(state),
+
 
 });
 
@@ -189,6 +194,31 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onMount: true,
     },
+    buildingCountRequest: {
+        url: '/overpass-element/',
+        method: methods.GET,
+        query: ({ params: { polygon } }) => ({
+            limit: 0,
+            count: true,
+            municipality: 23002,
+            bbox: polygon,
+            selector: `${'"'}building${'"'}`,
+        }),
+        onSuccess: ({ response, params: { handleBuidingResponse } }) => {
+            // const {  buildingCount = [] } = response;
+            handleBuidingResponse(response);
+        },
+        onMount: true,
+    },
+    landslidePolyRequest: {
+        url: ({ params }) => params.url,
+        method: methods.GET,
+        onSuccess: ({ params: { handlePolyRes }, response }) => {
+            handlePolyRes(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 
@@ -202,6 +232,7 @@ const leftElements = [
     <LeftPane7 />,
     <LeftPane8 />,
     <LeftPane9 />,
+    <LeftPane10 />,
 ];
 
 const BarabiseLandslide = (props) => {
@@ -220,12 +251,33 @@ const BarabiseLandslide = (props) => {
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const [population, setPopulation] = useState('ward');
     const [criticalElement, setCriticalElement] = useState('all');
+    // 2
     const [ci, setCI] = useState([]);
-    const [incidentFilterYear, setincidentFilterYear] = useState('2011');
+    const [incidentFilterYear, setincidentFilterYear] = useState('2020');
+    // 1
     const [incidents, setIncidents] = useState([]);
+    // 5
     const [bahrabiseIncidents, setBarabise] = useState([]);
     const [landslideYear, setLandSlideYear] = useState([]);
     const [yearClicked, setyearClicked] = useState(false);
+    // 3
+    const [buildingCount, setBuildingCount] = useState(0);
+    const [defaultBuildcount, setDefault] = useState(0);
+    const [polygon, setPolygon] = useState([]);
+    // 4
+    const [polygonResponse, setPolygonResponse] = useState({});
+    const [drawData, setDrawData] = useState([]);
+    const [chartReset, setChartReset] = useState(null);
+    const [showCI, setShowCI] = useState(false);
+    const [hideCILegends, sethideCILegends] = useState(true);
+    const [hideOSMLayers, setHideOSM] = useState(true);
+    const [livesLost, setLivesLost] = useState(0);
+    const [req1, setReq1] = useState(false);
+    const [req2, setReq2] = useState(false);
+    const [req3, setReq3] = useState(false);
+    const [req4, setReq4] = useState(false);
+    const [req5, setReq5] = useState(false);
+
     const {
         // incidentList,
         hazardTypes,
@@ -234,6 +286,8 @@ const BarabiseLandslide = (props) => {
             ciRequest,
             incidentsGetRequest,
             incidentsGetRequestBB,
+            buildingCountRequest,
+            landslidePolyRequest,
         },
     } = props;
     const handleAnimationStart = () => setReanimate(false);
@@ -261,10 +315,21 @@ const BarabiseLandslide = (props) => {
 
     const handleCI = (data) => {
         setCI(data);
+        setReq2(true);
     };
 
     ciRequest.setDefaultParams({
         handleCI,
+    });
+
+    const handlePolyRes = (res) => {
+        setPolygonResponse(res);
+        setReq5(true);
+    };
+
+    landslidePolyRequest.setDefaultParams({
+        handlePolyRes,
+        url: getgeoJsonLayer('Overall_landslide_barhabise_wgs84'),
     });
 
     const setIncidentData = (data) => {
@@ -274,9 +339,14 @@ const BarabiseLandslide = (props) => {
             title: inc.title,
             loss: inc.loss || {},
         }));
+        // 1
         setIncidents(a);
-        setPending(false);
-        console.log('a', a);
+        const lossArr = a.map(item => item.loss).filter(l => l !== undefined);
+        const pdC = lossArr
+            .reduce((a, b) => ({ peopleDeathCount: (b.peopleDeathCount || 0) + a.peopleDeathCount }));
+        setLivesLost(pdC.peopleDeathCount);
+        setReq1(true);
+        // setPending(false);
     };
 
     const setBarabiseIncidents = (data) => {
@@ -287,6 +357,11 @@ const BarabiseLandslide = (props) => {
             loss: inc.loss || {},
         }));
         setBarabise(bi);
+        setReq3(true);
+    };
+
+    const handlechartReset = () => {
+        setChartReset(!chartReset);
     };
 
     incidentsGetRequest.setDefaultParams({
@@ -296,6 +371,51 @@ const BarabiseLandslide = (props) => {
     incidentsGetRequestBB.setDefaultParams({
         setBarabiseIncidents,
     });
+
+    const handleBuidingResponse = (data) => {
+        setBuildingCount(data);
+        if (defaultBuildcount === 0) {
+            setDefault(data.count);
+        }
+        setReq4(true);
+        // setPending(false);
+    };
+    const getPolygon = (p) => {
+        setPolygon(p);
+    };
+
+    buildingCountRequest.setDefaultParams({
+        handleBuidingResponse,
+        setPending,
+        // polygon,
+    });
+
+    const getPolygonString = (p) => {
+        const poly = { type: 'Polygon', coordinates: p };
+        console.log('poly', poly);
+        return JSON.stringify(poly);
+    };
+
+    // useEffect(() => {
+    //     if (polygon.length > 0) {
+    //         buildingCountRequest.do({
+    //             polygon: getPolygonString(polygon),
+    //         });
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [polygon]);
+
+    useEffect(() => {
+        if (req1 && req2 && req3 && req4 && req5) {
+            setPending(false);
+        } else {
+            setPending(true);
+        }
+    }, [req1,
+        req2,
+        req3,
+        req4,
+        req5]);
 
     const handleChangeViewState = ({ viewState }) => setViewState(viewState);
     const handleFlyTo = (destination) => {
@@ -309,6 +429,10 @@ const BarabiseLandslide = (props) => {
 
     const handlePopulationChange = (population) => {
         setPopulation(population);
+    };
+
+    const handleCIChange = (val) => {
+        setShowCI(val);
     };
 
     const disableNavBtns = (val) => {
@@ -350,6 +474,26 @@ const BarabiseLandslide = (props) => {
     const handleYearSelect = (landSlideYear) => {
         setLandSlideYear(landSlideYear);
         setyearClicked(!yearClicked);
+    };
+
+    const handleDrawSelectedData = (result, dataArr) => {
+        setDrawData(result);
+        // buildingCountRequest.do();
+        console.log('dataArr', dataArr);
+        if (dataArr) {
+            buildingCountRequest.do({
+                polygon: getPolygonString(dataArr),
+            });
+        }
+        setPending(true);
+    };
+
+    const handlehideCILegends = (data) => {
+        sethideCILegends(data);
+    };
+
+    const handlehideOSMLayers = (data) => {
+        setHideOSM(data);
     };
 
 
@@ -396,7 +540,7 @@ const BarabiseLandslide = (props) => {
 
             }
             {
-                (currentPage === 6 || currentPage === 7)
+                (currentPage >= 6)
 
                 && (
                     <>
@@ -406,13 +550,22 @@ const BarabiseLandslide = (props) => {
                             handleIncidentChange={handleIncidentChange}
                             landslideYear={landslideYear}
                             yearClicked={yearClicked}
+                            getPolygon={getPolygon}
+                            cidata={ci}
+                            chartReset={chartReset}
+                            handlechartReset={handlechartReset}
+                            handleDrawSelectedData={handleDrawSelectedData}
+                            hideCI={hideCILegends}
+                            criticalElement={criticalElement}
+                            polygonResponse={polygonResponse}
+                            hideOSMLayers={hideOSMLayers}
                         />
                     </>
                 )
 
 
             }
-            {
+            {/* {
                 (currentPage === 8 || currentPage === 9)
 
                 && (
@@ -433,7 +586,7 @@ const BarabiseLandslide = (props) => {
                 )
 
 
-            }
+            } */}
 
 
             <Spring
@@ -456,14 +609,23 @@ const BarabiseLandslide = (props) => {
                                     && (
                                         <LeftPane1
                                             data={props}
+                                            incidentsCount={incidents.length}
+                                            livesLost={livesLost}
+                                            currentPage={currentPage}
                                         />
                                     )
                                 }
                                 {
                                     currentPage === 1
                                     && (
-                                        <LeftPane2
+                                        // <LeftPane2
+                                        //     data={props}
+                                        // />
+                                        <LeftPane1
                                             data={props}
+                                            currentPage={currentPage}
+                                            incidentsCount={incidents.length}
+                                            livesLost={livesLost}
                                         />
                                     )
                                 }
@@ -523,6 +685,9 @@ const BarabiseLandslide = (props) => {
                                             bahrabiseLandSlide={incidents}
                                             landSlide={bahrabiseIncidents}
                                             landslideYear={landslideYear}
+                                            drawData={drawData}
+                                            chartReset={chartReset}
+                                            polygonResponse={polygonResponse}
                                         />
                                     )
                                 }
@@ -536,6 +701,27 @@ const BarabiseLandslide = (props) => {
                                             bahrabiseLandSlide={incidents}
                                             landSlide={bahrabiseIncidents}
                                             landslideYear={landslideYear}
+                                            drawData={drawData}
+                                            chartReset={chartReset}
+                                            polygonResponse={polygonResponse}
+                                        />
+                                    )
+                                }
+                                {
+                                    currentPage === 9
+                                    && (
+                                        <LeftPane10
+                                            data={props}
+                                            ci={ci}
+                                            incidentFilterYear={incidentFilterYear}
+                                            bahrabiseLandSlide={incidents}
+                                            landSlide={bahrabiseIncidents}
+                                            landslideYear={landslideYear}
+                                            drawData={drawData}
+                                            chartReset={chartReset}
+                                            pending={pending}
+                                            buildingCount={buildingCount}
+                                            overallBuildingsCount={defaultBuildcount}
                                         />
                                     )
                                 }
@@ -561,12 +747,19 @@ const BarabiseLandslide = (props) => {
                     />
                 )
             }
+            {currentPage === 3
+                && (
+                    <LandCoverLegends />
+                )
+            }
             {currentPage === 5
                 && (
                     <CriticalInfraLegends
                         handlePopulationChange={handlePopulationChange}
                         handleCritical={handleCritical}
                         criticalElement={criticalElement}
+                        hide={false}
+                        right
                     />
                 )
             }
@@ -578,10 +771,67 @@ const BarabiseLandslide = (props) => {
             }
             {currentPage === 7
                 && (
-                    <InventoryLegend
-                        handleYearSelect={handleYearSelect}
-                    />
+                    <>
+                        <InventoryLegend
+                            handleYearSelect={handleYearSelect}
+                        />
+                        <CISwitchLegends
+                            handleCIChange={handleCIChange}
+                            handlehideCILegends={handlehideCILegends}
+                            handlehideOSMLayers={handlehideOSMLayers}
+                            hideCILegends={hideCILegends}
+                            hideOSMLayers={hideOSMLayers}
+                            showOSMSwitch
+                        />
+                        <CriticalInfraLegends
+                            handlePopulationChange={handlePopulationChange}
+                            handleCritical={handleCritical}
+                            criticalElement={criticalElement}
+                            hide={hideCILegends}
+                        />
+                    </>
+                )
+            }
+            {currentPage === 8
+                && (
+                    <>
+                        <InventoryLegend
+                            handleYearSelect={handleYearSelect}
+                        />
+                        <CISwitchLegends
+                            hideCILegends={hideCILegends}
+                            handleCIChange={handleCIChange}
+                            handlehideOSMLayers={handlehideOSMLayers}
+                            handlehideCILegends={handlehideCILegends}
+                            hideOSMLayers={hideOSMLayers}
+                            showOSMSwitch
 
+                        />
+                        <CriticalInfraLegends
+                            handlePopulationChange={handlePopulationChange}
+                            handleCritical={handleCritical}
+                            criticalElement={criticalElement}
+                            hide={hideCILegends}
+                        />
+
+                    </>
+                )
+            }
+            {currentPage === 9
+                && (
+                    <>
+                        <CISwitchLegends
+                            hideCILegends={hideCILegends}
+                            handleCIChange={handleCIChange}
+                            handlehideCILegends={handlehideCILegends}
+                        />
+                        <CriticalInfraLegends
+                            handlePopulationChange={handlePopulationChange}
+                            handleCritical={handleCritical}
+                            criticalElement={criticalElement}
+                            hide={hideCILegends}
+                        />
+                    </>
                 )
             }
             {Object.keys(legendList).indexOf(currentPage.toString()) !== -1

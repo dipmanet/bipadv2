@@ -11,14 +11,7 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 import Demo from '../../Data/demographicsData';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
-import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
-import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
 
-
-const demoChartdata = Demo.demographicsData;
 
 interface Props{
     handleNext: () => void;
@@ -48,7 +41,6 @@ const getTotalLoss = (year, arr) => {
             return incident.date > yearInt && incident.date < nextYear;
         })
         .map(l => l.loss);
-    console.log('temp', temp);
     if (temp.length > 0) {
         return temp
             .reduce((a, b) => ({ peopleDeathCount:
@@ -62,7 +54,7 @@ const getTotalLoss = (year, arr) => {
 const LeftPane7 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
-    const { incidentFilterYear, bahrabiseLandSlide, landSlide } = props;
+    const { landSlide } = props;
 
     useEffect(() => {
         if (landSlide) {

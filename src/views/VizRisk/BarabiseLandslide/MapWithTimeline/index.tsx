@@ -3,6 +3,9 @@ import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
+import { mapSources } from '#constants';
+import { drawStyle } from '../Data/mapbox';
+import RiskScores from '../Data/riskScores';
 
 import {
     // provincesSelector,
@@ -16,13 +19,13 @@ import {
     selectedMunicipalityIdSelector,
 } from '#selectors';
 
+import {
+    getWardFilter,
+} from '#utils/domain';
 
 import TimelineSlider from './TimelineSlider';
 
-const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
-if (TOKEN) {
-    mapboxgl.accessToken = TOKEN;
-}
+const hoveredWardId = null;
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -36,7 +39,56 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
+const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
+if (TOKEN) {
+    mapboxgl.accessToken = TOKEN;
+}
 
+const epochs = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
+
+const riskExpression = [
+    'interpolate',
+    ['linear'],
+    ['feature-state', 'value'],
+    1, 'rgb(230,245,152)', 2, 'rgb(230,245,152)',
+    3, 'rgb(245,173,96)', 4, 'rgb(213,62,79)',
+    5, 'rgb(254,251,191)', 6, 'rgb(230,245,152)',
+    7, 'rgb(171,221,196)', 8, 'rgb(254,251,191)',
+    9, 'rgb(252,224,139)',
+];
+
+const ciRef = {
+    health: 'Hospital',
+    finance: 'Financial Institution',
+    education: 'Education Instution',
+};
+const draw = new MapboxDraw({
+    displayControlsDefault: false,
+    userProperties: true,
+    controls: {
+        polygon: true,
+        trash: true,
+    },
+    styles: drawStyle,
+    defaultMode: 'draw_polygon',
+});
+
+const { scores } = RiskScores;
+const landuseLayers = [
+    'bahrabiseForest',
+    'bahrabiseBuildings',
+    'bahrabiseBridge',
+    'bahrabiseRoads',
+    'bahrabiseFarmland',
+    // 'bahrabiseFill',
+    'bahrabiseStone',
+    'bahrabiseShingle',
+    'bahrabiseScree',
+    'bahrabiseScrub',
+    // 'bahrabiseContourVals',
+    // 'bahrabiseContourLines',
+    // 'bahrabiseHillshadeLocal',
+];
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
         super(props);
@@ -45,8 +97,10 @@ class FloodHistoryMap extends React.Component {
             lng: 85.90010912899756,
             lat: 27.821772478807212,
             zoom: 11,
-            incidentYear: '0',
-            playState: true,
+            incidentYear: '9',
+            playState: false,
+            geoArr: {},
+            resourceArr: [],
         };
     }
 
@@ -55,17 +109,8 @@ class FloodHistoryMap extends React.Component {
             lng, lat, zoom,
         } = this.state;
 
-        const { bahrabiseLandSlide, currentPage } = this.props;
-        if (currentPage === 6) {
-            this.interval = setInterval(() => {
-                this.setState((prevState) => {
-                    if (Number(prevState.incidentYear) < 10) {
-                        return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
-                    }
-                    return ({ incidentYear: '0' });
-                });
-            }, 1000);
-        }
+        const { cidata: ci, wards } = this.props;
+
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -77,6 +122,11 @@ class FloodHistoryMap extends React.Component {
             maxZoom: 22,
         });
 
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            className: 'popup',
+        });
 
         this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
@@ -84,12 +134,20 @@ class FloodHistoryMap extends React.Component {
 
         // this.map.addControl(new MapboxLegendControl({},
         // { reverseOrder: false }), 'bottom-right');
-
+        const mapping = wards.filter(item => item.municipality === 23002).map(item => ({
+            ...item,
+            value: Number(item.title),
+        }));
         this.map.on('style.load', () => {
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseForest', 'visibility', 'none');
             this.map.setLayoutProperty('bahrabiseRoads', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseScrub', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseScree', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseShingle', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseStone', 'visibility', 'none');
+            this.map.setLayoutProperty('bahrabiseFarmland', 'visibility', 'none');
             this.map.addSource('hillshadeBahrabiseLocal', {
                 type: 'raster',
                 tiles: [this.getHillshadeLayer()],
@@ -101,13 +159,31 @@ class FloodHistoryMap extends React.Component {
                     id: 'bahrabiseHillshadeLocal',
                     type: 'raster',
                     source: 'hillshadeBahrabiseLocal',
-                    layout: {},
                     paint: {
                         'raster-opacity': 0.25,
                     },
                 },
             );
 
+            this.map.addSource('suseptibilityBahrabise', {
+                type: 'raster',
+                tiles: [this.getSusceptibilityLayer()],
+                tileSize: 256,
+            });
+
+            this.map.addLayer(
+                {
+                    id: 'suseptibility-bahrabise',
+                    type: 'raster',
+                    source: 'suseptibilityBahrabise',
+                    paint: {
+                        'raster-opacity': 1,
+                    },
+                    layout: {
+                        visibility: 'none',
+                    },
+                },
+            );
 
             const features = this.props.bahrabiseLandSlide.map(item => ({
                 type: 'Feature',
@@ -119,6 +195,8 @@ class FloodHistoryMap extends React.Component {
                     date: item.date,
                 },
             }));
+
+
             const geoData = {
                 type: 'FeatureCollection',
                 features,
@@ -138,375 +216,392 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
-            this.map.moveLayer('incidents-layer');
+
+
+            this.map.addSource('vizrisk-fills', {
+                type: 'vector',
+                url: mapSources.nepal.url,
+            });
+
+            this.map.addLayer({
+                id: 'risk-fill-local',
+                source: 'vizrisk-fills',
+                'source-layer': mapSources.nepal.layers.ward,
+                type: 'fill',
+                paint: {
+                    'fill-color': riskExpression,
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0,
+                        1,
+                    ],
+                },
+                layout: {
+                    visibility: 'none',
+                },
+                filter: getWardFilter(3, 24, 23002, wards),
+            });
+
+            mapping.forEach((attribute) => {
+                this.map.setFeatureState(
+                    {
+                        id: attribute.id,
+                        source: 'vizrisk-fills',
+                        sourceLayer: mapSources.nepal.layers.ward,
+                    },
+                    { value: attribute.value },
+                );
+            });
+
+            this.map.on('mousemove', 'risk-fill-local', (e) => {
+                if (e.features.length > 0) {
+                    this.map.getCanvas().style.cursor = 'pointer';
+
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    console.log('e', e.features[0]);
+
+                    const wardno = e.features[0].properties.title;
+                    const riskScore = scores.filter(s => s.ward === wardno)[0].score;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                                <p> Ward No.: ${wardno} </p>
+                                <p> Risk: ${riskScore} </p>
+                            </div>
+                            `,
+                    ).addTo(this.map);
+                }
+            });
+
+            this.map.on('mouseleave', 'risk-fill-local', () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
+            if (ci.length > 0) {
+                // const this.map = this.mapRef.current.getthis.Map();
+                const cifeatures = ci.map(f => ({
+                    properties: {
+                        resourceType: f.resourceType,
+                        title: f.title,
+                        id: f.id,
+                    },
+                    geometry: f.point,
+                }));
+                const geoArr = {
+                    type: 'FeatureCollection',
+                    features: cifeatures,
+                };
+                const resourceArr = [...new Set(ci.map(c => c.resourceType))];
+                this.setState({ resourceArr });
+                this.setState({ geoArr });
+                resourceArr.map((layer) => {
+                    this.map.addSource(`${layer}`, {
+                        type: 'geojson',
+                        data: this.getGeoJSON(layer, geoArr),
+                        cluster: true,
+                        clusterRadius: 50,
+                    });
+                    this.map.addLayer({
+                        id: `clusters-ci-${layer}`,
+                        type: 'circle',
+                        source: `${layer}`,
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#a4ac5e',
+                                100,
+                                '#a4ac5e',
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40,
+                            ],
+                        },
+                        layout: {
+                            visibility: 'none',
+                        },
+                    });
+
+                    this.map.addLayer({
+                        id: `unclustered-ci-${layer}`,
+                        type: 'symbol',
+                        source: `${layer}`,
+                        filter: ['!', ['has', 'point_count']],
+                        layout: {
+                            'icon-image': ['get', 'resourceType'],
+                            'icon-size': 0.3,
+                            'icon-anchor': 'bottom',
+                            visibility: 'none',
+                        },
+                    });
+                    this.map.addLayer({
+                        id: `clusters-count-ci-${layer}`,
+                        type: 'symbol',
+                        source: `${layer}`,
+                        layout: {
+                            'text-field': '{point_count_abbreviated}',
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12,
+                            visibility: 'none',
+                        },
+                    });
+                    this.map.on('mousemove', `unclustered-ci-${layer}`, (e) => {
+                        if (e) {
+                            this.map.getCanvas().style.cursor = 'pointer';
+                            const { lngLat } = e;
+                            const coordinates = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.title;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                            ).addTo(this.map);
+                        }
+                    });
+                    this.map.on('mouseleave', `unclustered-ci-${layer}`, () => {
+                        this.map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    });
+                    return null;
+                });
+            }
+            // this.handlePlayPause();
+            this.map.moveLayer('suseptibility-bahrabise', 'bahrabiseFarmland');
+            this.map.moveLayer('risk-fill-local', 'bahrabiseWardOutline');
         });
     }
 
     public componentDidUpdate(prevProps) {
-        const { yearClicked, currentPage, landslideYear } = this.props;
+        const {
+            yearClicked,
+            currentPage,
+            landslideYear,
+            cidata,
+            chartReset,
+            hideCI,
+            criticalElement,
+            polygonResponse,
+            hideOSMLayers,
+        } = this.props;
+        console.log('hideOSMLayers', hideOSMLayers);
+        const { resourceArr } = this.state;
+        if (criticalElement !== prevProps.criticalElement) {
+            this.resetClusters();
+            const layer = criticalElement;
+            if (layer === 'all') {
+                resourceArr.map((item) => {
+                    this.map.setLayoutProperty(`unclustered-ci-${item}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-ci-${item}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-count-ci-${item}`, 'visibility', 'visible');
+                    return null;
+                });
+            } else if (layer === 'health') {
+                this.map.setLayoutProperty('clusters-ci-health', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-health', 'visibility', 'visible');
+                this.map.setLayoutProperty('unclustered-ci-health', 'visibility', 'visible');
+            } else if (layer === 'finance') {
+                this.map.setLayoutProperty('unclustered-ci-finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-finance', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-finance', 'visibility', 'visible');
+            } else if (layer === 'education') {
+                this.map.setLayoutProperty('unclustered-ci-education', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-count-ci-education', 'visibility', 'visible');
+                this.map.setLayoutProperty('clusters-ci-education', 'visibility', 'visible');
+            }
+        }
+
+        if (currentPage === 6 && prevProps.currentPage === 7) {
+            this.map.removeControl(draw);
+            console.log('test');
+        }
+
+
+        if (currentPage === 7 && prevProps.currentPage === 8) {
+            this.map.removeControl(draw);
+        }
+
         if (currentPage === 6) {
             if (this.state.playState) {
                 this.handleStateChange();
             }
         }
+
+
+        if (currentPage === 7 || currentPage === 8) {
+            if (yearClicked !== prevProps.yearClicked) {
+                this.resetPolyLayers();
+                landslideYear.map((layer) => {
+                    this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                    return null;
+                });
+                this.state.resourceArr.map(layer => null);
+            }
+        }
+        if (currentPage !== prevProps.currentPage && currentPage === 6) {
+            this.map.setLayoutProperty('incidents-layer', 'visibility', 'visible');
+        }
         if (currentPage !== prevProps.currentPage && currentPage === 7) {
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
+
+            this.map.setLayoutProperty('incidents-layer', 'visibility', 'none');
+            this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'none');
+
             this.generateYearsArr().map((layer) => {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
             });
 
-            // const draw = new MapboxDraw({
-            //     displayControlsDefault: false,
-            //     userProperties: true,
-            //     controls: {
-            //         polygon: true,
-            //         trash: true,
-            //     },
-            //     styles: [
+            const resetArea = () => {
+                this.props.handlechartReset(!chartReset);
+            };
+            epochs.map(ci => this.map.on('mouseenter', `${ci}`, (e) => {
+                if (e) {
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const perimeter = e.features[0].properties.Perim_m;
+                    const area = e.features[0].properties.Area_m2;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                    <p>Perimeter: ${perimeter} m</p>
+                    <p>Area: ${area} sq m</p>
+                </div>
+                `,
+                    ).addTo(this.map);
+                }
+            }));
+            epochs.map(ci => this.map.on('mouseleave', `${ci}`, () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+            }));
+            const updateArea = (e) => {
+                const { handleDrawSelectedData } = this.props;
+                const arr = cidata.map(item => item.point.coordinates);
+                const points = turf.points(arr);
 
-            //         {
-            //             id: 'gl-draw-polygon-fill-inactive',
-            //             type: 'fill',
-            //             filter: ['all', ['==', 'active', 'false'],
-            //                 ['==', '$type', 'Polygon'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             paint: {
-            //                 'fill-color': '#3bb2d0',
-            //                 'fill-outline-color': '#3bb2d0',
-            //                 'fill-opacity': 0.1,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-fill-active',
-            //             type: 'fill',
-            //             filter: ['all', ['==', 'active', 'true'],
-            //                 ['==', '$type', 'Polygon'],
-            //             ],
-            //             paint: {
-            //                 'fill-color': '#fbb03b',
-            //                 'fill-outline-color': '#fbb03b',
-            //                 'fill-opacity': 0.1,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-midpoint',
-            //             type: 'circle',
-            //             filter: ['all', ['==', '$type', 'Point'],
-            //                 ['==', 'meta', 'midpoint'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 3,
-            //                 'circle-color': '#fbb03b',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-stroke-inactive',
-            //             type: 'line',
-            //             filter: ['all', ['==', 'active', 'false'],
-            //                 ['==', '$type', 'Polygon'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             layout: {
-            //                 'line-cap': 'round',
-            //                 'line-join': 'round',
-            //             },
-            //             paint: {
-            //                 'line-color': '#3bb2d0',
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-stroke-active',
-            //             type: 'line',
-            //             filter: ['all', ['==', 'active', 'true'],
-            //                 ['==', '$type', 'Polygon'],
-            //             ],
-            //             layout: {
-            //                 'line-cap': 'round',
-            //                 'line-join': 'round',
-            //             },
-            //             paint: {
-            //                 'line-color': '#fbb03b',
-            //                 'line-dasharray': [0.2, 2],
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-line-inactive',
-            //             type: 'line',
-            //             filter: ['all', ['==', 'active', 'false'],
-            //                 ['==', '$type', 'LineString'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             layout: {
-            //                 'line-cap': 'round',
-            //                 'line-join': 'round',
-            //             },
-            //             paint: {
-            //                 'line-color': '#3bb2d0',
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-line-active',
-            //             type: 'line',
-            //             filter: ['all', ['==', '$type', 'LineString'],
-            //                 ['==', 'active', 'true'],
-            //             ],
-            //             layout: {
-            //                 'line-cap': 'round',
-            //                 'line-join': 'round',
-            //             },
-            //             paint: {
-            //                 'line-color': '#fbb03b',
-            //                 'line-dasharray': [0.2, 2],
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-and-line-vertex-stroke-inactive',
-            //             type: 'circle',
-            //             filter: ['all', ['==', 'meta', 'vertex'],
-            //                 ['==', '$type', 'Point'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 5,
-            //                 'circle-color': '#fff',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-and-line-vertex-inactive',
-            //             type: 'circle',
-            //             filter: ['all', ['==', 'meta', 'vertex'],
-            //                 ['==', '$type', 'Point'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 3,
-            //                 'circle-color': '#fbb03b',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-point-point-stroke-inactive',
-            //             type: 'circle',
-            //             filter: ['all', ['==', 'active', 'false'],
-            //                 ['==', '$type', 'Point'],
-            //                 ['==', 'meta', 'feature'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 5,
-            //                 'circle-opacity': 1,
-            //                 'circle-color': '#fff',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-point-inactive',
-            //             type: 'circle',
-            //             filter: ['all', ['==', 'active', 'false'],
-            //                 ['==', '$type', 'Point'],
-            //                 ['==', 'meta', 'feature'],
-            //                 ['!=', 'mode', 'static'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 3,
-            //                 'circle-color': '#3bb2d0',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-point-stroke-active',
-            //             type: 'circle',
-            //             filter: ['all', ['==', '$type', 'Point'],
-            //                 ['==', 'active', 'true'],
-            //                 ['!=', 'meta', 'midpoint'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 7,
-            //                 'circle-color': '#fff',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-point-active',
-            //             type: 'circle',
-            //             filter: ['all', ['==', '$type', 'Point'],
-            //                 ['!=', 'meta', 'midpoint'],
-            //                 ['==', 'active', 'true'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 5,
-            //                 'circle-color': '#fbb03b',
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-fill-static',
-            //             type: 'fill',
-            //             filter: ['all', ['==', 'mode', 'static'],
-            //                 ['==', '$type', 'Polygon'],
-            //             ],
-            //             paint: {
-            //                 'fill-color': '#404040',
-            //                 'fill-outline-color': '#404040',
-            //                 'fill-opacity': 0.1,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-polygon-stroke-static',
-            //             type: 'line',
-            //             filter: ['all', ['==', 'mode', 'static'],
-            //                 ['==', '$type', 'Polygon'],
-            //             ],
-            //             layout: {
-            //                 'line-cap': 'round',
-            //                 'line-join': 'round',
-            //             },
-            //             paint: {
-            //                 'line-color': '#404040',
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-line-static',
-            //             type: 'line',
-            //             filter: ['all', ['==', 'mode', 'static'],
-            //                 ['==', '$type', 'LineString'],
-            //             ],
-            //             layout: {
-            //                 'line-cap': 'round',
-            //                 'line-join': 'round',
-            //             },
-            //             paint: {
-            //                 'line-color': '#404040',
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-point-static',
-            //             type: 'circle',
-            //             filter: ['all', ['==', 'mode', 'static'],
-            //                 ['==', '$type', 'Point'],
-            //             ],
-            //             paint: {
-            //                 'circle-radius': 5,
-            //                 'circle-color': '#404040',
-            //             },
-            //         },
+                const polyArr = polygonResponse.features.map(pItem => pItem.geometry.coordinates);
+                const polyPoints = turf.points(polyArr);
 
-            //         {
-            //             id: 'gl-draw-polygon-color-picker',
-            //             type: 'fill',
-            //             // filter: ['all', ['==', '$type', 'Polygon'],
-            //             //     ['has', 'user_portColor'],
-            //             // ],
-            //             paint: {
-            //                 'fill-color': '#ff0000',
-            //                 'fill-outline-color': '#ffffff',
-            //                 'fill-opacity': 0.1,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-line-color-picker',
-            //             type: 'line',
-            //             // filter: ['all', ['==', '$type', 'LineString'],
-            //             //     ['has', 'user_portColor'],
-            //             // ],
-            //             paint: {
-            //                 'line-color': '#ffffff',
-            //                 'line-width': 2,
-            //             },
-            //         },
-            //         {
-            //             id: 'gl-draw-point-color-picker',
-            //             type: 'circle',
-            //             // filter: ['all', ['==', '$type', 'Point'],
-            //             //     ['has', 'user_portColor'],
-            //             // ],
-            //             paint: {
-            //                 'circle-radius': 3,
-            //                 'circle-color': '#ffffff',
-            //             },
-            //         },
-            //     ],
-            //     defaultMode: 'draw_polygon',
-            // });
-            // const updateArea = (e) => {
-            //     const { handleDrawSelectedData } = this.props;
-            //     const { points, buildingpoints } = this.state;
-            //     const datad = draw.getAll();
-            //     const dataArr = datad.features[0].geometry.coordinates;
-            //     const searchWithin = turf.multiPolygon([dataArr], {});
+                const datad = draw.getAll();
+                const dataArr = datad.features[0].geometry.coordinates;
 
-            //     const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
-            //     const ptsWithinBuildings =
-            // turf.pointsWithinPolygon(buildingpoints, searchWithin);
-            //     const result = [];
-            //     const n = ptsWithin
-            //         .features
-            //         .map((i) => {
-            //             result
-            //                 .push({
-            //                     geometry: i.geometry,
-            //                     hazardTitle: ciRef[this.getTitleFromLatLng(i, cidata)],
-            //                 });
-            //             return null;
-            //         });
-            //     const coordList = dataArr[0]
-            //         .map(position => [parseFloat(position[0]), parseFloat(position[1])]);
-            //     const line = turf.lineString(coordList);
-            //     const bbox = turf.bbox(line);
+                const searchWithin = turf.multiPolygon([dataArr], {});
+                const ptsWithin = turf.pointsWithinPolygon(points, searchWithin);
+                const polyptsWithin = turf.pointsWithinPolygon(polyPoints, searchWithin);
+                const result = [];
+                const n = ptsWithin
+                    .features
+                    .map((i) => {
+                        result
+                            .push({
+                                geometry: i.geometry,
+                                hazardTitle: ciRef[this.getTitleFromLatLng(i, cidata)],
+                            });
+                        return null;
+                    });
+                const m = polyptsWithin
+                    .features
+                    .map((j) => {
+                        result
+                            .push({
+                                geometry: j.geometry,
+                                landslideYear: this.getYearfromLatLng(j, polygonResponse),
+                            });
+                        return null;
+                    });
+                handleDrawSelectedData(result, dataArr);
+                // this.map.fitBounds(bbox, {
+                //     padding: 20,
+                // });
+            };
 
-            //     const point1 = this.map.project([bbox[0], bbox[1]]);
-            //     const point2 = this.map.project([bbox[2], bbox[3]]);
-            //     const farmlands = this.map.queryRenderedFeatures(
-            //         [point1, point2],
-            //         { layers: ['Farmlands'] },
-            //     );
-            //     const forest = this.map.queryRenderedFeatures(
-            //         [point1, point2],
-            //         { layers: ['Forest'] },
-            //     );
-            //     const buildingsCount = ptsWithinBuildings.features.length;
-            //     result.push({
-            //         buildings: buildingsCount,
-            //         forest: forest.length,
-            //         farmlands: farmlands.length,
-            //     });
-            //     handleDrawSelectedData(result);
+            this.map.addControl(draw, 'top-right');
+            this.map.on('draw.modechange', (e) => {
+                const data = draw.getAll();
+                // if (draw.getMode() === 'draw_polygon') {
+                //     const pids = [];
+                //     this.props.handleDrawResetData(true);
+                //     // ID of the added template empty feature
+                //     const lid = data.features[data.features.length - 1].id;
 
-            //     this.map.fitBounds(bbox, {
-            //         padding: 20,
-            //     });
-            // };
+                //     data.features.forEach((f) => {
+                //         if (f.geometry.type === 'Polygon' && f.id !== lid) {
+                //             pids.push(f.id);
+                //         }
+                //     });
+                //     draw.delete(pids);
+                // }
+            });
 
-            // this.map.addControl(draw, 'top-right');
-            // this.map.on('draw.modechange', (e) => {
-            //     const data = draw.getAll();
-            //     if (draw.getMode() === 'draw_polygon') {
-            //         const pids = [];
-            //         this.props.handleDrawResetData(true);
-            //         // ID of the added template empty feature
-            //         const lid = data.features[data.features.length - 1].id;
-
-            //         data.features.forEach((f) => {
-            //             if (f.geometry.type === 'Polygon' && f.id !== lid) {
-            //                 pids.push(f.id);
-            //             }
-            //         });
-            //         draw.delete(pids);
-            //     }
-            // });
-
-            // this.map.on('draw.delete', this.resetArea);
-            // this.map.on('draw.create', updateArea);
-            // this.map.on('draw.update', updateArea);
+            this.map.on('draw.delete', resetArea);
+            this.map.on('draw.create', updateArea);
+            this.map.on('draw.update', updateArea);
         }
 
-        if (currentPage === 7) {
-            if (yearClicked !== prevProps.yearClicked) {
-                this.resetPolyLayers();
-                landslideYear.map((layer) => {
-                    this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+        if (currentPage !== prevProps.currentPage && currentPage === 8) {
+            this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
+            this.map.setLayoutProperty('risk-fill-local', 'visibility', 'none');
+            landslideYear.map((layer) => {
+                this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                return null;
+            });
+        }
+
+        if (currentPage !== prevProps.currentPage && currentPage === 9) {
+            this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+            this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'none');
+        }
+
+        if (hideCI !== prevProps.hideCI) {
+            if (!hideCI) {
+                this.state.resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'visible');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'visible');
+
+                    return null;
+                });
+            } else {
+                this.state.resourceArr.map((layer) => {
+                    this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+                    this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+
+                    return null;
+                });
+            }
+        }
+
+        if (hideOSMLayers !== prevProps.hideOSMLayers) {
+            if (!hideOSMLayers) {
+                landuseLayers.map((lyr) => {
+                    this.map.setLayoutProperty(lyr, 'visibility', 'visible');
+                    return null;
+                });
+                this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseTitle', 'visibility', 'visible');
+                this.generateYearsArr().map(layer => null);
+            } else {
+                landuseLayers.map((lyr) => {
+                    this.map.setLayoutProperty(lyr, 'visibility', 'none');
                     return null;
                 });
             }
@@ -520,6 +615,66 @@ class FloodHistoryMap extends React.Component {
         if (currentPage === 6) {
             clearInterval(this.interval);
         }
+    }
+
+    public getSusceptibilityLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.0',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=Bipad:barhabise_durham_susceptibility',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
+
+    public getTitleFromLatLng = (featureObject, cidata) => {
+        const latToCompare = featureObject.geometry.coordinates[1];
+        const lngToCompare = featureObject.geometry.coordinates[0];
+        const hT = cidata.filter(fC => fC.point.coordinates[0] === lngToCompare
+            && fC.point.coordinates[1] === latToCompare)[0];
+
+        if (hT) {
+            return hT.resourceType;
+        }
+        return [];
+    }
+
+    public getYearfromLatLng = (featureObject, polyData) => {
+        const latToCompare = featureObject.geometry.coordinates[1];
+        const lngToCompare = featureObject.geometry.coordinates[0];
+        const hT = polyData.features.filter(fC => fC.geometry.coordinates[0] === lngToCompare
+            && fC.geometry.coordinates[1] === latToCompare)[0];
+
+        if (hT) {
+            const e = hT.properties.Epoch;
+            return e.substr(e.length - 4);
+        }
+        return 'nodata';
+    }
+
+    public getObjFromLatLng = (lat, lng, polyData) => {
+        const hT = polyData.features.filter(fC => fC.geometry.coordinates[0] === lng
+            && fC.geometry.coordinates[1] === lat)[0];
+
+        if (hT) {
+            return hT;
+        }
+        return 'nodata';
+    }
+
+    public resetClusters = () => {
+        this.state.resourceArr.map((layer) => {
+            this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
+            this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
+
+            return null;
+        });
     }
 
     public generateYearsArr = () => {
@@ -542,12 +697,13 @@ class FloodHistoryMap extends React.Component {
         });
     }
 
+
     public getGeoJSON = (filterBy: string, data: any) => {
         const geoObj = {};
         geoObj.type = 'FeatureCollection';
         geoObj.name = filterBy;
         geoObj.features = [];
-        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
+        const d = data.features.filter(item => item.properties.resourceType === filterBy);
         geoObj.features.push(...d);
         return geoObj;
     }

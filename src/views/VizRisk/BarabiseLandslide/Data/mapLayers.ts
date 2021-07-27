@@ -1,13 +1,15 @@
 export default {
     landslide: [
         'bahrabiseTitle',
-        // 'bahrabiseWardOutline',
+        'bahrabiseWardOutline',
         'bahrabiseFill',
-        // 'bahrabiseHillshadeLocal',
+        'bahrabiseHillshadeLocal',
+        'bahrabiseWardText',
         'bahrabiseContourVals',
         'bahrabiseContourLines',
     ],
     landuse: [
+        'bahrabiseWardText',
         'bahrabiseTitle',
         'bahrabiseWardOutline',
         'bahrabiseForest',
@@ -16,9 +18,13 @@ export default {
         'bahrabiseRoads',
         'bahrabiseFarmland',
         'bahrabiseFill',
-        // 'bahrabiseHillshadeLocal',
+        'bahrabiseStone',
+        'bahrabiseShingle',
+        'bahrabiseScree',
+        'bahrabiseScrub',
         'bahrabiseContourVals',
         'bahrabiseContourLines',
+        'bahrabiseHillshadeLocal',
     ],
 
     criticalinfra: [

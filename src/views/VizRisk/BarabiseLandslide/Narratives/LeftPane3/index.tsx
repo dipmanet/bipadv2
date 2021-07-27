@@ -184,9 +184,9 @@ const LeftPane3 = (props: Props) => {
             </div>
             <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
             <div className={styles.climateChart}>
-                <ResponsiveContainer className={styles.chartContainer} height={300}>
+                <ResponsiveContainer className={styles.chartContainer} height={300} width={350}>
                     <LineChart
-                        margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                        margin={{ top: 0, right: 0, left: 10, bottom: 10 }}
                         data={lineData}
                     >
                         <CartesianGrid
@@ -220,10 +220,12 @@ const LeftPane3 = (props: Props) => {
             </div>
             <div className={styles.climateChart}>
                 <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
-                <ResponsiveContainer className={styles.chartContainer} height={300}>
+                <ResponsiveContainer className={styles.chartContainer} height={300} width={350}>
                     <LineChart
-                        margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                        margin={{ top: 0, right: 0, left: 10, bottom: 10 }}
                         data={rainfallData}
+                        height={300}
+                        width={300}
                     >
                         <CartesianGrid
                             vertical={false}
@@ -244,8 +246,12 @@ const LeftPane3 = (props: Props) => {
                             interval="preserveEnd"
                             allowDataOverflow
                         />
-                        {/* <Legend iconType="square" iconSize={10}
-                        align="center" content={renderLegendRainfall} /> */}
+                        <Legend
+                            iconType="square"
+                            iconSize={10}
+                            align="center"
+                            content={props.renderLegendRainfall}
+                        />
                         <Tooltip
                             content={props.customTooltipRain}
                         />

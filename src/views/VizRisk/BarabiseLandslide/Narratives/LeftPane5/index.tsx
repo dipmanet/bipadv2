@@ -130,7 +130,7 @@ const LeftPane4 = (props: Props) => {
 
 
             <div className={styles.chartContainer}>
-                <ResponsiveContainer width="100%" height={600}>
+                <ResponsiveContainer height={600} width={350}>
                     <BarChart
                         // width={350}
                         // height={600}

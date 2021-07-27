@@ -9,6 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
+import Loader from 'react-loader';
 import styles from './styles.scss';
 
 
@@ -20,6 +21,14 @@ interface Props{
     pending: boolean;
 
 }
+
+const ciRef = {
+    health: 'Hospital',
+    finance: 'Financial Institution',
+    education: 'Education Institution',
+};
+
+
 const generateYearsArr = () => {
     const max = new Date().getFullYear();
     const min = 2011;
@@ -40,7 +49,6 @@ const getTotalLoss = (year, arr) => {
             return incident.date > yearInt && incident.date < nextYear;
         })
         .map(l => l.loss);
-    console.log('temp', temp);
     if (temp.length > 0) {
         return temp
             .reduce((a, b) => ({ peopleDeathCount:
@@ -51,20 +59,21 @@ const getTotalLoss = (year, arr) => {
     return 0;
 };
 
-const ciRef = {
-    health: 'Hospital',
-    finance: 'Financial Institution',
-    education: 'Education Institution',
-};
-
-
-const LeftPane8 = (props: Props) => {
+const LeftPane10 = (props: Props) => {
     const [incidentChart, setIncidentChart] = useState([]);
     const [lossChart, setLossChart] = useState([]);
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
     const [lschartData, setLschartData] = useState(true);
-    const { drawData, landSlide, chartReset, ci } = props;
+    const {
+        drawData,
+        landSlide,
+        chartReset,
+        ci,
+        pending,
+        buildingCount,
+        overallBuildingsCount,
+    } = props;
 
     useEffect(() => {
         if (landSlide) {
@@ -104,15 +113,33 @@ const LeftPane8 = (props: Props) => {
     }, [drawData]);
 
     useEffect(() => {
+        if (buildingCount) {
+            const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))]
+                .filter(i => i !== undefined);
+            const cD = hazardArr.map(hazard => ({
+                name: hazard,
+                Total: drawData.filter(item => item.hazardTitle === hazard).length,
+            }));
+            cD.push({ name: 'Buildings', Total: buildingCount.count });
+            console.log('buildingCount', buildingCount);
+            setCIChartData(cD);
+            setReset(false);
+        }
+    }, [buildingCount, drawData]);
+
+    useEffect(() => {
+        console.log('reset');
         if (ci) {
             const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({
                 name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
+            cD.push({ name: 'Buildings', Total: overallBuildingsCount });
             setCIChartData(cD);
             setReset(true);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chartReset, ci]);
 
     useEffect(() => {
@@ -122,24 +149,29 @@ const LeftPane8 = (props: Props) => {
                 name: ciRef[res],
                 Total: ci.filter(item => item.resourceType === res).length,
             }));
+            cD.push({ name: 'Buildings', Total: overallBuildingsCount });
             setCIChartData(cD);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
     return (
         <div className={styles.vrSideBar}>
-            <h1>Landslide Susceptibility</h1>
+            <h1>Landslide Risk</h1>
             <p>
-                The map shows the area of Barhabise Municipality in
-                which landslides are likely to occur. The red color
-                signifies the higher likelihood and blue color signifies
-                the lower likelihood of landslide occurrences.
+            The map shows the ward level risk of landslide in
+            Barhabise Municipality. The municipality lies in hilly
+            region of the country and is also landslide prone area.
+            Out of the 9 wards, ward 4 is at higher risk of landslide.
             </p>
 
             <p>
                COMMUNITY INFRASTRUCTURE
+
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}
+
+
             </p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                 <BarChart
@@ -147,7 +179,7 @@ const LeftPane8 = (props: Props) => {
                     height={600}
                     data={cichartData}
                     layout="vertical"
-                    margin={{ left: 20, right: 20 }}
+                    margin={{ left: 5, right: 30 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis type="number" />
@@ -166,8 +198,9 @@ const LeftPane8 = (props: Props) => {
                     />
                 </BarChart>
             </ResponsiveContainer>
+
         </div>
     );
 };
 
-export default LeftPane8;
+export default LeftPane10;

@@ -1,19 +1,26 @@
 export default {
-    1: {
-        title: 'Landslides in Nepal',
+    0: {
+        title: '',
         type: 'hexagon',
         legends: [
             { key: 1, color: 'rgb(209,203,111)', label: 'Landslide' },
         ],
     },
-    2: {
+    1: {
+        title: '',
+        type: 'hexagon',
+        legends: [
+            { key: 1, color: 'rgb(209,203,111)', label: 'Landslide' },
+        ],
+    },
+    22: {
         title: 'Landslides in Bahrabise',
         type: 'hexagon',
         legends: [
             { key: 1, color: 'rgb(209,203,111)', label: 'Landslide' },
         ],
     },
-    3: {
+    13: {
         title: 'Landuse',
         type: 'hexagon',
         legends: [
@@ -26,7 +33,7 @@ export default {
             { key: 7, color: 'rgb(247,246,241)', label: 'Other' },
         ],
     },
-    5: {
+    15: {
         title: 'Demography',
         type: 'square',
         legends: [
@@ -37,7 +44,7 @@ export default {
         ],
     },
     8: {
-        title: 'LandSlide Suseptibility',
+        title: 'LandSlide Susceptibility',
         type: 'square',
         legends: [
             { key: 1, color: 'rgb(8,120,188)', label: '0' },
