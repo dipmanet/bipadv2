@@ -385,7 +385,7 @@ const LeftPane8 = (props: Props) => {
                         tick={{ fill: '#94bdcf' }}
                     />
                     <Tooltip />
-                    <Legend iconType="square" iconSize={10} align="center" height={50} />
+                    <Legend iconType="square" iconSize={10} align="center" height={10} />
                     {
                         epocharr.map((e, i) => (
                             <Bar

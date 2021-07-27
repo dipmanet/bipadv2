@@ -277,6 +277,7 @@ const BarabiseLandslide = (props) => {
     const [req3, setReq3] = useState(false);
     const [req4, setReq4] = useState(false);
     const [req5, setReq5] = useState(false);
+    const [drawpending, setDrawPending] = useState(false);
 
     const {
         // incidentList,
@@ -378,7 +379,7 @@ const BarabiseLandslide = (props) => {
             setDefault(data.count);
         }
         setReq4(true);
-        // setPending(false);
+        setDrawPending(false);
     };
     const getPolygon = (p) => {
         setPolygon(p);
@@ -485,7 +486,7 @@ const BarabiseLandslide = (props) => {
                 polygon: getPolygonString(dataArr),
             });
         }
-        setPending(true);
+        setDrawPending(true);
     };
 
     const handlehideCILegends = (data) => {
@@ -499,7 +500,7 @@ const BarabiseLandslide = (props) => {
 
     return (
         <>
-            { pending
+            { (pending || drawpending)
                 && (
                     <div className={styles.loaderClass}>
                         <Loader color="#fff" />
