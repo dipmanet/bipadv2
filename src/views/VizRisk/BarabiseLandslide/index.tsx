@@ -262,9 +262,10 @@ const BarabiseLandslide = (props) => {
     const [polygon, setPolygon] = useState([]);
     const [polygonResponse, setPolygonResponse] = useState({});
     const [drawData, setDrawData] = useState([]);
-    const [chartReset, setChartReset] = useState(false);
+    const [chartReset, setChartReset] = useState(null);
     const [showCI, setShowCI] = useState(false);
     const [hideCILegends, sethideCILegends] = useState(true);
+    const [hideOSMLayers, setHideOSM] = useState(true);
     const [livesLost, setLivesLost] = useState(0);
 
     const {
@@ -407,6 +408,10 @@ const BarabiseLandslide = (props) => {
         setShowCI(val);
     };
 
+    const handleOSMChange = (val) => {
+        setShowCI(val);
+    };
+
     const disableNavBtns = (val) => {
         if (val === 'Right' || pending) {
             setdisableNavRightBtn(true);
@@ -462,6 +467,10 @@ const BarabiseLandslide = (props) => {
 
     const handlehideCILegends = (data) => {
         sethideCILegends(data);
+    };
+
+    const handlehideOSMLayers = (data) => {
+        setHideOSM(data);
     };
 
 
@@ -526,7 +535,7 @@ const BarabiseLandslide = (props) => {
                             hideCI={hideCILegends}
                             criticalElement={criticalElement}
                             polygonResponse={polygonResponse}
-
+                            hideOSMLayers={hideOSMLayers}
                         />
                     </>
                 )
@@ -746,7 +755,10 @@ const BarabiseLandslide = (props) => {
                         <CISwitchLegends
                             handleCIChange={handleCIChange}
                             handlehideCILegends={handlehideCILegends}
+                            handlehideOSMLayers={handlehideOSMLayers}
                             hideCILegends={hideCILegends}
+                            hideOSMLayers={hideOSMLayers}
+                            showOSMSwitch
                         />
                         <CriticalInfraLegends
                             handlePopulationChange={handlePopulationChange}
@@ -766,7 +778,10 @@ const BarabiseLandslide = (props) => {
                         <CISwitchLegends
                             hideCILegends={hideCILegends}
                             handleCIChange={handleCIChange}
+                            handlehideOSMLayers={handlehideOSMLayers}
                             handlehideCILegends={handlehideCILegends}
+                            hideOSMLayers={hideOSMLayers}
+                            showOSMSwitch
 
                         />
                         <CriticalInfraLegends

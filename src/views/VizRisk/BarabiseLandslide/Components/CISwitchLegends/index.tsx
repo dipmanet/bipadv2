@@ -6,10 +6,10 @@ const DemoGraphicsLegends = (props) => {
     const {
         handleCIChange,
         handlehideCILegends,
-        handlehideOSM,
         hideCILegends,
         hideOSMLayers,
         showOSMSwitch,
+        handlehideOSMLayers,
     } = props;
     const [hide, sethide] = useState(hideCILegends);
     const [hideOSM, sethideOSM] = useState(hideOSMLayers);
@@ -25,10 +25,7 @@ const DemoGraphicsLegends = (props) => {
 
     const handleOSMClick = () => {
         sethideOSM(!hideOSM);
-        handleCIChange(!hideOSM);
-        if (handlehideOSM) {
-            handlehideOSM(!hideOSM);
-        }
+        handlehideOSMLayers(!hideOSM);
     };
 
     return (
@@ -54,10 +51,10 @@ const DemoGraphicsLegends = (props) => {
             {
                 showOSMSwitch
                 && (
-                    <div className={styles.hazardItemContainer}>
+                    <div className={styles.OSMSwitch}>
                         <button
                             type="button"
-                            className={hide ? styles.legendBtn : styles.legendBtnSelected}
+                            className={hideOSM ? styles.legendBtn : styles.legendBtnSelected}
                             onClick={() => handleOSMClick()}
                         >
                             <Hexagon

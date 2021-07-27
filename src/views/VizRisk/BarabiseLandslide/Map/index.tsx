@@ -329,6 +329,7 @@ class FloodHistoryMap extends React.Component {
                 });
             }
 
+
             if (currentPage === 5) {
                 this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'visible');
                 this.state.resourceArr.map((layer) => {
@@ -388,17 +389,21 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty('bahrabiseFill', 'visibility', 'visible');
             }
             if (currentPage === 4) {
+                landuse.map((l) => {
+                    this.map.setLayoutProperty(l, 'visibility', 'none');
+                    return null;
+                });
                 this.map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'none');
                 this.map.setLayoutProperty('bahrabisePopDensity', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
+                this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
+                this.map.moveLayer('bahrabiseWardOutline');
+                this.map.moveLayer('bahrabiseWardText');
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
                 resourceArr.map((layer) => {
                     this.map.setLayoutProperty(`clusters-ci-${layer}`, 'visibility', 'none');
                     this.map.setLayoutProperty(`clusters-count-ci-${layer}`, 'visibility', 'none');
                     this.map.setLayoutProperty(`unclustered-ci-${layer}`, 'visibility', 'none');
-                    return null;
-                });
-                landuse.map((l) => {
-                    this.map.setLayoutProperty(l, 'visibility', 'none');
                     return null;
                 });
             }

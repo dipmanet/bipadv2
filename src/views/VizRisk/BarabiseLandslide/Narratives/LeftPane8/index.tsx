@@ -96,13 +96,14 @@ const LeftPane8 = (props: Props) => {
     const [lossChart, setLossChart] = useState([]);
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
-    const [lschartData, setLschartData] = useState(true);
+    const [lschartData, setLschartData] = useState([]);
     const {
         drawData,
         landSlide,
         chartReset,
         ci,
         polygonResponse,
+        landslideYear,
     } = props;
 
     useEffect(() => {
@@ -129,16 +130,20 @@ const LeftPane8 = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-
     useEffect(() => {
-        if (drawData) {
+        let polyArr = [];
+        if (drawData.length > 0) {
             const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
-            const polyArr = [...new Set(drawData.map(h => h.landslideYear))];
+            if (landslideYear.length > 1) {
+                polyArr = landslideYear;
+            } else {
+                polyArr = [...new Set(drawData.map(h => h.landslideYear))];
+            }
 
             const filteredHArr = hazardArr.filter(item => item !== undefined);
             const filteredPolyArr = polyArr.filter(item => item !== undefined);
 
-            console.log('filteredHArr', filteredHArr);
+            console.log('filteredPolyArr', filteredHArr);
 
             const cD = filteredHArr.map(hazard => ({
                 name: hazard,
@@ -147,16 +152,38 @@ const LeftPane8 = (props: Props) => {
 
             const pcD = filteredPolyArr.map(poly => ({
                 name: poly,
-                Total: drawData.filter(item => item.landslideYear === poly).length,
+                Total: drawData.filter(item => item.landslideYear === String(poly)).length,
             }));
 
             setCIChartData(cD);
             setLschartData(pcD);
             setReset(false);
+        } else {
+            if (landslideYear.length > 1) {
+                polyArr = landslideYear;
+            } else {
+                const yearArr = polygonResponse.features.map((poly) => {
+                    const e = poly.properties.Epoch;
+                    return e.substr(e.length - 4);
+                });
+                polyArr = [...new Set(yearArr)];
+            }
+
+            const pcD = polyArr.map(year => ({
+                name: year,
+                Total: polygonResponse.features.filter((polygon) => {
+                    const f = polygon.properties.Epoch;
+                    return f.substr(f.length - 4) === String(year);
+                }).length,
+            }));
+
+            setLschartData(pcD);
+            setReset(false);
         }
-    }, [drawData]);
+    }, [drawData, landslideYear, polygonResponse.features]);
 
     useEffect(() => {
+        let polyArr = [];
         if (ci) {
             const resArr = [...new Set(ci.map(h => h.resourceType))];
             const filteredArr = resArr.filter(item => item !== undefined);
@@ -168,21 +195,27 @@ const LeftPane8 = (props: Props) => {
             setReset(true);
         }
         if (polygonResponse) {
-            const yearArr = polygonResponse.features.map((poly) => {
-                const e = poly.properties.Epoch;
-                return e.substr(e.length - 4);
-            });
-            const uniqueArr = [...new Set(yearArr)];
-            const pcD = uniqueArr.map(year => ({
+            if (landslideYear.length > 1) {
+                polyArr = landslideYear;
+            } else {
+                const yearArr = polygonResponse.features.map((poly) => {
+                    const e = poly.properties.Epoch;
+                    return e.substr(e.length - 4);
+                });
+                polyArr = [...new Set(yearArr)];
+            }
+
+            const pcD = polyArr.map(year => ({
                 name: year,
                 Total: polygonResponse.features.filter((polygon) => {
                     const f = polygon.properties.Epoch;
-                    return f.substr(f.length - 4) === year;
+                    return f.substr(f.length - 4) === String(year);
                 }).length,
             }));
 
             setLschartData(pcD);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chartReset, ci, polygonResponse]);
 
 
@@ -244,7 +277,7 @@ const LeftPane8 = (props: Props) => {
             </p>
 
             {
-                cichartData.length > 0
+                lschartData.length > 0
                     ? (
                         <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
                             <BarChart
@@ -283,7 +316,7 @@ const LeftPane8 = (props: Props) => {
 
             </p>
             {
-                lschartData.length > 0
+                cichartData.length > 0
                     ? (
                         <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                             <BarChart

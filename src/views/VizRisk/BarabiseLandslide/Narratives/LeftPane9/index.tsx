@@ -139,10 +139,7 @@ const LeftPane8 = (props: Props) => {
 
             <p>
                COMMUNITY INFRASTRUCTURE
-
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}
-
-
             </p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
                 <BarChart
