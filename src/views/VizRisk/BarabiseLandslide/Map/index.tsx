@@ -210,6 +210,25 @@ class FloodHistoryMap extends React.Component {
                             visibility: 'none',
                         },
                     });
+
+                    this.map.on('mousemove', `unclustered-ci-${layer}`, (e) => {
+                        if (e) {
+                            this.map.getCanvas().style.cursor = 'pointer';
+                            const { lngLat } = e;
+                            const coordinates = [lngLat.lng, lngLat.lat];
+                            const ciName = e.features[0].properties.title;
+                            popup.setLngLat(coordinates).setHTML(
+                                `<div style="padding: 5px;border-radius: 5px">
+                            <p>${ciName}</p>
+                        </div>
+                        `,
+                            ).addTo(this.map);
+                        }
+                    });
+                    this.map.on('mouseleave', `unclustered-ci-${layer}`, () => {
+                        this.map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    });
                     return null;
                 });
             }

@@ -7,41 +7,15 @@ const DemoGraphicsLegends = (props) => {
     const [showPopulationDensity, setShowPopulationDensity] = useState(false);
     const {
         handlePopulationChange,
+        legends,
     } = props;
-    const densityVals = [
-        '4241-6480',
-        '2641-4240',
-        '1441-2640',
-        '481-1440',
-        '0-480',
-    ];
-
-    const populationVals = [
-        '5000-6000',
-        '4000-5000',
-        '3000-4000',
-        '2000-3000',
-        '1000-2000',
-        '0-1000',
-    ];
-
-    const colors = [
-        'rgb(255, 94, 0)',
-        'rgb(255,111,0)',
-        'rgb(255,143,13)',
-        'rgb(202, 150, 78)',
-        'rgb(255,207,142)',
-        'rgb(255,235,198)',
-    ];
-
-    const densityColors = [
-        '#ff6e00',
-        '#ff8c00',
-        '#ffa857',
-        '#ffca8a',
-        '#ffebcc',
-    ];
-
+    console.log('legends', legends);
+    const {
+        densityVals,
+        populationVals,
+        colors,
+        densityColors,
+    } = legends;
     const getLegendStyle = (i, c, colorsArr) => {
         if (i === colorsArr.length - 1) {
             return {

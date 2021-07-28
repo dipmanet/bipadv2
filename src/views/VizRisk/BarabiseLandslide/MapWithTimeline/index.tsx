@@ -184,6 +184,7 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
+            console.log('incident data: ', this.props.bahrabiseLandSlide);
 
             const features = this.props.bahrabiseLandSlide.map(item => ({
                 type: 'Feature',
@@ -193,6 +194,7 @@ class FloodHistoryMap extends React.Component {
                 },
                 properties: {
                     date: item.date,
+                    severity: this.getSeverityScore(item),
                 },
             }));
 
@@ -213,6 +215,7 @@ class FloodHistoryMap extends React.Component {
                     layout: {},
                     paint: {
                         'circle-color': '#923f3f',
+                        'circle-radius': ['get', 'severity'],
                     },
                 },
             );
@@ -562,6 +565,7 @@ class FloodHistoryMap extends React.Component {
 
         if (currentPage !== prevProps.currentPage && currentPage === 9) {
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
+            this.map.moveLayer('risk-fill-local', 'bahrabiseBuildings');
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
@@ -778,6 +782,18 @@ class FloodHistoryMap extends React.Component {
         this.props.handleIncidentChange(val);
         this.filterOnMap(val);
         // this.setState({ incidentYear: e.target.value });
+    }
+
+    public getSeverityScore = (incidentData) => {
+        const pD = incidentData.loss.peopleDeathCount;
+        if (pD === 0) {
+            return 5;
+        } if (pD > 0 && pD < 10) {
+            return 10;
+        } if (pD >= 10 && pD < 100) {
+            return 15;
+        }
+        return 20;
     }
 
     public getHillshadeLayer = () => [

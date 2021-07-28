@@ -8,12 +8,13 @@ import Health from '#resources/icons/icon_set_health-01.svg';
 import Industry from '#resources/icons/icon_set_industry.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
 import Bank from '#resources/icons/icon_set_bank.svg';
+import Helipad from '#resources/icons/HelipadVR.svg';
 import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {
-    const { handleCritical, criticalElement, hide, right } = props;
+    const { handleCritical, criticalElement, hide, right, showHelipad: showHelipadInfo } = props;
     const [showEducation, setshowEducation] = useState(false);
     const [showFinance, setshowFinance] = useState(false);
     const [showIndustry, setshowIndustry] = useState(false);
@@ -23,6 +24,7 @@ const LandCoverLegends = (props) => {
     const [showTourism, setshowTourism] = useState(false);
     const [showWater, setshowWater] = useState(false);
     const [showTrade, setshowTrade] = useState(false);
+    const [showHelipad, setshowHelipad] = useState(false);
     const [showAll, setshowAll] = useState(true);
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
@@ -37,6 +39,7 @@ const LandCoverLegends = (props) => {
         setshowTrade(false);
         setshowWater(false);
         setshowAll(false);
+        setshowHelipad(false);
     };
 
     const handleCriticalToggle = () => {
@@ -79,6 +82,9 @@ const LandCoverLegends = (props) => {
             } else if (criticalElement === 'tourism') {
                 resetCriticalLayers();
                 setshowTourism(true);
+            } else if (criticalElement === 'helipad') {
+                resetCriticalLayers();
+                setshowHelipad(true);
             }
         }, [criticalElement],
 
@@ -125,6 +131,10 @@ const LandCoverLegends = (props) => {
         if (layer === 'water sources') {
             resetCriticalLayers();
             setshowWater(true);
+        }
+        if (layer === 'helipad') {
+            resetCriticalLayers();
+            setshowHelipad(true);
         }
     };
 
@@ -293,6 +303,29 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
+                        {
+                            showHelipadInfo
+                            && (
+                                <div className={styles.infraIconContainer}>
+
+                                    <button
+                                        type="button"
+                                        className={showHelipad
+                                            ? styles.criticalButtonSelected
+                                            : styles.criticalButton}
+                                        onClick={() => handleCriticalclick('helipad')}
+                                    >
+                                        <ScalableVectorGraphics
+                                            className={styles.svgIcon}
+                                            src={Helipad}
+                                        />
+
+                                 Helipad
+                                    </button>
+
+                                </div>
+                            )
+                        }
                         {/* <div className={styles.infraIconContainer}>
                             <button
                                 type="button"

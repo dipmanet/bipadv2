@@ -267,6 +267,7 @@ const LeftPane8 = (props: Props) => {
 
             setLschartData(pcD);
         }
+        setReset(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -293,7 +294,7 @@ const LeftPane8 = (props: Props) => {
             <p>
               NO. OF LANDSLIDES
 
-                {reset ? ' (Municipality) ' : ' (Selected Area) '}
+                {/* {reset ? ' (Municipality) ' : ' (Selected Area) '} */}
 
 
             </p>
@@ -333,7 +334,7 @@ const LeftPane8 = (props: Props) => {
             <p>
                COMMUNITY INFRASTRUCTURE
 
-                {reset ? ' (Municipality) ' : ' (Selected Area) '}
+                {/* {reset ? ' (Municipality) ' : ' (Selected Area) '} */}
 
 
             </p>

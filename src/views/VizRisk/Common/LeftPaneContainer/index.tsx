@@ -117,7 +117,7 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 134.653) * 100).toFixed(2)} % `}</p>
+                    <p>{`${((payload[0].value / payload[0].payload.total) * 100).toFixed(2)} % `}</p>
                 </div>
             );
         }

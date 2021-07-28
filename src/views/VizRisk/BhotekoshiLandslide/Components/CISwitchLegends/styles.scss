@@ -1,0 +1,54 @@
+
+    
+    .hazardItemContainer{
+        display: flex;
+        background: #112233;
+        position: fixed;
+        bottom: 20px;
+        right: 75px;
+        border-radius: 3px;
+        padding: 3px;
+       .legendBtnSelected{
+        font-size: 14px;
+        display: flex;
+        background-color: transparent;
+        border: none;
+        color: #036ef0; 
+        // opacity: 0.87;
+        margin-bottom: 5px;
+        align-items: center;
+        font-family: 'Source Sans Pro';
+        filter: saturate(100%);
+        cursor: pointer;
+        .educationHexagon{
+            width: 14px;
+            margin: 0 7px 0 0;
+        }
+       }
+        .legendBtn{
+            font-size: 14px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            opacity: 0.67;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+            .educationHexagon{
+                width: 14px;
+                margin: 0 7px 0 0;
+            }
+        }
+    }
+
+.OSMSwitch{
+    @extend  .hazardItemContainer;
+    bottom: 50px;
+
+}
+
+
+

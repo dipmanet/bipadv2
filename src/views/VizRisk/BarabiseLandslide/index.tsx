@@ -72,6 +72,8 @@ import LandslideLegend from './Components/LandslideLegend';
 import InventoryLegend from './Components/InventoryLegend';
 import CISwitchLegends from './Components/CISwitchLegends';
 import { getgeoJsonLayer } from '#views/VizRisk/Panchpokhari/utils';
+import LandcoverData from './Data/LandCoverChartData';
+import DemoLegends from './Data/demographicsData';
 
 interface Params {
 }
@@ -547,7 +549,7 @@ const BarabiseLandslide = (props) => {
                     <>
                         <MapWithTimeline
                             currentPage={currentPage}
-                            bahrabiseLandSlide={LandslideData.bahrabiseLandSlide}
+                            bahrabiseLandSlide={bahrabiseIncidents}
                             handleIncidentChange={handleIncidentChange}
                             landslideYear={landslideYear}
                             yearClicked={yearClicked}
@@ -745,12 +747,15 @@ const BarabiseLandslide = (props) => {
                 && (
                     <DemographicsLegends
                         handlePopulationChange={handlePopulationChange}
+                        legends={DemoLegends.demographicsLegends}
                     />
                 )
             }
             {currentPage === 3
                 && (
-                    <LandCoverLegends />
+                    <LandCoverLegends
+                        legends={LandcoverData.landcoverLegends}
+                    />
                 )
             }
             {currentPage === 5

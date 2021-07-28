@@ -1,0 +1,175 @@
+.vrSideBar::-webkit-scrollbar {
+    display: none;
+  }
+  .heading-style{
+    font-family: 'Playfair Display';
+    font-size: 28px;
+    color: white;
+    line-height: 1.4em;
+}
+.para-style{
+    color:white;
+    font-size: 15px;
+    font-family: 'Source Sans Pro';
+    padding: 0 10px 0 0;
+    opacity: 0.87;
+    line-height: 1.4em;
+
+}
+
+
+    .vrSideBar{
+        scrollbar-width: none;
+        // position: fixed;
+        background-color:rgb(12,36,50);
+        color:#b6d6e4;
+        padding: 20px 20px 20px 30px;
+        min-height: 90vh;
+        overflow-y: scroll;
+        // height: 200vh;
+        .climateChart{
+            margin-top: 10px;
+        }
+        .iconRow{
+            display: flex;
+            padding-left: 30px;
+            .infoIconsContainerHidden{
+                visibility: hidden;
+            }
+            .infoIconsContainer{
+                display: flex;
+                margin: 15px 15px 15px 0;
+                flex: 1;
+                .infoIcon{
+                    margin: 0px 15px 0 5px;
+                    width: 32px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+                }
+                .descriptionCotainer{
+                    display: flex;
+                    flex-direction: column;
+                    .iconTitle{
+                    font-size: 20px;
+                    color: #A7B3BB;
+                    font-family: 'Source Sans Pro';
+    
+                    }
+                    .iconText{
+                        font-size: 12px;
+                    color: #A7B3BB;
+                    }
+                }
+            }
+        }
+
+        .lastPara{
+            z-index: 2;
+            background-color:#112330;
+        }
+    
+        .chartContainer{
+            margin-top: 20px;
+            position: relative;
+            right: 35px;
+        }
+       
+        h1{
+            @extend .heading-style;
+        }
+        h2{
+            @extend .heading-style;
+            opacity: 0.9 !important;
+        }
+        p{
+            @extend .para-style;
+        }
+        .climateLegendContainer{
+            display:flex;
+            justify-content: flex-start;
+            margin-left: 55px;
+            min-width: 200px;
+         
+            .climatelegend{
+            display:flex;
+            padding-right: 20px;
+                .legendMax{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #ffbf00;
+                    padding-right: 4px;
+                    margin-right: 3px;
+                }
+                .legendMin{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #347eff;
+                    // border: 1px solid #1f59be;
+                    margin-right: 3px;
+
+                }
+                .legendDaily{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #00d725;
+                    // border: 1px solid #047a18;
+                    margin-right: 3px;
+                
+                }
+                .legendText{
+                    color: #6490a4;
+                    // opacity: 0.45;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+    }
+  
+
+
+    .customTooltip{
+        background-color: rgb(190, 190, 190) !important;
+        color: #444;
+        padding-bottom: 5px;
+        border-radius: 4px;
+        h2{
+            color: rgb(41, 40, 40) !important;
+            font-size: 12px !important;
+            line-height: 1em;
+            padding: 10px 0 0 10px;
+            display: flex;
+            justify-content: center;
+
+        }
+        p{
+            color: rgb(41, 40, 40) !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            justify-content: center;
+        }
+    }
+    .recharts-tooltip-wrapper{
+        background-color: rgb(175, 174, 174) !important;
+        border: 1px solid gray;
+        z-index: 100;
+        color: blue;
+        padding: 0px !important;
+
+    }
+
+
+
+
+    .loaderInfo{
+        position: fixed;
+    top: 54%;
+    left: 55%;
+        .loader{
+            background-color: white;
+        }
+    }

@@ -9,6 +9,7 @@ import Tikapur from './Tikapur';
 import Dhangadi from './Dhangadi';
 // import Biratnagar from './Biratnagar';
 import Barabise from './BarabiseLandslide';
+import Bhotekoshi from './BhotekoshiLandslide';
 // import BarabiseLandslide from './BarabiseLandslide';
 
 import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
@@ -24,6 +25,7 @@ const slides = [
     // <Biratnagar />,
     <Dhangadi />,
     <Barabise />,
+    <Bhotekoshi />,
     <Panchpokhari />,
     <Jugal />,
 
@@ -57,11 +59,14 @@ const VizRiskMainPage = () => {
         } else if (municipality === 'barabise') {
             setCurrentPage(4);
             setTitle('Visualising Landslide Exposure');
-        } else if (municipality === 'pachpokhari') {
+        } else if (municipality === 'bhotekoshi') {
             setCurrentPage(5);
+            setTitle('Visualising Landslide Exposure');
+        } else if (municipality === 'pachpokhari') {
+            setCurrentPage(6);
             setTitle('Visualising Multihazard Exposure');
         } else if (municipality === 'jugal') {
-            setCurrentPage(6);
+            setCurrentPage(7);
             setTitle('Visualising Multihazard Exposure');
         }
     };
@@ -76,7 +81,11 @@ const VizRiskMainPage = () => {
     };
 
     const getBtnStyle = () => {
-        if (mun === 'pachpokhari' || mun === 'jugal' || mun === 'barabise') {
+        if (mun === 'pachpokhari'
+        || mun === 'jugal'
+        || mun === 'barabise'
+        || mun === 'bhotekoshi'
+        ) {
             if (showMenu) {
                 return styles.hamburgerBtnContMenu;
             }
@@ -194,6 +203,20 @@ const VizRiskMainPage = () => {
                                 >
                                     <h1 className={styles.menuItems}>
                                         Barhabise Municipality
+
+                                    </h1>
+
+                                </Button>
+
+                            </div>
+                            <div className={styles.vizriskmunicipalityName}>
+
+                                <Button
+                                    transparent
+                                    onClick={() => handleMenuTitleClick('bhotekoshi')}
+                                >
+                                    <h1 className={styles.menuItems}>
+                                        Bhotekoshi Municipality
 
                                     </h1>
 
