@@ -63,11 +63,11 @@ const LeftPane4 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Demography</h1>
             <p>
-            Barhabise municipality has a total population of 26,114
-            with 13,257 males and 12,853 females residing in a total
-            of 7,660 households. Ward 3 has the largest number of
-            households (1195) while ward 1 has the least number of
-            households (310).
+            Bhotekoshi Rural Municipality has a total population
+            of 16,631 with 8431 males and 8200 females residing
+            in a total of 4183 households. Ward 2 has the largest
+            number of households (1431) while ward 3 has the least
+            number of households(302). (Data Source: Census 2011)
             </p>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>

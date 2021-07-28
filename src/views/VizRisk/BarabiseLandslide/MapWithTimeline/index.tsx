@@ -566,6 +566,7 @@ class FloodHistoryMap extends React.Component {
         if (currentPage !== prevProps.currentPage && currentPage === 9) {
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
             this.map.moveLayer('risk-fill-local', 'bahrabiseBuildings');
+
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');

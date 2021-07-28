@@ -568,10 +568,12 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
                 return null;
             });
+            this.map.setLayoutProperty('bahrabiseBuildings', 'visibility', 'visible');
         }
 
         if (currentPage !== prevProps.currentPage && currentPage === 9) {
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'visible');
+            this.map.setLayoutProperty('bahrabiseBuildings', 'visibility', 'visible');
             this.map.moveLayer('risk-fill-local', 'bahrabiseBuildings');
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
