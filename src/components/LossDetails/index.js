@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-
 import { _cs, isDefined } from '@togglecorp/fujs';
 
 
@@ -44,6 +43,17 @@ export default class LossDetails extends React.PureComponent {
         return stat;
     });
 
+    null_check=() => {
+        const { nullCondition, data = emptyList } = this.props;
+        if (nullCondition) {
+            summaryData = this.calculateSummary(data);
+            summaryData.estimatedLoss = '-';
+            return summaryData;
+        }
+        summaryData = this.calculateSummary(data);
+        return summaryData;
+    }
+
     render() {
         const {
             className,
@@ -51,15 +61,7 @@ export default class LossDetails extends React.PureComponent {
             hideIncidentCount,
             nullCondition,
         } = this.props;
-
-        if (nullCondition) {
-            summaryData = this.calculateSummary(data);
-            summaryData.estimatedLoss = '-';
-        } else {
-            summaryData = this.calculateSummary(data);
-            // summaryData.estimatedLoss = '-';
-        }
-        console.log('summary data', summaryData);
+        this.null_check();
 
         return (
             <div className={_cs(className, styles.lossDetails)}>

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import PropTypes from 'prop-types';
 import {
     _cs,
@@ -51,33 +52,49 @@ export default class TextOutput extends React.PureComponent {
             alwaysVisible,
             labelClassName,
             nullCondition,
+            finalData,
             ...otherProps
+
         } = this.props;
 
         if (isFalsy(value) && !alwaysVisible) {
             return null;
         }
-
         const valueComponent = value !== '-' ? (
-            <Numeral
-                className={_cs(styles.value, valueClassName)}
-                value={value}
-                precision={0}
-                {...otherProps}
-                nullCondition={nullCondition}
+            finalData.label === 'Estimated loss (NPR)' && finalData.value === 0
+                ? (
+                    <div className={_cs(styles.value, valueClassName)}>
+                        <Numeral
+                            className={_cs(styles.value, valueClassName)}
+                            value={value}
+                            precision={0}
+                            {...otherProps}
+                            nullCondition={nullCondition}
+                        />
+                        <Icon
+                            className={styles.infoIcon}
+                            name="info"
+                            title={'0 can be no data available or zero estimated loss'}
+                        />
+                    </div>
+                )
+                : (
+                    <Numeral
+                        className={_cs(styles.value, valueClassName)}
+                        value={value}
+                        precision={0}
+                        {...otherProps}
+                        nullCondition={nullCondition}
+                    />
+                )
 
-            />
         ) : (
-            <div className={_cs(styles.value, valueClassName)}>
+            <div className={_cs(styles.value, valueClassName)} title="N/A">
                  &#8212;
-                <Icon
-                    className={styles.infoIcon}
-                    name="info"
-                    title={'Estimated Loss Unavailable'}
-                />
+
             </div>
         );
-        console.log('is this numeric value', isNumericValue);
+
         return (
             <div className={
                 _cs(

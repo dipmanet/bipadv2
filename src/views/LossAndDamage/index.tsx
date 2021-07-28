@@ -267,8 +267,6 @@ class LossAndDamage extends React.PureComponent<Props, State> {
 
         const null_check_estimatedLoss = filteredData.map(item => item.loss.estimatedLoss)
             .filter(item => item === undefined);
-        console.log('filter check', filteredData);
-        console.log('Null check', null_check_estimatedLoss);
         if (filteredData.length > 0 && (filteredData.length === null_check_estimatedLoss.length)) {
             this.setState({ Null_check_estimatedLoss: true });
         }
@@ -376,7 +374,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         );
         const chartData = this.getDataAggregatedByYear(filteredData);
 
-        console.log('Null test', Null_check_estimatedLoss);
+
         return (
             <>
                 <Loading pending={pending} />
