@@ -8,6 +8,7 @@ import React from 'react';
 import Numeral from '#rscv/Numeral';
 
 import styles from './styles.scss';
+import Icon from '#rscg/Icon';
 
 const propTypes = {
     className: PropTypes.string,
@@ -49,6 +50,7 @@ export default class TextOutput extends React.PureComponent {
             valueClassName,
             alwaysVisible,
             labelClassName,
+            nullCondition,
             ...otherProps
         } = this.props;
 
@@ -56,19 +58,26 @@ export default class TextOutput extends React.PureComponent {
             return null;
         }
 
-        const valueComponent = isNumericValue ? (
+        const valueComponent = value !== '-' ? (
             <Numeral
                 className={_cs(styles.value, valueClassName)}
                 value={value}
                 precision={0}
                 {...otherProps}
+                nullCondition={nullCondition}
+
             />
         ) : (
             <div className={_cs(styles.value, valueClassName)}>
-                { value }
+                 &#8212;
+                <Icon
+                    className={styles.infoIcon}
+                    name="info"
+                    title={'Estimated Loss Unavailable'}
+                />
             </div>
         );
-
+        console.log('is this numeric value', isNumericValue);
         return (
             <div className={
                 _cs(
