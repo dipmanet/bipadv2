@@ -76,7 +76,7 @@ const LeftPane4 = (props: Props) => {
                         src={ManWoman}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>26,114</div>
+                        <div className={styles.iconTitle}>16,631</div>
                         <div className={styles.iconText}>
                                 Total Population
                         </div>
@@ -89,7 +89,7 @@ const LeftPane4 = (props: Props) => {
                         src={Home}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>7,660</div>
+                        <div className={styles.iconTitle}>4,183</div>
                         <div className={styles.iconText}>
                              Total Family Count
                         </div>
@@ -106,7 +106,7 @@ const LeftPane4 = (props: Props) => {
                         src={Male}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>13,257</div>
+                        <div className={styles.iconTitle}>8,431</div>
                         <div className={styles.iconText}>
                              Male Population
                         </div>
@@ -119,7 +119,7 @@ const LeftPane4 = (props: Props) => {
                         src={Female}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>12,853</div>
+                        <div className={styles.iconTitle}>8,200</div>
                         <div className={styles.iconText}>
                              Female Population
                         </div>
