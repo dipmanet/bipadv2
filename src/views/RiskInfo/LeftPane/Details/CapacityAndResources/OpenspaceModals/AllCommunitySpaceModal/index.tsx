@@ -121,7 +121,7 @@ class AllOpenspacesModal extends React.PureComponent<Props, State> {
         const { apiData } = this.state;
         const { filters } = this.props;
         const { region } = filters;
-        console.log('filters', filters);
+
 
         if (region.geoarea) {
             const filteredData = apiData.filter(

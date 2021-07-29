@@ -14,13 +14,13 @@
      })
 
      function parse(){
-         console.log("Parsing initiated....");
+        
          prioritysn = 1;
          subprioritysn = 1;
          activitysn = 1;
          _data.forEach((a)=>{
              b = a.split('\t');
-             console.log(b.length);
+            
              row = null;
              if(b[0]!==""){
                  //priority
@@ -46,7 +46,7 @@
      }
 
      function uniques(_d,_s,_idx){
-         console.log("Generating unique ones...");
+        
          _a = {};
          _d.forEach(function(a,i){
              __d = a.split(_s)[_idx];
