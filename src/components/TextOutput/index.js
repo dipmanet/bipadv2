@@ -60,41 +60,51 @@ export default class TextOutput extends React.PureComponent {
         if (isFalsy(value) && !alwaysVisible) {
             return null;
         }
-        const valueComponent = value !== '-' ? (
-            finalData.label === 'Estimated loss (NPR)' && finalData.value === 0
+        console.log('is numeric', isNumericValue);
+        console.log('value', value);
+        const valueComponent = (value === '-')
+            ? (
+                <div className={_cs(styles.value, valueClassName)} title="N/A">
+            &#8212;
+                    {/* {value} */}
+
+                </div>
+            )
+            : isNumericValue
+
                 ? (
+                    finalData && finalData.label === 'Estimated loss (NPR)' && finalData.value === 0
+                        ? (
+                            <div className={_cs(styles.value, valueClassName)}>
+                                <Numeral
+                                    className={_cs(styles.value, valueClassName)}
+                                    value={value}
+                                    precision={0}
+                                    {...otherProps}
+                                    nullCondition={nullCondition}
+                                />
+                                <Icon
+                                    className={styles.infoIcon}
+                                    name="info"
+                                    title={'0 can be no data available or zero estimated loss'}
+                                />
+                            </div>
+                        )
+                        : (
+                            <Numeral
+                                className={_cs(styles.value, valueClassName)}
+                                value={value}
+                                precision={0}
+                                {...otherProps}
+                                nullCondition={nullCondition}
+                            />
+                        )
+
+                ) : (
                     <div className={_cs(styles.value, valueClassName)}>
-                        <Numeral
-                            className={_cs(styles.value, valueClassName)}
-                            value={value}
-                            precision={0}
-                            {...otherProps}
-                            nullCondition={nullCondition}
-                        />
-                        <Icon
-                            className={styles.infoIcon}
-                            name="info"
-                            title={'0 can be no data available or zero estimated loss'}
-                        />
+                        { value }
                     </div>
-                )
-                : (
-                    <Numeral
-                        className={_cs(styles.value, valueClassName)}
-                        value={value}
-                        precision={0}
-                        {...otherProps}
-                        nullCondition={nullCondition}
-                    />
-                )
-
-        ) : (
-            <div className={_cs(styles.value, valueClassName)} title="N/A">
-                 &#8212;
-
-            </div>
-        );
-
+                );
         return (
             <div className={
                 _cs(
