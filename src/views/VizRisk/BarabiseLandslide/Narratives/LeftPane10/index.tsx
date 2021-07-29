@@ -165,7 +165,9 @@ const LeftPane10 = (props: Props) => {
             region of the country and is also landslide prone area.
             Out of the 9 wards, ward 4 is at higher risk of landslide.
             </p>
-
+            <p>
+            Source: Durham University
+            </p>
             <p>
                COMMUNITY INFRASTRUCTURE
 

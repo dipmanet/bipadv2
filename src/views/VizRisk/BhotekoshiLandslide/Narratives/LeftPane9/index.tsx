@@ -138,7 +138,9 @@ const LeftPane8 = (props: Props) => {
             likelihood and blue color signifies the lower
              likelihood of landslide occurrences.
             </p>
-
+            <p>
+            Source: Durham University
+            </p>
             <p>
                COMMUNITY INFRASTRUCTURE
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}

@@ -28,7 +28,7 @@ const ciRef = {
     'Community buildings': 'Community Building',
     'Cultural heritage sites': 'Cultural Heritage',
     Finance: 'Financial Institution',
-    Education: 'Education Instution',
+    Education: 'Education Institution',
 };
 
 class SlideFourPane extends React.Component<Props, State> {

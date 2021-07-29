@@ -3,6 +3,7 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
+    Label,
     Legend,
     ResponsiveContainer,
     Tooltip,
@@ -128,11 +129,30 @@ const LeftPane7 = (props: Props) => {
                     margin={{ left: 20, right: 20 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
+                    <XAxis type="number">
+                        <Label
+                            value="No. of deaths"
+                            offset={0}
+                            position="insideBottom"
+                            style={{
+                                textAnchor: 'middle',
+                                fill: 'rgba(255, 255, 255, 0.87)',
+                            }}
+                        />
+                    </XAxis>
                     <YAxis
                         type="category"
                         dataKey="name"
                         tick={{ fill: '#94bdcf' }}
+                    />
+                    <Label
+                        value="No. of deaths"
+                        offset={0}
+                        position="insideBottom"
+                        style={{
+                            textAnchor: 'middle',
+                            fill: 'rgba(255, 255, 255, 0.87)',
+                        }}
                     />
                     <Bar
                         dataKey="Total"

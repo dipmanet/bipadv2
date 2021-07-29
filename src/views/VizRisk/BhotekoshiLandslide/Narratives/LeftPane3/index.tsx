@@ -119,7 +119,9 @@ const LeftPane3 = (props: Props) => {
             and covers an area of 278.31 sq.km and is situated in the
             altitude range of 1183 to 5371 m above sea level.
             </p>
-
+            <p>
+                Source: Department of Hydrology and Meteorology
+            </p>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>
                     <ScalableVectorGraphics

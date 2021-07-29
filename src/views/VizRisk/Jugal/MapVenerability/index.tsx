@@ -57,7 +57,7 @@ const ciRef = {
     'Community buildings': 'Community Building',
     'Cultural heritage sites': 'Cultural Heritage',
     Finance: 'Financial Institution',
-    Education: 'Education Instution',
+    Education: 'Education Institution',
 };
 
 const draw = new MapboxDraw({

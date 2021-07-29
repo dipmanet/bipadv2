@@ -29,6 +29,7 @@ const LeftPane2 = (props: Props) => {
              wards and covers an area of 278.31 sq.km and is situated
              in the altitude range of 1183 to 5371 m above sea level.
             </p>
+
         </div>
 
     );

@@ -60,7 +60,7 @@ const riskExpression = [
 const ciRef = {
     health: 'Hospital',
     finance: 'Financial Institution',
-    education: 'Education Instution',
+    education: 'Education Institution',
 };
 const draw = new MapboxDraw({
     displayControlsDefault: false,

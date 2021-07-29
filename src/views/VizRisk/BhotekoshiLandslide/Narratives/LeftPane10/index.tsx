@@ -167,7 +167,9 @@ const LeftPane10 = (props: Props) => {
             prone area. Out of the 5 wards, ward 1 and 3 are
             comparatively at higher risk of landslide.
             </p>
-
+            <p>
+            Source: Durham University
+            </p>
             <p>
                COMMUNITY INFRASTRUCTURE
 

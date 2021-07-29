@@ -120,7 +120,9 @@ const LeftPane3 = (props: Props) => {
                 situated in the altitude range of 500 to 4000 m above sea
                 level.
             </p>
-
+            <p>
+                Source: Department of Hydrology and Meteorology
+            </p>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>
                     <ScalableVectorGraphics

@@ -43,6 +43,9 @@ const LeftPane4 = (props: Props) => {
                 residential areas. Other areas in the municipality
                 is covered by scree, sand, scrubs, shingles and stones.
             </p>
+            <p>
+                Source: OpenStreetMap
+            </p>
             <div className={styles.customChartLegend}>
 
                 <ResponsiveContainer className={styles.respContainer} height={200}>

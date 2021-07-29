@@ -35,6 +35,9 @@ const LeftPane2 = (props: Props) => {
             municipalities in the district, Barhabise witnessed 3 major
             landslides in the year 2020 alone.
             </p>
+            <p>
+                Source: Department of Hydrology and Meteorology
+            </p>
         </div>
 
     );

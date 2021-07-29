@@ -7,7 +7,7 @@ export default {
         { name: 'Farmland', value: 11.523, total: 278.13, color: '#bbf56b' },
         { name: 'Glacier', value: 4.719, total: 278.13, color: '#e4fafc' },
         { name: 'Water', value: 0.555, total: 278.13, color: '#0670bc' },
-        { name: 'Residential', value: 3.61, total: 278.13, color: '#d5d3d3' },
+        { name: 'Buildings', value: 3.61, total: 278.13, color: '#d5d3d3' },
         { name: 'Other', value: 9.222, total: 278.13, color: '#d5d3d3' },
     ],
     landcoverLegends: [

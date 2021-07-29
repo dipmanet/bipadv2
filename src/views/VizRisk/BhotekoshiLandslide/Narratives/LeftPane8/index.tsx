@@ -150,6 +150,7 @@ const LeftPane8 = (props: Props) => {
     }, [landslideYear]);
 
     useEffect(() => {
+        console.log('draw data', drawData);
         let polyArr = [];
         if (drawData.length > 0) {
             const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
@@ -288,7 +289,9 @@ const LeftPane8 = (props: Props) => {
             date occurred in the year 2018 i.e. 907.
 
             </p>
-
+            <p>
+            Source: Durham University
+            </p>
             <p>
               NO. OF LANDSLIDES
 

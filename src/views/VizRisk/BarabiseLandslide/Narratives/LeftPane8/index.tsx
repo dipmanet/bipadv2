@@ -290,7 +290,9 @@ const LeftPane8 = (props: Props) => {
                 of post monsoon landslide incidents till date occurred in the
                 year 2020 i.e. 543.
             </p>
-
+            <p>
+            Source: Durham University
+            </p>
             <p>
               NO. OF LANDSLIDES
 
