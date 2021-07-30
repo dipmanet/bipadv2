@@ -150,24 +150,24 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                 </div>
 
 
-                <ResponsiveContainer width="100%" height={'50%'}>
+                <ResponsiveContainer width="100%" height={600}>
                     <BarChart
                         width={350}
-                        height={600}
+                        // height={600}
                         data={chartData}
                         layout="vertical"
                         margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />
-                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} />
+                        <YAxis type="category" dataKey="name" tick={{ fill: '#94bdcf' }} interval={0} />
                         <Tooltip />
                         {/* <Legend /> */}
                         <Legend iconType="square" iconSize={10} align="center" content={this.renderLegend} />
                         <Bar dataKey="MalePop" stackId="a" fill="#ffbf00" />
-                        <Bar dataKey="FemalePop" stackId="a" fill="#00d725" />
-                        <Bar dataKey="OtherPop" stackId="a" fill="#EB7C21" />
-                        <Bar dataKey="TotalFamilyCount" fill="#347eff" />
+                        <Bar dataKey="FemalePop" stackId="a" fill="#00d725" radius={[0, 20, 20, 0]} />
+                        <Bar dataKey="OtherPop" stackId="a" fill="#EB7C21" radius={[0, 20, 20, 0]} />
+                        <Bar dataKey="TotalFamilyCount" fill="#347eff" radius={[0, 20, 20, 0]} />
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
