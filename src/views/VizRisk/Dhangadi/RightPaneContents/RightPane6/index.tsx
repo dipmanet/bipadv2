@@ -48,10 +48,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                   contingent upon several factors including building types and
                    their exposure, whether they are located in flood prone or flood safe areas.
                 </p>
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>
                     <BarChart
                         width={350}
-                        height={600}
+                        // height={600}
                         data={chartData}
                         layout="vertical"
                         margin={{ right: 20, left: 20 }}

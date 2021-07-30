@@ -36,10 +36,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 bridges in Gulariya are at constant threat of flooding every monsoon.
                 </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={'45%'}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>
                     <BarChart
                         width={300}
-                        height={600}
+                        // height={600}
                         data={chartData}
                         layout="vertical"
                         margin={{ left: 20, right: 20 }}
