@@ -65,8 +65,8 @@ const slideOneLayers = ['wardNumbers',
     'water', 'waterway',
     'wardOutline', 'wardFill'];
 
-const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'water',
-    'canalRajapur', 'rajapurbuildings', 'bridgeRajapur',
+const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'bridgeRajapur', 'water',
+    'canalRajapur', 'rajapurbuildings',
     'rajapurRoads', 'forestRajapur', 'agriculturelandRajapurPattern',
     'agriculturelandRajapur', 'wardOutline',
     'wardFill',
@@ -228,20 +228,20 @@ class FloodHistoryMap extends React.Component {
 
 
         const slideFourLayers = [
-            ...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'water', 'wardOutline',
-            'bridgeRajapur', 'canalRajapur',
+            ...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur', 'water', 'wardOutline',
+            'canalRajapur',
             'waterway', 'rajapurRoads', 'wardFill',
         ];
 
         const slideFiveLayers = [
-            ...criticalInfraClusters, ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'rajapurbuildings', 'water',
-            'bridgeRajapur', 'canalRajapur', 'waterway',
+            ...criticalInfraClusters, ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur', 'rajapurbuildings', 'water',
+            'canalRajapur', 'waterway',
             'rajapurRoads', 'wardOutline', 'wardFill',
         ];
-        const slideSixLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple',
+        const slideSixLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur',
             'safeshelterRajapurIcon', 'safeshelterRajapur',
             ...evacClusters, ...rasterLayers, 'water',
-            'bridgeRajapur', 'rajapurRoads', 'canalRajapur', 'waterway',
+            'rajapurRoads', 'canalRajapur', 'waterway',
             'wardOutline', 'wardFill',
         ];
 

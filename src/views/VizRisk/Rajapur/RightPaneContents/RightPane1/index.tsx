@@ -27,7 +27,7 @@ const lineData = [
         name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
     },
     {
-        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
+        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 8,
     },
     {
         name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
@@ -255,7 +255,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1900mm</div>
+                            <div className={styles.iconTitle}>2131.6 mm</div>
                             <div className={styles.iconText}>
                             Annual
                             Rainfall

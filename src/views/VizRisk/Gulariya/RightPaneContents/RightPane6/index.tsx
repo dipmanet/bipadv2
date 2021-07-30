@@ -46,7 +46,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 in flood-prone or flood safe areas.
                 </p>
                 <p>
-                A present, the data on evacuation centers is not available and therefore
+                At present, the data on evacuation centers is not available and therefore
                 not visualized on the map.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>
@@ -87,15 +87,13 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                             (METEOR) ,UK Space Agency, https://meteor-project.org/
                         </li>
                         <li>
-                            Risk Nexus, Urgent case for recovery. What we can
-                            learn from the August 2014 Karnali River floods in Nepal.
-                            Zurich Insurance Group Ltd and ISET-International, 2015
+                            OpenStreetMap
                         </li>
                         <li>
-                             Central Bureau of Statistics, 2011
+                        Department of Hydrology and Meteorology (DHM)
                         </li>
                         <li>
-                             Rajapur Municipality Profile, 2075
+                        Gulariya Municipality Profile, 2021
                         </li>
                     </ul>
                 )

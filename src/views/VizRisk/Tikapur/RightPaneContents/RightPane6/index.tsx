@@ -46,7 +46,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 in flood-prone or flood safe areas.
                 </p>
                 <p>
-                A present, the data on safe shelter is not available and therefore not
+                At present, the data on safe shelter is not available and therefore not
                 visualized on the map.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={'20%'}>

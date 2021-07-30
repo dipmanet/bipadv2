@@ -82,14 +82,14 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 {showReferences && (
                     <ul className={styles.referencesText}>
                         <li>
-                            Modeling Exposure Through Earth Observations Routines
-                            (METEOR) ,UK Space Agency, https://meteor-project.org/
+                        Modeling Exposure Through Earth Observations Routines (METEOR), UK Space Agency, https://meteor-project.org/
                         </li>
                         <li>
-                             Central Bureau of Statistics, 2011
+                        OpenStreetMap
                         </li>
+                        <li>Department of Hydrology and Meteorology (DHM) </li>
                         <li>
-                             Rajapur Municipality Profile, 2075
+                        Dhangadhi Sub-Metropolitan City, 2021
                         </li>
                     </ul>
                 )
