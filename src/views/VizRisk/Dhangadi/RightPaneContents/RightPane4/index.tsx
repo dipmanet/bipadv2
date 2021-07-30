@@ -59,7 +59,8 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             dataKey="Total"
                             fill="#ffbf00"
                             // barCategoryGap={30}
-                            barCategoryGap={20}
+                            // barCategoryGap={20}
+                            barSize={80}
                             label={{ position: 'insideRight' }}
                             tick={{ fill: '#94bdcf' }}
                         />
