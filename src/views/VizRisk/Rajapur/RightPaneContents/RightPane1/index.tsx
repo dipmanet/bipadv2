@@ -27,7 +27,7 @@ const lineData = [
         name: 'Jan', AvgMax: 23, DailyAvg: 15, AvgMin: 7,
     },
     {
-        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 9,
+        name: 'Feb', AvgMax: 30, DailyAvg: 19, AvgMin: 8,
     },
     {
         name: 'Mar', AvgMax: 35, DailyAvg: 23, AvgMin: 11,
@@ -200,10 +200,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                 <p>
                 Rajapur municipality lies in the Terai region of Bardiya district
                 in Lumbini Province.It covers a total area of 127.08 sq. km and
-                is situated at an elevation of 142 m to 154 m from sea level.Rajapur
-                experiences a lower tropical climate. Summer starts in March and
-                lasts till June. Winter begins in November and lasts till February.
-                Rajapur faces heavy downpours during the monsoon, from June to October.
+                is situated at an elevation of 142 m to 154 m from sea level.
 
                 </p>
                 <h2>Climate</h2>
@@ -258,7 +255,7 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1900mm</div>
+                            <div className={styles.iconTitle}>2131.6 mm</div>
                             <div className={styles.iconText}>
                             Annual
                             Rainfall
