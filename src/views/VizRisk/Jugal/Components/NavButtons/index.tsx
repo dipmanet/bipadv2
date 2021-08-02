@@ -1,8 +1,5 @@
 import React from 'react';
-import Icon from '#rscg/Icon';
-
 import styles from './styles.scss';
-import style from '#mapStyles/rasterStyle';
 
 interface Props{
     handleNext: () => void;

@@ -9,10 +9,10 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
-import NavButtons from '../../Components/NavButtons';
+import NavButtons from '#views/VizRisk/Common/NavButtons';
+
 
 // const chartData = criticalInfraData.safeShelterData;
 

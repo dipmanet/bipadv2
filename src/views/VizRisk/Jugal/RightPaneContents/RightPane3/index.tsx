@@ -1,36 +1,29 @@
 import React from 'react';
-import memoize from 'memoize-one';
-
 import {
     Bar, BarChart,
     CartesianGrid, Legend,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
-import DemographyData from './DemographyChartData';
+import DemographyData from '../../Data/demographyChartData';
+import styles from '../styles.scss';
 
-import Disclaimer from '../../Components/Disclaimer';
-import NavButtons from '../../Components/NavButtons';
+import NavButtons from '#views/VizRisk/Common/NavButtons';
+
 
 const demoChartdata = DemographyData.chartData;
 
-interface ComponentProps {}
-
-type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
-type Props = NewProps<ReduxProps, Params>;
-const COLORS = [
-    'rgb(0,177,0)',
-    'rgb(181,209,122)',
-    'rgb(241,238,150)',
-    'rgb(245,219,131)',
-    'rgb(255,240,255)',
-    'rgb(207,144,119)',
-];
+interface Props {
+    handleNext: () => void;
+    handlePrev: () => void;
+    disableNavLeftBtn: boolean;
+    disableNavRightBtn: boolean;
+    pagenumber: number;
+    totalPages: number;
+}
 
 class SlideThreePane extends React.PureComponent<Props, State> {
-    public renderLegend = props => (
+    public renderLegend = () => (
         <div className={styles.climateLegendContainer}>
             <div className={styles.climatelegend}>
                 <div className={styles.legendMax} />
@@ -57,13 +50,10 @@ class SlideThreePane extends React.PureComponent<Props, State> {
 
     public render() {
         const {
-            payload,
             handleNext,
             handlePrev,
             disableNavLeftBtn,
             disableNavRightBtn,
-            disableNav,
-            RightBtn,
             pagenumber,
             totalPages,
         } = this.props;

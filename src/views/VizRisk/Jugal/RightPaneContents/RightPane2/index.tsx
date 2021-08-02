@@ -10,7 +10,7 @@ import {
     Cell,
     Sector,
 } from 'recharts';
-import CustomChartLegend from '#views/VizRisk/Jugal/Components/CustomChartLegend';
+import CustomChartLegend from '#views/VizRisk/Common/ChartComps/CustomChartLegend';
 
 import {
     mapStyleSelector,
@@ -21,24 +21,12 @@ import {
     wardsSelector,
     hazardTypesSelector,
 } from '#selectors';
-import CustomLabel from './CustomLabel';
-
-import styles from './styles.scss';
-import Disclaimer from '../../Components/Disclaimer';
-import NavButtons from '../../Components/NavButtons';
-import LandCover from './LandCoverChartData';
+import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
+import NavButtons from '#views/VizRisk/Common/NavButtons';
+import LandCover from '../../Data/landCoverChartData';
+import styles from '../styles.scss';
 
 const demoChartdata = LandCover.chartData;
-
-
-const COLORS_CHART = [
-    '#d3e378',
-    '#b4b4b4',
-    '#00a811',
-    '#2b4253',
-    '#d5d3d3',
-];
-
 
 interface State {
     activeIndex: number;
@@ -142,7 +130,7 @@ class RightPane extends React.PureComponent<Props, State> {
 
 
     public render() {
-        const { activeIndex, showInfo } = this.state;
+        const { activeIndex } = this.state;
         const {
             handleNext,
             handlePrev,

@@ -8,8 +8,9 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
-import styles from './styles.scss';
-import NavButtons from '../../Components/NavButtons';
+import styles from '../styles.scss';
+import NavButtons from '#views/VizRisk/Common/NavButtons';
+
 
 interface ComponentProps {}
 

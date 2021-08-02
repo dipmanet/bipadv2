@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
 import styles from './styles.scss';
-import NavButtons from '../../Components/NavButtons';
+import NavButtons from '#views/VizRisk/Common/NavButtons';
 import Icon from '#rscg/Icon';
 import {
     getbuildingVul,
@@ -731,9 +731,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
 
                 }
-
-
-                {/* <SourceInfo /> */}
             </div>
         );
     }

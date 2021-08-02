@@ -8,17 +8,14 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import Hexagon from 'react-hexagon';
-import { isDefined } from '@togglecorp/fujs';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
-import NavButtons from '../../Components/NavButtons';
+import NavButtons from '#views/VizRisk/Common/NavButtons';
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFourPane extends React.PureComponent<Props, State> {
     public constructor(props) {
