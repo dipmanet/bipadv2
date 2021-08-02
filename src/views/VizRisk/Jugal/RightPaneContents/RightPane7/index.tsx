@@ -10,7 +10,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 import NavButtons from '#views/VizRisk/Common/NavButtons';
 import Icon from '#rscg/Icon';
 import {
@@ -24,13 +24,10 @@ import {
     getaverageAnnualincomeChartData,
 } from '../../utils';
 
-// const chartData = criticalInfraData.safeShelterData;
-
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFivePane extends React.PureComponent<Props, State> {
     public constructor(props) {

@@ -12,6 +12,7 @@ import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Icon from '#rscg/Icon';
 
+
 const LandCoverLegends = (props) => {
     const { handleCritical, criticalFlood } = props;
     const [showEducation, setshowEducation] = useState(false);
@@ -52,31 +53,28 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'Culture') {
+            } else if (criticalFlood === 'Community buildings') {
                 resetCriticalLayers();
                 setshowCulture(true);
-            } else if (criticalFlood === 'Governance') {
+            } else if (criticalFlood === 'Government Buildings') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
             } else if (criticalFlood === 'Health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'Industry') {
+            } else if (criticalFlood === 'Industry/ hydropower') {
                 resetCriticalLayers();
                 setshowIndustry(true);
             } else if (criticalFlood === 'Finance') {
                 resetCriticalLayers();
                 setshowFinance(true);
-            } else if (criticalFlood === 'Tourism') {
-                resetCriticalLayers();
-                setshowTourism(true);
-            } else if (criticalFlood === 'Trade and business') {
+            } else if (criticalFlood === 'Trade and business (groceries, meat, textiles)') {
                 resetCriticalLayers();
                 setshowTrade(true);
             } else if (criticalFlood === 'Water sources') {
                 resetCriticalLayers();
                 setshowWater(true);
-            } else if (criticalFlood === 'Tourism') {
+            } else if (criticalFlood === 'Hotel/resort/homestay') {
                 resetCriticalLayers();
                 setshowTourism(true);
             }
