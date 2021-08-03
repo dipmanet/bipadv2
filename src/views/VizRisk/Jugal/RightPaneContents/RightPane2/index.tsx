@@ -22,7 +22,8 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
-import NavButtons from '#views/VizRisk/Common/NavButtons';
+// import NavButtons from '#views/VizRisk/Common/NavButtons';
+import NavButtons from '../../Components/NavButtons';
 import LandCover from '../../Data/landCoverChartData';
 import styles from '../styles.scss';
 

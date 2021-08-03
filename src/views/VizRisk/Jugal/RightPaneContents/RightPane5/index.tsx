@@ -9,7 +9,8 @@ import {
 } from 'recharts';
 import Hexagon from 'react-hexagon';
 import styles from '../styles.scss';
-import NavButtons from '#views/VizRisk/Common/NavButtons';
+// import NavButtons from '#views/VizRisk/Common/NavButtons';
+import NavButtons from '../../Components/NavButtons';
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 
 interface ComponentProps {}

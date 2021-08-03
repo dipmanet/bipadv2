@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useRef, useState, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { isDefined } from '@togglecorp/fujs';
@@ -9,6 +10,7 @@ import demographicsData from '../Data/demographicsData';
 import expressions from '../Data/expressions';
 import * as PageTypes from '#store/atom/page/types';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
+import { AppState } from '#store/types';
 
 import {
     municipalitiesSelector,
@@ -24,6 +26,7 @@ import {
     getWardFilter,
 } from '#utils/domain';
 
+
 interface State{
     lat: number;
     lng: number;
@@ -36,6 +39,12 @@ interface OwnProps{
     showPopulation: string;
     criticalElement: string;
     CIData: CIData;
+    region: Region | undefined;
+}
+
+interface Region {
+    adminLevel: number;
+    geoarea: number;
 }
 
 interface CIData{
@@ -56,22 +65,22 @@ interface PropsFromAppState {
     districts: PageTypes.District[];
     municipalities: PageTypes.Municipality[];
     wards: PageTypes.Ward[];
-    bounds: [];
-    selectedProvinceId: number;
-    selectedDistrictId: number;
-    selectedMunicipalityId: number;
+    bounds: number[];
+    selectedProvinceId: number | undefined;
+    selectedDistrictId: number | undefined;
+    selectedMunicipalityId: number | undefined;
 }
 
 type Props = OwnProps & PropsFromAppState;
 
 type LngLat = any[];
-
+const UNSUPPORTED_BROWSER = !mapboxgl.supported();
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
@@ -81,43 +90,61 @@ const mapStateToProps = (state, props) => ({
     selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-let hoveredWardId: (string | null) = null;
+let hoveredWardId: (string | number |undefined);
 const { populationWardExpression } = expressions;
 
 
-const landCoverLayers = ['Rock-Stone', 'Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
-
 const popDensityLayers = ['Population Density', 'WardBoundary', 'Wardnumber'];
 
-class JugalMap extends React.Component<Props, State> {
-    public constructor(props: Props) {
-        super(props);
+const slideLayers1 = ['National Park', 'National Park Text', 'Buildings'];
+const slideLayers2 = ['Population Density', 'ward-fill-local'];
+const slideLayer3 = ['Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
 
-        this.state = {
-            lat: 28.015490220644214,
-            lng: 85.79108507481781,
-            zoom: 10,
-            categoriesCritical: [],
-        };
-    }
+const lat = 28.015490220644214;
+const lng = 85.79108507481781;
+const zoom = 9.8;
+function noop() {}
 
-    public componentDidMount() {
-        const {
-            lng, lat, zoom,
-        } = this.state;
+const mapStyle = {
+    position: 'absolute',
+    width: 'calc(70%)',
+    left: 'calc(30% - 60px)',
+    top: 0,
+    height: '100vh',
+};
 
-        const {
-            wards,
-            rightElement,
-        } = this.props;
+const JugalMap = (props: Props) => {
+    const [categoriesCritical, setcategoriesCritical] = useState([]);
+    const map = useRef<mapboxgl.Map | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const {
+        wards,
+        rightElement,
+        CIData,
+        criticalElement,
+        showPopulation,
+    } = props;
+
+    useEffect(() => {
+        if (UNSUPPORTED_BROWSER) {
+            console.error('No Mapboxgl support.');
+            return noop;
+        }
+        const { current: mapContainer } = mapContainerRef;
+        if (!mapContainer) {
+            console.error('No container found.');
+            return noop;
+        }
+        if (map.current) { return noop; }
+
 
         const mapping = wards.filter(item => item.municipality === 23007).map(item => ({
             ...item,
             value: Number(item.title),
         }));
 
-        this.jugalMap = new mapboxgl.Map({
-            container: this.mapContainer,
+        const jugalMap = new mapboxgl.Map({
+            container: mapContainer,
             style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
             center: [lng, lat],
             zoom,
@@ -125,24 +152,26 @@ class JugalMap extends React.Component<Props, State> {
             maxZoom: 22,
         });
 
+        map.current = jugalMap;
 
-        this.jugalMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-        this.jugalMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        jugalMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-        this.jugalMap.on('style.load', () => {
+        jugalMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        jugalMap.on('style.load', () => {
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
                 className: 'popup',
             });
-            this.jugalMap.addSource('jugalHillshade', {
+            jugalMap.addSource('jugalHillshade', {
                 type: 'raster',
                 tiles: [getHillShadeLayer('Jugal_hillshade')],
                 tileSize: 256,
             });
 
-            this.jugalMap.addLayer(
+            jugalMap.addLayer(
                 {
                     id: 'jugalHillshadeLayer',
                     type: 'raster',
@@ -153,24 +182,19 @@ class JugalMap extends React.Component<Props, State> {
                     },
                 },
             );
-
-            const { CIData } = this.props;
-
             if (isDefined(CIData.features)) {
-                const categoriesCritical: any = [...new Set(CIData.features.map(
+                const categories: any = [...new Set(CIData.features.map(
                     item => item.properties.CI,
                 ))];
-                    // eslint-disable-next-line react/no-did-update-set-state
-                this.setState({ categoriesCritical });
-
-                categoriesCritical.map((layer: string) => {
-                    this.jugalMap.addSource(layer, {
+                setcategoriesCritical(categories);
+                categories.map((layer: string) => {
+                    jugalMap.addSource(layer, {
                         type: 'geojson',
                         data: getGeoJSON(layer, CIData),
                         cluster: true,
                         clusterRadius: 50,
                     });
-                    this.jugalMap.addLayer({
+                    jugalMap.addLayer({
                         id: `clusters-${layer}`,
                         type: 'circle',
                         source: layer,
@@ -194,8 +218,7 @@ class JugalMap extends React.Component<Props, State> {
                             ],
                         },
                     });
-
-                    this.jugalMap.addLayer({
+                    jugalMap.addLayer({
                         id: `unclustered-point-${layer}`,
                         type: 'symbol',
                         source: layer,
@@ -206,8 +229,7 @@ class JugalMap extends React.Component<Props, State> {
                             'icon-anchor': 'bottom',
                         },
                     });
-
-                    this.jugalMap.addLayer({
+                    jugalMap.addLayer({
                         id: `clusters-count-${layer}`,
                         type: 'symbol',
                         source: layer,
@@ -217,7 +239,7 @@ class JugalMap extends React.Component<Props, State> {
                             'text-size': 12,
                         },
                     });
-                    categoriesCritical.map((ci: string) => this.jugalMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
+                    categories.map((ci: string) => jugalMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
                         if (e) {
                             const { lngLat } = e;
                             const coordinates: number[] = [lngLat.lng, lngLat.lat];
@@ -227,33 +249,33 @@ class JugalMap extends React.Component<Props, State> {
                                     <p>${ciName}</p>
                                 </div>
                         `,
-                            ).addTo(this.jugalMap);
+                            ).addTo(jugalMap);
                         }
                     }));
-                    categoriesCritical.map((ci: string) => this.jugalMap.on('mouseleave', `unclustered-point-${ci}`, () => {
-                        this.jugalMap.getCanvas().style.cursor = '';
+                    categories.map((ci: string) => jugalMap.on('mouseleave', `unclustered-point-${ci}`, () => {
+                        jugalMap.getCanvas().style.cursor = '';
                         popup.remove();
                     }));
                     if (rightElement !== 3) {
-                        this.jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                        this.jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                        this.jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                        jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                        jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                        jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
                     }
 
                     return null;
                 });
             }
 
-            this.jugalMap.addSource('vizrisk-fills', {
+            jugalMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
-            this.jugalMap.addSource('density', {
+            jugalMap.addSource('density', {
                 type: 'vector',
                 url: mapSources.populationDensity.url,
             });
 
-            this.jugalMap.addLayer({
+            jugalMap.addLayer({
                 id: 'ward-fill-local',
                 source: 'vizrisk-fills',
                 'source-layer': mapSources.nepal.layers.ward,
@@ -278,51 +300,9 @@ class JugalMap extends React.Component<Props, State> {
                 },
                 filter: getWardFilter(3, 24, 23007, wards),
             });
-            if (rightElement === 0) {
-                this.jugalMap.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.jugalMap.moveLayer('Buildings');
-                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'none');
-            }
-            if (rightElement === 1) {
-                popDensityLayers.map((l) => {
-                    this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
-                    return null;
-                });
-                this.jugalMap.setLayoutProperty('National Park', 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty('National Park Text', 'visibility', 'visible');
-                this.jugalMap.setPaintProperty('National Park', 'fill-color', 'rgb(247,229,184)');
-                this.jugalMap.moveLayer('National Park');
-                this.jugalMap.moveLayer('National Park Text');
-
-
-                this.jugalMap.setLayoutProperty('Jugal Mun Bondary', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('Jugal Contour', 'visibility', 'none');
-                this.jugalMap.setLayoutProperty('jugalHillshadeLayer', 'visibility', 'none');
-                this.jugalMap.moveLayer('WardBoundary');
-                this.jugalMap.moveLayer('Wardnumber');
-            } else {
-                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            }
-
-            if (rightElement === 2) {
-                this.jugalMap.setLayoutProperty('National Park', 'visibility', 'none');
-                landCoverLayers.map((l) => {
-                    this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
-                    return null;
-                });
-                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'none');
-            }
-            if (rightElement === 3) {
-                this.jugalMap.setLayoutProperty('National Park', 'visibility', 'none');
-                landCoverLayers.map((l) => {
-                    this.jugalMap.setLayoutProperty(l, 'visibility', 'visible');
-                    return null;
-                });
-                this.jugalMap.setLayoutProperty('Population Density', 'visibility', 'none');
-            }
 
             mapping.forEach((attribute) => {
-                this.jugalMap.setFeatureState(
+                jugalMap.setFeatureState(
                     {
                         id: attribute.id,
                         source: 'vizrisk-fills',
@@ -332,10 +312,9 @@ class JugalMap extends React.Component<Props, State> {
                 );
             });
 
-
-            this.jugalMap.on('mousemove', 'ward-fill-local', (e) => {
+            jugalMap.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
-                    this.jugalMap.getCanvas().style.cursor = 'pointer';
+                    jugalMap.getCanvas().style.cursor = 'pointer';
 
                     const { lngLat } = e;
                     const coordinates: LngLat = [lngLat.lng, lngLat.lat];
@@ -347,9 +326,9 @@ class JugalMap extends React.Component<Props, State> {
                             <p> Total Population: ${totalPop}</p>
                         </div>
                         `,
-                    ).addTo(this.jugalMap);
+                    ).addTo(jugalMap);
                     if (hoveredWardId) {
-                        this.jugalMap.setFeatureState(
+                        jugalMap.setFeatureState(
                             {
                                 id: hoveredWardId,
                                 source: 'vizrisk-fills',
@@ -359,7 +338,7 @@ class JugalMap extends React.Component<Props, State> {
                         );
                     }
                     hoveredWardId = e.features[0].id;
-                    this.jugalMap.setFeatureState(
+                    jugalMap.setFeatureState(
                         {
                             id: hoveredWardId,
                             source: 'vizrisk-fills',
@@ -371,11 +350,11 @@ class JugalMap extends React.Component<Props, State> {
                 }
             });
 
-            this.jugalMap.on('mouseleave', 'ward-fill-local', () => {
-                this.jugalMap.getCanvas().style.cursor = '';
+            jugalMap.on('mouseleave', 'ward-fill-local', () => {
+                jugalMap.getCanvas().style.cursor = '';
                 popup.remove();
                 if (hoveredWardId) {
-                    this.jugalMap.setFeatureState(
+                    jugalMap.setFeatureState(
                         {
                             source: 'vizrisk-fills',
                             id: hoveredWardId,
@@ -384,73 +363,126 @@ class JugalMap extends React.Component<Props, State> {
                         { hover: false },
 
                     );
-                    this.jugalMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    jugalMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                 }
                 hoveredWardId = null;
             });
+
+            jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            jugalMap.moveLayer('jugalHillshadeLayer', 'Population Density');
+            jugalMap.moveLayer('WardBoundary');
+            jugalMap.moveLayer('Wardnumber');
         });
-    }
-
-    public componentDidUpdate(prevProps: OwnProps) {
-        const { showPopulation, criticalElement } = this.props;
-
-        if (showPopulation !== prevProps.showPopulation) {
-            if (showPopulation === 'popdensity') {
-                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            } else {
-                this.jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-            }
-        }
-        if (criticalElement !== prevProps.criticalElement) {
-            this.resetClusters();
-            const { categoriesCritical } = this.state;
-
-            const layer = criticalElement;
-            if (layer === 'all') {
-                categoriesCritical.map((item) => {
-                    this.jugalMap.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
-                    this.jugalMap.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
-                    this.jugalMap.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
-                    return null;
-                });
-                this.jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
-                this.jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
-            }
-        }
-    }
-
-    public componentWillUnmount() {
-        this.jugalMap.remove();
-    }
-
-    public resetClusters = () => {
-        const { categoriesCritical } = this.state;
-        categoriesCritical.map((layer) => {
-            this.jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-            this.jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-            this.jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
-
-            return null;
-        });
-    }
-
-    [x: string]: any;
-
-    public render() {
-        const mapStyle = {
-            position: 'absolute',
-            width: 'calc(70%)',
-            left: 'calc(30% - 60px)',
-            top: 0,
-            height: '100vh',
+        const destroyMap = () => {
+            jugalMap.remove();
         };
 
-        return (
-            <div>
-                <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
-            </div>
-        );
-    }
-}
+        return destroyMap;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (map.current && showPopulation && map.current.isStyleLoaded()) {
+            console.log('showPopulation in', showPopulation);
+            if (showPopulation === 'popdensity') {
+                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            } else {
+                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+            }
+        }
+    }, [showPopulation]);
+
+    useEffect(() => {
+        if (map.current && map.current.isStyleLoaded()) {
+            categoriesCritical.map((layer) => {
+                if (map.current) {
+                    map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                    map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                    map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                }
+                return null;
+            });
+            const layer = criticalElement;
+            if (layer === 'all') {
+                categoriesCritical.map((item: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+                map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+                map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+                map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [criticalElement]);
+
+    useEffect(() => {
+        if (map.current && map.current.isStyleLoaded()) {
+            if (rightElement === 0) {
+                slideLayers2.map((layer: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
+                });
+                slideLayers1.map((layer: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            }
+            if (rightElement === 1) {
+                slideLayers2.map((layer: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            }
+            if (rightElement === 2) {
+                map.current.setLayoutProperty('National Park', 'visibility', 'none');
+
+                slideLayers2.map((layer: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
+                });
+                slideLayer3.map((l) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(l, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            }
+            if (rightElement === 3) {
+                map.current.setLayoutProperty('National Park', 'visibility', 'none');
+                slideLayer3.map((l) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(l, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+                map.current.setLayoutProperty('Population Density', 'visibility', 'none');
+            }
+            map.current.easeTo({
+                pitch: 30,
+                zoom,
+                duration: 1000,
+                center: [lng, lat],
+            });
+        }
+    }, [rightElement]);
+
+    return (
+        <div>
+            <div style={mapStyle} ref={mapContainerRef} />
+        </div>
+    );
+};
 export default connect(mapStateToProps)(JugalMap);

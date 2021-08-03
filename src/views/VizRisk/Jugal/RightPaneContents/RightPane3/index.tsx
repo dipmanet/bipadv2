@@ -8,7 +8,8 @@ import {
 import DemographyData from '../../Data/demographyChartData';
 import styles from '../styles.scss';
 
-import NavButtons from '#views/VizRisk/Common/NavButtons';
+// import NavButtons from '#views/VizRisk/Common/NavButtons';
+import NavButtons from '../../Components/NavButtons';
 
 
 const demoChartdata = DemographyData.chartData;

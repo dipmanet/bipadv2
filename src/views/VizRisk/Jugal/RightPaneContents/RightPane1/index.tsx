@@ -7,7 +7,8 @@ import { CartesianGrid,
     Tooltip, XAxis, YAxis } from 'recharts';
 import Loader from 'react-loader';
 import VizRiskContext from '#components/VizRiskContext';
-import NavButtons from '#views/VizRisk/Common/NavButtons';
+// import NavButtons from '#views/VizRisk/Common/NavButtons';
+import NavButtons from '../../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';

@@ -491,26 +491,26 @@ class Jugal extends React.Component {
 
         return (
             <div>
+                <Map
+                    showRaster={showRaster}
+                    rasterLayer={rasterLayer}
+                    exposedElement={exposedElement}
+                    rightElement={rightElement}
+                    handleMoveEnd={this.handleMoveEnd}
+                    showPopulation={showPopulation}
+                    criticalElement={criticalElement}
+                    criticalFlood={criticalFlood}
+                    evacElement={evacElement}
+                    disableNavBtns={this.disableNavBtns}
+                    enableNavBtns={this.enableNavBtns}
+                    incidentList={pointFeatureCollection}
+                    CIData={cI}
+                />
                 {
                     rightElement === 0
                     && (
                         <>
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                                CIData={cI}
 
-                            />
                             <RightElement1
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
@@ -526,7 +526,7 @@ class Jugal extends React.Component {
                 {rightElement === 1
                     && (
                         <>
-                            <Map
+                            {/* <Map
                                 showRaster={showRaster}
                                 rasterLayer={rasterLayer}
                                 exposedElement={exposedElement}
@@ -540,7 +540,7 @@ class Jugal extends React.Component {
                                 enableNavBtns={this.enableNavBtns}
                                 CIData={cI}
                                 incidentList={pointFeatureCollection}
-                            />
+                            /> */}
                             <RightElement3
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
@@ -558,7 +558,7 @@ class Jugal extends React.Component {
                 {rightElement === 2
                     && (
                         <>
-                            <Map
+                            {/* <Map
                                 showRaster={showRaster}
                                 rasterLayer={rasterLayer}
                                 exposedElement={exposedElement}
@@ -573,7 +573,7 @@ class Jugal extends React.Component {
                                 incidentList={pointFeatureCollection}
                                 CIData={cI}
 
-                            />
+                            /> */}
                             <RightElement2
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
@@ -590,7 +590,7 @@ class Jugal extends React.Component {
                 {rightElement === 3
                     && (
                         <>
-                            <Map
+                            {/* <Map
                                 showRaster={showRaster}
                                 rasterLayer={rasterLayer}
                                 exposedElement={exposedElement}
@@ -604,7 +604,7 @@ class Jugal extends React.Component {
                                 enableNavBtns={this.enableNavBtns}
                                 incidentList={pointFeatureCollection}
                                 CIData={cI}
-                            />
+                            /> */}
                             <RightElement4
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}

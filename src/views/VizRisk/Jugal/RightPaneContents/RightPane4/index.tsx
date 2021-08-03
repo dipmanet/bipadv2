@@ -9,7 +9,8 @@ import {
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
 import styles from '../styles.scss';
-import NavButtons from '#views/VizRisk/Common/NavButtons';
+// import NavButtons from '#views/VizRisk/Common/NavButtons';
+import NavButtons from '../../Components/NavButtons';
 
 
 interface ComponentProps {}
