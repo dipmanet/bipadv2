@@ -5,7 +5,6 @@ import { CartesianGrid,
     LineChart,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
-import Loader from 'react-loader';
 import VizRiskContext from '#components/VizRiskContext';
 // import NavButtons from '#views/VizRisk/Common/NavButtons';
 import NavButtons from '../../Components/NavButtons';
@@ -106,14 +105,14 @@ class RightPane1 extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                {
+                {/* {
                     pending
                     && (
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
                         </div>
                     )
-                }
+                } */}
                 <h1> Jugal Rural Municipality</h1>
                 <p>
                 Jugal Rural Municipality is located in Sindhupalchok

@@ -11,7 +11,7 @@ import expressions from '../Data/expressions';
 import * as PageTypes from '#store/atom/page/types';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 import { AppState } from '#store/types';
-
+import PageLayers from '../Data/pageLayers';
 import {
     municipalitiesSelector,
     districtsSelector,
@@ -80,6 +80,12 @@ if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 
+const {
+    slideLayers1,
+    slideLayers2,
+    slideLayers3,
+} = PageLayers;
+
 const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
@@ -92,13 +98,6 @@ const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
 
 let hoveredWardId: (string | number |undefined);
 const { populationWardExpression } = expressions;
-
-
-const popDensityLayers = ['Population Density', 'WardBoundary', 'Wardnumber'];
-
-const slideLayers1 = ['National Park', 'National Park Text', 'Buildings'];
-const slideLayers2 = ['Population Density', 'ward-fill-local'];
-const slideLayer3 = ['Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
 
 const lat = 28.015490220644214;
 const lng = 85.79108507481781;
@@ -182,89 +181,90 @@ const JugalMap = (props: Props) => {
                     },
                 },
             );
-            if (isDefined(CIData.features)) {
-                const categories: any = [...new Set(CIData.features.map(
-                    item => item.properties.CI,
-                ))];
-                setcategoriesCritical(categories);
-                categories.map((layer: string) => {
-                    jugalMap.addSource(layer, {
-                        type: 'geojson',
-                        data: getGeoJSON(layer, CIData),
-                        cluster: true,
-                        clusterRadius: 50,
-                    });
-                    jugalMap.addLayer({
-                        id: `clusters-${layer}`,
-                        type: 'circle',
-                        source: layer,
-                        filter: ['has', 'point_count'],
-                        paint: {
-                            'circle-color': [
-                                'step',
-                                ['get', 'point_count'],
-                                '#a4ac5e',
-                                100,
-                                '#a4ac5e',
-                            ],
-                            'circle-radius': [
-                                'step',
-                                ['get', 'point_count'],
-                                20,
-                                100,
-                                30,
-                                750,
-                                40,
-                            ],
-                        },
-                    });
-                    jugalMap.addLayer({
-                        id: `unclustered-point-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        filter: ['!', ['has', 'point_count']],
-                        layout: {
-                            'icon-image': ['downcase', ['get', 'CI']],
-                            'icon-size': 0.3,
-                            'icon-anchor': 'bottom',
-                        },
-                    });
-                    jugalMap.addLayer({
-                        id: `clusters-count-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                        },
-                    });
-                    categories.map((ci: string) => jugalMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
-                        if (e) {
-                            const { lngLat } = e;
-                            const coordinates: number[] = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.Name;
-                            popup.setLngLat(coordinates).setHTML(
-                                `<div style="padding: 5px;border-radius: 5px">
+            console.log('CI data in map', CIData);
+
+            // if (isDefined(CIData.features)) {
+            const categories: any = [...new Set(CIData.features.map(
+                item => item.properties.CI,
+            ))];
+            setcategoriesCritical(categories);
+            console.log('categories', categories);
+            categories.map((layer: string) => {
+                jugalMap.addSource(layer, {
+                    type: 'geojson',
+                    data: getGeoJSON(layer, CIData),
+                    cluster: true,
+                    clusterRadius: 50,
+                });
+                jugalMap.addLayer({
+                    id: `clusters-${layer}`,
+                    type: 'circle',
+                    source: layer,
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#a4ac5e',
+                            100,
+                            '#a4ac5e',
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            100,
+                            30,
+                            750,
+                            40,
+                        ],
+                    },
+                });
+                jugalMap.addLayer({
+                    id: `unclustered-point-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    filter: ['!', ['has', 'point_count']],
+                    layout: {
+                        'icon-image': ['downcase', ['get', 'CI']],
+                        'icon-size': 0.3,
+                        'icon-anchor': 'bottom',
+                    },
+                });
+                jugalMap.addLayer({
+                    id: `clusters-count-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12,
+                    },
+                });
+                categories.map((ci: string) => jugalMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
+                    if (e) {
+                        const { lngLat } = e;
+                        const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Name;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
                                     <p>${ciName}</p>
                                 </div>
                         `,
-                            ).addTo(jugalMap);
-                        }
-                    }));
-                    categories.map((ci: string) => jugalMap.on('mouseleave', `unclustered-point-${ci}`, () => {
-                        jugalMap.getCanvas().style.cursor = '';
-                        popup.remove();
-                    }));
-                    if (rightElement !== 3) {
-                        jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                        jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                        jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                        ).addTo(jugalMap);
                     }
+                }));
+                categories.map((ci: string) => jugalMap.on('mouseleave', `unclustered-point-${ci}`, () => {
+                    jugalMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+                jugalMap.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                jugalMap.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                jugalMap.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
 
-                    return null;
-                });
-            }
+                return null;
+            });
+            // }
 
             jugalMap.addSource('vizrisk-fills', {
                 type: 'vector',
@@ -453,18 +453,33 @@ const JugalMap = (props: Props) => {
                     }
                     return null;
                 });
-                slideLayer3.map((l) => {
+                slideLayers3.map((l) => {
                     if (map.current) {
                         map.current.setLayoutProperty(l, 'visibility', 'visible');
                     }
                     return null;
                 });
+                categoriesCritical.map((l) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`unclustered-point-${l}`, 'visibility', 'none');
+                        map.current.setLayoutProperty(`clusters-${l}`, 'visibility', 'none');
+                        map.current.setLayoutProperty(`clusters-count-${l}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
             }
             if (rightElement === 3) {
-                map.current.setLayoutProperty('National Park', 'visibility', 'none');
-                slideLayer3.map((l) => {
+                console.log(categoriesCritical);
+                categoriesCritical.map((l) => {
                     if (map.current) {
-                        map.current.setLayoutProperty(l, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`unclustered-point-${l}`, 'visibility', 'visible');
+                        map.current.moveLayer(`unclustered-point-${l}`);
+
+                        map.current.setLayoutProperty(`clusters-${l}`, 'visibility', 'visible');
+                        map.current.moveLayer(`clusters-${l}`);
+
+                        map.current.setLayoutProperty(`clusters-count-${l}`, 'visibility', 'visible');
+                        map.current.moveLayer(`clusters-count-${l}`);
                     }
                     return null;
                 });
@@ -477,7 +492,7 @@ const JugalMap = (props: Props) => {
                 center: [lng, lat],
             });
         }
-    }, [rightElement]);
+    }, [categoriesCritical, rightElement]);
 
     return (
         <div>

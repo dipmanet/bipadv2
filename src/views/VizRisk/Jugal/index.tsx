@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
+import Loader from 'react-loader';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -225,6 +226,19 @@ class Jugal extends React.Component {
             setVulData: this.setVulData,
             setPending: this.setPending,
         });
+    }
+
+    public componentDidUpdate() {
+        const { vulData, buildings, cI, pending } = this.state;
+        if (pending) {
+            if (
+                vulData.length > 0
+                && buildings.length > 0
+                && cI.length > 0
+            ) {
+                this.setPending(false);
+            }
+        }
     }
 
     public getIncidentYear = (incidentOn: string) => {
@@ -491,21 +505,33 @@ class Jugal extends React.Component {
 
         return (
             <div>
-                <Map
-                    showRaster={showRaster}
-                    rasterLayer={rasterLayer}
-                    exposedElement={exposedElement}
-                    rightElement={rightElement}
-                    handleMoveEnd={this.handleMoveEnd}
-                    showPopulation={showPopulation}
-                    criticalElement={criticalElement}
-                    criticalFlood={criticalFlood}
-                    evacElement={evacElement}
-                    disableNavBtns={this.disableNavBtns}
-                    enableNavBtns={this.enableNavBtns}
-                    incidentList={pointFeatureCollection}
-                    CIData={cI}
-                />
+                {
+                    pending
+                        ? (
+                            <div className={styles.loaderInfo}>
+                                <Loader color="#fff" className={styles.loader} />
+                            </div>
+                        )
+                        : (
+                            <Map
+                                showRaster={showRaster}
+                                rasterLayer={rasterLayer}
+                                exposedElement={exposedElement}
+                                rightElement={rightElement}
+                                handleMoveEnd={this.handleMoveEnd}
+                                showPopulation={showPopulation}
+                                criticalElement={criticalElement}
+                                criticalFlood={criticalFlood}
+                                evacElement={evacElement}
+                                disableNavBtns={this.disableNavBtns}
+                                enableNavBtns={this.enableNavBtns}
+                                incidentList={pointFeatureCollection}
+                                CIData={cI}
+                            />
+                        )
+
+                }
+
                 {
                     rightElement === 0
                     && (
