@@ -215,6 +215,7 @@ class AlertEventMap extends React.PureComponent {
     })
 
     handleAlertClick = (feature, lngLat) => {
+        console.log('lat lng', lngLat);
         const { properties:
             { title,
                 description,
@@ -364,6 +365,22 @@ class AlertEventMap extends React.PureComponent {
             ],
             icon => icon,
         );
+        // { alertClickLngLat && (
+        //     <MapTooltip
+        //         coordinates={alertClickLngLat}
+        //         tooltipOptions={tooltipOptions}
+        //         onHide={this.handleAlertClose}
+        //     >
+        //         <AlertTooltip
+        //             title={alertTitle}
+        //             description={alertDescription}
+        //             referenceType={alertReferenceType}
+        //             referenceData={alertReferenceData}
+        //             createdDate={alertCreatedDate}
+        //         />
+        //     </MapTooltip>
+        // ); }
+        console.log('alert', alertClickLngLat);
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />

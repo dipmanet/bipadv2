@@ -8,7 +8,7 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-
+import { bbox, point, buffer } from '@turf/turf';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
@@ -66,8 +66,15 @@ import {
 import authRoute from '#components/authRoute';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
-
+import { getFeatureInfo } from '#utils/domain';
 import styles from './styles.scss';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+
 
 function reloadPage() {
     window.location.reload(false);
@@ -282,7 +289,19 @@ const getUserRegion = (user?: User): RegionValueElement => {
     }
     return {};
 };
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    FeatureGetRequest: {
+        url: ({ params }) => `${params.api}`,
+        method: methods.GET,
+        onMount: false,
 
+        onSuccess: ({ response, params }) => {
+            params.responseData(response);
+        },
+    },
+
+
+};
 class Multiplexer extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -296,6 +315,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeLayers: [],
             leftContainerHidden: false,
             mapDownloadPending: false,
+            mapDataOnClick: {},
+            tooltipClicked: false,
+            mapClickedResponse: {},
+
         };
     }
 
@@ -342,6 +365,26 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
+    }
+
+    private handlemapClickedResponse=(data) => {
+        this.setState({ mapClickedResponse: data });
+    }
+
+    private handleMapClicked=(latlngData) => {
+        const { activeLayers } = this.state;
+        if (latlngData && activeLayers.length) {
+            const { requests: { FeatureGetRequest } } = this.props;
+            const latlng = point([latlngData.lngLat.lng, latlngData.lngLat.lat]);
+            const buffered = buffer(latlng, 1, { units: 'meters' });
+            const bBox = bbox(buffered);
+            const api = getFeatureInfo(activeLayers[0], bBox);
+            FeatureGetRequest.do({
+                api,
+                responseData: this.handlemapClickedResponse,
+            });
+        }
+        return null;
     }
 
     private setFilterFromUrl = (
@@ -627,6 +670,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         );
     }
 
+    private clickHandler=(data) => {
+        const { activeRouteDetails } = this.context;
+        this.setState({ mapDataOnClick: data });
+        this.setState({ tooltipClicked: true });
+    }
+
+    private closeTooltip=(data) => {
+        this.setState({ mapDataOnClick: data });
+    }
+
     public render() {
         const {
             mapStyle,
@@ -634,7 +687,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
-            // hazardList,
+        // hazardList,
         } = this.props;
 
         const {
@@ -655,8 +708,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeLayers,
             leftContainerHidden,
             mapDownloadPending,
-        } = this.state;
+            mapDataOnClick,
+            tooltipClicked,
+            mapClickedResponse,
 
+        } = this.state;
         const pageProps = {
             setLeftContent: this.setLeftContent,
             setRightContent: this.setRightContent,
@@ -683,6 +739,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
             removeLayers: this.removeLayers,
             setLayers: this.setLayers,
             activeLayers,
+            mapDataOnClick,
+            tooltipClicked,
+            closeTooltip: this.closeTooltip,
+            mapClickedResponse,
+
+
         };
 
         const regionName = this.getRegionName(
@@ -694,6 +756,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const orderedLayers = this.getLayerOrder(activeLayers);
         const hideFilters = false;
+
 
         return (
             <PageContext.Provider value={pageProps}>
@@ -708,6 +771,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
                                     mapStyle={mapStyle}
+
+                                    clickHandler={this.clickHandler}
+                                    handleMapClicked={this.handleMapClicked}
                                     mapOptions={{
                                         logoPosition: 'top-left',
                                         minZoom: 5,
@@ -844,4 +910,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));
+// export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            Responsive(Multiplexer),
+        ),
+    ),
+);

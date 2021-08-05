@@ -1,16 +1,22 @@
 import React from 'react';
-
-import { getRasterTile, getBuildingFootprint } from '#utils/domain';
+import { connect } from 'react-redux';
+import { getRasterTile, getBuildingFootprint, getFeatureInfo } from '#utils/domain';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
 import MapTooltip from '#re-map/MapTooltip';
-
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { mapSources, mapStyles } from '#constants';
 
 import CommonMap from '#components/CommonMap';
+
 
 interface Props {
 }
@@ -33,15 +39,27 @@ const linePaintByAdminLevel = {
 };
 
 const tooltipOptions = {
-    closeOnClick: false,
+    closeOnClick: true,
     closeButton: false,
     offset: 8,
 };
 
+// eslint-disable-next-line prefer-const
+let rasterLayers = [];
+// eslint-disable-next-line prefer-const
+let choroplethLayers = [];
+const test = '';
 class RiskInfoMap extends React.PureComponent<Props, State> {
+    public constructor(props) {
+        super(props);
+        this.myRef = React.createRef();
+    }
+
     public state = {
         feature: undefined,
         hoverLngLat: undefined,
+
+
     }
 
     private handleMouseEnter = (feature, lngLat) => {
@@ -58,15 +76,21 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         });
     }
 
+
     public render() {
-        const { activeLayers } = this.context;
         const {
             feature,
             hoverLngLat,
+
         } = this.state;
 
-        const rasterLayers = activeLayers.filter(d => d.type === 'raster');
-        const choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
+        const { activeLayers, mapDataOnClick, tooltipClicked, closeTooltip,
+            mapClickedResponse } = this.context;
+        // const { requests: { FeatureGetRequest } } = this.props;
+        rasterLayers = activeLayers.filter(d => d.type === 'raster');
+        // const vectorLayers = activeLayers.filter(d => d.type === 'vector');
+        choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
+
 
         return (
             <>
@@ -91,10 +115,50 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     'raster-opacity': layer.opacity,
                                 },
                             }}
+                            // onClick={this.handleAlertClick()}
+
                         />
+                        {/* {alertClickLngLat && (
+                        <MapTooltip
+                            coordinates={alertClickLngLat}
+                            tooltipOptions={tooltipOptions}
+                            onHide={this.handleAlertClose}
+                        >
+                            <AlertTooltip
+                                title={alertTitle}
+                                description={alertDescription}
+                                referenceType={alertReferenceType}
+                                referenceData={alertReferenceData}
+                                createdDate={alertCreatedDate}
+                            />
+                        </MapTooltip>
+                    )} */}
+
+
                     </MapSource>
                 ))}
-
+                {/* { vectorLayers.map(layer => (
+                    <MapSource
+                        key={layer.id}
+                        sourceKey={layer.layername}
+                        sourceOptions={{
+                            type: 'raster',
+                            tiles: [getRasterTile(layer)],
+                            tileSize: 256,
+                        }}
+                    >
+                        <MapLayer
+                            layerKey="raster-layer"
+                            layerOptions={{
+                                type: 'raster',
+                                paint: {
+                                    'raster-opacity': layer.opacity,
+                                },
+                            }}
+                            onClick={this.handleClick}
+                        />
+                    </MapSource>
+                ))} */}
                 {/* <MapSource
                     key={'buildingKey'}
                     sourceKey={'buildingFootprint'}
@@ -153,6 +217,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             attributeKey="value"
                             sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
                         />
+
                         { layer.tooltipRenderer
                             && hoverLngLat
                             && feature

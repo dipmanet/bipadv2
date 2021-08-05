@@ -727,6 +727,29 @@ export function getRasterTile(layer: { layername: string }) {
 
     return tileUrl;
 }
+export function getFeatureInfo(layer: { layername: string }, coordinates) {
+    const tileUrl = [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&VERSION=1.1.1',
+        '&SERVICE=WMS',
+        '&REQUEST=GetFeatureInfo',
+        `&QUERY_LAYERS=Bipad:${layer.layername}`,
+        `&LAYERS=Bipad:${layer.layername}`,
+        '&exceptions=application/vnd.ogc.se_inimage',
+        '&INFO_FORMAT=application/json',
+        '&X=50',
+        '&Y=50',
+        '&STYLES=',
+        `&BBOX=${coordinates[0]},${coordinates[1]},${coordinates[2]},${coordinates[3]}`,
+        '&tiled=true',
+        '&WIDTH=101',
+        '&HEIGHT=101',
+        '&SRS=EPSG:4326',
+        '&TRANSPARENT=true',
+        '&FORMAT=image/jpeg',
+    ].join('');
+    return tileUrl;
+}
 // export function getRasterTileBuilding() {
 //     const tileUrl = [
 //         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
