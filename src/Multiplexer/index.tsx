@@ -318,6 +318,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             mapDataOnClick: {},
             tooltipClicked: false,
             mapClickedResponse: {},
+            tooltipLatlng: undefined,
+            LoadingTooltip: false,
 
         };
     }
@@ -369,6 +371,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private handlemapClickedResponse=(data) => {
         this.setState({ mapClickedResponse: data });
+        this.setState({ LoadingTooltip: false });
     }
 
     private handleMapClicked=(latlngData) => {
@@ -379,6 +382,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             const buffered = buffer(latlng, 1, { units: 'meters' });
             const bBox = bbox(buffered);
             const api = getFeatureInfo(activeLayers[0], bBox);
+            this.setState({ LoadingTooltip: true });
             FeatureGetRequest.do({
                 api,
                 responseData: this.handlemapClickedResponse,
@@ -674,10 +678,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { activeRouteDetails } = this.context;
         this.setState({ mapDataOnClick: data });
         this.setState({ tooltipClicked: true });
+        this.setState({
+            tooltipLatlng: data.lngLat,
+        });
     }
 
     private closeTooltip=(data) => {
-        this.setState({ mapDataOnClick: data });
+        this.setState({ tooltipLatlng: data });
     }
 
     public render() {
@@ -711,6 +718,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             mapDataOnClick,
             tooltipClicked,
             mapClickedResponse,
+            tooltipLatlng,
+            LoadingTooltip,
 
         } = this.state;
         const pageProps = {
@@ -743,6 +752,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             tooltipClicked,
             closeTooltip: this.closeTooltip,
             mapClickedResponse,
+            tooltipLatlng,
+            LoadingTooltip,
 
 
         };

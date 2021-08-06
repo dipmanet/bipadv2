@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import { connect } from 'react-redux';
 import { getRasterTile, getBuildingFootprint, getFeatureInfo } from '#utils/domain';
@@ -16,7 +18,8 @@ import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { mapSources, mapStyles } from '#constants';
 
 import CommonMap from '#components/CommonMap';
-
+import LandslideToolTip from './Tooltips/RiskInfo/Landslide';
+import styles from './styles.scss';
 
 interface Props {
 }
@@ -76,6 +79,10 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleAlertClose = () => {
+        const { closeTooltip, mapDataOnClick } = this.context;
+        closeTooltip(undefined);
+    }
 
     public render() {
         const {
@@ -84,12 +91,13 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         } = this.state;
 
-        const { activeLayers, mapDataOnClick, tooltipClicked, closeTooltip,
+        const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse } = this.context;
         // const { requests: { FeatureGetRequest } } = this.props;
         rasterLayers = activeLayers.filter(d => d.type === 'raster');
         // const vectorLayers = activeLayers.filter(d => d.type === 'vector');
         choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
+        const responseDataKeys = Object.keys(mapClickedResponse);
 
 
         return (
@@ -118,21 +126,73 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             // onClick={this.handleAlertClick()}
 
                         />
-                        {/* {alertClickLngLat && (
-                        <MapTooltip
-                            coordinates={alertClickLngLat}
-                            tooltipOptions={tooltipOptions}
-                            onHide={this.handleAlertClose}
-                        >
-                            <AlertTooltip
-                                title={alertTitle}
-                                description={alertDescription}
-                                referenceType={alertReferenceType}
-                                referenceData={alertReferenceData}
-                                createdDate={alertCreatedDate}
-                            />
-                        </MapTooltip>
-                    )} */}
+
+
+                        {layer.group.title === 'Landslide Polygon' ? tooltipLatlng && (
+
+                            <MapTooltip
+                                coordinates={tooltipLatlng}
+                                tooltipOptions={tooltipOptions}
+                                onHide={this.handleAlertClose}
+
+                            >
+                                <div className={styles.landslideTooltip}>
+                                    <div className={styles.header}>
+                                        <h4>{layer.title}</h4>
+                                    </div>
+                                    <div className={styles.dataContent}>
+                                        <div className={styles.title}>
+                                            <div>
+                                        Area Km
+                                                <sup>2</sup>
+                                                {''}
+:
+                                            </div>
+                                            <div>
+                                                {responseDataKeys.length
+                                            && mapClickedResponse.features.length
+                                                    ? mapClickedResponse.features[0].properties.Area_km2
+                                                    : LoadingTooltip ? 'Loading...' : 'N/A' }
+                                            </div>
+
+                                        </div>
+                                        <div className={styles.title}>
+                                            <div>
+                                        Area m
+                                                <sup>2</sup>
+                                                {''}
+:
+                                            </div>
+                                            <div>
+                                                {responseDataKeys.length
+                                            && mapClickedResponse.features.length
+                                                    ? mapClickedResponse.features[0].properties.Area_m2
+                                                    : LoadingTooltip ? 'Loading...' : 'N/A' }
+                                            </div>
+
+                                        </div>
+                                        <div className={styles.title}>
+                                            <div>
+                                        Perimeter m
+                                                <sup>2</sup>
+                                                {''}
+:
+                                            </div>
+                                            <div>
+                                                {responseDataKeys.length
+                                            && mapClickedResponse.features.length
+                                                    ? mapClickedResponse.features[0].properties.Perim_m
+                                                    : LoadingTooltip ? 'Loading...' : 'N/A' }
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </MapTooltip>
+
+                        ) : ''}
 
 
                     </MapSource>

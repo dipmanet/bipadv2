@@ -380,7 +380,7 @@ class AlertEventMap extends React.PureComponent {
         //         />
         //     </MapTooltip>
         // ); }
-        console.log('alert', alertClickLngLat);
+        console.log('Test', alertClickLngLat);
         return (
             <React.Fragment>
                 <CommonMap sourceKey="dashboard" />
