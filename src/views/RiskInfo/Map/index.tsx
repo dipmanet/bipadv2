@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
@@ -98,8 +99,11 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         // const vectorLayers = activeLayers.filter(d => d.type === 'vector');
         choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
         const responseDataKeys = Object.keys(mapClickedResponse);
+        console.log('this is layer', rasterLayers);
 
-
+        console.log('keys', responseDataKeys);
+        const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
+        const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
         return (
             <>
                 <CommonMap
@@ -128,7 +132,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         />
 
 
-                        {layer.group.title === 'Landslide Polygon' ? tooltipLatlng && (
+                        {layer.showPopup ? tooltipLatlng && (
 
                             <MapTooltip
                                 coordinates={tooltipLatlng}
@@ -140,53 +144,19 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     <div className={styles.header}>
                                         <h4>{layer.title}</h4>
                                     </div>
-                                    <div className={styles.dataContent}>
-                                        <div className={styles.title}>
-                                            <div>
-                                        Area Km
-                                                <sup>2</sup>
-                                                {''}
-:
-                                            </div>
-                                            <div>
-                                                {responseDataKeys.length
-                                            && mapClickedResponse.features.length
-                                                    ? mapClickedResponse.features[0].properties.Area_km2
-                                                    : LoadingTooltip ? 'Loading...' : 'N/A' }
+                                    {LoadingTooltip ? <div className={styles.noData}>Loading...</div> : responseDataKeys.length && mapClickedResponse.features.length
+                                        ? (
+                                            <div className={styles.content}>
+                                                <div>
+                                                    {tooltipKeys.map((item, i) => <div key={i}>{item}</div>)}
+                                                </div>
+                                                <div>
+                                                    {tooltipValues.map((item, i) => <div key={i}>{item}</div>)}
+                                                </div>
                                             </div>
 
-                                        </div>
-                                        <div className={styles.title}>
-                                            <div>
-                                        Area m
-                                                <sup>2</sup>
-                                                {''}
-:
-                                            </div>
-                                            <div>
-                                                {responseDataKeys.length
-                                            && mapClickedResponse.features.length
-                                                    ? mapClickedResponse.features[0].properties.Area_m2
-                                                    : LoadingTooltip ? 'Loading...' : 'N/A' }
-                                            </div>
 
-                                        </div>
-                                        <div className={styles.title}>
-                                            <div>
-                                        Perimeter m
-                                                <sup>2</sup>
-                                                {''}
-:
-                                            </div>
-                                            <div>
-                                                {responseDataKeys.length
-                                            && mapClickedResponse.features.length
-                                                    ? mapClickedResponse.features[0].properties.Perim_m
-                                                    : LoadingTooltip ? 'Loading...' : 'N/A' }
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                        ) : <div className={styles.noData}>No Data</div>}
                                 </div>
 
 
