@@ -381,7 +381,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             const latlng = point([latlngData.lngLat.lng, latlngData.lngLat.lat]);
             const buffered = buffer(latlng, 1, { units: 'meters' });
             const bBox = bbox(buffered);
-            const api = getFeatureInfo(activeLayers[0], bBox);
+            const api = getFeatureInfo(activeLayers[activeLayers.length - 1], bBox);
             this.setState({ LoadingTooltip: true });
             FeatureGetRequest.do({
                 api,

@@ -12,6 +12,8 @@
         align-items: center;
         justify-content: space-between;
         padding: 10px;
+        max-height: 200px;
+        overflow: scroll;
     }
     .noData{
         height: 60px;
