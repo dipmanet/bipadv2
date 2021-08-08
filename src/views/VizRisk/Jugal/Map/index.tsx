@@ -2,7 +2,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import { isDefined } from '@togglecorp/fujs';
 // eslint-disable-next-line import/no-unresolved
 import * as geojson from 'geojson';
 import { mapSources } from '#constants';
@@ -104,6 +103,7 @@ const {
     incidentsPages,
     ciPages,
     incidentsSliderDelay,
+    rasterLayers,
 } = MapConstants;
 
 const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
@@ -120,7 +120,6 @@ let hoveredWardId: (string | number |undefined);
 const { populationWardExpression } = expressions;
 
 function noop() {}
-const newVal = 1;
 const JugalMap = (props: Props) => {
     const [categoriesCritical, setcategoriesCritical] = useState([]);
     const [incidentsArr, setIncidentsArr] = useState([]);
@@ -201,6 +200,7 @@ const JugalMap = (props: Props) => {
         }
     };
 
+
     useEffect(() => {
         if (incidentsPages.indexOf(rightElement + 1) !== -1) {
             interval.current = setInterval(() => {
@@ -273,9 +273,6 @@ const JugalMap = (props: Props) => {
                     },
                 },
             );
-            console.log('CI data in map', CIData);
-
-            // if (isDefined(CIData.features)) {
             const categories: any = [...new Set(CIData.features.map(
                 item => item.properties.CI,
             ))];
@@ -355,15 +352,10 @@ const JugalMap = (props: Props) => {
 
                 return null;
             });
-            // }
 
             jugalMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
-            });
-            jugalMap.addSource('density', {
-                type: 'vector',
-                url: mapSources.populationDensity.url,
             });
 
             jugalMap.addLayer({
@@ -673,7 +665,6 @@ const JugalMap = (props: Props) => {
         <div>
             <div style={mapCSS} ref={mapContainerRef}>
                 {
-
                     incidentsPages.indexOf(rightElement + 1) !== -1
                     && (
                         <div className={styles.incidentsSlider}>

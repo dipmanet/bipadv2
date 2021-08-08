@@ -37,6 +37,10 @@ const ciRef = {
     Finance: 'Financial Institution',
     Education: 'Education Institution',
 };
+const rasterLayers = [
+    '5', '10', '20', '50', '75', '100',
+    '200', '250', '500', '1000',
+];
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -73,6 +77,7 @@ class FloodHistoryMap extends React.Component {
             buildingpoints: [],
             opacitySes: 0.5,
             opacitySus: 0.5,
+            opacityFlood: 0.5,
         };
     }
 
@@ -631,20 +636,53 @@ class FloodHistoryMap extends React.Component {
             this.map.moveLayer('Buildings');
             this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
 
+            rasterLayers.map((layer) => {
+                this.map.addSource(`floodraster${layer}`, {
+                    type: 'raster',
+                    tiles: [this.getFloodRasterLayer(layer)],
+                    tileSize: 256,
+                });
+                this.map.addLayer(
+                    {
+                        id: `raster-flood-${layer}`,
+                        type: 'raster',
+                        source: `floodraster${layer}`,
+                        layout: {
+                            visibility: 'none',
+                        },
+                        paint: {
+                            'raster-opacity': 0.7,
+                        },
+                    },
+                );
+                return null;
+            });
             // this.map.on('draw.delete', updateArea);
             // this.map.on('draw.update', updateArea);
         });
     }
 
     public componentDidUpdate(prevProps) {
+        const { rasterLayer } = this.props;
         if (this.props.sesmicLayer !== prevProps.sesmicLayer) {
             if (this.props.sesmicLayer === 'ses') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'visible');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
-            } else {
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'none');
+            } else if (this.props.sesmicLayer === 'sus') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'none');
+            } else {
+                this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
+                this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'visible');
             }
+        }
+
+        if (this.props.rasterLayer !== prevProps.rasterLayer) {
+            console.log(this.props.rasterLayer);
+            this.switchFloodRasters(this.props.rasterLayer);
         }
     }
 
@@ -652,6 +690,31 @@ class FloodHistoryMap extends React.Component {
         this.map.remove();
         clearInterval(this.interval);
     }
+
+    public switchFloodRasters = (rL) => {
+        rasterLayers.map((layer) => {
+            this.map.setLayoutProperty(`raster-flood-${layer}`, 'visibility', 'none');
+            return null;
+        });
+
+        this.map.setLayoutProperty(`raster-flood-${rL}`, 'visibility', 'visible');
+        // this.map.moveLayer(`raster-flood-${rL}`);
+    };
+
+    public getFloodRasterLayer = (layerName: string) => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        `&layers=Bipad:Jugal_FD_1in${layerName}`,
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
 
     public getTitleFromLatLng = (featureObject, cidata) => {
         const latToCompare = featureObject.geometry.coordinates[1];
@@ -679,6 +742,12 @@ class FloodHistoryMap extends React.Component {
         const val = e.target.value;
         this.setState({ opacitySes: String(e.target.value) });
         this.map.setPaintProperty('jugallseicHazard', 'raster-opacity', Number(val));
+    }
+
+    public handleInputChangeFlood = (e) => {
+        const val = e.target.value;
+        this.setState({ opacityFlood: String(e.target.value) });
+        this.map.setPaintProperty(`raster-flood-${this.props.rasterLayer}`, 'raster-opacity', Number(val));
     }
 
     public getRasterLayer = () => [
@@ -754,6 +823,27 @@ class FloodHistoryMap extends React.Component {
                     <EarthquakeHazardLegends layer={this.props.sesmicLayer} />
                 </>
             )
+                    }
+
+                    {
+                        this.props.sesmicLayer === 'flood'
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel)}>
+                            Layer Opacity
+                        </p>
+                        <input
+                            onChange={this.handleInputChangeFlood}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(this.state.opacitySes)}
+                            className={styles.slider}
+                        />
+                    </>
+                )
                     }
                 </div>
             </div>

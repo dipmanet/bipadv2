@@ -19,6 +19,7 @@ import LandcoverLegends from './Legends/LandCoverLegends';
 import DemographicsLegends from './Legends/DemographicsLegends';
 import CriticalInfraLegends from './Legends/CriticalInfraLegends';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';
+import FloodHazardlegends from './Legends/FloodHazardLegends';
 import * as PageTypes from '#store/atom/page/types';
 import { getgeoJsonLayer } from './utils';
 
@@ -47,7 +48,6 @@ import {
 
 import VRLegend from '#views/VizRisk/Jugal/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
-import MapWithTimeline from './MapWithTimeline';
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
 import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
@@ -172,7 +172,7 @@ class Jugal extends React.Component {
         super(props);
 
         this.state = {
-            showRaster: true,
+            showRaster: false,
             rasterLayer: '5',
             exposedElement: 'all',
             criticalElement: 'all',
@@ -457,6 +457,10 @@ class Jugal extends React.Component {
         this.setState({ incidentFilterYear: y });
     };
 
+    private handleFloodLayerChange = (showRaster) => {
+        this.setState({ showRaster });
+    };
+
 
     public render() {
         const {
@@ -484,6 +488,7 @@ class Jugal extends React.Component {
             sesmicLayerVul,
             pending,
             indexArray,
+            flood,
         } = this.state;
 
         const {
@@ -736,6 +741,7 @@ class Jugal extends React.Component {
                                 sesmicLayer={sesmicLayer}
                                 CIData={cI}
                                 buildings={buildings}
+                                rasterLayer={rasterLayer}
                             />
                             <RightElement6
                                 handleDrawResetData={this.handleDrawResetData}
@@ -759,8 +765,18 @@ class Jugal extends React.Component {
                             <VRLegend>
                                 <SesmicHazardLegend
                                     handleSesmicLayerChange={this.handleSesmicLayerChange}
+                                    // handleFloodLayerChange={this.handleFloodLayerChange}
                                 />
                             </VRLegend>
+                            {
+                                // here
+                                sesmicLayer === 'flood'
+                                && (
+                                    <FloodHazardlegends
+                                        handleFloodChange={this.handleFloodChange}
+                                    />
+                                )
+                            }
                         </>
                     )
                 }
@@ -783,6 +799,7 @@ class Jugal extends React.Component {
                                 buildings={vulData}
                                 buildinggeojson={buildings}
                                 handleDrawResetData={this.handleDrawResetData}
+                                rasterLayer={rasterLayer}
                             />
                             <RightElement7
                                 handleDrawResetData={this.handleDrawResetData}

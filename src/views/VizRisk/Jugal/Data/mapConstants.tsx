@@ -23,5 +23,17 @@ export default {
     ciPages: [4],
     incidentsPages: [5],
     incidentsSliderDelay: 2000,
+    rasterLayers: [
+        'Jugal_FD_1in5',
+        'Jugal_FD_1in10',
+        'Jugal_FD_1in20',
+        'Jugal_FD_1in50',
+        'Jugal_FD_1in75',
+        'Jugal_FD_1in100',
+        'Jugal_FD_1in200',
+        'Jugal_FD_1in250',
+        'Jugal_FD_1in500',
+        'Jugal_FD_1in1000',
+    ],
 
 };
