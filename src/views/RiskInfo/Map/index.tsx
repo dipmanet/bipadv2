@@ -22,6 +22,7 @@ import CommonMap from '#components/CommonMap';
 import LandslideToolTip from './Tooltips/RiskInfo/Landslide';
 import styles from './styles.scss';
 
+
 interface Props {
 }
 
@@ -99,9 +100,8 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         // const vectorLayers = activeLayers.filter(d => d.type === 'vector');
         choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
         const responseDataKeys = Object.keys(mapClickedResponse);
-        console.log('this is layer', rasterLayers);
 
-        console.log('keys', responseDataKeys);
+
         const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
         const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
         return (
