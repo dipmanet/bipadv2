@@ -11,7 +11,8 @@ import expressions from '../Data/expressions';
 import * as PageTypes from '#store/atom/page/types';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 import { AppState } from '#store/types';
-import PageLayers from '../Data/pageLayers';
+import MapConstants from '../Data/mapConstants';
+
 import {
     municipalitiesSelector,
     districtsSelector,
@@ -25,6 +26,9 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
+import styles from './styles.scss';
+
+import Icon from '#rscg/Icon';
 
 
 interface State{
@@ -40,6 +44,15 @@ interface OwnProps{
     criticalElement: string;
     CIData: CIData;
     region: Region | undefined;
+    mapboxStyle: string;
+    zoom: number;
+    lng: number;
+    lat: number;
+    mapCSS: object;
+    hillshadeLayerName: string;
+    incidentList: CIData;
+    handleIncidentChange: (arg: string) => void;
+    clickedItem: string;
 }
 
 interface Region {
@@ -81,10 +94,17 @@ if (TOKEN) {
 }
 
 const {
-    slideLayers1,
-    slideLayers2,
-    slideLayers3,
-} = PageLayers;
+    layers,
+    mapCSS,
+    mapboxStyle,
+    zoom,
+    lng,
+    lat,
+    hillshadeLayerName,
+    incidentsPages,
+    ciPages,
+    incidentsSliderDelay,
+} = MapConstants;
 
 const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
     districts: districtsSelector(state),
@@ -99,21 +119,15 @@ const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
 let hoveredWardId: (string | number |undefined);
 const { populationWardExpression } = expressions;
 
-const lat = 28.015490220644214;
-const lng = 85.79108507481781;
-const zoom = 9.8;
 function noop() {}
-
-const mapStyle = {
-    position: 'absolute',
-    width: 'calc(70%)',
-    left: 'calc(30% - 60px)',
-    top: 0,
-    height: '100vh',
-};
-
+const newVal = 1;
 const JugalMap = (props: Props) => {
     const [categoriesCritical, setcategoriesCritical] = useState([]);
+    const [incidentsArr, setIncidentsArr] = useState([]);
+    const [playState, setPlayState] = useState(false);
+    const [incidentYear, setIncidentYear] = useState('0');
+
+    const interval = useRef<Timeout>(null);
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const {
@@ -122,7 +136,86 @@ const JugalMap = (props: Props) => {
         CIData,
         criticalElement,
         showPopulation,
+        incidentList,
+        handleIncidentChange,
+        clickedItem,
     } = props;
+    const getIncidentsGeoJSON = (filterBy: string, data: any) => {
+        const geoObj = {
+            type: 'FeatureCollection',
+            features: [],
+        };
+        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
+        geoObj.features.push(...d);
+        return geoObj;
+    };
+
+    const handlePlayPause = () => {
+        setPlayState(!playState);
+    };
+
+    const filterOnMap = (val: string) => {
+        const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
+        const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
+        let filters: T[] = [];
+        if (clickedItem === 'all') {
+            filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
+        } else {
+            filters = ['all',
+                ['>', 'incidentOn', yearInt],
+                ['<', 'incidentOn', nextYear],
+                ['==', 'hazardTitle', clickedItem]];
+        }
+        const hazardTitle = [...new Set(incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+        hazardTitle.map((layer) => {
+            if (map.current) {
+                map.current.setFilter(`incidents-${layer}`, filters);
+            }
+            return null;
+        });
+    };
+
+    const handleInputChange = (e) => {
+        if (e) {
+            clearInterval(interval.current);
+            const val = e.target.value;
+            setIncidentYear(val);
+            console.log('input year change via thingo', incidentYear);
+            handleIncidentChange(incidentYear);
+            if (map.current && map.current.isStyleLoaded()) {
+                filterOnMap(incidentYear);
+            }
+        } else {
+            if (Number(incidentYear) < 10) {
+                setIncidentYear(prevTime => String(Number(prevTime) + 1));
+            } else {
+                setIncidentYear('0');
+            }
+            handleIncidentChange(incidentYear);
+            console.log('input year change via timer', incidentYear);
+            if (map.current && map.current.isStyleLoaded()) {
+                filterOnMap(incidentYear);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (incidentsPages.indexOf(rightElement + 1) !== -1) {
+            interval.current = setInterval(() => {
+                console.log('jkjfhs');
+                if (!playState) {
+                    handleInputChange(null);
+                } else if (interval.current) {
+                    clearInterval(interval.current);
+                }
+            }, incidentsSliderDelay);
+        }
+        return () => {
+            clearInterval(interval.current);
+        };
+    });
 
     useEffect(() => {
         if (UNSUPPORTED_BROWSER) {
@@ -136,7 +229,6 @@ const JugalMap = (props: Props) => {
         }
         if (map.current) { return noop; }
 
-
         const mapping = wards.filter(item => item.municipality === 23007).map(item => ({
             ...item,
             value: Number(item.title),
@@ -144,7 +236,7 @@ const JugalMap = (props: Props) => {
 
         const jugalMap = new mapboxgl.Map({
             container: mapContainer,
-            style: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
+            style: mapboxStyle,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -164,17 +256,17 @@ const JugalMap = (props: Props) => {
                 closeOnClick: false,
                 className: 'popup',
             });
-            jugalMap.addSource('jugalHillshade', {
+            jugalMap.addSource('hillshade', {
                 type: 'raster',
-                tiles: [getHillShadeLayer('Jugal_hillshade')],
+                tiles: [getHillShadeLayer(hillshadeLayerName)],
                 tileSize: 256,
             });
 
             jugalMap.addLayer(
                 {
-                    id: 'jugalHillshadeLayer',
+                    id: 'hillshadeLayer',
                     type: 'raster',
-                    source: 'jugalHillshade',
+                    source: 'hillshade',
                     layout: {},
                     paint: {
                         'raster-opacity': 0.25,
@@ -188,7 +280,6 @@ const JugalMap = (props: Props) => {
                 item => item.properties.CI,
             ))];
             setcategoriesCritical(categories);
-            console.log('categories', categories);
             categories.map((layer: string) => {
                 jugalMap.addSource(layer, {
                     type: 'geojson',
@@ -369,9 +460,46 @@ const JugalMap = (props: Props) => {
             });
 
             jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            jugalMap.moveLayer('jugalHillshadeLayer', 'Population Density');
+            jugalMap.moveLayer('hillshadeLayer', 'Population Density');
             jugalMap.moveLayer('WardBoundary');
             jugalMap.moveLayer('Wardnumber');
+
+            const incidents = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+            setIncidentsArr(incidents);
+            incidents.map((layer) => {
+                jugalMap.addSource(layer, {
+                    type: 'geojson',
+                    data: getIncidentsGeoJSON(layer, incidentList),
+                });
+                jugalMap.addLayer(
+                    {
+                        id: `incidents-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        layout: {
+                            visibility: 'none',
+                        },
+                        paint: {
+                            'circle-color': ['get', 'hazardColor'],
+                        },
+                    },
+                );
+                jugalMap.addLayer(
+                    {
+                        id: `incidents-icon-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'icon-image': ['get', 'hazardIcon'],
+                            visibility: 'none',
+                        },
+                    },
+                );
+
+                return null;
+            });
         });
         const destroyMap = () => {
             jugalMap.remove();
@@ -412,6 +540,7 @@ const JugalMap = (props: Props) => {
                     }
                     return null;
                 });
+            } else {
                 map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
                 map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
                 map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
@@ -422,81 +551,176 @@ const JugalMap = (props: Props) => {
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
-            if (rightElement === 0) {
-                slideLayers2.map((layer: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+            if (rightElement <= layers.length - 1
+                && layers[rightElement].length > 0
+            ) {
+                if (rightElement === 0) {
+                    layers[0].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+                    if (layers.length > 1) {
+                        layers[1].map((layer) => {
+                            if (map.current) {
+                                map.current.setLayoutProperty(layer, 'visibility', 'none');
+                            }
+                            return null;
+                        });
                     }
-                    return null;
-                });
-                slideLayers1.map((layer: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                } else if (rightElement < layers.length - 1 && rightElement > 0) {
+                    layers[rightElement - 1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    layers[rightElement + 1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    layers[rightElement].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+                } else if (rightElement === layers.length - 1 && rightElement > 0) {
+                    layers[layers.length - 1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+                    if (layers.length > 1) {
+                        layers[layers.length - 2].map((layer) => {
+                            if (map.current) {
+                                map.current.setLayoutProperty(layer, 'visibility', 'none');
+                            }
+                            return null;
+                        });
                     }
-                    return null;
+                }
+                map.current.easeTo({
+                    pitch: 30,
+                    zoom,
+                    duration: 1000,
+                    center: [lng, lat],
                 });
             }
-            if (rightElement === 1) {
-                slideLayers2.map((layer: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
-                    }
-                    return null;
-                });
-            }
-            if (rightElement === 2) {
-                map.current.setLayoutProperty('National Park', 'visibility', 'none');
 
-                slideLayers2.map((layer: string) => {
+            if (ciPages && ciPages.indexOf(rightElement + 1) !== -1) {
+                categoriesCritical.map((item: string) => {
                     if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                        map.current.moveLayer(`clusters-${item}`);
+                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+                        map.current.moveLayer(`clusters-count-${item}`);
+                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                        map.current.moveLayer(`unclustered-point-${item}`);
                     }
                     return null;
                 });
-                slideLayers3.map((l) => {
+            } else {
+                categoriesCritical.map((item: string) => {
                     if (map.current) {
-                        map.current.setLayoutProperty(l, 'visibility', 'visible');
-                    }
-                    return null;
-                });
-                categoriesCritical.map((l) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`unclustered-point-${l}`, 'visibility', 'none');
-                        map.current.setLayoutProperty(`clusters-${l}`, 'visibility', 'none');
-                        map.current.setLayoutProperty(`clusters-count-${l}`, 'visibility', 'none');
+                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'none');
+                        map.current.moveLayer(`clusters-${item}`);
+                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'none');
+                        map.current.moveLayer(`clusters-count-${item}`);
+                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'none');
+                        map.current.moveLayer(`unclustered-point-${item}`);
                     }
                     return null;
                 });
             }
-            if (rightElement === 3) {
-                console.log(categoriesCritical);
-                categoriesCritical.map((l) => {
+
+            if (incidentsArr.length > 0 && incidentsArr.indexOf(rightElement) !== -1) {
+                incidentsArr.map((layer) => {
                     if (map.current) {
-                        map.current.setLayoutProperty(`unclustered-point-${l}`, 'visibility', 'visible');
-                        map.current.moveLayer(`unclustered-point-${l}`);
-
-                        map.current.setLayoutProperty(`clusters-${l}`, 'visibility', 'visible');
-                        map.current.moveLayer(`clusters-${l}`);
-
-                        map.current.setLayoutProperty(`clusters-count-${l}`, 'visibility', 'visible');
-                        map.current.moveLayer(`clusters-count-${l}`);
+                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
                     }
                     return null;
                 });
-                map.current.setLayoutProperty('Population Density', 'visibility', 'none');
             }
-            map.current.easeTo({
-                pitch: 30,
-                zoom,
-                duration: 1000,
-                center: [lng, lat],
-            });
         }
-    }, [categoriesCritical, rightElement]);
+    }, [categoriesCritical, rightElement, incidentsArr]);
+
+    useEffect(() => {
+        if (clickedItem === 'all') {
+            incidentsArr.map((ht) => {
+                if (map.current) {
+                    map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
+                }
+                return null;
+            });
+        } else {
+            incidentsArr.map((ht) => {
+                if (map.current) {
+                    map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
+                }
+                return null;
+            });
+            map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
+        }
+    }, [clickedItem, incidentsArr]);
+
 
     return (
         <div>
-            <div style={mapStyle} ref={mapContainerRef} />
+            <div style={mapCSS} ref={mapContainerRef}>
+                {
+
+                    incidentsPages.indexOf(rightElement + 1) !== -1
+                    && (
+                        <div className={styles.incidentsSlider}>
+                            <button
+                                className={styles.playButton}
+                                type="button"
+                                onClick={handlePlayPause}
+                            >
+                                {
+                                    playState
+                                        ? (
+                                            <Icon
+                                                name="play"
+                                                className={styles.playpauseIcon}
+                                            />
+                                        ) : (
+                                            <Icon
+                                                name="pause"
+                                                className={styles.playpauseIcon}
+                                            />
+                                        )}
+                            </button>
+
+                            <div className={styles.rangeWrap}>
+                                <div
+                                    style={{ left: `calc(${Number(incidentYear) * 10}% - ${Number(incidentYear) * 2}px)` }}
+                                    className={styles.rangeValue}
+                                    id="rangeV"
+                                >
+                                    {Number(incidentYear) + 2011}
+                                </div>
+                                <input
+                                    onChange={handleInputChange}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="10"
+                                    step="1"
+                                    value={incidentYear}
+                                    className={styles.slider}
+                                />
+                            </div>
+                        </div>
+                    )
+                }
+
+            </div>
         </div>
     );
 };

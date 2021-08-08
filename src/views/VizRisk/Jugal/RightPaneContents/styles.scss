@@ -1,3 +1,5 @@
+$button-color: rgb(0,170,223);
+
 .vrSideBar::-webkit-scrollbar {
     display: none;
   }
@@ -69,7 +71,102 @@
             z-index: 2;
             background-color:#112330;
         }
+        .infoIcon{
+            font-size: 16px;
+            color: white;
+        }
+        .vulScoreRow{
+            display: flex;
+            justify-content: space-between;
+            padding-right: 20px;
+        }
+        .singularPaneTable{
+                margin-top: 0px;
+                border-collapse: collapse;
+                width: 100%;
+                th{
+                padding: 0.5rem;
+                text-align: left;
+               
+                }
+                td{
+                border-top: 1px solid rgb(12, 87, 128);
+                border-bottom: 1px solid rgb(12, 87, 128);
+                padding: 0.5rem;
+                text-align: left;
+                color: white;
+                }
+                tr:nth-child(even) {
+                    background-color:transparent;
+               
+                
+                }
+                tr:nth-child(odd) {
+                    background-color:rgb(3,66,100);
+                }
+        
+        }
+
+        .backBtnContainer{
+            width: 100%;
+            display:flex;
+            justify-content: flex-end;
+            padding-right: 20px;
+            padding-bottom: 20px;
+            z-index: 3;
+            .backButton{
+                background-color: transparent;
+                border: 1px solid $button-color;
+                filter: saturate(100%);
+                color: $button-color;
+                cursor:pointer;
+                padding: 5px 10px;
+                margin-left: 5px;
+                font-size: 10px;
+                text-transform: uppercase;
+                width: 50px;
     
+            }
+        }
+
+        .buildingClassContainer{
+            display: flex;
+            width: 100%;
+            border-top: 1px dotted #eee;
+            justify-content: space-between;
+            padding-top: 15px;
+            .levelContainer{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .iconLevel{
+                    display: flex;
+                    align-items: center;
+                    .high{
+                        // path: {fill:rgb(197,44,56); }
+                        font-size: 30px;
+                        color:#af4042;
+                        margin-right: 5px;
+                    }
+                    .med{
+                        // path: {fill:rgb(193,127,90); }
+                        font-size: 30px;
+                        margin-right: 5px;
+                        color: #c1805a;
+                    }
+                    .low{
+                        // path: {fill: rgb(153,171,182);}
+                        font-size: 30px;
+                        margin-right: 5px;
+                        color: #afaf40;
+                    }
+                    .number{
+                        font-size: 12px;
+                        font-weight: 600;
+                     }
+                }
+            }
+        }
         .chartContainer{
             margin-top: 20px;
             position: relative;
@@ -78,6 +175,15 @@
        
         h1{
             @extend .heading-style;
+            button{
+                padding: 3px 10px 10px 10px;
+                z-index: 3;
+                opacity: 0.87;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                filter: saturate(100%);
+            }
         }
         h2{
             @extend .heading-style;
@@ -160,13 +266,52 @@
 
     }
 
-    .loaderInfo{
-        position: fixed;
-    top: 54%;
-    left: 55%;
-        .loader{
-            background-color: white;
+  
+    .incidentsLegendsContainer{
+        .hazardItemContainer{
+            display: flex;
+            padding: 0;
+            margin: 0;
+           .legendBtnSelected{
+            font-size: 11px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            // opacity: 0.87;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+            text-transform: uppercase;
+
+            .educationHexagon{
+                width: 11px;
+                margin: 0 7px 0 0;
+            }
+           }
+            .legendBtn{
+                font-size: 14px;
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+                opacity: 0.37;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                font-size: 11px;
+                text-transform: uppercase;
+                .educationHexagon{
+                    width: 11px;
+                    margin: 0 7px 0 0;
+                }
+            }
         }
+    
     }
 
 

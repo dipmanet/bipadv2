@@ -527,6 +527,9 @@ class Jugal extends React.Component {
                                 enableNavBtns={this.enableNavBtns}
                                 incidentList={pointFeatureCollection}
                                 CIData={cI}
+                                clickedItem={clickedIncidentItem}
+                                incidentFilterYear={incidentFilterYear}
+                                handleIncidentChange={this.handleIncidentChange}
                             />
                         )
 
@@ -648,7 +651,7 @@ class Jugal extends React.Component {
                     rightElement === 4
                     && (
                         <>
-                            <MapWithTimeline
+                            {/* <MapWithTimeline
                                 disableNavBtns={this.disableNavBtns}
                                 enableNavBtns={this.enableNavBtns}
                                 incidentList={pointFeatureCollection}
@@ -657,7 +660,7 @@ class Jugal extends React.Component {
                                 handleIncidentChange={this.handleIncidentChange}
                                 CIData={cI}
 
-                            />
+                            /> */}
                             <RightElement5
                                 incidentDetailsData={incidentDetailsData}
                                 handleNext={this.handleNext}
