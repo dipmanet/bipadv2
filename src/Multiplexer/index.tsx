@@ -320,6 +320,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             mapClickedResponse: {},
             tooltipLatlng: undefined,
             LoadingTooltip: false,
+            landslidePolygonImagemap: [],
 
         };
     }
@@ -376,7 +377,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private handleMapClicked=(latlngData) => {
         const { activeLayers } = this.state;
-        console.log('This layer', activeLayers);
+
         if (!activeLayers[activeLayers.length - 1].showPopup) {
             this.setState({
                 tooltipLatlng: undefined,
@@ -693,6 +694,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ tooltipLatlng: data });
     }
 
+    private handleLandslidePolygonImageMap=(data) => {
+        this.setState({
+            landslidePolygonImagemap: data,
+        });
+    }
+
     public render() {
         const {
             mapStyle,
@@ -726,6 +733,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             mapClickedResponse,
             tooltipLatlng,
             LoadingTooltip,
+            landslidePolygonImagemap,
 
         } = this.state;
         const pageProps = {
@@ -760,6 +768,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             mapClickedResponse,
             tooltipLatlng,
             LoadingTooltip,
+            landslidePolygonImagemap,
+            handleLandslidePolygonImageMap: this.handleLandslidePolygonImageMap,
 
 
         };
@@ -773,7 +783,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const orderedLayers = this.getLayerOrder(activeLayers);
         const hideFilters = false;
-
+        console.log('Active layer', activeLayers);
 
         return (
             <PageContext.Provider value={pageProps}>

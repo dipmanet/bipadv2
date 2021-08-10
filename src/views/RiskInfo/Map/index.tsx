@@ -99,7 +99,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         rasterLayers = activeLayers.filter(d => d.type === 'raster');
         // const vectorLayers = activeLayers.filter(d => d.type === 'vector');
         choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
-        console.log('Raster layer', rasterLayers);
+        console.log('choropleth layer', choroplethLayers);
         const responseDataKeys = Object.keys(mapClickedResponse);
         const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
         const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);

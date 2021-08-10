@@ -401,10 +401,11 @@ class Risk extends React.PureComponent<Props, State> {
                 />
             </>
         ));
-
+        console.log('this risk data', riskData);
+        console.log('risk layer', riskLayer);
+        console.log('This layer List', layerList);
         const RiskLayerSelectionItem = (p) => {
             const { data: layer } = p;
-
             if (layer.layername === 'durham_earthquake_risk_score') {
                 return (
                     <React.Fragment>
@@ -489,7 +490,7 @@ class Risk extends React.PureComponent<Props, State> {
                 />
             );
         };
-        console.log('Risk Layer', riskLayer);
+
         return (
             <>
                 <Loading pending={pending} />
