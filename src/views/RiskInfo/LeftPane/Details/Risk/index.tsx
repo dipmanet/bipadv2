@@ -350,7 +350,7 @@ class Risk extends React.PureComponent<Props, State> {
         const municipalityLandslideRaw = getResponse(requests, 'durhamLandslideMunicipalityRequest') as LandslideDataGeoJson;
         const wardLandslideRaw = getResponse(requests, 'durhamLandslideWardRequest') as LandslideDataGeoJson;
         const riskData = this.getRiskData(riskDataRaw, metricValues);
-        console.log('risk data', riskData);
+
         const landslideLayerToDataMap = {
             // eslint-disable-next-line @typescript-eslint/camelcase
             durham_landslide_hazard_risk_district: {
@@ -489,7 +489,7 @@ class Risk extends React.PureComponent<Props, State> {
                 />
             );
         };
-
+        console.log('Risk Layer', riskLayer);
         return (
             <>
                 <Loading pending={pending} />

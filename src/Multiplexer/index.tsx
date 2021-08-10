@@ -376,6 +376,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private handleMapClicked=(latlngData) => {
         const { activeLayers } = this.state;
+        console.log('This layer', activeLayers);
+        if (!activeLayers[activeLayers.length - 1].showPopup) {
+            this.setState({
+                tooltipLatlng: undefined,
+            });
+        }
         if (latlngData && activeLayers.length) {
             const { requests: { FeatureGetRequest } } = this.props;
             const latlng = point([latlngData.lngLat.lng, latlngData.lngLat.lat]);
