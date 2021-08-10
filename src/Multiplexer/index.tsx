@@ -378,7 +378,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private handleMapClicked=(latlngData) => {
         const { activeLayers } = this.state;
 
-        if (!activeLayers[activeLayers.length - 1].showPopup) {
+        if (activeLayers.length && !activeLayers[activeLayers.length - 1].showPopup) {
             this.setState({
                 tooltipLatlng: undefined,
             });
