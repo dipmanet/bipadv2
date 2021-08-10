@@ -1,251 +1,368 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
-import { isDefined } from '@togglecorp/fujs';
+// eslint-disable-next-line import/no-unresolved
+import * as geojson from 'geojson';
 import { mapSources } from '#constants';
-// import CIData from '../RightPaneContents/RightPane4/ci';
-import demographicsData from '../RightPaneContents/RightPane3/DemographyChartData';
-import styles from './styles.scss';
-import { getgeoJsonLayer, getGeoJSONPH } from '#views/VizRisk/Panchpokhari/utils';
+import demographicsData from '../Data/demographicsData';
+import expressions from '../Data/expressions';
+import * as PageTypes from '#store/atom/page/types';
+import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Jugal/utils';
+import { AppState } from '#store/types';
+import MapConstants from '../Data/mapConstants';
 
 import {
-    // provincesSelector,
-    municipalitiesSelector,
-    districtsSelector,
     wardsSelector,
-    regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
-    incidentListSelectorIP,
 } from '#selectors';
 
 import {
     getWardFilter,
 } from '#utils/domain';
+import styles from './styles.scss';
 
+import Icon from '#rscg/Icon';
+
+
+interface State{
+    lat: number;
+    lng: number;
+    zoom: number;
+    categoriesCritical: string[];
+}
+
+interface OwnProps{
+    rightElement: number;
+    showPopulation: string;
+    criticalElement: string;
+    CIData: CIData;
+    region: Region | undefined;
+    mapboxStyle: string;
+    zoom: number;
+    lng: number;
+    lat: number;
+    mapCSS: object;
+    hillshadeLayerName: string;
+    incidentList: CIData;
+    handleIncidentChange: (arg: string) => void;
+    clickedItem: string;
+}
+
+interface Region {
+    adminLevel: number;
+    geoarea: number;
+}
+
+interface CIData{
+    type: geojson.GeoJsonTypes;
+    features: Feature[];
+}
+
+interface Feature {
+    properties: Properties;
+    geometry: geojson.Geometry;
+}
+
+interface Properties {
+    Type: string;
+}
+
+interface PropsFromAppState {
+    wards: PageTypes.Ward[];
+}
+
+type Props = OwnProps & PropsFromAppState;
+
+type LngLat = any[];
+const UNSUPPORTED_BROWSER = !mapboxgl.supported();
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 
-const mapStateToProps = (state, props) => ({
-    // provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
+const {
+    layers,
+    mapCSS,
+    mapboxStyle,
+    zoom,
+    lng,
+    lat,
+    hillshadeLayerName,
+    incidentsPages,
+    ciPages,
+    incidentsSliderDelay,
+    municipalityId,
+} = MapConstants;
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
     wards: wardsSelector(state),
-    regionLevelFromAppState: regionLevelSelector(state, props),
-    bounds: boundsSelector(state, props),
-    selectedProvinceId: selectedProvinceIdSelector(state, props),
-    selectedDistrictId: selectedDistrictIdSelector(state, props),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const colorGrade = [
-    '#ffedb8',
-    '#ffffff',
-];
+let hoveredWardId: (string | number |undefined);
+const { populationWardExpression } = expressions;
 
-let hoveredWardId = null;
-const populationWardExpression = [
-    'interpolate',
-    ['linear'],
-    ['feature-state', 'value'],
-    1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
-    3, 'rgb(255,111,0)', 4, 'rgb(255,111,0)',
-    5, 'rgb(255,143,13)', 6, 'rgb(255, 94, 0)',
-    7, 'rgb(255, 94, 0)', 8, 'rgb(255,143,13)',
-    99, 'rgb(255,235,199)',
-];
-// const {
-//     data: criticalinfrastructures,
-// } = CIData;
+function noop() {}
+const JugalMap = (props: Props) => {
+    const [categoriesCritical, setcategoriesCritical] = useState([]);
+    const [incidentsArr, setIncidentsArr] = useState([]);
+    const [playState, setPlayState] = useState(false);
+    const [incidentYear, setIncidentYear] = useState('0');
 
-// const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
-//     item => item.properties.Type,
-// ))];
-
-
-class FloodHistoryMap extends React.Component {
-    public constructor(props) {
-        super(props);
-
-        this.state = {
-            lng: 85.64347922706821,
-            lat: 28.013604885888867,
-            zoom: 10,
-            wardNumber: 'Hover to see ward number',
-            categoriesCritical: [],
+    const interval = useRef<Timeout>(null);
+    const map = useRef<mapboxgl.Map | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement>(null);
+    const {
+        wards,
+        rightElement,
+        CIData,
+        criticalElement,
+        showPopulation,
+        incidentList,
+        handleIncidentChange,
+        clickedItem,
+    } = props;
+    const getIncidentsGeoJSON = (filterBy: string, data: any) => {
+        const geoObj = {
+            type: 'FeatureCollection',
+            features: [],
         };
-    }
+        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
+        geoObj.features.push(...d);
+        return geoObj;
+    };
 
-    public componentDidMount() {
-        const {
-            lng, lat, zoom,
-        } = this.state;
-        const {
-            wards,
-            selectedProvinceId: provinceId,
-            selectedDistrictId: districtId,
-            selectedMunicipalityId: municipalityId,
-            incidentList,
-        } = this.props;
+    const handlePlayPause = () => {
+        setPlayState(!playState);
+    };
+
+    const filterOnMap = (val: string) => {
+        const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
+        const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
+        let filters: T[] = [];
+        if (clickedItem === 'all') {
+            filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
+        } else {
+            filters = ['all',
+                ['>', 'incidentOn', yearInt],
+                ['<', 'incidentOn', nextYear],
+                ['==', 'hazardTitle', clickedItem]];
+        }
+        const hazardTitle = [...new Set(incidentList.features.map(
+            item => item.properties.hazardTitle,
+        ))];
+        hazardTitle.map((layer) => {
+            if (map.current) {
+                map.current.setFilter(`incidents-${layer}`, filters);
+            }
+            return null;
+        });
+    };
+
+    const handleInputChange = (e) => {
+        if (e) {
+            clearInterval(interval.current);
+            const val = e.target.value;
+            setIncidentYear(val);
+            console.log('input year change via thingo', incidentYear);
+            handleIncidentChange(incidentYear);
+            if (map.current && map.current.isStyleLoaded()) {
+                filterOnMap(incidentYear);
+            }
+        } else {
+            if (Number(incidentYear) < 10) {
+                setIncidentYear(prevTime => String(Number(prevTime) + 1));
+            } else {
+                setIncidentYear('0');
+            }
+            handleIncidentChange(incidentYear);
+            console.log('input year change via timer', incidentYear);
+            if (map.current && map.current.isStyleLoaded()) {
+                filterOnMap(incidentYear);
+            }
+        }
+    };
 
 
-        const mapping = wards.filter(item => item.municipality === 23010).map(item => ({
+    useEffect(() => {
+        if (incidentsPages.indexOf(rightElement + 1) !== -1) {
+            interval.current = setInterval(() => {
+                console.log('jkjfhs');
+                if (!playState) {
+                    handleInputChange(null);
+                } else if (interval.current) {
+                    clearInterval(interval.current);
+                }
+            }, incidentsSliderDelay);
+        }
+        return () => {
+            clearInterval(interval.current);
+        };
+    });
+
+    useEffect(() => {
+        if (UNSUPPORTED_BROWSER) {
+            console.error('No Mapboxgl support.');
+            return noop;
+        }
+        const { current: mapContainer } = mapContainerRef;
+        if (!mapContainer) {
+            console.error('No container found.');
+            return noop;
+        }
+        if (map.current) { return noop; }
+
+        const mapping = wards.filter(item => item.municipality === municipalityId).map(item => ({
             ...item,
             value: Number(item.title),
         }));
 
-        mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
-        this.map = new mapboxgl.Map({
-            container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
+        const jugalMap = new mapboxgl.Map({
+            container: mapContainer,
+            style: mapboxStyle,
             center: [lng, lat],
             zoom,
             minZoom: 2,
             maxZoom: 22,
         });
 
-
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
-
-        this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+        map.current = jugalMap;
 
 
-        this.map.on('style.load', () => {
+        jugalMap.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+
+        jugalMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+        jugalMap.on('style.load', () => {
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
                 className: 'popup',
             });
-            this.map.addSource('hillshadePachpokhari', {
+            jugalMap.addSource('hillshade', {
                 type: 'raster',
-                tiles: [this.getRasterLayer()],
+                tiles: [getHillShadeLayer(hillshadeLayerName)],
                 tileSize: 256,
             });
-            this.map.addLayer(
+
+            jugalMap.addLayer(
                 {
-                    id: 'raster-hillshade',
+                    id: 'hillshadeLayer',
                     type: 'raster',
-                    source: 'hillshadePachpokhari',
+                    source: 'hillshade',
                     layout: {},
                     paint: {
                         'raster-opacity': 0.25,
                     },
                 },
             );
-            const { CIData } = this.props;
-
-            if (isDefined(CIData.features)) {
-                const categoriesCritical = [...new Set(CIData.features.map(
-                    item => item.properties.Type,
-                ))];
-                this.setState({ categoriesCritical });
-
-                categoriesCritical.map((layer) => {
-                    this.map.addSource(layer, {
-                        type: 'geojson',
-                        data: getGeoJSONPH(layer, CIData),
-                        cluster: true,
-                        clusterRadius: 50,
-                    });
-                    this.map.addLayer({
-                        id: `clusters-${layer}`,
-                        type: 'circle',
-                        source: layer,
-                        filter: ['has', 'point_count'],
-                        paint: {
-                            'circle-color': [
-                                'step',
-                                ['get', 'point_count'],
-                                '#a4ac5e',
-                                100,
-                                '#a4ac5e',
-                            ],
-                            'circle-radius': [
-                                'step',
-                                ['get', 'point_count'],
-                                20,
-                                100,
-                                30,
-                                750,
-                                40,
-                            ],
-                        },
-                    });
-
-                    this.map.addLayer({
-                        id: `unclustered-point-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        filter: ['!', ['has', 'point_count']],
-                        layout: {
-                            'icon-image': ['downcase', ['get', 'Type']],
-                            'icon-size': 0.3,
-                            'icon-anchor': 'bottom',
-                        },
-                    });
-
-                    this.map.addLayer({
-                        id: `clusters-count-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
-                        },
-                    });
-
-                    if (this.props.rightElement !== 3) {
-                        this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                        this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                        this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
-                    }
-
-                    // here
-                    categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
-                        if (e) {
-                            this.map.getCanvas().style.cursor = 'pointer';
-                            const { lngLat } = e;
-                            const coordinates = [lngLat.lng, lngLat.lat];
-                            const ciName = e.features[0].properties.Title;
-                            popup.setLngLat(coordinates).setHTML(
-                                `<div style="padding: 5px;border-radius: 5px">
-                            <p>${ciName}</p>
-                        </div>
-                        `,
-                            ).addTo(this.map);
-                        }
-                    }));
-                    categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
-                        this.map.getCanvas().style.cursor = '';
-                        popup.remove();
-                    }));
-                    return null;
+            const categories: any = [...new Set(CIData.features.map(
+                item => item.properties.Type,
+            ))];
+            console.log('CIData', CIData);
+            setcategoriesCritical(categories);
+            categories.map((layer: string) => {
+                jugalMap.addSource(layer, {
+                    type: 'geojson',
+                    data: getGeoJSONPH(layer, CIData),
+                    cluster: true,
+                    clusterRadius: 50,
                 });
-            }
+                jugalMap.addLayer({
+                    id: `clusters-${layer}`,
+                    type: 'circle',
+                    source: layer,
+                    filter: ['has', 'point_count'],
+                    layout: {
+                        visibility: 'none',
+                    },
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#a4ac5e',
+                            100,
+                            '#a4ac5e',
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            100,
+                            30,
+                            750,
+                            40,
+                        ],
+                    },
+                });
+                jugalMap.addLayer({
+                    id: `unclustered-point-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    filter: ['!', ['has', 'point_count']],
+                    layout: {
+                        'icon-image': ['downcase', ['get', 'Type']],
+                        'icon-size': 0.3,
+                        'icon-anchor': 'bottom',
+                        visibility: 'none',
 
+                    },
+                });
+                jugalMap.addLayer({
+                    id: `clusters-count-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12,
+                        visibility: 'none',
+                    },
+                });
+                categories.map((ci: string) => jugalMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
+                    if (e) {
+                        const { lngLat } = e;
+                        const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Title;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                                    <p>${ciName}</p>
+                                </div>
+                        `,
+                        ).addTo(jugalMap);
+                    }
+                }));
+                categories.map((ci: string) => jugalMap.on('mouseleave', `unclustered-point-${ci}`, () => {
+                    jugalMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+                jugalMap.moveLayer(`unclustered-point-${layer}`);
+                jugalMap.moveLayer(`clusters-${layer}`);
+                jugalMap.moveLayer(`clusters-count-${layer}`);
 
-            this.map.addSource('vizrisk-fills', {
+                return null;
+            });
+
+            jugalMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
-            this.map.addSource('density', {
-                type: 'vector',
-                url: mapSources.populationDensity.url,
-            });
 
-            this.map.addLayer({
+            jugalMap.addLayer({
                 id: 'ward-fill-local',
                 source: 'vizrisk-fills',
                 'source-layer': mapSources.nepal.layers.ward,
                 type: 'fill',
                 paint: {
-                    'fill-color': populationWardExpression,
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['feature-state', 'value'],
+                        1, 'rgb(255,143,13)', 2, 'rgb(255,111,0)',
+                        3, 'rgb(255,111,0)', 4, 'rgb(255,111,0)',
+                        5, 'rgb(255,143,13)', 6, 'rgb(255, 94, 0)',
+                        7, 'rgb(255, 94, 0)', 8, 'rgb(255,143,13)',
+                        99, 'rgb(255,235,199)',
+                    ],
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
@@ -256,64 +373,8 @@ class FloodHistoryMap extends React.Component {
                 filter: getWardFilter(3, 24, 23010, wards),
             });
 
-
-            if (this.props.rightElement !== 1) {
-                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-
-                this.map.setLayoutProperty('Rock-Stone', 'visibility', 'none');
-                this.map.setLayoutProperty('Snow', 'visibility', 'none');
-                this.map.setLayoutProperty('Shrub', 'visibility', 'none');
-                this.map.setLayoutProperty('Forest', 'visibility', 'none');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-            }
-
-            if (this.props.rightElement === 0) {
-                this.map.setLayoutProperty('National Park', 'visibility', 'visible');
-                this.map.setLayoutProperty('raster-hillshade', 'visibility', 'visible');
-                this.map.moveLayer('raster-hillshade');
-                this.map.setLayoutProperty('Snow', 'visibility', 'none');
-                this.map.setLayoutProperty('Shrub', 'visibility', 'none');
-                this.map.setLayoutProperty('Forest', 'visibility', 'none');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-            }
-            if (this.props.rightElement === 2) {
-                this.map.setLayoutProperty('Snow', 'visibility', 'visible');
-                this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
-                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('Road', 'visibility', 'visible');
-                this.map.setLayoutProperty('National Park', 'visibility', 'none');
-            }
-            if (this.props.rightElement === 3) {
-                this.map.setLayoutProperty('Snow', 'visibility', 'visible');
-                this.map.setLayoutProperty('Shrub', 'visibility', 'visible');
-                this.map.setLayoutProperty('Forest', 'visibility', 'visible');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'visible');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-                this.map.setLayoutProperty('Road', 'visibility', 'visible');
-                this.map.setLayoutProperty('National Park', 'visibility', 'none');
-            }
-            if (this.props.rightElement === 1) {
-                this.map.setLayoutProperty('Population Density', 'visibility', 'visible');
-                this.map.setLayoutProperty('Ward Boundary Line', 'visibility', 'visible');
-                this.map.moveLayer('Ward Boundary Line');
-                this.map.setLayoutProperty('Ward No.', 'visibility', 'visible');
-                this.map.moveLayer('Ward No.');
-                this.map.setLayoutProperty('raster-hillshade', 'visibility', 'none');
-                this.map.setLayoutProperty('National Park', 'visibility', 'visible');
-
-                this.map.setLayoutProperty('Snow', 'visibility', 'none');
-                this.map.setLayoutProperty('Shrub', 'visibility', 'none');
-                this.map.setLayoutProperty('Forest', 'visibility', 'none');
-                this.map.setLayoutProperty('Farmlands', 'visibility', 'none');
-                this.map.setLayoutProperty('Buildings', 'visibility', 'none');
-            }
-
             mapping.forEach((attribute) => {
-                this.map.setFeatureState(
+                jugalMap.setFeatureState(
                     {
                         id: attribute.id,
                         source: 'vizrisk-fills',
@@ -323,24 +384,23 @@ class FloodHistoryMap extends React.Component {
                 );
             });
 
-
-            this.map.on('mousemove', 'ward-fill-local', (e) => {
+            jugalMap.on('mousemove', 'ward-fill-local', (e) => {
                 if (e.features.length > 0) {
-                    this.map.getCanvas().style.cursor = 'pointer';
+                    jugalMap.getCanvas().style.cursor = 'pointer';
 
                     const { lngLat } = e;
-                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
                     const wardno = e.features[0].properties.title;
-                    const details = demographicsData.chartData.filter(item => item.name === `Ward ${wardno}`);
+                    const details = demographicsData.demographicsData.filter(item => item.name === `Ward ${wardno}`);
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
                             <p> Total Population: ${totalPop}</p>
                         </div>
                         `,
-                    ).addTo(this.map);
+                    ).addTo(jugalMap);
                     if (hoveredWardId) {
-                        this.map.setFeatureState(
+                        jugalMap.setFeatureState(
                             {
                                 id: hoveredWardId,
                                 source: 'vizrisk-fills',
@@ -350,7 +410,7 @@ class FloodHistoryMap extends React.Component {
                         );
                     }
                     hoveredWardId = e.features[0].id;
-                    this.map.setFeatureState(
+                    jugalMap.setFeatureState(
                         {
                             id: hoveredWardId,
                             source: 'vizrisk-fills',
@@ -362,11 +422,11 @@ class FloodHistoryMap extends React.Component {
                 }
             });
 
-            this.map.on('mouseleave', 'ward-fill-local', () => {
-                this.map.getCanvas().style.cursor = '';
+            jugalMap.on('mouseleave', 'ward-fill-local', () => {
+                jugalMap.getCanvas().style.cursor = '';
                 popup.remove();
                 if (hoveredWardId) {
-                    this.map.setFeatureState(
+                    jugalMap.setFeatureState(
                         {
                             source: 'vizrisk-fills',
                             id: hoveredWardId,
@@ -375,316 +435,292 @@ class FloodHistoryMap extends React.Component {
                         { hover: false },
 
                     );
-                    this.map.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    jugalMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                 }
                 hoveredWardId = null;
             });
 
-            // this.map.setZoom(1);
-            // this.props.disableNavBtns('both');
-            // setTimeout(() => {
-            //     this.props.disableNavBtns('both');
-
-            //     this.map.easeTo({
-            //         zoom: 10.2,
-            //         duration: 8000,
-            //     });
-            // }, 4000);
-            // this.map.setPaintProperty('wardFill', 'fill-color', '#e0e0e0');
-        });
-    }
+            jugalMap.moveLayer('hillshadeLayer', 'Population Density');
+            jugalMap.moveLayer('Ward Boundary Line');
+            jugalMap.moveLayer('Ward No.');
+            jugalMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            jugalMap.moveLayer('ward-fill-local', 'Ward Boundary Line');
 
 
-    public componentDidUpdate(prevProps) {
-        if (this.props.showPopulation !== prevProps.showPopulation) {
-            if (this.props.showPopulation === 'popdensity') {
-                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            } else {
-                this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-            }
-        }
-        if (this.props.criticalElement !== prevProps.criticalElement) {
-            this.resetClusters();
-            const { categoriesCritical } = this.state;
-            const layer = this.props.criticalElement;
-            if (layer === 'all') {
-                categoriesCritical.map((item) => {
-                    this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
-                    this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
-                    this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
-                    return null;
+            const incidents = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+            setIncidentsArr(incidents);
+            incidents.map((layer) => {
+                jugalMap.addSource(layer, {
+                    type: 'geojson',
+                    data: getIncidentsGeoJSON(layer, incidentList),
                 });
-            } else if (layer === 'Health') {
-                this.map.setLayoutProperty('clusters-Health', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Health', 'visibility', 'visible');
-                this.map.setLayoutProperty('unclustered-point-Health', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Health');
-            } else if (layer === 'Finance') {
-                this.map.setLayoutProperty('unclustered-point-Finance', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Finance', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Finance', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Finance');
-            } else if (layer === 'Governance') {
-                this.map.setLayoutProperty('unclustered-point-Governance', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Governance', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Governance', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Bank');
-            } else if (layer === 'Industry') {
-                this.map.setLayoutProperty('unclustered-point-Industry', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Industry', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Industry', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Industry');
-            } else if (layer === 'Education') {
-                this.map.setLayoutProperty('unclustered-point-Education', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Education', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Education', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Education');
-            } else if (layer === 'Culture') {
-                this.map.setLayoutProperty('unclustered-point-Cultural', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Cultural', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Cultural', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Cultural');
-            } else if (layer === 'Tourism') {
-                this.map.setLayoutProperty('unclustered-point-Tourism', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Tourism', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Tourism', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Tourism');
-            } else if (layer === 'Water sources') {
-                this.map.setLayoutProperty('unclustered-point-Water sources', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Water sources', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Water sources', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Water sources');
-            } else if (layer === 'Trade and business') {
-                this.map.setLayoutProperty('unclustered-point-Trade and business', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-count-Trade and business', 'visibility', 'visible');
-                this.map.setLayoutProperty('clusters-Trade and business', 'visibility', 'visible');
-                this.map.moveLayer('clusters-count-Trade and business');
-            }
-        }
-        if (prevProps.CIData !== this.props.CIData) {
-            const popup = new mapboxgl.Popup({
-                closeButton: false,
-                closeOnClick: false,
-                className: 'popup',
-            });
-            const { CIData } = this.props;
-            const inci = this.map.getLayer('Buildings');
-            // if (CIData.length > 0) {
-            if (isDefined(CIData.features) && typeof inci !== 'undefined') {
-                const categoriesCritical = [...new Set(CIData.features.map(
-                    item => item.properties.Type,
-                ))];
-                // eslint-disable-next-line react/no-did-update-set-state
-                this.setState({ categoriesCritical });
-
-                categoriesCritical.map((layer) => {
-                    this.map.addSource(layer, {
-                        type: 'geojson',
-                        data: getGeoJSONPH(layer, CIData),
-                        cluster: true,
-                        clusterRadius: 50,
-                    });
-                    this.map.addLayer({
-                        id: `clusters-${layer}`,
+                jugalMap.addLayer(
+                    {
+                        id: `incidents-${layer}`,
                         type: 'circle',
                         source: layer,
-                        filter: ['has', 'point_count'],
                         paint: {
-                            'circle-color': [
-                                'step',
-                                ['get', 'point_count'],
-                                '#a4ac5e',
-                                100,
-                                '#a4ac5e',
-                            ],
-                            'circle-radius': [
-                                'step',
-                                ['get', 'point_count'],
-                                20,
-                                100,
-                                30,
-                                750,
-                                40,
-                            ],
+                            'circle-color': ['get', 'hazardColor'],
                         },
-                    });
-
-                    this.map.addLayer({
-                        id: `unclustered-point-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        filter: ['!', ['has', 'point_count']],
                         layout: {
-                            'icon-image': ['downcase', ['get', 'Type']],
-                            'icon-size': 0.3,
-                            'icon-anchor': 'bottom',
+                            visibility: 'none',
                         },
-                    });
-
-                    this.map.addLayer({
-                        id: `clusters-count-${layer}`,
+                    },
+                );
+                jugalMap.addLayer(
+                    {
+                        id: `incidents-icon-${layer}`,
                         type: 'symbol',
                         source: layer,
                         layout: {
-                            'text-field': '{point_count_abbreviated}',
-                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                            'text-size': 12,
+                            'icon-image': ['get', 'hazardIcon'],
+                            visibility: 'none',
                         },
-                    });
-                    categoriesCritical.map(ci => this.map.on('mousemove', `unclustered-point-${ci}`, (e) => {
-                        if (e) {
-                            this.map.getCanvas().style.cursor = 'pointer';
-                            const { lngLat } = e;
-                            const coordinates = [lngLat.lng, lngLat.lat];
-                            console.log('properties:', e.features[0].properties);
-                            const ciName = e.features[0].properties.title;
-                            popup.setLngLat(coordinates).setHTML(
-                                `<div style="padding: 5px;border-radius: 5px">
-                            <p>${ciName}</p>
-                        </div>
-                        `,
-                            ).addTo(this.map);
+                    },
+                );
+                jugalMap.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
+                jugalMap.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
+                return null;
+            });
+        });
+        const destroyMap = () => {
+            jugalMap.remove();
+        };
+
+        return destroyMap;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (map.current && showPopulation && map.current.isStyleLoaded()) {
+            if (showPopulation === 'popdensity') {
+                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+            } else {
+                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+            }
+        }
+    }, [showPopulation]);
+
+    useEffect(() => {
+        if (map.current && map.current.isStyleLoaded()) {
+            categoriesCritical.map((layer) => {
+                if (map.current) {
+                    map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                    map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                    map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                }
+                return null;
+            });
+            const layer = criticalElement;
+            if (layer === 'all') {
+                categoriesCritical.map((item: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            } else {
+                map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+                map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+                map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [criticalElement]);
+
+    useEffect(() => {
+        if (map.current && map.current.isStyleLoaded()) {
+            if (rightElement <= layers.length - 1
+                && layers[rightElement].length > 0
+            ) {
+                if (rightElement === 0) {
+                    layers[0].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
                         }
-                    }));
-                    categoriesCritical.map(ci => this.map.on('mouseleave', `unclustered-point-${ci}`, () => {
-                        this.map.getCanvas().style.cursor = '';
-                        popup.remove();
-                    }));
-                    if (this.props.rightElement !== 3) {
-                        this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                        this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                        this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+                        return null;
+                    });
+                    if (layers.length > 1) {
+                        layers[1].map((layer) => {
+                            if (map.current) {
+                                map.current.setLayoutProperty(layer, 'visibility', 'none');
+                            }
+                            return null;
+                        });
+                    }
+                } else if (rightElement < layers.length - 1 && rightElement > 0) {
+                    layers[rightElement - 1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    layers[rightElement + 1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    layers[rightElement].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+                } else if (rightElement === layers.length - 1 && rightElement > 0) {
+                    layers[layers.length - 1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+                    if (layers.length > 1) {
+                        layers[layers.length - 2].map((layer) => {
+                            if (map.current) {
+                                map.current.setLayoutProperty(layer, 'visibility', 'none');
+                            }
+                            return null;
+                        });
+                    }
+                }
+                map.current.easeTo({
+                    pitch: 30,
+                    zoom,
+                    duration: 1000,
+                    center: [lng, lat],
+                });
+            }
+
+            if (ciPages && ciPages.indexOf(rightElement + 1) !== -1) {
+                categoriesCritical.map((item: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                        map.current.moveLayer(`clusters-${item}`);
+                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+                        map.current.moveLayer(`clusters-count-${item}`);
+                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                        map.current.moveLayer(`unclustered-point-${item}`);
+                    }
+                    return null;
+                });
+            } else {
+                categoriesCritical.map((item: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'none');
+                        map.current.moveLayer(`clusters-${item}`);
+                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'none');
+                        map.current.moveLayer(`clusters-count-${item}`);
+                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'none');
+                        map.current.moveLayer(`unclustered-point-${item}`);
+                    }
+                    return null;
+                });
+            }
+            if (incidentsArr.length > 0 && incidentsPages.indexOf(rightElement + 1) !== -1) {
+                incidentsArr.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            } else {
+                incidentsArr.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
+                        map.current.moveLayer(`incidents-${layer}`);
+                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
+                        map.current.moveLayer(`incidents-icon-${layer}`);
                     }
                     return null;
                 });
             }
         }
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [categoriesCritical, rightElement]);
 
-    public componentWillUnmount() {
-        this.map.remove();
-    }
-
-    public getRasterLayer = () => [
-        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-        '&version=1.1.1',
-        '&service=WMS',
-        '&request=GetMap',
-        '&layers=Bipad:Panchpokhari_hillshade',
-        '&tiled=true',
-        '&width=256',
-        '&height=256',
-        '&srs=EPSG:3857',
-        '&bbox={bbox-epsg-3857}',
-        '&transparent=true',
-        '&format=image/png',
-    ].join('');
-
-    public getGeoJSON = (filterBy: string, data: any) => {
-        const geoObj = {};
-        geoObj.type = 'FeatureCollection';
-        geoObj.name = filterBy;
-        geoObj.features = [];
-        const d = data.features.filter(item => item.properties.CI === filterBy);
-        geoObj.features.push(...d);
-        return geoObj;
-    }
-
-
-    public resetClusters = () => {
-        this.state.categoriesCritical.map((layer) => {
-            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
-
-            return null;
-        });
-    }
-
-    public toggleVisiblity = (layers, state) => {
-        layers.map((layer) => {
-            this.map.setLayoutProperty(layer, 'visibility', state);
-            return null;
-        });
-    };
-
-    public orderLayers = (layers) => {
-        const { length } = layers;
-        if (length > 1) {
-            for (let i = 0; i < (layers.length - 1); i += 1) {
-                this.map.moveLayer(layers[i + 1], layers[i]);
+    useEffect(() => {
+        if (incidentsPages.indexOf(rightElement + 1) !== -1) {
+            if (clickedItem === 'all') {
+                if (map.current && map.current.isStyleLoaded()) {
+                    filterOnMap(incidentYear);
+                }
+                incidentsArr.map((ht) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            } else {
+                incidentsArr.map((ht) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
+                map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
             }
         }
-    };
-
-    public generatePaint = color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            ...color,
-        ],
-        'fill-opacity': 1,
-    });
-
-    public handleInfraClusterSwitch = (layer) => {
-        this.resetClusters();
-
-        if (layer === 'all') {
-            this.state.categoriesCritical.map((item) => {
-                this.map.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
-                this.map.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
-                this.map.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
-                return null;
-            });
-        } else {
-            this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
-            this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
-            this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
-            this.map.moveLayer(`clusters-count-${layer}`);
-        }
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clickedItem]);
 
 
-    public handleFloodRasterSwitch = (layer) => {
-        this.hideFloodRasters();
-        this.map.setLayoutProperty(`raster-rajapur-${layer}`, 'visibility', 'visible');
-    }
+    return (
+        <div>
+            <div style={mapCSS} ref={mapContainerRef}>
+                {
+                    incidentsPages.indexOf(rightElement + 1) !== -1
+                    && (
+                        <div className={styles.incidentsSlider}>
+                            <button
+                                className={styles.playButton}
+                                type="button"
+                                onClick={handlePlayPause}
+                            >
+                                {
+                                    playState
+                                        ? (
+                                            <Icon
+                                                name="play"
+                                                className={styles.playpauseIcon}
+                                            />
+                                        ) : (
+                                            <Icon
+                                                name="pause"
+                                                className={styles.playpauseIcon}
+                                            />
+                                        )}
+                            </button>
 
-    public generateColor = (maxValue, minValue, colorMapping) => {
-        const newColor = [];
-        const { length } = colorMapping;
-        const range = maxValue - minValue;
-        colorMapping.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
-            newColor.push(color);
-        });
-        return newColor;
-    };
+                            <div className={styles.rangeWrap}>
+                                <div
+                                    style={{ left: `calc(${Number(incidentYear) * 10}% - ${Number(incidentYear) * 2}px)` }}
+                                    className={styles.rangeValue}
+                                    id="rangeV"
+                                >
+                                    {Number(incidentYear) + 2011}
+                                </div>
+                                <input
+                                    onChange={handleInputChange}
+                                    id="slider"
+                                    type="range"
+                                    min="0"
+                                    max="10"
+                                    step="1"
+                                    value={incidentYear}
+                                    className={styles.slider}
+                                />
+                            </div>
+                        </div>
+                    )
+                }
 
-    public handleFlyEnd = () => {
-        this.props.handleMoveEnd(true);
-    }
-
-    public handleInputChange = (e) => {
-    }
-
-    public render() {
-        const mapStyle = {
-            position: 'absolute',
-            width: '70%',
-            left: 'calc(30% - 60px)',
-            top: 0,
-            // bottom: 0,
-            height: '100vh',
-        };
-
-        return (
-            <div>
-                <div style={mapStyle} ref={(el) => { this.mapContainer = el; }} />
             </div>
-        );
-    }
-}
-export default connect(mapStateToProps)(FloodHistoryMap);
+        </div>
+    );
+};
+export default connect(mapStateToProps)(JugalMap);

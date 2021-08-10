@@ -8,7 +8,7 @@ const DemoGraphicsLegends = (props) => {
     const [showFlood, setshowFlood] = useState(false);
     const {
         handleSesmicLayerChange,
-        handleFloodLayerChange,
+        // handleFloodLayerChange,
     } = props;
 
 
@@ -89,7 +89,7 @@ const DemoGraphicsLegends = (props) => {
                         }}
                         className={styles.educationHexagon}
                     />
-                          Flood Maps
+                          Flood Hazard Maps
                 </button>
             </div>
         </>

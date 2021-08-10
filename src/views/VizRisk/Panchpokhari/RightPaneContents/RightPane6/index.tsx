@@ -8,7 +8,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 
 import NavButtons from '../../Components/NavButtons';
 

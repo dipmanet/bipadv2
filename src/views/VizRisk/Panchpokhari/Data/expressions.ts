@@ -9,15 +9,7 @@ export default {
         7, 'rgb(255,143,13)', 8, 'rgb(207,144,119)',
         99, 'rgb(255,235,199)',
     ],
-    'fill-color': [
-        'match',
-        ['feature-state', 'party'],
-        'democrat',
-        '#6BA0C7',
-        'republican',
-        '#CE575E',
-        '#CCC',
-    ],
+
     buildingColor: [
         'case',
         ['all',

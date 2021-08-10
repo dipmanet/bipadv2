@@ -3,7 +3,7 @@ import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
-import Culture from '#resources/icons/icon_set_religion.svg';
+import Cultural from '#resources/icons/icon_set_religion.svg';
 import Health from '#resources/icons/icon_set_health-01.svg';
 import Industry from '#resources/icons/icon_set_industry.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
@@ -18,7 +18,7 @@ const LandCoverLegends = (props) => {
     const [showFinance, setshowFinance] = useState(false);
     const [showIndustry, setshowIndustry] = useState(false);
     const [showGovernemnt, setshowGovernemnt] = useState(false);
-    const [showCulture, setshowCulture] = useState(false);
+    const [showCultural, setshowCultural] = useState(false);
     const [showHospital, setshowHospital] = useState(false);
     const [showTourism, setshowTourism] = useState(false);
     const [showWater, setshowWater] = useState(false);
@@ -31,7 +31,7 @@ const LandCoverLegends = (props) => {
         setshowFinance(false);
         setshowIndustry(false);
         setshowGovernemnt(false);
-        setshowCulture(false);
+        setshowCultural(false);
         setshowHospital(false);
         setshowTourism(false);
         setshowTrade(false);
@@ -52,9 +52,9 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'Culture') {
+            } else if (criticalFlood === 'Cultural') {
                 resetCriticalLayers();
-                setshowCulture(true);
+                setshowCultural(true);
             } else if (criticalFlood === 'Governance') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
@@ -98,9 +98,9 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
-        if (layer === 'Culture') {
+        if (layer === 'Cultural') {
             resetCriticalLayers();
-            setshowCulture(true);
+            setshowCultural(true);
         }
         if (layer === 'Health') {
             resetCriticalLayers();
@@ -213,14 +213,14 @@ const LandCoverLegends = (props) => {
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
-                                className={showCulture
+                                className={showCultural
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Culture')}
+                                onClick={() => handleCriticalclick('Cultural')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Culture}
+                                    src={Cultural}
                                 />
 
                              Cultural Site

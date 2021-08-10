@@ -6,3 +6,12 @@
     // border: 1px solid gray;
     height: 100%;
 }
+.loaderInfo{
+    position: fixed;
+top: 54%;
+left: 60%;
+// border: 1px solid red;
+    .loader{
+        background-color: white;
+    }
+}

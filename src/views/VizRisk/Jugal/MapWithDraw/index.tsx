@@ -839,7 +839,7 @@ class FloodHistoryMap extends React.Component {
                             min="0"
                             max="1"
                             step="0.05"
-                            value={String(this.state.opacitySes)}
+                            value={String(this.state.opacityFlood)}
                             className={styles.slider}
                         />
                     </>

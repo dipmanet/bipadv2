@@ -6,7 +6,7 @@ import {
     ResponsiveContainer,
     XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 import NavButtons from '../../Components/NavButtons';
 
 interface ComponentProps {}

@@ -8,7 +8,7 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import Hexagon from 'react-hexagon';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 

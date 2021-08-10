@@ -178,11 +178,8 @@ class Jugal extends React.Component {
             criticalElement: 'all',
             criticalFlood: 'all',
             rightElement: 0,
-            legendElement: 0,
-            showLegend: false,
             disableNavRightBtn: false,
             disableNavLeftBtn: false,
-            hoveredWard: '',
             showPopulation: 'ward',
             evacElement: 'all',
             showCriticalElements: true,
@@ -310,9 +307,6 @@ class Jugal extends React.Component {
 
     public setVulData = (vulData) => {
         this.setState({ vulData });
-        // console.log('data with vulnerability score:',
-        //     vulData.filter(item => item.vulnerabilityScore !== undefined)
-        //         .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
         const indexArray = {};
         vulData.map((item, i) => {
             const dd = String(item.point.coordinates);
@@ -375,11 +369,6 @@ class Jugal extends React.Component {
         });
     }
 
-    public handleExposedElementChange = (exposed: string) => {
-        this.setState({
-            exposedElement: exposed,
-        });
-    }
 
     public handleNext = () => {
         if (this.state.rightElement < rightelements.length) {
@@ -395,9 +384,6 @@ class Jugal extends React.Component {
         }
     }
 
-    public handleMoveEnd = (value) => {
-        this.setState({ disableNavBtns: false });
-    }
 
     public handlePopulationChange =(showPopulation) => {
         this.setState({ showPopulation });
@@ -406,18 +392,6 @@ class Jugal extends React.Component {
     public handleFloodChange = (rasterLayer: string) => {
         this.setState({
             rasterLayer,
-        });
-    }
-
-    public handleChisapani = () => {
-        this.setState(prevState => ({
-            chisapaniClicked: !prevState.chisapaniClicked,
-        }));
-    }
-
-    public handleExposedElementChange = (exposed: string) => {
-        this.setState({
-            exposedElement: exposed,
         });
     }
 
@@ -456,11 +430,6 @@ class Jugal extends React.Component {
         const y = `${Number(incidentYear) + 2011}`;
         this.setState({ incidentFilterYear: y });
     };
-
-    private handleFloodLayerChange = (showRaster) => {
-        this.setState({ showRaster });
-    };
-
 
     public render() {
         const {
@@ -518,24 +487,27 @@ class Jugal extends React.Component {
                             </div>
                         )
                         : (
-                            <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                                CIData={cI}
-                                clickedItem={clickedIncidentItem}
-                                incidentFilterYear={incidentFilterYear}
-                                handleIncidentChange={this.handleIncidentChange}
-                            />
+                            rightElement < 5
+                            && (
+                                <Map
+                                    showRaster={showRaster}
+                                    rasterLayer={rasterLayer}
+                                    exposedElement={exposedElement}
+                                    rightElement={rightElement}
+                                    handleMoveEnd={this.handleMoveEnd}
+                                    showPopulation={showPopulation}
+                                    criticalElement={criticalElement}
+                                    criticalFlood={criticalFlood}
+                                    evacElement={evacElement}
+                                    disableNavBtns={this.disableNavBtns}
+                                    enableNavBtns={this.enableNavBtns}
+                                    incidentList={pointFeatureCollection}
+                                    CIData={cI}
+                                    clickedItem={clickedIncidentItem}
+                                    incidentFilterYear={incidentFilterYear}
+                                    handleIncidentChange={this.handleIncidentChange}
+                                />
+                            )
                         )
 
                 }
@@ -560,21 +532,6 @@ class Jugal extends React.Component {
                 {rightElement === 1
                     && (
                         <>
-                            {/* <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                CIData={cI}
-                                incidentList={pointFeatureCollection}
-                            /> */}
                             <RightElement3
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
@@ -592,22 +549,6 @@ class Jugal extends React.Component {
                 {rightElement === 2
                     && (
                         <>
-                            {/* <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                                CIData={cI}
-
-                            /> */}
                             <RightElement2
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
@@ -624,21 +565,6 @@ class Jugal extends React.Component {
                 {rightElement === 3
                     && (
                         <>
-                            {/* <Map
-                                showRaster={showRaster}
-                                rasterLayer={rasterLayer}
-                                exposedElement={exposedElement}
-                                rightElement={rightElement}
-                                handleMoveEnd={this.handleMoveEnd}
-                                showPopulation={showPopulation}
-                                criticalElement={criticalElement}
-                                criticalFlood={criticalFlood}
-                                evacElement={evacElement}
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                                CIData={cI}
-                            /> */}
                             <RightElement4
                                 handleNext={this.handleNext}
                                 handlePrev={this.handlePrev}
@@ -656,16 +582,7 @@ class Jugal extends React.Component {
                     rightElement === 4
                     && (
                         <>
-                            {/* <MapWithTimeline
-                                disableNavBtns={this.disableNavBtns}
-                                enableNavBtns={this.enableNavBtns}
-                                incidentList={pointFeatureCollection}
-                                clickedItem={clickedIncidentItem}
-                                incidentFilterYear={incidentFilterYear}
-                                handleIncidentChange={this.handleIncidentChange}
-                                CIData={cI}
 
-                            /> */}
                             <RightElement5
                                 incidentDetailsData={incidentDetailsData}
                                 handleNext={this.handleNext}
@@ -685,7 +602,6 @@ class Jugal extends React.Component {
                         </>
                     )
                 }
-                {/* {rightelements[rightElement]} */}
 
 
                 {rightElement === 1
@@ -822,12 +738,22 @@ class Jugal extends React.Component {
                                 vulData={vulData}
                                 resetDrawData={resetDrawData}
                                 indexArray={indexArray}
+
                             />
                             <VRLegend>
                                 <SesmicHazardVULLegend
                                     handleSesmicLayerChange={this.handleSesmicLayerChangeVUL}
                                 />
                             </VRLegend>
+                            {
+                                // here
+                                sesmicLayerVul === 'flood'
+                                && (
+                                    <FloodHazardlegends
+                                        handleFloodChange={this.handleFloodChange}
+                                    />
+                                )
+                            }
                         </>
                     )
                 }

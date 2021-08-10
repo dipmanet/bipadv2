@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 
+import Loader from 'react-loader';
 import Map from './Map';
 // import Legends from './Legends';
 import styles from './styles.scss';
@@ -42,7 +43,6 @@ import {
 
 import VRLegend from '#views/VizRisk/Panchpokhari/Components/VRLegend';
 import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#utils/transformations';
-import MapWithTimeline from './MapWithTimeline';
 import SesmicHazardLegend from './Legends/SesmicHazardLegend';
 import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
 import MapWithDraw from './MapWithDraw';
@@ -175,11 +175,8 @@ class Jugal extends React.Component {
             criticalElement: 'all',
             criticalFlood: 'all',
             rightElement: 0,
-            legendElement: 0,
-            showLegend: false,
             disableNavRightBtn: false,
             disableNavLeftBtn: false,
-            hoveredWard: '',
             showPopulation: 'ward',
             evacElement: 'all',
             showCriticalElements: true,
@@ -226,6 +223,19 @@ class Jugal extends React.Component {
         });
     }
 
+    public componentDidUpdate() {
+        const { vulData, buildings, cI, pending } = this.state;
+        if (pending) {
+            if (
+                vulData.length > 0
+                && buildings.length > 0
+                && cI.length > 0
+            ) {
+                this.setPending(false);
+            }
+        }
+    }
+
     public getIncidentYear = (incidentOn: string) => {
         if (incidentOn) {
             const date = incidentOn.split('T')[0];
@@ -255,10 +265,6 @@ class Jugal extends React.Component {
             return null;
         });
         this.setState({ indexArray });
-
-        // console.log('data with vulnerability score:',
-        //     vulData.filter(item => item.vulnerabilityScore !== undefined)
-        //         .map(o => ({ osmid: o.osmId, vscore: o.vulnerabilityScore })));
     }
 
     public setSingularBuilding = (singularBuilding, singularBuldingData) => {
@@ -353,26 +359,6 @@ class Jugal extends React.Component {
         });
     }
 
-    public handleEvac = (evacElement: string) => {
-        this.setState({
-            evacElement,
-        });
-    }
-
-
-    public handleLegendsClick = (rasterLayer: string, showRasterRec: boolean) => {
-        this.setState({
-            rasterLayer,
-            showRaster: showRasterRec,
-        });
-    }
-
-    public handleExposedElementChange = (exposed: string) => {
-        this.setState({
-            exposedElement: exposed,
-        });
-    }
-
     public handleNext = () => {
         if (this.state.rightElement < rightelements.length) {
             this.setState(prevState => ({ rightElement: prevState.rightElement + 1 }));
@@ -387,10 +373,6 @@ class Jugal extends React.Component {
         }
     }
 
-    public handleMoveEnd = (value) => {
-        this.setState({ disableNavBtns: false });
-    }
-
     public handlePopulationChange =(showPopulation) => {
         this.setState({ showPopulation });
     }
@@ -398,18 +380,6 @@ class Jugal extends React.Component {
     public handleFloodChange = (rasterLayer: string) => {
         this.setState({
             rasterLayer,
-        });
-    }
-
-    public handleChisapani = () => {
-        this.setState(prevState => ({
-            chisapaniClicked: !prevState.chisapaniClicked,
-        }));
-    }
-
-    public handleExposedElementChange = (exposed: string) => {
-        this.setState({
-            exposedElement: exposed,
         });
     }
 
@@ -497,25 +467,39 @@ class Jugal extends React.Component {
         return (
             <div>
                 {
+                    pending
+                        ? (
+                            <div className={styles.loaderInfo}>
+                                <Loader color="#fff" className={styles.loader} />
+                            </div>
+                        )
+                        : rightElement < 5
+                            && (
+                                <Map
+                                    showRaster={showRaster}
+                                    rasterLayer={rasterLayer}
+                                    exposedElement={exposedElement}
+                                    rightElement={rightElement}
+                                    showPopulation={showPopulation}
+                                    criticalElement={criticalElement}
+                                    criticalFlood={criticalFlood}
+                                    evacElement={evacElement}
+                                    disableNavBtns={this.disableNavBtns}
+                                    enableNavBtns={this.enableNavBtns}
+                                    incidentList={pointFeatureCollection}
+                                    CIData={cI}
+                                    clickedItem={clickedIncidentItem}
+                                    incidentFilterYear={incidentFilterYear}
+                                    handleIncidentChange={this.handleIncidentChange}
+                                />
+                            )
+
+                }
+
+                {
                     rightElement === 0
                 && (
                     <>
-                        <Map
-                            showRaster={showRaster}
-                            rasterLayer={rasterLayer}
-                            exposedElement={exposedElement}
-                            rightElement={rightElement}
-                            handleMoveEnd={this.handleMoveEnd}
-                            showPopulation={showPopulation}
-                            criticalElement={criticalElement}
-                            criticalFlood={criticalFlood}
-                            evacElement={evacElement}
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            CIData={cI}
-
-                        />
                         <RightElement1
                             handleNext={this.handleNext}
                             handlePrev={this.handlePrev}
@@ -531,22 +515,6 @@ class Jugal extends React.Component {
                 {rightElement === 1
                 && (
                     <>
-                        <Map
-                            showRaster={showRaster}
-                            rasterLayer={rasterLayer}
-                            exposedElement={exposedElement}
-                            rightElement={rightElement}
-                            handleMoveEnd={this.handleMoveEnd}
-                            showPopulation={showPopulation}
-                            criticalElement={criticalElement}
-                            criticalFlood={criticalFlood}
-                            evacElement={evacElement}
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            CIData={cI}
-
-                        />
                         <RightElement3
                             handleNext={this.handleNext}
                             handlePrev={this.handlePrev}
@@ -563,22 +531,6 @@ class Jugal extends React.Component {
                 {rightElement === 2
                 && (
                     <>
-                        <Map
-                            showRaster={showRaster}
-                            rasterLayer={rasterLayer}
-                            exposedElement={exposedElement}
-                            rightElement={rightElement}
-                            handleMoveEnd={this.handleMoveEnd}
-                            showPopulation={showPopulation}
-                            criticalElement={criticalElement}
-                            criticalFlood={criticalFlood}
-                            evacElement={evacElement}
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            CIData={cI}
-
-                        />
                         <RightElement2
                             handleNext={this.handleNext}
                             handlePrev={this.handlePrev}
@@ -594,22 +546,6 @@ class Jugal extends React.Component {
                 {rightElement === 3
                 && (
                     <>
-                        <Map
-                            showRaster={showRaster}
-                            rasterLayer={rasterLayer}
-                            exposedElement={exposedElement}
-                            rightElement={rightElement}
-                            handleMoveEnd={this.handleMoveEnd}
-                            showPopulation={showPopulation}
-                            criticalElement={criticalElement}
-                            criticalFlood={criticalFlood}
-                            evacElement={evacElement}
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            CIData={cI}
-
-                        />
                         <RightElement4
                             handleNext={this.handleNext}
                             handlePrev={this.handlePrev}
@@ -627,16 +563,7 @@ class Jugal extends React.Component {
                     rightElement === 4
                 && (
                     <>
-                        <MapWithTimeline
-                            disableNavBtns={this.disableNavBtns}
-                            enableNavBtns={this.enableNavBtns}
-                            incidentList={pointFeatureCollection}
-                            clickedItem={clickedIncidentItem}
-                            incidentFilterYear={incidentFilterYear}
-                            handleIncidentChange={this.handleIncidentChange}
-                            CIData={cI}
 
-                        />
                         <RightElement5
                             incidentDetailsData={incidentDetailsData}
                             handleNext={this.handleNext}

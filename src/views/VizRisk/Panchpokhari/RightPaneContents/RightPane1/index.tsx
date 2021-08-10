@@ -5,14 +5,13 @@ import { CartesianGrid,
     LineChart,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
-import Loader from 'react-loader';
-import VizRiskContext from '#components/VizRiskContext';
-import styles from './styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';
 import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
+import { lineData, rainfallData } from '../../Data/temperatureData';
+import styles from '../styles.scss';
 
 interface State {
     showInfo: boolean;
@@ -20,124 +19,29 @@ interface State {
 
 interface ComponentProps {}
 
-type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
-type Props = NewProps<ReduxProps, Params>;
-
-const lineData = [
-    {
-        Max: 20.4, Min: 5.8, Avg: 13.1, name: 'Jan',
-    },
-    {
-        Max: 23.4, Min: 7.6, Avg: 15.5, name: 'Feb',
-    },
-    {
-        Max: 26, Min: 10.7, Avg: 18.35, name: 'Mar',
-    },
-    {
-        Max: 30.5, Min: 12.7, Avg: 21.6, name: 'Apr',
-    },
-    {
-        Max: 30.9, Min: 16.4, Avg: 23.65, name: 'May',
-    },
-    {
-        Max: 31.2, Min: 20.8, Avg: 26, name: 'Jun',
-    },
-    {
-        Max: 29.3, Min: 21.2, Avg: 25.25, name: 'Jul',
-    },
-    {
-        Max: 32, Min: 21.4, Avg: 26.7, name: 'Aug',
-    },
-    {
-        Max: 31.3, Min: 20.2, Avg: 25.75, name: 'Sep',
-    },
-    {
-        Max: 32.1, Min: 18.2, Avg: 25.15, name: 'Oct',
-    },
-    {
-        Max: 26.4, Min: 8.3, Avg: 17.35, name: 'Nov',
-    },
-    {
-        Max: 23.6, Min: 4, Avg: 13.8, name: 'Dec',
-    },
-];
-
-const rainfallData = [
-    {
-        name: 'Jan', Rainfall: 51.3,
-    },
-    {
-        name: 'Feb', Rainfall: 34.2,
-    },
-    {
-        name: 'Mar', Rainfall: 92.4,
-    },
-    {
-        name: 'Apr', Rainfall: 92.4,
-    },
-    {
-        name: 'May', Rainfall: 288,
-    },
-    {
-        name: 'Jun', Rainfall: 658.5,
-    },
-    {
-        name: 'Jul', Rainfall: 1109.5,
-    },
-    {
-        name: 'Aug', Rainfall: 1049.4,
-    },
-    {
-        name: 'Sep', Rainfall: 552.2,
-    },
-    {
-        name: 'Oct', Rainfall: 21.6,
-    },
-    {
-        name: 'Nov', Rainfall: 0,
-    },
-    {
-        name: 'Dec', Rainfall: 0,
-    },
-];
-
-
 class Rajapur extends React.PureComponent<Props, State> {
-    public static contextType = VizRiskContext;
-
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            showInfo: false,
-        };
-    }
-
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
+    public renderLegend = () => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
                        Avg Max
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
-                       Avg Min
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
-                       Daily Avg
-                    </div>
                 </div>
             </div>
-        );
-    }
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMin} />
+                <div className={styles.legendText}>
+                       Avg Min
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendDaily} />
+                <div className={styles.legendText}>
+                       Daily Avg
+                </div>
+            </div>
+        </div>
+    )
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -170,10 +74,7 @@ class Rajapur extends React.PureComponent<Props, State> {
 
 
     public render() {
-        const { currentPage } = this.context;
-
         const {
-            municipalities,
             handleNext,
             handlePrev,
             disableNavLeftBtn,
@@ -183,20 +84,9 @@ class Rajapur extends React.PureComponent<Props, State> {
             pending,
         } = this.props;
 
-        const {
-            showInfo,
-        } = this.state;
 
         return (
             <div className={styles.vrSideBar}>
-                {
-                    pending
-                    && (
-                        <div className={styles.loaderInfo}>
-                            <Loader color="#fff" className={styles.loader} />
-                        </div>
-                    )
-                }
                 <h1> Panchpokhari Thangpal Rural Municipality</h1>
                 <p>
                 Panchpokhari Thangpal Rural Municipality is located in

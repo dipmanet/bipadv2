@@ -5,6 +5,7 @@ import styles from './styles.scss';
 const DemoGraphicsLegends = (props) => {
     const [showSus, setshowSus] = useState(false);
     const [showSes, setshowSes] = useState(false);
+    const [showFlood, setshowFlood] = useState(false);
     const {
         handleSesmicLayerChange,
     } = props;
@@ -22,6 +23,10 @@ const DemoGraphicsLegends = (props) => {
                     setshowSes(false);
                     handleSesmicLayerChange('sesHide');
                 }
+                if (showFlood) {
+                    setshowFlood(false);
+                    handleSesmicLayerChange('floodHide');
+                }
                 handleSesmicLayerChange('sus');
             }
         }
@@ -35,7 +40,29 @@ const DemoGraphicsLegends = (props) => {
                     setshowSus(false);
                     handleSesmicLayerChange('susHide');
                 }
+                if (showFlood) {
+                    setshowFlood(false);
+                    handleSesmicLayerChange('floodHide');
+                }
                 handleSesmicLayerChange('ses');
+            }
+        }
+
+        if (val === 'flood') {
+            if (showFlood) {
+                setshowFlood(false);
+                handleSesmicLayerChange('floodHide');
+            } else {
+                setshowFlood(true);
+                if (showSus) {
+                    setshowSus(false);
+                    handleSesmicLayerChange('susHide');
+                }
+                if (showSes) {
+                    setshowSes(false);
+                    handleSesmicLayerChange('sesHide');
+                }
+                handleSesmicLayerChange('flood');
             }
         }
     };
@@ -78,6 +105,26 @@ const DemoGraphicsLegends = (props) => {
                     />
 
                           Seismic Hazard Map
+                </button>
+            </div>
+            <div className={styles.hazardItemContainer}>
+                <button
+                    type="button"
+                    className={showFlood ? styles.legendBtnSelected : styles.legendBtn}
+                    onClick={() => handlePopulationClick('flood')}
+
+                >
+                    <Hexagon
+                        style={{
+                            stroke: '#fff',
+                            strokeWidth: 50,
+                            fill: showFlood ? '#036ef0' : 'transparent',
+
+                        }}
+                        className={styles.educationHexagon}
+                    />
+
+                          Flood Hazard Maps
                 </button>
             </div>
         </>

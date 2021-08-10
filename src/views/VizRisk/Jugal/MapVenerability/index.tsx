@@ -36,8 +36,10 @@ if (TOKEN) {
 
 const rasterLayers = [
     '5', '10', '20', '50', '75', '100',
-    '200', '250', '500', '100',
+    '200', '250', '500', '1000',
 ];
+
+
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
     districts: districtsSelector(state),
@@ -362,7 +364,7 @@ class FloodHistoryMap extends React.Component {
 
     public componentDidMount() {
         const {
-            lng, lat, zoom,
+            lng, lat, zoom, opacityFlood,
         } = this.state;
 
         this.interval = setInterval(() => {
@@ -597,17 +599,25 @@ class FloodHistoryMap extends React.Component {
     }
 
     public componentDidUpdate(prevProps) {
+        const { rasterLayer } = this.props;
+
         if (this.props.sesmicLayer !== prevProps.sesmicLayer) {
             if (this.props.sesmicLayer === 'ses') {
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'visible');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
-            } else if (this.props.sesmicLayer === 'sesHide') {
-                this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'none');
             } else if (this.props.sesmicLayer === 'sus') {
-                this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
                 this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
-            } else if (this.props.sesmicLayer === 'susHide') {
+                this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'visible');
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'none');
+            } else if (this.props.sesmicLayer === 'flood') {
+                this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
                 this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'visible');
+            } else {
+                this.map.setLayoutProperty('jugallseicHazard', 'visibility', 'none');
+                this.map.setLayoutProperty('jugallsSuslayer', 'visibility', 'none');
+                this.map.setLayoutProperty(`raster-flood-${rasterLayer}`, 'visibility', 'none');
             }
         }
 
@@ -657,12 +667,13 @@ class FloodHistoryMap extends React.Component {
         this.props.handleDrawResetData(true);
     };
 
+
     public getFloodRasterLayer = (layerName: string) => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
         '&version=1.1.1',
         '&service=WMS',
         '&request=GetMap',
-        `&layers=Bipad:${layerName}`,
+        `&layers=Bipad:Jugal_FD_1in${layerName}`,
         '&tiled=true',
         '&width=256',
         '&height=256',
@@ -671,6 +682,7 @@ class FloodHistoryMap extends React.Component {
         '&transparent=true',
         '&format=image/png',
     ].join('');
+
 
     public zoomToBbox = (data) => {
         const coordList = data
@@ -718,7 +730,7 @@ class FloodHistoryMap extends React.Component {
 
     public handleInputChangeFlood = (e) => {
         const val = e.target.value;
-        this.setState({ opacitySes: String(e.target.value) });
+        this.setState({ opacityFlood: String(e.target.value) });
 
         // here
         this.map.setPaintProperty(`raster-flood-${this.props.rasterLayer}`, 'raster-opacity', Number(val));
@@ -896,7 +908,7 @@ class FloodHistoryMap extends React.Component {
                             min="0"
                             max="1"
                             step="0.05"
-                            value={String(this.state.opacitySes)}
+                            value={String(this.state.opacityFlood)}
                             className={styles.slider}
                         />
                     </>

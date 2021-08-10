@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import memoize from 'memoize-one';
 import {
     ResponsiveContainer,
     PieChart,
@@ -22,7 +21,6 @@ import {
     hazardTypesSelector,
 } from '#selectors';
 import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
-// import NavButtons from '#views/VizRisk/Common/NavButtons';
 import NavButtons from '../../Components/NavButtons';
 import LandCover from '../../Data/landCoverChartData';
 import styles from '../styles.scss';
@@ -36,9 +34,6 @@ interface State {
 }
 
 interface ComponentProps {}
-
-type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
-type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = state => ({
     mapStyle: mapStyleSelector(state),
@@ -61,28 +56,6 @@ class RightPane extends React.PureComponent<Props, State> {
         };
     }
 
-    public generateColor = memoize((maxValue, minValue, colorMapping) => {
-        const newColor = [];
-        const { length } = colorMapping;
-        const range = maxValue - minValue;
-        colorMapping.forEach((color, i) => {
-            const val = minValue + ((i * range) / (length - 1));
-            newColor.push(val);
-            newColor.push(color);
-        });
-        return newColor;
-    });
-
-    public generatePaint = memoize(color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            ...color,
-        ],
-        'fill-opacity': 0,
-    }))
-
     public onPieEnter = (piedata, index) => {
         this.setState({
             activeIndex: index,
@@ -101,8 +74,8 @@ class RightPane extends React.PureComponent<Props, State> {
     };
 
     public renderActiveShape = (props) => {
-        const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-            fill, payload, percent, value } = props;
+        const { cx, cy, innerRadius, outerRadius, startAngle, endAngle,
+            fill } = props;
 
         return (
             <g>

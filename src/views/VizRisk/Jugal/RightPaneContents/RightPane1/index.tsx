@@ -5,7 +5,6 @@ import { CartesianGrid,
     LineChart,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
-import VizRiskContext from '#components/VizRiskContext';
 // import NavButtons from '#views/VizRisk/Common/NavButtons';
 import NavButtons from '../../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -21,46 +20,30 @@ interface State {
 
 interface ComponentProps {}
 
-type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
-type Props = NewProps<ReduxProps, Params>;
-
 
 class RightPane1 extends React.PureComponent<Props, State> {
-    public static contextType = VizRiskContext;
-
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            showInfo: false,
-        };
-    }
-
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
+    public renderLegend = () => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
                        Avg Max
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
-                       Avg Min
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
-                       Daily Avg
-                    </div>
                 </div>
             </div>
-        );
-    }
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMin} />
+                <div className={styles.legendText}>
+                       Avg Min
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendDaily} />
+                <div className={styles.legendText}>
+                       Daily Avg
+                </div>
+            </div>
+        </div>
+    )
 
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -105,14 +88,6 @@ class RightPane1 extends React.PureComponent<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
-                {/* {
-                    pending
-                    && (
-                        <div className={styles.loaderInfo}>
-                            <Loader color="#fff" className={styles.loader} />
-                        </div>
-                    )
-                } */}
                 <h1> Jugal Rural Municipality</h1>
                 <p>
                 Jugal Rural Municipality is located in Sindhupalchok

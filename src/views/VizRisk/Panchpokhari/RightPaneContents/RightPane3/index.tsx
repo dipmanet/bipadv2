@@ -1,5 +1,4 @@
 import React from 'react';
-import memoize from 'memoize-one';
 
 import {
     Bar, BarChart,
@@ -7,16 +6,12 @@ import {
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
-import DemographyData from './DemographyChartData';
+import DemographyData from '../../Data/demographyChartData';
+
 import NavButtons from '../../Components/NavButtons';
+import styles from '../styles.scss';
 
 const demoChartdata = DemographyData.chartData;
-
-interface ComponentProps {}
-
-type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
-type Props = NewProps<ReduxProps, Params>;
 
 
 class SlideThreePane extends React.PureComponent<Props, State> {
