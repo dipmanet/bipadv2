@@ -5,8 +5,10 @@ import styles from './styles.scss';
 const DemoGraphicsLegends = (props) => {
     const [showSus, setshowSus] = useState(true);
     const [showSes, setshowSes] = useState(false);
+    const [showFlood, setshowFlood] = useState(false);
     const {
         handleSesmicLayerChange,
+        // handleFloodLayerChange,
     } = props;
 
 
@@ -16,11 +18,19 @@ const DemoGraphicsLegends = (props) => {
         if (val === 'sus') {
             setshowSus(true);
             setshowSes(false);
+            setshowFlood(false);
         }
 
         if (val === 'ses') {
             setshowSus(false);
             setshowSes(true);
+            setshowFlood(false);
+        }
+
+        if (val === 'flood') {
+            setshowSus(false);
+            setshowSes(false);
+            setshowFlood(true);
         }
     };
 
@@ -62,6 +72,24 @@ const DemoGraphicsLegends = (props) => {
                     />
 
                           Seismic Hazard Map
+                </button>
+            </div>
+            <div className={styles.hazardItemContainer}>
+                <button
+                    type="button"
+                    className={showFlood ? styles.legendBtnSelected : styles.legendBtn}
+                    onClick={() => handlePopulationClick('flood')}
+                >
+                    <Hexagon
+                        style={{
+                            stroke: '#fff',
+                            strokeWidth: 50,
+                            fill: showFlood ? '#036ef0' : 'transparent',
+
+                        }}
+                        className={styles.educationHexagon}
+                    />
+                          Flood Hazard Maps
                 </button>
             </div>
         </>

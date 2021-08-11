@@ -13,15 +13,7 @@ import styles from './styles.scss';
 
 
 import {
-    // provincesSelector,
-    municipalitiesSelector,
-    districtsSelector,
     wardsSelector,
-    regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
 } from '#selectors';
 
 const ciRef = {
@@ -48,15 +40,7 @@ if (TOKEN) {
 }
 
 const mapStateToProps = (state, props) => ({
-    // provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevelFromAppState: regionLevelSelector(state, props),
-    bounds: boundsSelector(state, props),
-    selectedProvinceId: selectedProvinceIdSelector(state, props),
-    selectedDistrictId: selectedDistrictIdSelector(state, props),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
 

@@ -9,7 +9,7 @@ export default {
         ['Shrub', 'Forest', 'Farmlands', 'Buildings', 'Snow'],
     ],
     mapboxStyle: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
-    zoom: 9.8,
+    zoom: 10.4,
     lng: 85.64347922706821,
     lat: 28.013604885888867,
     mapCSS: {
