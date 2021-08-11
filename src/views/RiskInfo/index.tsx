@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 import Page from '#components/Page';
 
 import LeftPane from './LeftPane';
@@ -8,8 +9,10 @@ import ActiveLayers from './ActiveLayers';
 import CapacityAndResourcesLegend from './LeftPane/Details/CapacityAndResources/Legend';
 import styles from './styles.scss';
 
+
 interface Props {
 }
+
 
 class RiskInfo extends React.PureComponent<Props> {
     public state = {
@@ -53,6 +56,7 @@ class RiskInfo extends React.PureComponent<Props> {
             resourceIdForLegend,
             droneImagePending,
         } = this.state;
+
 
         return (
             <>

@@ -281,6 +281,7 @@ class Risk extends React.PureComponent<Props, State> {
         const riskLayer = transformRiskDataToLayer(riskData, earthquakeLayer[0], {});
 
         if (addLayer) {
+            console.log('risk layer', riskLayer);
             addLayer(riskLayer);
         }
     }
@@ -403,7 +404,10 @@ class Risk extends React.PureComponent<Props, State> {
         ));
         console.log('this risk data', riskData);
         console.log('risk layer', riskLayer);
-        console.log('This layer List', layerList);
+        console.log('This layer List', earthquakeLayer);
+        console.log('metric value', metricKeys);
+        console.log('layers', layers);
+
         const RiskLayerSelectionItem = (p) => {
             const { data: layer } = p;
             if (layer.layername === 'durham_earthquake_risk_score') {
@@ -490,7 +494,7 @@ class Risk extends React.PureComponent<Props, State> {
                 />
             );
         };
-
+        console.log('this data', RiskLayerSelectionItem);
         return (
             <>
                 <Loading pending={pending} />

@@ -5,6 +5,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+
 import {
     createRequestClient,
     NewProps,
@@ -14,7 +15,6 @@ import {
 } from '#request';
 
 import Button from '#rsca/Button';
-
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import {
@@ -31,8 +31,11 @@ import {
 
 import Overview from './Overview';
 import Details from './Details';
+import { generatePaint,
+    getLayerHierarchy } from '#utils/domain';
 
 import styles from './styles.scss';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 
 interface OwnProps {
     className?: string;
@@ -145,6 +148,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
 
         const groupedLayers = this.getGroupedLayers(layerList, layerGroupList);
 
+
         return (
             <div className={
                 _cs(
@@ -203,7 +207,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         );
     }
 }
-
+RiskInfoLeftPane.contextType = RiskInfoLayerContext;
 export default createConnectedRequestCoordinator<OwnProps>()(
     createRequestClient(requestOptions)(RiskInfoLeftPane),
 );

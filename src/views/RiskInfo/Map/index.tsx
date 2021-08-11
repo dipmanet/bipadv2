@@ -53,7 +53,7 @@ const tooltipOptions = {
 let rasterLayers = [];
 // eslint-disable-next-line prefer-const
 let choroplethLayers = [];
-const test = '';
+
 class RiskInfoMap extends React.PureComponent<Props, State> {
     public constructor(props) {
         super(props);
@@ -94,16 +94,18 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         } = this.state;
 
         const { activeLayers, LoadingTooltip, tooltipLatlng,
-            mapClickedResponse } = this.context;
-        // const { requests: { FeatureGetRequest } } = this.props;
+            mapClickedResponse, landslidePolygonChoroplethMapData } = this.context;
+
+
         rasterLayers = activeLayers.filter(d => d.type === 'raster');
-        // const vectorLayers = activeLayers.filter(d => d.type === 'vector');
         choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
-        console.log('choropleth layer', choroplethLayers);
-        console.log('this is data layer', rasterLayers);
+
+
         const responseDataKeys = Object.keys(mapClickedResponse);
         const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
         const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
+        console.log('active', activeLayers);
+
         return (
             <>
                 <CommonMap
@@ -167,65 +169,27 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
                     </MapSource>
                 ))}
-                {/* { vectorLayers.map(layer => (
-                    <MapSource
-                        key={layer.id}
-                        sourceKey={layer.layername}
-                        sourceOptions={{
-                            type: 'raster',
-                            tiles: [getRasterTile(layer)],
-                            tileSize: 256,
-                        }}
-                    >
-                        <MapLayer
-                            layerKey="raster-layer"
-                            layerOptions={{
-                                type: 'raster',
-                                paint: {
-                                    'raster-opacity': layer.opacity,
-                                },
-                            }}
-                            onClick={this.handleClick}
-                        />
-                    </MapSource>
-                ))} */}
-                {/* <MapSource
-                    key={'buildingKey'}
-                    sourceKey={'buildingFootprint'}
-                    sourceOptions={{
-                        type: 'raster',
-                        tiles: [getBuildingFootprint()],
-                        tileSize: 256,
-                    }}
-                >
-                    <MapLayer
-                        layerKey="raster-layer"
-                        layerOptions={{
-                            type: 'raster',
-                            paint: {
-                                'raster-opacity': 1,
-                            },
-                        }}
-                    />
-                </MapSource> */}
+
 
                 { choroplethLayers.map(layer => (
                     <MapSource
                         key={layer.id}
-                        sourceKey={layer.layername}
+                        sourceKey="post_moonsoon"
                         sourceOptions={{
                             type: 'vector',
                             url: mapSources.nepal.url,
                         }}
                     >
-                        <MapLayer
+                        {/* <MapLayer
                             layerKey="choropleth-layer-outline"
                             layerOptions={{
                                 'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
                                 type: 'line',
                                 paint: linePaintByAdminLevel[layer.adminLevel],
+
+
                             }}
-                        />
+                        /> */}
                         <MapLayer
                             layerKey="choropleth-layer"
                             layerOptions={{
@@ -247,6 +211,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             attributeKey="value"
                             sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
                         />
+
 
                         { layer.tooltipRenderer
                             && hoverLngLat

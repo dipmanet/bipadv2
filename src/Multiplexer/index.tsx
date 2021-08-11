@@ -321,6 +321,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             tooltipLatlng: undefined,
             LoadingTooltip: false,
             landslidePolygonImagemap: [],
+            landslidePolygonChoroplethMapData: [],
 
         };
     }
@@ -700,6 +701,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    private handlelandslidePolygonChoroplethMapData=(data) => {
+        this.setState({
+            landslidePolygonChoroplethMapData: data,
+        });
+    }
+
     public render() {
         const {
             mapStyle,
@@ -734,6 +741,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             tooltipLatlng,
             LoadingTooltip,
             landslidePolygonImagemap,
+            handlelandslidePolygonChoroplethMapData,
+            landslidePolygonChoroplethMapData,
+
 
         } = this.state;
         const pageProps = {
@@ -770,6 +780,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             LoadingTooltip,
             landslidePolygonImagemap,
             handleLandslidePolygonImageMap: this.handleLandslidePolygonImageMap,
+            handlelandslidePolygonChoroplethMapData: this.handlelandslidePolygonChoroplethMapData,
+            landslidePolygonChoroplethMapData,
 
 
         };
