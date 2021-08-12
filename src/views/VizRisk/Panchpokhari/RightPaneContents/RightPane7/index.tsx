@@ -24,6 +24,8 @@ import {
     getaverageAnnualincomeChartData,
 } from '../../utils';
 
+import HouseholdForm from '#views/VizRisk/Common/HouseholdForm';
+
 // const chartData = criticalInfraData.safeShelterData;
 
 interface ComponentProps {}
@@ -201,6 +203,8 @@ class SlideFivePane extends React.Component<Props, State> {
 
         return (
             <div className={styles.vrSideBar}>
+
+                <HouseholdForm />
                 {/* { singularBuilding
                     && (
                         <div className={styles.backBtnContainer}>
