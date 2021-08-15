@@ -507,6 +507,8 @@ class Filters extends React.PureComponent<Props, State> {
         const { setFilters, carKeys } = this.props;
         const { faramValues } = this.state;
         const { filters: propFilters } = this.props;
+        console.log('Faram Value', faramValues);
+        console.log('Props filter', propFilters);
         if (faramValues) {
             setFilters({ filters: faramValues });
         } else {
