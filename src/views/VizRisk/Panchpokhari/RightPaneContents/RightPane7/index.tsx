@@ -48,6 +48,7 @@ class SlideFivePane extends React.Component<Props, State> {
             sourceofIncomeChartData: [],
             averageAnnualincomeChartData: [],
             singularAgeGroupsChart: [],
+            showAddForm: false,
         };
     }
 
@@ -162,6 +163,10 @@ class SlideFivePane extends React.Component<Props, State> {
         return '-';
     }
 
+    public handleShowForm =() => {
+        this.setState({ showAddForm: true });
+    }
+
     public render() {
         const {
             handleNext,
@@ -185,6 +190,7 @@ class SlideFivePane extends React.Component<Props, State> {
             ownershipChartData,
             sourceofIncomeChartData,
             averageAnnualincomeChartData,
+            showAddForm,
         } = this.state;
 
 
@@ -201,10 +207,10 @@ class SlideFivePane extends React.Component<Props, State> {
                 : 0,
         });
 
+        console.log('singularBuldingData', singularBuldingData);
+
         return (
             <div className={styles.vrSideBar}>
-
-                <HouseholdForm />
                 {/* { singularBuilding
                     && (
                         <div className={styles.backBtnContainer}>
@@ -272,201 +278,223 @@ class SlideFivePane extends React.Component<Props, State> {
                 { singularBuilding
                     && (
                         <>
-                            <p>
-                            House ID No:
-                                {' '}
-                                {singularBuldingData && isDefined(singularBuldingData.houseOwnerId)
-                                    ? singularBuldingData.houseOwnerId
-                                    : '-'
-                                }
-                                {' '}
-                            </p>
-                            <div className={styles.vulScoreRow}>
-                                <span>VULNERABILITY OF THE HOUSEHOLD</span>
-                                {singularBuldingData
+                            {
+                                showAddForm
+                                    ? (
+                                        <HouseholdForm
+                                            buildingData={singularBuldingData}
+                                            enumData={this.props.enumData}
+                                            osmId={singularBuldingData && singularBuldingData.osmId}
+                                        />
+                                    )
+                                    : (
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={this.handleShowForm}
+                                                className={styles.showBtn}
+                                            >
+                                            Add/Edit Details
+                                            </button>
+                                            <p>
+                                                House ID No:
+                                                {' '}
+                                                {singularBuldingData && isDefined(singularBuldingData.houseOwnerId)
+                                                    ? singularBuldingData.houseOwnerId
+                                                    : '-'
+                                                }
+                                                {' '}
+                                            </p>
+                                            <div className={styles.vulScoreRow}>
+                                                <span>VULNERABILITY OF THE HOUSEHOLD</span>
+                                                {singularBuldingData
                                 && isDefined(singularBuldingData.vulnerabilityScore)
-                                    ? this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)
-                                    : '-'
-                                }
-                            </div>
+                                                    ? this.getVulnerabilityLvl(singularBuldingData.vulnerabilityScore)
+                                                    : '-'
+                                                }
+                                            </div>
 
-                            <p>
+                                            <p>
                                 The physical, social and economic fators were
                                 considered to identify the vulnerability of
                                 the household
-                            </p>
-                            <p>
+                                            </p>
+                                            <p>
                                 PHYSICAL FACTORS
-                            </p>
+                                            </p>
 
-                            <table className={styles.singularPaneTable}>
-                                <tr>
-                                    <td>
+                                            <table className={styles.singularPaneTable}>
+                                                <tr>
+                                                    <td>
                                         Foundation Type
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.foundationType) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.foundationType) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                         Roof Type
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.roofType) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.roofType) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                     Storey
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.storeys) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.storeys) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                     Ground surface
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.groundSurface) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.groundSurface) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                     Building condition
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.buildingCondition) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.buildingCondition) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                     Damage Grade
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.damageGrade) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.damageGrade) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                     Distance from road (meter)
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.roadDistance) || '-'}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.roadDistance) || '-'}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
                                     Drinking water distance (minutes)
-                                    </td>
-                                    <td>
-                                        {(singularBuldingData && singularBuldingData.drinkingWaterDistance) || '-'}
-                                    </td>
-                                </tr>
-                            </table>
-                            <p>
-                                Social Factors
-                            </p>
-                            <table className={styles.singularPaneTable}>
-                                <tr>
-                                    <td>Number of people</td>
-                                    <td>{(singularBuldingData && singularBuldingData.totalPopulation) || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td>Ownership of house</td>
-                                    {(singularBuldingData && singularBuldingData.ownership) || '-'}
-                                </tr>
-                                <tr>
-                                    <td>People with disability</td>
-                                    <td>{(singularBuldingData && singularBuldingData.peopleWithDisability) || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td>Distance to medical centers (minutes)</td>
-                                    <td>{(singularBuldingData && singularBuldingData.healthPostDistance) || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td>Distance from Security centers (minutes)</td>
-                                    <td>{(singularBuldingData && singularBuldingData.policeStationDistance) || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td>Distance from Schools (minutes)</td>
-                                    <td>{(singularBuldingData && singularBuldingData.schoolDistance) || '-'}</td>
-                                </tr>
-                                <tr>
-                                    <td>Distance from open space (minutes)</td>
-                                    <td>{(singularBuldingData && singularBuldingData.openSafeSpaceDistance) || '-'}</td>
-                                </tr>
-                            </table>
-                            <p>
-                               Agewise Population Distribution
-                            </p>
-                            <ResponsiveContainer
-                                className={styles.respContainer}
-                                width="100%"
-                                height={250}
-                            >
-                                <BarChart
-                                    width={350}
-                                    height={600}
-                                    data={singularAgeGroupsChart}
-                                    layout="vertical"
-                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                        <Label
-                                            value="Age in Years"
-                                            offset={0}
-                                            position="insideBottom"
-                                            style={{
-                                                textAnchor: 'middle',
-                                                fill: 'rgba(255, 255, 255, 0.87)',
-                                            }}
-                                        />
-                                    </XAxis>
-                                    <YAxis
-                                        type="category"
-                                        dataKey="name"
-                                        tick={{ fill: '#94bdcf' }}
-                                    />
-                                    <Tooltip />
-                                    <Bar
-                                        dataKey="Total"
-                                        fill="rgb(0,219,95)"
-                                        barSize={15}
-                                        label={{ position: 'right', fill: '#ffffff' }}
-                                        radius={[0, 15, 15, 0]}
-                                    />
-                                </BarChart>
-                            </ResponsiveContainer>
-                            <p>
+                                                    </td>
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.drinkingWaterDistance) || '-'}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <p>
+                                                Social Factors
+                                            </p>
+                                            <table className={styles.singularPaneTable}>
+                                                <tr>
+                                                    <td>Number of people</td>
+                                                    <td>{(singularBuldingData && singularBuldingData.totalPopulation) || '-'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Ownership of house</td>
+                                                    {(singularBuldingData && singularBuldingData.ownership) || '-'}
+                                                </tr>
+                                                <tr>
+                                                    <td>People with disability</td>
+                                                    <td>{(singularBuldingData && singularBuldingData.peopleWithDisability) || '-'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Distance to medical centers (minutes)</td>
+                                                    <td>{(singularBuldingData && singularBuldingData.healthPostDistance) || '-'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Distance from Security centers (minutes)</td>
+                                                    <td>{(singularBuldingData && singularBuldingData.policeStationDistance) || '-'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Distance from Schools (minutes)</td>
+                                                    <td>{(singularBuldingData && singularBuldingData.schoolDistance) || '-'}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Distance from open space (minutes)</td>
+                                                    <td>{(singularBuldingData && singularBuldingData.openSafeSpaceDistance) || '-'}</td>
+                                                </tr>
+                                            </table>
+                                            <p>
+                                                Agewise Population Distribution
+                                            </p>
+                                            <ResponsiveContainer
+                                                className={styles.respContainer}
+                                                width="100%"
+                                                height={250}
+                                            >
+                                                <BarChart
+                                                    width={350}
+                                                    height={600}
+                                                    data={singularAgeGroupsChart}
+                                                    layout="vertical"
+                                                    margin={{ top: 10, bottom: 10, right: 25, left: 10 }}
+                                                >
+                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                                        <Label
+                                                            value="Age in Years"
+                                                            offset={0}
+                                                            position="insideBottom"
+                                                            style={{
+                                                                textAnchor: 'middle',
+                                                                fill: 'rgba(255, 255, 255, 0.87)',
+                                                            }}
+                                                        />
+                                                    </XAxis>
+                                                    <YAxis
+                                                        type="category"
+                                                        dataKey="name"
+                                                        tick={{ fill: '#94bdcf' }}
+                                                    />
+                                                    <Tooltip />
+                                                    <Bar
+                                                        dataKey="Total"
+                                                        fill="rgb(0,219,95)"
+                                                        barSize={15}
+                                                        label={{ position: 'right', fill: '#ffffff' }}
+                                                        radius={[0, 15, 15, 0]}
+                                                    />
+                                                </BarChart>
+                                            </ResponsiveContainer>
+                                            <p>
                                 Economic Factors
-                                <ul>
-                                    <li>
+                                                <ul>
+                                                    <li>
                                             Main source of income:
-                                        {' '}
-                                        {(singularBuldingData && singularBuldingData.majorOccupation) || '-'}
-                                        {' '}
-                                    </li>
-                                    <li>
+                                                        {' '}
+                                                        {(singularBuldingData && singularBuldingData.majorOccupation) || '-'}
+                                                        {' '}
+                                                    </li>
+                                                    <li>
                                         Average yearly income (NPR):
-                                        {' '}
-                                        {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
-                                        {' '}
-                                    </li>
+                                                        {' '}
+                                                        {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
+                                                        {' '}
+                                                    </li>
 
-                                </ul>
-                            </p>
-                            <div className={styles.backBtnContainer}>
-                                <button
-                                    onClick={this.handleBackBtn}
-                                    type="button"
-                                    className={styles.backButton}
-                                >
+                                                </ul>
+                                            </p>
+                                            <div className={styles.backBtnContainer}>
+                                                <button
+                                                    onClick={this.handleBackBtn}
+                                                    type="button"
+                                                    className={styles.backButton}
+                                                >
                                     Back
-                                </button>
-                            </div>
+                                                </button>
+                                            </div>
+
+                                        </>
+                                    )
+                            }
                         </>
                     )
                 }

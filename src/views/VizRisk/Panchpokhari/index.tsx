@@ -163,6 +163,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    enumData: {
+        url: '/enum-choice/',
+        method: methods.GET,
+        onSuccess: ({ params, response }) => {
+            // const { results: vulData = [] } = response;
+            params.setEnum(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 class Jugal extends React.Component {
@@ -196,6 +206,7 @@ class Jugal extends React.Component {
             sesmicLayerVul: '',
             pending: true,
             indexArray: [],
+            enumData: [],
         };
 
         const { requests:
@@ -204,6 +215,7 @@ class Jugal extends React.Component {
                 cIGetRequest,
                 buildingsGetRequest,
                 vulnerabilityData,
+                enumData,
             } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
@@ -220,7 +232,9 @@ class Jugal extends React.Component {
         vulnerabilityData.setDefaultParams({
             setVulData: this.setVulData,
             setPending: this.setPending,
-
+        });
+        enumData.setDefaultParams({
+            setEnum: this.setEnum,
         });
     }
 
@@ -243,6 +257,13 @@ class Jugal extends React.Component {
             return date.split('-')[0];
         }
         return 0;
+    }
+
+    public setEnum = (data: array) => {
+        const enumData = data.filter(item => item.model === 'Building')[0].enums;
+        this.setState({ enumData });
+        console.log('enum data:', enumData);
+        console.log('response data:', data);
     }
 
     public setPending = (pending) => {
@@ -723,6 +744,7 @@ class Jugal extends React.Component {
                             vulData={vulData}
                             resetDrawData={resetDrawData}
                             indexArray={indexArray}
+                            enumData={this.state.enumData}
                         />
                         <VRLegend>
                             <SesmicHazardVULLegend

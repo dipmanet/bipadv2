@@ -485,9 +485,6 @@ class FloodHistoryMap extends React.Component {
                 const searchTerm = e.features[0].properties.osm_id;
                 this.setState({ searchTerm });
                 this.handleBuildingClick(true);
-                // const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
-                // this.map.setFilter('Buildings', filter);
-                // here
             });
             this.map.setLayoutProperty('Rock-Stone', 'visibility', 'visible');
             this.map.setLayoutProperty('Snow', 'visibility', 'visible');
@@ -736,7 +733,6 @@ class FloodHistoryMap extends React.Component {
             if (coordinatesObj.length > 0) {
                 cood = coordinatesObj[0].geometry.coordinates;
                 const singularBData = getSingularBuildingData(searchId, this.props.buildings);
-                console.log('singularBData', singularBData);
                 if (Object.keys(singularBData).length > 0) {
                     this.props.setSingularBuilding(true, singularBData);
                     this.setState({ searchTerm: '' });
@@ -750,15 +746,15 @@ class FloodHistoryMap extends React.Component {
                 } else {
                     // alert('No data available');
                     this.setState({ searchTerm: '' });
-                    this.props.setSingularBuilding(true, {});
+                    this.props.setSingularBuilding(true, { osmId: searchId });
                 }
             } else {
                 // alert('No data available');
                 this.setState({ searchTerm: '' });
-                this.props.setSingularBuilding(true, {});
+                this.props.setSingularBuilding(true, { osmId: searchId });
             }
         } else {
-            this.props.setSingularBuilding(true, {});
+            this.props.setSingularBuilding(true, { osmId: searchId });
             this.setState({ searchTerm: '' });
             // alert('No data available');
         }
