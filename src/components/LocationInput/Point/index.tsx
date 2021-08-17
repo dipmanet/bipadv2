@@ -179,7 +179,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         onPointMove(newGeoJson, newRegion);
     }
 
-    /*
+
     private handleLatInputChange = (lat: number) => {
         const {
             geoJson = defaultGeoJson,
@@ -194,10 +194,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            deferedState.features[0].geometry.coordinates = [lng, Number(lat)];
         });
 
-        const point = this.context.map.project([lng, lat]);
+        const point = this.context.map.project([lng, Number(lat)]);
 
         const features = this.context.map.queryRenderedFeatures(
             point,
@@ -219,9 +219,8 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         onPointMove(newGeoJson, region);
     }
-    */
 
-    /*
+
     private handleLngInputChange = (lng: number) => {
         const {
             geoJson = defaultGeoJson,
@@ -236,10 +235,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            deferedState.features[0].geometry.coordinates = [Number(lng), lat];
         });
 
-        const point = this.context.map.project([lng, lat]);
+        const point = this.context.map.project([Number(lng), lat]);
         const features = this.context.map.queryRenderedFeatures(
             point,
             { layers: [getLayerName('location-input-country', 'ward-fill')] },
@@ -261,7 +260,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         onPointMove(newGeoJson, region);
     }
-    */
+
 
     private handleMove = (e: unknown) => {
         const { geoJson } = this.props;
@@ -454,20 +453,18 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                 />
                 <div className={styles.coordinateInput}>
                     <TextInput
-                        readOnly
                         className={styles.latInput}
                         type="number"
                         label="Latitude"
                         value={lat}
-                        // onChange={this.handleLatInputChange}
+                        onChange={this.handleLatInputChange}
                     />
                     <TextInput
                         className={styles.lngInput}
-                        readOnly
                         type="number"
                         label="Longitude"
                         value={lng}
-                        // onChange={this.handleLngInputChange}
+                        onChange={this.handleLngInputChange}
                     />
                 </div>
             </div>

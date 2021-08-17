@@ -113,7 +113,9 @@ type toggleValues =
     | 'industry'
     | 'communication'
     | 'openspace'
-    | 'communityspace';
+    | 'communityspace'
+    |'fireengine'
+    |'helipad';
 
 const initialActiveLayersIndication = {
     education: false,
@@ -126,6 +128,8 @@ const initialActiveLayersIndication = {
     communication: false,
     openspace: false,
     communityspace: false,
+    fireengine: false,
+    helipad: false,
 };
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
@@ -248,6 +252,8 @@ interface ResourceColletion {
     communication: PageType.Resource[];
     openspace: PageType.Resource[];
     communityspace: PageType.Resource[];
+    fireengine: PageType.Resource[];
+    helipad: PageType.Resource[];
 }
 
 interface State {
@@ -273,6 +279,8 @@ interface State {
         communication: boolean;
         openspace: boolean;
         communityspace: boolean;
+        fireengine: boolean;
+        helipad: boolean;
     };
 }
 
@@ -334,7 +342,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const resources = response as MultiResponse<PageType.Resource>;
             if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
-                console.log('setting resource list', resources.results);
+
                 if (params.resourceType) {
                     params.resourceType
                         .map(item => params.setIndividualResourceList(
@@ -428,6 +436,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 communication: [],
                 openspace: [],
                 communityspace: [],
+                fireengine: [],
+                helipad: [],
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
         };
@@ -456,7 +466,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
         const { faramValues: { region } } = this.props.filters;
-        console.log(this.props.filters.faramValues.region);
+
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
             this.props.requests.resourceGetRequest.do(
                 {
@@ -517,7 +527,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
             setCarKeys(newArr);
 
-            console.log('car keys', key, ...carKeys);
+
             this.props.requests.resourceGetRequest.do({
                 resourceType: newArr,
                 region: this.props.filters.faramValues.region,
@@ -553,6 +563,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             communication: [],
             openspace: [],
             communityspace: [],
+            fireengine: [],
+            helipad: [],
         };
         const { resourceType } = resource;
         const { [resourceType]: singleResource } = resourceCollection;
@@ -745,6 +757,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 communication: false,
                 openspace: false,
                 communityspace: false,
+                fireengine: false,
+                helipad: false,
             },
         });
         const { handleActiveLayerIndication } = this.props;
@@ -869,7 +883,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 const directionsUrl = `https://www.google.com/maps/dir/'${position.coords.latitude},${position.coords.longitude}'/${coordinates[1]},${coordinates[0]}`;
 
                 window.open(directionsUrl, '_blank');
-            }, console.log('please provide location access'));
+            });
         }
     };
 
@@ -975,11 +989,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const communityspaceGeoJson = this.getGeojson(
             resourceCollection.communityspace,
         );
+        const fireengineGeoJson = this.getGeojson(resourceCollection.fireengine);
+        const helipadGeoJson = this.getGeojson(resourceCollection.helipad);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
             offset: 10,
         };
+
         return (
             <>
                 <Loading pending={pending} />
@@ -1901,6 +1918,144 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         </>
                                     )}
                                 </>
+                            )}
+                            {/* Fire engine */}
+                            {activeLayersIndication.fireengine && (
+                                <MapSource
+                                    sourceKey="resource-symbol-fireEngine"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={fireengineGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-fireEngine"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.fireengine,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-fireEngine"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-fireEngine"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.fireengine,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-fireEngine"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'fireEngine',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
+                            )}
+                            {/* Helipad */}
+                            {activeLayersIndication.helipad && (
+                                <MapSource
+                                    sourceKey="resource-symbol-helipad"
+                                    sourceOptions={{
+                                        type: 'geojson',
+                                        cluster: true,
+                                        clusterMaxZoom: 10,
+                                    }}
+                                    geoJson={helipadGeoJson}
+                                >
+                                    <MapLayer
+                                        layerKey="cluster-helipad"
+                                        onClick={this.handleClusterClick}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            paint: mapStyles.resourceCluster.helipad,
+                                            filter: ['has', 'point_count'],
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="cluster-count-helipad"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['has', 'point_count'],
+                                            layout: {
+                                                'text-field': '{point_count_abbreviated}',
+                                                'text-size': 12,
+                                            },
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="resource-symbol-background-helipad"
+                                        onClick={this.handleResourceClick}
+                                        onMouserEnter={this.handleResourceMouseEnter}
+                                        layerOptions={{
+                                            type: 'circle',
+                                            filter: ['!', ['has', 'point_count']],
+                                            paint: mapStyles.resourcePoint.helipad,
+                                        }}
+                                    />
+                                    <MapLayer
+                                        layerKey="-resourece-symbol-icon-helipad"
+                                        layerOptions={{
+                                            type: 'symbol',
+                                            filter: ['!', ['has', 'point_count']],
+                                            layout: {
+                                                'icon-image': 'helipad',
+                                                'icon-size': 0.03,
+                                            },
+                                        }}
+                                    />
+                                    { resourceLngLat && resourceInfo && (
+                                        <MapTooltip
+                                            coordinates={resourceLngLat}
+                                            tooltipOptions={tooltipOptions}
+                                            onHide={this.handleTooltipClose}
+                                        >
+                                            <ResourceTooltip
+                                            // FIXME: hide tooltip edit if there is no permission
+                                                {...resourceInfo}
+                                                {...resourceDetails}
+                                                onEditClick={this.handleEditClick}
+                                                onShowInventoryClick={this.handleShowInventoryClick}
+                                            />
+                                        </MapTooltip>
+                                    )}
+                                </MapSource>
                             )}
                             {/* new structure ends */}
                         </>

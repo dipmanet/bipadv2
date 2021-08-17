@@ -49,6 +49,7 @@ import CommunitySpaceFields from './CommunitySpaceFields';
 import schemaMap, { defaultSchema } from './schema';
 
 import styles from './styles.scss';
+import HelipadFields from './HelipadFields';
 
 const getLocationDetails = (point: unknown, ward?: number) => {
     const geoJson = {
@@ -198,6 +199,7 @@ const ExtraFields = ({
     resourceId,
     closeModal,
 }: ExtraFieldProps) => {
+    console.log('title', typeof title);
     switch (title) {
         case 'education':
             return (
@@ -264,6 +266,11 @@ const ExtraFields = ({
                     resourceId={resourceId}
                     closeModal={closeModal}
                 />
+            );
+        case 'helipad':
+            return (
+                // <HelipadFields />
+                null
             );
         default:
             return null;
@@ -366,6 +373,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
     }
 
+
     private handleAddResourceSuccess = (resource: PageType.Resource) => {
         const { onAddSuccess } = this.props;
 
@@ -427,6 +435,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
 
         const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
+        console.log('these values', resourceType);
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
@@ -498,6 +507,8 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     type="submit"
                                     disabled={pristine}
                                     pending={addResourcePending || editResourcePending}
+
+
                                 >
                             Save
                                 </PrimaryButton>
