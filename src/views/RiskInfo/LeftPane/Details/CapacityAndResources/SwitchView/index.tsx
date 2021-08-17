@@ -220,7 +220,7 @@ const SwitchView = (props: Props) => {
                     />
                 </div>
             </div>
-            <div className={styles.listItem}>
+            {/* <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
                     disabled={disabled}
@@ -232,7 +232,7 @@ const SwitchView = (props: Props) => {
                     }}
                 />
                 <div className={styles.listTitle}> Fire Engine </div>
-            </div>
+            </div> */}
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
