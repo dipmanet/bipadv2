@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable css-modules/no-undef-class */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import Loader from 'react-loader';
 import styles from './styles.scss';
 import { getBuildingOptions } from './formData';
 import {
@@ -87,7 +89,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             };
         },
         onSuccess: ({ response, props, params }) => {
-            console.log('success, data: ', response);
+            params.handlePostSuccess(response);
         },
         // onFailure: ({ error, params }) => {
         //     params.handlePending(false);
@@ -129,7 +131,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             };
         },
         onSuccess: ({ response, props, params }) => {
-            console.log('success, data: ', response);
+            params.handlePostSuccess(response);
         },
         // onFailure: ({ error, params }) => {
         //     params.handlePending(false);
@@ -150,10 +152,10 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         // extras: { hasFile: true },
     },
     buildingGetRequest: {
-        url: '/vizrisk-building/',
+        url: ({ params }) => `/vizrisk-building/${params.newId}/`,
         method: methods.GET,
         onSuccess: ({ response, props, params }) => {
-            console.log('building response', response);
+            params.handleGetSuccess(response);
         },
         query: ({ params }) => ({
             id: params.id,
@@ -183,17 +185,21 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
 
 const HouseholdForm = (props) => {
     // const [buildingFormData, setFormData] = useState(initialValues);
-    const { requests: {
-        buildingPutRequest,
-        buildingPostRequest,
-        buildingGetRequest,
-    },
-    buildingData,
-    osmId,
-    enumData } = props;
+    const {
+        requests: {
+            buildingPutRequest,
+            buildingPostRequest,
+            buildingGetRequest,
+        },
+        buildingData,
+        osmId,
+        enumData,
+        handleShowForm,
+    } = props;
 
     console.log('enum data', enumData);
     const [buildingFormData, setFormData] = useState({ ...buildingData });
+    const [pending, setPending] = useState(false);
     const { physicalFactors, socialFactors, economicFactor } = getBuildingOptions(enumData);
     const pfSelectTypes = getSelectTypes(physicalFactors);
     const pfInputTypes = getInputTypes(physicalFactors);
@@ -201,10 +207,7 @@ const HouseholdForm = (props) => {
     const scInputTypes = getInputTypes(socialFactors);
     const ecInputTypes = getInputTypes(economicFactor);
     const ecSelectTypes = getSelectTypes(economicFactor);
-    console.log('form data:', buildingFormData);
-    useEffect(() => {
-        console.log('buildingFormData', buildingFormData);
-    }, [buildingFormData]);
+
 
     useEffect(() => {
         if (buildingData && Object.keys(buildingData).length > 0) {
@@ -281,162 +284,185 @@ const HouseholdForm = (props) => {
             });
         }
     };
-    console.log('props', props);
-    // buildingGetRequest.setDefaultParams({
-    //     id: buildingData.id,
-    // });
+
+    const handleGetSuccess = (resp) => {
+        console.log('get success..', resp);
+        setPending(false);
+        // hiding form
+        handleShowForm(false, resp);
+    };
+    const handlePostSuccess = (response) => {
+        console.log('post success response', response);
+        buildingGetRequest.do({
+            newId: response.id,
+            handleGetSuccess,
+        });
+    };
 
     const handleSave = () => {
-        console.log('buildingData', buildingData);
         if (buildingData && Object.keys(buildingData).length > 0 && buildingData.id) {
-            console.log('doing put request ... ');
+            setPending(true);
             buildingPutRequest.do({
                 data: buildingFormData,
                 id: buildingData.id,
+                handlePostSuccess,
             });
         } else {
-            console.log('doing post request');
             buildingPostRequest.do({
                 data: buildingFormData,
                 osmId,
+                handlePostSuccess,
             });
         }
     };
 
 
     return (
-        <div className={styles.formContainer}>
-            <div className={styles.section}>
-                <h2>PHYSICAL FACTORS</h2>
-                {
-                    pfSelectTypes.map((type: string) => (
-                        <div className={styles.inputContainer}>
-                            <span className={styles.label}>
-                                {type}
-                            </span>
-                            <select
-                                value={buildingFormData[refData[type]]}
-                                onChange={e => handleFoundation(e, type)}
-                                className={styles.selectElement}
-                            >
-                                <option value="">{' '}</option>
-                                {physicalFactors.filter(pf => pf.title === type)[0].options
-                                    .map((item: string) => <option value={item}>{item}</option>)
-                                }
-                            </select>
+        <>
+            {
+                pending
+
+                    ? (
+                        <div className={styles.loaderInfo}>
+                            <Loader color="#fff" className={styles.loader} />
                         </div>
-
-                    ))
-                }
-                {
-                    pfInputTypes.map((type: string) => (
-                        <div className={styles.inputContainer}>
-                            <span className={styles.label}>
-                                {type}
-                            </span>
-                            <input
-                                type="text"
-                                value={buildingFormData[refData[type]]}
-                                onChange={e => handleFoundation(e, type)}
-                                className={styles.selectElement}
-                            />
-
-                        </div>
-
-                    ))
-                }
-            </div>
-            <div className={styles.section}>
-                <h2>SOCIAL FACTORS</h2>
-                {
-                    scSelectTypes.map((type: string, idx: number) => (
-                        <div className={styles.inputContainer}>
-                            <span className={styles.label}>
-                                {type}
-                            </span>
-                            <select
-                                value={buildingFormData[refData[type]]}
-                                onChange={e => handleFoundation(e, idx, type)}
-                                className={styles.selectElement}
-                            >
-                                <option value="">{' '}</option>
-                                {socialFactors.filter(pf => pf.title === type)[0].options
-                                    .map((item: string) => <option value={item}>{item}</option>)
-
-                                }
-                            </select>
-                        </div>
-
-                    ))
-                }
-                {
-                    scInputTypes.map((type: string) => (
-                        <div className={styles.inputContainer}>
-                            <span className={styles.label}>
-                                {type}
-                            </span>
-                            <input
-                                type="text"
-                                value={buildingFormData[refData[type]]}
-                                onChange={e => handleFoundation(e, type)}
-                                className={styles.selectElement}
-                            />
-
-                        </div>
-
-                    ))
-                }
-
-            </div>
-            <div className={styles.section}>
-                <h2>ECONOMIC FACTORS</h2>
-                {
-                    ecSelectTypes.map((type: string, idx: number) => (
-                        <div className={styles.inputContainer}>
-                            <span className={styles.label}>
-                                {type}
-                            </span>
-                            <select
-                                value={buildingFormData[refData[type]]}
-                                onChange={e => handleFoundation(e, idx, type)}
-                                className={styles.selectElement}
-                            >
-                                <option value="">{' '}</option>
+                    )
+                    : (
+                        <div className={styles.formContainer}>
+                            <div className={styles.section}>
+                                <h2>PHYSICAL FACTORS</h2>
                                 {
-                                    economicFactor.filter(pf => pf.title === type)[0].options
-                                        .map((item: string) => <option value={item}>{item}</option>)
+                                    pfSelectTypes.map((type: string) => (
+                                        <div className={styles.inputContainer}>
+                                            <span className={styles.label}>
+                                                {type}
+                                            </span>
+                                            <select
+                                                value={buildingFormData[refData[type]]}
+                                                onChange={e => handleFoundation(e, type)}
+                                                className={styles.selectElement}
+                                            >
+                                                <option value="">{' '}</option>
+                                                {physicalFactors.filter(pf => pf.title === type)[0].options
+                                                    .map((item: string) => <option value={item}>{item}</option>)
+                                                }
+                                            </select>
+                                        </div>
+
+                                    ))
                                 }
-                            </select>
-                        </div>
+                                {
+                                    pfInputTypes.map((type: string) => (
+                                        <div className={styles.inputContainer}>
+                                            <span className={styles.label}>
+                                                {type}
+                                            </span>
+                                            <input
+                                                type="text"
+                                                value={buildingFormData[refData[type]]}
+                                                onChange={e => handleFoundation(e, type)}
+                                                className={styles.selectElement}
+                                            />
 
-                    ))
-                }
-                {
-                    ecInputTypes.map((type: string) => (
-                        <div className={styles.inputContainer}>
-                            <span className={styles.label}>
-                                {type}
-                            </span>
-                            <input
-                                type="text"
-                                value={buildingFormData[refData[type]]}
-                                onChange={e => handleFoundation(e, type)}
-                                className={styles.selectElement}
-                            />
+                                        </div>
 
-                        </div>
+                                    ))
+                                }
+                            </div>
+                            <div className={styles.section}>
+                                <h2>SOCIAL FACTORS</h2>
+                                {
+                                    scSelectTypes.map((type: string, idx: number) => (
+                                        <div className={styles.inputContainer}>
+                                            <span className={styles.label}>
+                                                {type}
+                                            </span>
+                                            <select
+                                                value={buildingFormData[refData[type]]}
+                                                onChange={e => handleFoundation(e, idx, type)}
+                                                className={styles.selectElement}
+                                            >
+                                                <option value="">{' '}</option>
+                                                {socialFactors.filter(pf => pf.title === type)[0].options
+                                                    .map((item: string) => <option value={item}>{item}</option>)
 
-                    ))
-                }
-            </div>
-            <button
-                type="button"
-                onClick={handleSave}
-                className={styles.saveBtn}
-            >
+                                                }
+                                            </select>
+                                        </div>
+
+                                    ))
+                                }
+                                {
+                                    scInputTypes.map((type: string) => (
+                                        <div className={styles.inputContainer}>
+                                            <span className={styles.label}>
+                                                {type}
+                                            </span>
+                                            <input
+                                                type="text"
+                                                value={buildingFormData[refData[type]]}
+                                                onChange={e => handleFoundation(e, type)}
+                                                className={styles.selectElement}
+                                            />
+
+                                        </div>
+
+                                    ))
+                                }
+
+                            </div>
+                            <div className={styles.section}>
+                                <h2>ECONOMIC FACTORS</h2>
+                                {
+                                    ecSelectTypes.map((type: string, idx: number) => (
+                                        <div className={styles.inputContainer}>
+                                            <span className={styles.label}>
+                                                {type}
+                                            </span>
+                                            <select
+                                                value={buildingFormData[refData[type]]}
+                                                onChange={e => handleFoundation(e, idx, type)}
+                                                className={styles.selectElement}
+                                            >
+                                                <option value="">{' '}</option>
+                                                {
+                                                    economicFactor.filter(pf => pf.title === type)[0].options
+                                                        .map((item: string) => <option value={item}>{item}</option>)
+                                                }
+                                            </select>
+                                        </div>
+
+                                    ))
+                                }
+                                {
+                                    ecInputTypes.map((type: string) => (
+                                        <div className={styles.inputContainer}>
+                                            <span className={styles.label}>
+                                                {type}
+                                            </span>
+                                            <input
+                                                type="text"
+                                                value={buildingFormData[refData[type]]}
+                                                onChange={e => handleFoundation(e, type)}
+                                                className={styles.selectElement}
+                                            />
+
+                                        </div>
+
+                                    ))
+                                }
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleSave}
+                                className={styles.saveBtn}
+                            >
                 Save/Update
-            </button>
-        </div>
+                            </button>
+                        </div>
+                    )
+            }
+        </>
     );
 };
 

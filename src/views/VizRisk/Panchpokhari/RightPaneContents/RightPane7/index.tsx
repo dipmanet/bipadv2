@@ -10,6 +10,7 @@ import {
     Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { isDefined } from '@togglecorp/fujs';
+import Loader from 'react-loader';
 import styles from '../styles.scss';
 import NavButtons from '../../Components/NavButtons';
 import Icon from '#rscg/Icon';
@@ -25,6 +26,7 @@ import {
 } from '../../utils';
 
 import HouseholdForm from '#views/VizRisk/Common/HouseholdForm';
+
 
 // const chartData = criticalInfraData.safeShelterData;
 
@@ -49,6 +51,8 @@ class SlideFivePane extends React.Component<Props, State> {
             averageAnnualincomeChartData: [],
             singularAgeGroupsChart: [],
             showAddForm: false,
+            individualResponse: undefined,
+            showGetData: false,
         };
     }
 
@@ -95,6 +99,9 @@ class SlideFivePane extends React.Component<Props, State> {
             this.setState({
                 singularAgeGroupsChart: getsingularAgeGroupsChart(singularBuldingData),
             });
+
+            this.setState({ showAddForm: false });
+            this.setState({ individualResponse: {} });
         }
         if (drawChartData !== prevProps.drawChartData) {
             if (drawChartData.length > 0) {
@@ -163,9 +170,15 @@ class SlideFivePane extends React.Component<Props, State> {
         return '-';
     }
 
-    public handleShowForm =() => {
-        this.setState({ showAddForm: true });
+    public handleShowForm =(showAddForm: boolean, individualResponse: array) => {
+        this.setState({ showAddForm });
+        this.setState({ showGetData: true });
+        if (individualResponse) {
+            console.log('individualResponse', individualResponse);
+            this.props.appendBuildingData(individualResponse);
+        }
     }
+
 
     public render() {
         const {
@@ -285,13 +298,14 @@ class SlideFivePane extends React.Component<Props, State> {
                                             buildingData={singularBuldingData}
                                             enumData={this.props.enumData}
                                             osmId={singularBuldingData && singularBuldingData.osmId}
+                                            handleShowForm={this.handleShowForm}
                                         />
                                     )
                                     : (
                                         <>
                                             <button
                                                 type="button"
-                                                onClick={this.handleShowForm}
+                                                onClick={() => this.handleShowForm(true)}
                                                 className={styles.showBtn}
                                             >
                                             Add/Edit Details

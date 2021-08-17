@@ -441,6 +441,15 @@ class Jugal extends React.Component {
         this.setState({ incidentFilterYear: y });
     };
 
+    private appendBuildingData = (val) => {
+        this.setState((prevState) => {
+            console.log('appended building data:', [...prevState.vulData, val]);
+            return {
+                vulData: [...prevState.vulData, val],
+            };
+        });
+        this.setState({ singularBuldingData: val });
+    }
 
     public render() {
         const {
@@ -745,6 +754,7 @@ class Jugal extends React.Component {
                             resetDrawData={resetDrawData}
                             indexArray={indexArray}
                             enumData={this.state.enumData}
+                            appendBuildingData={this.appendBuildingData}
                         />
                         <VRLegend>
                             <SesmicHazardVULLegend
