@@ -4,6 +4,10 @@ export const getBuildingOptions = (enumData: array) => (
     {
         physicalFactors: [
             {
+                title: 'Houseowner ID',
+                select: false,
+            },
+            {
                 title: 'Foundation Type',
                 options: getOptions(enumData, 'foundation_type'),
                 select: true,
@@ -51,6 +55,18 @@ export const getBuildingOptions = (enumData: array) => (
             },
         ],
         socialFactors: [
+            // {
+            //     title: 'Age of house owner',
+            //     select: false,
+            // },
+            // {
+            //     title: 'Pregnant women',
+            //     select: false,
+            // },
+            // {
+            //     title: 'Chronically ill',
+            //     select: false,
+            // },
             {
                 title: 'Number of People/House Members',
                 select: false,
@@ -97,11 +113,15 @@ export const getBuildingOptions = (enumData: array) => (
                 select: false,
             },
         ],
-
         economicFactor: [
             {
                 title: 'Main source of income',
                 options: getOptions(enumData, 'major_occupation'),
+                select: true,
+            },
+            {
+                title: 'Supporting occupation',
+                options: getOptions(enumData, 'supporting_occupation'),
                 select: true,
             },
             {
@@ -119,7 +139,36 @@ export const getBuildingOptions = (enumData: array) => (
                 select: true,
             },
         ],
-
     }
 
 );
+
+export const refData = {
+    'Foundation Type': 'foundationType',
+    'Roof Type': 'roofType',
+    Storeys: 'storeys',
+    'Ground Surface': 'groundSurface',
+    'Distance from Road (meters)': 'roadDistance',
+    'Drinking Water Distance (minutes)': 'drinkingWaterDistance',
+    'Number of People/House Members': 'totalPopulation',
+    'Male Members': 'noOfMale',
+    'Female Members': 'noOfFemale',
+    'No. of Members (65 years old and above)': 'seniorCitizens',
+    'No. of Members (less than 5 years old)': 'childrenUnderFive',
+    'Ownership of House': 'ownership',
+    'People with Disability': 'peopleWithDisability',
+    'Distance from Medical Centers (minutes)': 'healthPostDistance',
+    'Distance from Security Center (minutes)': 'policeStationDistance',
+    'Distance from School (minutes)': 'schoolDistance',
+    'Distance from Open Space (minutes)': 'openSafeSpaceDistance',
+    'Main source of income': 'majorOccupation',
+    'Average yearly income (Nepalese Rupees)': 'averageAnnualIncome',
+    'Sufficiency of Agriculture product (Months)': 'suffency',
+    'Building Condition': 'buildingCondition',
+    'Damage Grade': 'damageGrade',
+    'Houseowner ID': 'houseOwnerId',
+    'Supporting occupation': 'supportingOccupation',
+};
+
+export const getSelectTypes = data => [...new Set(data.filter(f => f.select).map(p => p.title))];
+export const getInputTypes = data => [...new Set(data.filter(f => !f.select).map(p => p.title))];

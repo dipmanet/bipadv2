@@ -326,6 +326,11 @@ const draw = new MapboxDraw({
     defaultMode: 'draw_polygon',
 });
 
+const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: true,
+    className: 'popup',
+});
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -613,6 +618,26 @@ class FloodHistoryMap extends React.Component {
             console.log(this.props.rasterLayer);
             this.switchFloodRasters(this.props.rasterLayer);
         }
+        if (this.props.buildingVul !== prevProps.buildingVul) {
+            this.map.setFeatureState(
+                {
+                    id: this.props.buildingVul.osmId || 0,
+                    source: 'composite',
+                    sourceLayer: 'ppkrBuildingsWithIDs',
+                },
+                {
+                    vuln: this.props.buildingVul.vulnerabilityScore || -1,
+                },
+            );
+            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+        }
+        if (this.props.showAddForm !== prevProps.showAddForm) {
+            if (this.props.showAddForm) {
+                this.showMarker(this.state.cood, 'Editing...');
+            } else {
+                this.removeMarker();
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -674,17 +699,25 @@ class FloodHistoryMap extends React.Component {
     }
 
     public showPopupOnBldgs = (coordinates, msg) => {
-        const popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
         popup.setLngLat(coordinates).setHTML(
             `<div style="padding: 5px;border-radius: 5px">
                 <p>${msg}</p>
             </div>
             `,
         ).addTo(this.map);
+    };
+
+    public showMarker = (cood, msg) => {
+        popup.setLngLat(cood).setHTML(
+            `<div style="padding: 5px;border-radius: 5px">
+                <p>${msg}</p>
+            </div>
+            `,
+        ).addTo(this.map);
+    }
+
+    public removeMarker = () => {
+        popup.remove();
     };
 
     public handleInputChange = (e) => {
@@ -727,6 +760,7 @@ class FloodHistoryMap extends React.Component {
         }
 
         if (searchId) {
+            // looking for
             const coordinatesObj = this.props.buildinggeojson
                 .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
             let cood = [];
@@ -746,16 +780,20 @@ class FloodHistoryMap extends React.Component {
                 } else {
                     // alert('No data available');
                     this.setState({ searchTerm: '' });
-                    this.props.setSingularBuilding(true, { osmId: searchId });
+                    this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
+                    this.showMarker(coordinatesObj[0].geometry.coordinates, 'No data');
+                    this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {
                 // alert('No data available');
                 this.setState({ searchTerm: '' });
-                this.props.setSingularBuilding(true, { osmId: searchId });
+                this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
+                console.warn('no coordinates found', coordinatesObj);
             }
         } else {
             this.props.setSingularBuilding(true, { osmId: searchId });
             this.setState({ searchTerm: '' });
+            console.warn('no search id');
             // alert('No data available');
         }
     };

@@ -8,10 +8,16 @@
 }
 .loaderInfo{
     position: fixed;
-top: 54%;
+top: 50%;
 left: 60%;
 // border: 1px solid red;
     .loader{
         background-color: white;
+    }
+    .loaderText{
+        color: white;
+        position: relative;
+        top: 40px !important;
+        left: 3px;
     }
 }

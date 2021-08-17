@@ -207,6 +207,8 @@ class Jugal extends React.Component {
             pending: true,
             indexArray: [],
             enumData: [],
+            buildingVul: {},
+            showAddForm: false,
         };
 
         const { requests:
@@ -239,12 +241,13 @@ class Jugal extends React.Component {
     }
 
     public componentDidUpdate() {
-        const { vulData, buildings, cI, pending } = this.state;
+        const { vulData, buildings, cI, pending, enumData } = this.state;
         if (pending) {
             if (
                 vulData.length > 0
                 && buildings.length > 0
                 && cI.length > 0
+                && enumData.length > 0
             ) {
                 this.setPending(false);
             }
@@ -262,8 +265,6 @@ class Jugal extends React.Component {
     public setEnum = (data: array) => {
         const enumData = data.filter(item => item.model === 'Building')[0].enums;
         this.setState({ enumData });
-        console.log('enum data:', enumData);
-        console.log('response data:', data);
     }
 
     public setPending = (pending) => {
@@ -442,13 +443,16 @@ class Jugal extends React.Component {
     };
 
     private appendBuildingData = (val) => {
-        this.setState((prevState) => {
-            console.log('appended building data:', [...prevState.vulData, val]);
-            return {
-                vulData: [...prevState.vulData, val],
-            };
-        });
+        this.setState(prevState => ({
+            vulData: [...prevState.vulData, val],
+        }));
         this.setState({ singularBuldingData: val });
+        this.setState({ buildingVul: val });
+    }
+
+
+    private handleShowAddForm = (showAddForm) => {
+        this.setState({ showAddForm });
     }
 
     public render() {
@@ -477,6 +481,7 @@ class Jugal extends React.Component {
             sesmicLayerVul,
             pending,
             indexArray,
+            buildingVul,
         } = this.state;
 
         const {
@@ -502,6 +507,9 @@ class Jugal extends React.Component {
                         ? (
                             <div className={styles.loaderInfo}>
                                 <Loader color="#fff" className={styles.loader} />
+                                <p className={styles.loaderText}>
+                                Loading Data...
+                                </p>
                             </div>
                         )
                         : rightElement < 5
@@ -730,6 +738,8 @@ class Jugal extends React.Component {
                             buildinggeojson={buildings}
                             rasterLayer={rasterLayer}
                             handleDrawResetData={this.handleDrawResetData}
+                            buildingVul={buildingVul}
+                            showAddForm={this.state.showAddForm}
                         />
 
                         <RightElement7
@@ -755,6 +765,8 @@ class Jugal extends React.Component {
                             indexArray={indexArray}
                             enumData={this.state.enumData}
                             appendBuildingData={this.appendBuildingData}
+                            handleShowAddForm={this.handleShowAddForm}
+                            showAddForm={this.state.showAddForm}
                         />
                         <VRLegend>
                             <SesmicHazardVULLegend

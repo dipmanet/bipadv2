@@ -50,7 +50,6 @@ class SlideFivePane extends React.Component<Props, State> {
             sourceofIncomeChartData: [],
             averageAnnualincomeChartData: [],
             singularAgeGroupsChart: [],
-            showAddForm: false,
             individualResponse: undefined,
             showGetData: false,
         };
@@ -81,6 +80,8 @@ class SlideFivePane extends React.Component<Props, State> {
             resetDrawData,
             indexArray,
             handleDrawResetData,
+            showAddForm,
+            handleShowAddForm,
         } = this.props;
         if (vulData !== prevProps.vulData) {
             if (vulData.length > 0) {
@@ -100,17 +101,16 @@ class SlideFivePane extends React.Component<Props, State> {
                 singularAgeGroupsChart: getsingularAgeGroupsChart(singularBuldingData),
             });
 
-            this.setState({ showAddForm: false });
+            // this.setState({ showAddForm: false });
+            handleShowAddForm(false);
             this.setState({ individualResponse: {} });
         }
         if (drawChartData !== prevProps.drawChartData) {
             if (drawChartData.length > 0) {
-                console.time('chart functions');
                 const selectedPoints = drawChartData[drawChartData.length - 1].bPoints;
                 const selected = selectedPoints
                     .map(sp => this.getPtSelectedData(sp, indexArray));
                 const finalArr = selected.filter(f => f !== null);
-                console.timeEnd('chart functions');
                 this.setState({ buildingVulnerability: getbuildingVul(finalArr) });
                 this.setState({ foundationTypeChartData: getfoundationTypeChartData(finalArr) });
                 this.setState({ socialFactorChartData: getsocialFactorChartData(finalArr) });
@@ -171,10 +171,10 @@ class SlideFivePane extends React.Component<Props, State> {
     }
 
     public handleShowForm =(showAddForm: boolean, individualResponse: array) => {
-        this.setState({ showAddForm });
+        // this.setState({ showAddForm });
+        this.props.handleShowAddForm(showAddForm);
         this.setState({ showGetData: true });
         if (individualResponse) {
-            console.log('individualResponse', individualResponse);
             this.props.appendBuildingData(individualResponse);
         }
     }
@@ -192,6 +192,7 @@ class SlideFivePane extends React.Component<Props, State> {
             vulData,
             singularBuilding,
             singularBuldingData,
+            showAddForm,
         } = this.props;
 
         const {
@@ -203,7 +204,6 @@ class SlideFivePane extends React.Component<Props, State> {
             ownershipChartData,
             sourceofIncomeChartData,
             averageAnnualincomeChartData,
-            showAddForm,
         } = this.state;
 
 
@@ -220,7 +220,6 @@ class SlideFivePane extends React.Component<Props, State> {
                 : 0,
         });
 
-        console.log('singularBuldingData', singularBuldingData);
 
         return (
             <div className={styles.vrSideBar}>
@@ -238,36 +237,7 @@ class SlideFivePane extends React.Component<Props, State> {
                     )
                 } */}
 
-                <h1>
-            Vulnerability of People and Households
-                    <button
-                        type="button"
-                        onClick={e => e.preventDefault()}
-                        title="Vulnerability is the conditions which increase
-                     the susceptibility
-                     of an individual, household or community to
-                     the impact of hazards.
-                     The vulnerability level of each household has
-                     been visualized in the
-                     map in 3 different colors. Red siginifies the
-                     high vulnerability level,
-                     orange denotes moderate and yellow denotes the
-                     low vulnerability level.
-                     Physical, social and economic facors were considered to identify the
-                     vulnerability of each household. The vulnerability level has been calculated for
-                     buildings that have complete data on all the physical,
-                     social, and economic parameters used for the
-                     vulnerability score calculation. Buildings for which the
-                     score was not calculated are being displayed in black."
-                    >
 
-                        <Icon
-                            name="info"
-                            className={styles.infoIcon}
-                        />
-                    </button>
-
-                </h1>
                 {/* {singularBuilding
                 && singularBuldingData
                 && Object.keys(singularBuldingData).length === 0
@@ -299,10 +269,41 @@ class SlideFivePane extends React.Component<Props, State> {
                                             enumData={this.props.enumData}
                                             osmId={singularBuldingData && singularBuldingData.osmId}
                                             handleShowForm={this.handleShowForm}
+                                            updateMap={this.props.updateMap}
                                         />
                                     )
                                     : (
                                         <>
+                                            <h1>
+            Vulnerability of People and Households
+                                                <button
+                                                    type="button"
+                                                    onClick={e => e.preventDefault()}
+                                                    title="Vulnerability is the conditions which increase
+                     the susceptibility
+                     of an individual, household or community to
+                     the impact of hazards.
+                     The vulnerability level of each household has
+                     been visualized in the
+                     map in 3 different colors. Red siginifies the
+                     high vulnerability level,
+                     orange denotes moderate and yellow denotes the
+                     low vulnerability level.
+                     Physical, social and economic facors were considered to identify the
+                     vulnerability of each household. The vulnerability level has been calculated for
+                     buildings that have complete data on all the physical,
+                     social, and economic parameters used for the
+                     vulnerability score calculation. Buildings for which the
+                     score was not calculated are being displayed in black."
+                                                >
+
+                                                    <Icon
+                                                        name="info"
+                                                        className={styles.infoIcon}
+                                                    />
+                                                </button>
+
+                                            </h1>
                                             <button
                                                 type="button"
                                                 onClick={() => this.handleShowForm(true)}

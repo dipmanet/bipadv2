@@ -4,7 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import styles from './styles.scss';
-import { getBuildingOptions } from './formData';
+import {
+    refData,
+    getBuildingOptions,
+    getSelectTypes,
+    getInputTypes,
+} from './formData';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -21,61 +26,6 @@ interface Params {
 
 }
 
-const getSelectTypes = data => [...new Set(data.filter(f => f.select).map(p => p.title))];
-const getInputTypes = data => [...new Set(data.filter(f => !f.select).map(p => p.title))];
-
-const refData = {
-    'Foundation Type': 'foundationType',
-    'Roof Type': 'roofType',
-    Storeys: 'storeys',
-    'Ground Surface': 'groundSurface',
-    'Distance from Road (meters)': 'roadDistance',
-    'Drinking Water Distance (minutes)': 'drinkingWaterDistance',
-    'Number of People/House Members': 'totalPopulation',
-    'Male Members': 'noOfMale',
-    'Female Members': 'noOfFemale',
-    'No. of Members (65 years old and above)': 'seniorCitizens',
-    'No. of Members (less than 5 years old)': 'childrenUnderFive',
-    'Ownership of House': 'ownership',
-    'People with Disability': 'peopleWithDisability',
-    'Distance from Medical Centers (minutes)': 'healthPostDistance',
-    'Distance from Security Center (minutes)': 'policeStationDistance',
-    'Distance from School (minutes)': 'schoolDistance',
-    'Distance from Open Space (minutes)': 'openSafeSpaceDistance',
-    'Main source of income': 'majorOccupation',
-    'Average yearly income (Nepalese Rupees)': 'averageAnnualIncome',
-    'Sufficiency of Agriculture product (Months)': 'suffency',
-    'Building Condition': 'buildingCondition',
-    'Damage Grade': 'damageGrade',
-
-};
-
-const initialValues = {
-    foundationType: '',
-    roofType: '',
-    storeys: '',
-    groundSurface: '',
-    roadDistance: '',
-    drinkingWaterDistance: '',
-    totalPopulation: '',
-    noOfMale: '',
-    noOfFemale: '',
-    seniorCitizens: '',
-    childrenUnderFive: '',
-    ownership: '',
-    peopleWithDisability: '',
-    healthPostDistance: '',
-    policeStationDistance: '',
-    schoolDistance: '',
-    openSafeSpaceDistance: '',
-    majorOccupation: '',
-    averageAnnualIncome: '',
-    agricultureZeroToThreeMonth: false,
-    agricultureFourToSixMonth: false,
-    agricultureSevenToNineMonth: false,
-    agricultureNineToTwelveMonth: false,
-};
-
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
     buildingPostRequest: {
         url: '/vizrisk-building/',
@@ -91,23 +41,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         onSuccess: ({ response, props, params }) => {
             params.handlePostSuccess(response);
         },
-        // onFailure: ({ error, params }) => {
-        //     params.handlePending(false);
-        //     if (Object.keys(error).length > 0) {
-        //         const errorDesc = error[Object.keys(error)[0]];
-        //         params.handleResponseErrorMessage(errorDesc[Object.keys(errorDesc)[0]][0]);
-        //     } else {
-        //         params.handleResponseErrorMessage('Some problem occured, please try again.');
-        //     }
-        // },
-        // onFatal: ({ params }) => {
-        //     params.handlePending(false);
-        //     console.log('No reply, server error');
-        //     alert('Some problem occured, please contact IT support.');
-
-        //     window.location.reload();
-        // },
-        // extras: { hasFile: true },
     },
     buildingPutRequest: {
         url: ({ params }) => `/vizrisk-building/${params.id}/`,
@@ -118,38 +51,12 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             }
             return {
                 ...params.data,
-                // fullName: params.fullName,
-                // position: params.position,
-                // phoneNumber: params.phoneNumber,
-                // officialEmail: params.officialEmail,
-                // officialLetter: params.officialLetter,
-                // province: params.province,
-                // district: params.district,
-                // municipality: params.municipality,
 
-                // body goes here
             };
         },
         onSuccess: ({ response, props, params }) => {
             params.handlePostSuccess(response);
         },
-        // onFailure: ({ error, params }) => {
-        //     params.handlePending(false);
-        //     if (Object.keys(error).length > 0) {
-        //         const errorDesc = error[Object.keys(error)[0]];
-        //         params.handleResponseErrorMessage(errorDesc[Object.keys(errorDesc)[0]][0]);
-        //     } else {
-        //         params.handleResponseErrorMessage('Some problem occured, please try again.');
-        //     }
-        // },
-        // onFatal: ({ params }) => {
-        //     params.handlePending(false);
-        //     console.log('No reply, server error');
-        //     alert('Some problem occured, please contact IT support.');
-
-        //     window.location.reload();
-        // },
-        // extras: { hasFile: true },
     },
     buildingGetRequest: {
         url: ({ params }) => `/vizrisk-building/${params.newId}/`,
@@ -160,23 +67,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         query: ({ params }) => ({
             id: params.id,
         }),
-        // onFailure: ({ error, params }) => {
-        //     params.handlePending(false);
-        //     if (Object.keys(error).length > 0) {
-        //         const errorDesc = error[Object.keys(error)[0]];
-        //         params.handleResponseErrorMessage(errorDesc[Object.keys(errorDesc)[0]][0]);
-        //     } else {
-        //         params.handleResponseErrorMessage('Some problem occured, please try again.');
-        //     }
-        // },
-        // onFatal: ({ params }) => {
-        //     params.handlePending(false);
-        //     console.log('No reply, server error');
-        //     alert('Some problem occured, please contact IT support.');
-
-        //     window.location.reload();
-        // },
-        // extras: { hasFile: true },
     },
 
 
@@ -197,7 +87,6 @@ const HouseholdForm = (props) => {
         handleShowForm,
     } = props;
 
-    console.log('enum data', enumData);
     const [buildingFormData, setFormData] = useState({ ...buildingData });
     const [pending, setPending] = useState(false);
     const { physicalFactors, socialFactors, economicFactor } = getBuildingOptions(enumData);
@@ -286,13 +175,11 @@ const HouseholdForm = (props) => {
     };
 
     const handleGetSuccess = (resp) => {
-        console.log('get success..', resp);
         setPending(false);
         // hiding form
         handleShowForm(false, resp);
     };
     const handlePostSuccess = (response) => {
-        console.log('post success response', response);
         buildingGetRequest.do({
             newId: response.id,
             handleGetSuccess,
@@ -316,7 +203,9 @@ const HouseholdForm = (props) => {
         }
     };
 
-
+    const handleCancel = () => {
+        handleShowForm(false, buildingData);
+    };
     return (
         <>
             {
@@ -330,7 +219,7 @@ const HouseholdForm = (props) => {
                     : (
                         <div className={styles.formContainer}>
                             <div className={styles.section}>
-                                <h2>PHYSICAL FACTORS</h2>
+                                <p>PHYSICAL FACTORS</p>
                                 {
                                     pfSelectTypes.map((type: string) => (
                                         <div className={styles.inputContainer}>
@@ -370,7 +259,7 @@ const HouseholdForm = (props) => {
                                 }
                             </div>
                             <div className={styles.section}>
-                                <h2>SOCIAL FACTORS</h2>
+                                <p>SOCIAL FACTORS</p>
                                 {
                                     scSelectTypes.map((type: string, idx: number) => (
                                         <div className={styles.inputContainer}>
@@ -379,7 +268,7 @@ const HouseholdForm = (props) => {
                                             </span>
                                             <select
                                                 value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, idx, type)}
+                                                onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
                                             >
                                                 <option value="">{' '}</option>
@@ -412,16 +301,16 @@ const HouseholdForm = (props) => {
 
                             </div>
                             <div className={styles.section}>
-                                <h2>ECONOMIC FACTORS</h2>
+                                <p>ECONOMIC FACTORS</p>
                                 {
-                                    ecSelectTypes.map((type: string, idx: number) => (
+                                    ecSelectTypes.map((type: string) => (
                                         <div className={styles.inputContainer}>
                                             <span className={styles.label}>
                                                 {type}
                                             </span>
                                             <select
                                                 value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, idx, type)}
+                                                onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
                                             >
                                                 <option value="">{' '}</option>
@@ -458,6 +347,13 @@ const HouseholdForm = (props) => {
                                 className={styles.saveBtn}
                             >
                 Save/Update
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleCancel}
+                                className={styles.saveBtn}
+                            >
+                Cancel
                             </button>
                         </div>
                     )
