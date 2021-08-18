@@ -137,6 +137,10 @@ const state: PageState = {
             id: 10,
             title: 'communityspace',
         },
+        {
+            id: 11,
+            title: 'helipad',
+        },
     ],
     carKeys: [],
     lossList: [],

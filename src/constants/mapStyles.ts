@@ -383,6 +383,14 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#FEE94E',
         },
+        fireengine: {
+            ...resourceClusterInitial,
+            'circle-color': '#F38171',
+        },
+        helipad: {
+            ...resourceClusterInitial,
+            'circle-color': '#BCE618',
+        },
     },
 
     resourcePoint: {
@@ -437,6 +445,14 @@ export default {
         communityspace: {
             ...resourcePointInitial,
             'circle-color': '#FEE94E',
+        },
+        fireengine: {
+            ...resourcePointInitial,
+            'circle-color': '#F38171',
+        },
+        helipad: {
+            ...resourcePointInitial,
+            'circle-color': '#BCE618',
         },
     },
 
