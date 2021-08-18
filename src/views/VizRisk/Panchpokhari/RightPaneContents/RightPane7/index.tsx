@@ -516,6 +516,36 @@ class SlideFivePane extends React.Component<Props, State> {
                 { !singularBuilding
                     && (
                         <>
+                            <h1>
+                          Vulnerability of People and Households
+                                <button
+                                    type="button"
+                                    onClick={e => e.preventDefault()}
+                                    title="Vulnerability is the conditions which increase
+                                            the susceptibility
+                                            of an individual, household or community to
+                                            the impact of hazards.
+                                            The vulnerability level of each household has
+                                            been visualized in the
+                                            map in 3 different colors. Red siginifies the
+                                            high vulnerability level,
+                                            orange denotes moderate and yellow denotes the
+                                            low vulnerability level.
+                                            Physical, social and economic facors were considered to identify the
+                                            vulnerability of each household. The vulnerability level has been calculated for
+                                            buildings that have complete data on all the physical,
+                                            social, and economic parameters used for the
+                                            vulnerability score calculation. Buildings for which the
+                                            score was not calculated are being displayed in black."
+                                >
+
+                                    <Icon
+                                        name="info"
+                                        className={styles.infoIcon}
+                                    />
+                                </button>
+
+                            </h1>
                             <p>Vulnerability of Buildings </p>
                             <div className={styles.buildingClassContainer}>
                                 <div className={styles.levelContainer}>
