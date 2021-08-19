@@ -615,7 +615,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <Tooltip />
                                 <Bar
                                     dataKey="Total"
-                                    fill="rgb(0,149,215)"
+                                    fill="rgb(0,219,95)"
                                     barSize={15}
                                     label={{ position: 'right', fill: '#ffffff' }}
                                     radius={[0, 15, 15, 0]}
@@ -645,7 +645,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <Tooltip />
                                 <Bar
                                     dataKey="Total"
-                                    fill="rgb(213,81,76)"
+                                    fill="rgb(0,219,95)"
                                     barSize={15}
                                     label={{ position: 'right', fill: '#ffffff' }}
                                     radius={[0, 15, 15, 0]}
@@ -686,7 +686,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <Tooltip />
                                 <Bar
                                     dataKey="Total"
-                                    fill="rgb(213,81,76)"
+                                    fill="rgb(0,219,95)"
                                     barSize={15}
                                     label={{ position: 'right', fill: '#ffffff' }}
                                     radius={[0, 15, 15, 0]}
@@ -727,7 +727,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <Tooltip />
                                 <Bar
                                     dataKey="Total"
-                                    fill="rgb(213,81,76)"
+                                    fill="rgb(0,219,95)"
                                     barSize={15}
                                     label={{ position: 'right', fill: '#ffffff' }}
                                     radius={[0, 15, 15, 0]}
@@ -767,7 +767,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                 <Tooltip />
                                 <Bar
                                     dataKey="Total"
-                                    fill="rgb(213,81,76)"
+                                    fill="rgb(0,219,95)"
                                     barSize={15}
                                     label={{ position: 'right', fill: '#ffffff' }}
                                     radius={[0, 15, 15, 0]}

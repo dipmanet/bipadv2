@@ -163,7 +163,6 @@ const JugalMap = (props: Props) => {
             clearInterval(interval.current);
             const val = e.target.value;
             setIncidentYear(val);
-            console.log('input year change via thingo', incidentYear);
             handleIncidentChange(incidentYear);
             if (map.current && map.current.isStyleLoaded()) {
                 filterOnMap(incidentYear);
@@ -175,7 +174,6 @@ const JugalMap = (props: Props) => {
                 setIncidentYear('0');
             }
             handleIncidentChange(incidentYear);
-            console.log('input year change via timer', incidentYear);
             if (map.current && map.current.isStyleLoaded()) {
                 filterOnMap(incidentYear);
             }
@@ -186,7 +184,6 @@ const JugalMap = (props: Props) => {
     useEffect(() => {
         if (incidentsPages.indexOf(rightElement + 1) !== -1) {
             interval.current = setInterval(() => {
-                console.log('jkjfhs');
                 if (!playState) {
                     handleInputChange(null);
                 } else if (interval.current) {
@@ -258,7 +255,6 @@ const JugalMap = (props: Props) => {
             const categories: any = [...new Set(CIData.features.map(
                 item => item.properties.Type,
             ))];
-            console.log('CIData', CIData);
             setcategoriesCritical(categories);
             categories.map((layer: string) => {
                 jugalMap.addSource(layer, {

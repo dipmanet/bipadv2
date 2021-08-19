@@ -13,13 +13,7 @@ import { AppState } from '#store/types';
 import MapConstants from '../Data/mapConstants';
 
 import {
-    municipalitiesSelector,
-    districtsSelector,
     wardsSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
 } from '#selectors';
 
 import {
@@ -35,6 +29,10 @@ interface State{
     lng: number;
     zoom: number;
     categoriesCritical: string[];
+}
+
+interface PropsFromAppState {
+    wards: PageTypes.Ward[];
 }
 
 interface OwnProps{
@@ -74,13 +72,7 @@ interface Properties {
 }
 
 interface PropsFromAppState {
-    districts: PageTypes.District[];
-    municipalities: PageTypes.Municipality[];
     wards: PageTypes.Ward[];
-    bounds: number[];
-    selectedProvinceId: number | undefined;
-    selectedDistrictId: number | undefined;
-    selectedMunicipalityId: number | undefined;
 }
 
 type Props = OwnProps & PropsFromAppState;
@@ -103,17 +95,11 @@ const {
     incidentsPages,
     ciPages,
     incidentsSliderDelay,
-    rasterLayers,
+    municipalityId,
 } = MapConstants;
 
-const mapStateToProps = (state: AppState, props: Props): PropsFromAppState => ({
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
     wards: wardsSelector(state),
-    bounds: boundsSelector(state, props),
-    selectedProvinceId: selectedProvinceIdSelector(state, props),
-    selectedDistrictId: selectedDistrictIdSelector(state, props),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
 let hoveredWardId: (string | number |undefined);
@@ -181,7 +167,6 @@ const JugalMap = (props: Props) => {
             clearInterval(interval.current);
             const val = e.target.value;
             setIncidentYear(val);
-            console.log('input year change via thingo', incidentYear);
             handleIncidentChange(incidentYear);
             if (map.current && map.current.isStyleLoaded()) {
                 filterOnMap(incidentYear);
@@ -193,7 +178,6 @@ const JugalMap = (props: Props) => {
                 setIncidentYear('0');
             }
             handleIncidentChange(incidentYear);
-            console.log('input year change via timer', incidentYear);
             if (map.current && map.current.isStyleLoaded()) {
                 filterOnMap(incidentYear);
             }
@@ -204,7 +188,6 @@ const JugalMap = (props: Props) => {
     useEffect(() => {
         if (incidentsPages.indexOf(rightElement + 1) !== -1) {
             interval.current = setInterval(() => {
-                console.log('jkjfhs');
                 if (!playState) {
                     handleInputChange(null);
                 } else if (interval.current) {
@@ -229,7 +212,7 @@ const JugalMap = (props: Props) => {
         }
         if (map.current) { return noop; }
 
-        const mapping = wards.filter(item => item.municipality === 23007).map(item => ({
+        const mapping = wards.filter(item => item.municipality === municipalityId).map(item => ({
             ...item,
             value: Number(item.title),
         }));
@@ -381,7 +364,7 @@ const JugalMap = (props: Props) => {
                         1,
                     ],
                 },
-                filter: getWardFilter(3, 24, 23007, wards),
+                filter: getWardFilter(3, 24, municipalityId, wards),
             });
 
             mapping.forEach((attribute) => {
@@ -503,7 +486,6 @@ const JugalMap = (props: Props) => {
 
     useEffect(() => {
         if (map.current && showPopulation && map.current.isStyleLoaded()) {
-            console.log('showPopulation in', showPopulation);
             if (showPopulation === 'popdensity') {
                 map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
             } else {
@@ -630,35 +612,53 @@ const JugalMap = (props: Props) => {
                 });
             }
 
-            if (incidentsArr.length > 0 && incidentsArr.indexOf(rightElement) !== -1) {
+            if (incidentsArr.length > 0 && incidentsArr.indexOf(rightElement + 1) !== -1) {
                 incidentsArr.map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            } else {
+                incidentsArr.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
+                        map.current.moveLayer(`incidents-${layer}`);
+                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
+                        map.current.moveLayer(`incidents-icon-${layer}`);
                     }
                     return null;
                 });
             }
         }
-    }, [categoriesCritical, rightElement, incidentsArr]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [categoriesCritical, rightElement]);
 
     useEffect(() => {
-        if (clickedItem === 'all') {
-            incidentsArr.map((ht) => {
-                if (map.current) {
-                    map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
+        if (incidentsPages.indexOf(rightElement + 1) !== -1) {
+            if (clickedItem === 'all') {
+                if (map.current && map.current.isStyleLoaded()) {
+                    filterOnMap(incidentYear);
                 }
-                return null;
-            });
-        } else {
-            incidentsArr.map((ht) => {
-                if (map.current) {
-                    map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
-                }
-                return null;
-            });
-            map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
+                incidentsArr.map((ht) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            } else {
+                incidentsArr.map((ht) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
+                map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
+            }
         }
-    }, [clickedItem, incidentsArr]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clickedItem]);
 
 
     return (
