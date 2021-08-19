@@ -203,6 +203,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 rendererParams={rendererParams}
             />
             <div className={styles.actions}>
+
+
                 <AccentButton
                     title="Edit"
                     onClick={onEditClick}
@@ -211,6 +213,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 >
                     Edit data
                 </AccentButton>
+
+
                 <AccentButton
                     title={
                         resourceDetails.resourceType === 'openspace'
@@ -1006,6 +1010,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             Layers
                         </h2>
                         <div className={styles.actions}>
+
                             <Cloak hiddenIf={p => !p.add_resource}>
                                 <AccentModalButton
                                     iconName="add"
