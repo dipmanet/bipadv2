@@ -36,6 +36,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     carKeysSelector,
+    userSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -82,6 +83,7 @@ import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/ma
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
 import '#resources/openspace-resources/humanitarian-fonts.css';
+import { checkPermission } from '#utils/common';
 
 
 const TableModalButton = modalize(Button);
@@ -133,7 +135,7 @@ const initialActiveLayersIndication = {
 };
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
-    const { onEditClick, onShowInventoryClick, ...resourceDetails } = props;
+    const { onEditClick, onShowInventoryClick, isLoggedInUser, ...resourceDetails } = props;
 
     const { id, point, title, ...resource } = resourceDetails;
 
@@ -204,15 +206,17 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
             />
             <div className={styles.actions}>
 
-
-                <AccentButton
-                    title="Edit"
-                    onClick={onEditClick}
-                    transparent
-                    className={styles.editButton}
-                >
+                {isLoggedInUser
+                    ? (
+                        <AccentButton
+                            title="Edit"
+                            onClick={onEditClick}
+                            transparent
+                            className={styles.editButton}
+                        >
                     Edit data
-                </AccentButton>
+                        </AccentButton>
+                    ) : ''}
 
 
                 <AccentButton
@@ -311,6 +315,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     carKeys: carKeysSelector(state),
+    user: userSelector(state),
 
 });
 
@@ -444,6 +449,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 helipad: [],
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
+            isLoggedInUser: false,
         };
 
         const { faramValues: { region } } = filters;
@@ -462,10 +468,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             handleCarActive,
             filters,
             setFilters,
+            user,
         } = this.props;
         handleCarActive(true);
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
+        const isLoggedIn = checkPermission(user, 'edit_resource', 'resource');
+        this.setState({
+            isLoggedInUser: isLoggedIn,
+        });
     }
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
@@ -955,6 +966,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             activeModal,
             singleOpenspaceDetailsModal,
             CommunitySpaceDetailsModal,
+            isLoggedInUser,
         } = this.state;
 
         const {
@@ -1240,6 +1252,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1309,6 +1322,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1378,6 +1392,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1447,6 +1462,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1516,6 +1532,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1585,6 +1602,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1654,6 +1672,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1723,6 +1742,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -1807,6 +1827,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             >
                                                 <ResourceTooltip
                                                 // FIXME:hide tooltip edit if there is no permission
+                                                    isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
                                                     onEditClick={
@@ -1902,6 +1923,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             >
                                                 <ResourceTooltip
                                                 // FIXME:hide tooltip edit if there is no permission
+                                                    isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
                                                     onEditClick={
@@ -1984,6 +2006,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
@@ -2053,6 +2076,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         >
                                             <ResourceTooltip
                                             // FIXME: hide tooltip edit if there is no permission
+                                                isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
