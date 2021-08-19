@@ -304,13 +304,17 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </button>
 
                                             </h1>
-                                            <button
-                                                type="button"
-                                                onClick={() => this.handleShowForm(true)}
-                                                className={styles.showBtn}
-                                            >
+                                            { this.props.buildingdataAddPermission
+                                            && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => this.handleShowForm(true)}
+                                                    className={styles.showBtn}
+                                                >
                                             Add/Edit Details
-                                            </button>
+                                                </button>
+                                            )
+                                            }
                                             <p>
                                                 House ID No:
                                                 {' '}

@@ -467,10 +467,7 @@ class FloodHistoryMap extends React.Component {
         }
 
         this.map.on('style.load', () => {
-            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#ff6595');
-            // console.log('map:', this.map);
             buildings.map((row) => {
-                // if (isDefined(row.vulnerabilityScore)) {
                 this.map.setFeatureState(
                     {
                         id: row.osmId || 0,
@@ -633,7 +630,9 @@ class FloodHistoryMap extends React.Component {
         }
         if (this.props.showAddForm !== prevProps.showAddForm) {
             if (this.props.showAddForm) {
-                this.showMarker(this.state.cood, 'Editing...');
+                if (this.state.cood) {
+                    this.showMarker(this.state.cood, 'Editing...');
+                }
             } else {
                 this.removeMarker();
             }

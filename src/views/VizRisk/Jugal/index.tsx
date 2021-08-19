@@ -32,6 +32,7 @@ import {
     filtersSelector,
     hazardTypesSelector,
     incidentListSelectorIP,
+    userSelector,
 } from '#selectors';
 
 import {
@@ -51,6 +52,7 @@ import { transformDataRangeLocaleToFilter, transformRegionToFilter } from '#util
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
 import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
+import { checkPermission } from '#views/VizRisk/Common/utils';
 
 const rightelements = [
     <RightElement1 />,
@@ -68,7 +70,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     filters: filtersSelector(state),
     hazards: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
-
+    user: userSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -165,6 +167,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    enumData: {
+        url: '/enum-choice/',
+        method: methods.GET,
+        onSuccess: ({ params, response }) => {
+            // const { results: vulData = [] } = response;
+            params.setEnum(response);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 class Jugal extends React.Component {
@@ -193,11 +205,15 @@ class Jugal extends React.Component {
             singularBuilding: false,
             score: 7,
             vulData: [],
-            singularBuldingData: [],
+            singularBuldingData: {},
             resetDrawData: false,
             sesmicLayerVul: '',
             pending: true,
             indexArray: [],
+            enumData: [],
+            buildingVul: {},
+            showAddForm: false,
+            buildingdataAddPermission: false,
         };
 
         const { requests:
@@ -206,6 +222,7 @@ class Jugal extends React.Component {
                 cIGetRequest,
                 buildingsGetRequest,
                 vulnerabilityData,
+                enumData,
             } } = this.props;
 
         incidentsGetRequest.setDefaultParams({
@@ -223,15 +240,25 @@ class Jugal extends React.Component {
             setVulData: this.setVulData,
             setPending: this.setPending,
         });
+        enumData.setDefaultParams({
+            setEnum: this.setEnum,
+        });
+    }
+
+    public componentDidMount() {
+        const { user } = this.props;
+        const buildingdataAddPermission = checkPermission(user, 'change_resource', 'resources');
+        this.setState({ buildingdataAddPermission });
     }
 
     public componentDidUpdate() {
-        const { vulData, buildings, cI, pending } = this.state;
+        const { vulData, buildings, cI, pending, enumData } = this.state;
         if (pending) {
             if (
                 vulData.length > 0
                 && buildings.length > 0
                 && cI.length > 0
+                && enumData.length > 0
             ) {
                 this.setPending(false);
             }
@@ -248,6 +275,11 @@ class Jugal extends React.Component {
 
     public setPending = (pending) => {
         this.setState({ pending });
+    }
+
+    public setEnum = (data: array) => {
+        const enumData = data.filter(item => item.model === 'Building')[0].enums;
+        this.setState({ enumData });
     }
 
     public setCI = (cI) => {
@@ -267,7 +299,6 @@ class Jugal extends React.Component {
         } else {
             filteredIL = incidentList;
         }
-        console.log('filteredIL', filteredIL);
         if (filteredIL.length > 0) {
             const inciTotal = filteredIL
                 .filter(y => this.getIncidentYear(y.incidentOn) === year)
@@ -431,6 +462,19 @@ class Jugal extends React.Component {
         this.setState({ incidentFilterYear: y });
     };
 
+    private appendBuildingData = (val) => {
+        this.setState(prevState => ({
+            vulData: [...prevState.vulData, val],
+        }));
+        this.setState({ singularBuldingData: val });
+        this.setState({ buildingVul: val });
+    }
+
+
+    private handleShowAddForm = (showAddForm) => {
+        this.setState({ showAddForm });
+    }
+
     public render() {
         const {
             showRaster,
@@ -458,6 +502,7 @@ class Jugal extends React.Component {
             pending,
             indexArray,
             flood,
+            buildingVul,
         } = this.state;
 
         const {
@@ -484,6 +529,9 @@ class Jugal extends React.Component {
                         ? (
                             <div className={styles.loaderInfo}>
                                 <Loader color="#fff" className={styles.loader} />
+                                <p className={styles.loaderText}>
+                            Loading Data...
+                                </p>
                             </div>
                         )
                         : (
@@ -716,6 +764,8 @@ class Jugal extends React.Component {
                                 buildinggeojson={buildings}
                                 handleDrawResetData={this.handleDrawResetData}
                                 rasterLayer={rasterLayer}
+                                buildingVul={buildingVul}
+                                showAddForm={this.state.showAddForm}
                             />
                             <RightElement7
                                 handleDrawResetData={this.handleDrawResetData}
@@ -734,11 +784,15 @@ class Jugal extends React.Component {
                                 singularBuilding={this.state.singularBuilding}
                                 score={this.state.score}
                                 setSingularBuilding={this.setSingularBuilding}
-                                singularBuldingData={singularBuldingData}
+                                singularBuldingData={this.state.singularBuldingData}
                                 vulData={vulData}
                                 resetDrawData={resetDrawData}
                                 indexArray={indexArray}
-
+                                enumData={this.state.enumData}
+                                appendBuildingData={this.appendBuildingData}
+                                handleShowAddForm={this.handleShowAddForm}
+                                showAddForm={this.state.showAddForm}
+                                buildingdataAddPermission={this.state.buildingdataAddPermission}
                             />
                             <VRLegend>
                                 <SesmicHazardVULLegend

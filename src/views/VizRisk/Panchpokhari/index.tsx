@@ -28,6 +28,7 @@ import {
     filtersSelector,
     hazardTypesSelector,
     incidentListSelectorIP,
+    userSelector,
 } from '#selectors';
 
 import {
@@ -49,7 +50,7 @@ import SesmicHazardVULLegend from './Legends/SesmicHazardVULLegend';
 import MapWithDraw from './MapWithDraw';
 import MapVenerability from './MapVenerability';
 import LandCoverLegends from './Legends/LandCoverLegends';
-
+import { checkPermission } from '#views/VizRisk/Common/utils';
 
 const rightelements = [
     <RightElement1 />,
@@ -67,6 +68,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     filters: filtersSelector(state),
     hazards: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
+    user: userSelector(state),
 
 });
 
@@ -175,6 +177,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
+
 class Jugal extends React.Component {
     public constructor(props) {
         super(props);
@@ -209,6 +212,7 @@ class Jugal extends React.Component {
             enumData: [],
             buildingVul: {},
             showAddForm: false,
+            buildingdataAddPermission: false,
         };
 
         const { requests:
@@ -219,6 +223,7 @@ class Jugal extends React.Component {
                 vulnerabilityData,
                 enumData,
             } } = this.props;
+
 
         incidentsGetRequest.setDefaultParams({
             setIncidentList: this.setIncidentList,
@@ -238,6 +243,12 @@ class Jugal extends React.Component {
         enumData.setDefaultParams({
             setEnum: this.setEnum,
         });
+    }
+
+    public componentDidMount() {
+        const { user } = this.props;
+        const buildingdataAddPermission = checkPermission(user, 'change_resource', 'resources');
+        this.setState({ buildingdataAddPermission });
     }
 
     public componentDidUpdate() {
@@ -767,6 +778,7 @@ class Jugal extends React.Component {
                             appendBuildingData={this.appendBuildingData}
                             handleShowAddForm={this.handleShowAddForm}
                             showAddForm={this.state.showAddForm}
+                            buildingdataAddPermission={this.state.buildingdataAddPermission}
                         />
                         <VRLegend>
                             <SesmicHazardVULLegend

@@ -4,31 +4,19 @@ import mapboxgl from 'mapbox-gl';
 import { isDefined, _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import { VectorTile } from '@mapbox/vector-tile';
-import Loader from 'react-loader';
 import * as turf from '@turf/turf';
+import Loader from 'react-loader';
 import { getHillShadeLayer, getSingularBuildingData } from '#views/VizRisk/Jugal/utils';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
-
 import styles from './styles.scss';
 
 
 import {
-    // provincesSelector,
-    municipalitiesSelector,
-    districtsSelector,
     wardsSelector,
-    regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
-    incidentListSelectorIP,
 } from '#selectors';
 import Icon from '#rscg/Icon';
 
-const { buildingColor } = expressions;
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
@@ -39,18 +27,11 @@ const rasterLayers = [
     '200', '250', '500', '1000',
 ];
 
-
 const mapStateToProps = (state, props) => ({
-    // provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevelFromAppState: regionLevelSelector(state, props),
-    bounds: boundsSelector(state, props),
-    selectedProvinceId: selectedProvinceIdSelector(state, props),
-    selectedDistrictId: selectedDistrictIdSelector(state, props),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
+
+const { buildingColor } = expressions;
 
 const ciRef = {
     'Water sources': 'Water Source',
@@ -342,6 +323,12 @@ const draw = new MapboxDraw({
     defaultMode: 'draw_polygon',
 });
 
+const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: true,
+    className: 'popup',
+});
+
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
         super(props);
@@ -359,22 +346,16 @@ class FloodHistoryMap extends React.Component {
             buildingpoints: [],
             pending: false,
             opacityFlood: 0.5,
+            opacitySes: 0.5,
+            opacitySus: 0.5,
         };
     }
 
     public componentDidMount() {
         const {
-            lng, lat, zoom, opacityFlood,
+            lng, lat, zoom, opacitySes, opacitySus,
         } = this.state;
 
-        this.interval = setInterval(() => {
-            this.setState((prevState) => {
-                if (Number(prevState.incidentYear) < 10) {
-                    return ({ incidentYear: String(Number(prevState.incidentYear) + 1) });
-                }
-                return ({ incidentYear: '0' });
-            });
-        }, 1000);
 
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
@@ -409,7 +390,6 @@ class FloodHistoryMap extends React.Component {
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
                 const { points, buildingpoints } = this.state;
-                // this.setPending(true);
                 const datad = draw.getAll();
                 const dataArr = datad.features[0].geometry.coordinates;
                 const searchWithin = turf.multiPolygon([dataArr], {});
@@ -480,19 +460,12 @@ class FloodHistoryMap extends React.Component {
         }
 
         this.map.on('style.load', () => {
-            console.log('this map:', this.map);
-
             this.map.on('click', 'Buildings', (e) => {
                 this.setState({ osmID: e.features[0].properties.osm_id });
                 this.setState({ searchTerm: e.features[0].properties.osm_id });
                 this.handleBuildingClick(true);
-                // const filter = ['all', ['==', 'osm_id', e.features[0].properties.osm_id]];
-                // this.map.setFilter('Buildings', filter);
-                // here
             });
-            // this.map.setLayoutProperty('Buildings2D', 'visibility', 'visible');
             buildings.map((row) => {
-                // if (isDefined(row.vulnerabilityScore)) {
                 this.map.setFeatureState(
                     {
                         id: row.osmId || 0,
@@ -635,6 +608,28 @@ class FloodHistoryMap extends React.Component {
             console.log(this.props.rasterLayer);
             this.switchFloodRasters(this.props.rasterLayer);
         }
+        if (this.props.buildingVul !== prevProps.buildingVul) {
+            this.map.setFeatureState(
+                {
+                    id: this.props.buildingVul.osmId || 0,
+                    source: 'composite',
+                    sourceLayer: 'jugalBuildings',
+                },
+                {
+                    vuln: this.props.buildingVul.vulnerabilityScore || -1,
+                },
+            );
+            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+        }
+        if (this.props.showAddForm !== prevProps.showAddForm) {
+            if (this.props.showAddForm) {
+                if (this.state.cood) {
+                    this.showMarker(this.state.cood, 'Editing...');
+                }
+            } else {
+                this.removeMarker();
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -667,6 +662,19 @@ class FloodHistoryMap extends React.Component {
         this.props.handleDrawResetData(true);
     };
 
+    public showMarker = (cood, msg) => {
+        console.log('cood', cood);
+        popup.setLngLat(cood).setHTML(
+            `<div style="padding: 5px;border-radius: 5px">
+                <p>${msg}</p>
+            </div>
+            `,
+        ).addTo(this.map);
+    }
+
+    public removeMarker = () => {
+        popup.remove();
+    };
 
     public getFloodRasterLayer = (layerName: string) => [
         `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
@@ -703,11 +711,6 @@ class FloodHistoryMap extends React.Component {
     }
 
     public showPopupOnBldgs = (coordinates, msg) => {
-        const popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
         popup.setLngLat(coordinates).setHTML(
             `<div style="padding: 5px;border-radius: 5px">
                 <p>${msg}</p>
@@ -778,20 +781,21 @@ class FloodHistoryMap extends React.Component {
                     });
                     this.showPopupOnBldgs(cood, this.getHouseId(searchId));
                 } else {
-                    // this.showPopupOnBldgs(cood, 'No data available on this building');
-                    // alert('No data available');
                     this.setState({ searchTerm: '' });
-                    this.props.setSingularBuilding(true, {});
+                    this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
+                    console.log('cood obj', coordinatesObj);
+                    this.showMarker(coordinatesObj[0].geometry.coordinates, 'No data');
+                    this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {
                 this.setState({ searchTerm: '' });
-                this.props.setSingularBuilding(true, {});
-                // alert('No data available');
+                this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
+                console.log('cood obj', coordinatesObj);
+                console.log('osm id', searchId);
             }
         } else {
-            this.props.setSingularBuilding(true, {});
+            this.props.setSingularBuilding(true, { osmId: searchId });
             this.setState({ searchTerm: '' });
-            // alert('No data available');
         }
     };
 

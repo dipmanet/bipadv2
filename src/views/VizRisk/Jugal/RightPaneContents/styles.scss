@@ -232,6 +232,21 @@ $button-color: rgb(0,170,223);
                 }
             }
         }
+
+        $button-color: rgb(0,170,223);
+
+        .showBtn{
+            z-index: 500;
+            background-color: transparent;
+            border: 1px solid $button-color;
+            filter: saturate(100%);
+            color: $button-color;
+            cursor:pointer;
+            padding: 5px 10px;
+            margin-left: 5px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
     }
 
 
