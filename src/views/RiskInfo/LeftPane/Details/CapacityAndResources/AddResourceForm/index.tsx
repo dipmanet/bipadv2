@@ -375,21 +375,23 @@ class AddResourceForm extends React.PureComponent<Props, State> {
 
 
     private handleAddResourceSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess } = this.props;
+        const { onAddSuccess, closeModal } = this.props;
 
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
 
         this.setState({ resourceId: resource.id });
+        closeModal();
     }
 
     private handleEditResourceSuccess = (resource: PageType.Resource) => {
-        const { onEditSuccess } = this.props;
+        const { onEditSuccess, closeModal } = this.props;
 
         if (onEditSuccess) {
             onEditSuccess(resource.id, resource);
         }
+        closeModal();
     }
 
     private filterEnumItem = (

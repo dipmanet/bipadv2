@@ -191,13 +191,15 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
 
         const { lng } = this.getFormData(geoJson);
-
+        console.log('this lng', lng);
+        console.log('this lat', typeof lat);
+        console.log('geo json', geoJson);
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, Number(lat)];
+            deferedState.features[0].geometry.coordinates = [lng, lat];
         });
 
-        const point = this.context.map.project([lng, Number(lat)]);
+        const point = this.context.map.project([lng, lat]);
 
         const features = this.context.map.queryRenderedFeatures(
             point,
@@ -232,13 +234,13 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
 
         const { lat } = this.getFormData(geoJson);
-
+        console.log('geo json', geoJson);
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [Number(lng), lat];
+            deferedState.features[0].geometry.coordinates = [lng, lat];
         });
 
-        const point = this.context.map.project([Number(lng), lat]);
+        const point = this.context.map.project([lng, lat]);
         const features = this.context.map.queryRenderedFeatures(
             point,
             { layers: [getLayerName('location-input-country', 'ward-fill')] },
@@ -409,6 +411,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             lng,
             lat,
         } = this.getFormData(geoJson);
+
 
         return (
             <div className={_cs(className, styles.point)}>
