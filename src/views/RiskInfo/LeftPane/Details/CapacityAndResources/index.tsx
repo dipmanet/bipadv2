@@ -473,7 +473,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         handleCarActive(true);
         const { filters: faramValues } = this.props;
         this.setState({ faramValues });
-        const isLoggedIn = checkPermission(user, 'edit_resource', 'resource');
+        const isLoggedIn = checkPermission(user, 'change_resource', 'resources');
         this.setState({
             isLoggedInUser: isLoggedIn,
         });
