@@ -204,12 +204,12 @@ export const getsingularAgeGroupsChart = (d) => {
         typeof d === 'object'
         && d.seniorCitizens !== undefined
         && d.totalPopulation !== undefined
-        && d.childrenUnder5 !== undefined
+        && d.childrenUnderFive !== undefined
     ) {
         const finalData = {
             '>65': d.seniorCitizens || 0,
-            '6-64': d.totalPopulation - d.seniorCitizens - d.childrenUnder5,
-            '<5': d.childrenUnder5,
+            '6-64': d.totalPopulation - d.seniorCitizens - d.childrenUnderFive,
+            '<5': d.childrenUnderFive,
         };
 
         const arr = Object.keys(finalData);

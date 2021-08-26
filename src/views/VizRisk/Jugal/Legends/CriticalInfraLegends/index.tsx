@@ -53,28 +53,28 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'Culture') {
+            } else if (criticalFlood === 'Community buildings') {
                 resetCriticalLayers();
                 setshowCulture(true);
-            } else if (criticalFlood === 'Governance') {
+            } else if (criticalFlood === 'Government Buildings') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
             } else if (criticalFlood === 'Health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'Industry') {
+            } else if (criticalFlood === 'Industry/ hydropower') {
                 resetCriticalLayers();
                 setshowIndustry(true);
             } else if (criticalFlood === 'Finance') {
                 resetCriticalLayers();
                 setshowFinance(true);
-            } else if (criticalFlood === 'Trade') {
+            } else if (criticalFlood === 'Trade and business (groceries, meat, textiles)') {
                 resetCriticalLayers();
                 setshowTrade(true);
-            } else if (criticalFlood === 'Water') {
+            } else if (criticalFlood === 'Water sources') {
                 resetCriticalLayers();
                 setshowWater(true);
-            } else if (criticalFlood === 'Hotel') {
+            } else if (criticalFlood === 'Hotel/resort/homestay') {
                 resetCriticalLayers();
                 setshowTourism(true);
             }
@@ -92,11 +92,11 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowEducation(true);
         }
-        if (layer === 'Governance') {
+        if (layer === 'Government Buildings') {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
-        if (layer === 'Culture') {
+        if (layer === 'Community buildings') {
             resetCriticalLayers();
             setshowCulture(true);
         }
@@ -104,23 +104,23 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowHospital(true);
         }
-        if (layer === 'Industry') {
+        if (layer === 'Industry/ hydropower') {
             resetCriticalLayers();
             setshowIndustry(true);
         }
-        if (layer === 'Finance') {
+        if (layer === 'Bank') {
             resetCriticalLayers();
             setshowFinance(true);
         }
-        if (layer === 'Hotel') {
+        if (layer === 'Hotel/resort/homestay') {
             resetCriticalLayers();
             setshowTourism(true);
         }
-        if (layer === 'Trade') {
+        if (layer === 'Trade and business (groceries, meat, textiles)') {
             resetCriticalLayers();
             setshowTrade(true);
         }
-        if (layer === 'Water') {
+        if (layer === 'Water sources') {
             resetCriticalLayers();
             setshowWater(true);
         }
@@ -200,7 +200,7 @@ const LandCoverLegends = (props) => {
                                 className={showGovernemnt
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Governance')}
+                                onClick={() => handleCriticalclick('Government Buildings')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -217,7 +217,7 @@ const LandCoverLegends = (props) => {
                                 className={showCulture
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Culture')}
+                                onClick={() => handleCriticalclick('Community buildings')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -253,7 +253,7 @@ const LandCoverLegends = (props) => {
                                 className={showIndustry
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Industry')}
+                                onClick={() => handleCriticalclick('Industry/ hydropower')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -271,7 +271,7 @@ const LandCoverLegends = (props) => {
                                 className={showTourism
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Hotel')}
+                                onClick={() => handleCriticalclick('Hotel/resort/homestay')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -308,7 +308,7 @@ const LandCoverLegends = (props) => {
                                 className={showWater
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Water')}
+                                onClick={() => handleCriticalclick('Water sources')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -327,7 +327,7 @@ const LandCoverLegends = (props) => {
                                 className={showTrade
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Trade')}
+                                onClick={() => handleCriticalclick('Trade and business (groceries, meat, textiles)')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
