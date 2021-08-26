@@ -78,8 +78,9 @@ const RiskTooltip = ({ layer, feature }) => (
 );
 const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
     const mapState = data.map(d => ({
-        id: d.district,
+        id: d.municipality,
         value: 1,
+
     }));
 
     // const layerGroup = layer.group || {};
@@ -93,7 +94,7 @@ const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
         id: layer.id,
         title: layer.title,
         type: 'choropleth',
-        adminLevel: 'district',
+        adminLevel: 'municipality',
         layername: layer.layername,
         legendTitle: layer.legendTitle,
         opacity: 1,
@@ -102,6 +103,7 @@ const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
         legend,
         actions,
         minValue: min,
+        data,
         tooltipRenderer: RiskTooltip,
     };
 };
@@ -221,7 +223,7 @@ class Hazard extends React.PureComponent<Props, State> {
         && activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon Map') {
             const datas = transformRiskDataToLayer(landslidePolygonImagemap,
                 activeLayers[activeLayers.length - 1], {});
-            console.log('datda', datas);
+
             addLayer(datas);
         }
 
@@ -230,8 +232,7 @@ class Hazard extends React.PureComponent<Props, State> {
         });
         // const riskLayer = transformRiskDataToLayer(riskData, earthquakeLayer[0], {});
 
-        console.log('test', activeLayers);
-        console.log('test', landslidePolygonImagemap);
+
         return (
             <LayerSelection
                 className={_cs(styles.hazard, className)}

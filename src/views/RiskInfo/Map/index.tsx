@@ -21,7 +21,10 @@ import { mapSources, mapStyles } from '#constants';
 import CommonMap from '#components/CommonMap';
 import LandslideToolTip from './Tooltips/RiskInfo/Landslide';
 import styles from './styles.scss';
-
+import Modal from '#rscv/Modal';
+import ModalHeader from '#rscv/Modal/Header';
+import ModalBody from '#rscv/Modal/Body';
+import DangerButton from '#rsca/Button/DangerButton';
 
 interface Props {
 }
@@ -63,15 +66,26 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
     public state = {
         feature: undefined,
         hoverLngLat: undefined,
+        isModalOpen: false,
 
 
+    }
+
+    private handleCloseModal=() => {
+        this.setState({
+            isModalOpen: false,
+        });
     }
 
     private handleMouseEnter = (feature, lngLat) => {
         this.setState({
             feature,
             hoverLngLat: lngLat,
+            isModalOpen: true,
         });
+
+        const test = choroplethLayers[0].data.filter(item => item.municipality === feature.id);
+        console.log('final test', test);
     }
 
     private handleMouseLeave = () => {
@@ -90,9 +104,10 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         const {
             feature,
             hoverLngLat,
+            isModalOpen,
 
         } = this.state;
-
+        const { closeModal } = this.props;
         const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse, landslidePolygonChoroplethMapData } = this.context;
 
@@ -104,7 +119,8 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         const responseDataKeys = Object.keys(mapClickedResponse);
         const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
         const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
-        console.log('active', activeLayers);
+        console.log('choroplethLayers', choroplethLayers);
+        console.log('choroplethLayers', choroplethLayers);
 
         return (
             <>
@@ -169,51 +185,77 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
                     </MapSource>
                 ))}
+                {isModalOpen
+
+                    ? (
+                        <Modal>
+
+                            <ModalHeader
+                                className={styles.header}
+                                title="Add Data"
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={this.handleCloseModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <ModalBody className={styles.modalBody} />
 
 
-                { choroplethLayers.map(layer => (
-                    <MapSource
-                        key={layer.id}
-                        sourceKey="post_moonsoon"
-                        sourceOptions={{
-                            type: 'vector',
-                            url: mapSources.nepal.url,
-                        }}
-                    >
-                        {/* <MapLayer
-                            layerKey="choropleth-layer-outline"
-                            layerOptions={{
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                type: 'line',
-                                paint: linePaintByAdminLevel[layer.adminLevel],
-
-
+                        </Modal>
+                    )
+                    : ''}
+                { choroplethLayers.map((layer, i) => {
+                    console.log('layer name', layer.layername);
+                    return (
+                        <MapSource
+                            key={layer.id}
+                            // sourceKey={layer.layername}
+                            sourceKey={`${layer.layername}-${i}`}
+                            sourceOptions={{
+                                type: 'vector',
+                                url: mapSources.nepal.url,
                             }}
-                        /> */}
-                        <MapLayer
-                            layerKey="choropleth-layer"
-                            layerOptions={{
-                                type: 'fill',
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                paint: {
-                                    ...layer.paint,
-                                    'fill-opacity': layer.paint['fill-opacity'].map(
-                                        val => (typeof val === 'number' ? val * layer.opacity : val),
-                                    ),
-                                },
-                            }}
-                            onClick={layer.onClick ? layer.onClick : undefined}
-                            onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                            onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
-                        />
-                        <MapState
-                            attributes={layer.mapState}
-                            attributeKey="value"
-                            sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
-                        />
+                        >
+                            <MapLayer
+                                layerKey="choropleth-layer"
+                                layerOptions={{
+                                    type: 'fill',
+                                    'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                    paint: {
+                                        ...layer.paint,
+                                        'fill-opacity': layer.paint['fill-opacity'].map(
+                                            val => (typeof val === 'number' ? val * layer.opacity : val),
+                                        ),
+                                    },
+                                }}
+
+                                onClick={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
+                                // onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
+                                // onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
+                            />
+                            <MapLayer
+                                layerKey="choropleth-layer-outline"
+                                layerOptions={{
+                                    'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                    type: 'line',
+                                    paint: linePaintByAdminLevel[layer.adminLevel],
 
 
-                        { layer.tooltipRenderer
+                                }}
+                            />
+
+                            <MapState
+                                attributes={layer.mapState}
+                                attributeKey="value"
+                                sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
+                            />
+
+
+                            { layer.tooltipRenderer
                             && hoverLngLat
                             && feature
                             && (feature.source === layer.layername)
@@ -229,9 +271,10 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     />
                                 </MapTooltip>
                             )
-                        }
-                    </MapSource>
-                ))}
+                            }
+                        </MapSource>
+                    );
+                })}
             </>
         );
     }

@@ -795,7 +795,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const orderedLayers = this.getLayerOrder(activeLayers);
         const hideFilters = false;
-        console.log('Active layer', activeLayers);
+
 
         return (
             <PageContext.Provider value={pageProps}>
