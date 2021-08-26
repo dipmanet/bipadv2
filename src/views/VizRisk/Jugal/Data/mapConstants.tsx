@@ -9,7 +9,7 @@ export default {
         ['Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'],
     ],
     mapboxStyle: process.env.REACT_APP_VIZRISK_JUGAL_LANDSLIDE,
-    zoom: 9.8,
+    zoom: 10,
     lng: 85.79108507481781,
     lat: 28.015490220644214,
     mapCSS: {

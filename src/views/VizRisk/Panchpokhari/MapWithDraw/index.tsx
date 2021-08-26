@@ -51,7 +51,7 @@ class FloodHistoryMap extends React.Component {
         this.state = {
             lng: 85.64347922706821,
             lat: 28.013604885888867,
-            zoom: 9.8,
+            zoom: 10.2,
             incidentYear: '0',
             playState: true,
             ciChartData: [],
