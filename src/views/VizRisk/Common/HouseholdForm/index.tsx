@@ -35,6 +35,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 return {};
             }
             return {
+                osmId: params.osmId,
                 ...params.data,
             };
         },
@@ -187,6 +188,10 @@ const HouseholdForm = (props) => {
     };
 
     const handleSave = () => {
+        console.log('osmid', osmId);
+        console.log('osmid type', typeof osmId);
+        console.log('rounded', parseInt(osmId, 10));
+        setFormData({ ...buildingFormData, osmId: parseInt(osmId, 10) });
         if (buildingData && Object.keys(buildingData).length > 0 && buildingData.id) {
             setPending(true);
             buildingPutRequest.do({
@@ -197,7 +202,7 @@ const HouseholdForm = (props) => {
         } else {
             buildingPostRequest.do({
                 data: buildingFormData,
-                osmId,
+                osmId: parseInt(osmId, 10),
                 handlePostSuccess,
             });
         }

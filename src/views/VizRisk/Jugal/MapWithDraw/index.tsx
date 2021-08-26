@@ -521,6 +521,42 @@ class FloodHistoryMap extends React.Component {
             const { CIData } = this.props;
 
             // if (CIData.length > 0) {
+
+            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
+            this.map.setLayoutProperty('Population Density', 'visibility', 'none');
+            const landCoverLayers = ['Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
+            this.map.setLayoutProperty('National Park', 'visibility', 'none');
+            landCoverLayers.map((l) => {
+                this.map.setLayoutProperty(l, 'visibility', 'visible');
+                return null;
+            });
+            this.map.moveLayer('Buildings');
+            this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
+
+            rasterLayers.map((layer) => {
+                this.map.addSource(`floodraster${layer}`, {
+                    type: 'raster',
+                    tiles: [this.getFloodRasterLayer(layer)],
+                    tileSize: 256,
+                });
+                this.map.addLayer(
+                    {
+                        id: `raster-flood-${layer}`,
+                        type: 'raster',
+                        source: `floodraster${layer}`,
+                        layout: {
+                            visibility: 'none',
+                        },
+                        paint: {
+                            'raster-opacity': 0.7,
+                        },
+                    },
+                );
+                return null;
+            });
+            // this.map.on('draw.delete', updateArea);
+            // this.map.on('draw.update', updateArea);
+
             if (isDefined(CIData.features)) {
                 const categoriesCritical = [...new Set(CIData.features.map(
                     item => item.properties.CI,
@@ -609,40 +645,6 @@ class FloodHistoryMap extends React.Component {
                     return null;
                 });
             }
-            this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
-            this.map.setLayoutProperty('Population Density', 'visibility', 'none');
-            const landCoverLayers = ['Rock-Stone', 'Shrub', 'Forest', 'Farmlands', 'Buildings', 'Roads', 'Snow'];
-            this.map.setLayoutProperty('National Park', 'visibility', 'none');
-            landCoverLayers.map((l) => {
-                this.map.setLayoutProperty(l, 'visibility', 'visible');
-                return null;
-            });
-            this.map.moveLayer('Buildings');
-            this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
-
-            rasterLayers.map((layer) => {
-                this.map.addSource(`floodraster${layer}`, {
-                    type: 'raster',
-                    tiles: [this.getFloodRasterLayer(layer)],
-                    tileSize: 256,
-                });
-                this.map.addLayer(
-                    {
-                        id: `raster-flood-${layer}`,
-                        type: 'raster',
-                        source: `floodraster${layer}`,
-                        layout: {
-                            visibility: 'none',
-                        },
-                        paint: {
-                            'raster-opacity': 0.7,
-                        },
-                    },
-                );
-                return null;
-            });
-            // this.map.on('draw.delete', updateArea);
-            // this.map.on('draw.update', updateArea);
         });
     }
 

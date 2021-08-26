@@ -53,28 +53,28 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'Community buildings') {
+            } else if (criticalFlood === 'Culture') {
                 resetCriticalLayers();
                 setshowCulture(true);
-            } else if (criticalFlood === 'Government Buildings') {
+            } else if (criticalFlood === 'Governance') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
             } else if (criticalFlood === 'Health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'Industry/ hydropower') {
+            } else if (criticalFlood === 'Industry') {
                 resetCriticalLayers();
                 setshowIndustry(true);
             } else if (criticalFlood === 'Finance') {
                 resetCriticalLayers();
                 setshowFinance(true);
-            } else if (criticalFlood === 'Trade and business (groceries, meat, textiles)') {
+            } else if (criticalFlood === 'Trade') {
                 resetCriticalLayers();
                 setshowTrade(true);
-            } else if (criticalFlood === 'Water sources') {
+            } else if (criticalFlood === 'Water') {
                 resetCriticalLayers();
                 setshowWater(true);
-            } else if (criticalFlood === 'Hotel/resort/homestay') {
+            } else if (criticalFlood === 'Hotel') {
                 resetCriticalLayers();
                 setshowTourism(true);
             }
@@ -108,19 +108,19 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowIndustry(true);
         }
-        if (layer === 'Bank') {
+        if (layer === 'Finance') {
             resetCriticalLayers();
             setshowFinance(true);
         }
-        if (layer === 'Tourism') {
+        if (layer === 'Hotel') {
             resetCriticalLayers();
             setshowTourism(true);
         }
-        if (layer === 'Trade and business') {
+        if (layer === 'Trade') {
             resetCriticalLayers();
             setshowTrade(true);
         }
-        if (layer === 'Water sources') {
+        if (layer === 'Water') {
             resetCriticalLayers();
             setshowWater(true);
         }
@@ -271,7 +271,7 @@ const LandCoverLegends = (props) => {
                                 className={showTourism
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Tourism')}
+                                onClick={() => handleCriticalclick('Hotel')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -308,7 +308,7 @@ const LandCoverLegends = (props) => {
                                 className={showWater
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Water sources')}
+                                onClick={() => handleCriticalclick('Water')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -327,7 +327,7 @@ const LandCoverLegends = (props) => {
                                 className={showTrade
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Trade and business')}
+                                onClick={() => handleCriticalclick('Trade')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}

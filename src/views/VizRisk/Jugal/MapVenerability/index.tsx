@@ -372,14 +372,14 @@ class FloodHistoryMap extends React.Component {
         const { CIData: cidata, buildings, rasterLayer } = this.props;
 
 
-        if (isDefined(cidata.features)) {
-            const arr = cidata.features.map(item => [
-                item.properties.Longitude,
-                item.properties.Latitude,
-            ]);
-            const points = turf.points(arr);
-            this.setState({ points });
-        }
+        // if (isDefined(cidata.features)) {
+        //     const arr = cidata.features.map(item => [
+        //         item.properties.Longitude,
+        //         item.properties.Latitude,
+        //     ]);
+        //     const points = turf.points(arr);
+        //     this.setState({ points });
+        // }
         if (buildings.length > 0) {
             const buildingsD = buildings.filter(item => item.point !== undefined)
                 .map(p => p.point.coordinates);
@@ -465,12 +465,13 @@ class FloodHistoryMap extends React.Component {
                 this.setState({ searchTerm: e.features[0].properties.osm_id });
                 this.handleBuildingClick(true);
             });
+
             buildings.map((row) => {
                 this.map.setFeatureState(
                     {
                         id: row.osmId || 0,
                         source: 'composite',
-                        sourceLayer: 'jugalBuildings',
+                        sourceLayer: 'Jugal_building_polygon',
                     },
                     {
                         vuln: row.vulnerabilityScore || -1,
@@ -479,6 +480,8 @@ class FloodHistoryMap extends React.Component {
                 // }
                 return null;
             });
+
+
             this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
             this.map.setLayoutProperty('Snow', 'visibility', 'visible');
             this.map.setLayoutProperty('Roads', 'visibility', 'visible');
@@ -613,7 +616,7 @@ class FloodHistoryMap extends React.Component {
                 {
                     id: this.props.buildingVul.osmId || 0,
                     source: 'composite',
-                    sourceLayer: 'jugalBuildings',
+                    sourceLayer: 'Jugal_building_polygon',
                 },
                 {
                     vuln: this.props.buildingVul.vulnerabilityScore || -1,
@@ -766,7 +769,8 @@ class FloodHistoryMap extends React.Component {
         }
         if (searchId) {
             const coordinatesObj = this.props.buildinggeojson
-                .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
+                .features
+                .filter(b => searchId === parseInt(b.properties.osm_id, 10));
             let cood = [];
             if (coordinatesObj.length > 0) {
                 cood = coordinatesObj[0].geometry.coordinates;

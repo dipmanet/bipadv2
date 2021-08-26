@@ -297,7 +297,7 @@ const JugalMap = (props: Props) => {
                     source: layer,
                     filter: ['!', ['has', 'point_count']],
                     layout: {
-                        'icon-image': ['downcase', ['get', 'CI']],
+                        'icon-image': ['downcase', ['get', 'icon']],
                         'icon-size': 0.3,
                         'icon-anchor': 'bottom',
                     },
@@ -475,6 +475,24 @@ const JugalMap = (props: Props) => {
 
                 return null;
             });
+
+            if (rightElement > 0) {
+                layers[layers.length - 1].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+                incidents.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'visible');
+                        map.current.moveLayer(`incidents-${layer}`);
+                        map.current.moveLayer(`incidents-icon-${layer}`);
+                    }
+                    return null;
+                });
+            }
         });
         const destroyMap = () => {
             jugalMap.remove();
@@ -496,6 +514,7 @@ const JugalMap = (props: Props) => {
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
+            console.log('categoriesCritical', categoriesCritical);
             categoriesCritical.map((layer) => {
                 if (map.current) {
                     map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
@@ -612,7 +631,7 @@ const JugalMap = (props: Props) => {
                 });
             }
 
-            if (incidentsArr.length > 0 && incidentsArr.indexOf(rightElement + 1) !== -1) {
+            if (incidentsArr.length > 0 && incidentsPages.indexOf(rightElement + 1) !== -1) {
                 incidentsArr.map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
