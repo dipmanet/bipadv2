@@ -1,15 +1,19 @@
+.floodDepthContainer{
+    position: fixed;
+    background: rgb(12,36,51);
+    left: calc(30% - 60px);
+    bottom: 22px;
+    z-index: 201;
+    padding: 5px;
     h2{
         margin-top: 10px;
-        opacity: 0.67;
+        opacity: 0.87;
+        color: white;
+        font-size: 12px;
     }
-  
-    .floodDepthContainer{
+
+    .depthItems{
         display: flex;
-        position: fixed;
-        // right: calc(% - 75px);
-        left: calc(30% - 60px);
-        bottom: 22px;
-        z-index: 201;
         .floodDepth{
             display: flex;
             flex-direction: column;
@@ -60,9 +64,4 @@
         }
    
     }
-
-    
-
-
-
-
+}

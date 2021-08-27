@@ -367,7 +367,7 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+        this.map.addControl(new mapboxgl.ScaleControl(), 'top-right');
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
