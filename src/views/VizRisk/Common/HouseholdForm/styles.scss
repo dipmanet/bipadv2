@@ -33,3 +33,19 @@ $button-color: rgb(0,170,223);
     font-size: 10px;
     text-transform: uppercase;
 }
+.loaderInfo{
+    position: fixed;
+    z-index: 9999;
+top: 50%;
+left: 55%;
+// border: 1px solid red;
+    .loader{
+        background-color: white;
+    }
+    .loaderText{
+        color: rgb(139, 135, 135);
+        position: relative;
+        top: 40px !important;
+        left: 3px;
+    }
+}

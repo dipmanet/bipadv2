@@ -188,9 +188,6 @@ const HouseholdForm = (props) => {
     };
 
     const handleSave = () => {
-        console.log('osmid', osmId);
-        console.log('osmid type', typeof osmId);
-        console.log('rounded', parseInt(osmId, 10));
         setFormData({ ...buildingFormData, osmId: parseInt(osmId, 10) });
         if (buildingData && Object.keys(buildingData).length > 0 && buildingData.id) {
             setPending(true);
@@ -200,6 +197,7 @@ const HouseholdForm = (props) => {
                 handlePostSuccess,
             });
         } else {
+            setPending(true);
             buildingPostRequest.do({
                 data: buildingFormData,
                 osmId: parseInt(osmId, 10),
@@ -219,6 +217,9 @@ const HouseholdForm = (props) => {
                     ? (
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
+                            <p className={styles.loaderText}>
+                    Saving Household Data...
+                            </p>
                         </div>
                     )
                     : (
