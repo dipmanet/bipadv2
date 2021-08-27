@@ -98,6 +98,7 @@ const HouseholdForm = (props) => {
     const ecInputTypes = getInputTypes(economicFactor);
     const ecSelectTypes = getSelectTypes(economicFactor);
 
+    console.log('building data recieved: ', buildingData);
 
     useEffect(() => {
         if (buildingData && Object.keys(buildingData).length > 0) {
@@ -218,7 +219,7 @@ const HouseholdForm = (props) => {
                         <div className={styles.loaderInfo}>
                             <Loader color="#fff" className={styles.loader} />
                             <p className={styles.loaderText}>
-                    Saving Household Data...
+                                Saving Household Data...
                             </p>
                         </div>
                     )

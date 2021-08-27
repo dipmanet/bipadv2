@@ -343,7 +343,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                      Damage Grade
                                                     </td>
                                                     <td>
-                                                        {(singularBuldingData && singularBuldingData.buildingCondition) || '-'}
+                                                        {(singularBuldingData && singularBuldingData.damageGrade) || '-'}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -380,8 +380,8 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                     <td>{(singularBuldingData && singularBuldingData.peopleWithDisability) || '-'}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Medical centers</td>
-                                                    <td>{(singularBuldingData && singularBuldingData.medicalCenter) || '-'}</td>
+                                                    <td>Distance from Medical centers (minutes) </td>
+                                                    <td>{(singularBuldingData && singularBuldingData.healthPostDistance) || '-'}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Distance from Security centers (minutes)</td>

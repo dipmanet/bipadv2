@@ -480,6 +480,31 @@ const JugalMap = (props: Props) => {
                 jugalMap.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
                 return null;
             });
+
+
+            if (rightElement > 0) {
+                layers[layers.length - 1].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+                layers[0].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
+                });
+                incidents.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
+                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'visible');
+                        map.current.moveLayer(`incidents-${layer}`);
+                        map.current.moveLayer(`incidents-icon-${layer}`);
+                    }
+                    return null;
+                });
+            }
         });
         const destroyMap = () => {
             jugalMap.remove();

@@ -10,7 +10,7 @@ import { getHillShadeLayer, getSingularBuildingData } from '#views/VizRisk/Jugal
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
 import styles from './styles.scss';
-
+import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 
 import {
     wardsSelector,
@@ -366,7 +366,7 @@ class FloodHistoryMap extends React.Component {
             minZoom: 2,
             maxZoom: 22,
         });
-        this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
+        this.map.addControl(new mapboxgl.ScaleControl(), 'top-right');
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         const { CIData: cidata, buildings, rasterLayer } = this.props;
@@ -919,6 +919,7 @@ class FloodHistoryMap extends React.Component {
                             value={String(this.state.opacityFlood)}
                             className={styles.slider}
                         />
+                        <FloodDepthLegend />
                     </>
                 )
                     }

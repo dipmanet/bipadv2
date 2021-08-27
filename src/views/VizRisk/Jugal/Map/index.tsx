@@ -483,6 +483,12 @@ const JugalMap = (props: Props) => {
                     }
                     return null;
                 });
+                layers[0].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
+                });
                 incidents.map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
+import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import { getHillShadeLayer, getGeoJSON } from '#views/VizRisk/Jugal/utils';
 
 
@@ -828,6 +829,7 @@ class FloodHistoryMap extends React.Component {
                             value={String(this.state.opacityFlood)}
                             className={styles.slider}
                         />
+                        <FloodDepthLegend />
                     </>
                 )
                     }

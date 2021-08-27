@@ -246,9 +246,20 @@ class Jugal extends React.Component {
     }
 
     public componentDidMount() {
+        let admin;
         const { user } = this.props;
-        const buildingdataAddPermission = checkPermission(user, 'change_resource', 'resources');
-        this.setState({ buildingdataAddPermission });
+        // const buildingdataAddPermission = checkPermission(user, 'change_resource', 'resources');
+
+        if (user && user.isSuperuser) {
+            console.log('super user');
+            admin = true;
+        } else if (user && user.profile && user.profile.municipality === 23010) {
+            admin = true;
+        } else {
+            admin = false;
+        }
+
+        this.setState({ buildingdataAddPermission: admin });
     }
 
     public componentDidUpdate() {

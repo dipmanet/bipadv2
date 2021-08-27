@@ -425,7 +425,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     <td>{(singularBuldingData && singularBuldingData.peopleWithDisability) || '-'}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Distance to medical centers (minutes)</td>
+                                                    <td>Distance from Medical centers (minutes)</td>
                                                     <td>{(singularBuldingData && singularBuldingData.healthPostDistance) || '-'}</td>
                                                 </tr>
                                                 <tr>

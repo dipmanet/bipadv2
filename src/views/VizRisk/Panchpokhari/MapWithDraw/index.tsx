@@ -7,6 +7,7 @@ import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import { getHillShadeLayer, getGeoJSONPH } from '#views/VizRisk/Panchpokhari/utils';
+import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 
 
 import styles from './styles.scss';
@@ -852,6 +853,7 @@ class FloodHistoryMap extends React.Component {
                             value={String(this.state.opacityFlood)}
                             className={styles.slider}
                         />
+                        <FloodDepthLegend />
                     </>
                 )
                     }
