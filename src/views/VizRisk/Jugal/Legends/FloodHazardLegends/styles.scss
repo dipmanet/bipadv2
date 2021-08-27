@@ -7,10 +7,10 @@
     border: 1px solid rgba( 255, 255, 255, 0.18 );
     // padding: 10px;
     // border: 1px solid red;
-    height: 250px;
+    height: 270px;
     width: 140px;
     position: fixed;
-    bottom: 170px;
+    bottom: 190px;
     left: calc(100% - 210px);
     z-index: 1000;
     h2{
@@ -31,17 +31,10 @@
         }
     }
     .floodMainContainer{
-        display:flex;
-        padding: 7px 0 15px 0;
-        height: 50%;
-        flex-direction: column;
-        position: fixed;
-        // background-color: blue;
-        .floodSubGroup{
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+        display: block;
             .floodItemContainer{
+                margin: 0;
+                // height: fit-content;
                 .legendBtn{
                     cursor: pointer;
                     background-color: transparent;
@@ -96,7 +89,6 @@
                 }
            
             }
-        }
     }
 }
 
