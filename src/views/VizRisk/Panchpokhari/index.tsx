@@ -258,6 +258,8 @@ class Jugal extends React.Component {
         } else {
             admin = false;
         }
+
+        this.setState({ buildingdataAddPermission: admin });
     }
 
     public componentDidUpdate() {
