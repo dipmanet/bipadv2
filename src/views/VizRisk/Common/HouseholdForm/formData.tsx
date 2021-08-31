@@ -11,11 +11,13 @@ export const getBuildingOptions = (enumData: array) => (
                 title: 'Foundation Type',
                 options: getOptions(enumData, 'foundation_type'),
                 select: true,
+                placeholder: 'Please select the Foundation Type',
             },
             {
                 title: 'Roof Type',
                 options: getOptions(enumData, 'roof_type'),
                 select: true,
+                placeholder: 'Please select the Roof Type',
             },
             {
                 title: 'Storeys',
@@ -25,11 +27,12 @@ export const getBuildingOptions = (enumData: array) => (
                 title: 'Ground Surface',
                 options: getOptions(enumData, 'ground_surface'),
                 select: true,
+                placeholder: 'Please select the Ground Surface',
             },
             {
                 title: 'Building Condition',
                 options: getOptions(enumData, 'building_condition'),
-
+                placeholder: 'Please select the Building Condition',
                 select: true,
             },
             {
@@ -41,6 +44,7 @@ export const getBuildingOptions = (enumData: array) => (
                     '4',
                     '5',
                 ],
+                placeholder: 'Please select the Damage Grade',
                 select: true,
 
             },
@@ -55,18 +59,6 @@ export const getBuildingOptions = (enumData: array) => (
             },
         ],
         socialFactors: [
-            // {
-            //     title: 'Age of house owner',
-            //     select: false,
-            // },
-            // {
-            //     title: 'Pregnant women',
-            //     select: false,
-            // },
-            // {
-            //     title: 'Chronically ill',
-            //     select: false,
-            // },
             {
                 title: 'Number of People/House Members',
                 select: false,
@@ -82,6 +74,7 @@ export const getBuildingOptions = (enumData: array) => (
             {
                 title: 'Ownership of House',
                 options: getOptions(enumData, 'ownership'),
+                placeholder: 'Please select the Ownership of House',
                 select: true,
             },
             {
@@ -117,11 +110,13 @@ export const getBuildingOptions = (enumData: array) => (
             {
                 title: 'Main source of income',
                 options: getOptions(enumData, 'major_occupation'),
+                placeholder: 'Please select the Main source of income',
                 select: true,
             },
             {
                 title: 'Supporting occupation',
                 options: getOptions(enumData, 'supporting_occupation'),
+                placeholder: 'Please select the Supporting occupation',
                 select: true,
             },
             {
@@ -136,6 +131,7 @@ export const getBuildingOptions = (enumData: array) => (
                     '4-6',
                     '<3',
                 ],
+                placeholder: 'Please select the Sufficiency of Agriculture product (in months) ',
                 select: true,
             },
         ],

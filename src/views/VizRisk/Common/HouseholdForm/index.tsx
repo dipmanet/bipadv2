@@ -238,7 +238,10 @@ const HouseholdForm = (props) => {
                                                 onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
                                             >
-                                                <option value="">{' '}</option>
+
+                                                <option value="" disabled selected>
+                                                    {physicalFactors.filter(pf => pf.title === type)[0].placeholder}
+                                                </option>
                                                 {physicalFactors.filter(pf => pf.title === type)[0].options
                                                     .map((item: string) => <option value={item}>{item}</option>)
                                                 }
@@ -258,6 +261,7 @@ const HouseholdForm = (props) => {
                                                 value={buildingFormData[refData[type]]}
                                                 onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
+                                                placeholder={`Please enter ${type}`}
                                             />
 
                                         </div>
@@ -278,7 +282,9 @@ const HouseholdForm = (props) => {
                                                 onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
                                             >
-                                                <option value="">{' '}</option>
+                                                <option value="" disabled selected>
+                                                    {socialFactors.filter(pf => pf.title === type)[0].placeholder}
+                                                </option>
                                                 {socialFactors.filter(pf => pf.title === type)[0].options
                                                     .map((item: string) => <option value={item}>{item}</option>)
 
@@ -299,6 +305,8 @@ const HouseholdForm = (props) => {
                                                 value={buildingFormData[refData[type]]}
                                                 onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
+                                                placeholder={`Please enter ${type}`}
+
                                             />
 
                                         </div>
@@ -320,7 +328,9 @@ const HouseholdForm = (props) => {
                                                 onChange={e => handleFoundation(e, type)}
                                                 className={styles.selectElement}
                                             >
-                                                <option value="">{' '}</option>
+                                                <option value="" disabled selected>
+                                                    {economicFactor.filter(pf => pf.title === type)[0].placeholder}
+                                                </option>
                                                 {
                                                     economicFactor.filter(pf => pf.title === type)[0].options
                                                         .map((item: string) => <option value={item}>{item}</option>)
@@ -340,6 +350,7 @@ const HouseholdForm = (props) => {
                                                 type="text"
                                                 value={buildingFormData[refData[type]]}
                                                 onChange={e => handleFoundation(e, type)}
+                                                placeholder={`Please enter ${type}`}
                                                 className={styles.selectElement}
                                             />
 
