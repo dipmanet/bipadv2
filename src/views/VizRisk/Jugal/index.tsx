@@ -253,7 +253,7 @@ class Jugal extends React.Component {
         if (user && user.isSuperuser) {
             console.log('super user');
             admin = true;
-        } else if (user && user.profile && user.profile.municipality === 23010) {
+        } else if (user && user.profile && user.profile.municipality === 23007) {
             admin = true;
         } else {
             admin = false;
