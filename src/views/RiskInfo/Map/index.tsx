@@ -74,6 +74,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         loadedImages: [],
         selectedImage: '',
         selectedMunicipalityName: '',
+        loader: null,
 
 
     }
@@ -135,6 +136,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
     private handleClickModalButton=(buttonId) => {
         const { loadedImages } = this.state;
         this.setState({
+            loader: true,
+        });
+        this.setState({
             clickedButton: buttonId,
         });
         if (buttonId === 1) {
@@ -172,6 +176,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             clickedButton,
             selectedImage,
             selectedMunicipalityName,
+            loader,
 
         } = this.state;
         const { closeModal } = this.props;
@@ -183,16 +188,8 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         rasterLayers = selectedActiveLayer.filter(d => d.type === 'raster');
         choroplethLayers = selectedActiveLayer.filter(d => d.type === 'choropleth');
         const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
-        console.log('This is choropleth layer', finalChoroPlethLayer);
 
-
-        // const responseDataKeys = Object.keys(mapClickedResponse);
-        // const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
-        // const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
-        console.log('Active layer', activeLayers);
-        console.log('choroplethLayers', choroplethLayers);
-        console.log('raster layer', rasterLayers);
-        console.log('loaded image', selectedImage);
+        const municipalityAvailableForOpenseadragon = finalChoroPlethLayer.length && feature !== undefined ? finalChoroPlethLayer[0].mapState.filter(item => item.id === feature.id) : [];
 
 
         const isJsonDataPresent = rasterLayers.length && Object.keys(rasterLayers[rasterLayers.length - 1]).find(item => item === 'jsonData');
@@ -205,9 +202,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         const tooltipValues = JsonDataPresent !== undefined && JsonDataPresent !== 0 && tooltipData !== undefined && tooltipData !== 0 && JsonDataPresent.map(item => tooltipData[item.key]);
 
-
-        // const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
-        // const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
 
         return (
             <>
@@ -344,7 +338,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                         </div>
                                     </div>
                                     <div className={styles.rightPane}>
-                                        <OpenSeaDragonViewer selectedImage={selectedImage} />
+                                        <OpenSeaDragonViewer selectedImage={selectedImage} loadLoader={loader} />
                                     </div>
                                 </div>
                             </ModalBody>
@@ -353,52 +347,50 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         </Modal>
                     )
                     : ''}
-                { finalChoroPlethLayer.map((layer, i) => {
-                    console.log('layer name', layer.layername);
-                    return (
-                        <MapSource
-                            key={layer.id}
+                { finalChoroPlethLayer.map((layer, i) => (
+                    <MapSource
+                        key={layer.id}
                             // sourceKey={layer.layername}
-                            sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
-                            sourceOptions={{
-                                type: 'vector',
-                                url: mapSources.nepal.url,
+                        sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
+                        sourceOptions={{
+                            type: 'vector',
+                            url: mapSources.nepal.url,
+                        }}
+                    >
+                        <MapLayer
+                            layerKey="choropleth-layer"
+                            layerOptions={{
+                                type: 'fill',
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                paint: {
+                                    ...layer.paint,
+                                    'fill-opacity': layer.paint['fill-opacity'].map(
+                                        val => (typeof val === 'number' ? val * layer.opacity : val),
+                                    ),
+                                },
                             }}
-                        >
-                            <MapLayer
-                                layerKey="choropleth-layer"
-                                layerOptions={{
-                                    type: 'fill',
-                                    'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                    paint: {
-                                        ...layer.paint,
-                                        'fill-opacity': layer.paint['fill-opacity'].map(
-                                            val => (typeof val === 'number' ? val * layer.opacity : val),
-                                        ),
-                                    },
-                                }}
 
-                                onClick={layer.tooltipRenderer ? this.handleClick : undefined}
-                                onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                                onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
-                            />
-                            <MapLayer
-                                layerKey="choropleth-layer-outline"
-                                layerOptions={{
-                                    'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                    type: 'line',
-                                    paint: linePaintByAdminLevel[layer.adminLevel],
+                            onClick={layer.tooltipRenderer ? this.handleClick : undefined}
+                            onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
+                            onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
+                        />
+                        <MapLayer
+                            layerKey="choropleth-layer-outline"
+                            layerOptions={{
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                type: 'line',
+                                paint: linePaintByAdminLevel[layer.adminLevel],
 
 
-                                }}
-                            />
+                            }}
+                        />
 
-                            <MapState
-                                attributes={layer.mapState}
-                                attributeKey="value"
-                                sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
-                            />
-                            { layer.tooltipRenderer
+                        <MapState
+                            attributes={layer.mapState}
+                            attributeKey="value"
+                            sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
+                        />
+                        { layer.tooltipRenderer
                            && hoverLngLat
                            && feature
                            && (feature.source === layer.layername)
@@ -414,11 +406,13 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                    />
                                </MapTooltip>
                            )}
-                            {choroplethLayers.length && choroplethLayers[choroplethLayers.length - 1].title === 'Post-Monsoon 2020 landslide Map'
-                                ? choroplethLayers.length && layer.tooltipRenderer
+                        {choroplethLayers.length && choroplethLayers[choroplethLayers.length - 1].title === 'Post-Monsoon 2020 landslide Map'
+                                && municipalityAvailableForOpenseadragon.length
+                            ? choroplethLayers.length && layer.tooltipRenderer
                             && hoverLngLat
                            && feature
                            && (feature.source === 'post_monsoon-0'
+
 
                            && (
                                <MapTooltip
@@ -471,12 +465,11 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                </MapTooltip>
                            )
 
-                            }
+                        }
 
 
-                        </MapSource>
-                    );
-                })}
+                    </MapSource>
+                ))}
             </>
         );
     }

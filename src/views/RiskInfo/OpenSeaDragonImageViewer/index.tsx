@@ -4,14 +4,15 @@
 import OpenSeaDragon from 'openseadragon';
 import React, { useEffect, useState } from 'react';
 import Canvas2Image from '@reglendo/canvas2image';
+// import { Canvas2Image } from 'canvas2image';
+import Loader from 'react-loader';
 import image1 from '#resources/openseadragon-images/download_rest.png';
 import image2 from '#resources/openseadragon-images/download_hover.png';
 
-
-const OpenSeaDragonViewer = ({ image, selectedImage }) => {
+const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
     const [viewer, setViewer] = useState(null);
-    const [test, setTest] = useState(null);
-
+    const [downloadContent, setDownloadContent] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const calculateDownloadDimensions = () => {
         let returnObj = {};
@@ -40,38 +41,25 @@ const OpenSeaDragonViewer = ({ image, selectedImage }) => {
 
 
     const handleDownload = (e) => {
-        setTest(e);
-        console.log(e);
-        // const { width, height } = calculateDownloadDimensions();
-        // console.log("height width",height,width)
-
-        // if (width && height) {
-
-        // Canvas2Image.saveAsJPEG(
-        //   viewer.drawer.canvas,
-        // "openseadragon-react-viewer-download",
-        //   901,
-        //   801
-        // );
-        // }
+        setDownloadContent(e);
     };
 
     useEffect(() => {
-        console.log('This viewer', viewer);
         const { width, height } = calculateDownloadDimensions();
-        console.log('height width', height, width);
-        if (test !== null) {
-            console.log('that viewer', viewer);
-            Canvas2Image.saveAsJPEG(
+
+        if (downloadContent !== null) {
+            const imageName = selectedImage.split('.');
+            Canvas2Image.saveAsPNG(
                 viewer.drawer.canvas,
-                'openseadragon-react-viewer-download',
+                `${imageName[0]}`,
                 width,
                 height,
             );
 
-            setTest(null);
+
+            setDownloadContent(null);
         }
-    }, [test]);
+    }, [downloadContent]);
 
 
     useEffect(() => {
@@ -79,7 +67,7 @@ const OpenSeaDragonViewer = ({ image, selectedImage }) => {
             viewer.open(image.source);
         }
     }, [image, viewer]);
-    console.log('This is images', image);
+
     const InitOpenseadragon = () => {
         // eslint-disable-next-line no-unused-expressions
         viewer && viewer.destroy();
@@ -95,25 +83,32 @@ const OpenSeaDragonViewer = ({ image, selectedImage }) => {
         const view = OpenSeaDragon({
             id: 'openSeaDragon',
             prefixUrl: '/src/resources/openseadragon-images/',
+            crossOriginPolicy: 'Anonymous',
 
             tileSources: [
                 `https://imageserver.yilab.org.np/iiif/3/${selectedImage}/info.json`,
             ],
         });
-        view.addControl(customButton.element, { anchor: OpenSeaDragon.ControlAnchor.TOP_LEFT });
-        //   view.addHandler('open', function() {
-        //     const img = view.drawer.canvas.toDataURL("image/png");
-        //     console.log(img);
-        //  })
 
+
+        view.addControl(customButton.element, { anchor: OpenSeaDragon.ControlAnchor.TOP_LEFT });
+
+        view.addHandler('open', () => {
+            const loader = view.world.getItemAt(0);
+            loader.addHandler('fully-loaded-change', (event) => {
+                if (event.fullyLoaded) {
+                    setLoading(false);
+                }
+            });
+        });
 
         setViewer(
             view,
         );
     };
     useEffect(() => {
+        setLoading(loadLoader);
         InitOpenseadragon();
-        console.log('This is final viewer', viewer);
         return () => {
             // eslint-disable-next-line no-unused-expressions
             viewer && viewer.destroy();
@@ -121,16 +116,26 @@ const OpenSeaDragonViewer = ({ image, selectedImage }) => {
     }, [selectedImage]);
 
 
-    console.log('This viewer', viewer);
-
     return (
-        <div
-            id="openSeaDragon"
-            style={{
-                height: '100%',
-                width: 'auto',
-            }}
-        />
+        <>
+            {loading ? (
+                <div>
+
+                    <p style={{ fontSize: '18px', fontWeight: 'bold', top: '5%', position: 'absolute', zIndex: '1' }}>Loading Image,Please Wait...</p>
+                </div>
+            ) : ''}
+            <div
+                id="openSeaDragon"
+                style={{
+                    height: '100%',
+                    width: 'auto',
+                }}
+            />
+
+
+            {loading ? <Loader left="60%" /> : ''}
+
+        </>
     );
 };
 export { OpenSeaDragonViewer };
