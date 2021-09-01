@@ -186,13 +186,28 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         console.log('This is choropleth layer', finalChoroPlethLayer);
 
 
-        const responseDataKeys = Object.keys(mapClickedResponse);
-        const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
-        const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
+        // const responseDataKeys = Object.keys(mapClickedResponse);
+        // const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
+        // const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
         console.log('Active layer', activeLayers);
         console.log('choroplethLayers', choroplethLayers);
         console.log('raster layer', rasterLayers);
         console.log('loaded image', selectedImage);
+
+
+        const isJsonDataPresent = rasterLayers.length && Object.keys(rasterLayers[rasterLayers.length - 1]).find(item => item === 'jsonData');
+        const JsonDataPresent = rasterLayers.length && rasterLayers[rasterLayers.length - 1].jsonData;
+
+        const tooltipKeys = JsonDataPresent !== undefined && JsonDataPresent !== 0 && JsonDataPresent.map(item => item.label);
+
+        const responseDataKeys = Object.keys(mapClickedResponse);
+        const tooltipData = responseDataKeys.length && mapClickedResponse.features.map(item => item.properties)[0];
+
+        const tooltipValues = JsonDataPresent !== undefined && JsonDataPresent !== 0 && tooltipData !== undefined && tooltipData !== 0 && JsonDataPresent.map(item => tooltipData[item.key]);
+
+
+        // const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
+        // const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
 
         return (
             <>
@@ -223,7 +238,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         />
 
 
-                        {rasterLayers.length && rasterLayers[rasterLayers.length - 1].showPopup ? tooltipLatlng && (
+                        {rasterLayers.length && isJsonDataPresent !== undefined ? tooltipLatlng && (
 
                             <MapTooltip
                                 coordinates={tooltipLatlng}

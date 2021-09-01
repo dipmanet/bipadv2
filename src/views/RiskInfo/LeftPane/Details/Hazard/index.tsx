@@ -14,12 +14,7 @@ import { generatePaint,
     getLayerHierarchy } from '#utils/domain';
 
 import styles from './styles.scss';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
+import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { municipalitiesSelector } from '#selectors';
 
 
