@@ -3,6 +3,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import { connect } from 'react-redux';
+
 import { getRasterTile, getBuildingFootprint, getFeatureInfo } from '#utils/domain';
 
 import MapSource from '#re-map/MapSource';
@@ -25,6 +26,8 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
+import { OpenSeaDragonViewer } from '../OpenSeaDragonImageViewer';
+import PrimaryButton from '#rsca/Button/PrimaryButton';
 
 interface Props {
 }
@@ -67,25 +70,54 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         feature: undefined,
         hoverLngLat: undefined,
         isModalOpen: false,
+        clickedButton: 1,
+        loadedImages: [],
+        selectedImage: '',
+        selectedMunicipalityName: '',
 
 
     }
 
     private handleCloseModal=() => {
+        const { loadedImages } = this.state;
+
         this.setState({
             isModalOpen: false,
+            selectedImage: loadedImages[0].landslideInventoryEnglishFilename,
+            clickedButton: 1,
+
+
         });
     }
 
-    private handleMouseEnter = (feature, lngLat) => {
+    private handleClick=(feature, lngLat) => {
+        console.log('Feature', feature);
+        const municipalityName = (`${feature.properties.title_en} ${feature.properties.type}`);
+        this.setState({
+            selectedMunicipalityName: municipalityName,
+        });
+        console.log('This is municipality', lngLat);
         this.setState({
             feature,
             hoverLngLat: lngLat,
             isModalOpen: true,
         });
 
-        const test = choroplethLayers[0].data.filter(item => item.municipality === feature.id);
-        console.log('final test', test);
+        const imagesLoaded = choroplethLayers[0].data.filter(item => item.municipality === feature.id);
+        console.log('This is test', imagesLoaded);
+        this.setState({
+            loadedImages: imagesLoaded,
+            selectedImage: imagesLoaded[0].landslideInventoryEnglishFilename,
+        });
+    }
+
+    private handleMouseEnter = (feature, lngLat) => {
+        console.log('This is municipality', lngLat, feature);
+        this.setState({
+            feature,
+            hoverLngLat: lngLat,
+
+        });
     }
 
     private handleMouseLeave = () => {
@@ -100,11 +132,46 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         closeTooltip(undefined);
     }
 
+    private handleClickModalButton=(buttonId) => {
+        const { loadedImages } = this.state;
+        this.setState({
+            clickedButton: buttonId,
+        });
+        if (buttonId === 1) {
+            this.setState({
+                selectedImage: loadedImages[0].landslideInventoryEnglishFilename,
+            });
+        } else if (buttonId === 2) {
+            this.setState({
+                selectedImage: loadedImages[0].landslideInventoryNepaliFilename,
+            });
+        } else if (buttonId === 3) {
+            this.setState({
+                selectedImage: loadedImages[0].landslideRunoutEnglishFilename,
+            });
+        } else if (buttonId === 4) {
+            this.setState({
+                selectedImage: loadedImages[0].landslideRunoutNepaliFilename,
+            });
+        } else if (buttonId === 5) {
+            this.setState({
+                selectedImage: loadedImages[0].landslideSusceptibilityEnglishFilename,
+            });
+        } else {
+            this.setState({
+                selectedImage: loadedImages[0].landslideSusceptibilityNepaliFilename,
+            });
+        }
+    }
+
     public render() {
         const {
             feature,
             hoverLngLat,
             isModalOpen,
+            clickedButton,
+            selectedImage,
+            selectedMunicipalityName,
 
         } = this.state;
         const { closeModal } = this.props;
@@ -114,16 +181,20 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         rasterLayers = activeLayers.filter(d => d.type === 'raster');
         choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
+        const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
+        console.log('This is choropleth layer', finalChoroPlethLayer);
 
 
         const responseDataKeys = Object.keys(mapClickedResponse);
         const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
         const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
         console.log('choroplethLayers', choroplethLayers);
-        console.log('choroplethLayers', choroplethLayers);
+        console.log('raster layer', rasterLayers);
+        console.log('loaded image', selectedImage);
 
         return (
             <>
+
                 <CommonMap
                     sourceKey="risk-infoz"
                 />
@@ -188,11 +259,13 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                 {isModalOpen
 
                     ? (
-                        <Modal>
+                        <Modal
+                            className={styles.openseadragon}
+                        >
 
                             <ModalHeader
                                 className={styles.header}
-                                title="Add Data"
+                                title={selectedMunicipalityName}
                                 rightComponent={(
                                     <DangerButton
                                         transparent
@@ -202,19 +275,74 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     />
                                 )}
                             />
-                            <ModalBody className={styles.modalBody} />
+                            <ModalBody className={styles.modalBody}>
+                                <div className={styles.imageViewer}>
+                                    <div className={styles.leftPane}>
+                                        <div className={styles.municipalityName} />
+                                        <div className={styles.buttons}>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 1 ? styles.selectedAgreeBtn : styles.agreeBtn}
+                                                onClick={() => this.handleClickModalButton(1)}
+
+                                            >
+                                        Landslide Inventory English
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 2 ? styles.selectedAgreeBtn : styles.agreeBtn}
+                                                onClick={() => this.handleClickModalButton(2)}
+                                            >
+                                        Landslide Inventory Nepali
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 3 ? styles.selectedAgreeBtn : styles.agreeBtn}
+                                                onClick={() => this.handleClickModalButton(3)}
+                                            >
+                                        Landslide Runout English
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 4 ? styles.selectedAgreeBtn : styles.agreeBtn}
+                                                onClick={() => this.handleClickModalButton(4)}
+                                            >
+                                         Landslide Runout Nepali
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 5 ? styles.selectedAgreeBtn : styles.agreeBtn}
+                                                onClick={() => this.handleClickModalButton(5)}
+                                            >
+                                        Landslide Susceptibility English
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 6 ? styles.selectedAgreeBtn : styles.agreeBtn}
+                                                onClick={() => this.handleClickModalButton(6)}
+                                            >
+                                         Landslide Susceptibility Nepali
+                                            </PrimaryButton>
+
+                                        </div>
+                                    </div>
+                                    <div className={styles.rightPane}>
+                                        <OpenSeaDragonViewer selectedImage={selectedImage} />
+                                    </div>
+                                </div>
+                            </ModalBody>
 
 
                         </Modal>
                     )
                     : ''}
-                { choroplethLayers.map((layer, i) => {
+                { finalChoroPlethLayer.map((layer, i) => {
                     console.log('layer name', layer.layername);
                     return (
                         <MapSource
                             key={layer.id}
                             // sourceKey={layer.layername}
-                            sourceKey={`${layer.layername}-${i}`}
+                            sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
                             sourceOptions={{
                                 type: 'vector',
                                 url: mapSources.nepal.url,
@@ -233,9 +361,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     },
                                 }}
 
-                                onClick={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                                // onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                                // onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
+                                onClick={layer.tooltipRenderer ? this.handleClick : undefined}
+                                onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
+                                onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
                             />
                             <MapLayer
                                 layerKey="choropleth-layer-outline"
@@ -253,25 +381,82 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                 attributeKey="value"
                                 sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
                             />
-
-
                             { layer.tooltipRenderer
+                           && hoverLngLat
+                           && feature
+                           && (feature.source === layer.layername)
+                           && (
+                               <MapTooltip
+                                   coordinates={hoverLngLat}
+                                   trackPointer
+                                   tooltipOptions={tooltipOptions}
+                               >
+                                   <layer.tooltipRenderer
+                                       feature={feature}
+                                       layer={layer}
+                                   />
+                               </MapTooltip>
+                           )}
+                            {choroplethLayers.length && choroplethLayers[choroplethLayers.length - 1].title === 'Post-Monsoon 2020 landslide Map'
+                                ? choroplethLayers.length && layer.tooltipRenderer
                             && hoverLngLat
-                            && feature
-                            && (feature.source === layer.layername)
-                            && (
-                                <MapTooltip
-                                    coordinates={hoverLngLat}
-                                    trackPointer
-                                    tooltipOptions={tooltipOptions}
-                                >
-                                    <layer.tooltipRenderer
-                                        feature={feature}
-                                        layer={layer}
-                                    />
-                                </MapTooltip>
-                            )
+                           && feature
+                           && (feature.source === 'post_monsoon-0'
+
+                           && (
+                               <MapTooltip
+                                   coordinates={hoverLngLat}
+                                   tooltipOptions={tooltipOptions}
+                                   onHide={this.handleAlertClose}
+
+                               >
+                                   <div className={styles.landslideTooltip}>
+                                       <div className={styles.header}>
+                                           <h4>
+                                               {feature.properties.title_en}
+                                               {' '}
+
+                                               {feature.properties.type}
+
+                                           </h4>
+                                       </div>
+
+                                       <div className={styles.content}>
+                                           <div>
+
+
+                                               <p>Click on municipality for map </p>
+
+
+                                           </div>
+
+                                       </div>
+
+
+                                   </div>
+
+
+                               </MapTooltip>
+                           )) : layer.tooltipRenderer
+                           && hoverLngLat
+                           && feature
+                           && (feature.source === layer.layername)
+                           && (
+                               <MapTooltip
+                                   coordinates={hoverLngLat}
+                                   trackPointer
+                                   tooltipOptions={tooltipOptions}
+                               >
+                                   <layer.tooltipRenderer
+                                       feature={feature}
+                                       layer={layer}
+                                   />
+                               </MapTooltip>
+                           )
+
                             }
+
+
                         </MapSource>
                     );
                 })}

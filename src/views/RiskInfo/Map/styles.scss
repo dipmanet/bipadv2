@@ -23,3 +23,78 @@
         font-weight: bold;
     }
 }
+.modalBody{
+    width: auto;
+    .imageViewer{
+        display: flex;
+        border: 1px solid #3684D9;
+        height: 100%;
+        .leftPane{
+            flex: 1;
+           
+           border-right: 1px solid #3684D9;
+            padding: 5px;
+            height: 100%;
+            background-color: #E5EBF1;
+            .municipalityName{
+                height: 5%;
+                
+                padding: 10px;
+                font-size: 18px;
+                font-weight: 600;
+            }
+            .buttons{
+                display: flex;
+                flex-direction: column;
+                height: 95%;
+                .selectedAgreeBtn{
+                    margin: 10px;
+                       
+                    align-items: center;
+                    filter: saturate(100%);
+                    background-color: #105AAC !important;
+                    opacity: 1;
+                    border-radius: 5px;
+                    color: white !important;
+                    border-radius: 5px;
+                 
+                    font-size: 12px;
+                    padding: 20px;
+                }
+                .agreeBtn{
+                   
+                       margin: 10px;
+                       
+                        align-items: center;
+                        filter: saturate(100%);
+                        background-color: #0A7EFD !important;
+                        opacity: 1;
+                        border-radius: 5px;
+                        color: white !important;
+                        border-radius: 5px;
+                     
+                        font-size: 12px;
+                        padding: 20px;
+                        
+                    }
+                    .agreeBtn:hover{
+                        background-color: #78B4F7 !important;
+                        border-color: #78B4F7;
+                    }
+               
+                
+            }
+        }
+        .rightPane{
+           flex: 5;
+           padding: 5px;
+           height: 100%;
+            
+        }
+    }
+}
+.openseadragon{
+    width: 90vw;
+  height: 90vh;
+  overflow: auto;
+}

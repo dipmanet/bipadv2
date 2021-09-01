@@ -82,6 +82,7 @@ import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/ma
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
 import '#resources/openspace-resources/humanitarian-fonts.css';
+import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
 
 
 const TableModalButton = modalize(Button);

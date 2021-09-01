@@ -60,6 +60,7 @@ const RiskTooltipOutput = ({ label, value }) => (
     </div>
 );
 const RiskTooltip = ({ layer, feature }) => (
+
     <div className={styles.riskTooltip}>
         <h3 className={styles.heading}>
             { feature.properties.title }
