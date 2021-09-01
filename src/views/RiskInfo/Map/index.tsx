@@ -178,9 +178,10 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse, landslidePolygonChoroplethMapData } = this.context;
 
+        const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
 
-        rasterLayers = activeLayers.filter(d => d.type === 'raster');
-        choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
+        rasterLayers = selectedActiveLayer.filter(d => d.type === 'raster');
+        choroplethLayers = selectedActiveLayer.filter(d => d.type === 'choropleth');
         const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
         console.log('This is choropleth layer', finalChoroPlethLayer);
 
@@ -188,6 +189,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         const responseDataKeys = Object.keys(mapClickedResponse);
         const tooltipKeys = responseDataKeys.length && mapClickedResponse.features.length && Object.keys(mapClickedResponse.features[0].properties);
         const tooltipValues = responseDataKeys.length && mapClickedResponse.features.length && Object.values(mapClickedResponse.features[0].properties);
+        console.log('Active layer', activeLayers);
         console.log('choroplethLayers', choroplethLayers);
         console.log('raster layer', rasterLayers);
         console.log('loaded image', selectedImage);
