@@ -92,12 +92,11 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
     }
 
     private handleClick=(feature, lngLat) => {
-        console.log('Feature', feature);
         const municipalityName = (`${feature.properties.title_en} ${feature.properties.type}`);
         this.setState({
             selectedMunicipalityName: municipalityName,
         });
-        console.log('This is municipality', lngLat);
+
         this.setState({
             feature,
             hoverLngLat: lngLat,
@@ -105,7 +104,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         });
 
         const imagesLoaded = choroplethLayers[0].data.filter(item => item.municipality === feature.id);
-        console.log('This is test', imagesLoaded);
+
         this.setState({
             loadedImages: imagesLoaded,
             selectedImage: imagesLoaded[0].landslideInventoryEnglishFilename,
@@ -113,7 +112,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
     }
 
     private handleMouseEnter = (feature, lngLat) => {
-        console.log('This is municipality', lngLat, feature);
         this.setState({
             feature,
             hoverLngLat: lngLat,

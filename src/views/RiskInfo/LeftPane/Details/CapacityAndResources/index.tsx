@@ -335,7 +335,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const resources = response as MultiResponse<PageType.Resource>;
             if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
-                console.log('setting resource list', resources.results);
+
                 if (params.resourceType) {
                     params.resourceType
                         .map(item => params.setIndividualResourceList(
@@ -457,7 +457,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
         const { faramValues: { region } } = this.props.filters;
-        console.log(this.props.filters.faramValues.region);
+
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
             this.props.requests.resourceGetRequest.do(
                 {
@@ -518,7 +518,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
             setCarKeys(newArr);
 
-            console.log('car keys', key, ...carKeys);
+
             this.props.requests.resourceGetRequest.do({
                 resourceType: newArr,
                 region: this.props.filters.faramValues.region,
