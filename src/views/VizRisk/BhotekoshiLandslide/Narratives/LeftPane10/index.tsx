@@ -162,10 +162,10 @@ const LeftPane10 = (props: Props) => {
             <h1>Landslide Risk</h1>
             <p>
             The map shows the ward level risk of landslide in
-            Bhotekoshi Rural Municipality. The municipality lies
-            in hilly region of the country and is also landslide
-            prone area. Out of the 5 wards, ward 1 and 3 are
-            comparatively at higher risk of landslide.
+            Bhotekoshi Rural Municipality. The municipality
+            lies in hilly region of the country, highly
+            susceptible to landslides. Out of the 5 wards,
+            ward 1 and 3 posess higher risk of landslide.
             </p>
             <p>
             Source: Durham University

@@ -4,14 +4,12 @@ import {
     BarChart,
     CartesianGrid,
     Label,
-    Legend,
     ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import Demo from '../../Data/demographicsData';
 
 
 interface Props{
@@ -86,9 +84,9 @@ const LeftPane7 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Past Landslide Incidents</h1>
             <p>
-            In the year 2020, 9 landslide incidents have occurred in the municipality.
-            6 people lost their lives, 4 went missing and 31 infrastructures were destroyed
-            due to the incidents.
+            In the year 2020, 8 landslide incidents have occurred
+            in the municipality. 6 people lost their lives, 4 went
+            missing and 31 houses were destroyed.
             </p>
 
             <p>NO. OF INCIDENTS</p>

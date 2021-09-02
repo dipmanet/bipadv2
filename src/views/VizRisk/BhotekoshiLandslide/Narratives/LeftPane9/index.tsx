@@ -64,7 +64,6 @@ const LeftPane8 = (props: Props) => {
     const [lossChart, setLossChart] = useState([]);
     const [cichartData, setCIChartData] = useState([]);
     const [reset, setReset] = useState(true);
-    const [lschartData, setLschartData] = useState(true);
     const { drawData, landSlide, chartReset, ci } = props;
 
     useEffect(() => {
@@ -132,11 +131,10 @@ const LeftPane8 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Landslide Susceptibility</h1>
             <p>
-            The map shows the area of Bhotekoshi Rural
-            Municipality in which landslides are likely
-            to occur. The red color signifies the higher
-            likelihood and blue color signifies the lower
-             likelihood of landslide occurrences.
+            The map shows the area of Bhotekoshi Rural Municipality
+            where landslides are likely to occur. The red color
+            signifies the higher likelihood and blue color signifies
+            the lower likelihood of landslide occurrences.
             </p>
             <p>
             Source: Durham University

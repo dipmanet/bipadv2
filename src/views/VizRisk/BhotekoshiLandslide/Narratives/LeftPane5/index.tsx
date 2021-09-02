@@ -64,10 +64,10 @@ const LeftPane4 = (props: Props) => {
             <h1>Demography</h1>
             <p>
             Bhotekoshi Rural Municipality has a total population
-            of 16,631 with 8431 males and 8200 females residing
-            in a total of 4183 households. Ward 2 has the largest
-            number of households (1431) while ward 3 has the least
-            number of households(302). (Data Source: Census 2011)
+            of 13,396 with 6470 males and 6908 females residing in
+            a total of 2586 households. Ward 4 has the largest number
+            of households (677) while ward 3 has the least number of
+            households(187). (Data Source: Municipal Profile, 2075)
             </p>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>

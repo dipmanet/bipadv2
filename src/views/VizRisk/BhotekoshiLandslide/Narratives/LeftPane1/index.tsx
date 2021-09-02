@@ -68,11 +68,11 @@ const LeftPane1 = (props: Props) => {
                         <p>
 
 
-                Sindhupalchowk district, located in Central Nepal,
-                faces incidents of landslides every year which causes
-                loss of lives and infrastructures. Among the most affected
-                municipalities in the district, Barhabise witnessed three
-                major landslides in the year 2020 alone.
+                        Sindhupalchowk district, located in Central Nepal,
+                        faces incidents of landslides every year which causes
+                        loss of lives and infrastructures.
+                        Among the most affected municipalities in the district,
+                        Bhotekoshi witnessed 9 landslides till date.
                         </p>
                     </>
                 )

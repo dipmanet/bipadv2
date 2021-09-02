@@ -37,11 +37,11 @@ const LeftPane4 = (props: Props) => {
              Land Cover
             </h1>
             <p>
-            Out of a total area of 278.31 square km, 61.19% of the
-            land is covered by forests, 4.14% by farmland, 9.11% by
-            meadow, 0.20% by water bodies and 0.13% by residential
-            areas. Other areas in the municipality is covered by
-            scree, sand, snow and scrubs.
+            Out of a total area of 278.31 square km, 61.18%
+            of the land is covered by forests, 4.14% by farmland,
+            9.11% by meadow, 0.19% by water bodies and 0.13% by
+            residential areas. Other areas in the municipality is
+            covered by scree, sand, snow and scrubs.
             </p>
             <p>
                 Source: OpenStreetMap

@@ -115,9 +115,9 @@ const LeftPane3 = (props: Props) => {
             </h1>
             <p>
             Bhotekoshi Rural Municipality is located in Sindhupalchowk
-            district of Bagmati province. The municipality has 5 wards
-            and covers an area of 278.31 sq.km and is situated in the
-            altitude range of 1183 to 5371 m above sea level.
+            district of Bagmati province. The municipality has 5
+            wards and covers an area of 278.31 sq.km and is situated
+            in the altitude range of 1183 to 5371 m above sea level.
             </p>
             <p>
                 Source: Department of Hydrology and Meteorology

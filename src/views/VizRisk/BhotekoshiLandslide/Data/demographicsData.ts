@@ -1,10 +1,10 @@
 export default {
     demographicsData: [
-        { name: 'Ward 2', MalePop: 2869, FemalePop: 2662, Total: 5531, FamilyCount: 1431 },
-        { name: 'Ward 1', MalePop: 1555, FemalePop: 1750, Total: 3305, FamilyCount: 949 },
-        { name: 'Ward 4', MalePop: 1704, FemalePop: 1593, Total: 3297, FamilyCount: 783 },
-        { name: 'Ward 5', MalePop: 1660, FemalePop: 1595, Total: 3255, FamilyCount: 718 },
-        { name: 'Ward 3', MalePop: 643, FemalePop: 600, Total: 1243, FamilyCount: 302 },
+        { name: 'Ward 2', MalePop: 1003, FemalePop: 1115, Total: 2119, FamilyCount: 478 },
+        { name: 'Ward 1', MalePop: 1846, FemalePop: 1951, Total: 3802, FamilyCount: 636 },
+        { name: 'Ward 4', MalePop: 1635, FemalePop: 1698, Total: 3340, FamilyCount: 677 },
+        { name: 'Ward 5', MalePop: 1533, FemalePop: 1642, Total: 3178, FamilyCount: 608 },
+        { name: 'Ward 3', MalePop: 453, FemalePop: 502, Total: 957, FamilyCount: 187 },
     ],
     demographicsLegends: {
         densityVals: [

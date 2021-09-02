@@ -272,22 +272,17 @@ const LeftPane8 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Landslide Inventory</h1>
             <p>
-            The map shows the distribution of landslides that
-            occurred in the past. The landslide inventory data
-            of the year 2014 to 2020 has been visualized in the
-            map. It is known that a significant proportion of
-            landslide risk in the earthquake affected areas comes
-            from the reactivation of existing landslides, so this
-            map is useful for identifying landslides even high on
-            the mountainsides above, and for visualising if and how they have changed.
-
+            The map shows the spatial distribution of landslides
+            that occurred from 2014 to 2020. Research suggests that
+            a significant proportion of landslide risk in the earthquake
+            affected areas comes from the reactivation of existing landslides,
+            so this map is useful for visualising if and how they have changed.
             </p>
             <p>
-            After Gorkha Earthquake 2015, 836 landslide incidents
-            were seen in the post monsoon season. Likewise,  the
-            higher number of post monsoon landslide incidents till
-            date occurred in the year 2018 i.e. 907.
-
+            After Gorkha Earthquake 2015, 836 landslide incidents were
+            seen in the post monsoon season. Likewise,  the higher
+            number of post monsoon landslide incidents till date
+            occurred in the year 2018 i.e. 907.
             </p>
             <p>
             Source: Durham University
