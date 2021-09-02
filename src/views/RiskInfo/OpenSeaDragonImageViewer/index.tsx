@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react';
 import Canvas2Image from '@reglendo/canvas2image';
 // import { Canvas2Image } from 'canvas2image';
 import Loader from 'react-loader';
-import image1 from '#resources/openseadragon-images/download_rest.png';
-import image2 from '#resources/openseadragon-images/download_hover.png';
+// import image1 from '#resources/openseadragon-images/download_rest.png';
+// import image2 from '#resources/openseadragon-images/download_hover.png';
 
 const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
     const [viewer, setViewer] = useState(null);
@@ -73,16 +73,16 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
         viewer && viewer.destroy();
         const customButton = new OpenSeaDragon.Button({
             tooltip: 'Download',
-            srcRest: image1,
-            srcGroup: image1,
-            srcHover: image2,
-            srcDown: image1,
+            srcRest: '/public/openseadragon-images/download_rest.png',
+            srcGroup: '/public/openseadragon-images/download_rest.png',
+            srcHover: '/public/openseadragon-images/download_hover.png',
+            srcDown: '/public/openseadragon-images/download_rest.png',
             onClick: handleDownload,
         });
 
         const view = OpenSeaDragon({
             id: 'openSeaDragon',
-            prefixUrl: '/src/resources/openseadragon-images/',
+            prefixUrl: '/public/openseadragon-images/',
             crossOriginPolicy: 'Anonymous',
 
             tileSources: [
