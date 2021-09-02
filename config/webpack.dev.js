@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const StylishPlugin = require('eslint/lib/cli-engine/formatters/stylish');
+const CopyPlugin = require('copy-webpack-plugin');
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const dotenv = require('dotenv').config({
     path: '.env',
@@ -159,6 +160,11 @@ module.exports = (env) => {
             ],
         },
         plugins: [
+            new CopyPlugin({
+                patterns: [
+                    { from: 'public/publicFiles', to: 'publicFiles' },
+                ],
+            }),
             new webpack.DefinePlugin({
                 'process.env': ENV_VARS,
             }),

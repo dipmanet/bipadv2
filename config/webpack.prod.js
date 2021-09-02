@@ -172,29 +172,17 @@ module.exports = (env) => {
 
 
             ],
-            context: path.join(__dirname, 'your-app'),
-            // plugins: [
-            //     new CopyPlugin({
-            //         patterns: [
-            //             { from: 'openseadragon-images' },
-            //         ],
-            //     }),
-            // ],
+
+
         },
+
         plugins: [
             new CopyPlugin({
                 patterns: [
-                    { from: 'openseadragon-images' },
+                    { from: 'public/publicFiles', to: 'publicFiles' },
                 ],
             }),
-            // new CopyPlugin({
-            //     patterns: [
-            //         { from: 'openseadragon-images', to: 'build' },
-            //     ],
-            //     options: {
-            //         concurrency: 100,
-            //     },
-            // }),
+
             new webpack.DefinePlugin({
                 'process.env': ENV_VARS,
             }),
