@@ -86,10 +86,10 @@ const LeftPane7 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Past Landslide Incidents</h1>
             <p>
-                In the year 2020, 3 landslides have
-               occurred in the municipality. 18 people lost
-               their lives, 32 went missing and 47 infrastructures
-               were destroyed due to the incidents.
+            In the year 2020, 3 landslide incidents
+            have occurred in the municipality. 8 people
+            lost their lives, 32 went missing and 47
+            houses were destroyed.
             </p>
 
             <p>NO. OF INCIDENTS</p>

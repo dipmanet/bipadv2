@@ -68,11 +68,14 @@ const LeftPane6 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Community Infrastructure</h1>
             <p>
-                Critical Infrastructures are crucial even during the
-                time of crisis. The residential and governmental buildings,
-                religious and cultural sites, banking institutions, as well
-                as critical infrastructures such as hospitals, schools, bridges
-                in the municipality are at constant threat of landslide every year.
+            Community Infrastructures are socially, economically or
+            operationally essential to the functioning of a society
+            or community, both in routine circumstances and in the
+            extreme events of an emergency.
+            The residential and governmental buildings, religious and cultural
+            sites, banking institutions, as well as critical infrastructures
+            such as hospitals, schools, bridges in the municipality are at
+            constant threat of landslides every year.
             </p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
                 <BarChart

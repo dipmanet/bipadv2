@@ -272,7 +272,7 @@ const BarabiseLandslide = (props) => {
     const [chartReset, setChartReset] = useState(null);
     const [showCI, setShowCI] = useState(false);
     const [hideCILegends, sethideCILegends] = useState(true);
-    const [hideOSMLayers, setHideOSM] = useState(true);
+    const [hideOSMLayers, setHideOSM] = useState(false);
     const [livesLost, setLivesLost] = useState(0);
     const [req1, setReq1] = useState(false);
     const [req2, setReq2] = useState(false);

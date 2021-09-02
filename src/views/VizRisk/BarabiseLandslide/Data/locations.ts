@@ -1,7 +1,7 @@
 export default {
     bahrabise: {
-        longitude: 85.90010912899756,
-        latitude: 27.821772478807212,
+        longitude: 85.898603799247,
+        latitude: 27.844366075661792,
         zoom: 11.4,
         pitch: 0,
         bearing: 0,

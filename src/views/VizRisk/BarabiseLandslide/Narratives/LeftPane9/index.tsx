@@ -131,10 +131,10 @@ const LeftPane8 = (props: Props) => {
         <div className={styles.vrSideBar}>
             <h1>Landslide Susceptibility</h1>
             <p>
-                The map shows the area of Barhabise Municipality in
-                which landslides are likely to occur. The red color
-                signifies the higher likelihood and blue color signifies
-                the lower likelihood of landslide occurrences.
+            The map shows the area of Barhabise Municipality where
+            landslides are likely to occur. The red color signifies
+            the higher likelihood and blue color signifies the lower
+            likelihood of landslide occurrences.
             </p>
             <p>
             Source: Durham University

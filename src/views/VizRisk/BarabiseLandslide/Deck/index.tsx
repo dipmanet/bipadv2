@@ -146,19 +146,10 @@ const Deck = (props) => {
         const { deck } = deckRef.current;
         map.addLayer(
             new MapboxLayer({ id: 'landslide-scatterplot', deck }),
-            // Optionally define id from Mapbox layer stack under which to add deck layer
-            // 'water',
         );
         map.addLayer(
             new MapboxLayer({ id: 'landslide-barabise', deck }),
-            // Optionally define id from Mapbox layer stack under which to add deck layer
-            // 'water',
         );
-        // map.addLayer(
-        //     new MapboxLayer({ id: 'population-polygons', deck }),
-        //     // Optionally define id from Mapbox layer stack under which to add deck layer
-        //     // 'water',
-        // );
         map.addSource('hillshadeBahrabiseLocal', {
             type: 'raster',
             tiles: [getHillshadeLayer()],
@@ -313,7 +304,9 @@ const Deck = (props) => {
             setReAnimate(true);
 
             MapLayers.criticalinfra.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
+                if (map.isStyleLoaded()) {
+                    map.setLayoutProperty(layer, 'visibility', 'none');
+                }
                 return null;
             });
 
@@ -473,6 +466,8 @@ const Deck = (props) => {
                                 >
                                     {glContext && (
                                         <StaticMap
+                                            preventStyleDiffing
+                                            reuseMaps
                                             ref={mapRef}
                                             gl={glContext}
                                             mapStyle={

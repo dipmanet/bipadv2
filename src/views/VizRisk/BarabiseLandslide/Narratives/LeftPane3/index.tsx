@@ -102,11 +102,33 @@ const rainfallData = [
 ];
 
 const LeftPane3 = (props: Props) => {
-    const { pending,
-        totalPages,
-        pagenumber,
-        handleNext,
-        handlePrev } = props;
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Max: ${payload[0].payload.Max} ℃`}</p>
+                    <p>{`Min: ${payload[0].payload.Min} ℃`}</p>
+                    <p>{`Avg: ${payload[0].payload.Avg} ℃`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
+    const CustomTooltipRain = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Rainfall: ${payload[0].payload.Rainfall} ℃`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
 
     return (
         <div className={styles.vrSideBar}>
@@ -212,7 +234,7 @@ const LeftPane3 = (props: Props) => {
                         />
                         <Legend iconType="square" iconSize={10} align="center" content={props.renderLegend} />
                         <Tooltip
-                            content={props.customTooltip}
+                            content={CustomTooltip}
                         />
                         <Line type="monotone" dataKey="Max" stroke="#ffbf00" />
                         <Line type="monotone" dataKey="Avg" stroke="#00d725" />
@@ -255,7 +277,7 @@ const LeftPane3 = (props: Props) => {
                             content={props.renderLegendRainfall}
                         />
                         <Tooltip
-                            content={props.customTooltipRain}
+                            content={CustomTooltipRain}
                         />
                         <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
 

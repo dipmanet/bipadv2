@@ -94,9 +94,9 @@ class FloodHistoryMap extends React.Component {
         super(props);
 
         this.state = {
-            lng: 85.90010912899756,
-            lat: 27.821772478807212,
-            zoom: 11,
+            lng: 85.898603799247,
+            lat: 27.844366075661792,
+            zoom: 11.4,
             incidentYear: '9',
             playState: false,
             geoArr: {},
@@ -467,7 +467,10 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
             });
-
+            landuseLayers.map((lyr) => {
+                this.map.setLayoutProperty(lyr, 'visibility', 'visible');
+                return null;
+            });
             const resetArea = () => {
                 this.props.handlechartReset(!chartReset);
             };

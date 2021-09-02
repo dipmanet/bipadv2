@@ -161,9 +161,10 @@ const LeftPane10 = (props: Props) => {
             <h1>Landslide Risk</h1>
             <p>
             The map shows the ward level risk of landslide in
-            Barhabise Municipality. The municipality lies in hilly
-            region of the country and is also landslide prone area.
-            Out of the 9 wards, ward 4 is at higher risk of landslide.
+            Barhabise Municipality. The municipality lies in
+            hilly region of the country, highly susceptible to
+            landslides . Out of the 9 wards, ward 4 possess
+            the higher risk of landslide.
             </p>
             <p>
             Source: Durham University

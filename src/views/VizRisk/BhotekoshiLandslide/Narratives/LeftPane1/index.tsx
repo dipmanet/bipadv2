@@ -27,17 +27,19 @@ const LeftPane1 = (props: Props) => {
                 && (
                     <>
                         <p>
-                        Nepal’s rugged topography and recurring heavy
-                        monsoon rainfall patterns lead to a number of
-                        geological and hydro-meteorological hazards every
-                        year. Landslide is one of the most occurring and
-                        impactful among these natural hazards.
+                        Nepal’s rugged topography, active seismic
+                        conditions and recurring heavy monsoon rainfall
+                         patterns lead to a number of geological and
+                         hydro-meteorological hazards every year.
+                         Landslide is one of the most occurring and
+                         impactful among these natural hazards leading
+                         to a significant human and economic loss.
                         </p>
                         <p>
             The highest number of incidents is concentrated in Central
-            Nepal and most of the deaths and loss has been higher in
-            hills as compared to terai and mountain regions.
-            As of now, a total of
+            Nepal.  Human and economic loss is predominant in higher hills and mountains regions.
+
+            A total of
                             { ' ' }
                             { incidentsCount }
                             { ' ' }
@@ -56,17 +58,21 @@ const LeftPane1 = (props: Props) => {
                 && (
                     <>
                         <p>
-            Central Nepal faces the most number of landslide
-            incidents and fatalities due to the ever increasing and
-            haphazard urbanization, growing population and unmanaged
-            development activities.
+
+                Central Nepal faces a higher number of landslide
+                incidents and fatalities due to the ever increasing
+                and haphazard urbanization, growing population, change
+                in land-use patterns and unmanaged infrastructure development
+                activities such as road construction.
                         </p>
                         <p>
-            Sindhupalchowk district, located in Central Nepal,
-            faces incidents of landslides every year which causes
-            loss of lives and infrastructures. Among the most affected
-            municipalities in the district, Bhotekoshi witnessed 9 major
-            landslides till date.
+
+
+                Sindhupalchowk district, located in Central Nepal,
+                faces incidents of landslides every year which causes
+                loss of lives and infrastructures. Among the most affected
+                municipalities in the district, Barhabise witnessed three
+                major landslides in the year 2020 alone.
                         </p>
                     </>
                 )

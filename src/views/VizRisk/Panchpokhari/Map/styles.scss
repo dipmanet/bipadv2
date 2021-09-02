@@ -1,43 +1,10 @@
-
-.popup div .mapboxgl-popup-content{
-    border: 1px solid red;
-    padding: 10px;
-    h2{
-        padding: 5px 10px;
-        font-family: 'Source Sans Pro';
-    }
-    
-    p{
-        color: red;
-        padding: 0 10px;
-        font-family: 'Source Sans Pro';
-    }
-}
-
-div {
-    h2{
-    padding: 5px;
-    // font-family: 'Source Sans Pro';
-}
-}
-p{
-    color: red;
-    padding: 0 10px;
-    // font-family: 'Source Sans Pro';
-}
-
-
-
-
 .incidentsSlider{
     position: fixed;
     width: 30%;
-    // border: 1px solid red;
     z-index: 2;
     left: calc(30% - 60px + 17.5%);
     bottom: 4%;
     display: flex;
-    // flex-direction: column;
     color: rgb(174, 158, 247);
     justify-content: center;
     align-items: center;
@@ -130,6 +97,7 @@ p{
       .slider::-moz-range-thumb {
         @extend .thumb-style;
       }
+
 }
 
 

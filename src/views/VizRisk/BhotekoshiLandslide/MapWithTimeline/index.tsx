@@ -475,7 +475,10 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'visible');
                 return null;
             });
-
+            landuseLayers.map((lyr) => {
+                this.map.setLayoutProperty(lyr, 'visibility', 'visible');
+                return null;
+            });
             const resetArea = () => {
                 this.props.handlechartReset(!chartReset);
             };
@@ -563,6 +566,11 @@ class FloodHistoryMap extends React.Component {
         }
 
         if (currentPage !== prevProps.currentPage && currentPage === 8) {
+            console.log('setting it off!! page 8');
+            landuseLayers.map((lyr) => {
+                this.map.setLayoutProperty(lyr, 'visibility', 'none');
+                return null;
+            });
             this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
             this.map.setLayoutProperty('risk-fill-local', 'visibility', 'none');
             landslideYear.map((layer) => {
@@ -580,6 +588,12 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'none');
+            console.log('setting it off!! page 9');
+
+            landuseLayers.map((lyr) => {
+                this.map.setLayoutProperty(lyr, 'visibility', 'none');
+                return null;
+            });
         }
 
         if (hideCI !== prevProps.hideCI) {
