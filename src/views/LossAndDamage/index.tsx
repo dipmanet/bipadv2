@@ -264,8 +264,8 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const filteredData = hazardFilter.length > 0
             ? regionFilteredData.filter(d => hazardFilterMap[d.hazard])
             : regionFilteredData;
-
-        const null_check_estimatedLoss = filteredData.map(item => item.loss.estimatedLoss)
+        const null_check_estimatedLoss = filteredData.map(item => (item.loss
+            ? item.loss.estimatedLoss : undefined))
             .filter(item => item === undefined);
         if (filteredData.length > 0 && (filteredData.length === null_check_estimatedLoss.length)) {
             this.setState({ Null_check_estimatedLoss: true });

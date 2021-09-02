@@ -60,8 +60,7 @@ export default class TextOutput extends React.PureComponent {
         if (isFalsy(value) && !alwaysVisible) {
             return null;
         }
-        console.log('is numeric', isNumericValue);
-        console.log('value', value);
+
         const valueComponent = (value === '-')
             ? (
                 <div className={_cs(styles.value, valueClassName)} title="N/A">
