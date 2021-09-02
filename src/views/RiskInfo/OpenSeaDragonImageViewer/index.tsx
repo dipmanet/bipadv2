@@ -73,16 +73,16 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
         viewer && viewer.destroy();
         const customButton = new OpenSeaDragon.Button({
             tooltip: 'Download',
-            srcRest: 'openseadragon-images/download_rest.png',
-            srcGroup: 'openseadragon-images/download_rest.png',
-            srcHover: 'openseadragon-images/download_hover.png',
-            srcDown: 'openseadragon-images/download_rest.png',
+            srcRest: '/openseadragon-images/download_rest.png',
+            srcGroup: '/openseadragon-images/download_rest.png',
+            srcHover: '/openseadragon-images/download_hover.png',
+            srcDown: '/openseadragon-images/download_rest.png',
             onClick: handleDownload,
         });
 
         const view = OpenSeaDragon({
             id: 'openSeaDragon',
-            prefixUrl: 'openseadragon-images/',
+            prefixUrl: '/openseadragon-images/',
             crossOriginPolicy: 'Anonymous',
 
             tileSources: [
