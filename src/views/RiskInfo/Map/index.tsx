@@ -181,15 +181,20 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse, landslidePolygonChoroplethMapData } = this.context;
 
-        const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
+        // const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
+        const selectedActiveLayer = activeLayers;
 
         rasterLayers = selectedActiveLayer.filter(d => d.type === 'raster');
         choroplethLayers = selectedActiveLayer.filter(d => d.type === 'choropleth');
-        const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
+        const test1 = choroplethLayers.filter(item => item.adminLevel === 'district');
+        const test2 = choroplethLayers.filter(item => item.adminLevel === 'municipality');
+        console.log('This is test1', test1);
+        console.log('This is test2', test2);
+        // const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
 
-        const municipalityAvailableForOpenseadragon = finalChoroPlethLayer.length && feature !== undefined ? finalChoroPlethLayer[0].mapState.filter(item => item.id === feature.id) : [];
+        // const municipalityAvailableForOpenseadragon = finalChoroPlethLayer.length && feature !== undefined ? finalChoroPlethLayer[0].mapState.filter(item => item.id === feature.id) : [];
 
-
+        console.log('This is active layer', choroplethLayers);
         const isJsonDataPresent = rasterLayers.length && Object.keys(rasterLayers[rasterLayers.length - 1]).find(item => item === 'jsonData');
         const JsonDataPresent = rasterLayers.length && rasterLayers[rasterLayers.length - 1].jsonData;
 
@@ -345,10 +350,10 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         </Modal>
                     )
                     : ''}
-                { finalChoroPlethLayer.map((layer, i) => (
+                { choroplethLayers.map((layer, i) => (
                     <MapSource
                         key={layer.id}
-                            // sourceKey={layer.layername}
+                        // sourceKey={layer.layername}
                         sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
                         sourceOptions={{
                             type: 'vector',
@@ -405,7 +410,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                </MapTooltip>
                            )}
                         {choroplethLayers.length && choroplethLayers[choroplethLayers.length - 1].title === 'Post-Monsoon 2020 landslide Map'
-                                && municipalityAvailableForOpenseadragon.length
+                        // && municipalityAvailableForOpenseadragon.length
                             ? choroplethLayers.length && layer.tooltipRenderer
                             && hoverLngLat
                            && feature
