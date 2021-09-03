@@ -403,6 +403,7 @@ class Risk extends React.PureComponent<Props, State> {
 
         const RiskLayerSelectionItem = (p) => {
             const { data: layer } = p;
+            console.log('layer', layer);
             if (layer.layername === 'durham_earthquake_risk_score') {
                 return (
                     <React.Fragment>

@@ -1,16 +1,24 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import {
+    isDefined,
     Obj,
     _cs,
 } from '@togglecorp/fujs';
 
+import { connect } from 'react-redux';
+import { extent } from 'd3-array';
 import LayerSelection from '#components/LayerSelection';
 import { LayerWithGroup, LayerGroup, HazardType } from '#store/atom/page/types';
 
-import { getLayerHierarchy } from '#utils/domain';
+import { generatePaint, getLayerHierarchy } from '#utils/domain';
 
 import styles from './styles.scss';
+import LayerSelectionItem from '#components/LayerSelectionItem';
+import { getResponse, getResults } from '#utils/request';
+import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
+import { municipalitiesSelector } from '#selectors';
 
 interface Props {
     className?: string;
@@ -21,30 +29,244 @@ interface Props {
 
 interface State {
 }
+const landslideColorGrade = [
+    '#4288bd',
+    '#6692b5',
+    '#abddc4',
+    '#e6f598',
+    '#ffffbf',
+    '#fee08b',
+    '#fdae61',
+    '#f46d43',
+    '#d53e4f',
+];
+const colorGrade = [
+    '#ffe1ca',
+    '#ffe1ca',
+
+
+];
+
+const RiskTooltipOutput = ({ label, value }) => (
+    // <div className={styles.landslideTooltip}>
+    //     <div className={styles.header}>
+    //         <h4>
+    //             {label}
+
+    //         </h4>
+    //     </div>
+
+    //     <div className={styles.content}>
+    //         <div>
+
+
+    //             <p>Click on municipality for map </p>
+
+
+    //         </div>
+
+    //     </div>
+
+
+    // </div>
+
+    <div className={styles.riskTooltipOutput}>
+        <div className={styles.label}>
+            { label }
+        </div>
+        <div className={styles.value}>
+            { value }
+        </div>
+    </div>
+);
+const LandslideTooltip = ({ layer, feature }) => (
+    <div className={styles.riskTooltip}>
+        <h3 className={styles.heading}>
+            { feature.properties.title }
+        </h3>
+        <div className={styles.content}>
+            {
+                isDefined(feature.state.value) && (
+                    <RiskTooltipOutput
+                        label="Risk Score:"
+                        value={feature.state.value}
+                    />
+                )
+            }
+        </div>
+    </div>
+);
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    FeatureGetMunicipalityImages: {
+        url: '/municipality-images/',
+        method: methods.GET,
+        onMount: true,
+
+        onSuccess: ({ response, params }) => {
+            // params.responseData(response);
+            if (params) {
+                params.municipalityData(response.results);
+            }
+        },
+    },
+
+
+};
+
+
+const transformLandslideDataToLayer = (
+    data,
+    layer = {},
+) => {
+    console.log('this is final data value', data);
+    const mapState = data.map(d => ({
+        id: d.municipality,
+        value: 1,
+
+    }));
+
+
+    const layerGroup = layer.group || {};
+
+    // const [min, max] = extent(mapState, d => d.value);
+    const [min, max] = extent(mapState, d => d.value);
+    const { paint, legend } = generatePaint(colorGrade, 0, 1);
+
+    console.log('color', paint, legend);
+    return {
+        longDescription: layerGroup.longDescription,
+        metadata: layerGroup.metadata,
+        id: layer.id,
+        title: layer.title,
+        type: 'choropleth',
+        adminLevel: 'municipality',
+        layername: layer.layername,
+        legendTitle: layer.legendTitle,
+        opacity: 1,
+        mapState,
+        paint,
+        legend,
+        tooltipRenderer: LandslideTooltip,
+        minValue: min,
+        maxValueCapped: true,
+    };
+};
+const mapStateToProps = (state: AppState): PropsFromState => ({
+
+    municipalities: municipalitiesSelector(state),
+
+    // hazardList: hazardTypeListSelector(state),
+});
 
 class Hazard extends React.PureComponent<Props, State> {
+    public constructor() {
+        super();
+        this.state = {
+            municipalityImages: [],
+        };
+    }
+
     private getHierarchy = memoize(getLayerHierarchy);
+
+    private municipalityImageData=(data) => {
+        console.log('this is final data', data);
+        const { municipalities } = this.props;
+        const { handleLandslidePolygonImageMap } = this.context;
+        const munDataWithDistrict = data.map((item) => {
+            const dist = municipalities
+                .filter(mun => mun.id === item.municipality)
+                .map(rslt => rslt.district);
+            return ({
+                ...item,
+                district: dist[0],
+            });
+        });
+        this.setState({
+            municipalityImages: munDataWithDistrict,
+        });
+        // handleLandslidePolygonImageMap(munDataWithDistrict);
+    }
 
     public render() {
         const {
             className,
             layerList,
             layerGroupList,
+            requests: { FeatureGetMunicipalityImages },
         } = this.props;
+        const { municipalityImages } = this.state;
+        console.log('Municipality image', municipalityImages);
+        const { landslidePolygonImagemap } = this.context;
+        console.log('This is final data', landslidePolygonImagemap);
+
+        FeatureGetMunicipalityImages.setDefaultParams({
+            municipalityData: this.municipalityImageData,
+        });
+
 
         const layers = this.getHierarchy(
             layerList,
             layerGroupList,
         );
-
+        const landslideLayerToDataMap = {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            // durham_landslide_hazard_risk_district: {
+            //     data: districtLandslideRaw.features,
+            //     adminLevel: 'district',
+            //     dataKey: 'district_d',
+            //     dataValue: 'District_r',
+            // },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            post_monsoon: {
+                data: [],
+                adminLevel: 'municipality',
+                dataKey: 'municipali',
+                dataValue: 'Palika_ris',
+            },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            // durham_landslide_hazard_risk_ward: {
+            //     data: wardLandslideRaw.features,
+            //     adminLevel: 'ward',
+            //     dataKey: 'ward_id',
+            //     dataValue: 'Ward_War_4',
+            // },
+        };
+        const RiskLayerSelectionItem = (p) => {
+            const { data: layer } = p;
+            console.log('layer', layer);
+            return (
+                <LayerSelectionItem
+                    key={layer.id}
+                    data={
+                        landslideLayerToDataMap[layer.layername] ? (
+                            transformLandslideDataToLayer(
+                                municipalityImages,
+                                layer,
+                            )
+                        ) : (
+                            layer
+                        )
+                    }
+                />
+            );
+        };
 
         return (
             <LayerSelection
                 className={_cs(styles.hazard, className)}
                 layerList={layers}
+                layerSelectionItem={RiskLayerSelectionItem}
+
             />
         );
     }
 }
 
-export default Hazard;
+Hazard.contextType = RiskInfoLayerContext;
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            Hazard,
+        ),
+    ),
+);
