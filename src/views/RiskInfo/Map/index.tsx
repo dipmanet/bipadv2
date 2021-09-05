@@ -79,7 +79,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         loadedImages: [],
         selectedImage: '',
         selectedMunicipalityName: '',
-        loader: null,
+        loader: true,
 
 
     }
@@ -186,9 +186,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             loader,
 
         } = this.state;
-        const { closeModal } = this.props;
+
         const { activeLayers, LoadingTooltip, tooltipLatlng,
-            mapClickedResponse, landslidePolygonChoroplethMapData } = this.context;
+            mapClickedResponse } = this.context;
 
         // const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
         // const selectedActiveLayer = activeLayers;
@@ -370,8 +370,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             url: mapSources.nepal.url,
                         }}
                     >
-
-
                         <MapLayer
                             layerKey="choropleth-layer-outline"
                             layerOptions={{
@@ -380,7 +378,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                 paint: linePaintByAdminLevel.municipality,
                             }}
                         />
-
 
                         <MapLayer
                             layerKey="choropleth-layer"
@@ -399,6 +396,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
                             onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
                         />
+
 
                         <MapState
                             attributes={layer.mapState}

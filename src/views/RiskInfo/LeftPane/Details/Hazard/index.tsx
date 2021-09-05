@@ -33,7 +33,7 @@ interface Props {
 interface State {
 }
 const colorGrade = [
-    '#ffe1ca',
+    '#F6F6F4',
     '#ffe1ca',
 
 ];
@@ -114,17 +114,18 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 const transformLandslideDataToLayer = (
     data,
     layer = {},
-) => {
-    const mapState = data.map(d => ({
-        id: d.municipality,
-        value: 1,
+    municipalities,
 
+) => {
+    const mapState = municipalities.map(mun => ({
+        id: mun.id,
+        value: (data.find(item => item.municipality === mun.id)) ? 1 : 0,
     }));
 
 
     const layerGroup = layer.group || {};
 
-    // const [min, max] = extent(mapState, d => d.value);
+
     const [min, max] = extent(mapState, d => d.value);
     const { paint, legend } = generatePaint(colorGrade, 0, 1);
 
@@ -193,7 +194,7 @@ class Hazard extends React.PureComponent<Props, State> {
         } = this.props;
         const { municipalityImages } = this.state;
 
-        const { landslidePolygonImagemap } = this.context;
+        // const { landslidePolygonImagemap } = this.context;
 
 
         FeatureGetMunicipalityImages.setDefaultParams({
@@ -230,7 +231,7 @@ class Hazard extends React.PureComponent<Props, State> {
         };
         const RiskLayerSelectionItem = (p) => {
             const { data: layer } = p;
-
+            const { municipalities } = this.props;
             return (
                 <LayerSelectionItem
                     key={layer.id}
@@ -239,6 +240,8 @@ class Hazard extends React.PureComponent<Props, State> {
                             transformLandslideDataToLayer(
                                 municipalityImages,
                                 layer,
+                                municipalities,
+
                             )
                         ) : (
                             layer

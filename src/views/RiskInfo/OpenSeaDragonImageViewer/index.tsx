@@ -84,6 +84,7 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
             id: 'openSeaDragon',
             prefixUrl: '/publicFiles/openseadragon-images/',
             crossOriginPolicy: 'Anonymous',
+            timeout: 60000,
 
             tileSources: [
                 `https://imageserver.yilab.org.np/iiif/3/${selectedImage}/info.json`,
@@ -133,7 +134,7 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
             />
 
 
-            {loading ? <Loader left="60%" /> : ''}
+            {loading ? <Loader left="57%" /> : ''}
 
         </>
     );
