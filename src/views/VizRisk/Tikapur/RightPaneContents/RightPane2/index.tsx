@@ -24,7 +24,6 @@ import {
 import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
-import Disclaimer from '../../Components/Disclaimer';
 
 const data = [
     { name: 'Agricultural land', value: 74.71 },
@@ -32,9 +31,9 @@ const data = [
     { name: 'Water bodies', value: 6.11 },
     { name: 'Other', value: 18.2 },
     { name: 'Buildings', value: 1.69 },
-    { name: 'Grassland', value: 0.51 },
+    { name: 'Grassland', value: 1.34 },
     { name: 'Sand', value: 1.06 },
-    { name: 'Meadows', value: 0.83 },
+    // { name: 'Meadows', value: 0.83 },
 ].sort(({ value: a }, { value: b }) => b - a);
 console.log('This is final formal>>>', data);
 const COLORS_CHART = [
@@ -44,10 +43,8 @@ const COLORS_CHART = [
     '#0765AA', // water bodies
     '#F2F2F2', // building
     '#effdc9', // sand
-    '#afeb0a', // meadow
+    '#4ad391', // meadow
     '#4ad391', // grassland
-
-
 ];
 
 
@@ -162,9 +159,11 @@ class RightPane extends React.PureComponent<Props, State> {
 
                 <h1>Land Cover</h1>
                 <p>
-                Out of a total area of 118 sq. km, 63.3% of the land is used for agriculture.
-                Forests cover 12.6%, water bodies cover 5.2% and buildings cover 1.4% of the
-                land area. Other areas in Tikapur are covered by sand, meadow, and shrubs.
+                Out of a total area of 118 sq. km, 63.3% of the land
+                is used for agriculture. Forests cover 12.6%, water
+                bodies cover 5.2% and buildings cover 1.4% of the land
+                area. Other areas in Tikapur are covered by sand, meadow,
+                and shrubs.
                 </p>
                 <ResponsiveContainer className={styles.respContainer} height={200}>
                     <PieChart
@@ -261,13 +260,13 @@ class RightPane extends React.PureComponent<Props, State> {
                         data={'0.83 sq km / 0.70'}
                         selected={activeIndex === 6}
                     />
-                    <CustomChartLegend
+                    {/* <CustomChartLegend
                         text={data[7].name}
                         barColor={COLORS_CHART[7]}
                         background={'#eee'}
                         data={'0.51 sq km / 0.43'}
                         selected={activeIndex === 7}
-                    />
+                    /> */}
 
 
                 </div>

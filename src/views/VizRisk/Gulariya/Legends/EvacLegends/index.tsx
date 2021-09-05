@@ -3,7 +3,7 @@ import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '../../Icons/icon_set_school.svg';
 import Culture from '../../Icons/icon_set_religion.svg';
-import SafeShelter from '../../Icons/safeshelternew.svg';
+import Safe from '../../Icons/safeshelternew.svg';
 import Icon from '#rscg/Icon';
 
 
@@ -28,10 +28,10 @@ const EvacLegends = (props) => {
             } else if (evacElement === 'education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (evacElement === 'safe') {
+            } else if (evacElement === 'safeshelter') {
                 resetCriticalLayers();
                 setshowSafe(true);
-            } else if (evacElement === 'culture') {
+            } else if (evacElement === 'Cultural') {
                 resetCriticalLayers();
                 setshowCulture(true);
             }
@@ -52,12 +52,12 @@ const EvacLegends = (props) => {
             setshowEducation(true);
         }
 
-        if (layer === 'culture') {
+        if (layer === 'Cultural') {
             resetCriticalLayers();
             setshowCulture(true);
         }
 
-        if (layer === 'safe') {
+        if (layer === 'safeshelter') {
             resetCriticalLayers();
             setshowSafe(true);
         }
@@ -65,12 +65,12 @@ const EvacLegends = (props) => {
     return (
         <>
             {/* <VRLegend> */}
-            <h2>Evacuation Centers</h2>
+            <h2 className={styles.heading}>Evacuation Centers</h2>
 
             <div className={styles.criticalIcons}>
 
                 <div className={styles.toggleContainer}>
-                    {/* <div className={styles.infraIconContainer}>
+                    <div className={styles.infraIconContainer}>
 
                         <button
                             type="button"
@@ -87,7 +87,7 @@ const EvacLegends = (props) => {
                                 Show All
                         </button>
 
-                    </div> */}
+                    </div>
                     {/* <div className={styles.infraIconContainer}>
                         <button
                             type="button"
@@ -110,14 +110,29 @@ const EvacLegends = (props) => {
                             type="button"
                             className={showCulture
                                 ? styles.criticalButtonSelected
-                                : styles.criticalButtonSelected}
-                            onClick={() => handleEvacclick('culture')}
+                                : styles.criticalButton}
+                            onClick={() => handleEvacclick('Cultural')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
                                 src={Culture}
                             />
                             Culture
+                        </button>
+                    </div>
+                    <div className={styles.infraIconContainer}>
+                        <button
+                            type="button"
+                            className={showSafe
+                                ? styles.criticalButtonSelected
+                                : styles.criticalButton}
+                            onClick={() => handleEvacclick('safeshelter')}
+                        >
+                            <ScalableVectorGraphics
+                                className={styles.svgIcon}
+                                src={Safe}
+                            />
+                            Safe Shelter
                         </button>
                     </div>
                     {/* <div className={styles.infraIconContainer}>

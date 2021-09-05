@@ -43,25 +43,25 @@ const LandCoverLegends = (props) => {
             if (criticalFlood === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (criticalFlood === 'Education') {
+            } else if (criticalFlood === 'education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'Culture') {
+            } else if (criticalFlood === 'cultural') {
                 resetCriticalLayers();
                 setshowCulture(true);
-            } else if (criticalFlood === 'Governance') {
+            } else if (criticalFlood === 'governance') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
-            } else if (criticalFlood === 'Health') {
+            } else if (criticalFlood === 'health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'Industry') {
+            } else if (criticalFlood === 'industry') {
                 resetCriticalLayers();
                 setshowIndustry(true);
-            } else if (criticalFlood === 'Bank') {
+            } else if (criticalFlood === 'finance') {
                 resetCriticalLayers();
                 setshowFinance(true);
-            } else if (criticalFlood === 'Tourism') {
+            } else if (criticalFlood === 'tourism') {
                 resetCriticalLayers();
                 setshowTourism(true);
             }
@@ -75,31 +75,31 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowAll(true);
         }
-        if (layer === 'Education') {
+        if (layer === 'education') {
             resetCriticalLayers();
             setshowEducation(true);
         }
-        if (layer === 'Governance') {
+        if (layer === 'governance') {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
-        if (layer === 'Culture') {
+        if (layer === 'cultural') {
             resetCriticalLayers();
             setshowCulture(true);
         }
-        if (layer === 'Health') {
+        if (layer === 'health') {
             resetCriticalLayers();
             setshowHospital(true);
         }
-        if (layer === 'Industry') {
+        if (layer === 'industry') {
             resetCriticalLayers();
             setshowIndustry(true);
         }
-        if (layer === 'Bank') {
+        if (layer === 'finance') {
             resetCriticalLayers();
             setshowFinance(true);
         }
-        if (layer === 'Tourism') {
+        if (layer === 'tourism') {
             resetCriticalLayers();
             setshowTourism(true);
         }
@@ -158,7 +158,7 @@ const LandCoverLegends = (props) => {
                     fill: showAll ? '#ffffff' : 'transparent',
 
                 }}
-                className={styles.educationHexagon}
+                className={styles.EducationHexagon}
             /> */}
 
                 Show All
@@ -171,84 +171,45 @@ const LandCoverLegends = (props) => {
                                 className={showEducation
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Education')}
+                                onClick={() => handleCriticalclick('education')}
                             >
 
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Education}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#ffdd00',
-                    // stroke: showEducation ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showEducation ? '#ffdd00' : '#456172' }}
-                    // fill: '#ffdd00',
-                    fill: showEducation || showAll ? '#ffdd00' : 'transparent',
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
-
-
-            Educational Institution
+                                 Educational Institution
                             </button>
                         </div>
-                        <div className={styles.infraIconContainer}>
+                        {/* <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
                                 className={showGovernemnt
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Governance')}
+                                onClick={() => handleCriticalclick('governance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Governance}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#66dff4',
-                    // stroke: showGovernemnt ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showGovernemnt ? '#66dff4' : '#456172' }}
-                    // fill: '#66dff4',
-                    fill: showGovernemnt || showAll ? '#66dff4' : 'transparent',
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
             Government Building
                             </button>
 
-                        </div>
+                        </div> */}
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showCulture
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Culture')}
+                                onClick={() => handleCriticalclick('cultural')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Culture}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#c8b0b8',
-                    // stroke: showCulture ? '#9bb4be' : '#9bb4bf',
-
-                    strokeWidth: 50,
-                    // fill: '#c8b0b8',
-                    fill: showCulture || showAll ? '#c8b0b8' : 'transparent',
-
-                }}
-                        // fill: showCulture ? '#c8b0b8' : '#456172' }}
-                className={styles.educationHexagon}
-            /> */}
             Cultural Site
                             </button>
 
@@ -261,86 +222,50 @@ const LandCoverLegends = (props) => {
                                 className={showHospital
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Health')}
+                                onClick={() => handleCriticalclick('health')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Health}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#c8b09a',
-                    // stroke: showHospital ? '#9bb4be' : '#9bb4bf',
-
-                    strokeWidth: 50,
-                    // fill: showHospital ? '#c8b09a' : '#456172' }}
-                    // fill: '#c8b09a',
-                    fill: showHospital || showAll ? '#c8b09a' : 'transparent',
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
             Hospital
                             </button>
 
                         </div>
-                        <div className={styles.infraIconContainer}>
+                        {/* <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showIndustry
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Industry')}
+                                onClick={() => handleCriticalclick('industry')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Industry}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#a4ac5e',
-                    // stroke: showIndustry ? '#9bb4be' : '#9bb4bf',
 
-                    strokeWidth: 50,
-                    // fill: showIndustry ? '#a4ac5e' : '#456172'
-                    // fill: '#a4ac5e',
-                    fill: showIndustry || showAll ? '#a4ac5e' : 'transparent',
-
-
-                }}
-                className={styles.educationHexagon}
-            /> */}
-            Industry
+                                Industry
                             </button>
 
-                        </div>
-                        <div className={styles.infraIconContainer}>
+                        </div> */}
+                        {/* <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
                                 className={showTourism
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Tourism')}
+                                onClick={() => handleCriticalclick('tourism')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Tourism}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#62d480',
-                    // stroke: '#9bb4be',
-                    strokeWidth: 50,
-                    // fill: showTourism ? '#62d480' : '#456172'
-                    fill: showTourism || showAll ? '#62d480' : 'transparent',
-                }}
-                className={styles.educationHexagon}
-            /> */}
-                Hotel or Restaurant
+                             Hotel or Restaurant
                             </button>
 
-                        </div>
+                        </div> */}
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -348,24 +273,13 @@ const LandCoverLegends = (props) => {
                                 className={showFinance
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Bank')}
+                                onClick={() => handleCriticalclick('finance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Bank}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#c58dbf',
-                    // stroke: showFinance ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showFinance ? '#c58dbf' : '#456172'
-                    // fill: '#c58dbf',
-                    fill: showFinance || showAll ? '#c58dbf' : 'transparent',
-                }}
-                className={styles.educationHexagon}
-            /> */}
-             Bank
+                           Bank
                             </button>
 
                         </div>

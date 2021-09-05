@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import memoize from 'memoize-one';
 
@@ -9,11 +10,6 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Gulariya/Data/demographicsData';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Gulariya/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Gulariya/Icons/male.svg';
-import Female from '#views/VizRisk/Gulariya/Icons/female.svg';
-import Home from '#views/VizRisk/Gulariya/Icons/home.svg';
 
 import Disclaimer from '../../Components/Disclaimer';
 
@@ -65,15 +61,10 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven with
-                some pockets of dense settlements. This map allows viewing the
-                population distribution within each ward and helps to locate
-                the region of dense and sparse settlements.
+                Dense settlements exist in some of the core urban areas, especially in ward 4. Most of the region comprises mostly peri-urban and rural settlements with a low density of population.
                 </p>
                 <p>
-                Gulariya Municipality has a total population of 71,991. Ward number
-                4 has the highest population with 1786 families. Ward number 5 has
-                the least population (4335) with 782 families.
+                Gulariya Municipality has a total population of 71,991. Ward number 4 has the highest population with 1786 families. Ward number 5 has the least population (4335) with 782 families.
                 </p>
 
 

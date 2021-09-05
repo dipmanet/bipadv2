@@ -21,6 +21,7 @@ import {
     getWardFilter,
 } from '#utils/domain';
 
+import Evac from '../Data/tikapurGEOJSON';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -156,11 +157,10 @@ class FloodHistoryMap extends React.Component {
                 enableNavBtns('both');
             }
         });
-        console.log('cI', cI);
 
         const evacCulture = cI.features.filter(item => item.properties.results__r === 'cultural');
         const evaceducation = cI.features.filter(item => item.properties.results__r === 'education');
-        const categoriesEvac = ['cultural', 'education'];
+        const categoriesEvac = ['cultural', 'education', 'safeshelter'];
         const arrEvac = categoriesEvac.map(
             layer => [
                 `evac-clusters-count-${layer}`,
@@ -191,8 +191,10 @@ class FloodHistoryMap extends React.Component {
         const evaccenters = {
             type: 'FeatureCollection',
             name: 'CI',
-            features: [...evacCulture, ...evaceducation],
+            features: [...evacCulture, ...evaceducation, ...Evac.evaccenters],
         };
+
+        console.log('evaccenters', evaccenters);
         const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
             item => item.properties.results__r,
         ))];
@@ -707,10 +709,6 @@ class FloodHistoryMap extends React.Component {
         const temp = {};
         temp.type = 'FeatureCollection';
         temp.name = filterBy;
-        temp.crs = {};
-        temp.crs.type = 'name';
-        temp.crs.properties = {};
-        temp.crs.properties.name = 'urn:ogc:def:crs:OGC:1.3:CRS84';
         temp.features = [];
         const ourD = data.features.filter(item => item.properties.results__r === filterBy);
         temp.features.push(...ourD);
@@ -808,6 +806,10 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('evac-clusters-cultural', 'visibility', 'visible');
             this.map.setLayoutProperty('evac-clusters-count-cultural', 'visibility', 'visible');
             this.map.setLayoutProperty('evac-unclustered-point-cultural', 'visibility', 'visible');
+        } else if (layer === 'safeshelter') {
+            this.map.setLayoutProperty('evac-clusters-safeshelter', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-safeshelter', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-safeshelter', 'visibility', 'visible');
         }
     };
 

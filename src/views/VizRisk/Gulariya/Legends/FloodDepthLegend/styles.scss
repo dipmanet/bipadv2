@@ -1,20 +1,21 @@
-    h2{
-        margin-top: 10px;
-        opacity: 0.67;
+.toggleFlood{
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    color: white;
+    opacity: 0.87;
+    text-transform: uppercase;
+    .chevrontoggle{
+        font-size: 12px;
+        position: relative;
+        bottom: 4px;
     }
-    .toggleFlood{
-        background: transparent;
-        border: none;
-        display: flex;
-        align-items: center;
-        color: white;
-        opacity: 0.87;
-        text-transform: uppercase;
-        .chevrontoggle{
-            font-size: 12px;
-            position: relative;
-            bottom: 4px;
-        }
+    h2{
+        margin-top: 5px;
+        opacity: 0.67;
+        font-size: 12px;
+    }
     }
     .floodMainContainer{
         display:flex;
@@ -82,6 +83,9 @@
     }
     .floodDepthContainer{
         display: flex;
+        h2{
+            font-size: 12px;
+        }
         .floodDepth{
             display: flex;
             flex-direction: column;
@@ -131,6 +135,10 @@
   
         }
    
+    }
+
+    .heading{
+        font-size: 10px !important;
     }
 
     

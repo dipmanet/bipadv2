@@ -564,6 +564,10 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`${layer}`, 'visibility', 'none');
                 return null;
             });
+            landuseLayers.map((lyr) => {
+                this.map.setLayoutProperty(lyr, 'visibility', 'none');
+                return null;
+            });
         }
 
         if (currentPage !== prevProps.currentPage && currentPage === 9) {

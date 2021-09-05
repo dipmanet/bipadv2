@@ -55,7 +55,7 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'Industry') {
+            } else if (criticalFlood === 'industry') {
                 resetCriticalLayers();
                 setshowIndustry(true);
             } else if (criticalFlood === 'Finance') {
@@ -79,7 +79,7 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowEducation(true);
         }
-        if (layer === 'Governance') {
+        if (layer === 'governance') {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
@@ -91,7 +91,7 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowHospital(true);
         }
-        if (layer === 'Industry') {
+        if (layer === 'industry') {
             resetCriticalLayers();
             setshowIndustry(true);
         }
@@ -104,6 +104,7 @@ const LandCoverLegends = (props) => {
             setshowTourism(true);
         }
     };
+
 
     return (
         <>
@@ -157,20 +158,20 @@ const LandCoverLegends = (props) => {
                     fill: showAll ? '#ffffff' : 'transparent',
 
                 }}
-                className={styles.educationHexagon}
+                className={styles.EducationHexagon}
             /> */}
 
                 Show All
                             </button>
 
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showEducation
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('education')}
+                                onClick={() => handleCriticalclick('Education')}
                             >
 
                                 <ScalableVectorGraphics
@@ -179,15 +180,15 @@ const LandCoverLegends = (props) => {
                                 />
                                  Educational Institution
                             </button>
-                        </div> */}
-                        <div className={styles.infraIconContainer}>
+                        </div>
+                        {/* <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
                                 className={showGovernemnt
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Governance')}
+                                onClick={() => handleCriticalclick('governance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -196,7 +197,7 @@ const LandCoverLegends = (props) => {
             Government Building
                             </button>
 
-                        </div>
+                        </div> */}
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
@@ -255,7 +256,7 @@ const LandCoverLegends = (props) => {
                                 className={showTourism
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('tourism')}
+                                onClick={() => handleCriticalclick('Tourism')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}

@@ -1,14 +1,17 @@
 
+.heading{
+    font-size: 12px !important;
+}
 .criticalIcons{
     .toggleContainer{
         .infraIconContainer{
             text-transform: capitalize;
-            margin: 5px 0;
+            margin: 1px 0;
             .canalIcon{
                 border-bottom:2px solid #0670bc;
                 width: 25px;
                 margin-right: 12px;
-                font-size: 15px;
+                font-size: 12px;
                 position: relative;
                 // bottom: 7px;
             }
@@ -16,19 +19,19 @@
                 border-bottom:2px solid #a7a5a5;
                 width: 25px;
                 margin-right: 12px;
-                font-size: 15px;
+                font-size: 12px;
                 position: relative;
                 // bottom: 7px;
             }
             .allIconSelected{
-                font-size: 20px;
+                font-size: 15px;
                 color: #1664c1;
                 padding-right: 9px;
                 padding-left: 7px;
 
             }
             .allIcon{
-                font-size: 20px;
+                font-size: 15px;
                 color: white;
                 opacity: 0.67;
                 padding-right: 9px;
@@ -42,7 +45,7 @@
                 display: flex;
                 align-items: center;
                 border: none;
-                font-size: 14px;
+                font-size: 12px;
                 opacity: 0.87;
                 width: 100%;
                 cursor: pointer;
@@ -50,7 +53,7 @@
                 // border: 1px solid red;
                 margin: 0;
                 padding: 0;
-                height: 28px;
+                height: 22px;
                 // padding-top: 10px;
            
                 .svgIcon{
@@ -70,7 +73,7 @@
                 display: flex;
                 align-items: center;
                 border: none;
-                font-size: 14px;
+                font-size: 12px;
                 opacity: 0.68;
                 width: 100%;
                 cursor: pointer;
@@ -78,7 +81,7 @@
                 // border: 1px solid red;
                 margin: 0;
                 padding: 0;
-                height: 28px;
+                height: 22px;
                 // padding-top: 10px;
               
                 path{
@@ -91,7 +94,7 @@
 
                 }
                 .svgIcon{
-                    width: 32px;
+                    width: 25px;
                 }
             }
 

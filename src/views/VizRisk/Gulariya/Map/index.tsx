@@ -3,9 +3,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
-import SchoolGeoJSON from '../Data/gulariyaGEOJSON';
 import demographicsData from '../Data/demographicsData';
-import styles from './styles.scss';
 import {
     // provincesSelector,
     municipalitiesSelector,
@@ -21,7 +19,7 @@ import {
 import {
     getWardFilter,
 } from '#utils/domain';
-
+import Evac from '../Data/gulariyaGEOJSON';
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -165,7 +163,7 @@ class FloodHistoryMap extends React.Component {
         const evacCulture = cI.features.filter(item => item.properties.Type === 'Cultural');
         const evaceducation = cI.features.filter(item => item.properties.Type === 'Education');
 
-        const categoriesEvac = ['Cultural'];
+        const categoriesEvac = ['Cultural', 'safeshelter'];
         // const categoriesEvac = [...new Set(evaccenters.features.map(
         //     item => item.properties.Type,
         // ))];
@@ -195,8 +193,10 @@ class FloodHistoryMap extends React.Component {
         const evaccenters = {
             type: 'FeatureCollection',
             name: 'CI',
-            features: [...evacCulture, ...evaceducation],
+            features: [...evacCulture, ...Evac.evaccenters],
         };
+
+        console.log('evaccenters', evaccenters);
         const categoriesCritical = [...new Set(criticalinfrastructures.features.map(
             item => item.properties.Type,
         ))];
@@ -246,6 +246,8 @@ class FloodHistoryMap extends React.Component {
                 enableNavBtns('both');
             }
         });
+
+
         this.map.on('style.load', () => {
             categoriesEvac.map((layer) => {
                 const mapSource = this.map.getSource(`evac-${layer}`);
@@ -442,11 +444,6 @@ class FloodHistoryMap extends React.Component {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
-
-            // this.map.addSource('density', {
-            //     type: 'vector',
-            //     url: mapSources.populationDensity.url,
-            // });
 
             this.map.addLayer({
                 id: 'ward-fill-local',
@@ -716,7 +713,9 @@ class FloodHistoryMap extends React.Component {
         temp.name = filterBy;
         temp.features = [];
         const ourD = data.features.filter(item => item.properties.Type === filterBy);
+        console.log('filterBy', filterBy);
         temp.features.push(...ourD);
+        console.log('temp', temp);
         return temp;
     }
 
@@ -803,17 +802,14 @@ class FloodHistoryMap extends React.Component {
                 this.map.setLayoutProperty(`evac-clusters-count-${item}`, 'visibility', 'visible');
                 return null;
             });
-        } else if (layer === 'Education') {
-            this.map.setLayoutProperty('evac-clusters-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-clusters-count-Education', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-unclustered-point-Education', 'visibility', 'visible');
-        } else if (layer === 'Culture') {
-            this.map.setLayoutProperty('evac-clusters-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-clusters-count-Culture', 'visibility', 'visible');
-            this.map.setLayoutProperty('evac-unclustered-point-Culture', 'visibility', 'visible');
-        } else if (layer === 'safe') {
-            this.map.setLayoutProperty('safeshelterRajapur', 'visibility', 'visible');
-            this.map.setLayoutProperty('safeshelterRajapurIcon', 'visibility', 'visible');
+        } else if (layer === 'Cultural') {
+            this.map.setLayoutProperty('evac-clusters-Cultural', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-Cultural', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-Cultural', 'visibility', 'visible');
+        } else if (layer === 'safeshelter') {
+            this.map.setLayoutProperty('evac-clusters-safeshelter', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-clusters-count-safeshelter', 'visibility', 'visible');
+            this.map.setLayoutProperty('evac-unclustered-point-safeshelter', 'visibility', 'visible');
         }
     };
 

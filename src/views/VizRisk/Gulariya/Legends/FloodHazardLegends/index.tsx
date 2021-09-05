@@ -27,61 +27,18 @@ const FloodHistoryLegends = (props: Props) => {
         showCriticalElements,
     } = props;
 
-    const resetExposedLayers = () => {
-        setShowExposedAll(false);
-        setShowExposedSchool(false);
-        setShowExposedBuilding(false);
-        setShowExposedRoads(false);
-        setShowExposedCanals(false);
-        setShowSafeShelter(false);
-    };
-    const handleChisapaniBtn = () => {
-        handleChisapani();
-    };
-    const handleExposedClick = (layer) => {
-        handleExposedElementChange(layer);
-
-        if (layer === 'all') {
-            resetExposedLayers();
-            setShowExposedAll(true);
-        }
-        if (layer === 'school') {
-            resetExposedLayers();
-            setShowExposedSchool(true);
-        }
-
-        if (layer === 'roads') {
-            resetExposedLayers();
-            setShowExposedRoads(true);
-        }
-        if (layer === 'building') {
-            resetExposedLayers();
-            setShowExposedBuilding(true);
-        }
-        if (layer === 'canals') {
-            resetExposedLayers();
-            setShowExposedCanals(true);
-        }
-        if (layer === 'safeshelters') {
-            resetExposedLayers();
-            setShowSafeShelter(true);
-        }
-    };
     const handleLegendBtnClick = (layer) => {
         handleFloodChange(layer);
         setActiveRasterLayer(layer);
     };
 
-    const handleFloodtoggle = () => {
-        setshowFloodElements(!showCriticalElements);
-    };
 
     return (
         <>
             <button
                 type="button"
                 className={styles.toggleFlood}
-                onClick={handleFloodtoggle}
+                onClick={() => {}}
             >
                 <h2>
                     Flood Hazard
@@ -122,19 +79,16 @@ const FloodHistoryLegends = (props: Props) => {
                                 ? styles.legendBtnSelected
                                 : styles.legendBtn}
                             onClick={() => handleLegendBtnClick('10')}
-
                         >
                             <Hexagon
                                 style={{
                                     stroke: '#9dc7fa',
                                     strokeWidth: 50,
-                                    fill: activeRasterLayer === '10'
-                                        ? '#036ef0' : 'transparent',
+                                    fill: activeRasterLayer === '10' ? '#036ef0' : 'transparent',
 
                                 }}
                                 className={styles.educationHexagon}
                             />
-
 
                          10
                               years
@@ -143,7 +97,6 @@ const FloodHistoryLegends = (props: Props) => {
                         </button>
                     </div>
                 </div>
-
                 <div className={styles.floodSubGroup}>
                     <div className={styles.floodItemContainer}>
                         <button
@@ -189,13 +142,14 @@ const FloodHistoryLegends = (props: Props) => {
 
 
                          50 years
+                            {' '}
+
                         </button>
                     </div>
                 </div>
 
 
                 <div className={styles.floodSubGroup}>
-
 
                     <div className={styles.floodItemContainer}>
                         <button
@@ -243,6 +197,7 @@ const FloodHistoryLegends = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.floodSubGroup}>
+
                     <div className={styles.floodItemContainer}>
                         <button
                             type="button"

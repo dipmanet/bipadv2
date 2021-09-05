@@ -78,7 +78,7 @@ const FloodHistoryLegends = (props: Props) => {
 
     return (
         <>
-            <h2>Flood depth (in meters)</h2>
+            <h2 className={styles.heading}>Flood depth (in meters)</h2>
             <div className={styles.floodDepthContainer}>
                 <div className={styles.floodDepth}>
                     <div className={styles.floodIndicator1}>

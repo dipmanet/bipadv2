@@ -65,15 +65,22 @@ class SlideThreePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Demography</h1>
                 <p>
-                Population distribution in the region is largely uneven with some pockets of dense
-                settlements. This map allows viewing the population distribution within each ward
-                and helps to locate the region of dense and sparse settlements.
+                Ward 1 of the municipality is a planned core-urban
+                area and is densely populated. The rest of the municipality
+                consists of peripheral peri-urban settlements and rural
+                areas with a low density of population.
                 </p>
                 <p>
-                Tikapur Municipality has a total population of 98,651 with 50,405 males and 48,246
-                females. The total number of families counts to 18,620. Ward number 1 has the
-                largest number of families (9823), while ward number 9 has the least comprising
-                of only 743 families.
+                Tikapur Municipality has a total population of  98,651
+                with 50,405 males and 48,246 females. The total household
+                number counts to 18,620. Ward number 1 has the largest
+                household number of 9823, while ward number 9 has the least
+                comprising of only 743 households.
+                </p>
+                <p>
+                This map allows viewing the population distribution within
+                each ward and helps to locate the region of dense and sparse
+                settlements.
                 </p>
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import memoize from 'memoize-one';
 
@@ -23,17 +24,10 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
                 <p>
-                Flood exposure in Gulariya is due to its proximity to the Babai River,
-                which is locally called Sarju Nadi. The Babai River originates from the
-                low mountains in the Mahabharat Hills and flows in the northwest,
-                enclosed by these hills on either side and then exits onto the Terai
-                plain and flows southwards into India. As the river enters the Terai,
-                its straight path changes to numerous ox-bow formations leading downstream.
+                Flood exposure in Gulariya is due to its proximity to the Babai River, which is locally called Sarju Nadi. The Babai River originates from the low mountains in the Mahabharat Hills and flows in the northwest, enclosed by these hills on either side, and then exits onto the Terai plain and flows southwards into India. As the river enters the Terai, the river meanders as it flows downstream.
                 </p>
                 <p>
-                All of the residential and governmental buildings, religious and cultural sites,
-                banking institutions, critical infrastructures such as hospitals, schools,
-                bridges in Gulariya are at constant threat of flooding every monsoon.
+                All of the residential and governmental buildings, religious and cultural sites, banking institutions, critical infrastructures such as hospitals, schools, bridges in Gulariya are at constant threat of flooding every monsoon.
                 </p>
 
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>
