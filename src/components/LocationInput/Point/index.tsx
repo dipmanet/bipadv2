@@ -179,7 +179,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         onPointMove(newGeoJson, newRegion);
     }
 
-    /*
+
     private handleLatInputChange = (lat: number) => {
         const {
             geoJson = defaultGeoJson,
@@ -219,9 +219,8 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         onPointMove(newGeoJson, region);
     }
-    */
 
-    /*
+
     private handleLngInputChange = (lng: number) => {
         const {
             geoJson = defaultGeoJson,
@@ -261,7 +260,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         onPointMove(newGeoJson, region);
     }
-    */
+
 
     private handleMove = (e: unknown) => {
         const { geoJson } = this.props;
@@ -411,6 +410,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             lat,
         } = this.getFormData(geoJson);
 
+
         return (
             <div className={_cs(className, styles.point)}>
                 { geoJson && (
@@ -454,20 +454,18 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                 />
                 <div className={styles.coordinateInput}>
                     <TextInput
-                        readOnly
                         className={styles.latInput}
                         type="number"
                         label="Latitude"
                         value={lat}
-                        // onChange={this.handleLatInputChange}
+                        onChange={this.handleLatInputChange}
                     />
                     <TextInput
                         className={styles.lngInput}
-                        readOnly
                         type="number"
                         label="Longitude"
                         value={lng}
-                        // onChange={this.handleLngInputChange}
+                        onChange={this.handleLngInputChange}
                     />
                 </div>
             </div>

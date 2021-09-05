@@ -1,3 +1,28 @@
 .hazard {
     overflow: auto;
 }
+.landslideTooltip{
+   
+    .header{
+        background-color: #216cd7;
+        color: white;
+        padding: 10px;
+    }
+   
+    .content{
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        max-height: 200px;
+        overflow: scroll;
+    }
+    .noData{
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+    }
+}

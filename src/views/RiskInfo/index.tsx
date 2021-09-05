@@ -30,6 +30,8 @@ class RiskInfo extends React.PureComponent<Props> {
             communication: false,
             openspace: false,
             communityspace: false,
+            fireengine: false,
+            helipad: false,
         },
     }
 

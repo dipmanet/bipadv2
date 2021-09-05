@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -50,11 +51,15 @@ const linePaintByAdminLevel = {
 };
 
 const tooltipOptions = {
+    closeOnClick: false,
+    closeButton: false,
+    offset: 8,
+};
+const rasterTooltipOptions = {
     closeOnClick: true,
     closeButton: false,
     offset: 8,
 };
-
 // eslint-disable-next-line prefer-const
 let rasterLayers = [];
 // eslint-disable-next-line prefer-const
@@ -92,23 +97,27 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
     }
 
     private handleClick=(feature, lngLat) => {
-        const municipalityName = (`${feature.properties.title_en} ${feature.properties.type}`);
-        this.setState({
-            selectedMunicipalityName: municipalityName,
-        });
+        const { activeLayers } = this.context;
+        const municipalityAvailableForOpenseadragon = !!(feature && feature.state.value);
+        if (activeLayers[activeLayers.length - 1].type === 'choropleth' && municipalityAvailableForOpenseadragon && choroplethLayers[choroplethLayers.length - 1].layername === 'post_monsoon' && feature && feature.state.value === 1) {
+            const municipalityName = (`${feature.properties.title_en} ${feature.properties.type}`);
+            this.setState({
+                selectedMunicipalityName: municipalityName,
+            });
 
-        this.setState({
-            feature,
-            hoverLngLat: lngLat,
-            isModalOpen: true,
-        });
+            this.setState({
+                feature,
+                hoverLngLat: lngLat,
+                isModalOpen: true,
+            });
 
-        const imagesLoaded = choroplethLayers[0].data.filter(item => item.municipality === feature.id);
+            const imagesLoaded = choroplethLayers[choroplethLayers.length - 1].data.filter(item => item.municipality === feature.id);
 
-        this.setState({
-            loadedImages: imagesLoaded,
-            selectedImage: imagesLoaded[0].landslideInventoryEnglishFilename,
-        });
+            this.setState({
+                loadedImages: imagesLoaded,
+                selectedImage: imagesLoaded[0].landslideInventoryEnglishFilename,
+            });
+        }
     }
 
     private handleMouseEnter = (feature, lngLat) => {
@@ -182,19 +191,20 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             mapClickedResponse, landslidePolygonChoroplethMapData } = this.context;
 
         // const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
-        const selectedActiveLayer = activeLayers;
+        // const selectedActiveLayer = activeLayers;
 
-        rasterLayers = selectedActiveLayer.filter(d => d.type === 'raster');
-        choroplethLayers = selectedActiveLayer.filter(d => d.type === 'choropleth');
-        const test1 = choroplethLayers.filter(item => item.adminLevel === 'district');
-        const test2 = choroplethLayers.filter(item => item.adminLevel === 'municipality');
-        console.log('This is test1', test1);
-        console.log('This is test2', test2);
+        // rasterLayers = selectedActiveLayer.filter(d => d.type === 'raster');
+        // choroplethLayers = selectedActiveLayer.filter(d => d.type === 'choropleth');
+        // const test1 = choroplethLayers.filter(item => item.adminLevel === 'district');
+        // const test2 = choroplethLayers.filter(item => item.adminLevel === 'municipality');
+        // console.log('This is test1', test1);
+        // console.log('This is test2', test2);
         // const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
 
-        // const municipalityAvailableForOpenseadragon = finalChoroPlethLayer.length && feature !== undefined ? finalChoroPlethLayer[0].mapState.filter(item => item.id === feature.id) : [];
+        const municipalityAvailableForOpenseadragon = !!(feature && feature.state.value);
 
-        console.log('This is active layer', choroplethLayers);
+        rasterLayers = activeLayers.filter(d => d.type === 'raster');
+        choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
         const isJsonDataPresent = rasterLayers.length && Object.keys(rasterLayers[rasterLayers.length - 1]).find(item => item === 'jsonData');
         const JsonDataPresent = rasterLayers.length && rasterLayers[rasterLayers.length - 1].jsonData;
 
@@ -235,11 +245,11 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         />
 
 
-                        {rasterLayers.length && isJsonDataPresent !== undefined ? tooltipLatlng && (
+                        {activeLayers[activeLayers.length - 1].type === 'raster' && rasterLayers.length && isJsonDataPresent !== undefined ? tooltipLatlng && (
 
                             <MapTooltip
                                 coordinates={tooltipLatlng}
-                                tooltipOptions={tooltipOptions}
+                                tooltipOptions={rasterTooltipOptions}
                                 onHide={this.handleAlertClose}
 
                             >
@@ -353,13 +363,25 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                 { choroplethLayers.map((layer, i) => (
                     <MapSource
                         key={layer.id}
-                        // sourceKey={layer.layername}
-                        sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
+                        sourceKey={layer.layername}
+                        // sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
                         sourceOptions={{
                             type: 'vector',
                             url: mapSources.nepal.url,
                         }}
                     >
+
+
+                        <MapLayer
+                            layerKey="choropleth-layer-outline"
+                            layerOptions={{
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                type: 'line',
+                                paint: linePaintByAdminLevel.municipality,
+                            }}
+                        />
+
+
                         <MapLayer
                             layerKey="choropleth-layer"
                             layerOptions={{
@@ -372,20 +394,10 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     ),
                                 },
                             }}
-
+                            // onClick={layer.onClick ? layer.onClick : undefined}
                             onClick={layer.tooltipRenderer ? this.handleClick : undefined}
                             onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
                             onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
-                        />
-                        <MapLayer
-                            layerKey="choropleth-layer-outline"
-                            layerOptions={{
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                type: 'line',
-                                paint: linePaintByAdminLevel[layer.adminLevel],
-
-
-                            }}
                         />
 
                         <MapState
@@ -393,83 +405,26 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             attributeKey="value"
                             sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
                         />
-                        { layer.tooltipRenderer
-                           && hoverLngLat
-                           && feature
-                           && (feature.source === layer.layername)
-                           && (
-                               <MapTooltip
-                                   coordinates={hoverLngLat}
-                                   trackPointer
-                                   tooltipOptions={tooltipOptions}
-                               >
-                                   <layer.tooltipRenderer
-                                       feature={feature}
-                                       layer={layer}
-                                   />
-                               </MapTooltip>
-                           )}
-                        {choroplethLayers.length && choroplethLayers[choroplethLayers.length - 1].title === 'Post-Monsoon 2020 landslide Map'
-                        // && municipalityAvailableForOpenseadragon.length
-                            ? choroplethLayers.length && layer.tooltipRenderer
+
+
+                        {activeLayers[activeLayers.length - 1].type === 'choropleth'
+                        && layer.tooltipRenderer
                             && hoverLngLat
-                           && feature
-                           && (feature.source === 'post_monsoon-0'
-
-
-                           && (
-                               <MapTooltip
-                                   coordinates={hoverLngLat}
-                                   tooltipOptions={tooltipOptions}
-                                   onHide={this.handleAlertClose}
-
-                               >
-                                   <div className={styles.landslideTooltip}>
-                                       <div className={styles.header}>
-                                           <h4>
-                                               {feature.properties.title_en}
-                                               {' '}
-
-                                               {feature.properties.type}
-
-                                           </h4>
-                                       </div>
-
-                                       <div className={styles.content}>
-                                           <div>
-
-
-                                               <p>Click on municipality for map </p>
-
-
-                                           </div>
-
-                                       </div>
-
-
-                                   </div>
-
-
-                               </MapTooltip>
-                           )) : layer.tooltipRenderer
-                           && hoverLngLat
-                           && feature
-                           && (feature.source === layer.layername)
-                           && (
-                               <MapTooltip
-                                   coordinates={hoverLngLat}
-                                   trackPointer
-                                   tooltipOptions={tooltipOptions}
-                               >
-                                   <layer.tooltipRenderer
-                                       feature={feature}
-                                       layer={layer}
-                                   />
-                               </MapTooltip>
-                           )
-
+                            && feature
+                            && (feature.source === layer.layername)
+                            && municipalityAvailableForOpenseadragon && (
+                            <MapTooltip
+                                coordinates={hoverLngLat}
+                                trackPointer
+                                tooltipOptions={tooltipOptions}
+                            >
+                                <layer.tooltipRenderer
+                                    feature={feature}
+                                    layer={layer}
+                                />
+                            </MapTooltip>
+                        )
                         }
-
 
                     </MapSource>
                 ))}

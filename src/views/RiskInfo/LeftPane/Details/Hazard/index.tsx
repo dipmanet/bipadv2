@@ -1,6 +1,7 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import {
+    isDefined,
     Obj,
     _cs,
 } from '@togglecorp/fujs';
@@ -16,6 +17,10 @@ import { generatePaint,
 import styles from './styles.scss';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { municipalitiesSelector } from '#selectors';
+
+
+import LayerSelectionItem from '#components/LayerSelectionItem';
+import { getResponse, getResults } from '#utils/request';
 
 
 interface Props {
@@ -44,109 +49,50 @@ const landslideColorGrade = [
     '#f46d43',
     '#d53e4f',
 ];
+
+
 const RiskTooltipOutput = ({ label, value }) => (
-    <div className={styles.riskTooltipOutput}>
-        <div className={styles.label}>
-            { label }
-        </div>
-        <div className={styles.value}>
-            { value }
-        </div>
-    </div>
-);
-const RiskTooltip = ({ layer, feature }) => (
+    <div className={styles.landslideTooltip}>
+        <div className={styles.header}>
+            <h4>
+                {label}
 
-    <div className={styles.riskTooltip}>
-        <h3 className={styles.heading}>
-            { feature.properties.title }
-        </h3>
+            </h4>
+        </div>
+
         <div className={styles.content}>
-            <RiskTooltipOutput
-                label="Risk score:"
-                value={feature.state.value}
-            />
-            <RiskTooltipOutput
-                label="Rank:"
-                value={layer.rankMap[feature.id]}
-            />
+            <div>
+
+
+                <p>Click on municipality for map </p>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+);
+const LandslideTooltip = ({ layer, feature }) => (
+    <div className={styles.riskTooltip}>
+        {/* <h3 className={styles.heading}>
+            { feature.properties.title }
+        </h3> */}
+        <div className={styles.content}>
+            {
+                isDefined(feature.state.value) && (
+                    <RiskTooltipOutput
+                        label={feature.properties.title}
+
+                    />
+                )
+            }
         </div>
     </div>
 );
-const transformRiskDataToLayer = (data: RiskData[], layer = {}, actions) => {
-    const mapState = data.map(d => ({
-        id: d.municipality,
-        value: 1,
-
-    }));
-
-    // const layerGroup = layer.group || {};
-
-    const [min, max] = extent(mapState, d => d.value);
-    const { paint, legend } = generatePaint(colorGrade, 0, 1);
-
-    return {
-        // longDescription: layerGroup.longDescription,
-        // metadata: layerGroup.metadata,
-        id: layer.id,
-        title: layer.title,
-        type: 'choropleth',
-        adminLevel: 'municipality',
-        layername: layer.layername,
-        legendTitle: layer.legendTitle,
-        opacity: 1,
-        mapState,
-        paint,
-        legend,
-        actions,
-        minValue: min,
-        data,
-        tooltipRenderer: RiskTooltip,
-    };
-};
-
-const transformLandslideDataToLayer = (
-    {
-        data = [],
-        adminLevel,
-        dataKey,
-        dataValue,
-    }: {
-        data: LandslideDataFeature[];
-        adminLevel: string;
-        dataKey: string;
-        dataValue: string;
-    },
-    layer = {},
-) => {
-    const mapState = data.map(d => ({
-        id: d.properties[dataKey],
-        value: d.properties[dataValue],
-    }));
-
-    const layerGroup = layer.group || {};
-
-    // const [min, max] = extent(mapState, d => d.value);
-    const min = 0;
-    const max = 1;
-    const { paint, legend } = generatePaint(landslideColorGrade, min || 0, max || 0);
-
-    return {
-        longDescription: layerGroup.longDescription,
-        metadata: layerGroup.metadata,
-        id: layer.id,
-        title: layer.title,
-        type: 'choropleth',
-        adminLevel,
-        layername: layer.layername,
-        legendTitle: layer.legendTitle,
-        opacity: 1,
-        mapState,
-        paint,
-        legend,
-        minValue: min,
-        maxValueCapped: true,
-    };
-};
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     FeatureGetMunicipalityImages: {
         url: '/municipality-images/',
@@ -163,6 +109,45 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 
 };
+
+
+const transformLandslideDataToLayer = (
+    data,
+    layer = {},
+) => {
+    const mapState = data.map(d => ({
+        id: d.municipality,
+        value: 1,
+
+    }));
+
+
+    const layerGroup = layer.group || {};
+
+    // const [min, max] = extent(mapState, d => d.value);
+    const [min, max] = extent(mapState, d => d.value);
+    const { paint, legend } = generatePaint(colorGrade, 0, 1);
+
+
+    return {
+        longDescription: layerGroup.longDescription,
+        metadata: layerGroup.metadata,
+        id: layer.id,
+        title: layer.title,
+        type: 'choropleth',
+        adminLevel: 'municipality',
+        layername: layer.layername,
+        legendTitle: layer.legendTitle,
+        opacity: 1,
+        mapState,
+        paint,
+        legend,
+        tooltipRenderer: LandslideTooltip,
+        minValue: min,
+        maxValueCapped: true,
+        data,
+    };
+};
 const mapStateToProps = (state: AppState): PropsFromState => ({
 
     municipalities: municipalitiesSelector(state),
@@ -170,8 +155,16 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     // hazardList: hazardTypeListSelector(state),
 });
 
-
 class Hazard extends React.PureComponent<Props, State> {
+    public constructor() {
+        super();
+        this.state = {
+            municipalityImages: [],
+        };
+    }
+
+    private getHierarchy = memoize(getLayerHierarchy);
+
     private municipalityImageData=(data) => {
         const { municipalities } = this.props;
         const { handleLandslidePolygonImageMap } = this.context;
@@ -184,11 +177,11 @@ class Hazard extends React.PureComponent<Props, State> {
                 district: dist[0],
             });
         });
-        handleLandslidePolygonImageMap(munDataWithDistrict);
+        this.setState({
+            municipalityImages: munDataWithDistrict,
+        });
+        // handleLandslidePolygonImageMap(munDataWithDistrict);
     }
-
-
-    private getHierarchy = memoize(getLayerHierarchy);
 
     public render() {
         const {
@@ -198,41 +191,69 @@ class Hazard extends React.PureComponent<Props, State> {
             requests: { FeatureGetMunicipalityImages },
 
         } = this.props;
+        const { municipalityImages } = this.state;
+
+        const { landslidePolygonImagemap } = this.context;
+
+
+        FeatureGetMunicipalityImages.setDefaultParams({
+            municipalityData: this.municipalityImageData,
+        });
+
 
         const layers = this.getHierarchy(
             layerList,
             layerGroupList,
         );
-        const { landslidePolygonImagemap, activeLayers,
-            handlelandslidePolygonChoroplethMapData,
-            landslidePolygonChoroplethMapData, addLayer } = this.context;
-        // if (activeLayers.length && activeLayers[activeLayers.length - 1]
-        // .group.title === 'Landslide Polygon Map'
-        // && landslidePolygonChoroplethMapData.length === 0) {
-        //     const datas = transformRiskDataToLayer(landslidePolygonImagemap,
-        //         activeLayers[activeLayers.length - 1], {});
-        //     addLayer(datas);
-        //     // handlelandslidePolygonChoroplethMapData(datas);
-        //     console.log('This is data', datas);
-        // }
-        if (activeLayers.length && activeLayers[activeLayers.length - 1].type !== 'choropleth'
-        && activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon Map') {
-            const datas = transformRiskDataToLayer(landslidePolygonImagemap,
-                activeLayers[activeLayers.length - 1], {});
+        const landslideLayerToDataMap = {
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            // durham_landslide_hazard_risk_district: {
+            //     data: districtLandslideRaw.features,
+            //     adminLevel: 'district',
+            //     dataKey: 'district_d',
+            //     dataValue: 'District_r',
+            // },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            post_monsoon: {
+                data: [],
+                adminLevel: 'municipality',
+                dataKey: 'municipali',
+                dataValue: 'Palika_ris',
+            },
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            // durham_landslide_hazard_risk_ward: {
+            //     data: wardLandslideRaw.features,
+            //     adminLevel: 'ward',
+            //     dataKey: 'ward_id',
+            //     dataValue: 'Ward_War_4',
+            // },
+        };
+        const RiskLayerSelectionItem = (p) => {
+            const { data: layer } = p;
 
-            addLayer(datas);
-        }
-
-        FeatureGetMunicipalityImages.setDefaultParams({
-            municipalityData: this.municipalityImageData,
-        });
-        // const riskLayer = transformRiskDataToLayer(riskData, earthquakeLayer[0], {});
-
+            return (
+                <LayerSelectionItem
+                    key={layer.id}
+                    data={
+                        landslideLayerToDataMap[layer.layername] ? (
+                            transformLandslideDataToLayer(
+                                municipalityImages,
+                                layer,
+                            )
+                        ) : (
+                            layer
+                        )
+                    }
+                />
+            );
+        };
 
         return (
             <LayerSelection
                 className={_cs(styles.hazard, className)}
                 layerList={layers}
+                layerSelectionItem={RiskLayerSelectionItem}
+
             />
         );
     }

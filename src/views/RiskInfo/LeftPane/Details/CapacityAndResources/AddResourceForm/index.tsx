@@ -49,6 +49,7 @@ import CommunitySpaceFields from './CommunitySpaceFields';
 import schemaMap, { defaultSchema } from './schema';
 
 import styles from './styles.scss';
+import HelipadFields from './HelipadFields';
 
 const getLocationDetails = (point: unknown, ward?: number) => {
     const geoJson = {
@@ -265,6 +266,11 @@ const ExtraFields = ({
                     closeModal={closeModal}
                 />
             );
+        case 'helipad':
+            return (
+                // <HelipadFields />
+                null
+            );
         default:
             return null;
     }
@@ -366,22 +372,25 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
     }
 
+
     private handleAddResourceSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess } = this.props;
+        const { onAddSuccess, closeModal } = this.props;
 
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
 
         this.setState({ resourceId: resource.id });
+        closeModal();
     }
 
     private handleEditResourceSuccess = (resource: PageType.Resource) => {
-        const { onEditSuccess } = this.props;
+        const { onEditSuccess, closeModal } = this.props;
 
         if (onEditSuccess) {
             onEditSuccess(resource.id, resource);
         }
+        closeModal();
     }
 
     private filterEnumItem = (
@@ -427,6 +436,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
 
         const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
+
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
@@ -498,6 +508,8 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     type="submit"
                                     disabled={pristine}
                                     pending={addResourcePending || editResourcePending}
+
+
                                 >
                             Save
                                 </PrimaryButton>
