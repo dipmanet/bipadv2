@@ -126,66 +126,34 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         }}
                     >
 
-                        {choroplethLayers[choroplethLayers.length - 1].adminLevel === 'municipality'
-                            ? (
-                                <MapLayer
-                                    layerKey="choropleth-layer-outline"
-                                    layerOptions={{
-                                        'source-layer': sourceLayerByAdminLevel.municipality,
-                                        type: 'line',
-                                        paint: linePaintByAdminLevel.municipality,
-                                    }}
-                                />
-                            )
-                            : (
-                                <MapLayer
-                                    layerKey="choropleth-layer-outline"
-                                    layerOptions={{
-                                        'source-layer': sourceLayerByAdminLevel.district,
-                                        type: 'line',
-                                        paint: linePaintByAdminLevel.district,
-                                    }}
-                                />
-                            )
 
-                        }
-                        {choroplethLayers[choroplethLayers.length - 1].adminLevel === 'municipality'
-                            ? (
-                                <MapLayer
-                                    layerKey="choropleth-layer"
-                                    layerOptions={{
-                                        type: 'fill',
-                                        'source-layer': sourceLayerByAdminLevel.municipality,
-                                        paint: {
-                                            ...layer.paint,
-                                            'fill-opacity': layer.paint['fill-opacity'].map(
-                                                val => (typeof val === 'number' ? val * layer.opacity : val),
-                                            ),
-                                        },
-                                    }}
-                                    onClick={layer.onClick ? layer.onClick : undefined}
-                                    onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                                    onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
-                                />
-                            )
-                            : (
-                                <MapLayer
-                                    layerKey="choropleth-layer"
-                                    layerOptions={{
-                                        type: 'fill',
-                                        'source-layer': sourceLayerByAdminLevel.district,
-                                        paint: {
-                                            ...layer.paint,
-                                            'fill-opacity': layer.paint['fill-opacity'].map(
-                                                val => (typeof val === 'number' ? val * layer.opacity : val),
-                                            ),
-                                        },
-                                    }}
-                                    onClick={layer.onClick ? layer.onClick : undefined}
-                                    onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                                    onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
-                                />
-                            )}
+                        <MapLayer
+                            layerKey="choropleth-layer-outline"
+                            layerOptions={{
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                type: 'line',
+                                paint: linePaintByAdminLevel.municipality,
+                            }}
+                        />
+
+
+                        <MapLayer
+                            layerKey="choropleth-layer"
+                            layerOptions={{
+                                type: 'fill',
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                paint: {
+                                    ...layer.paint,
+                                    'fill-opacity': layer.paint['fill-opacity'].map(
+                                        val => (typeof val === 'number' ? val * layer.opacity : val),
+                                    ),
+                                },
+                            }}
+                            onClick={layer.onClick ? layer.onClick : undefined}
+                            onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
+                            onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
+                        />
+
                         <MapState
                             attributes={layer.mapState}
                             attributeKey="value"

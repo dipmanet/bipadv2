@@ -48,48 +48,41 @@ const colorGrade = [
 ];
 
 const RiskTooltipOutput = ({ label, value }) => (
-    // <div className={styles.landslideTooltip}>
-    //     <div className={styles.header}>
-    //         <h4>
-    //             {label}
+    <div className={styles.landslideTooltip}>
+        <div className={styles.header}>
+            <h4>
+                {label}
 
-    //         </h4>
-    //     </div>
-
-    //     <div className={styles.content}>
-    //         <div>
-
-
-    //             <p>Click on municipality for map </p>
-
-
-    //         </div>
-
-    //     </div>
-
-
-    // </div>
-
-    <div className={styles.riskTooltipOutput}>
-        <div className={styles.label}>
-            { label }
+            </h4>
         </div>
-        <div className={styles.value}>
-            { value }
+
+        <div className={styles.content}>
+            <div>
+
+
+                <p>Click on municipality for map </p>
+
+
+            </div>
+
         </div>
+
+
     </div>
+
+
 );
 const LandslideTooltip = ({ layer, feature }) => (
     <div className={styles.riskTooltip}>
-        <h3 className={styles.heading}>
+        {/* <h3 className={styles.heading}>
             { feature.properties.title }
-        </h3>
+        </h3> */}
         <div className={styles.content}>
             {
                 isDefined(feature.state.value) && (
                     <RiskTooltipOutput
-                        label="Risk Score:"
-                        value={feature.state.value}
+                        label={feature.properties.title}
+
                     />
                 )
             }
@@ -118,7 +111,6 @@ const transformLandslideDataToLayer = (
     data,
     layer = {},
 ) => {
-    console.log('this is final data value', data);
     const mapState = data.map(d => ({
         id: d.municipality,
         value: 1,
