@@ -30,6 +30,7 @@ import ContactEditForm from '../ContactEditForm';
 
 import styles from './styles.scss';
 
+
 const ModalButton = modalize(Button);
 
 const Detail = (p: {
@@ -106,6 +107,8 @@ const ContactItem = (props: Props) => {
         contactId,
         municipalityList,
         onContactEdit,
+        onContactSortDown,
+        onContactSortUp,
         requests: {
             municipalityContactDeleteRequest,
         },
@@ -198,27 +201,33 @@ const ContactItem = (props: Props) => {
                     />
                 </div>
             </div>
-            <Detail
-                label="Municipality"
-                value={municipalities[municipality]}
-            />
-            <Detail
-                label="Organization"
-                value={(organization ? organization.title : undefined) || '-'}
-            />
-            <Detail
-                label="Comittee"
-                value={committeeValues[committee] || '-'}
-            />
-            <Detail
-                className={styles.position}
-                label="Position"
-                value={position}
-            />
-            <Detail
-                label="Training"
-                value={trainingValueString}
-            />
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                    <Detail
+                        label="Municipality"
+                        value={municipalities[municipality]}
+                    />
+                    <Detail
+                        label="Organization"
+                        value={(organization ? organization.title : undefined) || '-'}
+                    />
+                    <Detail
+                        label="Comittee"
+                        value={committeeValues[committee] || '-'}
+                    />
+                    <Detail
+                        className={styles.position}
+                        label="Position"
+                        value={position}
+                    />
+                    <Detail
+                        label="Training"
+                        value={trainingValueString}
+                    />
+                </div>
+                <button style={{ height: 'fit-content', backgroundColor: '#1A65C0', color: 'white' }} type="submit" onClick={() => onContactSortUp(contact)}>Up</button>
+                <button style={{ height: 'fit-content', backgroundColor: '#1A65C0', color: 'white' }} type="submit" onClick={() => onContactSortDown(contact)}>Down</button>
+            </div>
             <div className={styles.actionButtons}>
                 <Cloak hiddenIf={p => !p.change_contact}>
                     <ModalButton

@@ -98,13 +98,36 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             limit: -1,
         },
     },
+    municipalityContactPatchSelectedID: {
+        url: ({ params }) => `/municipality-contact/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && { order: params.order },
+        onSuccess: ({ params, response }) => {
+            // if (params && params.onSuccess) {
+            //     params.onSuccess();
+            // }
+            console.log('This is final data', response);
+        },
+    },
+    municipalityContactPatchAlternateID: {
+        url: ({ params }) => `/municipality-contact/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && { order: params.order },
+        onSuccess: ({ params, response }) => {
+            // if (params && params.onSuccess) {
+            //     params.onSuccess();
+            // }
+            console.log('This is final data', response);
+        },
+    },
 };
 
 interface SelectInputOption {
     key: string;
     label: string;
 }
-
+// eslint-disable-next-line no-unused-vars
+let filteredContactList = [];
 class ContactPage extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -115,13 +138,19 @@ class ContactPage extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        municipalityContactRequest.setDefaultParams({
-            setProfileContactList: this.setProfileContactList,
-        });
 
         this.state = {
             contactList: [],
+            indexOfSelectedContact: null,
+            changedIndex: null,
+
         };
+        const { contactList } = this.state;
+        if (!contactList.length) {
+            municipalityContactRequest.setDefaultParams({
+                setProfileContactList: this.setProfileContactList,
+            });
+        }
     }
 
     public static contextType = TitleContext;
@@ -258,7 +287,126 @@ class ContactPage extends React.PureComponent<Props, State> {
         municipalityList: this.props.municipalityList,
         onContactEdit: this.handleContactEdit,
         onContactDelete: this.handleContactDelete,
+        onContactSortDown: this.handleContactSortDown,
+        onContactSortUp: this.handleContactSortUp,
+
     })
+
+    private handleContactSortUp=(contactDetail) => {
+        const {
+            contactList,
+        } = this.state;
+        const {
+            region,
+            municipalityList,
+            className,
+            filters: {
+                faramValues: filterValues,
+            },
+            requests: {
+                municipalityContactPatchSelectedID,
+                municipalityContactPatchAlternateID,
+
+                municipalityContactRequest: {
+                    pending = false,
+                } = {},
+            },
+        } = this.props;
+        filteredContactList = this.getFilteredContactList(
+            contactList,
+            region,
+            municipalityList,
+            filterValues,
+        );
+        const indexOfSelectedContact = filteredContactList
+            .findIndex(item => item.id === contactDetail.id);
+
+
+        const moveElement = (filteredList, indexInitial,
+            indexDestination) => {
+            filteredList.splice(indexDestination, 0, filteredList.splice(indexInitial, 1)[0]);
+
+            return filteredList;
+        };
+        filteredContactList = moveElement(filteredContactList,
+            indexOfSelectedContact, indexOfSelectedContact - 1);
+
+        // console.log('This is index', indexOfSelectedContact);
+        // console.log('This is data', filteredContactList);
+        console.log('This is detail of contact', contactDetail);
+        const TargetOrderData = filteredContactList[indexOfSelectedContact].order;
+        const SelectedOrderData = filteredContactList[indexOfSelectedContact - 1].order;
+        const alternateContactId = filteredContactList[indexOfSelectedContact].id;
+        const selectedContactId = filteredContactList[indexOfSelectedContact - 1].id;
+        console.log('alternate', alternateContactId);
+        console.log('selected id', selectedContactId);
+        console.log('These are start and target', SelectedOrderData, TargetOrderData);
+        this.setState({
+            indexOfSelectedContact,
+            changedIndex: indexOfSelectedContact - 1,
+        });
+        municipalityContactPatchSelectedID.do({
+            id: selectedContactId,
+            order: TargetOrderData,
+        });
+        municipalityContactPatchAlternateID.do({
+            id: alternateContactId,
+            order: SelectedOrderData,
+        });
+    }
+
+    private handleContactSortDown=(contactDetail) => {
+        const {
+            contactList,
+        } = this.state;
+        const {
+            region,
+            municipalityList,
+            className,
+            filters: {
+                faramValues: filterValues,
+            },
+            requests: {
+                municipalityContactRequest: {
+                    pending = false,
+                } = {},
+            },
+        } = this.props;
+        filteredContactList = this.getFilteredContactList(
+            contactList,
+            region,
+            municipalityList,
+            filterValues,
+        );
+        const indexOfSelectedContact = filteredContactList
+            .findIndex(item => item.id === contactDetail.id);
+
+
+        const moveElement = (filteredList, indexInitial,
+            indexDestination) => {
+            filteredList.splice(indexDestination, 0, filteredList.splice(indexInitial, 1)[0]);
+
+            return filteredList;
+        };
+        filteredContactList = moveElement(filteredContactList,
+            indexOfSelectedContact, indexOfSelectedContact + 1);
+
+        // console.log('This is index', indexOfSelectedContact);
+        // console.log('This is data', filteredContactList);
+        console.log('This is detail of contact', contactDetail);
+
+        const TargetOrderData = filteredContactList[indexOfSelectedContact].order;
+        const SelectedOrderData = filteredContactList[indexOfSelectedContact + 1].order;
+        const alternateContactId = filteredContactList[indexOfSelectedContact].id;
+        const selectedContactId = filteredContactList[indexOfSelectedContact + 1].id;
+        console.log('alternate', alternateContactId);
+        console.log('selected id', selectedContactId);
+        console.log('These are start and target', SelectedOrderData, TargetOrderData);
+        this.setState({
+            indexOfSelectedContact,
+            changedIndex: indexOfSelectedContact + 1,
+        });
+    }
 
     private handleContactEdit = (contactId: Contact['id'], contact: Contact) => {
         const { contactList } = this.state;
@@ -329,7 +477,7 @@ class ContactPage extends React.PureComponent<Props, State> {
             contactList,
         } = this.state;
 
-        const filteredContactList = this.getFilteredContactList(
+        filteredContactList = this.getFilteredContactList(
             contactList,
             region,
             municipalityList,
