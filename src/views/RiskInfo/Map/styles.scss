@@ -42,19 +42,20 @@
         padding: 10px;
         font-size: 18px;
         font-weight: 600;
+        margin-bottom: 10px;
         .notesButton {
           color: black;
           cursor: pointer;
           background-color: #e5ebf1;
-          padding-right: 5px;
-          padding-left: 5px;
+          padding: 5px;
+          height: 30px;
         }
         .notesButtonActive {
           color: white;
           cursor: pointer;
           background-color: #165aac;
-          padding-right: 5px;
-          padding-left: 5px;
+          padding: 5px;
+          height: 30px;
         }
       }
       .buttons {
