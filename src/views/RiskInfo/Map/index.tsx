@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
@@ -5,6 +6,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Loader from 'react-loader';
 import { getRasterTile, getBuildingFootprint, getFeatureInfo } from '#utils/domain';
 
 import MapSource from '#re-map/MapSource';
@@ -65,6 +67,24 @@ let rasterLayers = [];
 // eslint-disable-next-line prefer-const
 let choroplethLayers = [];
 
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    FeatureGetNotes: {
+        url: '/keyvalue-html/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => params && { key: params.key },
+        onSuccess: ({ response, params }) => {
+            // params.responseData(response);
+            if (params) {
+                params.results(response.results);
+            }
+        },
+    },
+
+
+};
+
+
 class RiskInfoMap extends React.PureComponent<Props, State> {
     public constructor(props) {
         super(props);
@@ -80,6 +100,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         selectedImage: '',
         selectedMunicipalityName: '',
         loader: true,
+        notesResult: '',
 
 
     }
@@ -91,6 +112,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             isModalOpen: false,
             selectedImage: loadedImages[0].landslideInventoryEnglishFilename,
             clickedButton: 1,
+            notesResult: '',
 
 
         });
@@ -109,6 +131,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                 feature,
                 hoverLngLat: lngLat,
                 isModalOpen: true,
+                loader: true,
             });
 
             const imagesLoaded = choroplethLayers[choroplethLayers.length - 1].data.filter(item => item.municipality === feature.id);
@@ -140,6 +163,36 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         closeTooltip(undefined);
     }
 
+    private notesResults=(data) => {
+        this.setState({
+            notesResult: data[0].value,
+            loader: false,
+        });
+    }
+
+    private handleNotes=(buttonId) => {
+        const {
+            requests: { FeatureGetNotes },
+        } = this.props;
+        this.setState({
+            clickedButton: buttonId,
+            loader: true,
+        });
+
+        if (buttonId === 8) {
+            FeatureGetNotes.do({
+                key: 'durham_landslide_maps_note_eng',
+                results: this.notesResults,
+            });
+        }
+        if (buttonId === 7) {
+            FeatureGetNotes.do({
+                key: 'durham_landslide_maps_note_nep',
+                results: this.notesResults,
+            });
+        }
+    }
+
     private handleClickModalButton=(buttonId) => {
         const { loadedImages } = this.state;
         this.setState({
@@ -151,26 +204,32 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         if (buttonId === 1) {
             this.setState({
                 selectedImage: loadedImages[0].landslideInventoryEnglishFilename,
+                notesResult: '',
             });
         } else if (buttonId === 2) {
             this.setState({
                 selectedImage: loadedImages[0].landslideInventoryNepaliFilename,
+                notesResult: '',
             });
         } else if (buttonId === 3) {
             this.setState({
                 selectedImage: loadedImages[0].landslideRunoutEnglishFilename,
+                notesResult: '',
             });
         } else if (buttonId === 4) {
             this.setState({
                 selectedImage: loadedImages[0].landslideRunoutNepaliFilename,
+                notesResult: '',
             });
         } else if (buttonId === 5) {
             this.setState({
                 selectedImage: loadedImages[0].landslideSusceptibilityEnglishFilename,
+                notesResult: '',
             });
         } else {
             this.setState({
                 selectedImage: loadedImages[0].landslideSusceptibilityNepaliFilename,
+                notesResult: '',
             });
         }
     }
@@ -184,7 +243,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             selectedImage,
             selectedMunicipalityName,
             loader,
-
+            notesResult,
         } = this.state;
 
         const { activeLayers, LoadingTooltip, tooltipLatlng,
@@ -302,7 +361,33 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             <ModalBody className={styles.modalBody}>
                                 <div className={styles.imageViewer}>
                                     <div className={styles.leftPane}>
-                                        <div className={styles.municipalityName} />
+                                        <div className={styles.municipalityName}>
+                                            <h4 style={{ marginRight: '5px' }}>
+Notes:
+
+                                            </h4>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 7 ? styles.notesButtonActive : styles.notesButton}
+                                                onClick={() => this.handleNotes(7)}
+
+
+                                            >
+                                        Nep
+                                            </PrimaryButton>
+                                            <PrimaryButton
+                                                type="button"
+                                                className={clickedButton === 8 ? styles.notesButtonActive : styles.notesButton}
+                                                onClick={() => this.handleNotes(8)}
+
+
+                                            >
+                                       Eng
+                                            </PrimaryButton>
+                                            {/* <div className={clickedButton === 1 ? styles.selectedAgreeBtn : styles.agreeBtn} style={{ color: 'white', cursor: 'pointer', backgroundColor: 'green', paddingLeft: '5px', paddingRight: '5px' }} defaultValue="7">Nep</div>
+                                            <div className={clickedButton === 1 ? styles.selectedAgreeBtn : styles.agreeBtn} style={{ color: 'white', cursor: 'pointer', backgroundColor: 'blue', paddingLeft: '5px', paddingRight: '5px' }} defaultValue="8" onClick={e => console.log(e.target.value)} role="button">Eng</div> */}
+                                        </div>
+
                                         <div className={styles.buttons}>
                                             <PrimaryButton
                                                 type="button"
@@ -348,10 +433,14 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                          Landslide Susceptibility Nepali
                                             </PrimaryButton>
 
+
                                         </div>
                                     </div>
                                     <div className={styles.rightPane}>
-                                        <OpenSeaDragonViewer selectedImage={selectedImage} loadLoader={loader} />
+                                        {(clickedButton === 7 || clickedButton === 8) && loader ? <Loader /> : notesResult
+                                            ? <div dangerouslySetInnerHTML={{ __html: notesResult }} />
+                                        // <div>{ notesResult }</div>
+                                            : <OpenSeaDragonViewer selectedImage={selectedImage} loadLoader={loader} />}
                                     </div>
                                 </div>
                             </ModalBody>
@@ -361,6 +450,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                     )
                     : ''}
                 { choroplethLayers.map((layer, i) => (
+
                     <MapSource
                         key={layer.id}
                         sourceKey={layer.layername}
@@ -432,4 +522,4 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 }
 
 RiskInfoMap.contextType = RiskInfoLayerContext;
-export default RiskInfoMap;
+export default createRequestClient(requests)(RiskInfoMap);

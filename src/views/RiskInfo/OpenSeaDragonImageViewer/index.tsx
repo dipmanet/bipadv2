@@ -43,7 +43,14 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
     const handleDownload = (e) => {
         setDownloadContent(e);
     };
-
+    const handleDownloadFullImage = (e) => {
+        const link = document.createElement('a');
+        link.href = `${process.env.REACT_APP_DOMAIN_IMAGE_DOWNLOAD}/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`;
+        link.download = selectedImage;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
     useEffect(() => {
         const { width, height } = calculateDownloadDimensions();
 
@@ -79,6 +86,14 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
             srcDown: '/publicFiles/openseadragon-images/download_rest.png',
             onClick: handleDownload,
         });
+        const customButtonFullDownload = new OpenSeaDragon.Button({
+            tooltip: 'Download Full Image',
+            srcRest: '/publicFiles/openseadragon-images/download_hover.png',
+            srcGroup: '/publicFiles/openseadragon-images/download_hover.png',
+            srcHover: '/publicFiles/openseadragon-images/download_hover.png',
+            srcDown: '/publicFiles/openseadragon-images/download_hover.png',
+            onClick: handleDownloadFullImage,
+        });
 
         const view = OpenSeaDragon({
             id: 'openSeaDragon',
@@ -87,12 +102,14 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
             timeout: 60000,
 
             tileSources: [
-                `https://imageserver.yilab.org.np/iiif/3/${selectedImage}/info.json`,
+                `${process.env.REACT_APP_IMAGE_SERVER}/iiif/3/${selectedImage}/info.json`,
             ],
         });
 
 
         view.addControl(customButton.element, { anchor: OpenSeaDragon.ControlAnchor.TOP_LEFT });
+        view.addControl(customButtonFullDownload.element,
+            { anchor: OpenSeaDragon.ControlAnchor.TOP_LEFT });
 
         view.addHandler('open', () => {
             const loader = view.world.getItemAt(0);
