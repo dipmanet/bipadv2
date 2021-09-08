@@ -31,6 +31,8 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import { OpenSeaDragonViewer } from '../OpenSeaDragonImageViewer';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
+import ZoomMap from '#components/ZoomMap';
+import MapBounds from '#re-map/MapBounds';
 
 interface Props {
 }
@@ -142,6 +144,21 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             });
         }
     }
+
+    public getRasterLayer = () => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        '&layers=MappingExtent_DurhamLandslide',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('')
 
     private handleMouseEnter = (feature, lngLat) => {
         this.setState({
@@ -281,7 +298,51 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                 <CommonMap
                     sourceKey="risk-infoz"
                 />
+
+                { activeLayers.length && activeLayers[activeLayers.length - 1].group && activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon'
+                && (
+                    <>
+
+                        <MapBounds
+                            bounds={[84.40443466922436, 26.895749746060208, 86.71431342978022, 28.814250289930218]}
+                            padding={20}
+                        />
+
+                        <MapSource
+                            key="douram-1"
+                            sourceKey="douram-layer"
+                            sourceOptions={{
+                                type: 'raster',
+                                tiles: [this.getRasterLayer()],
+                                tileSize: 256,
+                            }}
+                        >
+                            <MapLayer
+                                layerKey="douram-layer01"
+                                layerOptions={{
+                                    type: 'raster',
+                                    paint: {
+                                        'raster-opacity': 0.8,
+                                    },
+                                }}
+                            />
+                        </MapSource>
+                    </>
+                )}
+                { (!activeLayers.length || (activeLayers.length && (!activeLayers[activeLayers.length - 1].group || (activeLayers[activeLayers.length - 1].group && activeLayers[activeLayers.length - 1].group.title !== 'Landslide Polygon')))) && (
+                    <>
+
+                        <MapBounds
+                            bounds={[80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792]}
+                            padding={20}
+                        />
+
+                    </>
+                )}
+
+
                 { rasterLayers.map(layer => (
+
                     <MapSource
                         key={layer.id}
                         sourceKey={layer.layername}
@@ -449,6 +510,7 @@ Notes:
                         </Modal>
                     )
                     : ''}
+
                 { choroplethLayers.map((layer, i) => (
 
                     <MapSource
@@ -460,14 +522,7 @@ Notes:
                             url: mapSources.nepal.url,
                         }}
                     >
-                        <MapLayer
-                            layerKey="choropleth-layer-outline"
-                            layerOptions={{
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                type: 'line',
-                                paint: linePaintByAdminLevel.municipality,
-                            }}
-                        />
+
 
                         <MapLayer
                             layerKey="choropleth-layer"
@@ -486,7 +541,14 @@ Notes:
                             onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
                             onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
                         />
-
+                        <MapLayer
+                            layerKey="choropleth-layer-outline"
+                            layerOptions={{
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                type: 'line',
+                                paint: linePaintByAdminLevel.municipality,
+                            }}
+                        />
 
                         <MapState
                             attributes={layer.mapState}
