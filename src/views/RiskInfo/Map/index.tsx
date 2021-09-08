@@ -103,6 +103,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         selectedMunicipalityName: '',
         loader: true,
         notesResult: '',
+        topLayer: '',
+        topChoroPlethLayer: '',
+        boundary: [80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792],
 
 
     }
@@ -251,6 +254,32 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         }
     }
 
+    private handleMapBound=() => {
+        const { activeLayers } = this.context;
+        const { topLayer } = this.state;
+        this.setState({
+
+            topLayer: activeLayers.length && activeLayers[activeLayers.length - 1].layername,
+
+
+        });
+        console.log('this is click', activeLayers.length && activeLayers[activeLayers.length - 1].layername);
+        // if (activeLayers.length && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon') && (activeLayers[activeLayers.length - 1].layername !== topLayer)) {
+        //     this.setState({
+
+        //         topLayer: activeLayers.length && activeLayers[activeLayers.length - 1].layername,
+        //         topChoroPlethLayer: '',
+
+        //     });
+        // }
+        // if (!activeLayers.length || (activeLayers.length && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title !== 'Landslide Polygon')) || (activeLayers.length && !activeLayers[activeLayers.length - 1].group)) {
+        //     this.setState({
+        //         topChoroPlethLayer: activeLayers.length ? activeLayers[activeLayers.length - 1].layername : '',
+        //         topLayer: '',
+        //     });
+        // }
+    }
+
     public render() {
         const {
             feature,
@@ -261,11 +290,14 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             selectedMunicipalityName,
             loader,
             notesResult,
+            topLayer,
+            boundary,
+            topChoroPlethLayer,
         } = this.state;
 
         const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse } = this.context;
-
+        this.handleMapBound();
         // const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
         // const selectedActiveLayer = activeLayers;
 
@@ -291,6 +323,8 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         const tooltipValues = JsonDataPresent !== undefined && JsonDataPresent !== 0 && tooltipData !== undefined && tooltipData !== 0 && JsonDataPresent.map(item => tooltipData[item.key]);
 
+        console.log('Active layer', activeLayers);
+        console.log('top layer', topLayer);
 
         return (
             <>
@@ -299,15 +333,36 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                     sourceKey="risk-infoz"
                 />
 
+                { activeLayers.length && (topLayer !== activeLayers[activeLayers.length - 1].layername) && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon')
+                    ? (
+
+                        <>
+                            {console.log('tested')}
+                            <MapBounds
+                                bounds={[84.40443466922436, 26.895749746060208, 86.71431342978022, 28.814250289930218]}
+                                padding={20}
+                                duration={1500}
+                            />
+
+
+                        </>
+                    ) : activeLayers.length && (topLayer !== activeLayers[activeLayers.length - 1].layername) ? (
+                        <>
+
+                            <MapBounds
+                                bounds={[80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792]}
+                                padding={20}
+                                duration={1500}
+                            />
+
+                        </>
+                    ) : ''
+                }
+
                 { activeLayers.length && activeLayers[activeLayers.length - 1].group && activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon'
                 && (
                     <>
 
-                        <MapBounds
-                            bounds={[84.40443466922436, 26.895749746060208, 86.71431342978022, 28.814250289930218]}
-                            padding={20}
-                            duration={1500}
-                        />
 
                         <MapSource
                             key="douram-1"
@@ -328,17 +383,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                 }}
                             />
                         </MapSource>
-                    </>
-                )}
-                { (!activeLayers.length || (activeLayers.length && (!activeLayers[activeLayers.length - 1].group || (activeLayers[activeLayers.length - 1].group && activeLayers[activeLayers.length - 1].group.title !== 'Landslide Polygon')))) && (
-                    <>
-
-                        <MapBounds
-                            bounds={[80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792]}
-                            padding={20}
-                            duration={1500}
-                        />
-
                     </>
                 )}
 
