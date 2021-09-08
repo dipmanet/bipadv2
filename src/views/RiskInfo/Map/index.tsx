@@ -306,6 +306,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         <MapBounds
                             bounds={[84.40443466922436, 26.895749746060208, 86.71431342978022, 28.814250289930218]}
                             padding={20}
+                            duration={1500}
                         />
 
                         <MapSource
@@ -335,6 +336,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         <MapBounds
                             bounds={[80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792]}
                             padding={20}
+                            duration={1500}
                         />
 
                     </>
