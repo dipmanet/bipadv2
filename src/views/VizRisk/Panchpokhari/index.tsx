@@ -763,6 +763,7 @@ class Jugal extends React.Component {
                             buildingVul={buildingVul}
                             showAddForm={this.state.showAddForm}
                             handleShowAddForm={this.handleShowAddForm}
+                            singularBuldingData={this.state.singularBuldingData}
 
                         />
 

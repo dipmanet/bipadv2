@@ -11,6 +11,7 @@ import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
 import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import HouseholdPopup from '#views/VizRisk/Common/HouseholdPopup';
+import { dataItemsPopup } from '#views/VizRisk/Common/utils';
 import styles from './styles.scss';
 
 
@@ -702,26 +703,47 @@ class FloodHistoryMap extends React.Component {
     }
 
     public showPopupOnBldgs = (coordinates, msg) => {
-        // popup.setLngLat(coordinates).setHTML(
-        //     `<div style="padding: 5px;border-radius: 5px">
-        //         <p>${msg}</p>
-        //     </div>
-        //     `,
-        // ).addTo(this.map);
-
+        const { singularBuldingData } = this.props;
         const content = document.createElement('div');
-        content.innerHTML = msg;
+        const heading = document.createElement('h2');
+        heading.innerHTML = msg;
+        heading.style.backgroundColor = 'rgb(25,94,220)';
+        heading.style.width = '100%';
+        content.appendChild(heading);
         content.style.height = '200px';
         content.style.width = '200px';
+        content.style.overflow = 'scroll';
         content.style.padding = '15px';
         content.style.background = '#eeeeee';
         content.style.display = 'flex';
         content.style.flexDirection = 'column';
-        content.style.alignItems = 'center';
+        content.style.alignItems = 'flex-start';
 
+
+        if (Object.keys(singularBuldingData).length > 2) {
+            Object.keys(dataItemsPopup).map((item) => {
+                const listItem = document.createElement('div');
+                listItem.style.display = 'flex';
+                listItem.style.justifyContent = 'space-between';
+                listItem.style.padding = '5px 0';
+                listItem.style.borderBottom = '1px solid #dddddd';
+                listItem.style.width = '100%';
+                listItem.style.alignItems = 'center';
+                const l = document.createElement('span');
+                const m = document.createElement('span');
+                l.innerHTML = `${dataItemsPopup[item]}`;
+                m.innerHTML = `${singularBuldingData[item]}`;
+                m.style.paddingLeft = '10px';
+                listItem.appendChild(l);
+                listItem.appendChild(m);
+                content.appendChild(listItem);
+                return null;
+            });
+        }
         const button = document.createElement('BUTTON');
         button.innerHTML = 'Add/Edit Details';
         button.addEventListener('click', this.handleButtonClick, false);
+
         content.appendChild(button);
         popup.setLngLat(coordinates)
             .setDOMContent(
@@ -729,12 +751,12 @@ class FloodHistoryMap extends React.Component {
             ).addTo(this.map);
     };
 
-    // public showMarker = (cood, msg) => {
-    //     popup.setLngLat(cood)
-    //         .setHTML(
-    //             HouseholdPopup(msg),
-    //         ).addTo(this.map);
-    // }
+    public showMarker = (cood, msg) => {
+        popup.setLngLat(cood)
+            .setHTML(
+                HouseholdPopup(msg),
+            ).addTo(this.map);
+    }
 
     public removeMarker = () => {
         popup.remove();
@@ -801,7 +823,7 @@ class FloodHistoryMap extends React.Component {
                     // alert('No data available');
                     this.setState({ searchTerm: '' });
                     this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                    this.showMarker(coordinatesObj[0].geometry.coordinates, 'No data');
+                    this.showPopupOnBldgs(coordinatesObj[0].geometry.coordinates, 'To add data click the following button');
                     this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {
