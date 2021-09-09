@@ -83,3 +83,10 @@ input::placeholder{
 .slider::-moz-range-thumb {
   @extend .thumb-style;
 }
+
+
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+

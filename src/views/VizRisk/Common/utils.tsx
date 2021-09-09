@@ -1,5 +1,8 @@
 // Check permission for the user
 // eslint-disable-next-line import/prefer-default-export
+
+import styles from './popupstyles.scss';
+
 export const checkPermission = (user, codeName, app) => {
     let permission = false;
     if (!user) {
@@ -34,7 +37,7 @@ export const checkPermission = (user, codeName, app) => {
     // return true;
 };
 
-export const dataItemsPopup = {
+const dataItemsPopup = {
     buildingCondition: 'Building Condition',
     storeys: 'Storyes',
     groundSurface: 'Ground Surface',
@@ -64,4 +67,41 @@ export const dataItemsPopup = {
     drinkingWaterDistance: 'Drinking Wate Distance',
     openSafeSpaceDistance: 'Open Space Distance',
     flashFlood: 'Flash Flood',
+};
+
+const handleButtonClick = () => {
+
+};
+
+export const popupElement = (buildingData, msg, handleClick) => {
+    const content = document.createElement('div');
+    const heading = document.createElement('h2');
+    heading.innerHTML = msg;
+    heading.classList.add(styles.heading);
+    content.classList.add(styles.content);
+    content.appendChild(heading);
+
+    if (Object.keys(buildingData).length > 2) {
+        Object.keys(dataItemsPopup).map((item) => {
+            const listItem = document.createElement('div');
+            listItem.classList.add(styles.listItem);
+            const l = document.createElement('span');
+            const m = document.createElement('span');
+            l.innerHTML = `${dataItemsPopup[item]}`;
+            l.style.fontWeight = 'bold';
+            m.innerHTML = `${buildingData[item]}`;
+            m.classList.add(styles.m);
+            listItem.appendChild(l);
+            listItem.appendChild(m);
+            content.appendChild(listItem);
+            return null;
+        });
+    }
+    const button = document.createElement('BUTTON');
+    button.innerHTML = 'Add/Edit Details';
+    button.addEventListener('click', handleClick, false);
+    button.classList.add(styles.addButton);
+    content.appendChild(button);
+
+    return content;
 };

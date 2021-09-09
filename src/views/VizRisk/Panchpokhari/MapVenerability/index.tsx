@@ -11,7 +11,7 @@ import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
 import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import HouseholdPopup from '#views/VizRisk/Common/HouseholdPopup';
-import { dataItemsPopup } from '#views/VizRisk/Common/utils';
+import { popupElement } from '#views/VizRisk/Common/utils';
 import styles from './styles.scss';
 
 
@@ -704,52 +704,7 @@ class FloodHistoryMap extends React.Component {
 
     public showPopupOnBldgs = (coordinates, msg) => {
         const { singularBuldingData } = this.props;
-        const content = document.createElement('div');
-        const heading = document.createElement('h2');
-        heading.innerHTML = msg;
-        heading.style.backgroundColor = 'rgb(25,94,220)';
-        heading.style.width = '100%';
-        heading.style.color = '#ffffff';
-        heading.style.padding = '10px';
-        heading.style.fontSize = '14px';
-        content.appendChild(heading);
-        content.style.height = '200px';
-        content.style.width = '200px';
-        content.style.overflow = 'scroll';
-        content.style.padding = '0';
-        content.style.background = '#eeeeee';
-        content.style.display = 'flex';
-        content.style.flexDirection = 'column';
-        content.style.alignItems = 'flex-start';
-
-
-        if (Object.keys(singularBuldingData).length > 2) {
-            Object.keys(dataItemsPopup).map((item) => {
-                const listItem = document.createElement('div');
-                listItem.style.display = 'flex';
-                listItem.style.justifyContent = 'space-between';
-                listItem.style.padding = '5px 10px';
-                listItem.style.borderBottom = '1px solid #dddddd';
-                listItem.style.width = '100%';
-                listItem.style.alignItems = 'center';
-                const l = document.createElement('span');
-                const m = document.createElement('span');
-                l.innerHTML = `${dataItemsPopup[item]}`;
-                l.style.fontWeight = 'bold';
-                m.innerHTML = `${singularBuldingData[item]}`;
-                m.style.textAlign = 'right';
-                m.style.paddingLeft = '10px';
-                listItem.appendChild(l);
-                listItem.appendChild(m);
-                content.appendChild(listItem);
-                return null;
-            });
-        }
-        const button = document.createElement('BUTTON');
-        button.innerHTML = 'Add/Edit Details';
-        button.addEventListener('click', this.handleButtonClick, false);
-
-        content.appendChild(button);
+        const content = popupElement(singularBuldingData, msg, this.handleButtonClick);
         popup.setLngLat(coordinates)
             .setDOMContent(
                 content,
