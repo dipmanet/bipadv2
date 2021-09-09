@@ -10,6 +10,7 @@ import { getHillShadeLayer, getSingularBuildingData } from '#views/VizRisk/Panch
 import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
 import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
+import HouseholdPopup from '#views/VizRisk/Common/HouseholdPopup';
 import styles from './styles.scss';
 
 
@@ -630,7 +631,7 @@ class FloodHistoryMap extends React.Component {
         if (this.props.showAddForm !== prevProps.showAddForm) {
             if (this.props.showAddForm) {
                 if (this.state.cood) {
-                    this.showMarker(this.state.cood, 'Editing...');
+                    this.showPopupOnBldgs(this.state.cood, 'Please enter building details on the left panel. ');
                 }
             } else {
                 this.removeMarker();
@@ -696,23 +697,44 @@ class FloodHistoryMap extends React.Component {
         this.setState({ searchTerm: e.target.value });
     }
 
+    public handleButtonClick = () => {
+        this.props.handleShowAddForm(true);
+    }
+
     public showPopupOnBldgs = (coordinates, msg) => {
-        popup.setLngLat(coordinates).setHTML(
-            `<div style="padding: 5px;border-radius: 5px">
-                <p>${msg}</p>
-            </div>
-            `,
-        ).addTo(this.map);
+        // popup.setLngLat(coordinates).setHTML(
+        //     `<div style="padding: 5px;border-radius: 5px">
+        //         <p>${msg}</p>
+        //     </div>
+        //     `,
+        // ).addTo(this.map);
+
+        const content = document.createElement('div');
+        content.innerHTML = msg;
+        content.style.height = '200px';
+        content.style.width = '200px';
+        content.style.padding = '15px';
+        content.style.background = '#eeeeee';
+        content.style.display = 'flex';
+        content.style.flexDirection = 'column';
+        content.style.alignItems = 'center';
+
+        const button = document.createElement('BUTTON');
+        button.innerHTML = 'Add/Edit Details';
+        button.addEventListener('click', this.handleButtonClick, false);
+        content.appendChild(button);
+        popup.setLngLat(coordinates)
+            .setDOMContent(
+                content,
+            ).addTo(this.map);
     };
 
-    public showMarker = (cood, msg) => {
-        popup.setLngLat(cood).setHTML(
-            `<div style="padding: 5px;border-radius: 5px">
-                <p>${msg}</p>
-            </div>
-            `,
-        ).addTo(this.map);
-    }
+    // public showMarker = (cood, msg) => {
+    //     popup.setLngLat(cood)
+    //         .setHTML(
+    //             HouseholdPopup(msg),
+    //         ).addTo(this.map);
+    // }
 
     public removeMarker = () => {
         popup.remove();

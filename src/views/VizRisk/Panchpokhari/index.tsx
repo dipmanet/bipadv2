@@ -762,6 +762,8 @@ class Jugal extends React.Component {
                             handleDrawResetData={this.handleDrawResetData}
                             buildingVul={buildingVul}
                             showAddForm={this.state.showAddForm}
+                            handleShowAddForm={this.handleShowAddForm}
+
                         />
 
                         <RightElement7
