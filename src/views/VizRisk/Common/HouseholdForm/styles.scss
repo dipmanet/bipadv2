@@ -1,14 +1,10 @@
-.selectElement{
-    background: rgb(5,36,52);
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    margin: 6px 0;
-    color: white;
-    opacity: 0.85;
-    padding: 3px 0;
-    outline: none;
-    font-size: 12px;
+$border-color: rgba(255,255,255,0.5);
+
+.select{
+    border-bottom: 1px solid $border-color !important;
+    path { 
+        fill: $border-color;
+    }
 }
 
 .inputContainer {
@@ -18,6 +14,7 @@
         color: rgba(255,255,255,0.67) ;
 
     }
+    margin: 5px 0;
 }
 $button-color: rgb(0,170,223);
 

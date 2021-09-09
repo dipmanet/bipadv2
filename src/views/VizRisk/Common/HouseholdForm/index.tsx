@@ -3,6 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
+import Input from '@material-ui/core/Input';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import { makeStyles } from '@material-ui/core/styles';
 import styles from './styles.scss';
 import {
     refData,
@@ -25,6 +31,46 @@ interface Props {
 interface Params {
 
 }
+
+const useStyles = makeStyles({
+    select: {
+        color: '#ffffff !important',
+        padding: '10px 0',
+        width: '100%',
+        fontSize: '13px',
+        borderBottomColor: '#dddddd !important',
+        '& input::placeholder': {
+            fontSize: '12px',
+        },
+        '.MuiSelect-select': {
+            borderBottomColor: 'red',
+        },
+    },
+    label: {
+        fontSize: '12px',
+        color: '#dddddd',
+    },
+    cssLabel: {
+        color: 'white',
+        fontSize: '13px',
+        '&$cssFocused': {
+            color: '#dddddd',
+        },
+    },
+    cssFocused: {},
+    cssUnderline: {
+        color: '#dddddd',
+        '&:after': {
+            borderBottomColor: '#dddddd',
+        },
+    },
+    formControl: {
+        width: '100%',
+        margin: '15px 0',
+        borderBottomColor: '#dddddd',
+    },
+});
+
 
 const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
     buildingPostRequest: {
@@ -87,7 +133,7 @@ const HouseholdForm = (props) => {
         enumData,
         handleShowForm,
     } = props;
-
+    const classes = useStyles();
     const [buildingFormData, setFormData] = useState({ ...buildingData });
     const [pending, setPending] = useState(false);
     const { physicalFactors, socialFactors, economicFactor } = getBuildingOptions(enumData);
@@ -228,42 +274,80 @@ const HouseholdForm = (props) => {
                             <div className={styles.section}>
                                 <p>PHYSICAL FACTORS</p>
                                 {
-                                    pfSelectTypes.map((type: string) => (
+                                    pfSelectTypes.map((type: any) => (
                                         <div className={styles.inputContainer}>
-                                            <span className={styles.label}>
-                                                {type}
-                                            </span>
-                                            <select
-                                                value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, type)}
-                                                className={styles.selectElement}
-                                            >
+                                            <FormControl classes={{ root: classes.formControl }}>
+                                                <InputLabel
+                                                    classes={{
+                                                        root: classes.cssLabel,
+                                                        focused: classes.cssFocused,
+                                                    }}
+                                                >
+                                                    {type}
+                                                </InputLabel>
+                                                <Select
+                                                    classes={{
+                                                        root: classes.select,
+                                                        select: classes.cssUnderline,
+                                                    }}
+                                                    MenuProps={{
+                                                        anchorOrigin: {
+                                                            vertical: 'center',
+                                                            horizontal: 'left',
+                                                        },
+                                                        transformOrigin: {
+                                                            vertical: 'top',
+                                                            horizontal: 'left',
+                                                        },
+                                                        getContentAnchorEl: null,
+                                                    }}
 
-                                                <option value="" disabled selected>
-                                                    {physicalFactors.filter(pf => pf.title === type)[0].placeholder}
-                                                </option>
-                                                {physicalFactors.filter(pf => pf.title === type)[0].options
-                                                    .map((item: string) => <option value={item}>{item}</option>)
-                                                }
-                                            </select>
+                                                    placeholder={`Please Enter ${type}`}
+                                                    value={buildingFormData[refData[type]]}
+                                                    onChange={e => handleFoundation(e, type)}
+                                                    className={styles.select}
+
+                                                >
+
+                                                    <MenuItem value="" disabled selected>
+                                                        {physicalFactors.filter(pf => pf.title === type)[0].placeholder}
+                                                    </MenuItem>
+                                                    {physicalFactors.filter(pf => pf.title === type)[0].options
+                                                        .map((item: string) => <MenuItem value={item}>{item}</MenuItem>)
+                                                    }
+                                                </Select>
+                                            </FormControl>
                                         </div>
 
                                     ))
                                 }
                                 {
-                                    pfInputTypes.map((type: string) => (
+                                    pfInputTypes.map((type: any) => (
                                         <div className={styles.inputContainer}>
-                                            <span className={styles.label}>
-                                                {type}
-                                            </span>
-                                            <input
-                                                type="text"
-                                                value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, type)}
-                                                className={styles.selectElement}
-                                                placeholder={`Please enter ${type}`}
-                                            />
+                                            <FormControl classes={{ root: classes.formControl }}>
+                                                <InputLabel
+                                                    classes={{
+                                                        root: classes.cssLabel,
+                                                        focused: classes.cssFocused,
+                                                    }}
+                                                >
+                                                    {type}
+                                                </InputLabel>
+                                                <Input
+                                                    classes={{
+                                                        root: classes.select,
+                                                        underline: classes.cssUnderline,
 
+                                                    }}
+                                                    placeholder={`Please Enter ${type}`}
+                                                    type="text"
+                                                    value={buildingFormData[refData[type]]}
+                                                    onChange={e => handleFoundation(e, type)}
+                                                    // className={styles.selectElement}
+                                                    className={styles.select}
+
+                                                />
+                                            </FormControl>
                                         </div>
 
                                     ))
@@ -272,43 +356,78 @@ const HouseholdForm = (props) => {
                             <div className={styles.section}>
                                 <p>SOCIAL FACTORS</p>
                                 {
-                                    scSelectTypes.map((type: string, idx: number) => (
+                                    scSelectTypes.map((type: any, idx: any) => (
                                         <div className={styles.inputContainer}>
-                                            <span className={styles.label}>
-                                                {type}
-                                            </span>
-                                            <select
-                                                value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, type)}
-                                                className={styles.selectElement}
-                                            >
-                                                <option value="" disabled selected>
-                                                    {socialFactors.filter(pf => pf.title === type)[0].placeholder}
-                                                </option>
-                                                {socialFactors.filter(pf => pf.title === type)[0].options
-                                                    .map((item: string) => <option value={item}>{item}</option>)
+                                            <FormControl classes={{ root: classes.formControl }}>
+                                                <InputLabel
+                                                    classes={{
+                                                        root: classes.cssLabel,
+                                                        focused: classes.cssFocused,
+                                                    }}
+                                                >
+                                                    {type}
+                                                </InputLabel>
 
-                                                }
-                                            </select>
+                                                <Select
+                                                    label={type}
+                                                    placeholder={`Please Enter ${type}`}
+                                                    value={buildingFormData[refData[type]]}
+                                                    onChange={e => handleFoundation(e, type)}
+                                                    className={styles.select}
+                                                    classes={{
+                                                        underline: classes.cssUnderline,
+                                                        root: classes.select,
+                                                    }}
+                                                    MenuProps={{
+                                                        anchorOrigin: {
+                                                            vertical: 'bottom',
+                                                            horizontal: 'left',
+                                                        },
+                                                        transformOrigin: {
+                                                            vertical: 'top',
+                                                            horizontal: 'left',
+                                                        },
+                                                        getContentAnchorEl: null,
+                                                    }}
+                                                >
+                                                    <MenuItem value="" disabled selected>
+                                                        {socialFactors.filter(pf => pf.title === type)[0].placeholder}
+                                                    </MenuItem>
+                                                    {socialFactors.filter(pf => pf.title === type)[0].options
+                                                        .map((item: string) => <MenuItem value={item}>{item}</MenuItem>)
+
+                                                    }
+                                                </Select>
+                                            </FormControl>
                                         </div>
 
                                     ))
                                 }
                                 {
-                                    scInputTypes.map((type: string) => (
+                                    scInputTypes.map((type: any) => (
                                         <div className={styles.inputContainer}>
-                                            <span className={styles.label}>
-                                                {type}
-                                            </span>
-                                            <input
-                                                type="text"
-                                                value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, type)}
-                                                className={styles.selectElement}
-                                                placeholder={`Please enter ${type}`}
+                                            <FormControl classes={{ root: classes.formControl }}>
+                                                <InputLabel
+                                                    classes={{
+                                                        root: classes.cssLabel,
+                                                        focused: classes.cssFocused,
+                                                    }}
+                                                >
+                                                    {type}
+                                                </InputLabel>
 
-                                            />
-
+                                                <Input
+                                                    classes={{
+                                                        underline: classes.cssUnderline,
+                                                        root: classes.select,
+                                                    }}
+                                                    placeholder={`Please Enter ${type}`}
+                                                    type="text"
+                                                    value={buildingFormData[refData[type]]}
+                                                    onChange={e => handleFoundation(e, type)}
+                                                    className={styles.select}
+                                                />
+                                            </FormControl>
                                         </div>
 
                                     ))
@@ -318,42 +437,79 @@ const HouseholdForm = (props) => {
                             <div className={styles.section}>
                                 <p>ECONOMIC FACTORS</p>
                                 {
-                                    ecSelectTypes.map((type: string) => (
+                                    ecSelectTypes.map((type: any) => (
                                         <div className={styles.inputContainer}>
-                                            <span className={styles.label}>
-                                                {type}
-                                            </span>
-                                            <select
-                                                value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, type)}
-                                                className={styles.selectElement}
-                                            >
-                                                <option value="" disabled selected>
-                                                    {economicFactor.filter(pf => pf.title === type)[0].placeholder}
-                                                </option>
-                                                {
-                                                    economicFactor.filter(pf => pf.title === type)[0].options
-                                                        .map((item: string) => <option value={item}>{item}</option>)
-                                                }
-                                            </select>
+                                            <FormControl classes={{ root: classes.formControl }}>
+                                                <InputLabel
+                                                    classes={{
+                                                        root: classes.cssLabel,
+                                                        focused: classes.cssFocused,
+                                                    }}
+                                                >
+                                                    {type}
+                                                </InputLabel>
+
+                                                <Select
+                                                    label={type}
+                                                    classes={{
+                                                        underline: classes.cssUnderline,
+                                                        root: classes.select,
+                                                    }}
+                                                    placeholder={`Please Enter ${type}`}
+                                                    value={buildingFormData[refData[type]]}
+                                                    onChange={e => handleFoundation(e, type)}
+                                                    className={styles.select}
+                                                    MenuProps={{
+                                                        anchorOrigin: {
+                                                            vertical: 'bottom',
+                                                            horizontal: 'left',
+                                                        },
+                                                        transformOrigin: {
+                                                            vertical: 'top',
+                                                            horizontal: 'left',
+                                                        },
+                                                        getContentAnchorEl: null,
+                                                    }}
+                                                >
+                                                    <MenuItem value="" disabled selected>
+                                                        {economicFactor.filter(pf => pf.title === type)[0].placeholder}
+                                                    </MenuItem>
+                                                    {
+                                                        economicFactor.filter(pf => pf.title === type)[0].options
+                                                            .map((item: string) => <MenuItem value={item}>{item}</MenuItem>)
+                                                    }
+                                                </Select>
+                                            </FormControl>
                                         </div>
 
                                     ))
                                 }
                                 {
-                                    ecInputTypes.map((type: string) => (
+                                    ecInputTypes.map((type: any) => (
                                         <div className={styles.inputContainer}>
-                                            <span className={styles.label}>
-                                                {type}
-                                            </span>
-                                            <input
-                                                type="text"
-                                                value={buildingFormData[refData[type]]}
-                                                onChange={e => handleFoundation(e, type)}
-                                                placeholder={`Please enter ${type}`}
-                                                className={styles.selectElement}
-                                            />
+                                            <FormControl classes={{ root: classes.formControl }}>
 
+                                                <InputLabel
+                                                    classes={{
+                                                        root: classes.cssLabel,
+                                                        focused: classes.cssFocused,
+                                                    }}
+                                                >
+                                                    {type}
+                                                </InputLabel>
+
+                                                <Input
+                                                    classes={{
+                                                        underline: classes.cssUnderline,
+                                                        root: classes.select,
+                                                    }}
+                                                    placeholder={`Please Enter ${type}`}
+                                                    type="text"
+                                                    value={buildingFormData[refData[type]]}
+                                                    onChange={e => handleFoundation(e, type)}
+                                                    className={styles.select}
+                                                />
+                                            </FormControl>
                                         </div>
 
                                     ))
