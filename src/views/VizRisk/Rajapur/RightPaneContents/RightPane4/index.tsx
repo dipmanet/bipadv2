@@ -8,17 +8,34 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
+// import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFourPane extends React.PureComponent<Props, State> {
+    public constructor(p) {
+        super(p);
+        this.state = {
+            chartData: [],
+        };
+    }
+
+    public componentDidMount() {
+        const { criticalInfraData } = this.props;
+        const ciTypes = [...new Set(criticalInfraData
+            .features.map(ciType => ciType.properties.Type))];
+        const chartData = ciTypes.map(item => ({
+            name: item,
+            Total: criticalInfraData.features.filter(i => i.properties.Type === item).length,
+        }));
+        this.setState({ chartData });
+    }
+
     public render() {
-        const chartData = criticalInfraData.criticalInfraData;
+        const { chartData } = this.state;
         return (
             <div className={styles.vrSideBar}>
                 <h1>Community Infrastructures</h1>
@@ -38,13 +55,12 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 threat of flooding every monsoon.
                 </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
+                <ResponsiveContainer className={styles.respContainer} width="90%" height={450}>
                     <BarChart
-                        width={300}
-                        // height={600}
+                        width={250}
                         data={chartData}
                         layout="vertical"
-                        margin={{ left: 20, right: 20 }}
+                        margin={{ left: 40, right: 20 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" />
@@ -53,26 +69,16 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             dataKey="name"
                             tick={{ fill: '#94bdcf' }}
                         />
-                        {/* <Tooltip /> */}
-                        {/* <Legend /> */}
                         <Bar
                             dataKey="Total"
                             fill="#ffbf00"
-                            // barCategoryGap={30}
-                            // barCategoryGap={20}
                             barSize={20}
                             radius={[0, 20, 20, 0]}
-                            label={{ position: 'insideRight' }}
+                            label={{ position: 'right', fill: '#ffffff' }}
                             tick={{ fill: '#94bdcf' }}
                         />
-                        {/* <Bar dataKey="FemalePop" stackId="a" fill="#00d725" /> */}
-                        {/* <Bar dataKey="TotalHousehold" fill="#347eff" /> */}
-                        {/* <Bar background label dataKey="Total" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
-                {/* <SourceInfo /> */}
-
-
             </div>
         );
     }

@@ -18,11 +18,11 @@
     .floodMainContainer{
         display:flex;
         padding: 2px 0 5px 0;
-        height: 50%;
+        height: 40%;
         flex-direction: column;
         .floodSubGroup{
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: flex-start;
             .floodItemContainer{
                 // font-size: 10px;

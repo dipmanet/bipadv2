@@ -61,11 +61,11 @@ const rasterLayersYears = [5, 10, 20, 50, 100, 200, 250, 500, 1000];
 const rasterLayers = rasterLayersYears.map(layer => `raster-rajapur-${layer}`);
 
 const slideOneLayers = ['wardNumbers',
-    'water', 'waterway',
+    'water', 'riversrajapur-btz2hk', 'waterway',
     'wardOutline', 'wardFill'];
 
-const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'road-label-simple', 'bridgeRajapur', 'water',
-    'canalRajapur', 'rajapurbuildings',
+const slideTwoLayers = ['settlement-major-label', 'settlement-minor-label', 'settlement-subdivision-label', 'wardNumbers', 'road-label-simple', 'bridgeRajapur', 'water',
+    'riversrajapur-btz2hk', 'canalRajapur', 'rajapurbuildings',
     'rajapurRoads', 'forestRajapur', 'agriculturelandRajapurPattern',
     'agriculturelandRajapur', 'wardOutline',
     'wardFill',
@@ -227,19 +227,19 @@ class FloodHistoryMap extends React.Component {
 
 
         const slideFourLayers = [
-            ...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur', 'water', 'wardOutline',
-            'canalRajapur',
+            ...criticalInfraClusters, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'wardNumbers', 'bridgeRajapur', 'water', 'wardOutline',
+            'canalRajapur', 'riversrajapur-btz2hk',
             'waterway', 'rajapurRoads', 'wardFill',
         ];
 
         const slideFiveLayers = [
-            ...criticalInfraClusters, 'buildingPoints', ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur', 'rajapurbuildings', 'water',
+            ...criticalInfraClusters, 'buildingPoints', ...rasterLayers, 'settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur', 'rajapurbuildings', 'wardNumbers', 'water', 'riversrajapur-btz2hk',
             'canalRajapur', 'waterway',
             'rajapurRoads', 'wardOutline', 'wardFill',
         ];
-        const slideSixLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur',
+        const slideSixLayers = ['settlement-major-label', 'settlement-minor-label', 'road-label-simple', 'bridgeRajapur', 'wardNumbers',
             ...evacClusters, ...rasterLayers, 'water',
-            'rajapurRoads', 'canalRajapur', 'waterway',
+            'rajapurRoads', 'canalRajapur', 'riversrajapur-btz2hk', 'waterway',
             'wardOutline', 'wardFill',
         ];
 

@@ -10,10 +10,18 @@ import Industry from '../../Icons/icon_set_industry.svg';
 import Building from '../../Icons/homeNew.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
 import Icon from '#rscg/Icon';
-
+import Communication from '../../Icons/communication.svg';
+import Tourism from '#resources/icons/icon_set_hotel.svg';
+// import Electricity from '../../Icons/';
+import Transportation from '../../Icons/transportation.svg';
 
 const LandCoverLegends = (props) => {
-    const { handleCritical, criticalFlood, showBuildingPoints } = props;
+    const {
+        handleCritical,
+        criticalFlood,
+        showBuildingPoints,
+        criticalInfraData,
+    } = props;
     const [showEducation, setshowEducation] = useState(false);
     const [finance, setshowFinance] = useState(false);
     const [showBuilding, setshowBuilding] = useState(false);
@@ -24,16 +32,22 @@ const LandCoverLegends = (props) => {
     const [showTourism, setshowTourism] = useState(false);
     const [showAll, setshowAll] = useState(true);
     const [showCriticalElements, setshowCriticalElements] = useState(true);
+    const [showElectricity, setshowElectricity] = useState(false);
+    const [showTransportation, setshowTransportation] = useState(false);
+    const [showBank, setshowBank] = useState(false);
+    const [showCommunication, setshowCommunication] = useState(false);
 
     const resetCriticalLayers = () => {
-        setshowEducation(false);
-        setshowFinance(false);
-        setshowIndustry(false);
-        setshowGovernemnt(false);
-        setshowCulture(false);
-        setshowHospital(false);
-        setshowTourism(false);
         setshowAll(false);
+        setshowEducation(false);
+        setshowCulture(false);
+        setshowGovernemnt(false);
+        setshowHospital(false);
+        setshowIndustry(false);
+        setshowFinance(false);
+        setshowTourism(false);
+        setshowCommunication(false);
+        setshowBank(false);
         setshowBuilding(false);
     };
 
@@ -68,6 +82,15 @@ const LandCoverLegends = (props) => {
             } else if (criticalFlood === 'Tourism') {
                 resetCriticalLayers();
                 setshowTourism(true);
+            } else if (criticalFlood === 'Communication') {
+                resetCriticalLayers();
+                setshowCommunication(true);
+            } else if (criticalFlood === 'Electricity') {
+                resetCriticalLayers();
+                setshowTourism(true);
+            } else if (criticalFlood === 'Bank') {
+                resetCriticalLayers();
+                setshowBank(true);
             } else if (criticalFlood === 'buildings') {
                 resetCriticalLayers();
                 setshowBuilding(true);
@@ -114,6 +137,22 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowBuilding(true);
         }
+        if (layer === 'Electricity') {
+            resetCriticalLayers();
+            setshowElectricity(true);
+        }
+        if (layer === 'Transportation') {
+            resetCriticalLayers();
+            setshowTransportation(true);
+        }
+        if (layer === 'Bank') {
+            resetCriticalLayers();
+            setshowBank(true);
+        }
+        if (layer === 'Communication') {
+            resetCriticalLayers();
+            setshowCommunication(true);
+        }
     };
 
 
@@ -159,20 +198,7 @@ const LandCoverLegends = (props) => {
                                     name="circle"
                                     className={showAll ? styles.allIconSelected : styles.allIcon}
                                 />
-                                {/* <Hexagon
-                style={{
-                    stroke: '#9bb4be',
-                    // stroke: showAll ? '#9bb4be' : '#9bb4bf',
-                    strokeWidth: 50,
-                    // fill: showAll ? '#ff0000' : '#456172',
-                    // fill: '#ff0000',
-                    fill: showAll ? '#ffffff' : 'transparent',
-
-                }}
-                className={styles.EducationHexagon}
-            /> */}
-
-                Show All
+                            Show All
                             </button>
 
                         </div>
@@ -192,7 +218,7 @@ const LandCoverLegends = (props) => {
                                  Educational Institution
                             </button>
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -205,10 +231,44 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Governance}
                                 />
-            Government Building
+                                    Government Building
+                            </button>
+
+                        </div>
+                        {/* <div className={styles.infraIconContainer}>
+
+                            <button
+                                type="button"
+                                className={showCommunication
+                                    ? styles.criticalButtonSelected
+                                    : styles.criticalButton}
+                                onClick={() => handleCriticalclick('Communication')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.svgIcon}
+                                    src={Communication}
+                                />
+                                    Communication
                             </button>
 
                         </div> */}
+                        <div className={styles.infraIconContainer}>
+
+                            <button
+                                type="button"
+                                className={showBank
+                                    ? styles.criticalButtonSelected
+                                    : styles.criticalButton}
+                                onClick={() => handleCriticalclick('Bank')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.svgIcon}
+                                    src={Bank}
+                                />
+                                    Bank
+                            </button>
+
+                        </div>
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
@@ -243,7 +303,7 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showIndustry
@@ -259,8 +319,8 @@ const LandCoverLegends = (props) => {
                                 Industry
                             </button>
 
-                        </div> */}
-                        {/* <div className={styles.infraIconContainer}>
+                        </div>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -273,7 +333,24 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Tourism}
                                 />
-                             Hotel or Restaurant
+                             Tourism
+                            </button>
+
+                        </div>
+                        {/* <div className={styles.infraIconContainer}>
+
+                            <button
+                                type="button"
+                                className={showElectricity
+                                    ? styles.criticalButtonSelected
+                                    : styles.criticalButton}
+                                onClick={() => handleCriticalclick('Electricity')}
+                            >
+                                <ScalableVectorGraphics
+                                    className={styles.svgIcon}
+                                    src={Communication}
+                                />
+                           Electricity
                             </button>
 
                         </div> */}
@@ -281,16 +358,16 @@ const LandCoverLegends = (props) => {
 
                             <button
                                 type="button"
-                                className={finance
+                                className={showTransportation
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('Bank ATM')}
+                                onClick={() => handleCriticalclick('Transportation')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Bank}
+                                    src={Transportation}
                                 />
-                           Bank
+                           Transportation
                             </button>
 
                         </div>
@@ -319,30 +396,7 @@ const LandCoverLegends = (props) => {
                             </div>
                         )
                         }
-
-                        {/* <div className={styles.infraIconContainer}>
-        <button
-            type="button"
-            className={styles.criticalButton}
-            // onClick={() => handleCriticalclick('canals')}
-        >
-            <div className={styles.canalIcon} />
-             Canals
-        </button>
-    </div>
-    <div className={styles.infraIconContainer}>
-        <button
-            type="button"
-            className={styles.criticalButton}
-            // onClick={() => handleCriticalclick('roads')}
-        >
-            <div className={styles.roadIcon} />
-             Roads
-        </button>
-    </div> */}
                     </div>
-
-
                 </div>
             )
             }

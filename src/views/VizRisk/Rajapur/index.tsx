@@ -269,7 +269,8 @@ class Rajapur extends React.Component {
                         )
 
                 }
-                {rightelements[rightElement]}
+
+                {rightElement !== 3 && rightelements[rightElement]}
                 {rightElement === 1
                     ? (
                         <div className={styles.legends}>
@@ -294,14 +295,25 @@ class Rajapur extends React.Component {
                 }
                 {rightElement === 3
                     ? (
-                        <div className={styles.legends}>
-                            <VRLegend>
-                                <CriticalInfraLegends
-                                    handleCritical={this.handleCriticalInfra}
-                                    criticalFlood={criticalElement}
+                        <>
+                            {
+                                cI.features && cI.features.length > 0
+                            && (
+                                <RightElement4
+                                    criticalInfraData={cI}
                                 />
-                            </VRLegend>
-                        </div>
+                            )}
+,
+                            <div className={styles.legends}>
+                                <VRLegend>
+                                    <CriticalInfraLegends
+                                        handleCritical={this.handleCriticalInfra}
+                                        criticalFlood={criticalElement}
+                                        criticalInfraData={cI}
+                                    />
+                                </VRLegend>
+                            </div>
+                        </>
                     )
                     : ''
                 }
