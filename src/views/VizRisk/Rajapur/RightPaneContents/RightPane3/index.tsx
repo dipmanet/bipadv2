@@ -84,7 +84,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={ManWoman}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>55,584</div>
+                            <div className={styles.iconTitle}>69,246</div>
                             <div className={styles.iconText}>
                                 Total Population
                             </div>
@@ -97,7 +97,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Home}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>12,138</div>
+                            <div className={styles.iconTitle}>12,587</div>
                             <div className={styles.iconText}>
                              Total Household Number
                             </div>
@@ -114,7 +114,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Male}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>25,519</div>
+                            <div className={styles.iconTitle}>34,983</div>
                             <div className={styles.iconText}>
                              Male Population
                             </div>
@@ -127,7 +127,7 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                             src={Female}
                         /> */}
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>30,065</div>
+                            <div className={styles.iconTitle}>34,260</div>
                             <div className={styles.iconText}>
                              Female Population
                             </div>

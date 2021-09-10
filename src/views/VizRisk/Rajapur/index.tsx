@@ -314,7 +314,7 @@ class Rajapur extends React.Component {
                                         handleCritical={this.handleCriticalFlood}
                                         showCriticalElements={showCriticalElements}
                                         criticalFlood={criticalFlood}
-
+                                        showBuildingPoints
                                     />
                                 </VRLegend>
                                 <VRLegend>

@@ -25,13 +25,13 @@ const EvacLegends = (props) => {
             if (evacElement === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (evacElement === 'education') {
+            } else if (evacElement === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
             } else if (evacElement === 'safeshelter') {
                 resetCriticalLayers();
                 setshowSafe(true);
-            } else if (evacElement === 'cultural') {
+            } else if (evacElement === 'Culture') {
                 resetCriticalLayers();
                 setshowCulture(true);
             }
@@ -47,12 +47,12 @@ const EvacLegends = (props) => {
             setshowAll(true);
         }
 
-        if (layer === 'education') {
+        if (layer === 'Education') {
             resetCriticalLayers();
             setshowEducation(true);
         }
 
-        if (layer === 'cultural') {
+        if (layer === 'Culture') {
             resetCriticalLayers();
             setshowCulture(true);
         }
@@ -94,7 +94,7 @@ const EvacLegends = (props) => {
                             className={showEducation
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('education')}
+                            onClick={() => handleEvacclick('Education')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
@@ -111,7 +111,7 @@ const EvacLegends = (props) => {
                             className={showCulture
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
-                            onClick={() => handleEvacclick('cultural')}
+                            onClick={() => handleEvacclick('Culture')}
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}

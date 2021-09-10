@@ -38,7 +38,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 threat of flooding every monsoon.
                 </p>
 
-                <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>
+                <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
                     <BarChart
                         width={300}
                         // height={600}
@@ -60,7 +60,8 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                             fill="#ffbf00"
                             // barCategoryGap={30}
                             // barCategoryGap={20}
-                            barSize={80}
+                            barSize={20}
+                            radius={[0, 20, 20, 0]}
                             label={{ position: 'insideRight' }}
                             tick={{ fill: '#94bdcf' }}
                         />

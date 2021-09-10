@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '../../Icons/icon_set_school.svg';
@@ -6,14 +7,16 @@ import Governance from '../../Icons/icon_set_government.svg';
 import Culture from '../../Icons/icon_set_religion.svg';
 import Health from '../../Icons/icon_set_health-01.svg';
 import Industry from '../../Icons/icon_set_industry.svg';
-import Tourism from '../../Icons/icon_set_hotel.svg';
+import Building from '../../Icons/homeNew.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
 import Icon from '#rscg/Icon';
 
+
 const LandCoverLegends = (props) => {
-    const { handleCritical, criticalFlood } = props;
+    const { handleCritical, criticalFlood, showBuildingPoints } = props;
     const [showEducation, setshowEducation] = useState(false);
-    const [showFinance, setshowFinance] = useState(false);
+    const [finance, setshowFinance] = useState(false);
+    const [showBuilding, setshowBuilding] = useState(false);
     const [showIndustry, setshowIndustry] = useState(false);
     const [showGovernemnt, setshowGovernemnt] = useState(false);
     const [showCulture, setshowCulture] = useState(false);
@@ -31,6 +34,7 @@ const LandCoverLegends = (props) => {
         setshowHospital(false);
         setshowTourism(false);
         setshowAll(false);
+        setshowBuilding(false);
     };
 
     const handleCriticalToggle = () => {
@@ -43,27 +47,30 @@ const LandCoverLegends = (props) => {
             if (criticalFlood === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (criticalFlood === 'education') {
+            } else if (criticalFlood === 'Education') {
                 resetCriticalLayers();
                 setshowEducation(true);
-            } else if (criticalFlood === 'cultural') {
+            } else if (criticalFlood === 'Culture') {
                 resetCriticalLayers();
                 setshowCulture(true);
-            } else if (criticalFlood === 'governance') {
+            } else if (criticalFlood === 'Governance') {
                 resetCriticalLayers();
                 setshowGovernemnt(true);
-            } else if (criticalFlood === 'health') {
+            } else if (criticalFlood === 'Health') {
                 resetCriticalLayers();
                 setshowHospital(true);
-            } else if (criticalFlood === 'industry') {
+            } else if (criticalFlood === 'Industry') {
                 resetCriticalLayers();
                 setshowIndustry(true);
-            } else if (criticalFlood === 'finance') {
+            } else if (criticalFlood === 'Bank ATM') {
                 resetCriticalLayers();
                 setshowFinance(true);
-            } else if (criticalFlood === 'tourism') {
+            } else if (criticalFlood === 'Tourism') {
                 resetCriticalLayers();
                 setshowTourism(true);
+            } else if (criticalFlood === 'buildings') {
+                resetCriticalLayers();
+                setshowBuilding(true);
             }
         }, [criticalFlood],
 
@@ -75,33 +82,37 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowAll(true);
         }
-        if (layer === 'education') {
+        if (layer === 'Education') {
             resetCriticalLayers();
             setshowEducation(true);
         }
-        if (layer === 'governance') {
+        if (layer === 'Governance') {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
-        if (layer === 'cultural') {
+        if (layer === 'Culture') {
             resetCriticalLayers();
             setshowCulture(true);
         }
-        if (layer === 'health') {
+        if (layer === 'Health') {
             resetCriticalLayers();
             setshowHospital(true);
         }
-        if (layer === 'industry') {
+        if (layer === 'Industry') {
             resetCriticalLayers();
             setshowIndustry(true);
         }
-        if (layer === 'finance') {
+        if (layer === 'Bank ATM') {
             resetCriticalLayers();
             setshowFinance(true);
         }
-        if (layer === 'tourism') {
+        if (layer === 'Tourism') {
             resetCriticalLayers();
             setshowTourism(true);
+        }
+        if (layer === 'buildings') {
+            resetCriticalLayers();
+            setshowBuilding(true);
         }
     };
 
@@ -171,7 +182,7 @@ const LandCoverLegends = (props) => {
                                 className={showEducation
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('education')}
+                                onClick={() => handleCriticalclick('Education')}
                             >
 
                                 <ScalableVectorGraphics
@@ -188,7 +199,7 @@ const LandCoverLegends = (props) => {
                                 className={showGovernemnt
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('governance')}
+                                onClick={() => handleCriticalclick('Governance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -204,13 +215,13 @@ const LandCoverLegends = (props) => {
                                 className={showCulture
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('cultural')}
+                                onClick={() => handleCriticalclick('Culture')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
                                     src={Culture}
                                 />
-            Cultural Site
+            Culture Site
                             </button>
 
                         </div>
@@ -222,7 +233,7 @@ const LandCoverLegends = (props) => {
                                 className={showHospital
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('health')}
+                                onClick={() => handleCriticalclick('Health')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -238,7 +249,7 @@ const LandCoverLegends = (props) => {
                                 className={showIndustry
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('industry')}
+                                onClick={() => handleCriticalclick('Industry')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -256,7 +267,7 @@ const LandCoverLegends = (props) => {
                                 className={showTourism
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('tourism')}
+                                onClick={() => handleCriticalclick('Tourism')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -270,10 +281,10 @@ const LandCoverLegends = (props) => {
 
                             <button
                                 type="button"
-                                className={showFinance
+                                className={finance
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('finance')}
+                                onClick={() => handleCriticalclick('Bank ATM')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
@@ -283,6 +294,32 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
+                        {showBuildingPoints
+                        && (
+                            <div className={styles.infraIconContainer}>
+
+                                <button
+                                    type="button"
+                                    className={showBuilding
+                                        ? styles.criticalButtonSelected
+                                        : styles.criticalButton}
+                                    onClick={() => handleCriticalclick('buildings')}
+                                >
+                                    <Hexagon
+                                        style={{
+                                            stroke: '#fff',
+                                            strokeWidth: 50,
+                                            fill: showBuilding ? '#036ef0' : 'transparent',
+                                        }}
+                                        className={styles.educationHexagon}
+                                    />
+                           Buildings
+                                </button>
+
+                            </div>
+                        )
+                        }
+
                         {/* <div className={styles.infraIconContainer}>
         <button
             type="button"
