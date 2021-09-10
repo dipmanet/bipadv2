@@ -1,9 +1,11 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState } from 'react';
 import {
     _cs,
     listToMap,
 } from '@togglecorp/fujs';
 
+
+import Loader from 'react-loader-spinner';
 import {
     Contact,
     Municipality,
@@ -20,16 +22,15 @@ import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import Cloak from '#components/Cloak';
-
 import {
     trainingValues,
     committeeValues,
 } from '../utils';
-
+import sortUp from '#resources/images/sortUp.png';
 import ContactEditForm from '../ContactEditForm';
 
 import styles from './styles.scss';
-
+import Icon from '#rscg/Icon';
 
 const ModalButton = modalize(Button);
 
@@ -109,6 +110,8 @@ const ContactItem = (props: Props) => {
         onContactEdit,
         onContactSortDown,
         onContactSortUp,
+        filteredContactListLastIndex,
+        contactLoading,
         requests: {
             municipalityContactDeleteRequest,
         },
@@ -153,7 +156,6 @@ const ContactItem = (props: Props) => {
     );
 
     const confirmationMessage = `Are you sure you want to remove the contact ${name}?`;
-
     return (
         <div
             className={_cs(
@@ -225,8 +227,31 @@ const ContactItem = (props: Props) => {
                         value={trainingValueString}
                     />
                 </div>
-                <button style={{ height: 'fit-content', backgroundColor: '#1A65C0', color: 'white' }} type="submit" onClick={() => onContactSortUp(contact)}>Up</button>
-                <button style={{ height: 'fit-content', backgroundColor: '#1A65C0', color: 'white' }} type="submit" onClick={() => onContactSortDown(contact)}>Down</button>
+                <Cloak hiddenIf={p => !p.change_contact}>
+                    {contactLoading ? <Loader type="Oval" color="#E35163" height={30} width={30} />
+                        : (
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+                                {contact.indexValue !== 0
+                        && (
+                            <button style={{ height: 'fit-content', background: 'none', border: 'none', cursor: 'pointer' }} type="submit" onClick={() => onContactSortUp(contact)}>
+                                <Icon
+                                    name={'sortUp'}
+                                    className={styles.sortDown}
+                                />
+                            </button>
+                        )}
+                                {filteredContactListLastIndex !== contact.indexValue && (
+                                    <button style={{ height: 'fit-content', background: 'none', border: 'none', cursor: 'pointer' }} type="submit" onClick={() => onContactSortDown(contact)}>
+                                        <Icon
+                                            name={'sortDown'}
+                                            className={styles.sortDown}
+                                        />
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                </Cloak>
             </div>
             <div className={styles.actionButtons}>
                 <Cloak hiddenIf={p => !p.change_contact}>

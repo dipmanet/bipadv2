@@ -199,7 +199,6 @@ const ExtraFields = ({
     resourceId,
     closeModal,
 }: ExtraFieldProps) => {
-    console.log('title', typeof title);
     switch (title) {
         case 'education':
             return (
@@ -437,7 +436,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         }
 
         const hideButtons = resourceType === 'openspace' || resourceType === 'communityspace';
-        console.log('these values', resourceType);
+
         return (
             <Modal
                 className={_cs(styles.addResourceModal, className)}
