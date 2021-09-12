@@ -5,22 +5,16 @@ import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 import { mapSources } from '#constants';
 import demographicsData from '../Data/demographicsData';
-import styles from './styles.scss';
 import {
     // provincesSelector,
-    municipalitiesSelector,
-    districtsSelector,
     wardsSelector,
-    regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
 } from '#selectors';
 import Evac from '../Data/rajapurGEOJSON';
 import {
     getWardFilter,
 } from '#utils/domain';
+import { popupElementFlood } from '#views/VizRisk/Common/utils';
+
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -28,21 +22,8 @@ if (TOKEN) {
 }
 
 const mapStateToProps = (state, props) => ({
-    // provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevelFromAppState: regionLevelSelector(state, props),
-    bounds: boundsSelector(state, props),
-    selectedProvinceId: selectedProvinceIdSelector(state, props),
-    selectedDistrictId: selectedDistrictIdSelector(state, props),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
-
-const colorGrade = [
-    '#ffedb8',
-    '#ffffff',
-];
 
 let hoveredWardId = null;
 const populationWardExpression = [
@@ -87,7 +68,6 @@ class FloodHistoryMap extends React.Component {
             lat: 28.42722351741294,
             lng: 81.12424608127894,
             zoom: 11,
-            wardNumber: 'Hover to see ward number',
             categoriesCritical: [],
             categoriesEvac: [],
             slideFourLayers: [],
@@ -103,9 +83,6 @@ class FloodHistoryMap extends React.Component {
         } = this.state;
         const {
             wards,
-            selectedProvinceId: provinceId,
-            selectedDistrictId: districtId,
-            selectedMunicipalityId: municipalityId,
             cI,
         } = this.props;
 
@@ -334,14 +311,14 @@ class FloodHistoryMap extends React.Component {
             }));
 
             categoriesEvac.map(ci => this.map.on('mousemove', `evac-unclustered-point-${ci}`, (e) => {
-                if (e) {
+                if (e && ci !== 'safeshelter') {
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
-                    const ciName = e.features[0].properties.Title;
+                    const title = e.features[0].properties.Title;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
-                    <p>${ciName}</p>
+                    <p>${title}</p>
                 </div>
                 `,
                     ).addTo(this.map);
@@ -351,6 +328,29 @@ class FloodHistoryMap extends React.Component {
                 this.map.getCanvas().style.cursor = '';
                 popup.remove();
             }));
+
+            this.map.on('mousemove', 'evac-unclustered-point-safeshelter', (e) => {
+                if (e) {
+                    this.map.getCanvas().style.cursor = 'pointer';
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const title = e.features[0].properties.Title;
+                    console.log('Title', title);
+                    const safeData = Evac.evaccenters.filter(i => i.properties.Title === title)[0];
+                    const content = popupElementFlood(safeData.properties);
+                    popup.setLngLat(coordinates)
+                        .setDOMContent(
+                            content,
+                        ).addTo(this.map);
+                }
+            });
+
+
+            this.map.on('mouseleave', 'evac-unclustered-point-safeshelter', () => {
+                this.map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+
 
             categoriesCritical.map((layer) => {
                 this.map.addSource(layer, {
@@ -399,7 +399,6 @@ class FloodHistoryMap extends React.Component {
                         'icon-anchor': 'bottom',
                     },
                 });
-
                 this.map.addLayer({
                     id: `clusters-count-${layer}`,
                     type: 'symbol',
@@ -410,8 +409,6 @@ class FloodHistoryMap extends React.Component {
                         'text-size': 12,
                     },
                 });
-
-
                 this.map.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
                 this.map.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
                 this.map.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');

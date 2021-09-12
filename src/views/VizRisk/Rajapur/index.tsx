@@ -53,6 +53,52 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    rainRequest: {
+        url: '/rain-stations/',
+        method: methods.GET,
+        query: () => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            station_series_id: 684,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results:  = [] } = response as Response;
+            params.setAvg(response.results[0].averages);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
+    waterLevelReq: {
+        url: '/river-stations/',
+        method: methods.GET,
+        query: () => ({
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            station_series_id: 4136,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results:  = [] } = response as Response;
+            params.setWaterLevel(response.results[0].waterLevel.toFixed(2));
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
+    pollutionReq: {
+        url: '/pollution-stations/',
+        method: methods.GET,
+        query: () => ({
+            name: 'Nepalgunj',
+        }),
+        onSuccess: ({ params, response }) => {
+            // interface Response { results: PageType.Incident[] }
+            // const { results:  = [] } = response as Response;
+            params.setPollution(response.results[0].observation);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 };
 
 class Rajapur extends React.Component {
@@ -75,14 +121,51 @@ class Rajapur extends React.Component {
             evacElement: 'all',
             showCriticalElements: true,
             cI: [],
+            rainFall: null,
+            waterLevel: null,
+            temperature: null,
         };
 
-        const { requests: { cIGetRequest } } = this.props;
+        const { requests: {
+            cIGetRequest,
+            rainRequest,
+            waterLevelReq,
+            pollutionReq,
+        } } = this.props;
 
         cIGetRequest.setDefaultParams({
             setCI: this.setCI,
             url: getgeoJsonLayer('CI_Rajapur'),
         });
+        rainRequest.setDefaultParams({
+            setAvg: this.setAvg,
+        });
+        waterLevelReq.setDefaultParams({
+            setWaterLevel: this.setWaterLevel,
+        });
+        pollutionReq.setDefaultParams({
+            setPollution: this.setPollution,
+        });
+    }
+
+    public setAvg = (averages) => {
+        if (averages) {
+            const rainFall = averages.filter(item => item.interval === 24)[0].value;
+            this.setState({ rainFall });
+        }
+    }
+
+    public setWaterLevel = (waterLevel) => {
+        if (waterLevel) {
+            this.setState({ waterLevel });
+        }
+    }
+
+    public setPollution = (pollution) => {
+        if (pollution) {
+            const temperature = pollution.filter(p => p.seriesId === 666)[0].data.value;
+            this.setState({ temperature });
+        }
     }
 
     public handleCriticalShowToggle = (showCriticalElements: string) => {
@@ -206,6 +289,9 @@ class Rajapur extends React.Component {
             criticalFlood,
             showCriticalElements,
             cI,
+            rainFall,
+            waterLevel,
+            temperature,
         } = this.state;
 
         return (
@@ -270,17 +356,27 @@ class Rajapur extends React.Component {
 
                 }
 
-                {rightElement !== 3 && rightelements[rightElement]}
-                {rightElement === 1
-                    ? (
-                        <div className={styles.legends}>
-                            <VRLegend>
-                                <LandcoverLegends />
-                            </VRLegend>
-                        </div>
+                {rightElement !== 3 && rightElement !== 0 && rightelements[rightElement]}
+                {
+                    rightElement === 0
+                && (
+                    <RightElement1
+                        rainFall={rainFall}
+                        waterLevel={waterLevel}
+                        temperature={temperature}
+                    />
+                )}
+                {
+                    rightElement === 1
+                        ? (
+                            <div className={styles.legends}>
+                                <VRLegend>
+                                    <LandcoverLegends />
+                                </VRLegend>
+                            </div>
 
-                    )
-                    : ''}
+                        )
+                        : ''}
                 {rightElement === 2
                     ? (
                         <div className={styles.legends}>

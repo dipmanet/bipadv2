@@ -8,7 +8,7 @@ import { CartesianGrid,
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
-import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
+import WaterLevel from '#resources/icons/Spring-water.svg';
 import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
 import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
 import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
@@ -183,15 +183,11 @@ class Rajapur extends React.PureComponent<Props, State> {
 
 
     public render() {
-        const { currentPage } = this.context;
-
         const {
-            municipalities,
+            rainFall,
+            waterLevel,
+            temperature,
         } = this.props;
-
-        const {
-            showInfo,
-        } = this.state;
 
         return (
             <div className={styles.vrSideBar}>
@@ -219,30 +215,23 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={TempIcon}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>41℃</div>
+                            <div className={styles.iconTitle}>{`${temperature} ℃` || '-'}</div>
                             <div className={styles.iconText}>
-                            Maximum
-                                <br />
-                            Temperature in
-                                <br />
-                            Summer
+                            Temperature (Real Time)
                             </div>
 
                         </div>
                     </div>
                     <div className={styles.infoIconsContainer}>
-                        {/* <ScalableVectorGraphics
+                        <ScalableVectorGraphics
                             className={styles.infoIcon}
-                            src={TempIcon}
-                        /> */}
+                            src={WaterLevel}
+                        />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>7℃</div>
+                            <div className={styles.iconTitle}>{waterLevel || '-wat'}</div>
                             <div className={styles.iconText}>
-                            Minimum
-                                <br />
-                            Temeperature in
-                                <br />
-                            Winter
+                            Water
+                            Level
                             </div>
 
                         </div>
@@ -255,10 +244,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                             src={AvgRainFall}
                         />
                         <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>2131.6 mm</div>
+                            <div className={styles.iconTitle}>
+                                {rainFall || '-'}
+                                {' '}
+mm
+                            </div>
                             <div className={styles.iconText}>
-                            Annual
-                            Rainfall
+                            Rainfall (24 Hrs)
                             </div>
 
                         </div>

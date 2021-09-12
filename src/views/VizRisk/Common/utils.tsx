@@ -69,10 +69,6 @@ const dataItemsPopup = {
     flashFlood: 'Flash Flood',
 };
 
-const handleButtonClick = () => {
-
-};
-
 export const popupElement = (buildingData, msg, handleClick) => {
     const content = document.createElement('div');
     const heading = document.createElement('h2');
@@ -103,5 +99,41 @@ export const popupElement = (buildingData, msg, handleClick) => {
     button.classList.add(styles.addButton);
     content.appendChild(button);
 
+    return content;
+};
+
+const safeItems = {
+    // Title: 'Safe Shelter House, Chanaura',
+    Capacity: 'Shelter Capacity',
+    altitude: 'Altitude',
+    // precision: 'Precision',
+    Ward: 'Ward',
+};
+
+export const popupElementFlood = (safeshelterObj) => {
+    console.log('safeshelterObj', safeshelterObj);
+    const content = document.createElement('div');
+    const heading = document.createElement('h2');
+    heading.innerHTML = safeshelterObj.Title;
+    heading.classList.add(styles.heading);
+    content.classList.add(styles.content);
+    content.appendChild(heading);
+
+    if (Object.keys(safeshelterObj).length > 2) {
+        Object.keys(safeItems).map((item) => {
+            const listItem = document.createElement('div');
+            listItem.classList.add(styles.listItem);
+            const l = document.createElement('span');
+            const m = document.createElement('span');
+            l.innerHTML = `${safeItems[item]}`;
+            l.style.fontWeight = 'bold';
+            m.innerHTML = `${safeshelterObj[item]}`;
+            m.classList.add(styles.m);
+            listItem.appendChild(l);
+            listItem.appendChild(m);
+            content.appendChild(listItem);
+            return null;
+        });
+    }
     return content;
 };
