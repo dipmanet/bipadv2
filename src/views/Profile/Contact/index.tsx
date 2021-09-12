@@ -110,8 +110,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         query: ({ params }) => ({
             swap: true,
             // eslint-disable-next-line @typescript-eslint/camelcase
-            id_array: String([params && params.selectedId && params.selectedId,
-                params && params.alternateId && params.alternateId]),
+            first_contact: params && params.selectedId && params.selectedId,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            second_contact: params && params.alternateId && params.alternateId,
 
         }),
         onSuccess: ({ params, response }) => {
