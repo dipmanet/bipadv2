@@ -40,6 +40,7 @@ import {
 import {
     regionSelector,
     regionNameSelector,
+    userSelector,
 } from '#selectors';
 
 import {
@@ -97,12 +98,24 @@ type Props = NewProps<ReduxProps, Params>;
 const mapStateToProps = (state: AppState): PropsFromState => ({
     region: regionSelector(state),
     regionName: regionNameSelector(state),
+    user: userSelector(state),
 });
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     documentsGetRequest: {
         url: '/document/',
         method: methods.GET,
         onMount: true,
+        query: ({ params }) => ({
+            province: params && params.province && params.province,
+            district: params && params.district && params.district,
+            municipality: params && params.municipality && params.municipality,
+        }),
+        onSuccess: ({ response, params }) => {
+            if (params && params.output) {
+                params.output(response.results);
+            }
+        },
+
     },
     documentCategoryGetRequest: {
         url: '/document-category/',
@@ -248,12 +261,15 @@ const regionKeySelector = (d: RegionOption) => d.id;
 const regionLabelSelector = (d: RegionOption) => d.title;
 
 class Document extends React.PureComponent<Props, State> {
+    public static contextType = TitleContext;
+
     public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            documents: [],
+        };
     }
 
-    public static contextType = TitleContext;
 
     private getCategoryExpandedDocuments = memoize((
         documents: DocumentItem[],
@@ -283,23 +299,24 @@ class Document extends React.PureComponent<Props, State> {
         selectedRegion?: string,
     ) => {
         let filtered = documents;
-        if (!doesObjectHaveNoData(region)) {
-            const { adminLevel, geoarea } = region;
-            if (adminLevel === 1) {
-                filtered = documents.filter(d => d.province === geoarea);
-            }
-            if (adminLevel === 2) {
-                filtered = documents.filter(d => d.district === geoarea);
-            }
-            if (adminLevel === 3) {
-                filtered = documents.filter(d => d.municipality === geoarea);
-            }
-        }
+
+        // if (!doesObjectHaveNoData(region)) {
+        //     const { adminLevel, geoarea } = region;
+        //     if (adminLevel === 1) {
+        //         filtered = documents.filter(d => d.province === geoarea);
+        //     }
+        //     if (adminLevel === 2) {
+        //         filtered = documents.filter(d => d.district === geoarea);
+        //     }
+        //     if (adminLevel === 3) {
+        //         filtered = documents.filter(d => d.municipality === geoarea);
+        //     }
+        // }
         if (selectedCategory) {
             filtered = filtered.filter(document => document.category === selectedCategory);
         }
         if (selectedRegion) {
-            filtered = filtered.filter(document => document.region === region);
+            filtered = filtered.filter(document => document.region === selectedRegion);
         }
 
         return filtered;
@@ -327,19 +344,42 @@ class Document extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleResults=(data) => {
+        this.setState({
+            documents: data,
+        });
+    }
+
     public render() {
         const {
             className,
             requests,
+            requests: {
+                documentsGetRequest,
+            },
+            user,
             region,
+
         } = this.props;
 
         const {
             selectedCategory,
             selectedRegion,
+            documents,
         } = this.state;
 
-        const documents = getResults(requests, 'documentsGetRequest');
+
+        // const documents = getResults(requests, 'documentsGetRequest');
+        documentsGetRequest.setDefaultParams({
+
+            province: user && user.profile ? user.profile.province : '',
+            district: user && user.profile ? user.profile.district : '',
+            municipality: user && user.profile ? user.profile.municipality : '',
+            output: this.handleResults,
+
+        });
+
+
         const documentCategories = getResults(requests, 'documentCategoryGetRequest');
 
         const filteredDocuments = this.getFilteredDocuments(

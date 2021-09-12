@@ -20,6 +20,7 @@ import {
     regionSelector,
     municipalitiesSelector,
     profileContactFiltersSelector,
+    userSelector,
 } from '#selectors';
 import {
     AppState,
@@ -74,6 +75,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalityList: municipalitiesSelector(state),
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
+    user: userSelector(state),
 });
 
 const contactKeySelector = (d: Contact) => d.id;
@@ -91,10 +93,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
         onMount: true,
-        query: {
+        query: ({ params }) => ({
+
             expand: ['trainings', 'organization'],
             limit: -1,
-        },
+            province: params.province && params.province,
+            district: params.district && params.district,
+            municipality: params.municipality && params.municipality,
+
+
+        }),
     },
     municipalityContactPatchSelectedID: {
         url: ({ params }) => `/municipality-contact/${params.id}/`,
@@ -127,7 +135,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             // if (params && params.onSuccess) {
             //     params.onSuccess();
             // }
-            console.log('This is final data', response);
+
             if (params && params.loaderCondition) {
                 const { loaderCondition } = params;
                 loaderCondition(response.results);
@@ -150,6 +158,8 @@ interface SelectInputOption {
 let filteredContactList = [];
 let filteredContactListLastIndex = null;
 class ContactPage extends React.PureComponent<Props, State> {
+    public static contextType = TitleContext;
+
     public constructor(props: Props) {
         super(props);
 
@@ -165,17 +175,35 @@ class ContactPage extends React.PureComponent<Props, State> {
             indexOfSelectedContact: null,
             changedIndex: null,
             contactLoading: false,
+            isSortByOrdering: true,
 
         };
         const { contactList } = this.state;
         if (!contactList.length) {
-            municipalityContactRequest.setDefaultParams({
-                setProfileContactList: this.setProfileContactList,
-            });
+            const { user } = this.props;
+
+            // console.log('This is user', user);
+            if (user) {
+                const { user: { profile: {
+                    province,
+                    district,
+                    municipality,
+                } } } = this.props;
+                municipalityContactRequest.setDefaultParams({
+                    setProfileContactList: this.setProfileContactList,
+                    province,
+                    district,
+                    municipality,
+
+                });
+            } else {
+                municipalityContactRequest.setDefaultParams({
+                    setProfileContactList: this.setProfileContactList,
+                });
+            }
         }
     }
 
-    public static contextType = TitleContext;
 
     private getPositionOptions = memoize((contactList: Contact[]) => {
         const contactPositionList = [...new Set(
@@ -319,6 +347,7 @@ class ContactPage extends React.PureComponent<Props, State> {
     private handleContactSortUp=(contactDetail) => {
         this.setState({
             contactLoading: true,
+            isSortByOrdering: false,
         });
         const {
             contactList,
@@ -340,12 +369,13 @@ class ContactPage extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        filteredContactList = this.getFilteredContactList(
-            contactList,
-            region,
-            municipalityList,
-            filterValues,
-        );
+        // filteredContactList = this.getFilteredContactList(
+        //     contactList,
+        //     region,
+        //     municipalityList,
+        //     filterValues,
+        // );
+        filteredContactList = contactList;
         const indexOfSelectedContact = filteredContactList
             .findIndex(item => item.id === contactDetail.id);
 
@@ -401,12 +431,14 @@ class ContactPage extends React.PureComponent<Props, State> {
     private handleLoader=(data) => {
         this.setState({
             contactLoading: false,
+            isSortByOrdering: true,
         });
     }
 
     private handleContactSortDown=(contactDetail) => {
         this.setState({
             contactLoading: true,
+            isSortByOrdering: false,
         });
         const {
             contactList,
@@ -426,12 +458,13 @@ class ContactPage extends React.PureComponent<Props, State> {
                 } = {},
             },
         } = this.props;
-        filteredContactList = this.getFilteredContactList(
-            contactList,
-            region,
-            municipalityList,
-            filterValues,
-        );
+        // filteredContactList = this.getFilteredContactList(
+        //     contactList,
+        //     region,
+        //     municipalityList,
+        //     filterValues,
+        // );
+        filteredContactList = contactList;
         const indexOfSelectedContact = filteredContactList
             .findIndex(item => item.id === contactDetail.id);
 
@@ -450,8 +483,7 @@ class ContactPage extends React.PureComponent<Props, State> {
         const SelectedOrderData = filteredContactList[indexOfSelectedContact + 1].order;
         const alternateContactId = filteredContactList[indexOfSelectedContact].id;
         const selectedContactId = filteredContactList[indexOfSelectedContact + 1].id;
-        console.log('test', filteredContactList[indexOfSelectedContact]);
-        console.log('test1', filteredContactList[indexOfSelectedContact + 1]);
+
 
         this.setState({
             indexOfSelectedContact,
@@ -471,7 +503,7 @@ class ContactPage extends React.PureComponent<Props, State> {
             municipality: filteredContactList[indexOfSelectedContact + 1].municipality,
             committee: filteredContactList[indexOfSelectedContact + 1].committee,
         };
-        console.log('This is data sent', selectedContactBody);
+
         municipalityContactPatchSelectedID.do({
             id: selectedContactId,
             body: selectedContactBody,
@@ -540,6 +572,8 @@ class ContactPage extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { setProfile } = this.context;
+        const { isSortByOrdering } = this.state;
+        // const { province, district, municipality } = user.profile;
 
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
@@ -553,17 +587,18 @@ class ContactPage extends React.PureComponent<Props, State> {
         const {
             contactList,
         } = this.state;
-        const filteredContactListWithoutArrayIndex = this.getFilteredContactList(
-            contactList,
-            region,
-            municipalityList,
-            filterValues,
-        );
-        filteredContactList = filteredContactListWithoutArrayIndex
-            .map((item, i) => ({ ...item, indexValue: i }));
-        filteredContactListLastIndex = filteredContactList.length - 1;
-
-
+        if (isSortByOrdering) {
+            // const filteredContactListWithoutArrayIndex = this.getFilteredContactList(
+            //     contactList,
+            //     region,
+            //     municipalityList,
+            //     filterValues,
+            // );
+            const filteredContactListWithoutArrayIndex = contactList;
+            filteredContactList = filteredContactListWithoutArrayIndex
+                .map((item, i) => ({ ...item, indexValue: i }));
+            filteredContactListLastIndex = filteredContactList.length - 1;
+        }
         const pointsGeoJson = this.getPointsGeoJson(filteredContactList, municipalityList);
         const clusteredPointFilter = ['has', 'point_count'];
         const nonClusteredPointFilter = ['!', clusteredPointFilter];
