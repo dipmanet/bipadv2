@@ -106,6 +106,8 @@ interface SelectInputOption {
 }
 
 class ContactPage extends React.PureComponent<Props, State> {
+    public static contextType = TitleContext;
+
     public constructor(props: Props) {
         super(props);
 
@@ -124,7 +126,6 @@ class ContactPage extends React.PureComponent<Props, State> {
         };
     }
 
-    public static contextType = TitleContext;
 
     private getPositionOptions = memoize((contactList: Contact[]) => {
         const contactPositionList = [...new Set(
