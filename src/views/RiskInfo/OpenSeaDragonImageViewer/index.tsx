@@ -80,18 +80,18 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
         viewer && viewer.destroy();
         const customButton = new OpenSeaDragon.Button({
             tooltip: 'Download',
-            srcRest: '/publicFiles/openseadragon-images/download_rest.png',
-            srcGroup: '/publicFiles/openseadragon-images/download_rest.png',
-            srcHover: '/publicFiles/openseadragon-images/download_hover.png',
-            srcDown: '/publicFiles/openseadragon-images/download_rest.png',
+            srcRest: '/publicFiles/openseadragon-images/screenShotRest.png',
+            srcGroup: '/publicFiles/openseadragon-images/screenShotRest.png',
+            srcHover: '/publicFiles/openseadragon-images/screenShotHover.png',
+            srcDown: '/publicFiles/openseadragon-images/screenShotRest.png',
             onClick: handleDownload,
         });
         const customButtonFullDownload = new OpenSeaDragon.Button({
             tooltip: 'Download Full Image',
-            srcRest: '/publicFiles/openseadragon-images/download_hover.png',
-            srcGroup: '/publicFiles/openseadragon-images/download_hover.png',
+            srcRest: '/publicFiles/openseadragon-images/download_rest.png',
+            srcGroup: '/publicFiles/openseadragon-images/download_rest.png',
             srcHover: '/publicFiles/openseadragon-images/download_hover.png',
-            srcDown: '/publicFiles/openseadragon-images/download_hover.png',
+            srcDown: '/publicFiles/openseadragon-images/download_rest.png',
             onClick: handleDownloadFullImage,
         });
 
