@@ -105,37 +105,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         }),
     },
     municipalityContactPatchSelectedID: {
-        url: ({ params }) => `/municipality-contact/${params.id}/`,
-        method: methods.PATCH,
-        body: ({ params }) => params && params.body,
-        query: {
-            expand: ['trainings', 'organization'],
-        },
-        onSuccess: ({ params, response }) => {
-            // if (params && params.onSuccess) {
-            //     params.onSuccess();
-            // }
-            console.log('This is final data', response);
-        },
-        onFailure: ({ error, params }) => {
-            console.warn('failure', error.errorMessage);
-        },
-        onFatal: ({ error, params }) => {
-            console.warn('failure', error.errorMessage);
-        },
-    },
-    municipalityContactPatchAlternateID: {
-        url: ({ params }) => `/municipality-contact/${params.id}/`,
-        method: methods.PATCH,
-        body: ({ params }) => params && params.body,
-        query: {
-            expand: ['trainings', 'organization'],
-        },
-        onSuccess: ({ params, response }) => {
-            // if (params && params.onSuccess) {
-            //     params.onSuccess();
-            // }
+        url: ({ params }) => '/municipality-contact/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            swap: true,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            id_array: String([params && params.selectedId && params.selectedId,
+                params && params.alternateId && params.alternateId]),
 
+        }),
+        onSuccess: ({ params, response }) => {
             if (params && params.loaderCondition) {
                 const { loaderCondition } = params;
                 loaderCondition(response.results);
@@ -148,6 +127,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             console.warn('failure', error.errorMessage);
         },
     },
+
 };
 
 interface SelectInputOption {
@@ -415,15 +395,11 @@ class ContactPage extends React.PureComponent<Props, State> {
         };
 
         municipalityContactPatchSelectedID.do({
-            id: selectedContactId,
-            body: selectedContactBody,
 
-
-        });
-        municipalityContactPatchAlternateID.do({
-            id: alternateContactId,
-            body: selectedAlternateBody,
+            selectedId: selectedContactId,
+            alternateId: alternateContactId,
             loaderCondition: this.handleLoader,
+
 
         });
     }
@@ -503,16 +479,12 @@ class ContactPage extends React.PureComponent<Props, State> {
             municipality: filteredContactList[indexOfSelectedContact + 1].municipality,
             committee: filteredContactList[indexOfSelectedContact + 1].committee,
         };
-
         municipalityContactPatchSelectedID.do({
-            id: selectedContactId,
-            body: selectedContactBody,
 
-        });
-        municipalityContactPatchAlternateID.do({
-            id: alternateContactId,
-            body: selectedAlternateBody,
+            selectedId: selectedContactId,
+            alternateId: alternateContactId,
             loaderCondition: this.handleLoader,
+
 
         });
     }
