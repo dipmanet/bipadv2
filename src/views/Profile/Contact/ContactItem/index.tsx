@@ -26,7 +26,6 @@ import {
     trainingValues,
     committeeValues,
 } from '../utils';
-import sortUp from '#resources/images/sortUp.png';
 import ContactEditForm from '../ContactEditForm';
 
 import styles from './styles.scss';
