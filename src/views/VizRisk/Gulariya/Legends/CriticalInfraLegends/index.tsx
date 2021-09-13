@@ -79,7 +79,7 @@ const LandCoverLegends = (props) => {
             resetCriticalLayers();
             setshowEducation(true);
         }
-        if (layer === 'governance') {
+        if (layer === 'Governance') {
             resetCriticalLayers();
             setshowGovernemnt(true);
         }
@@ -188,7 +188,7 @@ const LandCoverLegends = (props) => {
                                 className={showGovernemnt
                                     ? styles.criticalButtonSelected
                                     : styles.criticalButton}
-                                onClick={() => handleCriticalclick('governance')}
+                                onClick={() => handleCriticalclick('Governance')}
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
