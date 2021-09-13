@@ -75,6 +75,7 @@ const RealTimeValues = (props: Props) => {
         stationSeriesIdRain,
         stationSeriesIdRiver,
         pollutionStName,
+        hideWaterLevel,
         requests: {
             rainRequest,
             waterLevelReq,
@@ -143,20 +144,25 @@ const RealTimeValues = (props: Props) => {
 
                     </div>
                 </div>
-                <div className={styles.infoIconsContainer}>
-                    <ScalableVectorGraphics
-                        className={styles.infoIcon}
-                        src={WaterLevel}
-                    />
-                    <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>{`${waterLevel} mm`}</div>
-                        <div className={styles.iconText}>
+                {
+                    !hideWaterLevel
+                    && (
+                        <div className={styles.infoIconsContainer}>
+                            <ScalableVectorGraphics
+                                className={styles.infoIcon}
+                                src={WaterLevel}
+                            />
+                            <div className={styles.descriptionCotainer}>
+                                <div className={styles.iconTitle}>{`${waterLevel} mm`}</div>
+                                <div className={styles.iconText}>
                 Water
                 Level
-                        </div>
+                                </div>
 
-                    </div>
-                </div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>
@@ -176,20 +182,6 @@ mm
 
                     </div>
                 </div>
-                <div className={styles.infoIconsContainerHidden}>
-                    <ScalableVectorGraphics
-                        className={styles.infoIcon}
-                        src={ElevationIcon}
-                    />
-                    <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>142m - 154m</div>
-                        <div className={styles.iconText}>
-                Elevation from Sea Level
-                        </div>
-
-                    </div>
-                </div>
-
             </div>
         </>
 

@@ -165,7 +165,7 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-                        <div className={styles.infraIconContainer}>
+                        {/* <div className={styles.infraIconContainer}>
                             <button
                                 type="button"
                                 className={showEducation
@@ -180,8 +180,8 @@ const LandCoverLegends = (props) => {
                                 />
                                  Educational Institution
                             </button>
-                        </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        </div> */}
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -194,10 +194,10 @@ const LandCoverLegends = (props) => {
                                     className={styles.svgIcon}
                                     src={Governance}
                                 />
-            Government Building
+                                Government Building
                             </button>
 
-                        </div> */}
+                        </div>
                         <div className={styles.infraIconContainer}>
                             <button
                                 type="button"

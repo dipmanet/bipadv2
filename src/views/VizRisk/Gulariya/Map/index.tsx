@@ -5,38 +5,19 @@ import { connect } from 'react-redux';
 import { mapSources } from '#constants';
 import demographicsData from '../Data/demographicsData';
 import {
-    // provincesSelector,
-    municipalitiesSelector,
-    districtsSelector,
     wardsSelector,
-    regionLevelSelector,
-    boundsSelector,
-    selectedProvinceIdSelector,
-    selectedDistrictIdSelector,
-    selectedMunicipalityIdSelector,
 } from '#selectors';
 
 import {
     getWardFilter,
 } from '#utils/domain';
 import Evac from '../Data/gulariyaGEOJSON';
+import { popupElementFlood } from '#views/VizRisk/Common/utils';
 
 const mapStateToProps = (state, props) => ({
-    // provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
-    regionLevelFromAppState: regionLevelSelector(state, props),
-    bounds: boundsSelector(state, props),
-    selectedProvinceId: selectedProvinceIdSelector(state, props),
-    selectedDistrictId: selectedDistrictIdSelector(state, props),
-    selectedMunicipalityId: selectedMunicipalityIdSelector(state, props),
 });
 
-const colorGrade = [
-    '#ffedb8',
-    '#ffffff',
-];
 
 let hoveredWardId = null;
 const populationWardExpression = [
@@ -79,7 +60,6 @@ class FloodHistoryMap extends React.Component {
             lat: 28.210927128836925,
             lng: 81.34569465152305,
             zoom: 11,
-            wardNumber: 'Hover to see ward number',
             categoriesCritical: [],
             categoriesEvac: [],
             slideFourLayers: [],
@@ -156,7 +136,7 @@ class FloodHistoryMap extends React.Component {
         });
         const popup = new mapboxgl.Popup({
             closeButton: false,
-            closeOnClick: false,
+            closeOnClick: true,
             className: 'popup',
         });
 
@@ -401,7 +381,7 @@ class FloodHistoryMap extends React.Component {
             }));
 
             categoriesEvac.map(ci => this.map.on('mousemove', `evac-unclustered-point-${ci}`, (e) => {
-                if (e) {
+                if (e && ci !== 'safeshelter') {
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
@@ -415,9 +395,27 @@ class FloodHistoryMap extends React.Component {
                 }
             }));
             categoriesEvac.map(ci => this.map.on('mouseleave', `evac-unclustered-point-${ci}`, () => {
-                this.map.getCanvas().style.cursor = '';
-                popup.remove();
+                if (ci !== 'safeshelter') {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }
             }));
+
+            this.map.on('click', 'evac-unclustered-point-safeshelter', (e) => {
+                if (e) {
+                    this.map.getCanvas().style.cursor = 'pointer';
+                    const { lngLat } = e;
+                    const coordinates = [lngLat.lng, lngLat.lat];
+                    const title = e.features[0].properties.Title;
+                    console.log('Title', title);
+                    const safeData = Evac.evaccenters.filter(i => i.properties.Title === title)[0];
+                    const content = popupElementFlood(safeData.properties);
+                    popup.setLngLat(coordinates)
+                        .setDOMContent(
+                            content,
+                        ).addTo(this.map);
+                }
+            });
             rasterLayersYears.map((layer) => {
                 this.map.addSource(`rasterrajapur${layer}`, {
                     type: 'raster',

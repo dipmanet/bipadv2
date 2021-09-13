@@ -7,13 +7,9 @@ import { CartesianGrid,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
-import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
-import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
-import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
-import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
 import styles from './styles.scss';
+import RealTimeValues from '#views/VizRisk/Common/RealTimeValues';
+
 
 interface State {
     showInfo: boolean;
@@ -204,71 +200,13 @@ class Rajapur extends React.PureComponent<Props, State> {
                 Gulariya experiences a subtropical climate. Summer starts in March and lasts till June. Winter begins in November (Mangsir) and lasts till February. Gulariya faces heavy downpours during the monsoon, from June to October.
 
                 </p>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={TempIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>34.8℃</div>
-                            <div className={styles.iconText}>
-                            Maximum
-                                <br />
-                            Temperature in
-                                <br />
-                            Summer
-                            </div>
+                <RealTimeValues
+                    stationSeriesIdRain={13065}
+                    stationSeriesIdRiver={4136}
+                    pollutionStName={'Nepalgunj'}
+                    hideWaterLevel
+                />
 
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        {/* <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={TempIcon}
-                        /> */}
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>8.2℃</div>
-                            <div className={styles.iconText}>
-                            Minimum
-                                <br />
-                            Temeperature in
-                                <br />
-                             Winter
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={AvgRainFall}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>1585.5 mm</div>
-                            <div className={styles.iconText}>
-                            Annual
-                            Rainfall
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainerHidden}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ElevationIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>142m - 154m</div>
-                            <div className={styles.iconText}>
-                            Elevation from Sea Level
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
                 <div className={styles.source}>Source: DHM, 2020 Data </div>
                 <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}>Temperature</p>
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
