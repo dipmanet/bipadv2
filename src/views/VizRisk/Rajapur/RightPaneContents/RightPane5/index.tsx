@@ -1,13 +1,11 @@
 import React from 'react';
 import styles from './styles.scss';
-import demographicsData from '#views/VizRisk/Rajapur/Data/demographicsData';
 import Disclaimer from '../../Components/Disclaimer';
 
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFourPane extends React.PureComponent<Props, State> {
     public constructor(props) {
@@ -26,8 +24,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const chartData = demographicsData.demographicsData;
-        const { showLandcover } = this.state;
         return (
             <div className={styles.vrSideBar}>
                 <h1> Visualising flood exposure for Rajapur municipality</h1>

@@ -1,6 +1,4 @@
 import React from 'react';
-import memoize from 'memoize-one';
-
 import {
     Bar, BarChart,
     CartesianGrid,
@@ -8,7 +6,6 @@ import {
     XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
-// import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
 
 interface ComponentProps {}
 
