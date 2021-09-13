@@ -6,12 +6,7 @@ import { CartesianGrid,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
-import WaterLevel from '#resources/icons/Spring-water.svg';
-import TempIcon from '#views/VizRisk/Rajapur/Icons/Temp.svg';
-import AvgRainFall from '#views/VizRisk/Rajapur/Icons/RainFall.svg';
-import ElevationIcon from '#views/VizRisk/Rajapur/Icons/ElevationFromSea.svg';
+import RealTimeValues from '#views/VizRisk/Common/RealTimeValues';
 import styles from './styles.scss';
 
 interface State {
@@ -208,69 +203,14 @@ class Rajapur extends React.PureComponent<Props, State> {
                     downpours during the monsoon, from June to October.
 
                 </p>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={TempIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>{`${temperature} ℃` || '-'}</div>
-                            <div className={styles.iconText}>
-                            Temperature (Real Time)
-                            </div>
 
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={WaterLevel}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>{waterLevel || '-wat'}</div>
-                            <div className={styles.iconText}>
-                            Water
-                            Level
-                            </div>
+                <RealTimeValues
+                    stationSeriesIdRain={684}
+                    stationSeriesIdRiver={4136}
+                    pollutionStName={'Nepalgunj'}
+                />
 
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.iconRow}>
-                    <div className={styles.infoIconsContainer}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={AvgRainFall}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>
-                                {rainFall || '-'}
-                                {' '}
-mm
-                            </div>
-                            <div className={styles.iconText}>
-                            Rainfall (24 Hrs)
-                            </div>
-
-                        </div>
-                    </div>
-                    <div className={styles.infoIconsContainerHidden}>
-                        <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={ElevationIcon}
-                        />
-                        <div className={styles.descriptionCotainer}>
-                            <div className={styles.iconTitle}>142m - 154m</div>
-                            <div className={styles.iconText}>
-                            Elevation from Sea Level
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <div className={styles.source}>Source: DHM, 2020 Data </div>
+                <div className={styles.source}>Source: DHM 2020 Data, Chisapani </div>
                 <ResponsiveContainer className={styles.chartContainer} height={300}>
                     <LineChart
                         margin={{ top: 0, right: 10, left: 10, bottom: 10 }}

@@ -8,15 +8,24 @@ import {
 } from 'recharts';
 import styles from './styles.scss';
 
-import criticalInfraData from '#views/VizRisk/Rajapur/Data/criticalInfraData';
+const chartData = [
+    {
+        name: 'Schools', Total: 54,
+    },
+    {
+        name: 'Culture', Total: 16,
+    },
 
-const chartData = criticalInfraData.safeShelterData;
+    {
+        name: 'Safe Shelters', Total: 9,
+    },
+];
 
 interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
+
 
 class SlideFivePane extends React.PureComponent<Props, State> {
     public constructor(props) {
@@ -46,10 +55,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 in flood-prone or flood safe areas.
 
                 </p>
-                {/* <p>
-                At present, the data on evacuation centers is not available and therefore
-                not visualized on the map.
-                </p> */}
+
                 <ResponsiveContainer className={styles.respContainer} width="100%" height={200}>
                     <BarChart
                         width={350}

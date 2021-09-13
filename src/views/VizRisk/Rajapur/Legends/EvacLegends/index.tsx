@@ -3,7 +3,7 @@ import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '../../Icons/icon_set_school.svg';
 import Culture from '../../Icons/icon_set_religion.svg';
-import Safe from '../../Icons/safeshelternew.svg';
+import Safe from '#resources/icons/Safeshelter_Updated.svg';
 import Icon from '#rscg/Icon';
 
 

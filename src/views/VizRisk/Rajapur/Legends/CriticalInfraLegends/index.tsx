@@ -10,10 +10,10 @@ import Industry from '../../Icons/icon_set_industry.svg';
 import Building from '../../Icons/homeNew.svg';
 import Bank from '../../Icons/icon_set_bank.svg';
 import Icon from '#rscg/Icon';
-import Communication from '../../Icons/communication.svg';
+import Communication from '#resources/icons/communication.svg';
+import Electricity from '#resources/icons/Electricity.svg';
+import Transportation from '#resources/icons/Transport.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
-// import Electricity from '../../Icons/';
-import Transportation from '../../Icons/transportation.svg';
 
 const LandCoverLegends = (props) => {
     const {
@@ -87,13 +87,16 @@ const LandCoverLegends = (props) => {
                 setshowCommunication(true);
             } else if (criticalFlood === 'Electricity') {
                 resetCriticalLayers();
-                setshowTourism(true);
+                setshowElectricity(true);
             } else if (criticalFlood === 'Bank') {
                 resetCriticalLayers();
                 setshowBank(true);
             } else if (criticalFlood === 'buildings') {
                 resetCriticalLayers();
                 setshowBuilding(true);
+            } else if (criticalFlood === 'Transportation') {
+                resetCriticalLayers();
+                setshowTransportation(true);
             }
         }, [criticalFlood],
 
@@ -235,7 +238,7 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -251,7 +254,7 @@ const LandCoverLegends = (props) => {
                                     Communication
                             </button>
 
-                        </div> */}
+                        </div>
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -337,7 +340,7 @@ const LandCoverLegends = (props) => {
                             </button>
 
                         </div>
-                        {/* <div className={styles.infraIconContainer}>
+                        <div className={styles.infraIconContainer}>
 
                             <button
                                 type="button"
@@ -348,12 +351,12 @@ const LandCoverLegends = (props) => {
                             >
                                 <ScalableVectorGraphics
                                     className={styles.svgIcon}
-                                    src={Communication}
+                                    src={Electricity}
                                 />
                            Electricity
                             </button>
 
-                        </div> */}
+                        </div>
                         <div className={styles.infraIconContainer}>
 
                             <button
@@ -384,9 +387,9 @@ const LandCoverLegends = (props) => {
                                 >
                                     <Hexagon
                                         style={{
-                                            stroke: '#fff',
+                                            stroke: showBuilding ? '#036ef0' : '#d3d3d3',
                                             strokeWidth: 50,
-                                            fill: showBuilding ? '#036ef0' : 'transparent',
+                                            fill: '#a4a4a2',
                                         }}
                                         className={styles.educationHexagon}
                                     />

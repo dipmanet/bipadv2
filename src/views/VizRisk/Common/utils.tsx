@@ -108,6 +108,14 @@ const safeItems = {
     altitude: 'Altitude',
     // precision: 'Precision',
     Ward: 'Ward',
+    BuildingCo: 'Building Code',
+    Cooking: 'Cooking',
+    DisableFri: 'Disable Friendly',
+    DrinkingWa: 'Drinking Water',
+    Toilet: 'Toilet Available',
+    AreInvento: 'Are inventories available for disaster response?',
+    Structure: 'Structure(single or multiple storey)',
+    'Local Add': 'Local Address',
 };
 
 export const popupElementFlood = (safeshelterObj) => {

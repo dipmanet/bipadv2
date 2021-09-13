@@ -8,21 +8,6 @@ type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
 class SlideFourPane extends React.PureComponent<Props, State> {
-    public constructor(props) {
-        super();
-        this.state = {
-            showLandcover: false,
-        };
-    }
-
-    public handleShowLandCover= () => {
-        this.setState(
-            prevState => ({
-                showLandcover: !prevState.showLandcover,
-            }),
-        );
-    }
-
     public render() {
         return (
             <div className={styles.vrSideBar}>
@@ -48,7 +33,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 </p>
                 {/* <SourceInfo /> */}
                 <Disclaimer
-                    disclamer={'This flood hazard layer is the result of a computer-based simulation of flooding or flood inundation.\nThe datasets are produced using the available and best possible datasets. Considering this limitation, the flood hazard might notoccur in a similar pattern as observed on the map.'}
+                    disclamer={'This flood hazard layer is the result of a computer-based simulation of flooding or flood inundation.\nThe datasets are produced using the available and best possible datasets. Considering this limitation, the flood hazard might not occur in a similar pattern as observed on the map.'}
                 />
             </div>
         );

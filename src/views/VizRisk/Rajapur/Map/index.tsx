@@ -88,7 +88,7 @@ class FloodHistoryMap extends React.Component {
 
         const popup = new mapboxgl.Popup({
             closeButton: false,
-            closeOnClick: false,
+            closeOnClick: true,
             className: 'popup',
         });
         const mapping = [];
@@ -325,11 +325,13 @@ class FloodHistoryMap extends React.Component {
                 }
             }));
             categoriesEvac.map(ci => this.map.on('mouseleave', `evac-unclustered-point-${ci}`, () => {
-                this.map.getCanvas().style.cursor = '';
-                popup.remove();
+                if (ci !== 'safeshelter') {
+                    this.map.getCanvas().style.cursor = '';
+                    popup.remove();
+                }
             }));
 
-            this.map.on('mousemove', 'evac-unclustered-point-safeshelter', (e) => {
+            this.map.on('click', 'evac-unclustered-point-safeshelter', (e) => {
                 if (e) {
                     this.map.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
@@ -346,10 +348,10 @@ class FloodHistoryMap extends React.Component {
             });
 
 
-            this.map.on('mouseleave', 'evac-unclustered-point-safeshelter', () => {
-                this.map.getCanvas().style.cursor = '';
-                popup.remove();
-            });
+            // this.map.on('mouseleave', 'evac-unclustered-point-safeshelter', () => {
+            //     this.map.getCanvas().style.cursor = '';
+            //     popup.remove();
+            // });
 
 
             categoriesCritical.map((layer) => {

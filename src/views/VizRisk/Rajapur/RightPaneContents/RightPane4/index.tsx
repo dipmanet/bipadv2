@@ -48,7 +48,7 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 All of the residential and governmental buildings, religious
                 and cultural sites, banking institutions,critical infrastructures
                 such as hospitals, schools, bridges, etc. are built near or between
-                the Karnaliand the Geruwa river. These infrastructures are at constant
+                Karnali and Geruwa river. These infrastructures are at a constant
                 threat of flooding every monsoon.
                 </p>
 
