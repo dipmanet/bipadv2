@@ -22,7 +22,12 @@ export default {
     safeShelterData: [
 
         {
-            name: 'Culture', Total: 3,
+            name: 'Culture',
+            Total: 3,
+        },
+        {
+            name: 'Safe Shelter',
+            Total: 4,
         },
 
 
