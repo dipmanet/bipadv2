@@ -49,6 +49,8 @@ const LandCoverLegends = (props) => {
         setshowCommunication(false);
         setshowBank(false);
         setshowBuilding(false);
+        setshowElectricity(false);
+        setshowTransportation(false);
     };
 
     const handleCriticalToggle = () => {
