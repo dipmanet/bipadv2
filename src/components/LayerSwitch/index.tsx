@@ -140,7 +140,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         // To reload styling
         if (this.context.persistor) {
             this.context.persistor.flush().then(() => {
-                window.location.reload();
+                // do nothing
             });
         }
     }
