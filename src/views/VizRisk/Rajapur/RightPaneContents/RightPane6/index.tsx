@@ -15,7 +15,6 @@ const chartData = [
     {
         name: 'Culture', Total: 16,
     },
-
     {
         name: 'Safe Shelters', Total: 9,
     },
@@ -42,7 +41,6 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const { showReferences } = this.state;
         return (
             <div className={styles.vrSideBar}>
                 <h1>Evacuation centers </h1>
@@ -82,35 +80,25 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                         />
                     </BarChart>
                 </ResponsiveContainer>
-                <button
-                    className={styles.referencesBtn}
-                    type="button"
-                    onClick={this.handleRefClick}
-                >
-                References
-                </button>
-                {showReferences && (
-                    <ul className={styles.referencesText}>
-                        <li>
+                <h2 className={styles.referencesBtn}>References</h2>
+
+                <ul className={styles.referencesText}>
+                    <li>
                             Modeling Exposure Through Earth Observations Routines
                             (METEOR) ,UK Space Agency, https://meteor-project.org/
-                        </li>
-                        <li>
+                    </li>
+                    <li>
                             Risk Nexus, Urgent case for recovery. What we can
                             learn from the August 2014 Karnali River floods in Nepal.
                             Zurich Insurance Group Ltd and ISET-International, 2015
-                        </li>
-                        <li>
+                    </li>
+                    <li>
                              Central Bureau of Statistics, 2011
-                        </li>
-                        <li>
+                    </li>
+                    <li>
                              Rajapur Municipality Profile, 2075
-                        </li>
-                    </ul>
-                )
-                }
-
-                {/* <SourceInfo /> */}
+                    </li>
+                </ul>
             </div>
         );
     }
