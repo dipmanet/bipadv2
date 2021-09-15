@@ -133,13 +133,15 @@ export const popupElementFlood = (safeshelterObj) => {
             listItem.classList.add(styles.listItem);
             const l = document.createElement('span');
             const m = document.createElement('span');
-            l.innerHTML = `${safeItems[item]}`;
-            l.style.fontWeight = 'bold';
-            m.innerHTML = `${safeshelterObj[item]}`;
-            m.classList.add(styles.m);
-            listItem.appendChild(l);
-            listItem.appendChild(m);
-            content.appendChild(listItem);
+            if (safeshelterObj[item]) {
+                l.innerHTML = `${safeItems[item]}`;
+                l.style.fontWeight = 'bold';
+                m.innerHTML = `${safeshelterObj[item]}`;
+                m.classList.add(styles.m);
+                listItem.appendChild(l);
+                listItem.appendChild(m);
+                content.appendChild(listItem);
+            }
             return null;
         });
     }

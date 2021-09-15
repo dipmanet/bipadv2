@@ -6,7 +6,8 @@
     .toggleContainer{
         .infraIconContainer{
             text-transform: capitalize;
-            margin: 1px 0;
+            margin: 5px;
+            cursor: pointer;
             .canalIcon{
                 border-bottom:2px solid #0670bc;
                 width: 25px;
@@ -50,16 +51,15 @@
                 width: 100%;
                 cursor: pointer;
                 filter: saturate(100%);
-                // border: 1px solid red;
                 margin: 0;
                 padding: 0;
                 height: 22px;
-                // padding-top: 10px;
-           
+                // border: 1px solid red;
                 .svgIcon{
-                    width: 32px;
+                    width: 25px;
                 }
-                  path{
+                path{
+                      border: 1px solid red;
                     fill: #1664c1;
                 }
                 polygon{
@@ -78,12 +78,12 @@
                 width: 100%;
                 cursor: pointer;
                 filter: saturate(100%);
-                // border: 1px solid red;
                 margin: 0;
                 padding: 0;
                 height: 22px;
-                // padding-top: 10px;
-              
+                // border: 1px solid red;
+
+                
                 path{
                     fill: white;
                     opacity: 0.38;

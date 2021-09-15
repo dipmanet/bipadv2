@@ -10,12 +10,10 @@ import Icon from '#rscg/Icon';
 
 const EvacLegends = (props) => {
     const { handleEvac, evacElement } = props;
-    const [showEducation, setshowEducation] = useState(false);
     const [showCulture, setshowCulture] = useState(false);
     const [showSafe, setshowSafe] = useState(false);
     const [showAll, setshowAll] = useState(true);
     const resetCriticalLayers = () => {
-        setshowEducation(false);
         setshowCulture(false);
         setshowAll(false);
         setshowSafe(false);
@@ -23,12 +21,10 @@ const EvacLegends = (props) => {
 
     useEffect(
         () => {
+            console.log('layer in useeffect', evacElement);
             if (evacElement === 'all') {
                 resetCriticalLayers();
                 setshowAll(true);
-            } else if (evacElement === 'education') {
-                resetCriticalLayers();
-                setshowEducation(true);
             } else if (evacElement === 'safeshelter') {
                 resetCriticalLayers();
                 setshowSafe(true);
@@ -42,15 +38,11 @@ const EvacLegends = (props) => {
 
 
     const handleEvacclick = (layer) => {
+        console.log('layer in click', layer);
         handleEvac(layer);
         if (layer === 'all') {
             resetCriticalLayers();
             setshowAll(true);
-        }
-
-        if (layer === 'education') {
-            resetCriticalLayers();
-            setshowEducation(true);
         }
 
         if (layer === 'Cultural') {
@@ -65,11 +57,8 @@ const EvacLegends = (props) => {
     };
     return (
         <>
-            {/* <VRLegend> */}
             <h2 className={styles.heading}>Evacuation Centers</h2>
-
             <div className={styles.criticalIcons}>
-
                 <div className={styles.toggleContainer}>
                     <div className={styles.infraIconContainer}>
 
@@ -79,6 +68,7 @@ const EvacLegends = (props) => {
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
                             onClick={() => handleEvacclick('all')}
+                            style={{ zIndex: 5 }}
                         >
                             <Icon
                                 name="circle"
@@ -89,23 +79,6 @@ const EvacLegends = (props) => {
                         </button>
 
                     </div>
-                    {/* <div className={styles.infraIconContainer}>
-                        <button
-                            type="button"
-                            className={showEducation
-                                ? styles.criticalButtonSelected
-                                : styles.criticalButton}
-                            onClick={() => handleEvacclick('education')}
-                        >
-                            <ScalableVectorGraphics
-                                className={styles.svgIcon}
-                                src={Education}
-                            />
-
-                            Education
-                        </button>
-                    </div> */}
-
                     <div className={styles.infraIconContainer}>
                         <button
                             type="button"
@@ -113,6 +86,8 @@ const EvacLegends = (props) => {
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
                             onClick={() => handleEvacclick('Cultural')}
+                            style={{ zIndex: 4 }}
+
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
@@ -128,34 +103,19 @@ const EvacLegends = (props) => {
                                 ? styles.criticalButtonSelected
                                 : styles.criticalButton}
                             onClick={() => handleEvacclick('safeshelter')}
+                            style={{ zIndex: 3 }}
+
                         >
                             <ScalableVectorGraphics
                                 className={styles.svgIcon}
                                 src={Safe}
+                                width={'25px'}
                             />
                             Safe Shelter
                         </button>
                     </div>
-                    {/* <div className={styles.infraIconContainer}>
-                        <button
-                            type="button"
-                            className={showSafe
-                                ? styles.criticalButtonSelected
-                                : styles.criticalButton}
-                            onClick={() => handleEvacclick('safe')}
-                        >
-                            <ScalableVectorGraphics
-                                className={styles.svgIcon}
-                                src={SafeShelter}
-                            />
-                            Safe Shelter
-                        </button>
-                    </div> */}
                 </div>
-
-
             </div>
-            {/* </VRLegend> */}
         </>
     );
 };
