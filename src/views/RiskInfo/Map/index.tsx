@@ -64,7 +64,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             feature,
             hoverLngLat,
         } = this.state;
-
+        console.log('feature', feature);
         const rasterLayers = activeLayers.filter(d => d.type === 'raster');
         const choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
 
