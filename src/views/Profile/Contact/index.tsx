@@ -97,9 +97,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
             expand: ['trainings', 'organization'],
             limit: -1,
-            province: params.province && params.province,
-            district: params.district && params.district,
-            municipality: params.municipality && params.municipality,
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
 
 
         }),
@@ -110,9 +110,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         query: ({ params }) => ({
             swap: true,
             // eslint-disable-next-line @typescript-eslint/camelcase
-            first_contact: params && params.selectedId && params.selectedId,
+            first_contact: params && params.selectedId,
             // eslint-disable-next-line @typescript-eslint/camelcase
-            second_contact: params && params.alternateId && params.alternateId,
+            second_contact: params && params.alternateId,
 
         }),
         onSuccess: ({ params, response }) => {
@@ -229,6 +229,7 @@ class ContactPage extends React.PureComponent<Props, State> {
         return geojson;
     })
 
+
     private getFilteredContactList = memoize((
         contactList: Contact[],
         region,
@@ -242,13 +243,14 @@ class ContactPage extends React.PureComponent<Props, State> {
             drrFocalPersonOnly,
         } = filterOptions;
 
-        let newContactList = [...contactList].sort((a: Contact, b: Contact) => {
-            const aWeight = a.isDrrFocalPerson ? 1 : 0;
-            const bWeight = b.isDrrFocalPerson ? 1 : 0;
+        // let newContactList = [...contactList].sort((a: Contact, b: Contact) => {
+        //     const aWeight = a.isDrrFocalPerson ? 1 : 0;
+        //     const bWeight = b.isDrrFocalPerson ? 1 : 0;
 
-            return (bWeight - aWeight);
-        });
+        //     return (bWeight - aWeight);
+        // });
 
+        let newContactList = contactList;
         if (drrFocalPersonOnly) {
             newContactList = newContactList.filter(d => d.isDrrFocalPerson);
         }
@@ -350,13 +352,13 @@ class ContactPage extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        // filteredContactList = this.getFilteredContactList(
-        //     contactList,
-        //     region,
-        //     municipalityList,
-        //     filterValues,
-        // );
-        filteredContactList = contactList;
+        filteredContactList = this.getFilteredContactList(
+            contactList,
+            region,
+            municipalityList,
+            filterValues,
+        );
+        // filteredContactList = contactList;
         const indexOfSelectedContact = filteredContactList
             .findIndex(item => item.id === contactDetail.id);
 
@@ -435,13 +437,13 @@ class ContactPage extends React.PureComponent<Props, State> {
                 } = {},
             },
         } = this.props;
-        // filteredContactList = this.getFilteredContactList(
-        //     contactList,
-        //     region,
-        //     municipalityList,
-        //     filterValues,
-        // );
-        filteredContactList = contactList;
+        filteredContactList = this.getFilteredContactList(
+            contactList,
+            region,
+            municipalityList,
+            filterValues,
+        );
+        // filteredContactList = contactList;
         const indexOfSelectedContact = filteredContactList
             .findIndex(item => item.id === contactDetail.id);
 
@@ -529,6 +531,23 @@ class ContactPage extends React.PureComponent<Props, State> {
         this.setState({ contactList: newContactList });
     }
 
+    public componentDidUpdate(prevProps, prevState, snapshot) {
+        const { region,
+            requests: {
+                municipalityContactRequest,
+            } } = this.props;
+        if (prevProps.region !== region) {
+            municipalityContactRequest.do(
+                {
+                    setProfileContactList: this.setProfileContactList,
+                    province: region.adminLevel === 1 ? region.geoarea : '',
+                    district: region.adminLevel === 2 ? region.geoarea : '',
+                    municipality: region.adminLevel === 3 ? region.geoarea : '',
+                },
+            );
+        }
+    }
+
     public render() {
         const {
             region,
@@ -545,8 +564,7 @@ class ContactPage extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { setProfile } = this.context;
-        const { isSortByOrdering } = this.state;
-        // const { province, district, municipality } = user.profile;
+        const { isSortByOrdering, contactList } = this.state;
 
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
@@ -556,18 +574,14 @@ class ContactPage extends React.PureComponent<Props, State> {
                 return prevProfile;
             });
         }
-
-        const {
-            contactList,
-        } = this.state;
         if (isSortByOrdering) {
-            // const filteredContactListWithoutArrayIndex = this.getFilteredContactList(
-            //     contactList,
-            //     region,
-            //     municipalityList,
-            //     filterValues,
-            // );
-            const filteredContactListWithoutArrayIndex = contactList;
+            const filteredContactListWithoutArrayIndex = this.getFilteredContactList(
+                contactList,
+                region,
+                municipalityList,
+                filterValues,
+            );
+            // const filteredContactListWithoutArrayIndex = contactList;
             filteredContactList = filteredContactListWithoutArrayIndex
                 .map((item, i) => ({ ...item, indexValue: i }));
             filteredContactListLastIndex = filteredContactList.length - 1;
