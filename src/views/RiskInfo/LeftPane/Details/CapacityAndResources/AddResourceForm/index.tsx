@@ -34,6 +34,7 @@ import {
 import {
     enumOptionsSelector,
     resourceTypeListSelector,
+    wardsSelector,
 } from '#selectors';
 
 import EducationFields from './EducationFields';
@@ -88,6 +89,7 @@ interface OwnProps {
 interface PropsFromState {
     resourceTypeList: PageType.ResourceType[];
     enumOptions: ModelEnum[];
+    wards: PageType.Ward[];
 }
 
 interface PropsFromDispatch {
@@ -116,6 +118,7 @@ type Props = NewProps<ReduxProps, Params>;
 const mapStateToProps = (state: AppState): PropsFromState => ({
     resourceTypeList: resourceTypeListSelector(state),
     enumOptions: enumOptionsSelector(state),
+    wards: wardsSelector(state),
 });
 
 const labelSelector = (d: PageType.Field) => d.title;
@@ -335,6 +338,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         const {
             resourceId,
         } = this.state;
+        const {
+            wards,
+        } = this.props;
 
         console.warn('here', faramValues);
 
@@ -342,10 +348,11 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         if (location) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
-
+            // const wardTitle: number | undefined = wards.filter(w => w.id === ward)[0].title;
             values = {
                 ...values,
                 point,
+                // ward: wardTitle || undefined,
                 ward,
             };
         }

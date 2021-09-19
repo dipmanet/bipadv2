@@ -38,7 +38,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-
+import { checkPermission, checkSameRegionPermission } from '#utils/common';
 import { TitleContext, Profile } from '#components/TitleContext';
 
 import { mapStyles } from '#constants';
@@ -553,6 +553,7 @@ class ContactPage extends React.PureComponent<Props, State> {
             region,
             municipalityList,
             className,
+            user,
             filters: {
                 faramValues: filterValues,
             },
@@ -560,6 +561,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                 municipalityContactRequest: {
                     pending = false,
                 } = {},
+
             },
         } = this.props;
 

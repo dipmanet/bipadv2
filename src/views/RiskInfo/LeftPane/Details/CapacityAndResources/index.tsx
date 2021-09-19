@@ -37,6 +37,7 @@ import {
     municipalitiesSelector,
     carKeysSelector,
     userSelector,
+    wardsSelector,
 } from '#selectors';
 
 import modalize from '#rscg/Modalize';
@@ -116,8 +117,8 @@ type toggleValues =
     | 'communication'
     | 'openspace'
     | 'communityspace'
-    |'fireengine'
-    |'helipad';
+    | 'fireengine'
+    | 'helipad';
 
 const initialActiveLayersIndication = {
     education: false,
@@ -135,7 +136,11 @@ const initialActiveLayersIndication = {
 };
 
 const ResourceTooltip = (props: ResourceTooltipProps) => {
-    const { onEditClick, onShowInventoryClick, isLoggedInUser, ...resourceDetails } = props;
+    const { onEditClick,
+        onShowInventoryClick,
+        isLoggedInUser,
+        wardsRef,
+        ...resourceDetails } = props;
 
     const { id, point, title, ...resource } = resourceDetails;
 
@@ -153,7 +158,25 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
         label: camelCaseToSentence(item.label),
     });
 
-    let filtered = data;
+    const oldfiltered = data;
+
+    console.log('oldfiltered', oldfiltered);
+    let filtered = oldfiltered.map((r) => {
+        if (r.label === 'ward') {
+            return {
+                label: 'ward',
+                value: wardsRef[r.value],
+            };
+        }
+
+        if (r.label === 'lastModifiedDate') {
+            return {
+                label: 'lastModifiedDate',
+                value: `${r.value.split('T')[0]}`,
+            };
+        }
+        return r;
+    });
 
     // showing only some specific fields on openspace popup
     if (resourceDetails.resourceType === 'openspace' || resourceDetails.resourceType === 'communityspace') {
@@ -292,6 +315,9 @@ interface State {
     };
 }
 
+interface WardRef {
+    wardId: number;
+}
 interface PropsFromState {
     resourceTypeList: PageType.ResourceType[];
 }
@@ -316,6 +342,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalities: municipalitiesSelector(state),
     carKeys: carKeysSelector(state),
     user: userSelector(state),
+    wards: wardsSelector(state),
 
 });
 
@@ -351,7 +378,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
             const resources = response as MultiResponse<PageType.Resource>;
             if (params && params.setResourceList && params.setIndividualResourceList) {
                 params.setResourceList(resources.results);
-
                 if (params.resourceType) {
                     params.resourceType
                         .map(item => params.setIndividualResourceList(
@@ -403,7 +429,6 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
                 // TODO: handle error
-                console.warn('failure', error);
                 params.setFaramErrors({
                     $internal: ['Some problem occurred'],
                 });
@@ -411,6 +436,9 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         },
     },
 };
+
+const tempHelipad = [];
+
 
 class CapacityAndResources extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -450,6 +478,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             },
             activeLayersIndication: { ...initialActiveLayersIndication },
             isLoggedInUser: false,
+            wardsRef: {},
         };
 
         const { faramValues: { region } } = filters;
@@ -466,9 +495,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const {
             handleCarActive,
-            filters,
-            setFilters,
             user,
+            wards,
         } = this.props;
         handleCarActive(true);
         const { filters: faramValues } = this.props;
@@ -477,6 +505,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         this.setState({
             isLoggedInUser: isLoggedIn,
         });
+        const temp = {};
+        wards.map((ward: PageType.Ward) => {
+            temp[ward.id] = ward.title;
+            return null;
+        });
+        this.setState({ wardsRef: temp });
     }
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
@@ -680,6 +714,11 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleResourceMouseEnter = () => { }
+
+    private getWardTitle = (wardId: number) => {
+        const { wardsRef } = this.state;
+        return wardsRef[wardId];
+    }
 
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
         const { properties: { id, title, description, ward, resourceType, point } } = feature;
@@ -935,7 +974,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceInfo: {
                 id,
                 title,
-                ward,
+                ward: this.getWardTitle(ward),
                 resourceType,
                 point,
             },
@@ -967,6 +1006,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             singleOpenspaceDetailsModal,
             CommunitySpaceDetailsModal,
             isLoggedInUser,
+            wardsRef,
         } = this.state;
 
         const {
@@ -1007,6 +1047,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         );
         const fireengineGeoJson = this.getGeojson(resourceCollection.fireengine);
         const helipadGeoJson = this.getGeojson(resourceCollection.helipad);
+
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -1257,6 +1298,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
+                                                wardsRef={wardsRef}
+
                                             />
                                         </MapTooltip>
                                     )}
@@ -1327,6 +1370,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
+                                                wardsRef={wardsRef}
                                             />
                                         </MapTooltip>
                                     )}
@@ -1397,6 +1441,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
+                                                wardsRef={wardsRef}
+
                                             />
                                         </MapTooltip>
                                     )}
@@ -1467,6 +1513,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
+                                                wardsRef={wardsRef}
+
                                             />
                                         </MapTooltip>
                                     )}
@@ -1536,6 +1584,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
+                                                wardsRef={wardsRef}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
                                             />
                                         </MapTooltip>
@@ -1606,6 +1655,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
+                                                wardsRef={wardsRef}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
                                             />
                                         </MapTooltip>
@@ -1676,6 +1726,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
+                                                wardsRef={wardsRef}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
                                             />
                                         </MapTooltip>
@@ -1746,6 +1797,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceInfo}
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
+                                                wardsRef={wardsRef}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
                                             />
                                         </MapTooltip>
@@ -1837,6 +1889,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         () => this.handleShowCommunitypaceDetails()
                                                     }
                                                     authenticated={authenticated}
+                                                    wardsRef={wardsRef}
+
                                                 />
                                             </MapTooltip>
                                         )}
@@ -1933,6 +1987,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         () => this.handleShowOpenspaceDetailsClick()
                                                     }
                                                     authenticated={authenticated}
+                                                    wardsRef={wardsRef}
+
                                                 />
                                             </MapTooltip>
                                         )}
@@ -2011,6 +2067,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
+                                                wardsRef={wardsRef}
+
                                             />
                                         </MapTooltip>
                                     )}
@@ -2081,6 +2139,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 {...resourceDetails}
                                                 onEditClick={this.handleEditClick}
                                                 onShowInventoryClick={this.handleShowInventoryClick}
+                                                wardsRef={wardsRef}
+
                                             />
                                         </MapTooltip>
                                     )}
