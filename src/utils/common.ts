@@ -267,3 +267,26 @@ export const checkPermission = (user, codeName, app) => {
     // temporary set true to all user for testing
     // return true;
 };
+
+// This function can be used to compare login in user's
+// federal region and filtered federal region to check the accessibility of the data.
+export const checkSameRegionPermission = (user, region) => {
+    let permission = false;
+    if (region.adminLevel === 1) {
+        if (user.profile.province === region.geoarea
+            && user.profile.district === null && user.profile.municipality === null) {
+            permission = true;
+        }
+    } else if (region.adminLevel === 2) {
+        if (user.profile.district === region.geoarea && user.profile.province === null) {
+            permission = true;
+        }
+    } else if (region.adminLevel === 3) {
+        if (user.profile.municipality === region.geoarea) {
+            permission = true;
+        }
+    } else {
+        permission = false;
+    }
+    return permission;
+};

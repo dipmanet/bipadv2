@@ -39,7 +39,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { checkPermission } from '#utils/common';
+import { checkPermission, checkSameRegionPermission } from '#utils/common';
 import { TitleContext, Profile } from '#components/TitleContext';
 
 import { mapStyles } from '#constants';
@@ -319,9 +319,6 @@ class ContactPage extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { setProfile } = this.context;
-        // const test=checkPermission(user,)
-        console.log('This is user', user);
-        console.log('This is region', region);
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
                 if (prevProfile.mainModule !== 'Contacts') {
