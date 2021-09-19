@@ -21,6 +21,7 @@ import {
     regionSelector,
     municipalitiesSelector,
     profileContactFiltersSelector,
+    userSelector,
 } from '#selectors';
 import {
     AppState,
@@ -38,7 +39,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-
+import { checkPermission } from '#utils/common';
 import { TitleContext, Profile } from '#components/TitleContext';
 
 import { mapStyles } from '#constants';
@@ -76,6 +77,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalityList: municipalitiesSelector(state),
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
+    user: userSelector(state),
 });
 
 const contactKeySelector = (d: Contact) => d.id;
@@ -304,6 +306,7 @@ class ContactPage extends React.PureComponent<Props, State> {
             region,
             municipalityList,
             className,
+            user,
             filters: {
                 faramValues: filterValues,
             },
@@ -311,11 +314,14 @@ class ContactPage extends React.PureComponent<Props, State> {
                 municipalityContactRequest: {
                     pending = false,
                 } = {},
+
             },
         } = this.props;
 
         const { setProfile } = this.context;
-
+        // const test=checkPermission(user,)
+        console.log('This is user', user);
+        console.log('This is region', region);
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
                 if (prevProfile.mainModule !== 'Contacts') {
