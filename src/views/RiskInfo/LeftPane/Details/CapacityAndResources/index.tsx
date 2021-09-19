@@ -160,7 +160,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
 
     const oldfiltered = data;
 
-    console.log('oldfiltered', oldfiltered);
+
     let filtered = oldfiltered.map((r) => {
         if (r.label === 'ward') {
             return {

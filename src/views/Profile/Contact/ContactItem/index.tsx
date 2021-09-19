@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useMemo, useCallback, useState } from 'react';
 import {
     _cs,
@@ -6,6 +7,7 @@ import {
 
 
 import Loader from 'react-loader-spinner';
+import { connect } from 'react-redux';
 import {
     Contact,
     Municipality,
@@ -30,6 +32,8 @@ import ContactEditForm from '../ContactEditForm';
 
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import { checkSameRegionPermission } from '#utils/common';
+import { regionSelector, userSelector } from '#selectors';
 
 const ModalButton = modalize(Button);
 
@@ -100,9 +104,16 @@ const requests: { [key: string]: ClientAttributes<Props, Params> } = {
         },
     },
 };
+const mapStateToProps = (state: AppState): PropsFromState => ({
 
+    region: regionSelector(state),
+
+    user: userSelector(state),
+});
 const ContactItem = (props: Props) => {
     const {
+        user,
+        region,
         contact,
         contactId,
         municipalityList,
@@ -153,6 +164,8 @@ const ContactItem = (props: Props) => {
         ).join(', ') || '-'),
         [trainings],
     );
+    const filterPermissionGranted = checkSameRegionPermission(user, region);
+
 
     const confirmationMessage = `Are you sure you want to remove the contact ${name}?`;
     return (
@@ -228,7 +241,7 @@ const ContactItem = (props: Props) => {
                 </div>
                 <Cloak hiddenIf={p => !p.change_contact}>
                     {contactLoading ? <Loader type="Oval" color="#E35163" height={30} width={30} />
-                        : (
+                        : filterPermissionGranted ? (
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
 
                                 {contact.indexValue !== 0
@@ -249,43 +262,49 @@ const ContactItem = (props: Props) => {
                                     </button>
                                 )}
                             </div>
-                        )}
+                        ) : ''}
                 </Cloak>
             </div>
-            <div className={styles.actionButtons}>
-                <Cloak hiddenIf={p => !p.change_contact}>
-                    <ModalButton
-                        className={styles.editButton}
-                        iconName="edit"
-                        transparent
-                        modal={(
-                            <ContactEditForm
-                                contactId={contactId}
-                                details={contact}
-                                onEditSuccess={onContactEdit}
-                            />
-                        )}
-                    >
+            {filterPermissionGranted
+                ? (
+                    <div className={styles.actionButtons}>
+                        <Cloak hiddenIf={p => !p.change_contact}>
+                            <ModalButton
+                                className={styles.editButton}
+                                iconName="edit"
+                                transparent
+                                modal={(
+                                    <ContactEditForm
+                                        contactId={contactId}
+                                        details={contact}
+                                        onEditSuccess={onContactEdit}
+                                    />
+                                )}
+                            >
                         Edit
-                    </ModalButton>
-                </Cloak>
-                <Cloak hiddenIf={p => !p.delete_contact}>
-                    <DangerConfirmButton
-                        className={styles.deleteButton}
-                        iconName="delete"
-                        confirmationMessage={confirmationMessage}
-                        pending={pending}
-                        onClick={handleContactDelete}
-                        transparent
-                    >
+                            </ModalButton>
+                        </Cloak>
+                        <Cloak hiddenIf={p => !p.delete_contact}>
+                            <DangerConfirmButton
+                                className={styles.deleteButton}
+                                iconName="delete"
+                                confirmationMessage={confirmationMessage}
+                                pending={pending}
+                                onClick={handleContactDelete}
+                                transparent
+                            >
                         Delete
-                    </DangerConfirmButton>
-                </Cloak>
-            </div>
+                            </DangerConfirmButton>
+                        </Cloak>
+                    </div>
+                )
+                : ''}
         </div>
     );
 };
 
-export default createConnectedRequestCoordinator<Props>()(
-    createRequestClient(requests)(ContactItem),
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<Props>()(
+        createRequestClient(requests)(ContactItem),
+    ),
 );

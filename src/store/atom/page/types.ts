@@ -802,6 +802,7 @@ export interface Organization {
 }
 
 export interface Contact {
+    indexValue: number;
     committee: 'PDMC' | 'DDMC' | 'LDMC' | 'WDMC' | 'CDMC' | 'non_committee';
     email: string;
     id: number;
