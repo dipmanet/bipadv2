@@ -45,12 +45,25 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
         setDownloadContent(e);
     };
     const handleDownloadFullImage = (e) => {
-        const link = document.createElement('a');
-        link.href = `${process.env.REACT_APP_DOMAIN_URL}/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`;
-        link.download = selectedImage;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // const link = document.createElement('a');
+        // eslint-disable-next-line max-len
+        // link.href = `${process.env.REACT_APP_DOMAIN_URL}/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`;
+        // link.download = selectedImage;
+        // document.body.appendChild(link);
+        // link.click();
+        // document.body.removeChild(link);
+
+
+        const element = document.createElement('a');
+        element.setAttribute('href', `${process.env.REACT_APP_DOMAIN_URL}/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`);
+        element.setAttribute('download', selectedImage);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
     };
     useEffect(() => {
         const { width, height } = calculateDownloadDimensions();
