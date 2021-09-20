@@ -46,7 +46,7 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
     };
     const handleDownloadFullImage = (e) => {
         const element = document.createElement('a');
-        element.setAttribute('href', `${process.env.REACT_APP_DOMAIN_URL}/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`);
+        element.setAttribute('href', `/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`);
         element.setAttribute('download', selectedImage);
 
         element.style.display = 'none';
