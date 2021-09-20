@@ -703,11 +703,22 @@ class FloodHistoryMap extends React.Component {
         this.props.handleShowAddForm(true);
 
         // change the popup
-        this.showPopupOnBldgs(this.state.cood, {}, 'Please enter building details on the left panel. ');
+        this.showPopupOnBldgs(
+            this.state.cood,
+            {},
+            'Please enter building details on the left panel.',
+            false,
+        );
     }
 
-    public showPopupOnBldgs = (coordinates, singularBuldingData, msg) => {
-        const content = popupElement(singularBuldingData, msg, this.handleButtonClick);
+    public showPopupOnBldgs = (coordinates, singularBuldingData, msg, showButton) => {
+        const content = popupElement(
+            singularBuldingData,
+            msg,
+            this.handleButtonClick,
+            showButton,
+        );
+
         this.setState({ cood: coordinates });
         popup.setLngLat(coordinates)
             .setDOMContent(
@@ -783,12 +794,22 @@ class FloodHistoryMap extends React.Component {
                         center: cood,
                     });
                     // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
-                    this.showPopupOnBldgs(cood, singularBuldingData, this.getHouseId(searchId));
+                    this.showPopupOnBldgs(
+                        cood,
+                        singularBuldingData,
+                        this.getHouseId(searchId),
+                        true,
+                    );
                 } else {
                     // alert('No data available');
                     this.setState({ searchTerm: '' });
                     this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                    this.showPopupOnBldgs(coordinatesObj[0].geometry.coordinates, singularBuldingData, 'To add data click the following button');
+                    this.showPopupOnBldgs(
+                        coordinatesObj[0].geometry.coordinates,
+                        singularBuldingData,
+                        'To add data click the following button',
+                        true,
+                    );
                     this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {

@@ -1,5 +1,5 @@
 .content{
-    height : 250px;
+    max-height : 250px;
     width : 200px;
     overflow : scroll;
     padding : 0 0 40px 0;
@@ -7,6 +7,22 @@
     display : flex;
     flex-direction : column;
     align-items : flex-start;
+  }
+
+  .noDataHeading{
+    @extend .heading;
+    color: #444444 !important;
+    background-color: #fff !important;
+    overflow:hidden !important;
+  }
+  .noDataContent{
+    @extend .content;
+    background-color: #fff;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    padding : 0 0 10px 0 !important;
+
   }
   
   .listItem{
