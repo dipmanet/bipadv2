@@ -275,16 +275,16 @@ export const checkSameRegionPermission = (user, region) => {
     if (user && user.isSuperuser) {
         permission = true;
     } else if (region.adminLevel === 1) {
-        if (user.profile.province === region.geoarea
+        if (user && user.profile.province === region.geoarea
             && user.profile.district === null && user.profile.municipality === null) {
             permission = true;
         }
     } else if (region.adminLevel === 2) {
-        if (user.profile.district === region.geoarea && user.profile.province === null) {
+        if (user && user.profile.district === region.geoarea && user.profile.province === null) {
             permission = true;
         }
     } else if (region.adminLevel === 3) {
-        if (user.profile.municipality === region.geoarea) {
+        if (user && user.profile.municipality === region.geoarea) {
             permission = true;
         }
     } else {
