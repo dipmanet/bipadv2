@@ -699,12 +699,16 @@ class FloodHistoryMap extends React.Component {
     }
 
     public handleButtonClick = () => {
+        // showing the data add form
         this.props.handleShowAddForm(true);
+
+        // change the popup
+        this.showPopupOnBldgs(this.state.cood, {}, 'Please enter building details on the left panel. ');
     }
 
-    public showPopupOnBldgs = (coordinates, msg) => {
-        const { singularBuldingData } = this.props;
+    public showPopupOnBldgs = (coordinates, singularBuldingData, msg) => {
         const content = popupElement(singularBuldingData, msg, this.handleButtonClick);
+        this.setState({ cood: coordinates });
         popup.setLngLat(coordinates)
             .setDOMContent(
                 content,
@@ -763,6 +767,7 @@ class FloodHistoryMap extends React.Component {
 
         if (searchId) {
             // looking for
+            const { singularBuldingData } = this.props;
             const coordinatesObj = this.props.buildinggeojson
                 .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
             let cood = [];
@@ -778,12 +783,12 @@ class FloodHistoryMap extends React.Component {
                         center: cood,
                     });
                     // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
-                    this.showPopupOnBldgs(cood, this.getHouseId(searchId));
+                    this.showPopupOnBldgs(cood, singularBuldingData, this.getHouseId(searchId));
                 } else {
                     // alert('No data available');
                     this.setState({ searchTerm: '' });
                     this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                    this.showPopupOnBldgs(coordinatesObj[0].geometry.coordinates, 'To add data click the following button');
+                    this.showPopupOnBldgs(coordinatesObj[0].geometry.coordinates, singularBuldingData, 'To add data click the following button');
                     this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {
