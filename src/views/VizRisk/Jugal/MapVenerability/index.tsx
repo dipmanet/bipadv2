@@ -11,6 +11,13 @@ import EarthquakeHazardLegends from '../Legends/EarthquakeHazardLegend';
 import expressions from '../Data/expressions';
 import styles from './styles.scss';
 import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
+import {
+    popupElement,
+    drawStyle,
+    ciRef,
+    rasterLayers,
+    getFloodRasterLayer,
+} from '#views/VizRisk/Common/utils';
 
 import {
     wardsSelector,
@@ -22,30 +29,11 @@ if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 
-const rasterLayers = [
-    '5', '10', '20', '50', '75', '100',
-    '200', '250', '500', '1000',
-];
-
 const mapStateToProps = (state, props) => ({
     wards: wardsSelector(state),
 });
 
 const { buildingColor } = expressions;
-
-const ciRef = {
-    'Water sources': 'Water Source',
-    'Trade and business (groceries, meat, textiles)': 'Trade and business',
-    'Industry/ hydropower': 'Industry',
-    'Hotel/resort/homestay': 'Hotel or Restaurant',
-    Health: 'Hospital',
-    'Government Buildings': 'Government Building',
-    Bridge: 'Bridge',
-    'Community buildings': 'Community Building',
-    'Cultural heritage sites': 'Cultural Heritage',
-    Finance: 'Financial Institution',
-    Education: 'Education Institution',
-};
 
 const draw = new MapboxDraw({
     displayControlsDefault: false,
@@ -54,280 +42,10 @@ const draw = new MapboxDraw({
         polygon: true,
         trash: true,
     },
-    styles: [
-
-        {
-            id: 'gl-draw-polygon-fill-inactive',
-            type: 'fill',
-            filter: ['all', ['==', 'active', 'false'],
-                ['==', '$type', 'Polygon'],
-                ['!=', 'mode', 'static'],
-            ],
-            paint: {
-                'fill-color': '#3bb2d0',
-                'fill-outline-color': '#3bb2d0',
-                'fill-opacity': 0.1,
-            },
-        },
-        {
-            id: 'gl-draw-polygon-fill-active',
-            type: 'fill',
-            filter: ['all', ['==', 'active', 'true'],
-                ['==', '$type', 'Polygon'],
-            ],
-            paint: {
-                'fill-color': '#fbb03b',
-                'fill-outline-color': '#fbb03b',
-                'fill-opacity': 0.1,
-            },
-        },
-        {
-            id: 'gl-draw-polygon-midpoint',
-            type: 'circle',
-            filter: ['all', ['==', '$type', 'Point'],
-                ['==', 'meta', 'midpoint'],
-            ],
-            paint: {
-                'circle-radius': 3,
-                'circle-color': '#fbb03b',
-            },
-        },
-        {
-            id: 'gl-draw-polygon-stroke-inactive',
-            type: 'line',
-            filter: ['all', ['==', 'active', 'false'],
-                ['==', '$type', 'Polygon'],
-                ['!=', 'mode', 'static'],
-            ],
-            layout: {
-                'line-cap': 'round',
-                'line-join': 'round',
-            },
-            paint: {
-                'line-color': '#3bb2d0',
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-polygon-stroke-active',
-            type: 'line',
-            filter: ['all', ['==', 'active', 'true'],
-                ['==', '$type', 'Polygon'],
-            ],
-            layout: {
-                'line-cap': 'round',
-                'line-join': 'round',
-            },
-            paint: {
-                'line-color': '#fbb03b',
-                'line-dasharray': [0.2, 2],
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-line-inactive',
-            type: 'line',
-            filter: ['all', ['==', 'active', 'false'],
-                ['==', '$type', 'LineString'],
-                ['!=', 'mode', 'static'],
-            ],
-            layout: {
-                'line-cap': 'round',
-                'line-join': 'round',
-            },
-            paint: {
-                'line-color': '#3bb2d0',
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-line-active',
-            type: 'line',
-            filter: ['all', ['==', '$type', 'LineString'],
-                ['==', 'active', 'true'],
-            ],
-            layout: {
-                'line-cap': 'round',
-                'line-join': 'round',
-            },
-            paint: {
-                'line-color': '#fbb03b',
-                'line-dasharray': [0.2, 2],
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-polygon-and-line-vertex-stroke-inactive',
-            type: 'circle',
-            filter: ['all', ['==', 'meta', 'vertex'],
-                ['==', '$type', 'Point'],
-                ['!=', 'mode', 'static'],
-            ],
-            paint: {
-                'circle-radius': 5,
-                'circle-color': '#fff',
-            },
-        },
-        {
-            id: 'gl-draw-polygon-and-line-vertex-inactive',
-            type: 'circle',
-            filter: ['all', ['==', 'meta', 'vertex'],
-                ['==', '$type', 'Point'],
-                ['!=', 'mode', 'static'],
-            ],
-            paint: {
-                'circle-radius': 3,
-                'circle-color': '#fbb03b',
-            },
-        },
-        {
-            id: 'gl-draw-point-point-stroke-inactive',
-            type: 'circle',
-            filter: ['all', ['==', 'active', 'false'],
-                ['==', '$type', 'Point'],
-                ['==', 'meta', 'feature'],
-                ['!=', 'mode', 'static'],
-            ],
-            paint: {
-                'circle-radius': 5,
-                'circle-opacity': 1,
-                'circle-color': '#fff',
-            },
-        },
-        {
-            id: 'gl-draw-point-inactive',
-            type: 'circle',
-            filter: ['all', ['==', 'active', 'false'],
-                ['==', '$type', 'Point'],
-                ['==', 'meta', 'feature'],
-                ['!=', 'mode', 'static'],
-            ],
-            paint: {
-                'circle-radius': 3,
-                'circle-color': '#3bb2d0',
-            },
-        },
-        {
-            id: 'gl-draw-point-stroke-active',
-            type: 'circle',
-            filter: ['all', ['==', '$type', 'Point'],
-                ['==', 'active', 'true'],
-                ['!=', 'meta', 'midpoint'],
-            ],
-            paint: {
-                'circle-radius': 7,
-                'circle-color': '#fff',
-            },
-        },
-        {
-            id: 'gl-draw-point-active',
-            type: 'circle',
-            filter: ['all', ['==', '$type', 'Point'],
-                ['!=', 'meta', 'midpoint'],
-                ['==', 'active', 'true'],
-            ],
-            paint: {
-                'circle-radius': 5,
-                'circle-color': '#fbb03b',
-            },
-        },
-        {
-            id: 'gl-draw-polygon-fill-static',
-            type: 'fill',
-            filter: ['all', ['==', 'mode', 'static'],
-                ['==', '$type', 'Polygon'],
-            ],
-            paint: {
-                'fill-color': '#404040',
-                'fill-outline-color': '#404040',
-                'fill-opacity': 0.1,
-            },
-        },
-        {
-            id: 'gl-draw-polygon-stroke-static',
-            type: 'line',
-            filter: ['all', ['==', 'mode', 'static'],
-                ['==', '$type', 'Polygon'],
-            ],
-            layout: {
-                'line-cap': 'round',
-                'line-join': 'round',
-            },
-            paint: {
-                'line-color': '#404040',
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-line-static',
-            type: 'line',
-            filter: ['all', ['==', 'mode', 'static'],
-                ['==', '$type', 'LineString'],
-            ],
-            layout: {
-                'line-cap': 'round',
-                'line-join': 'round',
-            },
-            paint: {
-                'line-color': '#404040',
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-point-static',
-            type: 'circle',
-            filter: ['all', ['==', 'mode', 'static'],
-                ['==', '$type', 'Point'],
-            ],
-            paint: {
-                'circle-radius': 5,
-                'circle-color': '#404040',
-            },
-        },
-
-        {
-            id: 'gl-draw-polygon-color-picker',
-            type: 'fill',
-            // filter: ['all', ['==', '$type', 'Polygon'],
-            //     ['has', 'user_portColor'],
-            // ],
-            paint: {
-                'fill-color': '#ff0000',
-                'fill-outline-color': '#ffffff',
-                'fill-opacity': 0.1,
-            },
-        },
-        {
-            id: 'gl-draw-line-color-picker',
-            type: 'line',
-            // filter: ['all', ['==', '$type', 'LineString'],
-            //     ['has', 'user_portColor'],
-            // ],
-            paint: {
-                'line-color': '#ffffff',
-                'line-width': 2,
-            },
-        },
-        {
-            id: 'gl-draw-point-color-picker',
-            type: 'circle',
-            // filter: ['all', ['==', '$type', 'Point'],
-            //     ['has', 'user_portColor'],
-            // ],
-            paint: {
-                'circle-radius': 3,
-                'circle-color': '#ffffff',
-            },
-        },
-    ],
+    styles: drawStyle,
     defaultMode: 'draw_polygon',
 });
 
-const popup = new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: true,
-    className: 'popup',
-});
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -553,7 +271,7 @@ class FloodHistoryMap extends React.Component {
             rasterLayers.map((layer) => {
                 this.map.addSource(`floodraster${layer}`, {
                     type: 'raster',
-                    tiles: [this.getFloodRasterLayer(layer)],
+                    tiles: [getFloodRasterLayer(layer)],
                     tileSize: 256,
                 });
                 this.map.addLayer(
@@ -627,10 +345,13 @@ class FloodHistoryMap extends React.Component {
         if (this.props.showAddForm !== prevProps.showAddForm) {
             if (this.props.showAddForm) {
                 if (this.state.cood) {
-                    this.showMarker(this.state.cood, 'Editing...');
+                    this.showPopupOnBldgs(
+                        this.state.cood,
+                        'Please enter building details on the left panel. ',
+                    );
                 }
             } else {
-                this.removeMarker();
+                this.map.fire('closeAllPopups');
             }
         }
     }
@@ -665,35 +386,6 @@ class FloodHistoryMap extends React.Component {
         this.props.handleDrawResetData(true);
     };
 
-    public showMarker = (cood, msg) => {
-        console.log('cood', cood);
-        popup.setLngLat(cood).setHTML(
-            `<div style="padding: 5px;border-radius: 5px">
-                <p>${msg}</p>
-            </div>
-            `,
-        ).addTo(this.map);
-    }
-
-    public removeMarker = () => {
-        popup.remove();
-    };
-
-    public getFloodRasterLayer = (layerName: string) => [
-        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
-        '&version=1.1.1',
-        '&service=WMS',
-        '&request=GetMap',
-        `&layers=Bipad:Jugal_FD_1in${layerName}`,
-        '&tiled=true',
-        '&width=256',
-        '&height=256',
-        '&srs=EPSG:3857',
-        '&bbox={bbox-epsg-3857}',
-        '&transparent=true',
-        '&format=image/png',
-    ].join('');
-
 
     public zoomToBbox = (data) => {
         const coordList = data
@@ -713,13 +405,56 @@ class FloodHistoryMap extends React.Component {
         this.setState({ searchTerm: e.target.value });
     }
 
-    public showPopupOnBldgs = (coordinates, msg) => {
-        popup.setLngLat(coordinates).setHTML(
-            `<div style="padding: 5px;border-radius: 5px">
-                <p>${msg}</p>
-            </div>
-            `,
-        ).addTo(this.map);
+    public handleButtonClick = () => {
+        // showing the data add form
+        this.props.handleShowAddForm(true);
+
+        // change the popup
+        this.showPopupOnBldgs(
+            this.state.cood,
+            {},
+            'Please enter building details on the left panel.',
+            false,
+        );
+    }
+
+    public showPopupOnBldgs = (coordinates, singularBuldingData, msg, showButton) => {
+        const popupWithData = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: true,
+            className: 'popup',
+        });
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: true,
+            className: 'popup',
+        });
+        const content = popupElement(
+            singularBuldingData,
+            msg,
+            this.handleButtonClick,
+            showButton,
+        );
+
+        this.map.on('closeAllPopups', () => {
+            popup.remove();
+            popupWithData.remove();
+        });
+
+        this.setState({ cood: coordinates });
+        if (Object.keys(singularBuldingData).length > 2) {
+            popup.remove();
+            popupWithData.setLngLat(coordinates)
+                .setDOMContent(
+                    content,
+                ).addTo(this.map);
+        } else {
+            popupWithData.remove();
+            popup.setLngLat(coordinates)
+                .setDOMContent(
+                    content,
+                ).addTo(this.map);
+        }
     };
 
     public handleInputChange = (e) => {
@@ -768,6 +503,8 @@ class FloodHistoryMap extends React.Component {
             searchId = this.state.searchTerm;
         }
         if (searchId) {
+            const { singularBuldingData } = this.props;
+
             const coordinatesObj = this.props.buildinggeojson
                 .features
                 .filter(b => searchId === parseInt(b.properties.osm_id, 10));
@@ -783,23 +520,40 @@ class FloodHistoryMap extends React.Component {
                         duration: 500,
                         center: cood,
                     });
-                    this.showPopupOnBldgs(cood, this.getHouseId(searchId));
+                    // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
+                    console.log('singularBuldingData in function', singularBData);
+
+                    console.log('data available, showing popup');
+                    this.showPopupOnBldgs(
+                        cood,
+                        singularBData,
+                        this.getHouseId(searchId),
+                        true,
+                    );
                 } else {
+                    // alert('No data available');
+                    console.log('no coordinate thingo');
                     this.setState({ searchTerm: '' });
                     this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                    console.log('cood obj', coordinatesObj);
-                    this.showMarker(coordinatesObj[0].geometry.coordinates, 'No data');
+                    this.showPopupOnBldgs(
+                        coordinatesObj[0].geometry.coordinates,
+                        {},
+                        'To add data click the following button',
+                        true,
+                    );
                     this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {
+                // alert('No data available');
                 this.setState({ searchTerm: '' });
                 this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                console.log('cood obj', coordinatesObj);
-                console.log('osm id', searchId);
+                console.warn('no coordinates found', coordinatesObj);
             }
         } else {
             this.props.setSingularBuilding(true, { osmId: searchId });
             this.setState({ searchTerm: '' });
+            console.warn('no search id');
+            // alert('No data available');
         }
     };
 

@@ -777,6 +777,8 @@ class Jugal extends React.Component {
                                 rasterLayer={rasterLayer}
                                 buildingVul={buildingVul}
                                 showAddForm={this.state.showAddForm}
+                                handleShowAddForm={this.handleShowAddForm}
+
                             />
                             <RightElement7
                                 handleDrawResetData={this.handleDrawResetData}
