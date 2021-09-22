@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation, Trans } from 'react-i18next';
+import i18n from 'i18next';
+
 import Message from '#rscv/Message';
 import VirtualizedListView from '#rscv/VirtualizedListView';
 import Modal from '#rscv/Modal';
@@ -95,6 +98,11 @@ const AlertTableModal = ({
         </ModalBody>
     </Modal>
 );
+
+const lngs = {
+    en: { nativeName: 'English' },
+    np: { nativeName: 'नेपाली' },
+};
 
 export default class LeftPane extends React.PureComponent {
     static propTypes = propTypes
@@ -225,6 +233,11 @@ export default class LeftPane extends React.PureComponent {
         this.setState({ activeView: 'visualizations' });
     }
 
+    // handleTransClick = () => {
+    //     i18n.changeLanguage('np');
+    // }
+
+
     render() {
         const {
             className,
@@ -258,6 +271,16 @@ export default class LeftPane extends React.PureComponent {
                     startDate={startDate}
                     endDate={endDate}
                 />
+
+                <div>
+                    {Object.keys(lngs).map(lng => (
+                        <button key={lng} style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }} type="submit" onClick={() => i18n.changeLanguage(lng)}>
+                            {lngs[lng].nativeName}
+                        </button>
+                    ))}
+                </div>
+
+
                 <div className={styles.sourceDetails}>
                     <div className={styles.infoIconContainer}>
                         <Icon
@@ -266,7 +289,12 @@ export default class LeftPane extends React.PureComponent {
                         />
                     </div>
                     <div className={styles.label}>
-                        Data source:
+                        <Translation>
+                            {
+                                t => <p>{t('Data source')}</p>
+                            }
+                        </Translation>
+                        {/* Data source: */}
                     </div>
                     <div className={styles.value}>
                         <div className={styles.source}>

@@ -8,7 +8,9 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { enTranslation, npTranslation } from '#constants/translations';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
@@ -27,6 +29,7 @@ import {
     Layer,
     FiltersElement,
 } from '#types';
+
 
 import {
     District,
@@ -315,6 +318,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (!pending) {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
+
+        i18n.use(initReactI18next).init({
+            lng: 'en',
+            debug: true,
+            fallbackLng: 'en',
+            resources: {
+                en: enTranslation,
+                np: npTranslation,
+            },
+        });
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Props) {

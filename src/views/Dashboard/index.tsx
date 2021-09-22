@@ -6,7 +6,6 @@ import {
     _cs,
     Obj,
 } from '@togglecorp/fujs';
-
 import HazardsLegend from '#components/HazardsLegend';
 import Loading from '#components/Loading';
 
