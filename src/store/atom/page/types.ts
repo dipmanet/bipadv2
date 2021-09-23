@@ -5,6 +5,9 @@ export interface Field {
     id: number;
     title: string;
 }
+export interface Language {
+    language: string;
+}
 
 interface Centroid {
     type: 'Point';
@@ -458,6 +461,8 @@ export interface PageState {
     region: Region;
     filters: FiltersElement;
 
+    language: Language;
+
     adminLevelList: AdminLevel[];
 
     documentCategoryList: DocumentCategory[];
@@ -498,6 +503,7 @@ export interface PageState {
 
 // eslint-disable-next-line import/prefer-default-export
 export enum PageType {
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
     SET_REGION = 'page/SET_REGION',
     SET_INITIAL_POPUP_HIDDEN = 'page/SET_INITIAL_POPUP_HIDDEN',
     SET_HAZARD_TYPES = 'page/SET_HAZARD_TYPES',
@@ -568,6 +574,10 @@ export enum PageType {
 }
 
 // ACTION CREATOR INTERFACE
+
+export interface SetLanguage {
+    language: Language;
+}
 
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
@@ -837,7 +847,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetRegion | SetInitialPopupHidden |
+    SetLanguage | SetRegion | SetInitialPopupHidden |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |

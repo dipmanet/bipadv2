@@ -79,33 +79,39 @@ button {
                 left: var(--spacing-medium);
                 z-index: 11;
             }
-
-            .map-actions {
-                display: flex;
+            .mapActionsContainer{
+                display:flex;
                 position: absolute;
                 top: var(--spacing-medium);
                 left: var(--spacing-medium);
                 z-index: 1;
-                border: var(--width-separator-medium) solid var(--color-separator);
-                border-radius: 5px;
-                background-color: var(--color-foreground);
-
-                .map-download-button {
-                    padding: var(--spacing-small) var(--spacing-medium);
-                    font-size: var(--font-size-large);
-
-                    &:hover {
-                        background-color: var(--color-background-hover);
+                .map-actions {
+                    display: flex;
+                    position: relative;
+                    // top: var(--spacing-medium);
+                    // left: var(--spacing-medium);
+                    // z-index: 1;
+                    border: var(--width-separator-medium) solid var(--color-separator);
+                    border-radius: 5px;
+                    background-color: var(--color-foreground);
+    
+                    .map-download-button {
+                        padding: var(--spacing-small) var(--spacing-medium);
+                        font-size: var(--font-size-large);
+    
+                        &:hover {
+                            background-color: var(--color-background-hover);
+                        }
                     }
-                }
-
-                .layer-switch {
-                    text-align: center;
-
-                    :global {
-                        .dropdown-button {
-                            padding: var(--spacing-small) var(--spacing-medium);
-                            font-size: var(--font-size-large);
+    
+                    .layer-switch {
+                        text-align: center;
+    
+                        :global {
+                            .dropdown-button {
+                                padding: var(--spacing-small) var(--spacing-medium);
+                                font-size: var(--font-size-large);
+                            }
                         }
                     }
                 }

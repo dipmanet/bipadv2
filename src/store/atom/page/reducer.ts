@@ -7,6 +7,13 @@ import initialState from './initialState';
 import { ModelEnum } from '#types';
 // ACTION CREATORS
 
+
+export const setLanguageAction = language => ({
+    type: Type.PageType.SET_LANGUAGE,
+    language,
+});
+
+
 export const setRegionAction = (
     { region }: { region: Type.Region },
 ) => ({
@@ -1175,6 +1182,17 @@ export const setProfileContactFilters = (
     return newState;
 };
 
+const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
+    console.log('action', action);
+    const { language } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.language = language;
+    });
+    return newState;
+};
+
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
@@ -1182,6 +1200,8 @@ export default function routeReducer(
     switch (action.type) {
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
+        case Type.PageType.SET_LANGUAGE:
+            return setLanguageLocal(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
             return setInitialPopupHidden(state, action);
         case Type.PageType.SET_HAZARD_TYPES:

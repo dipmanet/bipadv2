@@ -198,5 +198,8 @@ const state: PageState = {
             pristine: true,
         },
     },
+    language: {
+        language: 'en',
+    },
 };
 export default state;

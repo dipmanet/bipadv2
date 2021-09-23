@@ -71,6 +71,7 @@ import errorBound from '../errorBound';
 import helmetify from '../helmetify';
 
 import styles from './styles.scss';
+import LanguageToggle from '#components/LanguageToggle';
 
 function reloadPage() {
     window.location.reload(false);
@@ -318,7 +319,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (!pending) {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
-
+        // debug true for development
         i18n.use(initReactI18next).init({
             lng: 'en',
             debug: true,
@@ -801,26 +802,31 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                         );
                                     }) */}
                                         { !hideMap && (
-                                            <div className={styles.mapActions}>
-                                                <MapDownloadButton
-                                                    className={styles.mapDownloadButton}
-                                                    transparent
-                                                    title="Download current map"
-                                                    iconName="download"
-                                                    onPendingStateChange={
-                                                        this.handleMapDownloadStateChange
-                                                    }
-                                                />
-                                                <LayerSwitch
-                                                    className={styles.layerSwitch}
-                                                />
-                                                <LayerToggle />
+                                            <div className={styles.mapActionsContainer}>
+                                                <div className={styles.mapActions}>
+                                                    <MapDownloadButton
+                                                        className={styles.mapDownloadButton}
+                                                        transparent
+                                                        title="Download current map"
+                                                        iconName="download"
+                                                        onPendingStateChange={
+                                                            this.handleMapDownloadStateChange
+                                                        }
+                                                    />
+                                                    <LayerSwitch
+                                                        className={styles.layerSwitch}
+                                                    />
+                                                    <LayerToggle />
+
+                                                </div>
+                                                <LanguageToggle />
                                             </div>
                                         )}
                                     </main>
                                     {(rightContent || !hideFilters) && (
                                         <aside className={styles.right}>
                                             { rightContent && (
+
                                                 <div
                                                     className={_cs(
                                                         styles.rightContentContainer,
@@ -829,6 +835,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 >
                                                     { rightContent }
                                                 </div>
+
                                             )}
                                             { !hideFilter && (
                                                 <Filters

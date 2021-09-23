@@ -13,6 +13,7 @@ import { Region, Status } from './types';
 
 const emptyList: unknown[] = [];
 
+
 const dashboardPageSelector = ({ page }: AppState) => page.dashboardPage;
 
 const incidentPageSelector = ({ page }: AppState) => page.incidentPage;
@@ -24,6 +25,8 @@ const realTimeMonitoringPageSelector = ({ page }: AppState) => page.realTimeMoni
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
+
+export const languageSelector = ({ page }: AppState) => page.language;
 
 export const resourceTypeListSelector = ({ page }: AppState) => (
     page.resourceTypeList || emptyList

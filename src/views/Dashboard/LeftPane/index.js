@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
 
 import { Translation, Trans } from 'react-i18next';
 import i18n from 'i18next';
@@ -36,12 +37,22 @@ import {
 
 import styles from './styles.scss';
 
+import {
+    languageSelector,
+} from '#selectors';
+
+
+import {
+    setLanguageAction,
+} from '#actionCreators';
+
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     eventList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
     dateRange: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    language: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 const defaultProps = {
     alertList: [],
@@ -49,6 +60,7 @@ const defaultProps = {
     hazardTypes: {},
     dateRange: undefined,
     className: undefined,
+    language: { language: 'en' },
 };
 
 const AlertTableModalButton = modalize(Button);
@@ -99,12 +111,15 @@ const AlertTableModal = ({
     </Modal>
 );
 
-const lngs = {
-    en: { nativeName: 'English' },
-    np: { nativeName: 'नेपाली' },
-};
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+const mapDispatchToProps = dispatch => ({
+    setLanguage: params => dispatch(setLanguageAction(params)),
+});
 
-export default class LeftPane extends React.PureComponent {
+
+class LeftPane extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
@@ -117,6 +132,13 @@ export default class LeftPane extends React.PureComponent {
             showAddEventModal: false,
             activeView: 'alerts',
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        const { language: { language } } = this.props;
+        if (prevProps.language !== language) {
+            i18n.changeLanguage(language);
+        }
     }
 
     getAlertRendererParams = (_, d) => ({
@@ -233,11 +255,6 @@ export default class LeftPane extends React.PureComponent {
         this.setState({ activeView: 'visualizations' });
     }
 
-    // handleTransClick = () => {
-    //     i18n.changeLanguage('np');
-    // }
-
-
     render() {
         const {
             className,
@@ -272,13 +289,17 @@ export default class LeftPane extends React.PureComponent {
                     endDate={endDate}
                 />
 
-                <div>
+                {/* <div>
                     {Object.keys(lngs).map(lng => (
-                        <button key={lng} style={{ fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal' }} type="submit" onClick={() => i18n.changeLanguage(lng)}>
+                        <button key={lng} style=
+                        {{ fontWeight: i18n.resolvedLanguage ===
+                            lng ? 'bold' : 'normal' }}
+                            type="submit" onClick={()
+                                => i18n.changeLanguage(lng)}>
                             {lngs[lng].nativeName}
                         </button>
                     ))}
-                </div>
+                </div> */}
 
 
                 <div className={styles.sourceDetails}>
@@ -449,3 +470,4 @@ export default class LeftPane extends React.PureComponent {
         );
     }
 }
+export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);
