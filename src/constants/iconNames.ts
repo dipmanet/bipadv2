@@ -92,6 +92,8 @@ const iconNames = {
     lock: 'fa fa-unlock-alt',
     times: 'fa fa-times',
     info: 'fa  fa-info-circle',
+    sortDown: 'fa fa-angle-down',
+    sortUp: 'fa fa-angle-up',
 };
 
 export default iconNames;

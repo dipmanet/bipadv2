@@ -191,6 +191,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
 
         const { lng } = this.getFormData(geoJson);
+
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
             deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
@@ -231,6 +232,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         }
 
         const { lat } = this.getFormData(geoJson);
+
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
             deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
