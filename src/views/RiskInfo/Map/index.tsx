@@ -105,7 +105,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         notesResult: '',
         topLayer: '',
         topChoroPlethLayer: '',
-        boundary: [80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792],
+        // boundary: [80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792],
 
 
     }
@@ -297,7 +297,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse } = this.context;
-        this.handleMapBound();
+        // this.handleMapBound();
         // const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
         // const selectedActiveLayer = activeLayers;
 
@@ -323,8 +323,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         const tooltipValues = JsonDataPresent !== undefined && JsonDataPresent !== 0 && tooltipData !== undefined && tooltipData !== 0 && JsonDataPresent.map(item => tooltipData[item.key]);
 
-        console.log('Active layer', activeLayers);
-        console.log('top layer', topLayer);
 
         return (
             <>
@@ -333,7 +331,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                     sourceKey="risk-infoz"
                 />
 
-                { activeLayers.length && (topLayer !== activeLayers[activeLayers.length - 1].layername) && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon')
+                {/* { activeLayers.length && (topLayer !== activeLayers[activeLayers.length - 1].layername) && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon')
                     ? (
 
                         <>
@@ -357,7 +355,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
                         </>
                     ) : ''
-                }
+                } */}
 
                 { activeLayers.length && activeLayers[activeLayers.length - 1].group && activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon'
                 && (
