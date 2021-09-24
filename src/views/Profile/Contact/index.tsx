@@ -169,12 +169,13 @@ class ContactPage extends React.PureComponent<Props, State> {
                     province,
                     district,
                     municipality,
-                } } } = this.props;
+                } },
+                region } = this.props;
                 municipalityContactRequest.setDefaultParams({
                     setProfileContactList: this.setProfileContactList,
-                    province,
-                    district,
-                    municipality,
+                    province: region.adminLevel === 1 ? region.geoarea : '',
+                    district: region.adminLevel === 2 ? region.geoarea : '',
+                    municipality: region.adminLevel === 3 ? region.geoarea : '',
 
                 });
             } else {
