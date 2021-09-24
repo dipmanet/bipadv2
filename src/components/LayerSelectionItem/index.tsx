@@ -22,6 +22,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
             addLayer,
             removeLayer,
         } = this.context;
+
         if (value) {
             addLayer(data);
         } else {
