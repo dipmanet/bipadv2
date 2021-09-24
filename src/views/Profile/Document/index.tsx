@@ -17,7 +17,7 @@ import Icon from '#rscg/Icon';
 import ListView from '#rscv/List/ListView';
 import SelectInput from '#rsci/SelectInput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-
+import { checkSameRegionPermission } from '#utils/common';
 import documentIcon from '#resources/icons/file-document.svg';
 
 import Loading from '#components/Loading';
@@ -106,9 +106,9 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         method: methods.GET,
         onMount: true,
         query: ({ params }) => ({
-            province: params && params.province && params.province,
-            district: params && params.district && params.district,
-            municipality: params && params.municipality && params.municipality,
+            province: params && params.province,
+            district: params && params.district,
+            municipality: params && params.municipality,
         }),
         onSuccess: ({ response, params }) => {
             if (params && params.output) {
@@ -157,7 +157,7 @@ const DetailItem = ({
 );
 
 const DocumentRenderer = (props: DocumentProps) => {
-    const { document, onUpdate, onDelete, disabled } = props;
+    const { document, onUpdate, onDelete, disabled, user, regions } = props;
 
     const {
         id,
@@ -166,12 +166,13 @@ const DocumentRenderer = (props: DocumentProps) => {
         file,
         publishedDate,
         categoryName,
+
     } = document;
 
     const handleDelete = () => {
         onDelete(id);
     };
-
+    const filterPermissionGranted = checkSameRegionPermission(user, regions);
     return (
         <div className={styles.documentDetails}>
             <div className={styles.documentIcon}>
@@ -186,34 +187,40 @@ const DocumentRenderer = (props: DocumentProps) => {
                         { title }
                     </h3>
                     <div className={styles.actions}>
-                        <Cloak hiddenIf={p => !p.change_document}>
-                            <ModalButton
-                                className={styles.editButton}
-                                iconName="edit"
-                                transparent
-                                modal={(
-                                    <AddDocumentForm
-                                        value={document}
-                                        onUpdate={onUpdate}
-                                    />
-                                )}
-                                disabled={disabled}
-                            >
+                        {filterPermissionGranted
+                            ? (
+                                <>
+                                    <Cloak hiddenIf={p => !p.change_document}>
+                                        <ModalButton
+                                            className={styles.editButton}
+                                            iconName="edit"
+                                            transparent
+                                            modal={(
+                                                <AddDocumentForm
+                                                    value={document}
+                                                    onUpdate={onUpdate}
+                                                />
+                                            )}
+                                            disabled={disabled}
+                                        >
                                 Edit
-                            </ModalButton>
-                        </Cloak>
-                        <Cloak hiddenIf={p => !p.delete_document}>
-                            <DangerConfirmButton
-                                className={styles.deleteButton}
-                                confirmationMessage="Are you sure you want to delete this document?"
-                                disabled={disabled}
-                                iconName="delete"
-                                onClick={handleDelete}
-                                transparent
-                            >
+                                        </ModalButton>
+                                    </Cloak>
+                                    <Cloak hiddenIf={p => !p.delete_document}>
+                                        <DangerConfirmButton
+                                            className={styles.deleteButton}
+                                            confirmationMessage="Are you sure you want to delete this document?"
+                                            disabled={disabled}
+                                            iconName="delete"
+                                            onClick={handleDelete}
+                                            transparent
+                                        >
                                 Delete
-                            </DangerConfirmButton>
-                        </Cloak>
+                                        </DangerConfirmButton>
+                                    </Cloak>
+
+                                </>
+                            ) : ''}
                         <a
                             className={styles.downloadLink}
                             href={file}
@@ -286,6 +293,8 @@ class Document extends React.PureComponent<Props, State> {
     })
 
     private rendererParams = (_: string, data: DocumentItem) => ({
+        user: this.props.user,
+        regions: this.props.region,
         document: data,
         onUpdate: this.handleUpdate,
         onDelete: this.handleDelete,
@@ -312,6 +321,7 @@ class Document extends React.PureComponent<Props, State> {
         //         filtered = documents.filter(d => d.municipality === geoarea);
         //     }
         // }
+
         if (selectedCategory) {
             filtered = filtered.filter(document => document.category === selectedCategory);
         }
@@ -350,6 +360,23 @@ class Document extends React.PureComponent<Props, State> {
         });
     }
 
+    public componentDidUpdate(prevProps, prevState, snapshot) {
+        const { region,
+            requests: {
+                documentsGetRequest,
+            } } = this.props;
+        if (prevProps.region !== region) {
+            documentsGetRequest.do({
+
+                province: region.adminLevel === 1 ? region.geoarea : '',
+                district: region.adminLevel === 2 ? region.geoarea : '',
+                municipality: region.adminLevel === 3 ? region.geoarea : '',
+                output: this.handleResults,
+
+            });
+        }
+    }
+
     public render() {
         const {
             className,
@@ -372,9 +399,9 @@ class Document extends React.PureComponent<Props, State> {
         // const documents = getResults(requests, 'documentsGetRequest');
         documentsGetRequest.setDefaultParams({
 
-            province: user && user.profile ? user.profile.province : '',
-            district: user && user.profile ? user.profile.district : '',
-            municipality: user && user.profile ? user.profile.municipality : '',
+            province: region.adminLevel === 1 ? region.geoarea : '',
+            district: region.adminLevel === 2 ? region.geoarea : '',
+            municipality: region.adminLevel === 3 ? region.geoarea : '',
             output: this.handleResults,
 
         });
