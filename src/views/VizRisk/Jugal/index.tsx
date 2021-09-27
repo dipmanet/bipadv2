@@ -778,6 +778,7 @@ class Jugal extends React.Component {
                                 buildingVul={buildingVul}
                                 showAddForm={this.state.showAddForm}
                                 handleShowAddForm={this.handleShowAddForm}
+                                buildingdataAddPermission={this.state.buildingdataAddPermission}
 
                             />
                             <RightElement7
@@ -805,7 +806,6 @@ class Jugal extends React.Component {
                                 appendBuildingData={this.appendBuildingData}
                                 handleShowAddForm={this.handleShowAddForm}
                                 showAddForm={this.state.showAddForm}
-                                buildingdataAddPermission={this.state.buildingdataAddPermission}
                             />
                             <VRLegend>
                                 <SesmicHazardVULLegend

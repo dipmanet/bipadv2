@@ -260,7 +260,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 </button>
 
                                             </h1>
-                                            { this.props.buildingdataAddPermission
+                                            {/* { this.props.buildingdataAddPermission
                                             && (
                                                 <button
                                                     type="button"
@@ -270,7 +270,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                             Add/Edit Details
                                                 </button>
                                             )
-                                            }
+                                            } */}
                                             <p>
                              House ID No:
                                                 {' '}

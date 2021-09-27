@@ -69,10 +69,11 @@ const dataItemsPopup = {
     flashFlood: 'Flash Flood',
 };
 
-export const popupElement = (buildingData, msg, handleClick, showButton) => {
+export const popupElement = (buildingData, msg, handleClick, showButton, permission) => {
     const content = document.createElement('div');
     const heading = document.createElement('h2');
     heading.innerHTML = msg;
+
     if (showButton) {
         heading.classList.add(styles.heading);
         content.classList.add(styles.content);
@@ -101,7 +102,7 @@ export const popupElement = (buildingData, msg, handleClick, showButton) => {
             return null;
         });
     }
-    if (showButton) {
+    if (permission && showButton) {
         const button = document.createElement('BUTTON');
         button.innerHTML = 'Add/Edit Details';
         button.addEventListener('click', handleClick, false);

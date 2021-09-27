@@ -326,7 +326,6 @@ class FloodHistoryMap extends React.Component {
         }
 
         if (this.props.rasterLayer !== prevProps.rasterLayer) {
-            console.log(this.props.rasterLayer);
             this.switchFloodRasters(this.props.rasterLayer);
         }
         if (this.props.buildingVul !== prevProps.buildingVul) {
@@ -418,7 +417,7 @@ class FloodHistoryMap extends React.Component {
         );
     }
 
-    public showPopupOnBldgs = (coordinates, singularBuldingData, msg, showButton) => {
+    public showPopupOnBldgs = (coordinates, singularBuldingData, msg, showButton, permission) => {
         const popupWithData = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: true,
@@ -434,6 +433,7 @@ class FloodHistoryMap extends React.Component {
             msg,
             this.handleButtonClick,
             showButton,
+            permission,
         );
 
         this.map.on('closeAllPopups', () => {
@@ -503,7 +503,7 @@ class FloodHistoryMap extends React.Component {
             searchId = this.state.searchTerm;
         }
         if (searchId) {
-            const { singularBuldingData } = this.props;
+            const { buildingdataAddPermission } = this.props;
 
             const coordinatesObj = this.props.buildinggeojson
                 .features
@@ -521,26 +521,35 @@ class FloodHistoryMap extends React.Component {
                         center: cood,
                     });
                     // this.showPopupOnBldgs(cood, `OSM_ID: ${searchId}`);
-                    console.log('singularBuldingData in function', singularBData);
 
-                    console.log('data available, showing popup');
                     this.showPopupOnBldgs(
                         cood,
                         singularBData,
                         this.getHouseId(searchId),
                         true,
+                        buildingdataAddPermission,
                     );
                 } else {
                     // alert('No data available');
-                    console.log('no coordinate thingo');
                     this.setState({ searchTerm: '' });
                     this.props.setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                    this.showPopupOnBldgs(
-                        coordinatesObj[0].geometry.coordinates,
-                        {},
-                        'To add data click the following button',
-                        true,
-                    );
+                    if (buildingdataAddPermission) {
+                        this.showPopupOnBldgs(
+                            coordinatesObj[0].geometry.coordinates,
+                            {},
+                            'To add data click the following button',
+                            true,
+                            buildingdataAddPermission,
+                        );
+                    } else {
+                        this.showPopupOnBldgs(
+                            coordinatesObj[0].geometry.coordinates,
+                            {},
+                            'No Building Data Available',
+                            false,
+                            buildingdataAddPermission,
+                        );
+                    }
                     this.setState({ cood: coordinatesObj[0].geometry.coordinates });
                 }
             } else {
