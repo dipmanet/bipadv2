@@ -18,15 +18,13 @@ import styles from './styles.scss';
 import { AppState } from '#types';
 
 interface ComponentProps {
-
 }
 
 interface PropsFromAppState {
     language: PageTypes.Language;
-
 }
 
-type Props = ComponentProps & PropsFromAppState ;
+type Props = ComponentProps & PropsFromAppState & PropsFromDispatch ;
 
 interface PropsFromDispatch {
     setLanguage: typeof setLanguageAction;
@@ -39,14 +37,10 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setLanguage: params => dispatch(setLanguageAction(params)),
 });
 
-
 const LanguageToggle = (props: Props) => {
-    console.log(props);
-    const { language, setLanguage } = props;
+    const { language: { language }, setLanguage } = props;
 
     const handleLangButton = (val: string) => {
-        console.log('val', val);
-        console.log('language from redux', language);
         setLanguage({ language: val });
     };
 
@@ -54,18 +48,17 @@ const LanguageToggle = (props: Props) => {
         <div className={styles.languageButton}>
             <button
                 onClick={() => handleLangButton('en')}
-                className={language.language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}
+                className={language === 'en' ? _cs(styles.engButton, styles.selectedLanguage) : styles.engButton}
                 type="button"
             >
-        EN
+                EN
             </button>
             <button
                 onClick={() => handleLangButton('np')}
-                className={language.language === 'np' ? _cs(styles.nepButton, styles.selectedLanguage) : styles.nepButton}
-
+                className={language === 'np' ? _cs(styles.nepButton, styles.selectedLanguage) : styles.nepButton}
                 type="button"
             >
-        ने
+                ने
             </button>
         </div>
     );

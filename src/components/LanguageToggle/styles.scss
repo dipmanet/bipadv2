@@ -1,10 +1,9 @@
 .languageButton {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     margin-left: 10px;
     .nepButton {
-        background-color: grey;
+        background-color: #a6a6a6;
         opacity: 0.67;
         border: none;
         color: white;
@@ -15,27 +14,17 @@
         cursor: pointer;
         width: 22px;
         height: 20px;
+        font-weight: 500;
         filter: saturate(100%);
     }
-    
     .engButton {
-        background-color: grey;
-        opacity: 0.67;
-        border: none;
-        color: white;
-        outline: none;
-        font-size: 12px;
-        text-decoration: none;
-        text-align: center;
-        padding-right: 20px;
-        cursor: pointer;
-        width: 22px;
-        height: 20px;
-        filter: saturate(100%);
+      @extend .nepButton;
+        padding-right: 22px;
     }
     
     .selectedLanguage {
-        background-color: #3684d8;
+        background-color: #003273;
         opacity: 1 !important;
+        width: 22px;
     }
 }

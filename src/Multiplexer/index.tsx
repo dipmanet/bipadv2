@@ -35,6 +35,7 @@ import {
     District,
     Province,
     Municipality,
+    Language,
     // HazardType,
 } from '#store/atom/page/types';
 import { User } from '#store/atom/auth/types';
@@ -58,12 +59,14 @@ import {
     municipalitiesSelector,
     provincesSelector,
     filtersSelector,
+    languageSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
     setFiltersAction,
+    setLanguageAction,
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
@@ -72,6 +75,7 @@ import helmetify from '../helmetify';
 
 import styles from './styles.scss';
 import LanguageToggle from '#components/LanguageToggle';
+
 
 function reloadPage() {
     window.location.reload(false);
@@ -179,6 +183,7 @@ interface OwnProps {
     hasError: boolean;
     mapStyle: string;
     boundingClientRect?: BoundingClientRect;
+    language: Language;
 }
 
 interface PropsFromState {
@@ -187,6 +192,7 @@ interface PropsFromState {
     provinces: Province[];
     municipalities: Municipality[];
     filters: FiltersElement;
+    language: Language;
     // hazardList: HazardType[];
 }
 
@@ -194,6 +200,7 @@ interface PropsFromDispatch {
     setInitialPopupHidden: typeof setInitialPopupHiddenAction;
     setRegion: typeof setRegionAction;
     setFilters: typeof setFiltersAction;
+    setLanguage: typeof setLanguageAction;
 }
 
 interface Coords {
@@ -205,7 +212,9 @@ interface Coords {
 
 type Props = OwnProps & PropsFromState & PropsFromDispatch;
 
+
 const mapStateToProps = (state: AppState): PropsFromState => ({
+    language: languageSelector(state),
     user: userSelector(state),
     filters: filtersSelector(state),
     districts: districtsSelector(state),
@@ -215,6 +224,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setLanguage: params => dispatch(setLanguageAction(params)),
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
     setFilters: params => dispatch(setFiltersAction(params)),
@@ -648,6 +658,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
+            language: { language },
             // hazardList,
         } = this.props;
 
@@ -716,6 +727,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         styles.multiplexer,
                         leftContainerHidden && styles.leftContainerHidden,
                         mapDownloadPending && styles.downloadingMap,
+                        language === 'np' && styles.languageFont,
                     )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>

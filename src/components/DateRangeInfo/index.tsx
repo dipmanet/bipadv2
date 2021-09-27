@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import Icon from '#rscg/Icon';
 import FormattedDate from '#rscv/FormattedDate';
 
@@ -31,7 +32,11 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                     />
                 </div>
                 <div className={styles.label}>
-                    Showing data from
+                    <Translation>
+                        {
+                            t => <p>{t('DateRangeInfo')}</p>
+                        }
+                    </Translation>
                 </div>
                 <FormattedDate
                     className={styles.startDate}
@@ -39,7 +44,11 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                     value={startDate}
                 />
                 <div className={styles.label}>
-                    to
+                    <Translation>
+                        {
+                            t => <p>{t('to')}</p>
+                        }
+                    </Translation>
                 </div>
                 <FormattedDate
                     className={styles.endDate}

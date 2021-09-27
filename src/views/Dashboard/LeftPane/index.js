@@ -4,7 +4,7 @@ import memoize from 'memoize-one';
 import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
-import { Translation, Trans } from 'react-i18next';
+import { Translation } from 'react-i18next';
 import i18n from 'i18next';
 
 import Message from '#rscv/Message';
@@ -289,18 +289,6 @@ class LeftPane extends React.PureComponent {
                     endDate={endDate}
                 />
 
-                {/* <div>
-                    {Object.keys(lngs).map(lng => (
-                        <button key={lng} style=
-                        {{ fontWeight: i18n.resolvedLanguage ===
-                            lng ? 'bold' : 'normal' }}
-                            type="submit" onClick={()
-                                => i18n.changeLanguage(lng)}>
-                            {lngs[lng].nativeName}
-                        </button>
-                    ))}
-                </div> */}
-
 
                 <div className={styles.sourceDetails}>
                     <div className={styles.infoIconContainer}>
@@ -315,12 +303,16 @@ class LeftPane extends React.PureComponent {
                                 t => <p>{t('Data source')}</p>
                             }
                         </Translation>
-                        {/* Data source: */}
                     </div>
                     <div className={styles.value}>
                         <div className={styles.source}>
                             <div className={styles.text}>
-                                Realtime Module
+                                <Translation>
+                                    {
+                                        t => <p>{t('Realtime Module')}</p>
+                                    }
+                                </Translation>
+
                             </div>
                             {/* <a
                                 className={styles.link}
