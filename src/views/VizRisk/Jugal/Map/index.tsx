@@ -167,19 +167,24 @@ const JugalMap = (props: Props) => {
             clearInterval(interval.current);
             const val = e.target.value;
             setIncidentYear(val);
-            handleIncidentChange(incidentYear);
+            handleIncidentChange(val);
             if (map.current && map.current.isStyleLoaded()) {
-                filterOnMap(incidentYear);
+                filterOnMap(val);
             }
         } else {
+            let val: string;
             if (Number(incidentYear) < 10) {
-                setIncidentYear(prevTime => String(Number(prevTime) + 1));
+                setIncidentYear((prevTime) => {
+                    val = String(Number(prevTime) + 1);
+                    return val;
+                });
             } else {
                 setIncidentYear('0');
+                val = '0';
             }
-            handleIncidentChange(incidentYear);
+            handleIncidentChange(val);
             if (map.current && map.current.isStyleLoaded()) {
-                filterOnMap(incidentYear);
+                filterOnMap(val);
             }
         }
     };

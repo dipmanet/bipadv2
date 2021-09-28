@@ -158,24 +158,30 @@ const JugalMap = (props: Props) => {
         });
     };
 
+
     const handleInputChange = (e) => {
         if (e) {
             clearInterval(interval.current);
             const val = e.target.value;
             setIncidentYear(val);
-            handleIncidentChange(incidentYear);
+            handleIncidentChange(val);
             if (map.current && map.current.isStyleLoaded()) {
-                filterOnMap(incidentYear);
+                filterOnMap(val);
             }
         } else {
+            let val: string;
             if (Number(incidentYear) < 10) {
-                setIncidentYear(prevTime => String(Number(prevTime) + 1));
+                setIncidentYear((prevTime) => {
+                    val = String(Number(prevTime) + 1);
+                    return val;
+                });
             } else {
                 setIncidentYear('0');
+                val = '0';
             }
-            handleIncidentChange(incidentYear);
+            handleIncidentChange(val);
             if (map.current && map.current.isStyleLoaded()) {
-                filterOnMap(incidentYear);
+                filterOnMap(val);
             }
         }
     };
@@ -235,6 +241,47 @@ const JugalMap = (props: Props) => {
                 closeOnClick: false,
                 className: 'popup',
             });
+            const incidents = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+            console.log('incidents', incidents);
+            console.log('incidents list', incidentList);
+            incidents.map((layer) => {
+                console.log('each layer', getIncidentsGeoJSON(layer, incidentList));
+                console.log('layer namee', layer);
+                jugalMap.addSource(layer, {
+                    type: 'geojson',
+                    data: getIncidentsGeoJSON(layer, incidentList),
+                });
+                jugalMap.addLayer(
+                    {
+                        id: `incidents-${layer}`,
+                        type: 'circle',
+                        source: layer,
+                        paint: {
+                            'circle-color': ['get', 'hazardColor'],
+                        },
+                        layout: {
+                            visibility: 'none',
+                        },
+                    },
+                );
+                jugalMap.addLayer(
+                    {
+                        id: `incidents-icon-${layer}`,
+                        type: 'symbol',
+                        source: layer,
+                        layout: {
+                            'icon-image': ['get', 'hazardIcon'],
+                            visibility: 'none',
+                        },
+                    },
+                );
+
+                jugalMap.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
+                jugalMap.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
+                return null;
+            });
             jugalMap.addSource('hillshade', {
                 type: 'raster',
                 tiles: [getHillShadeLayer(hillshadeLayerName)],
@@ -256,17 +303,17 @@ const JugalMap = (props: Props) => {
                 item => item.properties.Type,
             ))];
             setcategoriesCritical(categories);
-            categories.map((layer: string) => {
-                jugalMap.addSource(layer, {
+            categories.map((l: string) => {
+                jugalMap.addSource(l, {
                     type: 'geojson',
-                    data: getGeoJSONPH(layer, CIData),
+                    data: getGeoJSONPH(l, CIData),
                     cluster: true,
                     clusterRadius: 50,
                 });
                 jugalMap.addLayer({
-                    id: `clusters-${layer}`,
+                    id: `clusters-${l}`,
                     type: 'circle',
-                    source: layer,
+                    source: l,
                     filter: ['has', 'point_count'],
                     layout: {
                         visibility: 'none',
@@ -290,10 +337,11 @@ const JugalMap = (props: Props) => {
                         ],
                     },
                 });
+
                 jugalMap.addLayer({
-                    id: `unclustered-point-${layer}`,
+                    id: `unclustered-point-${l}`,
                     type: 'symbol',
-                    source: layer,
+                    source: l,
                     filter: ['!', ['has', 'point_count']],
                     layout: {
                         'icon-image': ['downcase', ['get', 'Type']],
@@ -304,9 +352,9 @@ const JugalMap = (props: Props) => {
                     },
                 });
                 jugalMap.addLayer({
-                    id: `clusters-count-${layer}`,
+                    id: `clusters-count-${l}`,
                     type: 'symbol',
-                    source: layer,
+                    source: l,
                     layout: {
                         'text-field': '{point_count_abbreviated}',
                         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
@@ -331,9 +379,9 @@ const JugalMap = (props: Props) => {
                     jugalMap.getCanvas().style.cursor = '';
                     popup.remove();
                 }));
-                jugalMap.moveLayer(`unclustered-point-${layer}`);
-                jugalMap.moveLayer(`clusters-${layer}`);
-                jugalMap.moveLayer(`clusters-count-${layer}`);
+                jugalMap.moveLayer(`unclustered-point-${l}`);
+                jugalMap.moveLayer(`clusters-${l}`);
+                jugalMap.moveLayer(`clusters-count-${l}`);
 
                 return null;
             });
@@ -443,44 +491,7 @@ const JugalMap = (props: Props) => {
             jugalMap.moveLayer('ward-fill-local', 'Ward Boundary Line');
 
 
-            const incidents = [...new Set(incidentList.features.map(
-                item => item.properties.hazardTitle,
-            ))];
             setIncidentsArr(incidents);
-            incidents.map((layer) => {
-                jugalMap.addSource(layer, {
-                    type: 'geojson',
-                    data: getIncidentsGeoJSON(layer, incidentList),
-                });
-                jugalMap.addLayer(
-                    {
-                        id: `incidents-${layer}`,
-                        type: 'circle',
-                        source: layer,
-                        paint: {
-                            'circle-color': ['get', 'hazardColor'],
-                        },
-                        layout: {
-                            visibility: 'none',
-                        },
-                    },
-                );
-                jugalMap.addLayer(
-                    {
-                        id: `incidents-icon-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        layout: {
-                            'icon-image': ['get', 'hazardIcon'],
-                            visibility: 'none',
-                        },
-                    },
-                );
-                jugalMap.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
-                jugalMap.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
-                return null;
-            });
-
 
             if (rightElement > 0) {
                 layers[layers.length - 1].map((layer) => {
@@ -651,7 +662,7 @@ const JugalMap = (props: Props) => {
                 });
             } else {
                 incidentsArr.map((layer) => {
-                    if (map.current) {
+                    if (map.current && map.current.getLayer(`incidents-${layer}`)) {
                         map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
                         map.current.moveLayer(`incidents-${layer}`);
                         map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
