@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
+import { Translation } from 'react-i18next';
 
 import {
     ResponsiveContainer,
@@ -23,14 +25,25 @@ import Message from '#rscv/Message';
 
 import styles from './styles.scss';
 
+import {
+    languageSelector,
+} from '#selectors';
+
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 const propTypes = {
     className: PropTypes.string,
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+    language: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 const defaultProps = {
     className: undefined,
     alertList: [],
+    language: { language: 'en' },
 };
 
 const CustomLabel = (props) => {
@@ -43,10 +56,14 @@ const CustomLabel = (props) => {
     );
 };
 
-export default class Visualization extends React.PureComponent {
+class Visualization extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
+
+    componentDidUpdate(prevProps) {
+
+    }
 
     handleSaveClick = () => {
         saveChart('hazardSummary', 'hazardSummary');
@@ -54,16 +71,24 @@ export default class Visualization extends React.PureComponent {
     }
 
     getHazardSummary = memoize((alertList) => {
-        const { hazardTypes } = this.props;
-
+        const { hazardTypes, language: { language } } = this.props;
+        console.log('hazard types', hazardTypes);
         const freqCount = groupList(
             alertList.filter(i => i.hazard),
             alert => alert.hazard,
         );
-
+        if (language === 'en') {
+            return freqCount.map(h => (
+                {
+                    label: (hazardTypes[h.key] || {}).title,
+                    value: h.value.length,
+                    color: (hazardTypes[h.key] || {}).color,
+                }
+            )).sort((a, b) => (a.value - b.value));
+        }
         return freqCount.map(h => (
             {
-                label: (hazardTypes[h.key] || {}).title,
+                label: (hazardTypes[h.key] || {}).titleNe,
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
             }
@@ -100,7 +125,11 @@ export default class Visualization extends React.PureComponent {
                     className={styles.message}
                 >
                     <Message>
-                            No Alerts in the Selected Time Period
+                        <Translation>
+                            {
+                                t => <span>{t('No Alerts in the Selected Time Period')}</span>
+                            }
+                        </Translation>
                     </Message>
                 </div>
             );
@@ -108,6 +137,8 @@ export default class Visualization extends React.PureComponent {
 
         // To reduce space taken by pollution on Y-axis
         hazardSummary.map((hs) => {
+            const { language: { language } } = this.props;
+            console.log('hazard summary', hazardSummary);
             if (hs.label === 'Environmental pollution') {
                 // eslint-disable-next-line no-param-reassign
                 hs.label = 'Env. Pollution';
@@ -121,7 +152,12 @@ export default class Visualization extends React.PureComponent {
             >
                 <header className={styles.header}>
                     <h4 className={styles.heading}>
-                        Hazard Occurence Statistics
+                        <Translation>
+                            {
+                                t => <span>{t('Hazard Occurence Statistics')}</span>
+                            }
+                        </Translation>
+
                     </h4>
                     <Button
                         title="Download Chart"
@@ -181,7 +217,12 @@ export default class Visualization extends React.PureComponent {
                 <div className={styles.alertSummary}>
                     <header className={styles.header}>
                         <h3 className={styles.heading}>
-                            Number of Alerts
+
+                            <Translation>
+                                {
+                                    t => <span>{t('Number of Alerts')}</span>
+                                }
+                            </Translation>
                         </h3>
                     </header>
                     <div className={styles.content}>
@@ -238,3 +279,5 @@ export default class Visualization extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps, undefined)(Visualization);

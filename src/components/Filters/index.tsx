@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { _cs, isDefined } from '@togglecorp/fujs';
 import Faram from '@togglecorp/faram';
 import memoize from 'memoize-one';
+import { Translation } from 'react-i18next';
 import PageContext from '#components/PageContext';
 
 import Button from '#rsca/Button';
@@ -609,7 +610,11 @@ class Filters extends React.PureComponent<Props, State> {
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
                     <h3 className={styles.heading}>
-                        Filters
+                        <Translation>
+                            {
+                                t => <span>{t('Filters')}</span>
+                            }
+                        </Translation>
                     </h3>
 
                     <Button
@@ -662,7 +667,11 @@ class Filters extends React.PureComponent<Props, State> {
                             className={styles.submitButton}
                             role="presentation"
                         >
-                        Submit
+                            <Translation>
+                                {
+                                    t => <span>{t('Submit')}</span>
+                                }
+                            </Translation>
                         </div>
                     )}
                 </div>

@@ -34,7 +34,7 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                 <div className={styles.label}>
                     <Translation>
                         {
-                            t => <p>{t('DateRangeInfo')}</p>
+                            t => <span>{t('DateRangeInfo')}</span>
                         }
                     </Translation>
                 </div>
@@ -46,7 +46,7 @@ class DateRangeInfo extends React.PureComponent<Props, State> {
                 <div className={styles.label}>
                     <Translation>
                         {
-                            t => <p>{t('to')}</p>
+                            t => <span>{t('to')}</span>
                         }
                     </Translation>
                 </div>

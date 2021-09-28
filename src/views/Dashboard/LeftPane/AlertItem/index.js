@@ -1,6 +1,10 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Button from '#rsca/Button';
@@ -11,15 +15,21 @@ import { getYesterday } from '#utils/common';
 // import DateOutput from '#components/DateOutput';
 import Cloak from '#components/Cloak';
 import Icon from '#rscg/Icon';
+import {
+    languageSelector,
+} from '#selectors';
 
 import styles from './styles.scss';
 
 const propTypes = {
     className: PropTypes.string,
+    language: { language: 'en' },
+
 };
 
 const defaultProps = {
     className: undefined,
+    language: { language: 'en' },
 };
 
 const isRecent = (date, recentDay) => {
@@ -35,7 +45,11 @@ const emptyReferenceData = {
     },
 };
 
-export default class AlertItem extends React.PureComponent {
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+class AlertItem extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
@@ -92,8 +106,36 @@ export default class AlertItem extends React.PureComponent {
             fields:
             { title: referenceDataTitle },
         } = referenceData;
+
+        const {
+            language: { language },
+        } = this.props;
+        // if(language === 'en'){
         if (title.toUpperCase().trim() === 'FLOOD') {
-            return `Flood at ${referenceDataTitle}`;
+            return (
+                `
+            ${
+                <div>
+                    <Translation>
+                        {
+                            t => <p>{t('Flood at')}</p>
+                        }
+                    </Translation>
+                    <Translation>
+                        {
+                            t => <p>{t(`${referenceDataTitle}`)}</p>
+                        }
+                    </Translation>
+                    <Translation>
+                        {
+                            t => <p>{t('Ma')}</p>
+                        }
+                    </Translation>
+                </div>
+                }
+                `
+
+            );
         }
         if (title.toUpperCase().trim() === 'HEAVY RAINFALL') {
             return `Heavy Rainfall at ${referenceDataTitle}`;
@@ -104,9 +146,26 @@ export default class AlertItem extends React.PureComponent {
         if (title.toUpperCase().trim() === 'EARTHQUAKE') {
             const {
                 fields:
-                { address: epicenter },
+                    { address: epicenter },
             } = referenceData;
-            return `Earthquake at ${epicenter}`;
+            return `
+            ${
+    <div>
+        <Translation>
+            {
+                t => <p>{t('Earthquake at')}</p>
+            }
+        </Translation>
+        <Translation>
+            {
+                t => <p>{t('Ma')}</p>
+            }
+        </Translation>
+    </div>
+}
+            ${epicenter}
+            
+            `;
         }
         if (title.toUpperCase().trim() === 'ENVIRONMENTAL POLLUTION') {
             return `Environmental pollution at ${referenceDataTitle}`;
@@ -121,6 +180,7 @@ export default class AlertItem extends React.PureComponent {
             hazardTypes,
             recentDay,
             isHovered,
+            language: { language },
         } = this.props;
 
         const {
@@ -138,9 +198,17 @@ export default class AlertItem extends React.PureComponent {
         const minutes = time.split(':')[1];
         let timeIndicator;
         if (hour + minutes <= 1200) {
-            timeIndicator = 'AM';
+            if (language === 'en') {
+                timeIndicator = 'AM';
+            } else {
+                timeIndicator = 'बिहान';
+            }
         } else if ((hour + minutes) > 1200 && (hour + minutes) <= 2359) {
-            timeIndicator = 'PM';
+            if (language === 'en') {
+                timeIndicator = 'PM';
+            } else {
+                timeIndicator = 'बेलुका';
+            }
         } else {
             timeIndicator = '';
         }
@@ -176,7 +244,11 @@ export default class AlertItem extends React.PureComponent {
                                 onClick={this.handleEditButtonClick}
                                 iconName="edit"
                             >
-                                Edit
+                                <Translation>
+                                    {
+                                        t => <span>{t('Edit')}</span>
+                                    }
+                                </Translation>
                             </Button>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_alert}>
@@ -187,7 +259,11 @@ export default class AlertItem extends React.PureComponent {
                                 onClick={this.handleDeleteButtonClick}
                                 confirmationMessage="Are you sure to delete the Alert?"
                             >
-                                Delete
+                                <Translation>
+                                    {
+                                        t => <span>{t('Delete')}</span>
+                                    }
+                                </Translation>
                             </DangerConfirmButton>
                         </Cloak>
                     </div>
@@ -231,3 +307,5 @@ export default class AlertItem extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps, undefined)(AlertItem);

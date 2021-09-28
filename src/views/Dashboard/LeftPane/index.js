@@ -81,7 +81,11 @@ const AlertTableEmptyComponent = () => (
 );
 const EventEmptyComponent = () => (
     <div className={styles.eventEmpty}>
-        There are no major events at the moment.
+        <Translation>
+            {
+                t => <span>{t('There are no major events at the moment.')}</span>
+            }
+        </Translation>
     </div>
 );
 
@@ -300,7 +304,7 @@ class LeftPane extends React.PureComponent {
                     <div className={styles.label}>
                         <Translation>
                             {
-                                t => <p>{t('Data source')}</p>
+                                t => <span>{t('Data source')}</span>
                             }
                         </Translation>
                     </div>
@@ -309,7 +313,7 @@ class LeftPane extends React.PureComponent {
                             <div className={styles.text}>
                                 <Translation>
                                     {
-                                        t => <p>{t('Realtime Module')}</p>
+                                        t => <span>{t('Realtime Module')}</span>
                                     }
                                 </Translation>
 
@@ -340,7 +344,11 @@ class LeftPane extends React.PureComponent {
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.alertIcon)} />
                                 <div className={styles.text}>
-                                    Alerts
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Alerts')}</span>
+                                        }
+                                    </Translation>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +363,11 @@ class LeftPane extends React.PureComponent {
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.eventIcon)} />
                                 <div className={styles.text}>
-                                    Events
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Events')}</span>
+                                        }
+                                    </Translation>
                                 </div>
                             </div>
                         </div>
@@ -369,7 +381,12 @@ class LeftPane extends React.PureComponent {
                                 name="bars"
                             />
                             <div className={styles.text}>
-                                Visualizations
+                                <Translation>
+                                    {
+                                        t => <span>{t('Visualizations')}</span>
+                                    }
+                                </Translation>
+
                             </div>
                         </div>
                     </div>
@@ -382,7 +399,12 @@ class LeftPane extends React.PureComponent {
                                     iconName="add"
                                     transparent
                                 >
-                                    New alert
+                                    <Translation>
+                                        {
+                                            t => <span>{t('New alert')}</span>
+                                        }
+                                    </Translation>
+
                                 </AccentButton>
                             </Cloak>
                         )}
@@ -394,7 +416,11 @@ class LeftPane extends React.PureComponent {
                                     iconName="add"
                                     transparent
                                 >
-                                    New event
+                                    <Translation>
+                                        {
+                                            t => <span>{t('New event')}</span>
+                                        }
+                                    </Translation>
                                 </AccentButton>
                             </Cloak>
                         )}
