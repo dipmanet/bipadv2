@@ -16,6 +16,8 @@ import {
     Legend,
 } from 'recharts';
 
+import { npTranslation } from '#constants/translations';
+
 import {
     groupList,
     saveChart,
@@ -55,6 +57,21 @@ const CustomLabel = (props) => {
         </div>
     );
 };
+
+const hazardSummaryNepali = [
+    {
+        label: 'भूकम्प',
+    },
+    {
+        label: 'वातावरणीय प्रदूषण',
+    },
+    {
+        label: 'बाढी',
+    },
+    {
+        label: 'भारी वर्षा',
+    },
+];
 
 class Visualization extends React.PureComponent {
     static propTypes = propTypes;
@@ -109,11 +126,22 @@ class Visualization extends React.PureComponent {
         )).sort((a, b) => (b.value - a.value));
     });
 
+    getLabel = index => npTranslation.translation.hazardSummary[index].label;
+
+    getTrans = (hazardData) => {
+        const arr = hazardData.map((i, idx) => ({
+            ...i,
+            label: this.getLabel(idx),
+        }));
+        return arr;
+    }
+
     render() {
         const {
             className,
             alertList,
             hazardTypes,
+            language: { language },
         } = this.props;
 
         const hazardSummary = this.getHazardSummary(alertList);
@@ -137,7 +165,6 @@ class Visualization extends React.PureComponent {
 
         // To reduce space taken by pollution on Y-axis
         hazardSummary.map((hs) => {
-            const { language: { language } } = this.props;
             console.log('hazard summary', hazardSummary);
             if (hs.label === 'Environmental pollution') {
                 // eslint-disable-next-line no-param-reassign
@@ -145,6 +172,8 @@ class Visualization extends React.PureComponent {
             }
             return hs;
         });
+
+        console.log('hazard summary', hazardSummary);
 
         const ChartView = () => (
             <div
@@ -174,7 +203,7 @@ class Visualization extends React.PureComponent {
                     <ResponsiveContainer>
                         <BarChart
                             layout="vertical"
-                            data={hazardSummary}
+                            data={language === 'en' ? hazardSummary : this.getTrans(hazardSummary)}
                             margin={{ top: 20, right: 10, left: 10, bottom: 5 }}
                         >
                             <YAxis dataKey="label" type="category" />
@@ -188,7 +217,12 @@ class Visualization extends React.PureComponent {
                                 height={36}
                                 align="center"
                                 iconSize={0}
-                                formatter={() => '  No. of Events  '}
+                                formatter={() => {
+                                    if (language === 'en') {
+                                        return ('  No. of Events  ');
+                                    }
+                                    return ('घटनाहरुको संख्या');
+                                }}
                             />
                             <Bar
                                 dataKey="value"
@@ -226,10 +260,15 @@ class Visualization extends React.PureComponent {
                         </h3>
                     </header>
                     <div className={styles.content}>
-                        {hazardSummary.map(s => (
+                        {hazardSummary.map((s, idx) => (
                             <div key={s.label} className={styles.summaryItem}>
                                 <div className={styles.label}>
-                                    {s.label}
+                                    <Translation>
+                                        {
+                                            t => <span>{t(`hazardSummary.${idx}.label`, { returnObjects: true })}</span>
+                                        }
+                                    </Translation>
+                                    {/* {s.label} */}
                                 </div>
                                 <div className={styles.value}>
                                     {s.value}

@@ -23,6 +23,21 @@ export const enTranslation = {
         'Number of Alerts': 'Number of Alerts',
         'No Alerts in the Selected Time Period': 'No Alerts in the Selected Time Period',
         'Hazard Occurence Statistics': 'Hazard Occurence Statistics',
+        hazardSummary: [
+            {
+                label: 'Earthquake',
+            },
+            {
+                label: 'Env. Pollution',
+            },
+            {
+                label: 'Flood',
+            },
+            {
+                label: 'Heavy Rainfall',
+            },
+        ],
+
 
     },
 };
@@ -52,5 +67,19 @@ export const npTranslation = {
         'Number of Alerts': 'अलर्ट को संख्या',
         'No Alerts in the Selected Time Period': 'चयनित समय अवधि मा कुनै अलर्ट छैन',
         'Hazard Occurence Statistics': 'खतरा घटना तथ्या्क',
+        hazardSummary: [
+            {
+                label: 'भूकम्प',
+            },
+            {
+                label: 'वातावरणीय प्रदूषण',
+            },
+            {
+                label: 'बाढी',
+            },
+            {
+                label: 'भारी वर्षा',
+            },
+        ],
     },
 };

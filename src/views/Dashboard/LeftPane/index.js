@@ -295,6 +295,8 @@ class LeftPane extends React.PureComponent {
 
 
                 <div className={styles.sourceDetails}>
+
+
                     <div className={styles.infoIconContainer}>
                         <Icon
                             className={styles.infoIcon}
