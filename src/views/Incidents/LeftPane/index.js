@@ -6,7 +6,7 @@ import {
     _cs,
     compareDate,
 } from '@togglecorp/fujs';
-
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import Icon from '#rscg/Icon';
 import AccentButton from '#rsca/Button/AccentButton';
@@ -198,15 +198,30 @@ class LeftPane extends React.PureComponent {
                         />
                     </div>
                     <div className={styles.label}>
-                        Data sources:
+                        <Translation>
+                            {
+                                t => <span>{t('Data sources')}</span>
+                            }
+                        </Translation>
+                        :
                     </div>
                     <div className={styles.value}>
                         <div className={styles.source}>
-                            Nepal Police
+                            <Translation>
+                                {
+                                    t => <span>{t('Nepal Police')}</span>
+                                }
+                            </Translation>
+
                         </div>
                         <div className={styles.source}>
                             <div className={styles.text}>
-                                DRR Portal
+                                <Translation>
+                                    {
+                                        t => <span>{t('DRR Portal')}</span>
+                                    }
+                                </Translation>
+
                             </div>
                             <a
                                 className={styles.link}
@@ -239,7 +254,12 @@ class LeftPane extends React.PureComponent {
                             <div className={styles.title}>
                                 <div className={_cs(styles.icon, styles.incidentIcon)} />
                                 <div className={styles.text}>
-                                    Incidents
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Incidents')}</span>
+                                        }
+                                    </Translation>
+
                                 </div>
                             </div>
                         </div>
@@ -253,7 +273,11 @@ class LeftPane extends React.PureComponent {
                                 name="bars"
                             />
                             <div className={styles.text}>
-                                Visualizations
+                                <Translation>
+                                    {
+                                        t => <span>{t('Visualizations')}</span>
+                                    }
+                                </Translation>
                             </div>
                         </div>
                     </div>
@@ -273,7 +297,12 @@ class LeftPane extends React.PureComponent {
                                     />
                                 )}
                             >
-                                New incident
+                                <Translation>
+                                    {
+                                        t => <span>{t('New incident')}</span>
+                                    }
+                                </Translation>
+
                             </AccentModalButton>
                         </Cloak>
                         <ModalButton

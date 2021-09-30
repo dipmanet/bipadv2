@@ -58,29 +58,11 @@ const CustomLabel = (props) => {
     );
 };
 
-const hazardSummaryNepali = [
-    {
-        label: 'भूकम्प',
-    },
-    {
-        label: 'वातावरणीय प्रदूषण',
-    },
-    {
-        label: 'बाढी',
-    },
-    {
-        label: 'भारी वर्षा',
-    },
-];
-
 class Visualization extends React.PureComponent {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
 
-    componentDidUpdate(prevProps) {
-
-    }
 
     handleSaveClick = () => {
         saveChart('hazardSummary', 'hazardSummary');
@@ -90,6 +72,7 @@ class Visualization extends React.PureComponent {
     getHazardSummary = memoize((alertList) => {
         const { hazardTypes, language: { language } } = this.props;
         console.log('hazard types', hazardTypes);
+
         const freqCount = groupList(
             alertList.filter(i => i.hazard),
             alert => alert.hazard,
@@ -129,12 +112,30 @@ class Visualization extends React.PureComponent {
     getLabel = index => npTranslation.translation.hazardSummary[index].label;
 
     getTrans = (hazardData) => {
+        console.log('hazard data', hazardData);
         const arr = hazardData.map((i, idx) => ({
             ...i,
+            तथ्या्क: i.value,
             label: this.getLabel(idx),
         }));
         return arr;
     }
+
+    customTooltip = ({ active, payload, label }) => {
+        const { language: { language } } = this.props;
+
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <p>{language === 'np' && `तथ्या्क: ${payload[0].payload.value}`}</p>
+                    <p>{language === 'en' && `value: ${payload[0].payload.value}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
+
 
     render() {
         const {
@@ -206,12 +207,18 @@ class Visualization extends React.PureComponent {
                             data={language === 'en' ? hazardSummary : this.getTrans(hazardSummary)}
                             margin={{ top: 20, right: 10, left: 10, bottom: 5 }}
                         >
-                            <YAxis dataKey="label" type="category" />
+                            <YAxis
+                                dataKey="label"
+                                type="category"
+                            />
                             <XAxis
                                 dataKey="value"
                                 type="number"
                             />
-                            <Tooltip cursor={false} />
+                            <Tooltip
+                                content={this.customTooltip}
+                                cursor={false}
+                            />
                             <Legend
                                 verticalAlign="bottom"
                                 height={36}

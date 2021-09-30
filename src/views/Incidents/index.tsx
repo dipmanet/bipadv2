@@ -8,8 +8,8 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 
+import { Translation } from 'react-i18next';
 import Legend from '#rscz/Legend';
-
 import { FiltersElement } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
@@ -268,7 +268,12 @@ class Incidents extends React.PureComponent<Props, State> {
                             <div className={styles.pointSizeLegendContainer}>
                                 <header className={styles.header}>
                                     <h4 className={styles.heading}>
-                                        People death count
+                                        <Translation>
+                                            {
+                                                t => <span>{t('People death count')}</span>
+                                            }
+                                        </Translation>
+
                                     </h4>
                                 </header>
                                 <Legend
@@ -285,7 +290,14 @@ class Incidents extends React.PureComponent<Props, State> {
                             </div>
                             {filteredHazardTypes.length > 0 && (
                                 <div className={styles.hazardLegend}>
-                                    <div className={styles.legendTitle}>Hazards Legend</div>
+                                    <div className={styles.legendTitle}>
+                                        <Translation>
+                                            {
+                                                t => <span>{t('Hazards Legend')}</span>
+                                            }
+                                        </Translation>
+
+                                    </div>
                                     <HazardsLegend
                                         filteredHazardTypes={filteredHazardTypes}
                                         className={styles.legend}

@@ -10,6 +10,7 @@ import {
 import memoize from 'memoize-one';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
 import { enTranslation, npTranslation } from '#constants/translations';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
@@ -313,6 +314,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
     }
 
+
     public componentDidMount() {
         // NOTE: this means everything has loaded before mounting this page,
         // which is highly unlikely
@@ -362,10 +364,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(prevProps) {
         const { boundingClientRect } = this.props;
-
         this.setLeftPanelWidth(boundingClientRect);
+        const { language: { language } } = this.props;
+        if (prevProps.language !== language) {
+            i18n.changeLanguage(language);
+        }
     }
 
     private setFilterFromUrl = (

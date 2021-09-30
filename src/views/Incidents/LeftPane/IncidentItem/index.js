@@ -8,7 +8,7 @@ import {
     reverseRoute,
 } from '@togglecorp/fujs';
 import { Link } from '@reach/router';
-
+import { Translation, Trans } from 'react-i18next';
 import {
     createRequestClient,
     methods,
@@ -270,7 +270,12 @@ class IncidentItem extends React.PureComponent {
                                     />
                                 )}
                             >
-                                Edit
+                                <Translation>
+                                    {
+                                        t => <span>{t('Edit')}</span>
+                                    }
+                                </Translation>
+
                             </ModalAccentButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_incident}>
@@ -282,7 +287,12 @@ class IncidentItem extends React.PureComponent {
                                 pending={incidentDeletePending}
                                 transparent
                             >
-                                Delete
+                                <Translation>
+                                    {
+                                        t => <span>{t('Delete')}</span>
+                                    }
+                                </Translation>
+
                             </DangerConfirmButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.change_feedback}>
@@ -296,7 +306,12 @@ class IncidentItem extends React.PureComponent {
                                     />
                                 )}
                             >
-                                {`Feedbacks (${unacknowledgedFeedbackCount || 0})`}
+                                <Translation>
+                                    {
+                                        t => <span>{t('Feedbacks')}</span>
+                                    }
+                                </Translation>
+                                {`(${unacknowledgedFeedbackCount || 0})`}
                             </ModalAccentButton>
                         </Cloak>
                     </div>
@@ -309,27 +324,45 @@ class IncidentItem extends React.PureComponent {
                             alwaysVisible
                         />
                         <div className={styles.outputGroup}>
-                            <TextOutput
-                                label="Source"
-                                value={sources[source]}
-                                alwaysVisible
-                                className={styles.source}
-                            />
-                            <TextOutput
-                                value={verified ? 'Verified' : 'Not verified'}
-                                label="Status"
-                                alwaysVisible
-                                className={styles.status}
-                            />
+                            <Translation>
+                                {
+                                    t => (
+                                        <>
+                                            <TextOutput
+                                                label={t('Source')}
+                                                value={sources[source]}
+                                                alwaysVisible
+                                                className={styles.source}
+                                            />
+                                            <TextOutput
+                                                value={verified ? t('Verified') : t('Not verified')}
+                                                label={t('Status')}
+                                                alwaysVisible
+                                                className={styles.status}
+                                            />
+                                        </>
+                                    )
+                                }
+                            </Translation>
+
+
                         </div>
                     </div>
                     <div className={styles.publicActions}>
-                        <Link
-                            className={styles.link}
-                            to={reverseRoute('incidents/:incidentId/response', { incidentId })}
-                        >
-                            Go to response
-                        </Link>
+                        <Translation>
+                            {
+                                t => (
+                                    <Link
+                                        className={styles.link}
+                                        to={reverseRoute('incidents/:incidentId/response', { incidentId })}
+                                    >
+                                        {t('Go to response')}
+                                    </Link>
+                                )
+                            }
+
+                        </Translation>
+
                         <ModalAccentButton
                             className={styles.button}
                             transparent
@@ -340,7 +373,12 @@ class IncidentItem extends React.PureComponent {
                                 />
                             )}
                         >
-                            Leave Feedback
+                            <Translation>
+                                {
+                                    t => <span>{t('Leave Feedback')}</span>
+                                }
+                            </Translation>
+
                         </ModalAccentButton>
                     </div>
                 </div>

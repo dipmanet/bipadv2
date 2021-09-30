@@ -5,7 +5,6 @@ import { _cs } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 
 import { Translation } from 'react-i18next';
-import i18n from 'i18next';
 
 import Message from '#rscv/Message';
 import VirtualizedListView from '#rscv/VirtualizedListView';
@@ -37,22 +36,13 @@ import {
 
 import styles from './styles.scss';
 
-import {
-    languageSelector,
-} from '#selectors';
-
-
-import {
-    setLanguageAction,
-} from '#actionCreators';
-
 const propTypes = {
     alertList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     eventList: PropTypes.array, // eslint-disable-line react/forbid-prop-types
     hazardTypes: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     className: PropTypes.string,
     dateRange: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-    language: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    // language: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 const defaultProps = {
     alertList: [],
@@ -60,7 +50,7 @@ const defaultProps = {
     hazardTypes: {},
     dateRange: undefined,
     className: undefined,
-    language: { language: 'en' },
+    // language: { language: 'en' },
 };
 
 const AlertTableModalButton = modalize(Button);
@@ -115,12 +105,12 @@ const AlertTableModal = ({
     </Modal>
 );
 
-const mapStateToProps = state => ({
-    language: languageSelector(state),
-});
-const mapDispatchToProps = dispatch => ({
-    setLanguage: params => dispatch(setLanguageAction(params)),
-});
+// const mapStateToProps = state => ({
+//     language: languageSelector(state),
+// });
+// const mapDispatchToProps = dispatch => ({
+//     setLanguage: params => dispatch(setLanguageAction(params)),
+// });
 
 
 class LeftPane extends React.PureComponent {
@@ -136,13 +126,6 @@ class LeftPane extends React.PureComponent {
             showAddEventModal: false,
             activeView: 'alerts',
         };
-    }
-
-    componentDidUpdate(prevProps) {
-        const { language: { language } } = this.props;
-        if (prevProps.language !== language) {
-            i18n.changeLanguage(language);
-        }
     }
 
     getAlertRendererParams = (_, d) => ({
@@ -490,4 +473,4 @@ class LeftPane extends React.PureComponent {
         );
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LeftPane);
+export default connect(undefined, undefined)(LeftPane);
