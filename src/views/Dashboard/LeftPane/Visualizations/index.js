@@ -48,16 +48,6 @@ const defaultProps = {
     language: { language: 'en' },
 };
 
-const CustomLabel = (props) => {
-    const { value } = props;
-
-    return (
-        <div>
-            {`Value: ${value}`}
-        </div>
-    );
-};
-
 class Visualization extends React.PureComponent {
     static propTypes = propTypes;
 
@@ -71,7 +61,6 @@ class Visualization extends React.PureComponent {
 
     getHazardSummary = memoize((alertList) => {
         const { hazardTypes, language: { language } } = this.props;
-        console.log('hazard types', hazardTypes);
 
         const freqCount = groupList(
             alertList.filter(i => i.hazard),
@@ -112,7 +101,6 @@ class Visualization extends React.PureComponent {
     getLabel = index => npTranslation.translation.hazardSummary[index].label;
 
     getTrans = (hazardData) => {
-        console.log('hazard data', hazardData);
         const arr = hazardData.map((i, idx) => ({
             ...i,
             तथ्या्क: i.value,

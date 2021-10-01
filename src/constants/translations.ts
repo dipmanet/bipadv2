@@ -50,6 +50,13 @@ export const enTranslation = {
         Verified: 'Verified',
         'Not verified': 'Not Verified',
         'Go to response': 'Go to Response',
+        hazardItems: [
+            { title: 'Earthquake', color: '#5D4037' },
+            { title: 'Flood', color: '#00008B' },
+            { title: 'Heavy Rainfall', color: '#42A5F5' },
+            { title: 'Environmental pollution', color: '#6A1B9A' },
+        ],
+        Fire: 'Fire',
     },
 };
 
@@ -105,5 +112,12 @@ export const npTranslation = {
         Verified: 'प्रमाणित',
         'Not verified': 'प्रमाणित छैन',
         'Go to response': 'प्रतिक्रिया मा जानुहोस्',
+        hazardItems: [
+            { title: 'भूकम्प', color: '#5D4037' },
+            { title: 'बाढी', color: '#00008B' },
+            { title: 'भारी वर्षा', color: '#42A5F5' },
+            { title: 'वातावरणीय प्रदूषण', color: '#6A1B9A' },
+        ],
+        Fire: 'Nepali Fire',
     },
 };

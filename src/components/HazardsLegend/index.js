@@ -37,7 +37,6 @@ class HazardsLegend extends React.PureComponent {
         } = this.props;
 
         const hazardItems = filteredHazardTypes || Object.values(hazardTypes);
-
         return (
             <Legend
                 className={className}
