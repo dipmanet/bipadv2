@@ -119,7 +119,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 item => item.properties.hazardTitle,
             ))];
         }
-        console.log('fullhazardTitle', fullhazardTitle);
         const arr = fullhazardTitle.map((item) => {
             if (chartData.filter(n => n.name === item).length > 0) {
                 if (chartData.filter(n => n.name === item)[0].Total !== 0) {
@@ -128,7 +127,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             }
             return null;
         });
-        console.log('arr', arr);
         return arr.filter(n => n !== null);
     }
 

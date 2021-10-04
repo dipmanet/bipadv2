@@ -35,7 +35,6 @@ const data = [
     { name: 'Sand', value: 1.06 },
     // { name: 'Meadows', value: 0.83 },
 ].sort(({ value: a }, { value: b }) => b - a);
-console.log('This is final formal>>>', data);
 const COLORS_CHART = [
     '#d3e378', // agriculture
     '#f3f2f2', // other

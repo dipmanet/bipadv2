@@ -244,11 +244,7 @@ const JugalMap = (props: Props) => {
             const incidents = [...new Set(incidentList.features.map(
                 item => item.properties.hazardTitle,
             ))];
-            console.log('incidents', incidents);
-            console.log('incidents list', incidentList);
             incidents.map((layer) => {
-                console.log('each layer', getIncidentsGeoJSON(layer, incidentList));
-                console.log('layer namee', layer);
                 jugalMap.addSource(layer, {
                     type: 'geojson',
                     data: getIncidentsGeoJSON(layer, incidentList),

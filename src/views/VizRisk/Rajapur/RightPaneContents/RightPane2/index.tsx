@@ -33,7 +33,6 @@ const data = [
     { name: 'Other', value: 21.5 },
     { name: 'Buildings', value: 0.959 },
 ].sort(({ value: a }, { value: b }) => b - a);
-console.log('This >>>>', data);
 const COLORS_CHART = [
     '#d3e378',
     '#a8abb4',

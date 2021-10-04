@@ -667,7 +667,6 @@ class FloodHistoryMap extends React.Component {
         }
 
         if (this.props.rasterLayer !== prevProps.rasterLayer) {
-            console.log(this.props.rasterLayer);
             this.switchFloodRasters(this.props.rasterLayer);
         }
     }

@@ -105,7 +105,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     public getDescription= () => {
         const { nonZeroArr, chartData } = this.state;
         const { clickedItem } = this.props;
-        console.log('clickedItem', clickedItem);
         if (clickedItem === 'all') {
             if (nonZeroArr.length > 0) {
                 return nonZeroArr.map((item, i) => {
@@ -154,7 +153,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 item => item.properties.hazardTitle,
             ))];
         }
-        console.log('fullhazardTitle', fullhazardTitle);
         const arr = fullhazardTitle.map((item) => {
             if (chartData.filter(n => n.name === item).length > 0) {
                 if (chartData.filter(n => n.name === item)[0].Total !== 0) {
@@ -163,7 +161,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
             }
             return null;
         });
-        console.log('arr', arr);
         return arr.filter(n => n !== null);
     }
 

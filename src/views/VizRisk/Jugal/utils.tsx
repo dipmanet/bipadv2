@@ -43,9 +43,7 @@ export const getgeoJsonLayer = (layer: string) => [
 
 export const getbuildingVul = (d) => {
     if (d.length > 0) {
-        console.log('data recieved for vul:', d);
         const arr = d.filter(item => typeof item.vulnerabilityScore === 'number');
-        console.log('arr', arr);
         if (arr.length > 0) {
             const low = arr.filter(v => v.vulnerabilityScore < 50).length;
             const medium = arr.filter(v => v
@@ -199,7 +197,6 @@ export const getaverageAnnualincomeChartData = (d) => {
 };
 
 export const getsingularAgeGroupsChart = (d) => {
-    console.log('agegroup chart object', d);
     if (
         typeof d === 'object'
     && d.seniorCitizens !== undefined

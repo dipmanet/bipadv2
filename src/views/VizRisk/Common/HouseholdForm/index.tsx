@@ -226,8 +226,11 @@ const HouseholdForm = (props) => {
         setPending(false);
         // hiding form
         handleShowForm(false, resp);
+
+        // update building data
     };
     const handlePostSuccess = (response) => {
+        const { appendBuildingData } = props;
         buildingGetRequest.do({
             newId: response.id,
             handleGetSuccess,
@@ -520,14 +523,14 @@ const HouseholdForm = (props) => {
                                 onClick={handleSave}
                                 className={styles.saveBtn}
                             >
-                Save/Update
+                                Save/Update
                             </button>
                             <button
                                 type="button"
                                 onClick={handleCancel}
                                 className={styles.saveBtn}
                             >
-                Cancel
+                                Cancel
                             </button>
                         </div>
                     )

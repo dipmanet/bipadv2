@@ -525,7 +525,6 @@ const JugalMap = (props: Props) => {
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
-            console.log('categoriesCritical', categoriesCritical);
             categoriesCritical.map((layer) => {
                 if (map.current) {
                     map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');

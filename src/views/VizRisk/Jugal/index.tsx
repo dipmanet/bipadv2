@@ -251,7 +251,6 @@ class Jugal extends React.Component {
         // const buildingdataAddPermission = checkPermission(user, 'change_resource', 'resources');
 
         if (user && user.isSuperuser) {
-            console.log('super user');
             admin = true;
         } else if (user && user.profile && user.profile.municipality === 23007) {
             admin = true;
@@ -304,7 +303,6 @@ class Jugal extends React.Component {
     public setIncidentList = (year: string, hazard) => {
         const { incidentList } = this.props;
         let filteredIL;
-        console.log('hazard', hazard);
         if (hazard !== 'all') {
             filteredIL = incidentList.filter(item => item.hazardInfo.title === hazard);
         } else {
@@ -474,9 +472,8 @@ class Jugal extends React.Component {
     };
 
     private appendBuildingData = (val) => {
-        this.setState(prevState => ({
-            vulData: [...prevState.vulData, val],
-        }));
+        const filteredVulData = this.state.vulData.filter(vD => vD.houseOwnerId !== val.houseOwnerId);
+        this.setState({ vulData: [...filteredVulData, val] });
         this.setState({ singularBuldingData: val });
         this.setState({ buildingVul: val });
     }
