@@ -1,43 +1,55 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { FaramInputElement } from '@togglecorp/faram';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import DateInput from '#rsci/DateInput';
 import RadioInput from '#components/RadioInput';
+
+import {
+    languageSelector,
+} from '#selectors';
 
 import styles from './styles.scss';
 
 const pastDataKeySelector = d => d.key;
 
-const pastDataLabelSelector = d => d.label;
 
 const pastDateRangeOptions = [
     {
         label: '3 days',
+        labelNe: '3 दिन',
         key: 3,
     },
     {
         label: '7 days',
+        labelNe: '7 दिन',
         key: 7,
     },
     {
         label: '2 weeks',
+        labelNe: '2 हप्ता',
         key: 14,
     },
     {
         label: '1 month',
+        labelNe: '1 महिना',
         key: 30,
     },
     {
         label: '6 months',
+        labelNe: '3 महिना',
         key: 183,
     },
     {
         label: '1 year',
+        labelNe: '3 वर्ष',
         key: 365,
     },
     {
         label: 'Custom',
+        labelNe: 'कस्टम',
         key: 'custom',
     },
 ];
@@ -77,6 +89,15 @@ class PastDateRangeInput extends React.PureComponent<Props> {
         }
     }
 
+    private pastDataLabelSelector = (d) => {
+        const { language: { language } } = this.props;
+        if (language === 'en') {
+            return d.label;
+        }
+        return d.labelNe;
+    };
+
+
     private handleStartDateInputChange = (newStartDate: string) => {
         const {
             value,
@@ -113,7 +134,7 @@ class PastDateRangeInput extends React.PureComponent<Props> {
             <div className={_cs(styles.pastDateRangeInput, className)}>
                 <RadioInput
                     keySelector={pastDataKeySelector}
-                    labelSelector={pastDataLabelSelector}
+                    labelSelector={this.pastDataLabelSelector}
                     options={pastDateRangeOptions}
                     onChange={this.handleRadioInputChange}
                     value={value.rangeInDays}
@@ -121,20 +142,34 @@ class PastDateRangeInput extends React.PureComponent<Props> {
                 />
                 { value.rangeInDays === 'custom' && (
                     <div className={styles.customRange}>
-                        <DateInput
-                            className={styles.startDateInput}
-                            label="Start Date"
-                            faramElementName="start"
-                            onChange={this.handleStartDateInputChange}
-                            value={value.startDate}
-                        />
-                        <DateInput
-                            className={styles.endDateInput}
-                            label="End Date"
-                            faramElementName="end"
-                            onChange={this.handleEndDateInputChange}
-                            value={value.endDate}
-                        />
+                        <Translation>
+                            {
+                                t => (
+
+                                    <DateInput
+                                        className={styles.startDateInput}
+                                        label={t('Start Date')}
+                                        faramElementName="start"
+                                        onChange={this.handleStartDateInputChange}
+                                        value={value.startDate}
+                                    />
+                                )
+                            }
+                        </Translation>
+                        <Translation>
+                            {
+                                t => (
+                                    <DateInput
+                                        className={styles.endDateInput}
+                                        label={t('End Date')}
+                                        faramElementName="end"
+                                        onChange={this.handleEndDateInputChange}
+                                        value={value.endDate}
+                                    />
+                                )
+                            }
+                        </Translation>
+
                     </div>
                 )}
             </div>
@@ -142,4 +177,10 @@ class PastDateRangeInput extends React.PureComponent<Props> {
     }
 }
 
-export default FaramInputElement(PastDateRangeInput);
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+export default FaramInputElement(connect(
+    mapStateToProps,
+)(PastDateRangeInput));

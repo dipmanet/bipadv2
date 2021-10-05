@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { _cs, listToMap } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 import memoize from 'memoize-one';
-
+import { Translation } from 'react-i18next';
 import SelectInput from '#rsci/SelectInput';
 import SearchSelectInput from '#rsci/SearchSelectInput';
 // import SegmentInput from '#rsci/SegmentInput';
@@ -167,19 +167,25 @@ export default class RegionSelectInput extends React.PureComponent {
                     showHintAndError={showHintAndError}
                 />
                 */}
-                <Input
-                    label="Location"
-                    key={adminLevel}
-                    {...otherProps}
-                    maxDisplayOptions={maxOptions}
-                    className={styles.geoareaSelectInput}
-                    options={options}
-                    value={value}
-                    keySelector={geoareaKeySelector}
-                    labelSelector={geoareaLabelSelector}
-                    onChange={this.handleGeoAreaChange}
-                    autoFocus={autoFocus}
-                />
+                <Translation>
+                    {
+                        t => (
+                            <Input
+                                label={t('Location')}
+                                key={adminLevel}
+                                {...otherProps}
+                                maxDisplayOptions={maxOptions}
+                                className={styles.geoareaSelectInput}
+                                options={options}
+                                value={value}
+                                keySelector={geoareaKeySelector}
+                                labelSelector={geoareaLabelSelector}
+                                onChange={this.handleGeoAreaChange}
+                                autoFocus={autoFocus}
+                            />
+                        )
+                    }
+                </Translation>
             </div>
         );
     }

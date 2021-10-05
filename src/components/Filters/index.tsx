@@ -248,24 +248,23 @@ class Filters extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const {
             filters: faramValues,
-            municipalities,
-            districts,
-            provinces,
         } = this.props;
 
         this.setState({ faramValues });
     }
 
-    public UNSAFE_componentWillReceiveProps(nextProps) {
+    public UNSAFE_componentWillReceiveProps() {
         const {
             filters: faramValues,
             municipalities,
             districts,
             provinces,
         } = this.props;
+
         const {
             locRecv,
         } = this.state;
+
         this.setState({ faramValues });
 
         if (
@@ -616,15 +615,20 @@ class Filters extends React.PureComponent<Props, State> {
                             }
                         </Translation>
                     </h3>
-
-                    <Button
-                        className={styles.resetFiltersButton}
-                        title="Reset filters"
-                        onClick={this.handleResetFiltersButtonClick}
-                        iconName="refresh"
-                        transparent
-                        disabled={!validActiveView}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <Button
+                                    className={styles.resetFiltersButton}
+                                    title={t('Reset filters')}
+                                    onClick={this.handleResetFiltersButtonClick}
+                                    iconName="refresh"
+                                    transparent
+                                    disabled={!validActiveView}
+                                />
+                            )
+                        }
+                    </Translation>
 
                 </header>
                 <div className={styles.content}>
@@ -645,9 +649,14 @@ class Filters extends React.PureComponent<Props, State> {
                     >
                         {validActiveView && (
                             <header className={styles.header}>
-                                <h3 className={styles.heading}>
-                                    { tabs[validActiveView] }
-                                </h3>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <h3 className={styles.heading}>
+                                                { t(`${tabs[validActiveView]}`)}
+                                            </h3>
+                                        )}
+                                </Translation>
                                 <Button
                                     className={styles.closeButton}
                                     transparent

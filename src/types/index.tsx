@@ -96,6 +96,7 @@ export interface RegionElement {
     centroid: number[];
     title: string;
     code?: string;
+    title_ne: string;
 }
 
 export interface ProvinceElement extends RegionElement {
