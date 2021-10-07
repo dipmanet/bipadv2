@@ -473,7 +473,7 @@ class Jugal extends React.Component {
 
     private appendBuildingData = (val) => {
         const filteredVulData = this.state.vulData.filter(vD => vD.houseOwnerId !== val.houseOwnerId);
-        this.setState({ vulData: [...filteredVulData, val] });
+        this.setState({ vulData: [val, ...filteredVulData] });
         this.setState({ singularBuldingData: val });
         this.setState({ buildingVul: val });
     }

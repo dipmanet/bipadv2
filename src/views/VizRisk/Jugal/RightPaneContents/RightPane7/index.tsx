@@ -66,6 +66,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         }
     }
 
+
     public componentDidUpdate(prevProps) {
         const {
             vulData,
@@ -131,6 +132,12 @@ class SlideFivePane extends React.PureComponent<Props, State> {
     }
 
 
+    public componentDidCatch(error, errorInfo) {
+        // You can also log the error to an error reporting service
+        console.warn(error, errorInfo);
+        console.log('social factor data', this.state.socialFactorChartData);
+    }
+
     public handleRefClick = () => {
         this.setState(prevState => ({
             showReferences: !prevState.showReferences,
@@ -166,9 +173,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         // this.setState({ showAddForm });
         this.props.handleShowAddForm(showAddForm);
         this.setState({ showGetData: true });
-        if (individualResponse) {
-            this.props.appendBuildingData(individualResponse);
-        }
+        // if (individualResponse) {
+        this.props.appendBuildingData(individualResponse);
+        // }
     }
 
     public render() {
@@ -209,6 +216,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                 ? drawChartData[drawChartData.length - 1].buildings
                 : 0,
         });
+        console.log('socialFactorChartData', socialFactorChartData);
 
         return (
             <div className={styles.vrSideBar}>
@@ -437,7 +445,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                                     dataKey="Total"
                                                                     fill="rgb(0,219,95)"
                                                                     barSize={15}
-                                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                                     radius={[0, 15, 15, 0]}
                                                                 />
                                                             </BarChart>
@@ -597,7 +605,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 dataKey="Total"
                                                 fill="rgb(0,219,95)"
                                                 barSize={15}
-                                                label={{ position: 'right', fill: '#ffffff' }}
+                                                // label={{ position: 'right', fill: '#ffffff' }}
                                                 radius={[0, 15, 15, 0]}
                                             />
                                         </BarChart>
@@ -632,7 +640,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 dataKey="Total"
                                                 fill="rgb(0,219,95)"
                                                 barSize={15}
-                                                label={{ position: 'right', fill: '#ffffff' }}
+                                                // label={{ position: 'right', fill: '#ffffff' }}
                                                 radius={[0, 15, 15, 0]}
                                             />
                                         </BarChart>
@@ -667,7 +675,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 dataKey="Total"
                                                 fill="rgb(0,219,95)"
                                                 barSize={15}
-                                                label={{ position: 'right', fill: '#ffffff' }}
+                                                // label={{ position: 'right', fill: '#ffffff' }}
                                                 radius={[0, 15, 15, 0]}
                                             />
                                         </BarChart>
@@ -714,7 +722,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 dataKey="Total"
                                                 fill="rgb(0,219,95)"
                                                 barSize={15}
-                                                label={{ position: 'right', fill: '#ffffff' }}
+                                                // label={{ position: 'right', fill: '#ffffff' }}
                                                 radius={[0, 15, 15, 0]}
                                             />
                                         </BarChart>
@@ -760,7 +768,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 dataKey="Total"
                                                 fill="rgb(0,219,95)"
                                                 barSize={15}
-                                                label={{ position: 'right', fill: '#ffffff' }}
+                                                // label={{ position: 'right', fill: '#ffffff' }}
                                                 radius={[0, 15, 15, 0]}
                                             />
                                         </BarChart>
@@ -806,7 +814,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                                 dataKey="Total"
                                                 fill="rgb(0,219,95)"
                                                 barSize={15}
-                                                label={{ position: 'right', fill: '#ffffff' }}
+                                                // label={{ position: 'right', fill: '#ffffff' }}
                                                 radius={[0, 15, 15, 0]}
                                             />
                                         </BarChart>

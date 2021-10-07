@@ -9,6 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
+import { FormatListNumberedRtlOutlined } from '@material-ui/icons';
 import styles from './styles.scss';
 import {
     refData,
@@ -217,7 +218,7 @@ const HouseholdForm = (props) => {
         } else {
             setFormData({
                 ...buildingFormData,
-                [refData[type]]: e.target.value,
+                [refData[type]]: e.target.value || null,
             });
         }
     };

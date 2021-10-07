@@ -139,6 +139,10 @@ class SlideFivePane extends React.Component<Props, State> {
         }
     }
 
+    public componentDidCatch(error, errorInfo) {
+        // You can also log the error to an error reporting service
+        console.warn(error, errorInfo);
+    }
 
     public handleRefClick = () => {
         this.setState(prevState => ({
@@ -482,7 +486,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                                     dataKey="Total"
                                                                     fill="rgb(0,219,95)"
                                                                     barSize={15}
-                                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                                     radius={[0, 15, 15, 0]}
                                                                 />
                                                             </BarChart>
@@ -640,7 +644,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
                                                     barSize={15}
-                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                     radius={[0, 15, 15, 0]}
                                                 />
                                             </BarChart>
@@ -676,7 +680,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
                                                     barSize={15}
-                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                     radius={[0, 15, 15, 0]}
                                                 />
                                             </BarChart>
@@ -760,7 +764,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
                                                     barSize={15}
-                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                     radius={[0, 15, 15, 0]}
                                                 />
                                             </BarChart>
@@ -806,7 +810,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
                                                     barSize={15}
-                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                     radius={[0, 15, 15, 0]}
                                                 />
                                             </BarChart>
@@ -851,7 +855,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
                                                     barSize={15}
-                                                    label={{ position: 'right', fill: '#ffffff' }}
+                                                    // label={{ position: 'right', fill: '#ffffff' }}
                                                     radius={[0, 15, 15, 0]}
                                                 />
                                             </BarChart>

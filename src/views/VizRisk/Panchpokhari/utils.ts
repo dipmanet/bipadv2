@@ -82,6 +82,7 @@ export const getfoundationTypeChartData = (d) => {
     return [];
 };
 
+
 export const getsocialFactorChartData = (d) => {
     const socialChartref = {
         noOfFemale: 'Female',
@@ -91,13 +92,13 @@ export const getsocialFactorChartData = (d) => {
     if (d.length > 0) {
         const totalMFData = d.reduce((a, b) => (
             {
-                totalPopulation: (a.totalPopulation || 0) + (b.totalPopulation || 0),
-                noOfFemale: (a.noOfFemale || 0) + (b.noOfFemale || 0),
-                peopleWithDisability: (a.peopleWithDisability || 0) + (b.peopleWithDisability || 0),
+                totalPopulation: (a.totalPopulation) + (b.totalPopulation || 0),
+                noOfFemale: (a.noOfFemale) + (b.noOfFemale || 0),
+                peopleWithDisability: (a.peopleWithDisability) + (b.peopleWithDisability || 0),
             }
-        ));
+        ), { totalPopulation: 0, noOfFemale: 0, peopleWithDisability: 0 });
 
-        const arr = Object.keys(totalMFData);
+        const arr = Object.keys(socialChartref);
         const chartData = arr.map(g => ({
             name: socialChartref[g],
             Total: totalMFData[g],
@@ -108,6 +109,7 @@ export const getsocialFactorChartData = (d) => {
 
     return [];
 };
+
 
 export const getageGroupChartData = (d) => {
     if (d.length > 0) {
