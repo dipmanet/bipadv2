@@ -31,8 +31,7 @@ import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
 import { OpenSeaDragonViewer } from '../OpenSeaDragonImageViewer';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
-import ZoomMap from '#components/ZoomMap';
-import MapBounds from '#re-map/MapBounds';
+
 
 interface Props {
 }
@@ -105,7 +104,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         notesResult: '',
         topLayer: '',
         topChoroPlethLayer: '',
-        // boundary: [80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792],
 
 
     }
@@ -254,31 +252,6 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         }
     }
 
-    private handleMapBound=() => {
-        const { activeLayers } = this.context;
-        const { topLayer } = this.state;
-        this.setState({
-
-            topLayer: activeLayers.length && activeLayers[activeLayers.length - 1].layername,
-
-
-        });
-        console.log('this is click', activeLayers.length && activeLayers[activeLayers.length - 1].layername);
-        // if (activeLayers.length && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon') && (activeLayers[activeLayers.length - 1].layername !== topLayer)) {
-        //     this.setState({
-
-        //         topLayer: activeLayers.length && activeLayers[activeLayers.length - 1].layername,
-        //         topChoroPlethLayer: '',
-
-        //     });
-        // }
-        // if (!activeLayers.length || (activeLayers.length && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title !== 'Landslide Polygon')) || (activeLayers.length && !activeLayers[activeLayers.length - 1].group)) {
-        //     this.setState({
-        //         topChoroPlethLayer: activeLayers.length ? activeLayers[activeLayers.length - 1].layername : '',
-        //         topLayer: '',
-        //     });
-        // }
-    }
 
     public render() {
         const {
@@ -291,23 +264,12 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             loader,
             notesResult,
             topLayer,
-            boundary,
             topChoroPlethLayer,
         } = this.state;
 
         const { activeLayers, LoadingTooltip, tooltipLatlng,
             mapClickedResponse } = this.context;
-        // this.handleMapBound();
-        // const selectedActiveLayer = activeLayers.length ? [activeLayers[activeLayers.length - 1]] : [];
-        // const selectedActiveLayer = activeLayers;
 
-        // rasterLayers = selectedActiveLayer.filter(d => d.type === 'raster');
-        // choroplethLayers = selectedActiveLayer.filter(d => d.type === 'choropleth');
-        // const test1 = choroplethLayers.filter(item => item.adminLevel === 'district');
-        // const test2 = choroplethLayers.filter(item => item.adminLevel === 'municipality');
-        // console.log('This is test1', test1);
-        // console.log('This is test2', test2);
-        // const finalChoroPlethLayer = choroplethLayers.length ? [choroplethLayers[choroplethLayers.length - 1]] : [];
 
         const municipalityAvailableForOpenseadragon = !!(feature && feature.state.value);
 
@@ -331,58 +293,33 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                     sourceKey="risk-infoz"
                 />
 
-                {/* { activeLayers.length && (topLayer !== activeLayers[activeLayers.length - 1].layername) && activeLayers[activeLayers.length - 1].group && (activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon')
-                    ? (
-
-                        <>
-                            {console.log('tested')}
-                            <MapBounds
-                                bounds={[84.40443466922436, 26.895749746060208, 86.71431342978022, 28.814250289930218]}
-                                padding={20}
-                                duration={1500}
-                            />
-
-
-                        </>
-                    ) : activeLayers.length && (topLayer !== activeLayers[activeLayers.length - 1].layername) ? (
-                        <>
-
-                            <MapBounds
-                                bounds={[80.05858661752784, 26.347836996368667, 88.20166918432409, 30.44702867091792]}
-                                padding={20}
-                                duration={1500}
-                            />
-
-                        </>
-                    ) : ''
-                } */}
 
                 { activeLayers.length && activeLayers[activeLayers.length - 1].group && activeLayers[activeLayers.length - 1].group.title === 'Landslide Polygon'
-                && (
-                    <>
+                    ? (
+                        <>
 
 
-                        <MapSource
-                            key="douram-1"
-                            sourceKey="douram-layer"
-                            sourceOptions={{
-                                type: 'raster',
-                                tiles: [this.getRasterLayer()],
-                                tileSize: 256,
-                            }}
-                        >
-                            <MapLayer
-                                layerKey="douram-layer01"
-                                layerOptions={{
+                            <MapSource
+                                key="douram-1"
+                                sourceKey="douram-layer"
+                                sourceOptions={{
                                     type: 'raster',
-                                    paint: {
-                                        'raster-opacity': 0.8,
-                                    },
+                                    tiles: [this.getRasterLayer()],
+                                    tileSize: 256,
                                 }}
-                            />
-                        </MapSource>
-                    </>
-                )}
+                            >
+                                <MapLayer
+                                    layerKey="douram-layer01"
+                                    layerOptions={{
+                                        type: 'raster',
+                                        paint: {
+                                            'raster-opacity': 0.8,
+                                        },
+                                    }}
+                                />
+                            </MapSource>
+                        </>
+                    ) : ''}
 
 
                 { rasterLayers.map(layer => (
