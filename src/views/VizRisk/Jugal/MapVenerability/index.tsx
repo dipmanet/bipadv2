@@ -16,7 +16,7 @@ import {
     drawStyle,
     ciRef,
     rasterLayers,
-    getFloodRasterLayer,
+    // getFloodRasterLayer,
 } from '#views/VizRisk/Common/utils';
 
 import {
@@ -271,7 +271,7 @@ class FloodHistoryMap extends React.Component {
             rasterLayers.map((layer) => {
                 this.map.addSource(`floodraster${layer}`, {
                     type: 'raster',
-                    tiles: [getFloodRasterLayer(layer)],
+                    tiles: [this.getFloodRasterLayer(layer)],
                     tileSize: 256,
                 });
                 this.map.addLayer(
@@ -572,6 +572,21 @@ class FloodHistoryMap extends React.Component {
         '&service=WMS',
         '&request=GetMap',
         '&layers=Bipad:Jugal_hillshade',
+        '&tiled=true',
+        '&width=256',
+        '&height=256',
+        '&srs=EPSG:3857',
+        '&bbox={bbox-epsg-3857}',
+        '&transparent=true',
+        '&format=image/png',
+    ].join('');
+
+    public getFloodRasterLayer = (layerName: string) => [
+        `${process.env.REACT_APP_GEO_SERVER_URL}/geoserver/Bipad/wms?`,
+        '&version=1.1.1',
+        '&service=WMS',
+        '&request=GetMap',
+        `&layers=Bipad:Jugal_FD_1in${layerName}`,
         '&tiled=true',
         '&width=256',
         '&height=256',
