@@ -6,9 +6,9 @@ import {
     _cs,
     Obj,
 } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 import HazardsLegend from '#components/HazardsLegend';
 import Loading from '#components/Loading';
-
 import { AppState } from '#store/types';
 import * as PageTypes from '#store/atom/page/types';
 import {
@@ -522,7 +522,13 @@ class Dashboard extends React.PureComponent<Props, State> {
                     mainContentContainerClassName={_cs(styles.hazardLegendContainer, 'map-legend-container')}
                     mainContent={(
                         <>
-                            <div className={styles.legendTitle}>Hazards Legend</div>
+                            <div className={styles.legendTitle}>
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hazards Legend')}</span>
+                                    }
+                                </Translation>
+                            </div>
                             <HazardsLegend
                                 filteredHazardTypes={filteredHazardTypes}
                                 className={styles.hazardLegend}

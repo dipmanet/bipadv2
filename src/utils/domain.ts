@@ -137,6 +137,7 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
     return group.map(h => (
         {
             title: (hazardTypes[h.key] || {}).title,
+            titleNe: (hazardTypes[h.key] || {}).titleNe,
             color: (hazardTypes[h.key] || {}).color,
         }
     ));

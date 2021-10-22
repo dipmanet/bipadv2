@@ -154,7 +154,6 @@ class Visualization extends React.PureComponent {
 
         // To reduce space taken by pollution on Y-axis
         hazardSummary.map((hs) => {
-            console.log('hazard summary', hazardSummary);
             if (hs.label === 'Environmental pollution') {
                 // eslint-disable-next-line no-param-reassign
                 hs.label = 'Env. Pollution';
@@ -162,7 +161,6 @@ class Visualization extends React.PureComponent {
             return hs;
         });
 
-        console.log('hazard summary', hazardSummary);
 
         const ChartView = () => (
             <div
@@ -192,7 +190,7 @@ class Visualization extends React.PureComponent {
                     <ResponsiveContainer>
                         <BarChart
                             layout="vertical"
-                            data={language === 'en' ? hazardSummary : this.getTrans(hazardSummary)}
+                            data={hazardSummary}
                             margin={{ top: 20, right: 10, left: 10, bottom: 5 }}
                         >
                             <YAxis
