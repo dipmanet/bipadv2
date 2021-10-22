@@ -1,9 +1,12 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { connect } from 'react-redux';
 import { unique } from '@togglecorp/fujs';
-
+import { Translation } from 'react-i18next';
 import List from '#rscv/List';
 import MapSource from '#re-map/MapSource';
 import MapImage from '#re-map/MapImage';
@@ -223,6 +226,7 @@ class AlertEventMap extends React.PureComponent {
                 startedOn,
                 createdDate } } = feature;
         const data = referenceData ? JSON.parse(referenceData) : undefined;
+        // translation to do: change the following data
 
         this.setState({
             alertTitle: title,

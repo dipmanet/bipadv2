@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
-
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 
 interface ReferenceData {
@@ -47,31 +47,101 @@ const FireTooltip = (
     return (
         <div className={styles.fireTooltip}>
             <div className={styles.header}>
-                <div className={styles.title}>{headerTitle || 'N/A'}</div>
+                <div className={styles.title}>
+                    {headerTitle
+                    || (
+                        <Translation>
+                            {
+                                t => <span>{t('N/A')}</span>
+                            }
+                        </Translation>
+                    )
+
+                    }
+                </div>
                 <div className={styles.date}>
                     { createdDate
-                        ? `${date} | ${timeOnly} (NPT)`
-                        : 'N/A' }
+                        ? (
+                            <>
+                                <span>
+                                    {date}
+                                    {' '}
+                                |
+                                    {' '}
+                                    {timeOnly}
+                                </span>
+                                <span>
+                                    {' '}
+                                    <Translation>
+                                        {
+                                            t => <span>{t('(NPT)')}</span>
+                                        }
+                                    </Translation>
+                                </span>
+                            </>
+                        )
+                        : (
+                            <Translation>
+                                {
+                                    t => <span>{t('N/A')}</span>
+                                }
+                            </Translation>
+                        )
+                    }
                 </div>
             </div>
             <div className={styles.content}>
                 <div className={styles.landCover}>
                     <div className={styles.title}>Land Cover:</div>
-                    <div className={styles.value}>{landCover || 'N/A'}</div>
+                    <div className={styles.value}>
+                        {landCover
+                    || (
+                        <Translation>
+                            {
+                                t => <span>{t('N/A')}</span>
+                            }
+                        </Translation>
+                    )
+                        }
+
+                    </div>
                 </div>
                 <div className={styles.brightness}>
                     <div className={styles.title}>Brightness:</div>
-                    <div className={styles.value}>{brightness || 'N/A'}</div>
+                    <div className={styles.value}>
+                        {brightness
+                     || (
+                         <Translation>
+                             {
+                                 t => <span>{t('N/A')}</span>
+                             }
+                         </Translation>
+                     )
+                        }
+
+                    </div>
                 </div>
                 <div className={styles.source}>
-                    <div className={styles.title}>SOURCE:</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Source')}</span>
+                            }
+                        </Translation>
+                        :
+                    </div>
                     <a
                         href="https://www.icimod.org/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}
                     >
-                        International Centre for Integrated Mountain Development
+                        <Translation>
+                            {
+                                t => <span>{t(' International Centre for Integrated Mountain Development')}</span>
+                            }
+                        </Translation>
+
                     </a>
                 </div>
             </div>
