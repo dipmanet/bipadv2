@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 
 import styles from './styles.scss';
 
@@ -94,10 +95,21 @@ const PollutionTooltip = (
                 </div>
                 <div className={styles.remark}>
                     <div className={styles.title}>Remark:</div>
-                    <div className={styles.value}>{aqi ? renderAqiIndicator(aqi) : 'N/A'}</div>
+                    <Translation>
+                        {
+                            t => <div className={styles.value}>{t(`${renderAqiIndicator(aqi)}`)}</div>
+                        }
+                    </Translation>
                 </div>
                 <div className={styles.source}>
-                    <div className={styles.title}>SOURCE:</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Source')}</span>
+                            }
+                        </Translation>
+                        :
+                    </div>
                     <a
                         href="http://mofe.gov.np/"
                         target="_blank"

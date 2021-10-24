@@ -120,6 +120,12 @@ export const enTranslation = {
         ML: 'ML',
         'International Centre for Integrated Mountain Development': 'International Centre for Integrated Mountain Development',
         'Land Cover': 'Land Cover',
+        Good: 'Good',
+        Moderate: 'Moderate',
+        'Unhealthy for Sensitive People': 'Unhealthy for Sensitive People',
+        Unhealthy: 'Unhealthy',
+        Hazardous: 'Hazardous',
+        'Ministry of Forests and Environment': 'Ministry of Forests and Environment',
     },
 };
 
@@ -147,20 +153,7 @@ export const npTranslation = {
         'Number of Alerts': 'अलर्ट को संख्या',
         'No Alerts in the Selected Time Period': 'चयनित समय अवधि मा कुनै अलर्ट छैन',
         'Hazard Occurence Statistics': 'खतरा घटना तथ्या्क',
-        hazardSummary: [
-            {
-                label: 'भूकम्प',
-            },
-            {
-                label: 'वातावरणीय प्रदूषण',
-            },
-            {
-                label: 'बाढी',
-            },
-            {
-                label: 'भारी वर्षा',
-            },
-        ],
+
         'Data sources': 'डाटा स्रोतहरु',
         'Nepal Police': 'नेपाल प्रहरी',
         'DRR Portal': 'DRR पोर्टल',
@@ -246,5 +239,12 @@ export const npTranslation = {
         'International Centre for Integrated Mountain Development': 'एकीकृत पर्वत विकास को लागी अन्तर्राष्ट्रिय केन्द्र',
         Brightness: 'चमक',
         'Land Cover': 'भूउपयोग',
+        'Very Unhealthy': 'धेरै अस्वस्थ',
+        Good: 'राम्रो',
+        Moderate: 'मध्यम',
+        'Unhealthy for Sensitive People': 'संवेदनशील मानिसहरुको लागी अस्वस्थ',
+        Unhealthy: 'अस्वस्थ',
+        Hazardous: 'खतरनाक',
+        'Ministry of Forests and Environment': '',
     },
 };
