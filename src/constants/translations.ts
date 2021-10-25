@@ -126,6 +126,14 @@ export const enTranslation = {
         Unhealthy: 'Unhealthy',
         Hazardous: 'Hazardous',
         'Ministry of Forests and Environment': 'Ministry of Forests and Environment',
+        Remark: 'Remark',
+        AQI: 'AQI',
+        Basin: 'Basin',
+        'Accumulated Rainfall': 'Accumulated Rainfall',
+        Hour: 'Hour',
+        'Department of Hydrology and Meteorology': 'Department of Hydrology and Meteorology',
+        'Station Name': 'Station Name',
+        'WATER LEVEL': 'WATER LEVEL',
     },
 };
 
@@ -153,6 +161,20 @@ export const npTranslation = {
         'Number of Alerts': 'अलर्ट को संख्या',
         'No Alerts in the Selected Time Period': 'चयनित समय अवधि मा कुनै अलर्ट छैन',
         'Hazard Occurence Statistics': 'खतरा घटना तथ्या्क',
+        hazardSummary: [
+            {
+                label: 'भूकम्प',
+            },
+            {
+                label: 'वातावरणीय प्रदूषण',
+            },
+            {
+                label: 'बाढी',
+            },
+            {
+                label: 'भारी वर्षा',
+            },
+        ],
 
         'Data sources': 'डाटा स्रोतहरु',
         'Nepal Police': 'नेपाल प्रहरी',
@@ -245,6 +267,15 @@ export const npTranslation = {
         'Unhealthy for Sensitive People': 'संवेदनशील मानिसहरुको लागी अस्वस्थ',
         Unhealthy: 'अस्वस्थ',
         Hazardous: 'खतरनाक',
-        'Ministry of Forests and Environment': '',
+        'Ministry of Forests and Environment': 'वन तथा वातावरण मन्त्रालय',
+        Remark: 'टिप्पणी',
+        AQI: 'वायु गुणस्तर सूचकांक',
+        Basin: 'बेसिन',
+        'Accumulated Rainfall': 'संचित वर्षा',
+        Hour: 'घण्टा',
+        'Department of Hydrology and Meteorology': 'जल तथा मौसम विज्ञान विभाग',
+        'Station Name': 'स्टेशनको नाम',
+        'WATER LEVEL': 'पानी तह',
+
     },
 };

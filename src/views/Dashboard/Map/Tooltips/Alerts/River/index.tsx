@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 
 interface ReferenceData {
@@ -47,15 +47,56 @@ const RiverTooltip = (
             </div>
             <div className={styles.content}>
                 <div className={styles.basin}>
-                    <div className={styles.title}>BASIN:</div>
-                    <div className={styles.value}>{basin || 'N/A'}</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Basin')}</span>
+                            }
+                        </Translation>
+:
+
+                    </div>
+                    <div className={styles.value}>
+                        {basin
+                       || (
+                           <Translation>
+                               {
+                                   t => <span>{t('N/A')}</span>
+                               }
+                           </Translation>
+                       )
+                        }
+
+                    </div>
                 </div>
                 <div className={styles.station}>
                     <div className={styles.title}>Station Name:</div>
-                    <div className={styles.value}>{headerTitle || 'N/A'}</div>
+                    <div className={styles.value}>
+                        {headerTitle
+                        || (
+                            <Translation>
+                                {
+                                    t => <span>{t('N/A')}</span>
+                                }
+                            </Translation>
+                        )
+                        }
+
+                    </div>
                 </div>
                 <div className={styles.waterLevel}>
-                    <div className={styles.title}>WATER LEVEL</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => (
+                                    <span>
+                                        {t('WATER LEVEL')}
+                                    </span>
+                                )
+                            }
+                        </Translation>
+
+                    </div>
                     <div className={styles.value}>
                         {
                             waterLevel
@@ -65,18 +106,36 @@ const RiverTooltip = (
                     </div>
                 </div>
                 <div className={styles.status}>
-                    <div className={styles.title}>STATUS</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Status')}</span>
+                            }
+                        </Translation>
+                    </div>
                     <div className={styles.value}>{status || 'N/A'}</div>
                 </div>
                 <div className={styles.source}>
-                    <div className={styles.title}>SOURCE:</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Source')}</span>
+                            }
+                        </Translation>
+                    :
+
+                    </div>
                     <a
                         href="http://hydrology.gov.np/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}
                     >
-                    Department of Hydrology and Meteorology
+                        <Translation>
+                            {
+                                t => <span>{t('Department of Hydrology and Meteorology')}</span>
+                            }
+                        </Translation>
                     </a>
                 </div>
             </div>

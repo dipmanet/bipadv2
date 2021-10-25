@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 
 import styles from './styles.scss';
 
@@ -64,18 +65,83 @@ const RainTooltip = (
                 <div className={styles.title}>{renderedTitle}</div>
                 <div className={styles.date}>
                     { createdDate
-                        ? `${date} | ${timeOnly} (NPT)`
-                        : 'N/A' }
+                        ? (
+                            <>
+                                <span>
+                                    {date}
+                                    {' '}
+                                |
+                                    {' '}
+                                    {timeOnly}
+                                </span>
+                                <span>
+                                    {' '}
+                                    <Translation>
+                                        {
+                                            t => <span>{t('(NPT)')}</span>
+                                        }
+                                    </Translation>
+                                </span>
+                            </>
+                        )
+                        : (
+                            <Translation>
+                                {
+                                    t => <span>{t('N/A')}</span>
+                                }
+                            </Translation>
+                        )
+                    }
                 </div>
             </div>
             <div className={styles.content}>
                 <div className={styles.basin}>
-                    <div className={styles.title}>Basin:</div>
-                    <div className={styles.value}>{basin || 'N/A'}</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Basin')}</span>
+                            }
+                        </Translation>
+                        :
+
+                    </div>
+                    <div className={styles.value}>
+                        {basin
+                     || (
+                         <Translation>
+                             {
+                                 t => <span>{t('N/A')}</span>
+                             }
+                         </Translation>
+                     )
+
+                        }
+
+                    </div>
                 </div>
                 <div className={styles.station}>
-                    <div className={styles.title}>Station Name:</div>
-                    <div className={styles.value}>{referenceDataTitle || 'N/A'}</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Station Name')}</span>
+                            }
+                        </Translation>
+
+                        :
+
+                    </div>
+                    <div className={styles.value}>
+                        {referenceDataTitle
+                  || (
+                      <Translation>
+                          {
+                              t => <span>{t('N/A')}</span>
+                          }
+                      </Translation>
+                  )
+                        }
+
+                    </div>
                 </div>
                 <div className={styles.rainfall}>
                     <div className={styles.title}>
@@ -83,36 +149,93 @@ const RainTooltip = (
                     </div>
                     <div className={styles.rainfallList}>
                         <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>1 Hour</div>
+                            <div className={styles.hour}>
+                                    1
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hour')}</span>
+                                    }
+                                </Translation>
+
+
+                            </div>
                             <div className={styles.value}>{`${oneHourInterval} mm`}</div>
                         </div>
                         <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>3 Hour</div>
+                            <div className={styles.hour}>
+                                    3
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hour')}</span>
+                                    }
+                                </Translation>
+
+
+                            </div>
                             <div className={styles.value}>{`${threeHourInterval} mm`}</div>
                         </div>
                         <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>6 Hour</div>
+                            <div className={styles.hour}>
+                                    6
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hour')}</span>
+                                    }
+                                </Translation>
+
+
+                            </div>
                             <div className={styles.value}>{`${sixHourInterval} mm`}</div>
                         </div>
                         <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>12 Hour</div>
+                            <div className={styles.hour}>
+                                    12
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hour')}</span>
+                                    }
+                                </Translation>
+
+
+                            </div>
                             <div className={styles.value}>{`${twelveHourInterval} mm`}</div>
                         </div>
                         <div className={styles.rainfallItem}>
-                            <div className={styles.hour}>24 Hour</div>
+                            <div className={styles.hour}>
+                                    24
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hour')}</span>
+                                    }
+                                </Translation>
+
+
+                            </div>
                             <div className={styles.value}>{`${twentyFourHourInterval} mm`}</div>
                         </div>
                     </div>
                 </div>
                 <div className={styles.source}>
-                    <div className={styles.title}>Source:</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span>{t('Source')}</span>
+                            }
+                        </Translation>
+                    :
+
+                    </div>
                     <a
                         href="http://hydrology.gov.np/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}
                     >
-                        Department of Hydrology and Meteorology
+                        <Translation>
+                            {
+                                t => <span>{t('Department of Hydrology and Meteorology')}</span>
+                            }
+                        </Translation>
                     </a>
                 </div>
             </div>

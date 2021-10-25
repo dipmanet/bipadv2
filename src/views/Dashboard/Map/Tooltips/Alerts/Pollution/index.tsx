@@ -84,20 +84,60 @@ const PollutionTooltip = (
                 <div className={styles.title}>{headerTitle || 'N/A'}</div>
                 <div className={styles.date}>
                     { createdDate
-                        ? `${date} | ${timeOnly} (NPT)`
-                        : 'N/A' }
+                        ? (
+                            <>
+                                <span>
+                                    {date}
+                                    {' '}
+                                |
+                                    {' '}
+                                    {timeOnly}
+                                </span>
+                                <span>
+                                    {' '}
+                                    <Translation>
+                                        {
+                                            t => <span>{t('(NPT)')}</span>
+                                        }
+                                    </Translation>
+                                </span>
+                            </>
+                        )
+                        : (
+                            <Translation>
+                                {
+                                    t => <span>{t('N/A')}</span>
+                                }
+                            </Translation>
+                        )
+                    }
                 </div>
             </div>
             <div className={styles.content}>
                 <div className={styles.aqi}>
-                    <div className={styles.title}>AQI:</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span className={styles.value}>{t('AQI')}</span>
+                            }
+                        </Translation>
+                    :
+
+                    </div>
                     <div className={styles.value}>{aqi ? aqi.toFixed(2) : 'N/A'}</div>
                 </div>
                 <div className={styles.remark}>
-                    <div className={styles.title}>Remark:</div>
+                    <div className={styles.title}>
+                        <Translation>
+                            {
+                                t => <span className={styles.value}>{t('Remark')}</span>
+                            }
+                        </Translation>
+                    </div>
+                        :
                     <Translation>
                         {
-                            t => <div className={styles.value}>{t(`${renderAqiIndicator(aqi)}`)}</div>
+                            t => <span className={styles.value}>{t(`${renderAqiIndicator(aqi)}`)}</span>
                         }
                     </Translation>
                 </div>
@@ -116,7 +156,12 @@ const PollutionTooltip = (
                         rel="noopener noreferrer"
                         className={styles.value}
                     >
-                    Ministry of Forests and Environment
+                        <Translation>
+                            {
+                                t => <span>{t('Ministry of Forests and Environment')}</span>
+                            }
+                        </Translation>
+
                     </a>
                 </div>
             </div>
