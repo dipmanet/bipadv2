@@ -156,6 +156,13 @@ const schema: Schema = {
             shapeFile: [],
         },
     },
+    helipad: {
+        fields: {
+            ...defaultFields,
+            type: [],
+
+        },
+    },
 };
 
 export const defaultSchema = {
