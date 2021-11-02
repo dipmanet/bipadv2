@@ -1,30 +1,28 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import { schemeAccent } from 'd3-scale-chromatic';
 import { scaleOrdinal } from 'd3-scale';
 import {
     ResponsiveContainer,
-    PieChart,
     BarChart,
     XAxis,
     YAxis,
-    Legend,
     Bar,
-    Pie,
     Cell,
-    Tooltip,
     LabelList,
-    Label,
 } from 'recharts';
-
-
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 
 import {
     saveChart,
     groupList,
 } from '#utils/common';
+
+import { languageSelector } from '#selectors';
 import styles from './styles.scss';
 
 const propTypes = {
@@ -41,7 +39,11 @@ const defaultProps = {
 
 const colors = scaleOrdinal().range(schemeAccent);
 
-export default class Visualizations extends React.PureComponent {
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
+class Visualizations extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
@@ -51,16 +53,19 @@ export default class Visualizations extends React.PureComponent {
         saveChart('hazardSeverity', 'hazardSeverity');
     }
 
-    getHazardSummary = memoize((incidentList) => {
+    getHazardSummary = memoize((incidentList, language) => {
         const { hazardTypes } = this.props;
-
+        console.log('hazardTypes', hazardTypes);
         const freqCount = groupList(
             incidentList.filter(i => i.hazard),
             incident => incident.hazard,
         );
+
         return freqCount.map(h => (
             {
-                label: (hazardTypes[h.key] || {}).title,
+                label: language === 'en'
+                    ? (hazardTypes[h.key] || {}).title
+                    : (hazardTypes[h.key] || {}).titleNe,
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
                 deathCount: (freqCount && h.value.map(data => data.loss))
@@ -71,7 +76,7 @@ export default class Visualizations extends React.PureComponent {
         )).sort((a, b) => (a.value - b.value));
     })
 
-    getLifeLossSummary = memoize((incidentList) => {
+    getLifeLossSummary = memoize((incidentList, language) => {
         const { hazardTypes } = this.props;
 
         const freqCount = groupList(
@@ -80,7 +85,9 @@ export default class Visualizations extends React.PureComponent {
         );
         return freqCount.map(h => (
             {
-                label: (hazardTypes[h.key] || {}).title,
+                label: language === 'en'
+                    ? (hazardTypes[h.key] || {}).title
+                    : (hazardTypes[h.key] || {}).titleNe,
                 value: h.value.length,
                 color: (hazardTypes[h.key] || {}).color,
                 deathCount: (freqCount && h.value.map(data => data.loss))
@@ -119,11 +126,12 @@ export default class Visualizations extends React.PureComponent {
             className,
             incidentList,
             hazardTypes,
+            language: { language },
         } = this.props;
 
         const severitySummary = this.getSeveritySummary(incidentList);
-        const hazardSummary = this.getHazardSummary(incidentList);
-        const lifeLossSummary = this.getLifeLossSummary(incidentList);
+        const hazardSummary = this.getHazardSummary(incidentList, language);
+        const lifeLossSummary = this.getLifeLossSummary(incidentList, language);
         // const eventSummary = this.getEventSummary(incidentList);
 
 
@@ -148,7 +156,14 @@ export default class Visualizations extends React.PureComponent {
                         className={styles.chart}
                         id="hazardSummary"
                     >
-                        <h4>Number of Incidents</h4>
+                        <h4>
+                            <Translation>
+                                {
+
+                                    t => <span>{t('Number of Incidents')}</span>
+                                }
+                            </Translation>
+                        </h4>
                         <ResponsiveContainer height={300}>
 
                             <BarChart
@@ -227,7 +242,14 @@ export default class Visualizations extends React.PureComponent {
                                 <Legend />
                             </PieChart>
                         </ResponsiveContainer> */}
-                        <h4>Hazard Severity (Fatality due to Hazard)</h4>
+                        <h4>
+                            <Translation>
+                                {
+                                    t => <span>{t('Hazard Severity (Fatality due to Hazard)')}</span>
+                                }
+                            </Translation>
+
+                        </h4>
                         <ResponsiveContainer height={300}>
 
                             <BarChart
@@ -238,11 +260,9 @@ export default class Visualizations extends React.PureComponent {
                                 <YAxis dataKey="label" type="category" interval={0} />
                                 <XAxis dataKey="deathCount" type="number" />
 
-
                                 {/* <Tooltip /> */}
                                 <Bar
                                     dataKey="deathCount"
-
                                 >
                                     { lifeLossSummary.map(hazard => (
                                         <Cell
@@ -265,3 +285,5 @@ export default class Visualizations extends React.PureComponent {
         );
     }
 }
+
+export default connect(mapStateToProps)(Visualizations);

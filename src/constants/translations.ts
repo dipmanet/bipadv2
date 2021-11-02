@@ -134,6 +134,13 @@ export const enTranslation = {
         'Department of Hydrology and Meteorology': 'Department of Hydrology and Meteorology',
         'Station Name': 'Station Name',
         'WATER LEVEL': 'WATER LEVEL',
+        'People death': 'People death',
+        'Estimated loss (NPR)': 'Estimated loss (NPR)',
+        'Infrastructure destroyed': 'Infrastructure destroyed',
+        'Livestock destroyed': 'Livestock destroyed',
+        'LEAVE FEEDBACK': 'LEAVE FEEDBACK',
+        'Number of Incidents': 'Number of Incidents',
+        'Hazard Severity (Fatality due to Hazard)': 'Hazard Severity (Fatality due to Hazard)',
     },
 };
 
@@ -276,6 +283,12 @@ export const npTranslation = {
         'Department of Hydrology and Meteorology': 'जल तथा मौसम विज्ञान विभाग',
         'Station Name': 'स्टेशनको नाम',
         'WATER LEVEL': 'पानी तह',
-
+        'People death': 'जन मृत्यु',
+        'Estimated loss (NPR)': 'अनुमानित क्षति (NPR)',
+        'Infrastructure destroyed': 'पूर्वाधार ध्वस्त',
+        'Livestock destroyed': 'पशुधन नष्ट',
+        'LEAVE FEEDBACK': 'सुझाव छोड्नु',
+        'Number of Incidents': 'घटनाहरूको संख्या',
+        'Hazard Severity (Fatality due to Hazard)': 'जोखिम गम्भीरता (खतराको कारण मृत्यु)',
     },
 };

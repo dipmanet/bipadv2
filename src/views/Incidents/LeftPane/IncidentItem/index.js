@@ -375,7 +375,7 @@ class IncidentItem extends React.PureComponent {
                         >
                             <Translation>
                                 {
-                                    t => <span>{t('Leave Feedback')}</span>
+                                    t => <span>{t('LEAVE FEEDBACK')}</span>
                                 }
                             </Translation>
 
