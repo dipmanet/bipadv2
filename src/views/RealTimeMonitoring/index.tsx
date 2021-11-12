@@ -3,6 +3,7 @@ import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
@@ -47,6 +48,7 @@ import {
     realTimeSourceListSelector,
     otherSourceListSelector,
     filtersSelector,
+    languageSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -111,6 +113,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     otherSourceList: otherSourceListSelector(state),
     filters: realTimeFiltersValuesSelector(state),
     globalFilters: filtersSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -267,7 +270,12 @@ const itemSelector = (d: { label: string }) => d.label;
 // const iconSelector = (d: { icon: string }) => d.icon;
 const radiusSelector = (d: { radius: number }) => d.radius;
 const legendColorSelector = (d: { color: string }) => d.color;
-const legendLabelSelector = (d: { label: string }) => d.label;
+const legendLabelSelector = (d: { label: string }, language: string) => {
+    if (language === 'en') {
+        return d.label;
+    }
+    return d.labelNe;
+};
 const classNameSelector = (d: { style: string }) => d.style;
 
 const emptyHazardHoverAttributeList: MapStateElement[] = [];
@@ -362,6 +370,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             },
             realTimeRiverList,
             realTimePollutionList,
+            language: { language },
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -389,7 +398,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="Rain"
                             />
                             <h4 className={styles.heading}>
-                                Rain
+                                <Translation>
+                                    {
+                                        t => <span>{t('Rain')}</span>
+                                    }
+                                </Translation>
                             </h4>
                         </header>
                         <Legend
@@ -398,14 +411,19 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
+                            labelSelector={e => legendLabelSelector(e, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -413,7 +431,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Department of Hydrology and Meteorology
+                                <Translation>
+                                    {
+                                        t => <span>{t('Department of Hydrology and Meteorology')}</span>
+                                    }
+                                </Translation>
                             </a>
                         </div>
                     </div>
@@ -427,7 +449,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="River"
                             />
                             <h4 className={styles.heading}>
-                                River
+                                <Translation>
+                                    {
+                                        t => <span>{t('River')}</span>
+                                    }
+                                </Translation>
                             </h4>
                         </header>
                         <Legend
@@ -442,14 +468,20 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
                             // iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={e => legendLabelSelector(e, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -457,7 +489,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Department of Hydrology and Meteorology
+                                <Translation>
+                                    {
+                                        t => <span>{t('Department of Hydrology and Meteorology')}</span>
+                                    }
+                                </Translation>
                             </a>
                         </div>
                     </div>
@@ -471,7 +507,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 alt="Earthquake"
                             />
                             <h4 className={styles.heading}>
-                                Earthquake (Richter Scale (ML))
+                                <Translation>
+                                    {
+                                        t => <span>{t(' Earthquake (Richter Scale (ML))')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <Legend
@@ -481,14 +522,22 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             keySelector={itemSelector}
                             radiusSelector={radiusSelector}
                             // iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={e => legendLabelSelector(e, language)}
+
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -496,7 +545,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Department of Mines and Geology
+                                <Translation>
+                                    {
+                                        t => <span>{t(' Department of Mines and Geology')}</span>
+                                    }
+                                </Translation>
+
                             </a>
                         </div>
                     </div>
@@ -515,7 +569,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                     2.5
                                 </sub>
                                 ) */}
-                                Pollution (AQI Value)
+
+                                <Translation>
+                                    {
+                                        t => <span>{t('Pollution (AQI Value)')}</span>
+                                    }
+                                </Translation>
                             </h4>
                         </header>
                         <Legend
@@ -528,14 +587,21 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             }
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={e => legendLabelSelector(e, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -543,7 +609,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Ministry of Forests and Environment
+                                <Translation>
+                                    {
+                                        t => <span>{t('Ministry of Forests and Environment')}</span>
+                                    }
+                                </Translation>
+
                             </a>
                         </div>
                     </div>
@@ -556,7 +627,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 src={FireIcon}
                             />
                             <h4 className={styles.heading}>
-                                Forest Fire
+                                <Translation>
+                                    {
+                                        t => <span>{t('Forest Fire')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <Legend
@@ -564,14 +640,20 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             data={forestFireLegendItems}
                             itemClassName={styles.legendItem}
                             keySelector={itemSelector}
-                            labelSelector={legendLabelSelector}
+                            // labelSelector={legendLabelSelector}
+                            labelSelector={e => legendLabelSelector(e, language)}
                             symbolClassNameSelector={classNameSelector}
                             colorSelector={legendColorSelector}
                             emptyComponent={null}
                         />
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -579,7 +661,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                International Centre for Integrated Mountain Development
+                                <Translation>
+                                    {
+                                        t => <span>{t('International Centre for Integrated Mountain Development')}</span>
+                                    }
+                                </Translation>
                             </a>
                         </div>
                     </div>
@@ -591,12 +677,22 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 <line x1="0" y1="5" x2="20" y2="5" style={{ stroke: '#7cb5ec', strokeWidth: 5 }} />
                             </svg>
                             <h4 className={styles.heading}>
-                                Streamflow
+                                <Translation>
+                                    {
+                                        t => <span>{t('Streamflow')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
-                                Source:
+                                <Translation>
+                                    {
+                                        t => <span>{t('Source')}</span>
+                                    }
+                                </Translation>
+                                :
                             </div>
                             <a
                                 className={styles.link}
@@ -656,7 +752,6 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         const {
             activeView,
         } = this.state;
-
         const showEarthquake = otherSources && otherSources.findIndex(v => v === 1) !== -1;
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
         const showRain = realtimeSources && realtimeSources.findIndex(v => v === 3) !== -1;

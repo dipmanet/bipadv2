@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-concat */
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -17,6 +18,7 @@ import {
     CartesianGrid,
     Brush,
 } from 'recharts';
+import { Translation } from 'react-i18next';
 
 import DateInput from '#rsci/DateInput';
 import modalize from '#rscg/Modalize';
@@ -383,7 +385,11 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     <div className={styles.label}>
-                                        Showing data from
+                                        <Translation>
+                                            {
+                                                t => <span>{t('DateRangeInfo')}</span>
+                                            }
+                                        </Translation>
                                     </div>
                                     <DateInput
                                         showLabel={false}
@@ -393,7 +399,13 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         onChange={this.handleStartDateChange}
                                     />
                                     <div className={styles.label}>
-                                        to
+                                        <div className={styles.label}>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('to')}</span>
+                                                }
+                                            </Translation>
+                                        </div>
                                     </div>
                                     <DateInput
                                         showLabel={false}
@@ -407,13 +419,21 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         onClick={this.handleSubmitClick}
                                         role="presentation"
                                     >
-                                        Submit
+                                        <Translation>
+                                            {
+                                                t => <span>{t('Submit')}</span>
+                                            }
+                                        </Translation>
                                     </div>
                                 </div>
                                 { startDate > endDate
                                         && (
                                             <div className={styles.warningText}>
-                                                WARNING! Start date cannot be greater than End Date
+                                                <Translation>
+                                                    {
+                                                        t => <span>{t('DateMismatchWarning')}</span>
+                                                    }
+                                                </Translation>
                                             </div>
                                         )
                                 }
@@ -425,15 +445,28 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                         />
                                     </div>
                                     <div className={styles.label}>
-                                        Data sources:
+                                        <Translation>
+                                            {
+                                                t => <span>{t('Data sources')}</span>
+                                            }
+                                        </Translation>
+                                        :
                                     </div>
                                     <div className={styles.value}>
                                         <div className={styles.source}>
-                                            Nepal Police
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Nepal Police')}</span>
+                                                }
+                                            </Translation>
                                         </div>
                                         <div className={styles.source}>
                                             <div className={styles.text}>
-                                                DRR Portal
+                                                <Translation>
+                                                    {
+                                                        t => <span>{t('DRR Portal')}</span>
+                                                    }
+                                                </Translation>
                                             </div>
                                             <a
                                                 className={styles.link}
@@ -455,19 +488,29 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                     className={styles.compareButton}
                                     modal={<Comparative lossAndDamageList={incidentList} />}
                                 >
-                                    Compare regions
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Compare Regions')}</span>
+                                        }
+                                    </Translation>
                                 </ModalButton>
-                                <ModalButton
-                                    title="Show data in tabular format"
-                                    className={styles.showTableButton}
-                                    iconName="table"
-                                    transparent
-                                    modal={(
-                                        <IncidentTableModal
-                                            incidentList={filteredData}
-                                        />
-                                    )}
-                                />
+                                <Translation>
+                                    {
+                                        t => (
+                                            <ModalButton
+                                                title={t('Show data in tabular format')}
+                                                className={styles.showTableButton}
+                                                iconName="table"
+                                                transparent
+                                                modal={(
+                                                    <IncidentTableModal
+                                                        incidentList={filteredData}
+                                                    />
+                                                )}
+                                            />
+                                        )
+                                    }
+                                </Translation>
                             </div>
                             <div className={styles.mainContent}>
                                 <LossDetails
@@ -492,46 +535,59 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                             className={styles.chartContainer}
                                         >
                                             <h4 className={styles.heading}>
-                                                { metric.title }
+                                                <Translation>
+                                                    {
+                                                        t => <span>{t(`${metric.title}`)}</span>
+                                                    }
+                                                </Translation>
                                             </h4>
                                             <div className={styles.content}>
-                                                <ResponsiveContainer>
-                                                    <AreaChart
-                                                        data={chartData}
-                                                        syncId="lndChart"
-                                                        margin={chartMargin}
-                                                    >
-                                                        <defs>
-                                                            <linearGradient id={`${metric.dataKey}-color`} y1="0" x2="0" y2="1">
-                                                                <stop offset="5%" stopColor={metric.color} stopOpacity={0.8} />
-                                                                <stop offset="95%" stopColor={metric.color} stopOpacity={0} />
-                                                            </linearGradient>
-                                                        </defs>
-                                                        <CartesianGrid strokeDasharray="3 3" />
-                                                        <XAxis
-                                                            type="number"
-                                                            dataKey="incidentMonthTimestamp"
-                                                            domain={['dataMin', 'dataMax']}
-                                                            allowDecimals={false}
-                                                            hide
-                                                        />
-                                                        <YAxis
-                                                            hide
-                                                            type="number"
-                                                            domain={['dataMin', 'dataMax']}
-                                                        />
-                                                        <Area
-                                                            type="monotone"
-                                                            fill={`url(#${metric.dataKey}-color)`}
-                                                            dataKey={metric.dataKey}
-                                                            stroke={metric.color}
-                                                        />
-                                                        <Tooltip
-                                                            labelFormatter={() => null}
-                                                            formatter={(value, name, p) => [value, `${metric.title} in ${timeTickFormatter(p.payload.incidentMonthTimestamp)}`]}
-                                                        />
-                                                    </AreaChart>
-                                                </ResponsiveContainer>
+                                                <Translation>
+                                                    {
+                                                        t => (
+                                                            <ResponsiveContainer>
+                                                                <AreaChart
+                                                                    data={chartData}
+                                                                    syncId="lndChart"
+                                                                    margin={chartMargin}
+                                                                >
+                                                                    <defs>
+                                                                        <linearGradient id={`${metric.dataKey}-color`} y1="0" x2="0" y2="1">
+                                                                            <stop offset="5%" stopColor={metric.color} stopOpacity={0.8} />
+                                                                            <stop offset="95%" stopColor={metric.color} stopOpacity={0} />
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <CartesianGrid strokeDasharray="3 3" />
+                                                                    <XAxis
+                                                                        type="number"
+                                                                        dataKey="incidentMonthTimestamp"
+                                                                        domain={['dataMin', 'dataMax']}
+                                                                        allowDecimals={false}
+                                                                        hide
+                                                                    />
+                                                                    <YAxis
+                                                                        hide
+                                                                        type="number"
+                                                                        domain={['dataMin', 'dataMax']}
+                                                                    />
+                                                                    <Area
+                                                                        type="monotone"
+                                                                        fill={`url(#${metric.dataKey}-color)`}
+                                                                        dataKey={metric.dataKey}
+                                                                        stroke={metric.color}
+                                                                    />
+                                                                    <Tooltip
+                                                                        labelFormatter={() => null}
+                                                                        formatter={(value, name, p) => [value, `${t(`${metric.title}`)} ${t('in')}
+                                                                        ${timeTickFormatter(p.payload.incidentMonthTimestamp)}`]}
+                                                                    />
+
+                                                                </AreaChart>
+                                                            </ResponsiveContainer>
+                                                        )
+                                                    }
+                                                </Translation>
+
                                             </div>
                                         </div>
                                     ))}

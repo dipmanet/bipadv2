@@ -18,12 +18,14 @@ import {
 
 import { isDefined } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
 import { hazardTypesList } from '#utils/domain';
 import { groupList, sum } from '#utils/common';
 
 import {
     hazardTypesSelector,
+    languageSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -72,6 +74,7 @@ const deathsLabelModifier = (label, value) => (
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 class Visualizations extends React.PureComponent {
@@ -84,7 +87,7 @@ class Visualizations extends React.PureComponent {
         return hazardTypesList(lossAndDamageList, hazardTypes);
     })
 
-    getHazardPeopleDeathCount = memoize((lossAndDamageList) => {
+    getHazardPeopleDeathCount = memoize((lossAndDamageList, language) => {
         const { hazardTypes } = this.props;
         return groupList(
             lossAndDamageList.filter(v => (
@@ -94,7 +97,7 @@ class Visualizations extends React.PureComponent {
         )
             .map(({ key, value }) => ({
                 // FIXME: potentially unsafe
-                label: hazardTypes[key].title,
+                label: language === 'en' ? hazardTypes[key].title : hazardTypes[key].titleNe,
                 color: hazardTypes[key].color,
                 value: sum(value.map(val => val.loss.peopleDeathCount)),
             }))
@@ -102,7 +105,7 @@ class Visualizations extends React.PureComponent {
             .sort((a, b) => a.value - b.value);
     })
 
-    getHazardLossEstimation = memoize((lossAndDamageList) => {
+    getHazardLossEstimation = memoize((lossAndDamageList, language) => {
         const { hazardTypes } = this.props;
         return groupList(
             lossAndDamageList.filter(v => (
@@ -112,7 +115,7 @@ class Visualizations extends React.PureComponent {
         )
             .map(({ key, value }) => ({
                 // FIXME: potentially unsafe
-                label: hazardTypes[key].title,
+                label: language === 'en' ? hazardTypes[key].title : hazardTypes[key].titleNe,
                 color: hazardTypes[key].color,
                 value: sum(value.map(val => val.loss.estimatedLoss)),
             }))
@@ -135,10 +138,11 @@ class Visualizations extends React.PureComponent {
         const {
             className,
             lossAndDamageList = emptyList,
+            language: { language },
         } = this.props;
 
-        const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList);
-        const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList);
+        const hazardLossEstimate = this.getHazardLossEstimation(lossAndDamageList, language);
+        const hazardDeaths = this.getHazardPeopleDeathCount(lossAndDamageList, language);
         const lossSummary = this.getLossSummary(lossAndDamageList);
         // height: `${60 + lossSummary.length * 40}px`,
 
@@ -147,7 +151,12 @@ class Visualizations extends React.PureComponent {
                 <div className={styles.chartContainer}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
-                            People death count
+                            <Translation>
+                                {
+                                    t => <span>{t('People death count')}</span>
+                                }
+
+                            </Translation>
                         </h4>
                     </header>
                     <div
@@ -182,42 +191,58 @@ class Visualizations extends React.PureComponent {
                 <div className={styles.chartContainer}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
-                            Estimated Monetary Loss
+                            <Translation>
+                                {
+                                    t => <span>{t('Estimated Monetary Loss')}</span>
+                                }
+                            </Translation>
+
                         </h4>
                     </header>
                     <div
                         className={styles.barChart}
                         style={{ height: `${60 + lossSummary.length * 40}px` }}
                     >
-                        <ResponsiveContainer>
-                            <BarChart
-                                data={lossSummary}
-                                layout="vertical"
-                            >
-                                <Tooltip
-                                    formatter={value => ([estimatedLossValueFormatter(value), 'Estimated Monetary Loss'])}
-                                />
-                                <Bar
-                                    layout="vertical"
-                                    dataKey="estimatedLoss"
-                                    fill="#58508d"
-                                />
-                                <XAxis
-                                    dataKey="estimatedLoss"
-                                    type="number"
-                                />
-                                <YAxis
-                                    dataKey="label"
-                                    type="category"
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        <Translation>
+                            {
+                                t => (
+                                    <ResponsiveContainer>
+                                        <BarChart
+                                            data={lossSummary}
+                                            layout="vertical"
+                                        >
+                                            <Tooltip
+                                                formatter={value => ([estimatedLossValueFormatter(value), `${t('Estimated Monetary Loss')}`])}
+                                            />
+                                            <Bar
+                                                layout="vertical"
+                                                dataKey="estimatedLoss"
+                                                fill="#58508d"
+                                            />
+                                            <XAxis
+                                                dataKey="estimatedLoss"
+                                                type="number"
+                                            />
+                                            <YAxis
+                                                dataKey="label"
+                                                type="category"
+                                            />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                )
+                            }
+                        </Translation>
+
                     </div>
                 </div>
                 <div className={styles.chartContainer}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
-                            Death toll by disaster
+                            <Translation>
+                                {
+                                    t => <span>{t('Death toll by disaster')}</span>
+                                }
+                            </Translation>
                         </h4>
                     </header>
                     <div className={styles.pieChart}>
@@ -246,7 +271,11 @@ class Visualizations extends React.PureComponent {
                 <div className={styles.chartContainer}>
                     <header className={styles.header}>
                         <h4 className={styles.heading}>
-                            Estimated economic loss by disaster
+                            <Translation>
+                                {
+                                    t => <span>{t('Estimated economic loss by disaster')}</span>
+                                }
+                            </Translation>
                         </h4>
                     </header>
                     <div className={styles.pieChart}>

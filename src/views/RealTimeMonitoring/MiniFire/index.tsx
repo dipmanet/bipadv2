@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     compareString,
     compareNumber,
@@ -7,6 +8,7 @@ import {
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import { Header } from '#store/atom/table/types';
+import { AppState } from '#store/types';
 
 
 import Table from '#rscv/Table';
@@ -19,10 +21,17 @@ import Fire from '../Fire';
 
 import styles from './styles.scss';
 
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = (state: AppState) => ({
+    language: languageSelector(state),
+});
+
 interface Props {
     className?: string;
     realTimeFire: RealTimeFire[];
     onHazardHover: Function;
+    language: { language: 'en' | 'np' };
 }
 
 const ModalButton = modalize(Button);
@@ -36,6 +45,56 @@ const defaultSort = {
 class Minifire extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
+        this.fireHeaderNe = [
+
+            {
+                key: 'eventOn',
+                label: 'मिति',
+                order: 1,
+                sortable: true,
+                comparator: (a, b) => compareString(a.eventOn, b.eventOn),
+                modifier: (row: RealTimeFire) => {
+                    const { eventOn } = row;
+
+                    return (eventOn) ? (
+                        <div>
+                            {/* parsing date to appropiate format */}
+                            {eventOn.substring(0, eventOn.indexOf('T'))}
+                        </div>
+                    ) : undefined;
+                },
+            },
+            {
+                key: 'time',
+                label: 'समय',
+                order: 2,
+                sortable: false,
+                modifier: (row: RealTimeFire) => {
+                    const { eventOn } = row;
+                    if (eventOn) {
+                        return (
+                            <div>
+                                {/* parsing date to time format */}
+                                {eventOn.split('T')[1].split('.')[0].split('+')[0]}
+                            </div>
+                        );
+                    } return undefined;
+                },
+            },
+            {
+                key: 'landCover',
+                label: 'भूउपयोग',
+                order: 3,
+                sortable: false,
+            },
+            {
+                key: 'brightness',
+                label: 'चमक',
+                order: 4,
+                sortable: true,
+                comparator: (a, b) => compareNumber(a.brightness, b.brightness),
+            },
+        ];
         this.fireHeader = [
 
             {
@@ -95,6 +154,7 @@ class Minifire extends React.PureComponent<Props> {
             realTimeFire,
             className,
             onHazardHover,
+            language: { language },
         } = this.props;
 
         return (
@@ -117,7 +177,7 @@ class Minifire extends React.PureComponent<Props> {
                     <Table
                         className={styles.fireTable}
                         data={realTimeFire}
-                        headers={this.fireHeader}
+                        headers={language === 'en' ? this.fireHeader : this.fireHeaderNe}
                         keySelector={fireKeySelector}
                         onBodyHover={(id: number) => onHazardHover(id)}
                         onBodyHoverOut={() => onHazardHover()}
@@ -129,4 +189,4 @@ class Minifire extends React.PureComponent<Props> {
     }
 }
 
-export default Minifire;
+export default connect(mapStateToProps)(Minifire);

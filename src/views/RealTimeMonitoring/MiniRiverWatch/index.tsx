@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     compareString,
     compareNumber,
@@ -13,9 +14,15 @@ import { Header } from '#store/atom/table/types';
 import {
     RealTimeRiver as RealTimeRiverOld,
 } from '#store/atom/page/types';
+import { AppState } from '#store/types';
 
 import RiverWatch from '../RiverWatch';
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = (state: AppState) => ({
+    language: languageSelector(state),
+});
 
 interface Props {
     className?: string;
@@ -39,6 +46,90 @@ class MiniRiverWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
 
+        this.riverWatchHeaderNe = [
+            {
+                key: 'basin',
+                label: 'बेसिन',
+                order: 1,
+                sortable: true,
+                comparator: (a, b) => compareString(a.basin, b.basin),
+            },
+            {
+                key: 'title',
+                label: 'स्टेशनको नाम',
+                order: 2,
+                sortable: true,
+                comparator: (a, b) => compareString(a.title, b.title),
+            },
+            {
+                key: 'waterLevel',
+                label: 'पानीको तह',
+                order: 5,
+                sortable: true,
+                comparator: (a, b) => compareNumber(
+                    a.waterLevel ? a.waterLevel : 0, b.waterLevel ? b.waterLevel : 0,
+                ),
+                modifier: (row: RealTimeRiver) => {
+                    const {
+                        status,
+                        waterLevel,
+                    } = row;
+                    const className = _cs(
+                        styles.waterLevel,
+                        status === 'BELOW WARNING LEVEL' && styles.below,
+                        status === 'ABOVE WARNING LEVEL' && styles.above,
+                        status === 'ABOVE DANGER LEVEL' && styles.danger,
+                    );
+
+                    return (waterLevel) ? (
+                        <div className={className}>
+                            {waterLevel.toFixed(3)}
+                            m
+                        </div>
+                    ) : undefined;
+                },
+            },
+            {
+                key: 'waterLevelOn',
+                label: 'मिति',
+                order: 3,
+                sortable: true,
+                comparator: (a, b) => compareString(a.waterLevelOn, b.waterLevelOn),
+                modifier: (row: RealTimeRiver) => {
+                    const { waterLevelOn } = row;
+                    return (waterLevelOn) ? (
+                        <div style={{ width: '60px' }}>
+                            {/* parsing date to appropiate format */}
+                            {waterLevelOn.substring(0, waterLevelOn.indexOf('T'))}
+                        </div>
+                    ) : undefined;
+                },
+            },
+            {
+                key: 'time',
+                label: 'समय',
+                order: 4,
+                sortable: false,
+                modifier: (row: RealTimeRiver) => {
+                    const { waterLevelOn } = row;
+                    if (waterLevelOn) {
+                        return (
+                            <div>
+                                {/* parsing date to time format */}
+                                {waterLevelOn.split('T')[1].split('+')[0]}
+                            </div>
+                        );
+                    } return undefined;
+                },
+            },
+            {
+                key: 'status',
+                label: 'स्थिति',
+                order: 6,
+                sortable: true,
+                comparator: (a, b) => compareString(a.status, b.status),
+            },
+        ];
         this.riverWatchHeader = [
             {
                 key: 'basin',
@@ -146,8 +237,8 @@ class MiniRiverWatch extends React.PureComponent<Props> {
             realTimeRiver,
             className,
             onHazardHover,
+            language: { language },
         } = this.props;
-
         return (
             <div className={_cs(className, styles.riverWatch)}>
                 <header className={styles.header}>
@@ -169,7 +260,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                         rowClassNameSelector={this.getClassName}
                         className={styles.riverWatchTable}
                         data={realTimeRiver}
-                        headers={this.riverWatchHeader}
+                        headers={language === 'en' ? this.riverWatchHeader : this.riverWatchHeaderNe}
                         keySelector={riverWatchKeySelector}
                         onBodyHover={(id: number) => onHazardHover(id)}
                         onBodyHoverOut={() => onHazardHover()}
@@ -181,4 +272,4 @@ class MiniRiverWatch extends React.PureComponent<Props> {
     }
 }
 
-export default MiniRiverWatch;
+export default connect(mapStateToProps)(MiniRiverWatch);

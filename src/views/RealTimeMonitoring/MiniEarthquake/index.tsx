@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     compareString,
     compareNumber,
@@ -7,6 +8,7 @@ import {
 import modalize from '#rscg/Modalize';
 import Button from '#rsca/Button';
 import { Header } from '#store/atom/table/types';
+import { AppState } from '#store/types';
 
 
 import Table from '#rscv/Table';
@@ -18,10 +20,17 @@ import {
 import styles from './styles.scss';
 import Earthquake from '../Earthquake';
 
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = (state: AppState) => ({
+    language: languageSelector(state),
+});
+
 interface Props {
     className?: string;
     realTimeEarthquake: RealTimeEarthquake[];
     onHazardHover: Function;
+    language: { language: 'en' | 'np'};
 }
 
 const ModalButton = modalize(Button);
@@ -35,6 +44,68 @@ const defaultSort = {
 class MiniEarthquake extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
+        this.earthquakeHeaderNe = [
+            {
+                key: 'address',
+                label: 'स्थान',
+                order: 1,
+                sortable: true,
+                comparator: (a, b) => compareString(a.address, b.address),
+            },
+            {
+                key: 'eventOn',
+                label: 'मिति',
+                order: 2,
+                sortable: true,
+                comparator: (a, b) => compareString(a.eventOn, b.eventOn),
+                modifier: (row: RealTimeEarthquake) => {
+                    const { eventOn } = row;
+
+                    return (eventOn) ? (
+                        <div>
+                            {/* parsing date to appropiate format */}
+                            {eventOn.substring(0, eventOn.indexOf('T'))}
+                        </div>
+                    ) : undefined;
+                },
+            },
+            {
+                key: 'time',
+                label: 'समय',
+                order: 3,
+                sortable: false,
+                modifier: (row: RealTimeEarthquake) => {
+                    const { eventOn } = row;
+                    if (eventOn) {
+                        const date = new Date(eventOn);
+                        return (
+                            <div>
+                                {/* parsing date to time format */}
+                                {date.toISOString().split('T')[1].split('.')[0]}
+                            </div>
+                        );
+                    } return undefined;
+                },
+            },
+            {
+                key: 'magnitude',
+                label: 'परिमाण',
+                order: 4,
+                sortable: true,
+                comparator: (a, b) => compareNumber(a.magnitude, b.magnitude),
+                modifier: (row: RealTimeEarthquake) => {
+                    const { magnitude } = row;
+                    return (magnitude)
+                        ? (
+                            <div>
+                                {magnitude}
+                                {' '}
+ML
+                            </div>
+                        ) : undefined;
+                },
+            },
+        ];
         this.earthquakeHeader = [
             {
                 key: 'address',
@@ -106,6 +177,7 @@ ML
             realTimeEarthquake,
             className,
             onHazardHover,
+            language: { language },
         } = this.props;
 
         return (
@@ -128,7 +200,7 @@ ML
                     <Table
                         className={styles.earthquakeTable}
                         data={realTimeEarthquake}
-                        headers={this.earthquakeHeader}
+                        headers={language === 'en' ? this.earthquakeHeader : this.earthquakeHeaderNe}
                         keySelector={earthquakeKeySelector}
                         onBodyHover={(id: number) => onHazardHover(id)}
                         onBodyHoverOut={() => onHazardHover()}
@@ -140,4 +212,4 @@ ML
     }
 }
 
-export default MiniEarthquake;
+export default connect(mapStateToProps)(MiniEarthquake);

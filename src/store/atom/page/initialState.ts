@@ -145,14 +145,14 @@ const state: PageState = {
         realTimeFireList: [],
         realTimePollutionList: [],
         realTimeSourceList: [
-            { id: 3, title: 'Rain' },
-            { id: 2, title: 'River' },
+            { id: 3, title: 'Rain', titleNe: 'वर्षा' },
+            { id: 2, title: 'River', titleNe: 'नदी' },
         ],
         otherSourceList: [
-            { id: 1, title: 'Earthquake' },
-            { id: 5, title: 'Air pollution' },
-            { id: 4, title: 'Forest Fire' },
-            { id: 6, title: 'Streamflow' },
+            { id: 1, title: 'Earthquake', titleNe: 'भूकम्प' },
+            { id: 5, title: 'Air pollution', titleNe: 'वायु प्रदूषण' },
+            { id: 4, title: 'Forest Fire', titleNe: 'वन आगो' },
+            { id: 6, title: 'Streamflow', titleNe: 'स्ट्रिमफ्लो' },
         ],
         filters: {
             faramValues: {

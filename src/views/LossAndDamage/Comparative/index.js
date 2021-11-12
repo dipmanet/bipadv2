@@ -9,6 +9,7 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import Modal from '#rscv/Modal';
 
@@ -26,6 +27,7 @@ import {
     municipalitiesSelector,
     wardsSelector,
     hazardTypesSelector,
+    languageSelector,
 } from '#selectors';
 
 import CommonMap from '#components/CommonMap';
@@ -53,6 +55,7 @@ const mapStateToProps = state => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 const emptyList = [];
@@ -175,6 +178,7 @@ class Comparative extends React.PureComponent {
             minDate,
             regions,
             closeModal,
+            language: { language },
         } = this.props;
 
         const {
@@ -192,7 +196,12 @@ class Comparative extends React.PureComponent {
         const region2Incidents = this.filterIncidents(lossAndDamageList, regions, region2);
 
         return (
-            <Modal className={_cs(className, styles.comparative)}>
+            <Modal className={_cs(
+                className,
+                styles.comparative,
+                language === 'np' && styles.languageFont,
+            )}
+            >
                 <header className={styles.header}>
                     <Faram
                         className={styles.regionSelectionForm}
@@ -204,20 +213,29 @@ class Comparative extends React.PureComponent {
                         error={faramErrors}
                         disabled={false}
                     >
-                        <RegionSelectInput
-                            label="First location"
-                            className={styles.regionInput}
-                            faramElementName="region1"
-                            showHintAndError={false}
-                            // autoFocus
-                        />
-                        <RegionSelectInput
-                            label="Second location"
-                            className={styles.regionInput}
-                            faramElementName="region2"
-                            showHintAndError={false}
-                            disabled={!faramValues.region1}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <>
+                                        <RegionSelectInput
+                                            label={t('First location')}
+                                            className={styles.regionInput}
+                                            faramElementName="region1"
+                                            showHintAndError={false}
+                                        // autoFocus
+                                        />
+                                        <RegionSelectInput
+                                            label={t('Second location')}
+                                            className={styles.regionInput}
+                                            faramElementName="region2"
+                                            showHintAndError={false}
+                                            disabled={!faramValues.region1}
+                                        />
+                                    </>
+                                )
+                            }
+                        </Translation>
+
                     </Faram>
                     <Button
                         title="Download Chart"
@@ -238,7 +256,12 @@ class Comparative extends React.PureComponent {
                 >
                     { (!region1 && !region2) ? (
                         <div className={styles.preComparisionMessage}>
-                            Please select locations to start the comparison
+                            <Translation>
+                                {
+                                    t => <span>{t('SelectMessage')}</span>
+                                }
+                            </Translation>
+
                         </div>
                     ) : (
                         <div className={styles.comparisionContainer}>

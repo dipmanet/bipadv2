@@ -334,7 +334,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         // debug true for development
         i18n.use(initReactI18next).init({
             lng: 'en',
-            debug: true,
+            debug: false,
             fallbackLng: 'en',
             resources: {
                 en: enTranslation,

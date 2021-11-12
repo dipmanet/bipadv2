@@ -417,11 +417,13 @@ export interface ProfileContactPage {
 export interface RealTimeSource {
     id: number;
     title: string;
+    titleNe: string;
 }
 
 export interface OtherSource {
     id: number;
     title: string;
+    titleNe: string;
 }
 
 export interface RealTimeMonitoringPage {

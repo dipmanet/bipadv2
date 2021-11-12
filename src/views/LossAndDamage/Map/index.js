@@ -88,6 +88,8 @@ export default class LossAndDamageMap extends React.PureComponent {
         const colorUnitWidth = `${100 / colorGrade.length}%`;
         // const colorString = `linear-gradient(to right, ${pickList(color, 1, 2).join(', ')})`;
 
+        console.log('loss metrics', lossMetrics);
+
         return (
             <React.Fragment>
                 <div

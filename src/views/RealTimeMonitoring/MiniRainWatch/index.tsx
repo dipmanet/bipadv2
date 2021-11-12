@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     compareString,
     compareNumber,
@@ -16,15 +17,24 @@ import {
     RealTimeRain,
 } from '#store/atom/page/types';
 
+import { languageSelector } from '#selectors';
+
 import RainWatch from '../RainWatch';
 import { TitleContext } from '#components/TitleContext';
+import { AppState } from '#store/types';
 
 import styles from './styles.scss';
+
+const mapStateToProps = (state: AppState) => ({
+    language: languageSelector(state),
+});
+
 
 interface Props {
     realTimeRain: RealTimeRain[];
     className?: string;
     onHazardHover: Function;
+    language: { language: 'en' | 'np'};
 }
 interface State {
     duration: number;
@@ -93,10 +103,10 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
 
     public static contextType = TitleContext;
 
-    private getRainHeader = (duration: number) => ([
+    private getRainHeader = (duration: number, language: string) => ([
         {
             key: 'basin',
-            label: 'Basin',
+            label: language === 'en' ? 'Basin' : 'बेसिन',
             order: 1,
             sortable: true,
             comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.basin, b.basin),
@@ -112,14 +122,14 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         },
         {
             key: 'title',
-            label: 'Station Name',
+            label: language === 'en' ? 'Station Name' : 'स्टेशनको नाम',
             order: 2,
             sortable: true,
             comparator: (a: RealTimeRain, b: RealTimeRain) => compareString(a.title, b.title),
         },
         {
             key: 'lastHour',
-            label: 'Rainfall',
+            label: language === 'en' ? 'Rainfall' : 'वर्षा',
             order: 5,
             modifier: (row: RealTimeRain) => {
                 const {
@@ -149,7 +159,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         },
         {
             key: 'modifiedOn',
-            label: 'Date',
+            label: language === 'en' ? 'Date' : 'मिति',
             order: 3,
             sortable: true,
             comparator: (a, b) => compareString(a.modifiedOn, b.modifiedOn),
@@ -166,7 +176,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         },
         {
             key: 'time',
-            label: 'Time',
+            label: language === 'en' ? 'Time' : 'समय',
             order: 4,
             sortable: false,
             modifier: (row: RealTimeRain) => {
@@ -185,7 +195,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         },
         {
             key: 'status',
-            label: 'Status',
+            label: language === 'en' ? 'Status' : 'स्थिति',
             order: 6,
             sortable: true,
             comparator: (a, b) => compareString(a.status, b.status),
@@ -217,10 +227,11 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             className,
             realTimeRain,
             onHazardHover,
+            language: { language },
         } = this.props;
 
         const { duration } = this.state;
-        const rainHeader: Header<RealTimeRain>[] = this.getRainHeader(duration);
+        const rainHeader: Header<RealTimeRain>[] = this.getRainHeader(duration, language);
         const { setRealtime } = this.context;
 
         if (setRealtime) {
@@ -276,4 +287,4 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
     }
 }
 
-export default MiniRainWatch;
+export default connect(mapStateToProps)(MiniRainWatch);
