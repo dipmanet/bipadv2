@@ -322,6 +322,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             LoadingTooltip: false,
             landslidePolygonImagemap: [],
             landslidePolygonChoroplethMapData: [],
+            climateChangeSelectedDistrict: { id: undefined, title: undefined },
 
         };
     }
@@ -707,6 +708,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    private setClimateChangeSelectedDistrict=(data) => {
+        const { id, properties: { title } } = data;
+
+        this.setState({
+            climateChangeSelectedDistrict: { id, title },
+        });
+    }
+
     public render() {
         const {
             mapStyle,
@@ -743,6 +752,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             landslidePolygonImagemap,
             handlelandslidePolygonChoroplethMapData,
             landslidePolygonChoroplethMapData,
+            climateChangeSelectedDistrict,
 
 
         } = this.state;
@@ -782,6 +792,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             handleLandslidePolygonImageMap: this.handleLandslidePolygonImageMap,
             handlelandslidePolygonChoroplethMapData: this.handlelandslidePolygonChoroplethMapData,
             landslidePolygonChoroplethMapData,
+            climateChangeSelectedDistrict,
+            setClimateChangeSelectedDistrict: this.setClimateChangeSelectedDistrict,
 
 
         };

@@ -122,7 +122,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
     }
 
     private handleClick=(feature, lngLat) => {
-        const { activeLayers } = this.context;
+        const { activeLayers, setClimateChangeSelectedDistrict } = this.context;
+
+        setClimateChangeSelectedDistrict(feature);
         const municipalityAvailableForOpenseadragon = !!(feature && feature.state.value);
         if (activeLayers[activeLayers.length - 1].type === 'choropleth' && municipalityAvailableForOpenseadragon && choroplethLayers[choroplethLayers.length - 1].layername === 'post_monsoon' && feature && feature.state.value === 1) {
             const municipalityName = (`${feature.properties.title_en} ${feature.properties.type}`);
@@ -279,8 +281,8 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
         const JsonDataPresent = rasterLayers.length && rasterLayers[rasterLayers.length - 1].jsonData;
 
         const tooltipKeys = JsonDataPresent !== undefined && JsonDataPresent !== 0 && JsonDataPresent.map(item => item.label);
+        const responseDataKeys = mapClickedResponse ? Object.keys(mapClickedResponse) : [];
 
-        const responseDataKeys = Object.keys(mapClickedResponse);
         const tooltipData = responseDataKeys.length && mapClickedResponse.features.map(item => item.properties)[0];
 
         const tooltipValues = JsonDataPresent !== undefined && JsonDataPresent !== 0 && tooltipData !== undefined && tooltipData !== 0 && JsonDataPresent.map(item => tooltipData[item.key]);
