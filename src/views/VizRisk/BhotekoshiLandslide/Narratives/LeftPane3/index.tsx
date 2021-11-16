@@ -13,113 +13,34 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';
 import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
-import styles from './styles.scss';
+import { lineData, rainfallData } from '../../Data/temperatureData';
+import styles from '../../styles.scss';
 
-interface Props{
-    handleNext: () => void;
-    handlePrev: () => void;
-    pagenumber: number;
-    totalPages: number;
-    pending: boolean;
-
+interface Props {
+    renderLegend: () => void;
+    customTooltip: () => void;
+    renderLegendRainfall: () => void;
+    customTooltipRain: () => void;
 }
-const lineData = [
-    {
-        Max: 20.4, Min: 5.8, Avg: 13.1, name: 'Jan',
-    },
-    {
-        Max: 23.4, Min: 7.6, Avg: 15.5, name: 'Feb',
-    },
-    {
-        Max: 26, Min: 10.7, Avg: 18.35, name: 'Mar',
-    },
-    {
-        Max: 30.5, Min: 12.7, Avg: 21.6, name: 'Apr',
-    },
-    {
-        Max: 30.9, Min: 16.4, Avg: 23.65, name: 'May',
-    },
-    {
-        Max: 31.2, Min: 20.8, Avg: 26, name: 'Jun',
-    },
-    {
-        Max: 29.3, Min: 21.2, Avg: 25.25, name: 'Jul',
-    },
-    {
-        Max: 32, Min: 21.4, Avg: 26.7, name: 'Aug',
-    },
-    {
-        Max: 31.3, Min: 20.2, Avg: 25.75, name: 'Sep',
-    },
-    {
-        Max: 32.1, Min: 18.2, Avg: 25.15, name: 'Oct',
-    },
-    {
-        Max: 26.4, Min: 8.3, Avg: 17.35, name: 'Nov',
-    },
-    {
-        Max: 23.6, Min: 4, Avg: 13.8, name: 'Dec',
-    },
-];
-
-const rainfallData = [
-    {
-        name: 'Jan', Rainfall: 51.3,
-    },
-    {
-        name: 'Feb', Rainfall: 34.2,
-    },
-    {
-        name: 'Mar', Rainfall: 92.4,
-    },
-    {
-        name: 'Apr', Rainfall: 92.4,
-    },
-    {
-        name: 'May', Rainfall: 288,
-    },
-    {
-        name: 'Jun', Rainfall: 658.5,
-    },
-    {
-        name: 'Jul', Rainfall: 1109.5,
-    },
-    {
-        name: 'Aug', Rainfall: 1049.4,
-    },
-    {
-        name: 'Sep', Rainfall: 552.2,
-    },
-    {
-        name: 'Oct', Rainfall: 21.6,
-    },
-    {
-        name: 'Nov', Rainfall: 0,
-    },
-    {
-        name: 'Dec', Rainfall: 0,
-    },
-];
 
 const LeftPane3 = (props: Props) => {
-    const { pending,
-        totalPages,
-        pagenumber,
-        handleNext,
-        handlePrev } = props;
+    const { renderLegend,
+        customTooltip,
+        renderLegendRainfall,
+        customTooltipRain } = props;
 
     return (
         <div className={styles.vrSideBar}>
             <h1>
               Bhotekoshi Municipality
             </h1>
-            <p>
-            Bhotekoshi Rural Municipality is located in Sindhupalchowk
-            district of Bagmati province. The municipality has 5
-            wards and covers an area of 278.31 sq.km and is situated
-            in the altitude range of 1183 to 5371 m above sea level.
+            <p className={styles.narrativeText}>
+                Bhotekoshi Rural Municipality is located in Sindhupalchowk
+                district of Bagmati province. The municipality has 5
+                wards and covers an area of 278.31 sq.km and is situated
+                in the altitude range of 1183 to 5371 m above sea level.
             </p>
-            <p>
+            <p className={styles.narrativeText}>
                 Source: Department of Hydrology and Meteorology
             </p>
             <div className={styles.iconRow}>
@@ -139,10 +60,6 @@ const LeftPane3 = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.infoIconsContainer}>
-                    {/* <ScalableVectorGraphics
-                            className={styles.infoIcon}
-                            src={TempIcon}
-                        /> */}
                     <div className={styles.descriptionCotainer}>
                         <div className={styles.iconTitle}>4℃</div>
                         <div className={styles.iconText}>
@@ -166,7 +83,6 @@ const LeftPane3 = (props: Props) => {
                             Annual
                             Rainfall
                         </div>
-
                     </div>
                 </div>
                 <div className={styles.infoIconsContainerHidden}>
@@ -179,15 +95,14 @@ const LeftPane3 = (props: Props) => {
                         <div className={styles.iconText}>
                             Elevation from Sea Level
                         </div>
-
                     </div>
                 </div>
             </div>
             <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
             <div className={styles.climateChart}>
-                <ResponsiveContainer className={styles.chartContainer} height={300} width={350}>
+                <ResponsiveContainer height={'100%'} width={'100%'}>
                     <LineChart
-                        margin={{ top: 0, right: 0, left: 10, bottom: 10 }}
+                        margin={{ top: 0, right: 0, left: 0, bottom: 10 }}
                         data={lineData}
                     >
                         <CartesianGrid
@@ -209,9 +124,9 @@ const LeftPane3 = (props: Props) => {
                             interval="preserveEnd"
                             allowDataOverflow
                         />
-                        <Legend iconType="square" iconSize={10} align="center" content={props.renderLegend} />
+                        <Legend iconType="square" iconSize={10} align="center" content={renderLegend} />
                         <Tooltip
-                            content={props.customTooltip}
+                            content={customTooltip}
                         />
                         <Line type="monotone" dataKey="Max" stroke="#ffbf00" />
                         <Line type="monotone" dataKey="Avg" stroke="#00d725" />
@@ -221,12 +136,10 @@ const LeftPane3 = (props: Props) => {
             </div>
             <div className={styles.climateChart}>
                 <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
-                <ResponsiveContainer className={styles.chartContainer} height={300} width={350}>
+                <ResponsiveContainer height={'100%'} width={'100%'}>
                     <LineChart
-                        margin={{ top: 0, right: 0, left: 10, bottom: 10 }}
+                        margin={{ top: 0, right: 0, left: 0, bottom: 10 }}
                         data={rainfallData}
-                        height={300}
-                        width={300}
                     >
                         <CartesianGrid
                             vertical={false}
@@ -251,10 +164,10 @@ const LeftPane3 = (props: Props) => {
                             iconType="square"
                             iconSize={10}
                             align="center"
-                            content={props.renderLegendRainfall}
+                            content={renderLegendRainfall}
                         />
                         <Tooltip
-                            content={props.customTooltipRain}
+                            content={customTooltipRain}
                         />
                         <Line type="monotone" dataKey="Rainfall" stroke="#ffbf00" />
 

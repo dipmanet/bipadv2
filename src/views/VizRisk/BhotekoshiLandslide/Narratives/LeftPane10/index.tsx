@@ -3,14 +3,12 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Legend,
     ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
-import Loader from 'react-loader';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -160,17 +158,17 @@ const LeftPane10 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Risk</h1>
-            <p>
+            <p className={styles.narrativeText}>
             The map shows the ward level risk of landslide in
             Bhotekoshi Rural Municipality. The municipality
             lies in hilly region of the country, highly
             susceptible to landslides. Out of the 5 wards,
             ward 1 and 3 posess higher risk of landslide.
             </p>
-            <p>
+            <p className={styles.narrativeText}>
             Source: Durham University
             </p>
-            <p>
+            <p className={styles.narrativeText}>
                COMMUNITY INFRASTRUCTURE
 
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}

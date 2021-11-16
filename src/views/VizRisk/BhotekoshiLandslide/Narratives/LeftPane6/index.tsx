@@ -3,14 +3,12 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Legend,
     ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
-import Demo from '../../Data/demographicsData';
+import styles from '../../styles.scss';
 
 interface Props{
     handleNext: () => void;
@@ -18,7 +16,7 @@ interface Props{
     pagenumber: number;
     totalPages: number;
     pending: boolean;
-
+    ci: array;
 }
 
 const ciRef = {
@@ -30,7 +28,6 @@ const ciRef = {
 
 const LeftPane6 = (props: Props) => {
     const { ci } = props;
-    console.log('ci in left pane', ci);
     const [ciGeoJson, setCiGeo] = useState([]);
 
     useEffect(() => {
@@ -43,10 +40,6 @@ const LeftPane6 = (props: Props) => {
                 },
                 geometry: f.point,
             }));
-            const geoArr = {
-                type: 'FeatureCollection',
-                features,
-            };
             const resourceArr = [...new Set(ci.map(c => c.resourceType))];
             const chartData = resourceArr.map(res => ({
                 name: ciRef[res],
@@ -60,45 +53,46 @@ const LeftPane6 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Community Infrastructure</h1>
-            <p>
-            Community Infrastructures are socially, economically
-            or operationally essential to the functioning of a society
-            or community, both in routine circumstances and in the
-            extreme events of an emergency
-            The residential and governmental buildings, religious
-            and cultural sites, banking institutions, as well as
-            critical infrastructures such as hospitals, schools,
-            bridges in the municipality are at constant threat of
-            landslides every year.
-
+            <p className={styles.narrativeText}>
+                Community Infrastructures are socially, economically
+                or operationally essential to the functioning of a society
+                or community, both in routine circumstances and in the
+                extreme events of an emergency
+                The residential and governmental buildings, religious
+                and cultural sites, banking institutions, as well as
+                critical infrastructures such as hospitals, schools,
+                bridges in the municipality are at constant threat of
+                landslides every year.
             </p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={300}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={ciGeoJson}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Tooltip />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
+            <div className={styles.climateChart}>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <BarChart
+                        width={300}
+                        height={600}
+                        data={ciGeoJson}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <Tooltip />
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,219,95)"
+                            barSize={20}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            tick={{ fill: '#94bdcf' }}
+                            radius={[0, 20, 20, 0]}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
 
+            </div>
         </div>
     );
 };

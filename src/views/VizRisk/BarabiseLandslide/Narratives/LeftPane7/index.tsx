@@ -4,14 +4,11 @@ import {
     BarChart,
     CartesianGrid,
     Label,
-    Legend,
     ResponsiveContainer,
-    Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
-import Demo from '../../Data/demographicsData';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -76,7 +73,6 @@ const LeftPane7 = (props: Props) => {
             }));
             setIncidentChart(noIncidentsChart);
             setLossChart(loss);
-            console.log('loss chart', loss);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -85,51 +81,66 @@ const LeftPane7 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Past Landslide Incidents</h1>
-            <p>
-            In the year 2020, 3 landslide incidents
-            have occurred in the municipality. 8 people
-            lost their lives, 32 went missing and 47
-            houses were destroyed.
+            <p className={styles.narrativeText}>
+                In the year 2020, 3 landslide incidents
+                have occurred in the municipality. 8 people
+                lost their lives, 32 went missing and 47
+                houses were destroyed.
             </p>
 
             <p>NO. OF INCIDENTS</p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={incidentChart}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
-
+            <div className={styles.climateChart}>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <BarChart
+                        data={incidentChart}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,219,95)"
+                            barSize={20}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            tick={{ fill: '#94bdcf' }}
+                            radius={[0, 20, 20, 0]}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
             <p>LOSS INFORMATION</p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={lossChart}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number">
+            <div className={styles.climateChart}>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <BarChart
+                        width={300}
+                        height={600}
+                        data={lossChart}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number">
+                            <Label
+                                value="No. of deaths"
+                                offset={0}
+                                position="insideBottom"
+                                style={{
+                                    textAnchor: 'middle',
+                                    fill: 'rgba(255, 255, 255, 0.87)',
+                                }}
+                            />
+                        </XAxis>
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
                         <Label
                             value="No. of deaths"
                             offset={0}
@@ -139,33 +150,17 @@ const LeftPane7 = (props: Props) => {
                                 fill: 'rgba(255, 255, 255, 0.87)',
                             }}
                         />
-                    </XAxis>
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Label
-                        value="No. of deaths"
-                        offset={0}
-                        position="insideBottom"
-                        style={{
-                            textAnchor: 'middle',
-                            fill: 'rgba(255, 255, 255, 0.87)',
-                        }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
-
-
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,219,95)"
+                            barSize={20}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            tick={{ fill: '#94bdcf' }}
+                            radius={[0, 20, 20, 0]}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };

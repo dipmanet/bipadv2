@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -130,16 +130,16 @@ const LeftPane8 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Susceptibility</h1>
-            <p>
-            The map shows the area of Bhotekoshi Rural Municipality
-            where landslides are likely to occur. The red color
-            signifies the higher likelihood and blue color signifies
-            the lower likelihood of landslide occurrences.
+            <p className={styles.narrativeText}>
+                The map shows the area of Bhotekoshi Rural Municipality
+                where landslides are likely to occur. The red color
+                signifies the higher likelihood and blue color signifies
+                the lower likelihood of landslide occurrences.
             </p>
-            <p>
-            Source: Durham University
+            <p className={styles.narrativeText}>
+                 Source: Durham University
             </p>
-            <p>
+            <p className={styles.narrativeText}>
                COMMUNITY INFRASTRUCTURE
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}
             </p>

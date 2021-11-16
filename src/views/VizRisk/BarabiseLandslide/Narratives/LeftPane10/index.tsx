@@ -3,14 +3,11 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Legend,
     ResponsiveContainer,
-    Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
-import Loader from 'react-loader';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -70,7 +67,6 @@ const LeftPane10 = (props: Props) => {
         landSlide,
         chartReset,
         ci,
-        pending,
         buildingCount,
         overallBuildingsCount,
     } = props;
@@ -94,7 +90,6 @@ const LeftPane10 = (props: Props) => {
             }));
             setIncidentChart(noIncidentsChart);
             setLossChart(loss);
-            console.log('loss chart', loss);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -121,14 +116,12 @@ const LeftPane10 = (props: Props) => {
                 Total: drawData.filter(item => item.hazardTitle === hazard).length,
             }));
             cD.push({ name: 'Buildings', Total: buildingCount.count });
-            console.log('buildingCount', buildingCount);
             setCIChartData(cD);
             setReset(false);
         }
     }, [buildingCount, drawData]);
 
     useEffect(() => {
-        console.log('reset');
         if (ci) {
             const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({
@@ -159,49 +152,45 @@ const LeftPane10 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Risk</h1>
-            <p>
-            The map shows the ward level risk of landslide in
-            Barhabise Municipality. The municipality lies in
-            hilly region of the country, highly susceptible to
-            landslides . Out of the 9 wards, ward 4 possess
-            the higher risk of landslide.
+            <p className={styles.narrativeText}>
+                The map shows the ward level risk of landslide in
+                Barhabise Municipality. The municipality lies in
+                hilly region of the country, highly susceptible to
+                landslides . Out of the 9 wards, ward 4 possess
+                the higher risk of landslide.
             </p>
-            <p>
-            Source: Durham University
+            <p className={styles.narrativeText}>
+                Source: Durham University
             </p>
-            <p>
+            <p className={styles.narrativeText}>
                COMMUNITY INFRASTRUCTURE
-
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}
-
-
             </p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={cichartData}
-                    layout="vertical"
-                    margin={{ left: 5, right: 30 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
-
+            <div className={styles.climateChart}>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <BarChart
+                        data={cichartData}
+                        layout="vertical"
+                        margin={{ left: 5, right: 30 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,219,95)"
+                            barSize={20}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            tick={{ fill: '#94bdcf' }}
+                            radius={[0, 20, 20, 0]}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };

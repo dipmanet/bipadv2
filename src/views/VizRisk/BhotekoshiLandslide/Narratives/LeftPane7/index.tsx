@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -83,7 +83,7 @@ const LeftPane7 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Past Landslide Incidents</h1>
-            <p>
+            <p className={styles.narrativeText}>
             In the year 2020, 8 landslide incidents have occurred
             in the municipality. 6 people lost their lives, 4 went
             missing and 31 houses were destroyed.

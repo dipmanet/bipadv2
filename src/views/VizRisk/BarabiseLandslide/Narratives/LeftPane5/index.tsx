@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 import Demo from '../../Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
@@ -19,25 +19,16 @@ import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
 
 const demoChartdata = Demo.demographicsData;
 
-interface Props{
-    handleNext: () => void;
-    handlePrev: () => void;
-    pagenumber: number;
-    totalPages: number;
-    pending: boolean;
 
-}
-
-
-const LeftPane4 = (props: Props) => {
+const LeftPane4 = () => {
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Male Population: ${payload[0].payload.MalePop} ℃`}</p>
-                    <p>{`Female Population: ${payload[0].payload.FemalePop} ℃`}</p>
-                    <p>{`Total Households: ${payload[0].payload.FamilyCount} ℃`}</p>
+                    <p>{`Male Population: ${payload[0].payload.MalePop}`}</p>
+                    <p>{`Female Population: ${payload[0].payload.FemalePop}`}</p>
+                    <p>{`Total Households: ${payload[0].payload.FamilyCount}`}</p>
 
                 </div>
             );
@@ -74,12 +65,12 @@ const LeftPane4 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Demography</h1>
-            <p>
-            Barhabise municipality has a total population of 26,114
-            with 13257 males and 128537 females residing in a total
-            of 7660 households. Ward 3 has the largest number of
-            households (1195) while ward 1 has the least number of
-            households (310).
+            <p className={styles.narrativeText}>
+                Barhabise municipality has a total population of 26,114
+                with 13257 males and 128537 females residing in a total
+                of 7660 households. Ward 3 has the largest number of
+                households (1195) while ward 1 has the least number of
+                households (310).
             </p>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>
@@ -141,11 +132,9 @@ const LeftPane4 = (props: Props) => {
             </div>
 
 
-            <div className={styles.chartContainer}>
-                <ResponsiveContainer height={600} width={350}>
+            <div className={styles.climateChart}>
+                <ResponsiveContainer height={demoChartdata.length * 40 + 60} width={'100%'}>
                     <BarChart
-                        // width={350}
-                        // height={600}
                         data={demoChartdata}
                         layout="vertical"
                         margin={{ top: 30, bottom: 10, right: 20, left: 10 }}

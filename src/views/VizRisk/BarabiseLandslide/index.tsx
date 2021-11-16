@@ -3,13 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { compose, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import Anime from 'react-anime';
 import Loader from 'react-loader';
 
 import {
-    _cs,
     Obj,
-    listToMap,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import { FlyToInterpolator } from 'react-map-gl';
@@ -395,7 +392,6 @@ const BarabiseLandslide = (props) => {
 
     const getPolygonString = (p) => {
         const poly = { type: 'Polygon', coordinates: p };
-        console.log('poly', poly);
         return JSON.stringify(poly);
     };
 
@@ -450,8 +446,6 @@ const BarabiseLandslide = (props) => {
     };
 
     const handleNext = () => {
-        console.log('leftElements.length', leftElements.length);
-        console.log('currentPage', currentPage);
         if (currentPage < leftElements.length) {
             setCurrentPage(currentPage + 1);
             disableNavBtns('both');
@@ -482,7 +476,6 @@ const BarabiseLandslide = (props) => {
     const handleDrawSelectedData = (result, dataArr) => {
         setDrawData(result);
         // buildingCountRequest.do();
-        console.log('dataArr', dataArr);
         if (dataArr) {
             buildingCountRequest.do({
                 polygon: getPolygonString(dataArr),
@@ -498,7 +491,6 @@ const BarabiseLandslide = (props) => {
     const handlehideOSMLayers = (data) => {
         setHideOSM(data);
     };
-
 
     return (
         <>

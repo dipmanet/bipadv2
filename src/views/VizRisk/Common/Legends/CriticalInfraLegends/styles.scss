@@ -43,7 +43,7 @@
                     color: white;
                     opacity: 0.87;
                     padding-right: 5px;
-                    padding-left: 2px;
+                    padding-left: 5px;
     
                 }
                 .canalIcon{
@@ -80,9 +80,11 @@
                     padding: 0;
                     height: 20px;
                     // padding-top: 10px;
+                    white-space: nowrap;
                     
                     .svgIcon{
                         width: 25px;
+                        height: 25px;
                     }
                       path{
                         fill: #1664c1;
@@ -122,6 +124,7 @@
                     }
                     .svgIcon{
                         width: 25px;
+                        height: 25px;
                     }
                 }
             }

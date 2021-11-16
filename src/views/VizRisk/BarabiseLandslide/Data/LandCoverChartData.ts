@@ -30,10 +30,6 @@ export default {
             item: 'Buildings',
         },
         {
-            color: '#b6f7a8',
-            item: 'Meadow',
-        },
-        {
             color: '#0670bc',
             item: 'Water',
         },

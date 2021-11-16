@@ -7,20 +7,22 @@ import {
     ResponsiveContainer,
     Tooltip,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 import CustomLabel from '#views/VizRisk/Common/ChartComps/CustomLabel';
 import CustomChartLegend from '#views/VizRisk/Common/ChartComps/CustomChartLegend';
 import LandCover from '../../Data/LandCoverChartData';
 
 const demoChartdata = LandCover.chartData;
 
-interface Props{
-    handleNext: () => void;
-    handlePrev: () => void;
-    pagenumber: number;
-    totalPages: number;
-    pending: boolean;
+interface Data{
+    renderActiveShape: () => void;
+    onPieEnter: () => void;
+    customTooltip: () => void;
+    activeIndex: number;
 
+}
+interface Props {
+    data: Data;
 }
 
 const LeftPane4 = (props: Props) => {
@@ -36,19 +38,18 @@ const LeftPane4 = (props: Props) => {
             <h1>
              Land Cover
             </h1>
-            <p>
+            <p className={styles.narrativeText}>
                 Out of a total area of 134.65 square km, 63.13 sq km of
                 the land is covered by forests, 23.64 sq km by farmland,
                 13.8 sq km by meadow, 0.112  sq km by water bodies and 8.6 sq km by
                 residential areas. Other areas in the municipality
                 is covered by scree, sand, scrubs, shingles and stones.
             </p>
-            <p>
+            <p className={styles.narrativeText}>
                 Source: OpenStreetMap
             </p>
-            <div className={styles.customChartLegend}>
-
-                <ResponsiveContainer className={styles.respContainer} height={200}>
+            <div className={styles.climateChart}>
+                <ResponsiveContainer height={'100%'} width={'100%'}>
                     <PieChart
                         width={200}
                         height={150}

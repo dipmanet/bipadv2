@@ -3,13 +3,11 @@ import {
     Bar,
     BarChart,
     CartesianGrid,
-    Legend,
     ResponsiveContainer,
-    Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -40,7 +38,6 @@ const getTotalLoss = (year, arr) => {
             return incident.date > yearInt && incident.date < nextYear;
         })
         .map(l => l.loss);
-    console.log('temp', temp);
     if (temp.length > 0) {
         return temp
             .reduce((a, b) => ({ peopleDeathCount:
@@ -85,7 +82,6 @@ const LeftPane8 = (props: Props) => {
             }));
             setIncidentChart(noIncidentsChart);
             setLossChart(loss);
-            console.log('loss chart', loss);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -130,44 +126,46 @@ const LeftPane8 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Susceptibility</h1>
-            <p>
-            The map shows the area of Barhabise Municipality where
-            landslides are likely to occur. The red color signifies
-            the higher likelihood and blue color signifies the lower
-            likelihood of landslide occurrences.
+            <p className={styles.narrativeText}>
+                The map shows the area of Barhabise Municipality where
+                landslides are likely to occur. The red color signifies
+                the higher likelihood and blue color signifies the lower
+                likelihood of landslide occurrences.
             </p>
-            <p>
-            Source: Durham University
+            <p className={styles.narrativeText}>
+                 Source: Durham University
             </p>
-            <p>
+            <p className={styles.narrativeText}>
                COMMUNITY INFRASTRUCTURE
                 {reset ? ' (Municipality) ' : ' (Selected Area) '}
             </p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                <BarChart
-                    width={300}
-                    height={600}
-                    data={cichartData}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Bar
-                        dataKey="Total"
-                        fill="rgb(0,219,95)"
-                        barSize={20}
-                        label={{ position: 'right', fill: '#ffffff' }}
-                        tick={{ fill: '#94bdcf' }}
-                        radius={[0, 20, 20, 0]}
-                    />
-                </BarChart>
-            </ResponsiveContainer>
+            <div className={styles.climateChart}>
+                <ResponsiveContainer width={'100%'} height={'100%'}>
+                    <BarChart
+                        width={300}
+                        height={600}
+                        data={cichartData}
+                        layout="vertical"
+                        margin={{ left: 20, right: 20 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <Bar
+                            dataKey="Total"
+                            fill="rgb(0,219,95)"
+                            barSize={20}
+                            label={{ position: 'right', fill: '#ffffff' }}
+                            tick={{ fill: '#94bdcf' }}
+                            radius={[0, 20, 20, 0]}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };

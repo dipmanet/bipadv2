@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 import Demo from '../../Data/demographicsData';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
@@ -62,12 +62,12 @@ const LeftPane4 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Demography</h1>
-            <p>
-            Bhotekoshi Rural Municipality has a total population
-            of 13,396 with 6470 males and 6908 females residing in
-            a total of 2586 households. Ward 4 has the largest number
-            of households (677) while ward 3 has the least number of
-            households(187). (Data Source: Municipal Profile, 2075)
+            <p className={styles.narrativeText}>
+                Bhotekoshi Rural Municipality has a total population
+                of 13,396 with 6470 males and 6908 females residing in
+                a total of 2586 households. Ward 4 has the largest number
+                of households (677) while ward 3 has the least number of
+                households(187). (Data Source: Municipal Profile, 2075)
             </p>
             <div className={styles.iconRow}>
                 <div className={styles.infoIconsContainer}>
@@ -129,14 +129,12 @@ const LeftPane4 = (props: Props) => {
             </div>
 
 
-            <div className={styles.chartContainer}>
-                <ResponsiveContainer height={600} width={350}>
+            <div className={styles.climateChart}>
+                <ResponsiveContainer height={'100%'} width={'100%'}>
                     <BarChart
-                        // width={350}
-                        // height={600}
                         data={demoChartdata}
                         layout="vertical"
-                        margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
+                        margin={{ top: 0, bottom: 10, right: 0, left: 0 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" tick={{ fill: '#94bdcf' }} />

@@ -3,6 +3,7 @@ import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 import DeckGL from '@deck.gl/react';
 import { ScatterplotLayer } from '@deck.gl/layers';
 import { StaticMap } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 import * as d3 from 'd3';
 import { MapboxLayer } from '@deck.gl/mapbox';
 import { Spring } from 'react-spring/renderprops';
@@ -17,6 +18,11 @@ import {
 } from '#selectors';
 // import RangeInput from '../Components/RangeInput';
 import styles from './styles.scss';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import/no-webpack-loader-syntax
+// eslint-disable-next-line import/no-unresolved
+mapboxgl.workerClass = require('mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -24,16 +30,6 @@ const mapStateToProps = (state, props) => ({
 });
 
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
-const populationWardExpression = [
-    'interpolate',
-    ['linear'],
-    ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fe9b2a',
-    3, '#fe9b2a', 4, '#9a3404',
-    5, '#d95f0e', 6, '#fe9b2a',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#fed990',
-];
 
 const Deck = (props) => {
     const [glContext, setGLContext] = useState();
@@ -55,8 +51,6 @@ const Deck = (props) => {
         libraries,
         currentPage,
         handleFlyTo,
-        wards,
-        ci,
     } = props;
     const getToolTip = ({ object }) => (
         object && currentPage === 5 && {
@@ -103,17 +97,13 @@ const Deck = (props) => {
         // depth: Number(row.Depth),
         // magnitude: Number(row.Magnitude)
     }));
-    const formatLabel = (t) => {
-        const date = new Date(t);
-        return `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}`;
-    };
+
     const dataFilter = new DataFilterExtension({
         filterSize: 1,
         // Enable for higher precision, e.g. 1 second granularity
         // See DataFilterExtension documentation for how to pick precision
         fp64: false,
     });
-    const MS_PER_DAY = 2.64e7;
     const getTimeRange = (datas) => {
         if (!datas) {
             return null;
@@ -188,28 +178,13 @@ const Deck = (props) => {
             },
         );
 
-
-        if (currentPage === 8) {
-            map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
-            map.moveLayer('suseptibility-bahrabise');
-            console.log('currentPage:', currentPage);
-        }
-        // const criticalinfrastructuresdata = getGeoJSON(criticalinfrastructures.criticalData);
-        // const categoriesCritical = [...new Set(criticalinfrastructuresdata.features.map(
-        //     item => item.properties.resourceType,
-        // ))];
-        // categoriesCritical.map((layer) => {
-
-
-        //     return null;
-        // });
         MapLayers.landuse.map((layer) => {
             map.setLayoutProperty(layer, 'visibility', 'none');
-
             return null;
         });
 
         if (currentPage === 3) {
+            console.log('its three now');
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
@@ -249,7 +224,7 @@ const Deck = (props) => {
             const map = mapRef.current.getMap();
             setReAnimate(true);
             MapLayers.landslide.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
+                map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
         } else if (currentPage === 2) {
@@ -266,6 +241,7 @@ const Deck = (props) => {
                 return null;
             });
         } else if (currentPage === 3) {
+            console.log('entering here too');
             const map = mapRef.current.getMap();
 
             setReAnimate(true);
@@ -287,51 +263,6 @@ const Deck = (props) => {
             });
 
             map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-        } else if (currentPage === 5) {
-            const map = mapRef.current.getMap();
-            setReAnimate(true);
-
-            // MapLayers.suseptibility.map((layer) => {
-            //     map.setLayoutProperty(layer, 'visibility', 'none');
-            //     return null;
-            // });
-            // MapLayers.criticalinfra.map((layer) => {
-            //     map.setLayoutProperty(layer, 'visibility', 'visible');
-            //     return null;
-            // });
-        } else if (currentPage === 8) {
-            const map = mapRef.current.getMap();
-            setReAnimate(true);
-
-            MapLayers.criticalinfra.map((layer) => {
-                if (map.isStyleLoaded()) {
-                    map.setLayoutProperty(layer, 'visibility', 'none');
-                }
-                return null;
-            });
-
-            MapLayers.landsliderisk.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
-                return null;
-            });
-            map.setLayoutProperty('bahrabiseHillshadeLocal', 'visibility', 'none');
-            MapLayers.suseptibility.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
-                return null;
-            });
-        } else if (currentPage === 9) {
-            const map = mapRef.current.getMap();
-            setReAnimate(true);
-
-            MapLayers.suseptibility.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
-                return null;
-            });
-
-            MapLayers.landsliderisk.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'visible');
-                return null;
-            });
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -466,8 +397,8 @@ const Deck = (props) => {
                                 >
                                     {glContext && (
                                         <StaticMap
-                                            preventStyleDiffing
-                                            reuseMaps
+                                            // preventStyleDiffing
+                                            // reuseMaps
                                             ref={mapRef}
                                             gl={glContext}
                                             mapStyle={

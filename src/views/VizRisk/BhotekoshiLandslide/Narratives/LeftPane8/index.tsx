@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -271,28 +271,24 @@ const LeftPane8 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Inventory</h1>
-            <p>
-            The map shows the spatial distribution of landslides
-            that occurred from 2014 to 2020. Research suggests that
-            a significant proportion of landslide risk in the earthquake
-            affected areas comes from the reactivation of existing landslides,
-            so this map is useful for visualising if and how they have changed.
+            <p className={styles.narrativeText}>
+                The map shows the spatial distribution of landslides
+                that occurred from 2014 to 2020. Research suggests that
+                a significant proportion of landslide risk in the earthquake
+                affected areas comes from the reactivation of existing landslides,
+                so this map is useful for visualising if and how they have changed.
             </p>
             <p>
-            After Gorkha Earthquake 2015, 836 landslide incidents were
-            seen in the post monsoon season. Likewise,  the higher
-            number of post monsoon landslide incidents till date
-            occurred in the year 2018 i.e. 907.
+                After Gorkha Earthquake 2015, 836 landslide incidents were
+                seen in the post monsoon season. Likewise,  the higher
+                number of post monsoon landslide incidents till date
+                occurred in the year 2018 i.e. 907.
             </p>
-            <p>
-            Source: Durham University
+            <p className={styles.narrativeText}>
+                Source: Durham University
             </p>
-            <p>
-              NO. OF LANDSLIDES
-
-                {/* {reset ? ' (Municipality) ' : ' (Selected Area) '} */}
-
-
+            <p className={styles.narrativeText}>
+                 NO. OF LANDSLIDES
             </p>
 
             {
@@ -325,15 +321,17 @@ const LeftPane8 = (props: Props) => {
                             </BarChart>
                         </ResponsiveContainer>
                     )
-                    : <p>No landslide has occured in the selected area from 2014 to 2020</p>
+
+                    : (
+                        <p className={styles.narrativeText}>
+                        No landslide has occured in the
+                        selected area from 2014 to 2020
+                        </p>
+                    )
             }
 
-            <p>
+            <p className={styles.narrativeText}>
                COMMUNITY INFRASTRUCTURE
-
-                {/* {reset ? ' (Municipality) ' : ' (Selected Area) '} */}
-
-
             </p>
             {
                 cichartData.length > 0
@@ -367,7 +365,7 @@ const LeftPane8 = (props: Props) => {
                     ) : <p>No Community Infrastructure exists in the selected area</p>
             }
 
-            <p>NO. OF LANDSLIDE INVENTORY (YEAR WISE)</p>
+            <p className={styles.narrativeText}>NO. OF LANDSLIDE INVENTORY (YEAR WISE)</p>
             <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>
                 <BarChart
                     // width={300}

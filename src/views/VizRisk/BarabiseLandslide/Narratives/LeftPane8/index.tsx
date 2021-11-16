@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from 'recharts';
-import styles from './styles.scss';
+import styles from '../../styles.scss';
 
 
 interface Props{
@@ -47,7 +47,6 @@ const getTotalLoss = (year, arr) => {
             return incident.date > yearInt && incident.date < nextYear;
         })
         .map(l => l.loss);
-    console.log('temp', temp);
     if (temp.length > 0) {
         return temp
             .reduce((a, b) => ({ peopleDeathCount:
@@ -126,7 +125,6 @@ const LeftPane8 = (props: Props) => {
             }));
             setIncidentChart(noIncidentsChart);
             setLossChart(loss);
-            console.log('loss chart', loss);
         }
         setwardwiseChartData(wardwiseData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,8 +142,6 @@ const LeftPane8 = (props: Props) => {
                     return obj;
                 }, {}));
 
-            console.log('landslideYear', landslideYear);
-            console.log('...', [...landslideYear]);
             setwardwiseChartData(wwcD);
         } else {
             setwardwiseChartData(wardwiseData);
@@ -164,8 +160,6 @@ const LeftPane8 = (props: Props) => {
 
             const filteredHArr = hazardArr.filter(item => item !== undefined);
             const filteredPolyArr = polyArr.filter(item => item !== undefined);
-
-            console.log('filteredPolyArr', filteredHArr);
 
             const cD = filteredHArr.map(hazard => ({
                 name: hazard,
@@ -274,132 +268,127 @@ const LeftPane8 = (props: Props) => {
     return (
         <div className={styles.vrSideBar}>
             <h1>Landslide Inventory</h1>
-            <p>
-            The map shows the spatial distribution of landslides
-            that occurred from 2014 to 2020.  Research suggests that
-            a significant proportion of landslide risk in the earthquake
-            affected areas comes from the reactivation of existing
-            landslides, so this map is useful for visualizing if and how they have changed.
+            <p className={styles.narrativeText}>
+                The map shows the spatial distribution of landslides
+                that occurred from 2014 to 2020.  Research suggests that
+                a significant proportion of landslide risk in the earthquake
+                affected areas comes from the reactivation of existing
+                landslides, so this map is useful for visualizing if and how they have changed.
             </p>
-            After Gorkha Earthquake 2015, 451 landslide incidents were
-            observed in the post monsoon season. Likewise, the higher
-             number of post monsoon landslide incidents until date
-             occurred in 2020 i.e. 543.
-            <p />
-            <p>
-            Source: Durham University
+            <p className={styles.narrativeText}>
+                After Gorkha Earthquake 2015, 451 landslide incidents were
+                observed in the post monsoon season. Likewise, the higher
+                number of post monsoon landslide incidents until date
+                occurred in 2020 i.e. 543.
             </p>
-            <p>
+            <p className={styles.narrativeText}>
+                 Source: Durham University
+            </p>
+            <p className={styles.narrativeText}>
               NO. OF LANDSLIDES
-
-                {/* {reset ? ' (Municipality) ' : ' (Selected Area) '} */}
-
-
             </p>
 
             {
                 lschartData.length > 0
                     ? (
-                        <ResponsiveContainer className={styles.respContainer} width="100%" height={350}>
-                            <BarChart
-                                width={300}
-                                height={600}
-                                data={lschartData}
-                                layout="vertical"
-                                margin={{ left: 20, right: 20 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" />
-                                <YAxis
-                                    type="category"
-                                    dataKey="name"
-                                    tick={{ fill: '#94bdcf' }}
-                                />
-                                <Bar
-                                    dataKey="Total"
-                                    fill="rgb(0,219,95)"
-                                    barSize={20}
-                                    label={{ position: 'right', fill: '#ffffff' }}
-                                    tick={{ fill: '#94bdcf' }}
-                                    radius={[0, 20, 20, 0]}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        <div className={styles.climateChart}>
+                            <ResponsiveContainer width={'100%'} height={'100%'}>
+                                <BarChart
+                                    width={300}
+                                    height={600}
+                                    data={lschartData}
+                                    layout="vertical"
+                                    margin={{ left: 0, right: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,219,95)"
+                                        barSize={20}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        tick={{ fill: '#94bdcf' }}
+                                        radius={[0, 20, 20, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     )
                     : <p>No landslide has occured in the selected area from 2014 to 2020</p>
             }
 
             <p>
                COMMUNITY INFRASTRUCTURE
-
-                {/* {reset ? ' (Municipality) ' : ' (Selected Area) '} */}
-
-
             </p>
             {
                 cichartData.length > 0
                     ? (
-                        <ResponsiveContainer className={styles.respContainer} width="100%" height={250}>
-                            <BarChart
-                                width={300}
-                                height={600}
-                                data={cichartData}
-                                layout="vertical"
-                                margin={{ left: 20, right: 20 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" />
-                                <YAxis
-                                    type="category"
-                                    dataKey="name"
-                                    tick={{ fill: '#94bdcf' }}
-                                />
-                                <Bar
-                                    dataKey="Total"
-                                    fill="rgb(0,219,95)"
-                                    barSize={20}
-                                    label={{ position: 'right', fill: '#ffffff' }}
-                                    tick={{ fill: '#94bdcf' }}
-                                    radius={[0, 20, 20, 0]}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        <div className={styles.climateChart}>
+                            <ResponsiveContainer width={'100%'} height={'100%'}>
+                                <BarChart
+                                    width={300}
+                                    height={600}
+                                    data={cichartData}
+                                    layout="vertical"
+                                    margin={{ left: 20, right: 10 }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" />
+                                    <YAxis
+                                        type="category"
+                                        dataKey="name"
+                                        tick={{ fill: '#94bdcf' }}
+                                    />
+                                    <Bar
+                                        dataKey="Total"
+                                        fill="rgb(0,219,95)"
+                                        barSize={20}
+                                        label={{ position: 'right', fill: '#ffffff' }}
+                                        tick={{ fill: '#94bdcf' }}
+                                        radius={[0, 20, 20, 0]}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
                     ) : <p>No Community Infrastructure exists in the selected area</p>
             }
 
             <p>NO. OF LANDSLIDE INVENTORY (YEAR WISE)</p>
-            <ResponsiveContainer className={styles.respContainer} width="100%" height={600}>
-                <BarChart
-                    // width={300}
-                    // height={600}
-                    data={wardwiseChartData}
-                    layout="vertical"
-                    margin={{ left: 20, right: 20 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" />
-                    <YAxis
-                        type="category"
-                        dataKey="name"
-                        tick={{ fill: '#94bdcf' }}
-                    />
-                    <Tooltip />
-                    <Legend iconType="square" iconSize={10} align="center" height={10} />
-                    {
-                        epocharr.map((e, i) => (
-                            <Bar
-                                dataKey={e}
-                                fill={colorArr[i]}
-                                barSize={20}
-                                // label={{ position: 'right', fill: '#ffffff' }}
-                                tick={{ fill: '#94bdcf' }}
-                                // radius={[0, 20, 20, 0]}
-                                stackId="a"
-                            />
-                        ))
-                    }
-                </BarChart>
-            </ResponsiveContainer>
+            <div className={styles.climateChart}>
+                <ResponsiveContainer width={'100%'} height={wardwiseChartData.length * 40 + 60}>
+                    <BarChart
+                        data={wardwiseChartData}
+                        layout="vertical"
+                        margin={{ left: 0, right: 10 }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis
+                            type="category"
+                            dataKey="name"
+                            tick={{ fill: '#94bdcf' }}
+                        />
+                        <Tooltip />
+                        <Legend iconType="square" iconSize={10} align="center" height={10} />
+                        {
+                            epocharr.map((e, i) => (
+                                <Bar
+                                    dataKey={e}
+                                    fill={colorArr[i]}
+                                    barSize={20}
+                                    tick={{ fill: '#94bdcf' }}
+                                    stackId="a"
+                                />
+                            ))
+                        }
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 };

@@ -24,16 +24,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const delayProp = window.location.search === '?target' ? 'target' : 'longitude';
-const populationWardExpression = [
-    'interpolate',
-    ['linear'],
-    ['feature-state', 'value'],
-    1, '#fe9b2a', 2, '#fe9b2a',
-    3, '#fe9b2a', 4, '#9a3404',
-    5, '#d95f0e', 6, '#fe9b2a',
-    7, '#ffffd6', 8, '#fe9b2a',
-    9, '#fed990',
-];
+
 
 const Deck = (props) => {
     const [glContext, setGLContext] = useState();
@@ -55,8 +46,6 @@ const Deck = (props) => {
         libraries,
         currentPage,
         handleFlyTo,
-        wards,
-        ci,
     } = props;
     const getToolTip = ({ object }) => (
         object && currentPage === 5 && {
@@ -103,17 +92,13 @@ const Deck = (props) => {
         // depth: Number(row.Depth),
         // magnitude: Number(row.Magnitude)
     }));
-    const formatLabel = (t) => {
-        const date = new Date(t);
-        return `${date.getUTCFullYear()}/${date.getUTCMonth() + 1}`;
-    };
+
     const dataFilter = new DataFilterExtension({
         filterSize: 1,
         // Enable for higher precision, e.g. 1 second granularity
         // See DataFilterExtension documentation for how to pick precision
         fp64: false,
     });
-    const MS_PER_DAY = 2.64e7;
     const getTimeRange = (datas) => {
         if (!datas) {
             return null;
@@ -146,19 +131,10 @@ const Deck = (props) => {
         const { deck } = deckRef.current;
         map.addLayer(
             new MapboxLayer({ id: 'landslide-scatterplot', deck }),
-            // Optionally define id from Mapbox layer stack under which to add deck layer
-            // 'water',
         );
         map.addLayer(
             new MapboxLayer({ id: 'landslide-barabise', deck }),
-            // Optionally define id from Mapbox layer stack under which to add deck layer
-            // 'water',
         );
-        // map.addLayer(
-        //     new MapboxLayer({ id: 'population-polygons', deck }),
-        //     // Optionally define id from Mapbox layer stack under which to add deck layer
-        //     // 'water',
-        // );
         map.addSource('hillshadeBahrabiseLocal', {
             type: 'raster',
             tiles: [getHillshadeLayer()],
@@ -203,15 +179,7 @@ const Deck = (props) => {
             map.moveLayer('suseptibility-bahrabise');
             console.log('currentPage:', currentPage);
         }
-        // const criticalinfrastructuresdata = getGeoJSON(criticalinfrastructures.criticalData);
-        // const categoriesCritical = [...new Set(criticalinfrastructuresdata.features.map(
-        //     item => item.properties.resourceType,
-        // ))];
-        // categoriesCritical.map((layer) => {
 
-
-        //     return null;
-        // });
         MapLayers.landuse.map((layer) => {
             map.setLayoutProperty(layer, 'visibility', 'none');
 
@@ -258,7 +226,7 @@ const Deck = (props) => {
             const map = mapRef.current.getMap();
             setReAnimate(true);
             MapLayers.landslide.map((layer) => {
-                map.setLayoutProperty(layer, 'visibility', 'none');
+                map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
             });
         } else if (currentPage === 2) {
@@ -284,9 +252,6 @@ const Deck = (props) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;
             });
-            console.log('landuse');
-            console.log('map:', map);
-
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
