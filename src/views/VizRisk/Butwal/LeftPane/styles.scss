@@ -1,0 +1,613 @@
+$button-color: rgb(0,170,223);
+
+
+
+@media all and (max-width : 1500px){
+.mainTiitleInfo{
+	left: 180px;
+}
+	
+}
+
+.vrSideBar::-webkit-scrollbar {
+    display: none;
+	
+  }
+  .heading-style{
+    font-family: 'Playfair Display';
+    font-size: 28px;
+    color: white;
+    line-height: 1.4em;
+}
+.para-style{
+    color:white;
+    font-size: 16px;
+    font-family: 'Source Sans Pro';
+    padding: 0 40px 15px 0;
+	text-align:initial;
+    opacity: 0.87;
+    line-height: 1.5em;
+	letter-spacing: 1px;
+	// text-align: justify;
+
+	word-spacing: 0.5px;
+
+}
+    .vrSideBar{
+        scrollbar-width: none;
+        position: absolute;
+        flex-direction: column;
+        background-color:rgb(12,36,50);
+        color:#b6d6e4;
+        padding: 65px 0px 60px 18px;
+        width: calc(30% - 60px);
+        height: 100vh;
+        left: 0;
+        overflow-y: scroll;
+		.leftTopBar{
+			position: fixed;
+			width: calc(30% - 60px);
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			height: 60px;
+			z-index: 5;
+			background-color: #0c2432;
+		}
+		.mainIntroHtmlFromAPI{
+			h3{
+				color: white !important;
+				font-size: 16px;
+			}
+		}
+		.leftBottomBar{
+			position: fixed;
+			width: calc(30% - 60px);
+			bottom: 0px;
+			left: 0px;
+			right: 0px;
+			height: 38px;
+			z-index: 5;
+			background-color: #324052;
+		}
+
+        .climateChart{
+            margin-top: 10px;
+        }
+        .iconRow{
+            display: flex;
+            padding-left: -5px;
+            .infoIconsContainerHidden{
+                visibility: hidden;
+            }
+            .infoIconsContainer{
+                display: flex;
+                margin: 15px 2px 15px 0;
+                flex: 1;
+                .infoIcon{
+                    margin: 0px 15px 0 5px;
+                    width: 32px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+                }
+                .infoIconMax{
+                    margin: 0px 5px 0 5px;
+                    width: 32px;
+					height: 47px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+                }
+                .infoIconMin{
+                    margin: 0px 5px 0 5px;
+                    width: 32px;
+					height: 47px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #76a6e6;
+                    }
+                }
+				.infoIconFamily{
+					margin: 0px 15px 0 5px;
+                    width: 48px;
+                    path{
+                    opacity: 1 !important;
+                        fill: #FFEBBE;
+                    }
+				}
+                .descriptionCotainer{
+                    display: flex;
+                    flex-direction: column;
+                    .iconTitle{
+						font-weight: bold;
+                    font-size: 18px;
+                    color: #ffffff;
+                    font-family: 'Source Sans Pro';
+					opacity: 1;
+    
+                    }
+					.iconTitleDate{
+						background: rgb(12, 12, 12);
+						color: #fff;
+						text-align: center;
+						font-size: 12px;
+						width: 100%;
+						border: 4px solid rgb(255, 252, 252);
+						padding: 5px 10px;
+						box-shadow: 0 2px 10px 0 rgba(0,0,0,0.16), 0 2px 10px 0 
+						rgba(0,0,0,0.12);
+    
+                    }
+					.iconTitleCurrentTemp{
+						// background: white;
+						color: white;
+						text-align: center;
+						font-size: 15px;
+						width: 100%;
+						font-style: italic;
+						padding: 5px 10px;
+						box-shadow: 0 2px 10px 0 rgba(0,0,0,0.16), 0 2px 10px 0 
+						rgba(0,0,0,0.12);
+    
+                    }
+                    .iconText{
+                        font-size: 12px;
+                    color: #A7B3BB;
+                    }
+                }
+            }
+        }
+
+        .lastPara{
+            z-index: 2;
+            background-color:#112330;
+        }
+        .infoIcon{
+            font-size: 16px;
+            color: white;
+        }
+    
+        .vulScoreRow{
+            display: flex;
+            justify-content: space-between;
+            padding-right: 20px;
+        }
+        .singularPaneTable{
+                margin-top: 0px;
+                border-collapse: collapse;
+                width: 100%;
+                th{
+                padding: 0.5rem;
+                text-align: left;
+               
+                }
+                td{
+                border-top: 1px solid rgb(12, 87, 128);
+                border-bottom: 1px solid rgb(12, 87, 128);
+                padding: 0.5rem;
+                text-align: left;
+                color: white;
+                }
+                tr:nth-child(even) {
+                    background-color:transparent;
+               
+                
+                }
+                tr:nth-child(odd) {
+                    background-color:rgb(3,66,100);
+                }
+        
+        }
+
+        .backBtnContainer{
+            width: 100%;
+            display:flex;
+            justify-content: flex-end;
+            padding-right: 20px;
+            padding-bottom: 20px;
+            z-index: 3;
+            .backButton{
+                background-color: transparent;
+                border: 1px solid $button-color;
+                filter: saturate(100%);
+                color: $button-color;
+                cursor:pointer;
+                padding: 5px 10px;
+                margin-left: 5px;
+                font-size: 10px;
+                text-transform: uppercase;
+                width: 50px;
+    
+            }
+        }
+
+        .buildingClassContainer{
+            display: flex;
+            width: 100%;
+            border-top: 1px dotted #eee;
+            justify-content: space-between;
+            padding-top: 15px;
+            .levelContainer{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .iconLevel{
+                    display: flex;
+                    align-items: center;
+                    .high{
+                        // path: {fill:rgb(197,44,56); }
+                        font-size: 30px;
+                        color:#af4042;
+                        margin-right: 5px;
+                    }
+                    .med{
+                        // path: {fill:rgb(193,127,90); }
+                        font-size: 30px;
+                        margin-right: 5px;
+                        color: #c1805a;
+                    }
+                    .low{
+                        // path: {fill: rgb(153,171,182);}
+                        font-size: 30px;
+                        margin-right: 5px;
+                        color: #afaf40;
+                    }
+                    .number{
+                        font-size: 12px;
+                        font-weight: 600;
+                     }
+                }
+            }
+        }
+        .chartContainer{
+            margin-top: 20px;
+            position: relative;
+            right: 34px;
+        }
+       
+        h1{
+            @extend .heading-style;
+            button{
+                padding: 3px 10px 10px 10px;
+                z-index: 3;
+                opacity: 0.87;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                filter: saturate(100%);
+            }
+        }
+        h2{
+            @extend .heading-style;
+            opacity: 0.9 !important;
+        }
+        p{
+            @extend .para-style;
+        }
+        .climateLegendContainer{
+            display:flex;
+            justify-content: flex-start;
+            margin-left: 60px;
+			margin-bottom: 15px !important;
+            min-width: 200px;
+         
+            .climatelegend{
+            display:flex;
+            padding-right: 20px;
+                .legendMax{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #ffbf00;
+                    padding-right: 15px;
+                    margin-right: 3px;
+                }
+                .legendMin{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #347eff;
+                    // border: 1px solid #1f59be;
+                    margin-right: 3px;
+
+                }
+                .legendDaily{
+                    width: 15px;
+                    height: 15px;
+                    background-color: #00d725;
+                    // border: 1px solid #047a18;
+                    margin-right: 3px;
+                
+                }
+                .legendText{
+                    color: #6490a4;
+                    // opacity: 0.45;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+        $button-color: rgb(0,170,223);
+
+        .showBtn{
+            z-index: 500;
+            background-color: transparent;
+            border: 1px solid $button-color;
+            filter: saturate(100%);
+            color: $button-color;
+            cursor:pointer;
+            padding: 5px 10px;
+            margin-left: 5px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+    }
+
+
+    .customTooltip{
+        background-color: #17445e !important;
+        // color: #444;
+        padding-bottom: 1px;
+        border-radius: 10px;
+		text-align: start;
+		display: flex;
+		justify-content: start;
+		flex-direction: column;
+		padding-left: 15px;
+		padding-top: 1px;
+        h2{
+            color: rgb(255, 255, 255) !important;
+            font-size: 12px !important;
+            line-height: 1em;
+            padding: 10px 10px 15px 0px;
+            display: flex;
+            // justify-content: center;
+			text-align: start;
+
+        }
+        :nth-child(2){
+			// padding-left: 10px;
+			padding: 0px 15px 0px 0px;
+            color: #ffbf00 !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            // justify-content: center;
+        }
+        :nth-child(3){
+			padding: 0px 15px 0px 0px;
+			// padding-left: 10px;
+            color: #00d725 !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            // justify-content: center;
+        }
+        :nth-child(4){
+			padding: 0px 15px 0px 0px;
+			// padding-left: 10px;
+            color: #347eff !important;
+            line-height: 0.7em !important;
+            font-size:12px !important;
+            display: flex;
+            // justify-content: center;
+        }
+    }
+    .recharts-tooltip-wrapper{
+        background-color: white !important;
+        border: 1px solid gray;
+        z-index: 100;
+        color: blue;
+        padding: 0px !important;
+
+    }
+
+  
+    .incidentsLegendsContainer{
+        .hazardItemContainer{
+            display: flex;
+            padding: 0;
+            margin: 0;
+           .legendBtnSelected{
+            font-size: 11px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            // opacity: 0.87;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+            text-transform: uppercase;
+
+            .educationHexagon{
+                width: 11px;
+                margin: 0 7px 0 0;
+            }
+           }
+            .legendBtn{
+                font-size: 14px;
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+                opacity: 0.37;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                font-size: 11px;
+                text-transform: uppercase;
+                .educationHexagon{
+                    width: 11px;
+                    margin: 0 7px 0 0;
+                }
+            }
+        }
+    
+    }
+    .incidentsLegendsContainerDisabled{
+		cursor: not-allowed;
+        .hazardItemContainer{
+            display: flex;
+            padding: 0;
+            margin: 0;
+			cursor: not-allowed;
+           .legendBtnSelected{
+            font-size: 11px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            // opacity: 0.87;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+            text-transform: uppercase;
+			cursor: not-allowed;
+
+            .educationHexagon{
+                width: 11px;
+                margin: 0 7px 0 0;
+				cursor: not-allowed;
+            }
+           }
+            .legendBtn{
+                font-size: 14px;
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+                opacity: 0.37;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                font-size: 11px;
+                text-transform: uppercase;
+				cursor: not-allowed;
+                .educationHexagon{
+                    width: 11px;
+                    margin: 0 7px 0 0;
+					cursor: not-allowed;
+                }
+            }
+        }
+    
+    }
+	.hazardElementHeaderStyle{
+padding: 14px 8px;
+	}
+    .incidentsLegendsContainer3{
+        .hazardItemContainer3{
+            display: flex;
+            padding: 0;
+            margin: 0;
+           .legendBtnSelected3{
+            font-size: 14px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            // opacity: 0.87;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+         padding: 4px 8px;
+	
+
+            .educationHexagon3{
+                width: 15px;
+                margin: 0 7px 0 0;
+            }
+           }
+            .legendBtn3{
+  
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+				padding: 4px 8px;
+			
+                opacity: 0.6;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                font-size: 13px;
+              
+                .educationHexagon3{
+                    width: 15px;
+                    margin: 0 7px 0 0;
+                }
+            }
+        }
+    
+    }
+    .incidentsLegendsContainer3Disabled{
+        .hazardItemContainer3{
+            display: flex;
+            padding: 0;
+            margin: 0;
+           .legendBtnSelected3{
+            font-size: 14px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            // opacity: 0.87;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: not-allowed;
+         padding: 4px 8px;
+	
+
+            .educationHexagon3{
+                width: 15px;
+                margin: 0 7px 0 0;
+				cursor: not-allowed;
+            }
+           }
+            .legendBtn3{
+  
+                display: flex;
+                background-color: transparent;
+                border: none;
+                color: white; 
+				padding: 4px 8px;
+			
+                opacity: 0.6;
+                margin-bottom: 5px;
+                align-items: center;
+                font-family: 'Source Sans Pro';
+                filter: saturate(100%);
+                cursor: pointer;
+                font-size: 13px;
+				cursor: not-allowed;
+              
+                .educationHexagon3{
+                    width: 15px;
+                    margin: 0 7px 0 0;
+					cursor: not-allowed;
+                }
+            }
+        }
+    
+    }
+
+
+
+

@@ -1,0 +1,137 @@
+.mainDivForPopDensity{
+	position: fixed;
+	bottom: 210px;
+	right: 83px;
+	z-index: 15;
+	background-color: rgba(19,32,55,0.9);
+	padding: 15px;
+	border-radius: 5px;
+
+}
+.mainDivForPopDensityExposure{
+	position: fixed;
+	bottom: 420px;
+	right: 83px;
+	z-index: 15;
+	background-color: rgba(19,32,55,0.9);
+	padding: 15px;
+	border-radius: 5px;
+
+}
+    
+    .populationContainer{
+        display: flex;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-right: 0px;
+        margin-left: 10px;
+        width: 149px;
+        p{
+            line-height: 0;
+            position: relative;
+            bottom: 20px
+        }
+        .populationIndContainer{
+            display: flex;
+            flex-direction: column;
+            padding-right: 4px;
+            .populationIndicator1{
+                width: 12px;
+                height: 25px;
+                background-color:#9a3404;
+                border-radius: 6px 6px 0 0;
+            }
+            .populationIndicator2{
+                width: 12px;
+                height: 25px;
+                background-color: rgb(255,143,13); 
+            }
+            .populationIndicator3{
+                width: 12px;
+                height: 25px;
+                background-color:#f4aa43;
+                // display: none;
+
+            }
+            .populationIndicator4{
+                width: 12px;
+                height: 25px;
+                background-color:rgb(255,207,142);
+            }
+            .populationIndicator5{
+                width: 12px;
+                height: 25px;
+                background-color:rgb(255,235,198);
+                border-radius: 0 0 6px 6px;
+            }
+        }
+        
+        .populationIndContainerShort{
+            @extend .populationIndContainer;
+            .populationIndicator3{
+                width: 12px;
+                height: 25px;
+                background-color:#f4aa43;
+                // display: none;
+
+            }
+        }
+        .populationTextContainer{
+            display:flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .populationText{
+                // width:10px;
+                color: white;
+                opacity:0.67;
+                font-family: 'Source Sans Pro';
+                position: relative;
+                bottom: 0;
+                // margin-bottom: 5px;
+                font-size: 11px;
+            }
+        }
+    }
+
+    .hazardItemContainer{
+        display: flex;
+        padding: 0;
+        margin: 0;
+       .legendBtnSelected{
+        font-size: 14px;
+        display: flex;
+        background-color: transparent;
+        border: none;
+        color: #036ef0; 
+        // opacity: 0.87;
+        margin-bottom: 5px;
+        align-items: center;
+        font-family: 'Source Sans Pro';
+        filter: saturate(100%);
+        cursor: pointer;
+        .educationHexagon{
+            width: 14px;
+            margin: 0 7px 0 0;
+        }
+       }
+        .legendBtn{
+            font-size: 14px;
+            display: flex;
+            background-color: transparent;
+            border: none;
+            color: white; 
+            opacity: 0.67;
+            margin-bottom: 5px;
+            align-items: center;
+            font-family: 'Source Sans Pro';
+            filter: saturate(100%);
+            cursor: pointer;
+            .educationHexagon{
+                width: 14px;
+                margin: 0 7px 0 0;
+            }
+        }
+    }
+
+
+

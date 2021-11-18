@@ -3,18 +3,22 @@
     top: 500px !important;
     border: 1px solid red !important;
 }
+
 .mainVzContainer{
-    position: relative;
-    width:calc(100vw) ;
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+    width:100vw ;
     background: #193341;
     height:100%;
-    // margin-top: -12px;
-    z-index: 2;
-    font-size: 11px;
+	overflow-y: scroll;
+	overflow-x: hidden !important;
     .vizrisknmenupagecontainer{
         .vizrisknmenupage{
-            position: absolute;
-            padding: 90px 0 50px 200px;
+            // position: relative;
+            padding: 40px 0 0px 200px;
             // border: 1px solid white;
             
     
@@ -26,11 +30,16 @@
                 color: rgb(175, 220, 241);
     
             }
+			.themeName {
+		visibility:hidden;
+			}
             .vizriskmunicipalityName{
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
+				
             }
+			
         }
     }
     
@@ -42,10 +51,11 @@
         right: 0px;
         justify-content: space-between;
         align-items: center;
-        background-color: transparent;
+        // background-color: transparent;
         // border: 1px solid red;
         z-index: 202;
         width: 100%;
+	
 
         .nextPrevBtnContainer{
             position: absolute;
@@ -65,12 +75,13 @@
             }
         }
         .hamburgerBtnContainer{
-            position: absolute;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;   
-            right: 72%;        
-            top: 10px; 
+            position: fixed;
+            // width: 100%;
+            // display: flex;
+            // justify-content: flex-end;   
+            // right: 95%;        
+			left: 18px;
+            top: 41px; 
             .hamburgerBtn{
                 color: white;
                 display: flex;
@@ -98,7 +109,7 @@
             width: 100%;
             display: flex;
             justify-content: flex-end;   
-            right: 95%;        
+                 
             top: 10px; 
             .hamburgerBtn{
                 color: white;
@@ -124,6 +135,7 @@
         }
         .hamburgerBtnContMenu{
             @extend .hamburgerBtnContainer;
+			top: 20px;
             right: 95%;
         }
 
