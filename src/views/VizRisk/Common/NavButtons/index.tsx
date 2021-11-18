@@ -10,6 +10,7 @@ interface Props{
     pagenumber: number;
     totalPages: number;
     pending: boolean;
+    idle: boolean;
 }
 
 const NavButtons = (props: Props) => {
@@ -19,6 +20,7 @@ const NavButtons = (props: Props) => {
         pagenumber,
         totalPages,
         pending,
+        idle,
     } = props;
 
     return (
@@ -48,17 +50,19 @@ const NavButtons = (props: Props) => {
                 <button
                     type="button"
                     onClick={handlePrev}
-                    className={pagenumber === 1 ? styles.btnDisable : styles.navbutton}
-                    disabled={pagenumber === 1}
+                    className={(pagenumber === 1 && idle === false)
+                        ? styles.btnDisable
+                        : styles.navbutton}
+                    disabled={pagenumber === 1 && idle === false}
                 >
                    Previous
                 </button>
                 <button
                     type="button"
                     onClick={handleNext}
-                    className={pagenumber === totalPages || pending === true
+                    className={pagenumber === totalPages || pending === true || idle === false
                         ? styles.btnDisable : styles.navbutton}
-                    disabled={pagenumber === totalPages || pending === true}
+                    disabled={pagenumber === totalPages || pending === true || idle === false}
                 >
                   Next
                 </button>

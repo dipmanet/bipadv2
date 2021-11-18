@@ -5,18 +5,20 @@ import { ScatterplotLayer } from '@deck.gl/layers';
 import { StaticMap } from 'react-map-gl';
 import * as d3 from 'd3';
 import { MapboxLayer } from '@deck.gl/mapbox';
+import mapboxgl from 'mapbox-gl';
 import { Spring } from 'react-spring/renderprops';
 import { connect } from 'react-redux';
 import { DataFilterExtension } from '@deck.gl/extensions';
 import DelayedPointLayer from '../Components/DelayedPointLayer';
 import Locations from '../Data/locations';
 import MapLayers from '../Data/mapLayers';
-// import criticalinfrastructures from '../Data/criticalInfraGeoJSON';
 import {
     wardsSelector,
 } from '#selectors';
-// import RangeInput from '../Components/RangeInput';
+
 import styles from './styles.scss';
+
+mapboxgl.workerClass = require('mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const mapStateToProps = (state, props) => ({
     // provinces: provincesSelector(state),
@@ -32,11 +34,9 @@ const Deck = (props) => {
     const mapRef = useRef(null);
     const [radiusChange, setRadiusChange] = useState(false);
     const [allDataVisible, setAllDataVisible] = useState(true);
-    const [landSlidePointsVisible, setLandslideVisible] = useState(true);
     const [mapanimationDuration, setMapAnimateDuration] = useState(30000);
     const [reAnimate, setReAnimate] = useState(false);
     const [delay, setMapDelay] = useState(2000);
-    const [ciGeo, setCiGeo] = useState({});
     const [filter, setFilter] = useState(null);
 
     // eslint-disable-next-line no-shadow
@@ -201,9 +201,13 @@ const Deck = (props) => {
 
             // map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
         }
-        // map.moveLayer('landslide-barabise');
+        const { getIdle } = props;
+        map.on('idle', (e) => {
+            getIdle(true);
+            console.log('idle fired');
+        });
 
-        // map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -217,7 +221,6 @@ const Deck = (props) => {
             setAllDataVisible(true);
             setRadiusChange(false);
             props.setNarrationDelay(2000);
-            setLandslideVisible(false);
             MapLayers.landslide.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;

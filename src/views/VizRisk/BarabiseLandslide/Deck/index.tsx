@@ -268,12 +268,6 @@ const Deck = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 
-    // useEffect(() => {
-    //     if (!mapRef.current) {
-    //         return;
-    //     }
-
-    // }, [ci]);
     return (
         <Spring
             from={{ enterProgress: 0 }}

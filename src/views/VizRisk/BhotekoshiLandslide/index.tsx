@@ -235,17 +235,11 @@ const leftElements = [
 ];
 
 const BarabiseLandslide = (props) => {
-    const [landSlidePoints, setlandSlidePoints] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const [destination, setDestination] = useState(1);
     const [location, setLocation] = useState(Locations.nepal);
     const [viewState, setViewState] = useState(Locations.nepal);
-    const [transitionEnd, setTransitionEnd] = useState(false);
     const [reAnimate, setReanimate] = useState(false);
     const [delay, setDelay] = useState(4000);
-    const [showDemoChart, setShowDemoChart] = useState(true);
-    const [disableNavRightBtn, setdisableNavRightBtn] = useState(false);
-    const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
     const [pending, setPending] = useState(true);
     const handleChangeViewChange = ({ viewState }) => setViewState(viewState);
     const [population, setPopulation] = useState('ward');
@@ -277,6 +271,7 @@ const BarabiseLandslide = (props) => {
     const [req4, setReq4] = useState(false);
     const [req5, setReq5] = useState(false);
     const [drawpending, setDrawPending] = useState(false);
+    const [idle, setIdle] = useState(false);
 
     const {
         // incidentList,
@@ -293,7 +288,6 @@ const BarabiseLandslide = (props) => {
     const handleAnimationStart = () => setReanimate(false);
     const getSanitizedIncident = memoize(getSanitizedIncidents);
     // eslint-disable-next-line no-shadow
-    const setDestinationhandle = destination => setDestination(destination);
     const incidentList = CriticalData.criticalInfraData;
     const sanitizedIncidentList = getSanitizedIncident(
         incidentList,
@@ -426,28 +420,16 @@ const BarabiseLandslide = (props) => {
         setShowCI(val);
     };
 
-    const disableNavBtns = (val) => {
-        if (val === 'Right' || pending) {
-            setdisableNavRightBtn(true);
-        } else if (val === 'Left' || pending) {
-            setdisableNavLeftBtn(true);
-        } else {
-            setdisableNavLeftBtn(true);
-            setdisableNavRightBtn(true);
-        }
-    };
 
     const handleNext = () => {
         if (currentPage < leftElements.length) {
             setCurrentPage(currentPage + 1);
-            disableNavBtns('both');
         }
     };
 
     const handlePrev = () => {
         if (currentPage > 0) {
             setCurrentPage(currentPage - 1);
-            disableNavBtns('both');
         }
     };
 
@@ -484,6 +466,13 @@ const BarabiseLandslide = (props) => {
         setHideOSM(data);
     };
 
+    const getIdle = (d: boolean) => {
+        setIdle(d);
+    };
+
+    useEffect(() => {
+        setIdle(false);
+    }, [currentPage]);
 
     return (
         <>
@@ -510,6 +499,7 @@ const BarabiseLandslide = (props) => {
                         handleFlyTo={handleFlyTo}
                         setNarrationDelay={setNarrationDelay}
                         ci={ci}
+                        getIdle={getIdle}
                     />
                 )
             }
@@ -696,6 +686,7 @@ const BarabiseLandslide = (props) => {
                                     pagenumber={currentPage + 1}
                                     totalPages={leftElements.length}
                                     pending={pending}
+                                    idle={idle}
                                 />
                             </div>
                         )}
