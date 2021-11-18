@@ -107,7 +107,10 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-
+        const { getIdle } = this.props;
+        this.map.on('idle', (e) => {
+            getIdle(true);
+        });
         this.map.on('style.load', () => {
             this.map.addSource('hillshadeBahrabiseLocal', {
                 type: 'raster',

@@ -141,6 +141,11 @@ class FloodHistoryMap extends React.Component {
             ...item,
             value: Number(item.title),
         }));
+
+        const { getIdle } = this.props;
+        this.map.on('idle', (e) => {
+            getIdle(true);
+        });
         this.map.on('style.load', () => {
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');

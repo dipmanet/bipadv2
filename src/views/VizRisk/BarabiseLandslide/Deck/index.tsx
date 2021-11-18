@@ -199,9 +199,11 @@ const Deck = (props) => {
 
             // map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
         }
-        // map.moveLayer('landslide-barabise');
 
-        // map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
+        const { getIdle } = props;
+        map.on('idle', (e) => {
+            getIdle(true);
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
