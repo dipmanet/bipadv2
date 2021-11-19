@@ -177,7 +177,6 @@ const Deck = (props) => {
         if (currentPage === 8) {
             map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'visible');
             map.moveLayer('suseptibility-bahrabise');
-            console.log('currentPage:', currentPage);
         }
 
         MapLayers.landuse.map((layer) => {
@@ -204,7 +203,6 @@ const Deck = (props) => {
         const { getIdle } = props;
         map.on('idle', (e) => {
             getIdle(true);
-            console.log('idle fired');
         });
 
 
@@ -237,7 +235,6 @@ const Deck = (props) => {
             setReAnimate(true);
             handleFlyTo(Locations.bahrabise);
             // map.panBy([0, 200]);
-            console.log('Landslide');
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'none');
                 return null;

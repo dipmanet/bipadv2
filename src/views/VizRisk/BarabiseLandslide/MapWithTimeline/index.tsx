@@ -138,6 +138,10 @@ class FloodHistoryMap extends React.Component {
             ...item,
             value: Number(item.title),
         }));
+        const { getIdle } = this.props;
+        this.map.on('idle', (e) => {
+            getIdle(true);
+        });
         this.map.on('style.load', () => {
             this.map.setLayoutProperty('bahrabiseWardOutline', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
@@ -184,7 +188,6 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
-            console.log('incident data: ', this.props.bahrabiseLandSlide);
 
             const features = this.props.bahrabiseLandSlide.map(item => ({
                 type: 'Feature',
@@ -263,7 +266,6 @@ class FloodHistoryMap extends React.Component {
 
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
-                    console.log('e', e.features[0]);
 
                     const wardno = e.features[0].properties.title;
                     const riskScore = scores.filter(s => s.ward === wardno)[0].score;
@@ -396,7 +398,6 @@ class FloodHistoryMap extends React.Component {
             polygonResponse,
             hideOSMLayers,
         } = this.props;
-        console.log('hideOSMLayers', hideOSMLayers);
         const { resourceArr } = this.state;
         if (criticalElement !== prevProps.criticalElement) {
             this.resetClusters();
@@ -425,7 +426,6 @@ class FloodHistoryMap extends React.Component {
 
         if (currentPage === 6 && prevProps.currentPage === 7) {
             this.map.removeControl(draw);
-            console.log('test');
         }
 
 

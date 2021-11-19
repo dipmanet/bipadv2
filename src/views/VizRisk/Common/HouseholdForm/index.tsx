@@ -145,8 +145,6 @@ const HouseholdForm = (props) => {
     const ecInputTypes = getInputTypes(economicFactor);
     const ecSelectTypes = getSelectTypes(economicFactor);
 
-    console.log('building data recieved: ', buildingData);
-
     useEffect(() => {
         if (buildingData && Object.keys(buildingData).length > 0) {
             if (

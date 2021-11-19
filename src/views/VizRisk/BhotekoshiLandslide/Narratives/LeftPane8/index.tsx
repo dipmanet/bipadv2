@@ -48,7 +48,6 @@ const getTotalLoss = (year, arr) => {
             return incident.date > yearInt && incident.date < nextYear;
         })
         .map(l => l.loss);
-    console.log('temp', temp);
     if (temp.length > 0) {
         return temp
             .reduce((a, b) => ({ peopleDeathCount:
@@ -123,7 +122,6 @@ const LeftPane8 = (props: Props) => {
             }));
             setIncidentChart(noIncidentsChart);
             setLossChart(loss);
-            console.log('loss chart', loss);
         }
         setwardwiseChartData(wardwiseData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,8 +139,6 @@ const LeftPane8 = (props: Props) => {
                     return obj;
                 }, {}));
 
-            console.log('landslideYear', landslideYear);
-            console.log('...', [...landslideYear]);
             setwardwiseChartData(wwcD);
         } else {
             setwardwiseChartData(wardwiseData);
@@ -150,7 +146,6 @@ const LeftPane8 = (props: Props) => {
     }, [landslideYear]);
 
     useEffect(() => {
-        console.log('draw data', drawData);
         let polyArr = [];
         if (drawData.length > 0) {
             const hazardArr = [...new Set(drawData.map(h => h.hazardTitle))];
@@ -163,7 +158,6 @@ const LeftPane8 = (props: Props) => {
             const filteredHArr = hazardArr.filter(item => item !== undefined);
             const filteredPolyArr = polyArr.filter(item => item !== undefined);
 
-            console.log('filteredPolyArr', filteredHArr);
 
             const cD = filteredHArr.map(hazard => ({
                 name: hazard,

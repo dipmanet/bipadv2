@@ -105,6 +105,10 @@ class FloodHistoryMap extends React.Component {
 
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+        const { getIdle } = this.props;
+        this.map.on('idle', (e) => {
+            getIdle(true);
+        });
 
         this.map.on('style.load', () => {
             this.map.addSource('hillshadeBahrabiseLocal', {
@@ -374,7 +378,6 @@ class FloodHistoryMap extends React.Component {
     public componentDidUpdate(prevProps) {
         const { population, currentPage } = this.props;
         const { resourceArr } = this.state;
-        console.log('currentPage', currentPage);
         if (population !== prevProps.population) {
             if (population === 'ward') {
                 this.map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');

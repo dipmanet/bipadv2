@@ -50,10 +50,10 @@ const NavButtons = (props: Props) => {
                 <button
                     type="button"
                     onClick={handlePrev}
-                    className={(pagenumber === 1 && idle === false)
+                    className={(pagenumber === 1 || pending === true || idle === false)
                         ? styles.btnDisable
                         : styles.navbutton}
-                    disabled={pagenumber === 1 && idle === false}
+                    disabled={pagenumber === 1 || pending === true || idle === false}
                 >
                    Previous
                 </button>
