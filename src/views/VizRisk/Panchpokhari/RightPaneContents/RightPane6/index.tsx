@@ -126,7 +126,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             <div className={styles.vrSideBar}>
                 {
                     this.props.sesmicLayer === 'ses'
-                        ? (
+                        && (
                             <>
                                 <h1>Earthquake Exposure </h1>
 
@@ -161,7 +161,10 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                             </>
                         )
-                        : (
+                }
+                {
+                    this.props.sesmicLayer === 'sus'
+                        && (
                             <>
                                 <h1>Landslide Exposure </h1>
                                 <p>
@@ -193,6 +196,90 @@ class SlideFivePane extends React.PureComponent<Props, State> {
                                     {' '}
                                     {this.state.areaSelected}
                                 </p>
+                            </>
+                        )
+                }
+                {
+                    this.props.sesmicLayer === 'ses'
+                        && (
+                            <>
+                                <h1>Landslide Exposure </h1>
+                                <p>
+                                    The map shows the exposure of critical
+                                    infrastructures and assets to landslide.
+                                    This visualization allows the super imposition
+                                    of the landslide susceptibility map with details
+                                    of landcover and critical infrastructures. The map
+                                    shows the relative indication of the probability of
+                                    rainfall triggered landslides.
+
+                                </p>
+
+                                <p>
+                                    This visualization helps understand the population,
+                                    critical infrastructures and
+                                    assets that are at threat to earthquake
+                                    hazard in the region.
+                                    {' '}
+                                </p>
+
+                                <p>
+                                    Its impacts can be reduced through risk-sensitive
+                                    land use planning and this visualization allows
+                                    re-thinking long term spatial planning in the region.
+                                </p>
+                                <p>
+                                ELEMENTS THAT ARE EXPOSED TO LANDSLIDE WITHIN
+                                    {' '}
+                                    {this.state.areaSelected}
+                                </p>
+                            </>
+                        )
+                }
+                {
+                    this.props.sesmicLayer === 'flood'
+                        && (
+                            <>
+
+                                <h1>Flood Exposure</h1>
+
+                                <p>
+                                    The map shows the exposure of population,
+                                    critical infrastructures, and assets to flood.
+                                </p>
+
+                                <p>
+                                    This visualization allows the super imposition
+                                    of the flood hazard map with details of land
+                                    use and critical infrastructures.
+
+                                </p>
+
+                                <p>
+                                    Return period is the probability of experiencing
+                                    a given water depth within a single year; i.e.,
+                                    ‘1-in-100 year’ means 1 in 100 (1%) chance of
+                                    occurrence in any given year.
+
+                                </p>
+
+                                <p>
+                                    This visualization helps understand the population,
+                                    critical infrastructures and assets that are at
+                                    threat to flood hazard in the region.
+
+                                </p>
+
+                                <p>
+                                    Its impacts can be reduced through risk-sensitive
+                                    land use planning and the visualization allow
+                                    re-thinking of long-term spatial planning in the region.
+
+                                </p>
+
+
+                                <p> Source: METEOR Project</p>
+
                             </>
                         )
                 }

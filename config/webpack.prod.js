@@ -79,6 +79,12 @@ module.exports = (env) => {
             ],
             splitChunks: {
                 cacheGroups: {
+                    highcharts: {
+                        // test: /[\\/]node_modules[\\/]/,
+                        test: /.*\/node_modules\/highcharts\./,
+                        name: 'highcharts',
+                        chunks: 'all',
+                    },
                     vendors: {
                         test: /[\\/]node_modules[\\/]/,
                         name: 'vendors',
