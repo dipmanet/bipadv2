@@ -272,7 +272,7 @@ export const Butwal = (props) => {
 
         });
         incidentsGetRequest.do();
-    }, [municipalityId, incidentList]);
+    }, [municipalityId]);
 
 
     const handleNext = () => {
