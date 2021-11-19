@@ -117,9 +117,9 @@ function Leftpane(props) {
 		  page4Legend2InroHtml,
 		  page4Legend3InroHtml,
 		  legentItemDisabled,
+		  CIState,
 
     } = props;
-    console.log('real data in leftpane', realTimeData);
 
 
     const [fullhazardTitle, setfullhazardTitle] = useState([]);
@@ -689,6 +689,7 @@ mm
                             handleCritical={handleCriticalInfra}
                             criticalFlood={criticalElement}
                             leftElement={leftElement}
+                            CIState={CIState}
 
                         />
                         {(leftElement === 2 && clickedArr[2] === 1) && (
@@ -787,6 +788,7 @@ mm
                             handleCritical={handleCriticalInfra}
                             criticalFlood={criticalElement}
                             leftElement={leftElement}
+                            CIState={CIState}
 
                         />
                         <VRLegend>

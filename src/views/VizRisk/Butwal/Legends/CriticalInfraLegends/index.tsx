@@ -21,7 +21,7 @@ import ManualIcon from '#resources/images/manualicon.png';
 
 
 const CriticalInfraLegends = (props) => {
-    const { handleCritical, criticalFlood, cITypeName, clickedArr, exposureElementArr, leftElement } = props;
+    const { handleCritical, criticalFlood, cITypeName, clickedArr, exposureElementArr, leftElement,	CIState } = props;
     const [showCriticalElements, setshowCriticalElements] = useState(true);
 
     const handleCriticalToggle = () => {
@@ -80,14 +80,14 @@ const CriticalInfraLegends = (props) => {
 
                                     <button
                                         type="button"
-                                        className={criticalFlood === 'all'
+                                        className={criticalFlood === 'all' || CIState
                                             ? styles.criticalButtonSelected
                                             : styles.criticalButton}
                                         onClick={() => handleCritical('all')}
                                     >
                                         <Icon
                                             name="circle"
-                                            className={criticalFlood === 'all' ? styles.allIconSelected : styles.allIcon}
+                                            className={criticalFlood === 'all' || CIState ? styles.allIconSelected : styles.allIcon}
                                         />
 
 
@@ -100,7 +100,7 @@ SHOW ALL
                                     <div className={styles.infraIconContainer} key={item}>
                                         <button
                                             type="button"
-                                            className={criticalFlood === item
+                                            className={criticalFlood === item && !CIState
 			 ? styles.criticalButtonSelected
 			  : styles.criticalButton}
                                             onClick={() => handleCritical(item)}

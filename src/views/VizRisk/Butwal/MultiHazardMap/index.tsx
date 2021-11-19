@@ -31,6 +31,7 @@ import {
 import {
     generatePaintByQuantile,
     getWardFilter,
+    incidentPointToGeojson,
 } from '#utils/domain';
 import styles from './styles.scss';
 import TimelineSlider from './TimelineSlider';
@@ -51,6 +52,7 @@ import Heli from '#resources/icons/Heli.png';
 import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
 import { getgeoJsonLayer, getHillShadeLayer } from '../utils';
 import SatelliteLegends from '../Legends/SatelliteLegend';
+import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 
 
 interface State{
@@ -239,6 +241,7 @@ const MultiHazardMap = (props: Props) => {
         satelliteYearDisabled,
         setsatelliteYearDisabled,
         setlegentItemDisabled,
+
 
     } = props;
 
@@ -667,6 +670,7 @@ const MultiHazardMap = (props: Props) => {
             }
             enableNavBtns('both');
         });
+        console.log('multihazrad map incidnet is', incidentList);
 
 
         multihazardMap.on('style.load', () => {
@@ -716,7 +720,7 @@ const MultiHazardMap = (props: Props) => {
                 item => item.properties.hazardTitle,
             ))];
             setIncidentsArr(incidents);
-            console.log('main main', incidents, incidentsArr);
+            console.log('main main', incidents);
 
             incidents.map((layer) => {
                 multihazardMap.addSource(layer, {

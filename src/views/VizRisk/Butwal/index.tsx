@@ -239,6 +239,7 @@ export const Butwal = (props) => {
     const [disableNavLeftBtn, setdisableNavLeftBtn] = useState(false);
     const [satelliteYearDisabled, setsatelliteYearDisabled] = useState(false);
     const [legentItemDisabled, setlegentItemDisabled] = useState(false);
+    const [CIState, setCIState] = useState(false);
 
     const municipalityInfo = municipalities.filter(item => item.id === municipalityId);
     const [selectedYear, setSelectedYear] = useState(2014);
@@ -256,7 +257,26 @@ export const Butwal = (props) => {
         agricultureEconomicLoss: 0,
         totalAnnualincidents: 0,
     });
+    const { requests:
+		{
+
+		    incidentsGetRequest,
+
+		} } = props;
+    const { incidentList } = props;
+    useEffect(() => {
+        incidentsGetRequest.setDefaultParams({
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            setIncidentList,
+            municipalityId,
+        });
+        incidentsGetRequest.do();
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    }, [municipalityId, incidentList]);
+
+
     const handleNext = () => {
+        setCIState(true);
         if (
             leftElement < leftelements.length) {
             setleftElement(state => state + 1);
@@ -269,6 +289,7 @@ export const Butwal = (props) => {
 
 
     const handlePrev = () => {
+        setCIState(true);
         if (leftElement > 0) {
             setleftElement(state => state - 1);
             setactive(leftElement);
@@ -339,6 +360,7 @@ export const Butwal = (props) => {
     const handleMultipeLegendClicked = (legendClicked, i) => {
         setlegentItemDisabled(true);
         setclickedItemMultiple(legendClicked);
+
         let clickedCur = [...clicked];
         clickedCur[i] = (clickedCur[i] === 1) ? 0 : 1;
         if (legendClicked === 'Population Density' && clickedCur[1] === 1) {
@@ -350,6 +372,9 @@ export const Butwal = (props) => {
             setclicked(clickedCur);
         } else {
             setclicked(clickedCur);
+        }
+        if (clickedCur[0] === 1) {
+            setCIState(true);
         }
     };
 
@@ -381,8 +406,8 @@ export const Butwal = (props) => {
 
     const handleMultipleExposure = (exposureItem, i) => {
         setlegentItemDisabled(true);
-        setcriticalElement('all');
         setexposureElement(exposureItem);
+
         let curExposure = [...exposureElementsArr];
         curExposure[i] = curExposure[i] === 1 ? 0 : 1;
 
@@ -399,6 +424,9 @@ export const Butwal = (props) => {
             setexposureElementsArr(curExposure);
 	   }
         setexposureElementsArr(curExposure);
+        if (curExposure[1] === 1) {
+            setCIState(true);
+        }
     };
 
 
@@ -412,6 +440,7 @@ export const Butwal = (props) => {
 
 
     const handleCriticalInfra = (criticalElementName: string) => {
+        setCIState(false);
         setcriticalElement(criticalElementName);
     };
 
@@ -420,7 +449,6 @@ export const Butwal = (props) => {
 		{
 		    htmlRequest,
 		    jsonDataRequest,
-		    incidentsGetRequest,
 		    cIGetRequest,
 		    buildingsGetRequest,
 		    climateDataRequest,
@@ -430,7 +458,6 @@ export const Butwal = (props) => {
 
 
     const setIncidentList = (year: string, hazard) => {
-        const { incidentList } = props;
         let filteredIL;
 
         if (hazard !== 'all') {
@@ -480,9 +507,12 @@ export const Butwal = (props) => {
 
 
     const SUFFIXID = `${PROVINCEID}_${DISTRICTID}_${MUNICIPALITYID}`;
-
+    const {
+        regions,
+        hazardTypes,
+        hazards,
+    } = props;
     useEffect(() => {
-        console.log('munid is', municipalityId);
         htmlRequest.setDefaultParams({
             sethtmlData,
             municipalityId,
@@ -491,11 +521,6 @@ export const Butwal = (props) => {
         jsonDataRequest.setDefaultParams({ setjsonData, municipalityId });
         jsonDataRequest.do();
 
-        incidentsGetRequest.setDefaultParams({
-            setIncidentList,
-            municipalityId,
-        });
-        incidentsGetRequest.do();
 
         cIGetRequest.setDefaultParams({
             setCI,
@@ -509,12 +534,6 @@ export const Butwal = (props) => {
     }, [municipalityId]);
 
 
-    const {
-        incidentList,
-        regions,
-        hazardTypes,
-        hazards,
-    } = props;
     const sanitizedIncidentList = getSanitizedIncidents(
         incidentList,
         regions,
@@ -598,29 +617,6 @@ export const Butwal = (props) => {
 		 === `${KEYNAME}_mapbox_layer_${THEME_ID}_${SUFFIXID}`).map(item => item.value.layername);
 
 
-		   useEffect(() => {
-        console.log('munid is', municipalityId);
-        htmlRequest.setDefaultParams({
-            sethtmlData,
-            municipalityId,
-        });
-        htmlRequest.do();
-        jsonDataRequest.setDefaultParams({ setjsonData, municipalityId });
-        jsonDataRequest.do();
-
-        incidentsGetRequest.setDefaultParams({
-            setIncidentList,
-            municipalityId,
-        });
-        incidentsGetRequest.do();
-
-        cIGetRequest.setDefaultParams({
-            setCI,
-            municipalityId,
-        });
-        cIGetRequest.do();
-    }, [municipalityId]);
-
     const realTimeDataStationName = String(jsonData.filter(item => item.key
 		=== `${KEYNAME}_realtime_datasource_${THEME_ID}_${SUFFIXID}`).map(item => item.value.stationName)[0]);
 
@@ -637,13 +633,11 @@ export const Butwal = (props) => {
         if (pending) {
             if (incidentList.length > 0
 				&& cI.length > 0 && htmlData.length > 0
-					 && jsonData.length > 0 && realTimeData.length > 0) {
+					 && jsonData.length > 0) {
 							 setpending(false);
             }
         }
     }, [cI, htmlData, incidentList, jsonData, pending]);
-
-    console.log('real time data is', incidentList);
 
 
     return (
@@ -664,6 +658,7 @@ export const Butwal = (props) => {
                                 <>
                                     <MultiHazardMap
                                         MAINKEYNAME={MAINKEYNAME}
+
                                         incidentList={pointFeatureCollectionButwal}
                                         populationDensityRange={populationDensityRange[0]}
                                         rightElement={leftElement}
@@ -741,6 +736,7 @@ export const Butwal = (props) => {
                                 disableNavLeftBtn={disableNavLeftBtn}
                                 disableNavRightBtn={disableNavRightBtn}
                                 legentItemDisabled={legentItemDisabled}
+                                CIState={CIState}
                             />
                         )
 
@@ -849,6 +845,7 @@ export const Butwal = (props) => {
                         disableNavLeftBtn={disableNavLeftBtn}
                         disableNavRightBtn={disableNavRightBtn}
                         legentItemDisabled={legentItemDisabled}
+                        CIState={CIState}
 
 
                     />
@@ -889,6 +886,7 @@ export const Butwal = (props) => {
                         disableNavLeftBtn={disableNavLeftBtn}
                         disableNavRightBtn={disableNavRightBtn}
                         legentItemDisabled={legentItemDisabled}
+                        CIState={CIState}
 
 
                     />
