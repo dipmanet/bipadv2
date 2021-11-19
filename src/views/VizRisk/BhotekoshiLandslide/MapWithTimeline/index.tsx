@@ -192,7 +192,6 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
-            console.log('incidents data', this.props.bahrabiseLandSlide);
             const features = this.props.bahrabiseLandSlide.map((item, i) => ({
                 type: 'Feature',
                 id: i,
@@ -271,7 +270,6 @@ class FloodHistoryMap extends React.Component {
 
                     const { lngLat } = e;
                     const coordinates = [lngLat.lng, lngLat.lat];
-                    console.log('e', e.features[0]);
 
                     const wardno = e.features[0].properties.title;
                     const riskScore = scores.filter(s => s.ward === wardno)[0].score;
@@ -404,7 +402,6 @@ class FloodHistoryMap extends React.Component {
             polygonResponse,
             hideOSMLayers,
         } = this.props;
-        console.log('hideOSMLayers', hideOSMLayers);
         const { resourceArr } = this.state;
         if (criticalElement !== prevProps.criticalElement) {
             this.resetClusters();
@@ -438,7 +435,6 @@ class FloodHistoryMap extends React.Component {
 
         if (currentPage === 6 && prevProps.currentPage === 7) {
             this.map.removeControl(draw);
-            console.log('test');
         }
 
 
@@ -571,7 +567,6 @@ class FloodHistoryMap extends React.Component {
         }
 
         if (currentPage !== prevProps.currentPage && currentPage === 8) {
-            console.log('setting it off!! page 8');
             landuseLayers.map((lyr) => {
                 this.map.setLayoutProperty(lyr, 'visibility', 'none');
                 return null;
@@ -597,7 +592,6 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('bahrabiseWardText', 'visibility', 'visible');
             this.map.setLayoutProperty('suseptibility-bahrabise', 'visibility', 'none');
-            console.log('setting it off!! page 9');
 
             landuseLayers.map((lyr) => {
                 this.map.setLayoutProperty(lyr, 'visibility', 'none');

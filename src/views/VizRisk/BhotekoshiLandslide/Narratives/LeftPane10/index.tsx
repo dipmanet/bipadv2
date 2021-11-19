@@ -93,7 +93,6 @@ const LeftPane10 = (props: Props) => {
             }));
             setIncidentChart(noIncidentsChart);
             setLossChart(loss);
-            console.log('loss chart', loss);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -120,14 +119,12 @@ const LeftPane10 = (props: Props) => {
                 Total: drawData.filter(item => item.hazardTitle === hazard).length,
             }));
             cD.push({ name: 'Buildings', Total: buildingCount.count });
-            console.log('buildingCount', buildingCount);
             setCIChartData(cD);
             setReset(false);
         }
     }, [buildingCount, drawData]);
 
     useEffect(() => {
-        console.log('reset');
         if (ci) {
             const resArr = [...new Set(ci.map(h => h.resourceType))].filter(i => i !== undefined);
             const cD = resArr.map(res => ({

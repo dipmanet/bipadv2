@@ -18,7 +18,6 @@ export function vs(viewState) {
         zoom: viewState.zoom,
         pitch: viewState.pitch,
     };
-    console.log(JSON.stringify(obj));
 }
 
 /**
@@ -31,14 +30,6 @@ export function flyTo(
     extraViewState = {},
 ) {
     return new Promise((resolve) => {
-        console.log(
-            '[fly transition] flying to',
-            longitude,
-            latitude,
-            zoom,
-            pitch,
-            bearing,
-        );
         deck.setProps({
             viewState: {
                 longitude,

@@ -10,7 +10,6 @@ const handleButtonClick = () => {
 };
 
 const HouseholdPopup = (props: Props) => {
-    console.log(props);
     const tooltipContainerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(

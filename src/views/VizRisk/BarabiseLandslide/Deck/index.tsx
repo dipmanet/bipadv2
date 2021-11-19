@@ -184,7 +184,6 @@ const Deck = (props) => {
         });
 
         if (currentPage === 3) {
-            console.log('its three now');
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
@@ -243,7 +242,6 @@ const Deck = (props) => {
                 return null;
             });
         } else if (currentPage === 3) {
-            console.log('entering here too');
             const map = mapRef.current.getMap();
 
             setReAnimate(true);

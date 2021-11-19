@@ -135,6 +135,7 @@ class SlideFivePane extends React.PureComponent<Props, State> {
             drawChartData,
         } = this.props;
 
+        console.log('layer', this.props.sesmicLayer);
         const { chartData } = this.state;
 
         return (
