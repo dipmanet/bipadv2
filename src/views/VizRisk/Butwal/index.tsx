@@ -269,10 +269,10 @@ export const Butwal = (props) => {
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
             setIncidentList,
             municipalityId,
+
         });
         incidentsGetRequest.do();
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    }, [municipalityId, incidentList]);
+    }, [municipalityId]);
 
 
     const handleNext = () => {

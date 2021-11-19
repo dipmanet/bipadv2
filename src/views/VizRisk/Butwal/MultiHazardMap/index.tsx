@@ -588,7 +588,7 @@ const MultiHazardMap = (props: Props) => {
                 } else if (interval.current) {
                     clearInterval(interval.current);
                 }
-            }, incidentsSliderDelay);
+            }, 1000);
         }
         return () => {
             clearInterval(interval.current);
