@@ -84,7 +84,7 @@ class RightPane extends React.PureComponent<Props, State> {
         'fill-opacity': 0,
     }))
 
-    public onPieEnter = (piedata, index) => {
+    public onPieEnter = (index) => {
         this.setState({
             activeIndex: index,
         });
@@ -94,7 +94,7 @@ class RightPane extends React.PureComponent<Props, State> {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${((payload[0].value / 260.919) * 100).toFixed(2)} % `}</p>
+                    <p>{`${this.getPercentVal(payload[0], data)} % `}</p>
                 </div>
             );
         }
