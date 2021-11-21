@@ -1,19 +1,13 @@
 import React from 'react';
-import memoize from 'memoize-one';
-
 import {
     Bar, BarChart,
     CartesianGrid, Legend,
     ResponsiveContainer,
     Tooltip, XAxis, YAxis,
 } from 'recharts';
-import styles from './styles.scss';
 import demographicsData from '#views/VizRisk/Dhangadi/Data/demographicsData';
-import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import ManWoman from '#views/VizRisk/Dhangadi/Icons/ManWoman.svg';
-import Male from '#views/VizRisk/Dhangadi/Icons/male.svg';
-import Female from '#views/VizRisk/Dhangadi/Icons/female.svg';
-import Home from '#views/VizRisk/Dhangadi/Icons/home.svg';
+import styles from './styles.scss';
+
 
 import Disclaimer from '../../Components/Disclaimer';
 
@@ -21,43 +15,39 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideThreePane extends React.PureComponent<Props, State> {
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
+    public renderLegend = () => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
                        Male Pop
-                        <sup>n</sup>
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
-                    Female Pop
-                        <sup>n</sup>
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendOther} />
-                    <div className={styles.legendText}>
-                    Other Pop
-                        <sup>n</sup>
-                    </div>
-                </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
-                       Total Family Count
-                    </div>
+                    <sup>n</sup>
                 </div>
             </div>
-        );
-    }
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMin} />
+                <div className={styles.legendText}>
+                    Female Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendOther} />
+                <div className={styles.legendText}>
+                    Other Pop
+                    <sup>n</sup>
+                </div>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendDaily} />
+                <div className={styles.legendText}>
+                       Total Family Count
+                </div>
+            </div>
+        </div>
+    )
 
     public render() {
         const chartData = demographicsData.demographicsData;
@@ -171,7 +161,6 @@ class SlideThreePane extends React.PureComponent<Props, State> {
                         {/* <Bar background label dataKey="foo" fill="#8884d8" /> */}
                     </BarChart>
                 </ResponsiveContainer>
-                {/* <SourceInfo /> */}
                 <Disclaimer disclamer={'Disclaimer: Temporarily there is an inconsistency in the map layers due to different data sources'} />
 
             </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
 import Map from './Map';
-// import Legends from './Legends';
 import styles from './styles.scss';
 import RightElement1 from './RightPaneContents/RightPane1';
 import RightElement2 from './RightPaneContents/RightPane2';
@@ -18,7 +17,6 @@ import FloodDepthLegend from './Legends/FloodDepthLegend';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';

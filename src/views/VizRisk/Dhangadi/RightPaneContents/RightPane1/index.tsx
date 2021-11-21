@@ -7,11 +7,9 @@ import { CartesianGrid,
     Tooltip, XAxis, YAxis } from 'recharts';
 import VizRiskContext from '#components/VizRiskContext';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import MaxTempIcon from '#views/VizRisk/Rajapur/Icons/TempMax.svg';
-import MinTempIcon from '#views/VizRisk/Rajapur/Icons/TempMin.svg';
-import TempIcon from '#views/VizRisk/Dhangadi/Icons/Temp.svg';
-import AvgRainFall from '#views/VizRisk/Dhangadi/Icons/RainFall.svg';
-import ElevationIcon from '#views/VizRisk/Dhangadi/Icons/ElevationFromSea.svg';
+import TempIcon from '#resources/icons/Temp.svg';
+import AvgRainFall from '#resources/icons/RainFall.svg';
+import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
 import styles from './styles.scss';
 
 interface State {
@@ -109,48 +107,42 @@ class Rajapur extends React.PureComponent<Props, State> {
         };
     }
 
-    public renderLegend = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
+    public renderLegend = () => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
                        Avg Max
-                    </div>
                 </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMin} />
-                    <div className={styles.legendText}>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMin} />
+                <div className={styles.legendText}>
                        Avg Min
-                    </div>
                 </div>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendDaily} />
-                    <div className={styles.legendText}>
+            </div>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendDaily} />
+                <div className={styles.legendText}>
                        Daily Avg
-                    </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    )
 
-    public renderLegendRainfall = (props) => {
-        const { payload } = props;
-        return (
-            <div className={styles.climateLegendContainer}>
-                <div className={styles.climatelegend}>
-                    <div className={styles.legendMax} />
-                    <div className={styles.legendText}>
+    public renderLegendRainfall = props => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
                        Avg Rainfall
-                    </div>
                 </div>
-
             </div>
-        );
-    }
 
-    public CustomTooltip = ({ active, payload, label }) => {
+        </div>
+    )
+
+    public CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
@@ -165,7 +157,7 @@ class Rajapur extends React.PureComponent<Props, State> {
         return null;
     };
 
-    public CustomTooltipRain = ({ active, payload, label }) => {
+    public CustomTooltipRain = ({ active, payload }) => {
         console.log('Payload', payload);
         if (active && payload && payload.length) {
             return (
@@ -181,16 +173,6 @@ class Rajapur extends React.PureComponent<Props, State> {
     };
 
     public render() {
-        const { currentPage } = this.context;
-
-        const {
-            municipalities,
-        } = this.props;
-
-        const {
-            showInfo,
-        } = this.state;
-
         return (
             <div className={styles.vrSideBar}>
                 <h1> Dhangadhi Sub-Metropolitan City  </h1>
@@ -339,9 +321,6 @@ class Rajapur extends React.PureComponent<Props, State> {
 
                     </LineChart>
                 </ResponsiveContainer>
-                {/* <SourceInfo /> */}
-
-
             </div>
         );
     }
