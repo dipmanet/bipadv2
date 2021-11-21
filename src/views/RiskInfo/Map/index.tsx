@@ -70,9 +70,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         return (
             <>
-                <CommonMap
-                    sourceKey="risk-infoz"
-                />
+
                 { rasterLayers.map(layer => (
                     <MapSource
                         key={layer.id}
@@ -172,6 +170,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         }
                     </MapSource>
                 ))}
+                <CommonMap
+                    sourceKey="risk-infoz"
+                />
             </>
         );
     }
