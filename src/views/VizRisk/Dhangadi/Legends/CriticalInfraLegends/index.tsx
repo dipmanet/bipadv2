@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Education from '../../Icons/icon_set_school.svg';
-import Governance from '../../Icons/icon_set_government.svg';
-import Culture from '../../Icons/icon_set_religion.svg';
-import Health from '../../Icons/icon_set_health-01.svg';
-import Industry from '../../Icons/icon_set_industry.svg';
-import Tourism from '../../Icons/icon_set_hotel.svg';
-import Bank from '../../Icons/icon_set_bank.svg';
+import Education from '#resources/icons/SchoolVR.svg';
+import Governance from '#resources/icons/GovernanceVR.svg';
+import Culture from '#resources/icons/CultureVR.svg';
+import Health from '#resources/icons/HealthVR.svg';
+import Bank from '#resources/icons/FinanceVR.svg';
 import Icon from '#rscg/Icon';
 
 const LandCoverLegends = (props) => {

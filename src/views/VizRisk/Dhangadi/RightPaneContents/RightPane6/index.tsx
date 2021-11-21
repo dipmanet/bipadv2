@@ -4,7 +4,7 @@ import {
     Bar, BarChart,
     CartesianGrid,
     ResponsiveContainer,
-    Tooltip, XAxis, YAxis,
+    XAxis, YAxis,
 } from 'recharts';
 import styles from './styles.scss';
 
@@ -16,7 +16,6 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFivePane extends React.PureComponent<Props, State> {
     public constructor(props) {

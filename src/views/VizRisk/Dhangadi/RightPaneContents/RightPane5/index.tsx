@@ -7,7 +7,6 @@ interface ComponentProps {}
 
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
-const COLORS = ['#00afe9', '#016cc3', '#00aca1', '#ff5ba5', '#ff6c4b', '#016cc3'];
 
 class SlideFourPane extends React.PureComponent<Props, State> {
     public constructor(props) {
@@ -26,8 +25,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const chartData = demographicsData.demographicsData;
-        const { showLandcover } = this.state;
         return (
             <div className={styles.vrSideBar}>
                 <h1>Visualising Flood Exposure for Dhangadi Sub-Metropolitican City </h1>
@@ -48,7 +45,6 @@ class SlideFourPane extends React.PureComponent<Props, State> {
                 planning and this visualization allows re-thinking long-term spatial planning
                 in the region.
                 </p>
-                {/* <SourceInfo /> */}
                 <Disclaimer
                     disclamer={'This flood hazard layer is the result of a computer-based simulation of flooding or flood inundation.\nThe datasets are produced using the available and best possible datasets. Considering this limitation, the flood hazard might notoccur in a similar pattern as observed on the map.'}
                 />

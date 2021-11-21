@@ -1,7 +1,7 @@
 import React from 'react';
 import Hexagon from 'react-hexagon';
 import styles from './styles.scss';
-import AgriPattern from '../../Icons/agrihexagon.png';
+import AgriPattern from '#resources/icons/Agrihexagon.png';
 
 const LandCoverLegends = () => (
     <>

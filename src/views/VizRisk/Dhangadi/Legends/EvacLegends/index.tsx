@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-import Education from '../../Icons/icon_set_school.svg';
-import Culture from '../../Icons/icon_set_religion.svg';
-import SafeShelter from '../../Icons/safeshelternew.svg';
+import Education from '#resources/icons/SchoolVR.svg';
+import Culture from '#resources/icons/CultureVR.svg';
+import SafeShelter from '#resources/icons/Safeshelter_Updated.svg';
 import Icon from '#rscg/Icon';
 
 
@@ -64,7 +64,6 @@ const EvacLegends = (props) => {
     };
     return (
         <>
-            {/* <VRLegend> */}
             <h2>Evacuation Centers</h2>
 
             <div className={styles.criticalIcons}>
@@ -139,7 +138,6 @@ const EvacLegends = (props) => {
 
 
             </div>
-            {/* </VRLegend> */}
         </>
     );
 };
