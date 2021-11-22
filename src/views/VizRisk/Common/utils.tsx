@@ -130,7 +130,6 @@ const safeItems = {
 };
 
 export const popupElementFlood = (safeshelterObj) => {
-    console.log('safeshelterObj', safeshelterObj);
     const content = document.createElement('div');
     const heading = document.createElement('h2');
     heading.innerHTML = safeshelterObj.Title;

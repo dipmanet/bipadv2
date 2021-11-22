@@ -234,7 +234,6 @@ class LeftPaneContainer extends React.PureComponent<Props, State> {
     public getDescription= () => {
         const { nonZeroArr, chartData } = this.state;
         const { clickedItem } = this.props;
-        console.log('clickedItem', clickedItem);
         if (clickedItem === 'all') {
             if (nonZeroArr.length > 0) {
                 return nonZeroArr.map((item, i) => {

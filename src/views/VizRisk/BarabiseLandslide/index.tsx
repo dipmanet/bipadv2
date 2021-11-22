@@ -277,6 +277,7 @@ const BarabiseLandslide = (props) => {
     const [req4, setReq4] = useState(false);
     const [req5, setReq5] = useState(false);
     const [drawpending, setDrawPending] = useState(false);
+    const [idle, setIdle] = useState(false);
 
     const {
         // incidentList,
@@ -492,6 +493,14 @@ const BarabiseLandslide = (props) => {
         setHideOSM(data);
     };
 
+    const getIdle = (d: boolean) => {
+        setIdle(d);
+    };
+
+    useEffect(() => {
+        setIdle(false);
+    }, [currentPage]);
+
     return (
         <>
             { (pending || drawpending)
@@ -517,6 +526,7 @@ const BarabiseLandslide = (props) => {
                         handleFlyTo={handleFlyTo}
                         setNarrationDelay={setNarrationDelay}
                         ci={ci}
+                        getIdle={getIdle}
                     />
                 )
             }
@@ -530,6 +540,7 @@ const BarabiseLandslide = (props) => {
                         ci={ci}
                         currentPage={currentPage}
                         criticalElement={criticalElement}
+                        getIdle={getIdle}
                     />
                 )
 
@@ -554,6 +565,7 @@ const BarabiseLandslide = (props) => {
                             criticalElement={criticalElement}
                             polygonResponse={polygonResponse}
                             hideOSMLayers={hideOSMLayers}
+                            getIdle={getIdle}
                         />
                     </>
                 )
@@ -726,6 +738,7 @@ const BarabiseLandslide = (props) => {
                                     pagenumber={currentPage + 1}
                                     totalPages={leftElements.length}
                                     pending={pending}
+                                    idle={idle}
                                 />
                             </div>
                         )}

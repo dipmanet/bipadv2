@@ -513,6 +513,7 @@ const BarabiseLandslide = (props) => {
                         ci={ci}
                         currentPage={currentPage}
                         criticalElement={criticalElement}
+                        getIdle={getIdle}
                     />
                 )
 
@@ -537,6 +538,8 @@ const BarabiseLandslide = (props) => {
                             criticalElement={criticalElement}
                             polygonResponse={polygonResponse}
                             hideOSMLayers={hideOSMLayers}
+                            getIdle={getIdle}
+
                         />
                     </>
                 )

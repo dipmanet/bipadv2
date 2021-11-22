@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import {
     ResponsiveContainer,
@@ -10,6 +11,16 @@ import {
     Sector,
 } from 'recharts';
 import CustomChartLegend from '#views/VizRisk/Dhangadi/Components/CustomChartLegend';
+
+import {
+    mapStyleSelector,
+    regionsSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    wardsSelector,
+    hazardTypesSelector,
+} from '#selectors';
 import CustomLabel from './CustomLabel';
 
 import styles from './styles.scss';
@@ -39,6 +50,7 @@ const COLORS_CHART = [
 
 ];
 
+
 interface State {
     activeIndex: number;
     selected: number;
@@ -50,6 +62,15 @@ interface ComponentProps {}
 type ReduxProps = ComponentProps & PropsFromAppState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
 
+const mapStateToProps = state => ({
+    mapStyle: mapStyleSelector(state),
+    regions: regionsSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    hazardTypes: hazardTypesSelector(state),
+});
 
 class RightPane extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -84,17 +105,19 @@ class RightPane extends React.PureComponent<Props, State> {
         'fill-opacity': 0,
     }))
 
-    public onPieEnter = (index) => {
+    public onPieEnter = (piedata, index) => {
         this.setState({
             activeIndex: index,
         });
     };
 
-    public CustomTooltip = ({ active, payload }) => {
+    public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
+            console.log('payload', payload);
+            // console.log('payload', payload);
             return (
                 <div className={styles.customTooltip}>
-                    <p>{`${this.getPercentVal(payload[0], data)} % `}</p>
+                    <p>{`${((payload[0].value / 260.919) * 100).toFixed(2)} % `}</p>
                 </div>
             );
         }
@@ -102,8 +125,8 @@ class RightPane extends React.PureComponent<Props, State> {
     };
 
     public renderActiveShape = (props) => {
-        const { cx, cy, innerRadius, outerRadius, startAngle, endAngle,
-            fill } = props;
+        const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
+            fill, payload, percent, value } = props;
 
         return (
             <g>
@@ -131,14 +154,10 @@ class RightPane extends React.PureComponent<Props, State> {
     };
 
 
-    public getPercentVal = (item, d) => {
-        const val = item.value;
-        const total = d.reduce((a, b) => ({ value: a.value + b.value }));
-        return (val / total.value * 100).toFixed(1);
-    }
-
     public render() {
-        const { activeIndex } = this.state;
+        const { activeIndex, showInfo } = this.state;
+        console.log('Color', COLORS_CHART);
+
         return (
             <div className={styles.vrSideBar}>
 
@@ -183,7 +202,8 @@ class RightPane extends React.PureComponent<Props, State> {
                                 content={(
                                     <CustomLabel
                                         value1={`${data[activeIndex].value} sq km`}
-                                        value2={` / ${this.getPercentVal(data[activeIndex], data)}%`}
+                                        value2={` / ${((data[activeIndex].value / 260.919)
+                                             * 100).toFixed(2)}%`}
                                     />
                                 )}
                             />
@@ -193,17 +213,64 @@ class RightPane extends React.PureComponent<Props, State> {
                 </ResponsiveContainer>
 
                 <div className={styles.customChartLegend}>
-                    {data.map((item, i) => (
-                        <CustomChartLegend
-                            text={data[i].name}
-                            barColor={COLORS_CHART[i]}
-                            background={'#eee'}
-                            // data={'119.44 sq km / 45.78'}
-                            data={`${item.value} sq km /${this.getPercentVal(item, data)}`}
-                            selected={activeIndex === i}
-                        />
-                    ))
-                    }
+                    <CustomChartLegend
+                        text={data[0].name}
+                        barColor={COLORS_CHART[0]}
+                        background={'#eee'}
+                        data={'119.44 sq km / 45.78'}
+                        selected={activeIndex === 0}
+                    />
+                    <CustomChartLegend
+                        text={data[1].name}
+                        barColor={COLORS_CHART[1]}
+                        background={'#eee'}
+                        data={'89.12 sq km / 34.16'}
+                        selected={activeIndex === 1}
+                    />
+
+                    <CustomChartLegend
+                        text={data[2].name}
+                        barColor={COLORS_CHART[2]}
+                        background={'#eee'}
+                        data={'36.71 sq km / 14.07'}
+                        selected={activeIndex === 2}
+                    />
+                    <CustomChartLegend
+                        text={data[3].name}
+                        barColor={COLORS_CHART[3]}
+                        background={'#eee'}
+                        data={'4.96 sq km / 1.90'}
+                        selected={activeIndex === 3}
+                    />
+                    <CustomChartLegend
+                        text={data[4].name}
+                        barColor={COLORS_CHART[4]}
+                        background={'#eee'}
+                        data={'4.01 sq km / 1.54'}
+                        selected={activeIndex === 4}
+                    />
+                    <CustomChartLegend
+                        text={data[5].name}
+                        barColor={COLORS_CHART[5]}
+                        background={'#eee'}
+                        data={'3.37 sq km / 1.29'}
+                        selected={activeIndex === 5}
+                    />
+                    <CustomChartLegend
+                        text={data[6].name}
+                        barColor={COLORS_CHART[6]}
+                        background={'#eee'}
+                        data={'2.06 sq km / 0.79'}
+                        selected={activeIndex === 6}
+                    />
+                    <CustomChartLegend
+                        text={data[7].name}
+                        barColor={COLORS_CHART[7]}
+                        background={'#eee'}
+                        data={'0.52 sq km / 0.19'}
+                        selected={activeIndex === 7}
+                    />
+
 
                 </div>
                 {/* <SourceInfo /> */}
@@ -213,4 +280,4 @@ class RightPane extends React.PureComponent<Props, State> {
     }
 }
 
-export default RightPane;
+export default connect(mapStateToProps)(RightPane);

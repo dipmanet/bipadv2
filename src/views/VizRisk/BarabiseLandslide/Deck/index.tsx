@@ -184,7 +184,6 @@ const Deck = (props) => {
         });
 
         if (currentPage === 3) {
-            console.log('its three now');
             MapLayers.landuse.map((layer) => {
                 map.setLayoutProperty(layer, 'visibility', 'visible');
                 return null;
@@ -199,9 +198,11 @@ const Deck = (props) => {
 
             // map.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
         }
-        // map.moveLayer('landslide-barabise');
 
-        // map.setPaintProperty('bahrabiseFill', 'fill-color', 'rgb(108,171,7)');
+        const { getIdle } = props;
+        map.on('idle', (e) => {
+            getIdle(true);
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -241,7 +242,6 @@ const Deck = (props) => {
                 return null;
             });
         } else if (currentPage === 3) {
-            console.log('entering here too');
             const map = mapRef.current.getMap();
 
             setReAnimate(true);
