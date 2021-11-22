@@ -1145,8 +1145,7 @@ const MultiHazardMap = (props: Props) => {
 
 
         return destroyMap;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [municipalityId, provinceId]);
 
 
     useEffect(() => {
