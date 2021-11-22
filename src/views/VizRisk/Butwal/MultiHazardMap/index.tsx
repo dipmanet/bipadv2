@@ -670,7 +670,6 @@ const MultiHazardMap = (props: Props) => {
             }
             enableNavBtns('both');
         });
-        console.log('multihazrad map incidnet is', incidentList);
 
 
         multihazardMap.on('style.load', () => {
@@ -720,7 +719,7 @@ const MultiHazardMap = (props: Props) => {
                 item => item.properties.hazardTitle,
             ))];
             setIncidentsArr(incidents);
-            console.log('main main', incidents);
+
 
             incidents.map((layer) => {
                 multihazardMap.addSource(layer, {
