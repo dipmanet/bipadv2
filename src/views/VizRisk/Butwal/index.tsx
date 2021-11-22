@@ -210,7 +210,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 
 export const Butwal = (props) => {
-    const { municipalities, municipalityId } = props;
+    const { municipalities, municipalityId, togglingBetweenMun } = props;
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [pending, setpending] = useState<boolean>(true);
     const [clickedIncidentItem, setclickedIncidentItem] = useState('all');
@@ -658,7 +658,7 @@ export const Butwal = (props) => {
                                 <>
                                     <MultiHazardMap
                                         MAINKEYNAME={MAINKEYNAME}
-
+                                        togglingBetweenMun={togglingBetweenMun}
                                         incidentList={pointFeatureCollectionButwal}
                                         populationDensityRange={populationDensityRange[0]}
                                         rightElement={leftElement}

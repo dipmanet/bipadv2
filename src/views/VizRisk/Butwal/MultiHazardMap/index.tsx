@@ -241,6 +241,8 @@ const MultiHazardMap = (props: Props) => {
         satelliteYearDisabled,
         setsatelliteYearDisabled,
         setlegentItemDisabled,
+        togglingBetweenMun,
+        munThemeId,
 
 
     } = props;
@@ -1144,7 +1146,7 @@ const MultiHazardMap = (props: Props) => {
 
 
         return destroyMap;
-    }, [municipalityId, provinceId]);
+    }, [togglingBetweenMun, munThemeId]);
 
 
     useEffect(() => {

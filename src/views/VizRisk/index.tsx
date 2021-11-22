@@ -56,10 +56,12 @@ const VizRiskMainPage = (props) => {
     const [munThemeId, setmunThemeId] = useState(null);
     const [municipalityId, setmunicipalityId] = useState(null);
     const [pendingMainPage, setpendingMainPage] = useState(true);
+	const [togglingBetweenMun, settogglingBetweenMun] = useState(false);
 
 
     const handleMenuIconClick = () => {
         setShowMenu(true);
+		settogglingBetweenMun(true);
     };
 
     const handleMenuTitleClick = (municipality, themeid, munId) => {
@@ -67,6 +69,7 @@ const VizRiskMainPage = (props) => {
         setMun(municipality);
         setmunThemeId(themeid);
         setmunicipalityId(munId);
+			settogglingBetweenMun(true);
     };
 
 
@@ -236,7 +239,7 @@ const VizRiskMainPage = (props) => {
 
                                                 </div>
                                             </>
-                                        ) : ((munThemeId === 101 && <Butwal municipalityId={municipalityId} />)
+                                        ) : ((munThemeId === 101 && <Butwal municipalityId={municipalityId} togglingBetweenMun={togglingBetweenMun} munThemeId={munThemeId} />)
 		 || (munThemeId === 109 && <Jugal />)
 		 || (munThemeId === 110 && <Panchpokhari />))
                                         }
