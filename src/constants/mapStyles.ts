@@ -476,7 +476,7 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-radius': 8,
+            'circle-radius': 16,
             'circle-stroke-color': '#000000',
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -494,7 +494,7 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-radius': 8,
+            'circle-radius': 16,
             'circle-stroke-color': '#000000',
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -508,7 +508,7 @@ export default {
             ],
         },
         paint: {
-            'circle-radius': 8,
+            'circle-radius': 16,
             'circle-color': [
                 'case',
                 // ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
@@ -535,6 +535,96 @@ export default {
                 1,
                 0,
             ],
+        },
+    },
+    rain24Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'twentyfour']], 'number'], '-',
+                ['get', 'twentyfour'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'twentyfour']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain12Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'twelve']], 'number'], '-',
+                ['get', 'twelve'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'twelve']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain6Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'six']], 'number'], '-',
+                ['get', 'six'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'six']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain3Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'three']], 'number'], '-',
+                ['get', 'three'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'three']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain1Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'one']], 'number'], '-',
+                ['get', 'one'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'one']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
         },
     },
 
@@ -573,7 +663,7 @@ export default {
                 '■',
             ],
             'text-allow-overlap': true,
-            'text-size': 32,
+            'text-size': 48,
         },
         text: {
             'text-color': [
@@ -647,7 +737,20 @@ export default {
             // ],
         },
     },
-
+    riverText: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': ['get', 'waterLevel'],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'waterLevel']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
     firePoint: {
         layout: {
             'text-field': '◆',

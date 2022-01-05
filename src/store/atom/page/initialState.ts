@@ -161,6 +161,7 @@ const state: PageState = {
             faramErrors: {},
             pristine: true,
         },
+        duration: 24,
     },
 
     lossAndDamagePage: {

@@ -7,7 +7,11 @@ import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Message from '#rscv/Message';
 import Legend from '#rscz/Legend';
 import {
-    rainLegendItems,
+    rain24LegendItems,
+    rain12LegendItems,
+    rain6LegendItems,
+    rain3LegendItems,
+    rain1LegendItems,
     newRiverLegendItems,
     earthquakeLegendItems,
     forestFireLegendItems,
@@ -47,6 +51,7 @@ import {
     realTimeSourceListSelector,
     otherSourceListSelector,
     filtersSelector,
+    realTimeDurationSelector,
 } from '#selectors';
 
 import Page from '#components/Page';
@@ -95,6 +100,7 @@ interface PropsFromState {
     otherSourceList: PageType.OtherSource[];
     filters: PageType.FiltersWithRegion['faramValues'];
     globalFilters: FiltersElement;
+    duration: number;
 }
 
 type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
@@ -111,6 +117,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     otherSourceList: otherSourceListSelector(state),
     filters: realTimeFiltersValuesSelector(state),
     globalFilters: filtersSelector(state),
+    duration: realTimeDurationSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
@@ -362,6 +369,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             },
             realTimeRiverList,
             realTimePollutionList,
+            duration,
         } = this.props;
 
         const showRiver = realtimeSources && realtimeSources.findIndex(v => v === 2) !== -1;
@@ -392,17 +400,81 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 Rain
                             </h4>
                         </header>
-                        <Legend
-                            className={styles.legend}
-                            data={rainLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
+                        {duration === 24
+                        && (
+                            <Legend
+                                className={styles.legend}
+                                data={rain24LegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
                             // iconSelector={iconSelector}
-                            labelSelector={legendLabelSelector}
-                            symbolClassNameSelector={classNameSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                                labelSelector={legendLabelSelector}
+                                symbolClassNameSelector={classNameSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        )
+                        }
+                        {duration === 12
+                        && (
+                            <Legend
+                                className={styles.legend}
+                                data={rain12LegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                            // iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                symbolClassNameSelector={classNameSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        )
+                        }
+                        {duration === 6
+                        && (
+                            <Legend
+                                className={styles.legend}
+                                data={rain6LegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                            // iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                symbolClassNameSelector={classNameSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        )
+                        }
+                        {duration === 3
+                        && (
+                            <Legend
+                                className={styles.legend}
+                                data={rain3LegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                            // iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                symbolClassNameSelector={classNameSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        )
+                        }
+                        {duration === 1
+                        && (
+                            <Legend
+                                className={styles.legend}
+                                data={rain1LegendItems}
+                                itemClassName={styles.legendItem}
+                                keySelector={itemSelector}
+                            // iconSelector={iconSelector}
+                                labelSelector={legendLabelSelector}
+                                symbolClassNameSelector={classNameSelector}
+                                colorSelector={legendColorSelector}
+                                emptyComponent={null}
+                            />
+                        )
+                        }
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 Source:
@@ -652,6 +724,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
             },
             realTimeSourceList,
             otherSourceList,
+            duration,
         } = this.props;
         const {
             activeView,

@@ -1,4 +1,5 @@
 import { Obj } from '@togglecorp/fujs';
+import { Duration } from '@material-ui/core';
 import { FiltersElement, ResourceTypeKeys, ModelEnum, KeyValue } from '#types';
 
 export interface Field {
@@ -430,6 +431,7 @@ export interface RealTimeMonitoringPage {
     realTimeSourceList: RealTimeSource[];
     otherSourceList: OtherSource[];
     filters: Filters;
+    duration: number;
 }
 
 export interface ProjectsProfileFilters {
@@ -547,6 +549,7 @@ export enum PageType {
     RTM__SET_REAL_TIME_FIRE_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FIRE',
     RTM__SET_REAL_TIME_POLLUTION_LIST = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_POLLUTION',
     RTM__SET_REAL_TIME_FILTERS = 'page/REAL_TIME_MONITORING/SET_REAL_TIME_FILTERS',
+    RTM__SET_REAL_TIME_DURATION = 'page/RTM__SET_REAL_TIME_DURATION',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -751,6 +754,10 @@ export interface SetRealTimeEarthquakeList {
     type: typeof PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST;
     realTimeEarthquakeList: RealTimeEarthquake[];
 }
+export interface SetRealTimeDuration {
+    type: typeof PageType.RTM__SET_REAL_TIME_DURATION;
+    duration: Duration;
+}
 
 export interface SetRealTimeFireList {
     type: typeof PageType.RTM__SET_REAL_TIME_FIRE_LIST;
@@ -845,7 +852,7 @@ export type PageActionTypes = (
     SetDashboardAlertList | SetDashboardFilters | SetIncidentList |
     SetIncident | RemoveIncident | PatchIncident |
     SetIncidentFilters | SetResourceList | SetEventType |
-    SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList |
+    SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList | SetRealTimeDuration |
     SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |

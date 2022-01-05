@@ -245,6 +245,12 @@ export const setRealTimeRiverListAction = (
     type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
     realTimeRiverList,
 });
+export const setRealTimeDurationAction = (
+    { duration }: { duration: Type.Duration},
+) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_DURATION,
+    duration,
+});
 
 export const setRealTimeEarthquakeListAction = (
     { realTimeEarthquakeList }:
@@ -905,6 +911,19 @@ export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealT
 
     return newState;
 };
+export const setRealTimeDuration = (state: Type.PageState, action: Type.SetRealTimeeDuration) => {
+    const {
+        duration,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.duration = duration;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
 
 export const setRealTimeRiverList = (state: Type.PageState, action: Type.SetRealTimeRiverList) => {
     const {
@@ -1238,6 +1257,8 @@ export default function routeReducer(
             return setInventoryItemListAction(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST:
             return setRealTimeRainList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_DURATION:
+            return setRealTimeDuration(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST:
             return setRealTimeRiverList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST:

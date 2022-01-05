@@ -5,6 +5,8 @@ import {
     _cs,
 } from '@togglecorp/fujs';
 
+import { compose, Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
 import Table from '#rscv/Table';
@@ -18,8 +20,15 @@ import {
 
 import RainWatch from '../RainWatch';
 import { TitleContext } from '#components/TitleContext';
-
+import { AppState } from '#store/types';
 import styles from './styles.scss';
+
+import * as PageType from '#store/atom/page/types';
+
+import {
+    setRealTimeDurationAction,
+} from '#actionCreators';
+import { realTimeDurationSelector } from '#selectors';
 
 interface Props {
     realTimeRain: RealTimeRain[];
@@ -33,6 +42,22 @@ interface KeyValue {
     key: number;
     label: string;
 }
+interface PropsFromDispatch {
+    setRealTimeDuration: typeof setRealTimeDurationAction;
+}
+
+interface PropsFromState {
+    duration: PageType.Duration;
+}
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    duration: realTimeDurationSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
+    setRealTimeDuration: params => dispatch(setRealTimeDurationAction(params)),
+
+});
 
 const durationOptions: KeyValue[] = [
     {
@@ -196,6 +221,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
         this.setState({
             duration,
         });
+        this.props.setRealTimeDuration({ duration });
     }
 
     private getClassName = (row: RealTimeRain) => {
@@ -217,6 +243,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             className,
             realTimeRain,
             onHazardHover,
+            setRealTimeDuration,
         } = this.props;
 
         const { duration } = this.state;
@@ -276,4 +303,8 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
     }
 }
 
-export default MiniRainWatch;
+// export default MiniRainWatch;
+
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+)(MiniRainWatch);

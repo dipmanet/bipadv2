@@ -509,6 +509,7 @@ export const riverToGeojson = (realTimeRiverList: RealTimeRiver[]) => {
                     basin: river.basin,
                     status: river.status,
                     steady: river.steady,
+                    waterLevel: river.waterLevel && Number(river.waterLevel.toFixed(1)),
                 },
             })),
     };
@@ -532,6 +533,11 @@ export const rainToGeojson = (realTimeRainList: RealTimeRain[]) => {
                     description: rain.description,
                     basin: rain.basin,
                     status: rain.status,
+                    one: rain.averages[0].value && Number(rain.averages[0].value.toFixed(1)),
+                    three: rain.averages[1].value && Number(rain.averages[1].value.toFixed(1)),
+                    six: rain.averages[2].value && Number(rain.averages[2].value.toFixed(1)),
+                    twelve: rain.averages[3].value && Number(rain.averages[3].value.toFixed(1)),
+                    twentyfour: rain.averages[4].value && Number(rain.averages[4].value.toFixed(1)),
                 },
             })),
     };
