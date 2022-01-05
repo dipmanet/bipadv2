@@ -354,8 +354,8 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                 coordinates={tooltipLatlng}
                                 tooltipOptions={rasterTooltipOptions}
                                 onHide={this.handleAlertClose}
-
                             >
+
                                 <div className={styles.landslideTooltip}>
                                     <div className={styles.header}>
                                         <h4>{layer.title}</h4>
@@ -363,12 +363,26 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                                     {LoadingTooltip ? <div className={styles.noData}>Loading...</div> : responseDataKeys.length && mapClickedResponse.features.length
                                         ? (
                                             <div className={styles.content}>
-                                                <div>
+                                                {/* <table style={{ width: '100%' }} className={styles.tooltipTable}>
+                                                    {tooltipKeys.map((item, i) => (
+                                                        <tr key={i}>
+                                                            <td style={{ width: '50%' }}>{item}</td>
+                                                            <td style={{ width: '50%' }}>{tooltipValues[i]}</td>
+                                                        </tr>
+                                                    ))}
+                                                </table> */}
+                                                {tooltipKeys.map((item, i) => (
+                                                    <div key={i} style={{ width: '100%', display: 'flex', padding: '10px' }}>
+                                                        <span style={{ width: '50%' }}>{item}</span>
+                                                        <span style={{ width: '50%' }}>{tooltipValues[i]}</span>
+                                                    </div>
+                                                ))}
+                                                {/* <div>
                                                     {tooltipKeys.map((item, i) => <div key={i}>{item}</div>)}
                                                 </div>
                                                 <div>
                                                     {tooltipValues.map((item, i) => <div key={i}>{item}</div>)}
-                                                </div>
+                                                </div> */}
                                             </div>
 
 

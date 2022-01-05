@@ -1,4 +1,24 @@
 .landslideTooltip {
+  width: 300px;
+  background-color: #fff;
+  max-height: 400px;
+  .tooltipTable {
+    border-collapse: collapse;
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+  }
   .header {
     background-color: #216cd7;
     color: white;
@@ -10,9 +30,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px;
     max-height: 200px;
     overflow: scroll;
+    flex-direction: column;
   }
   .noData {
     height: 60px;
