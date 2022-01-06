@@ -108,13 +108,13 @@ const ModalButton = modalize(Button);
 const rainWatchKeySelector = (station: RealTimeRain) => station.id;
 
 class MiniRainWatch extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
+    // public constructor(props: Props) {
+    //     super(props);
 
-        this.state = {
-            duration: 24,
-        };
-    }
+    //     // this.state = {
+    //     //     duration: 24,
+    //     // };
+    // }
 
     public static contextType = TitleContext;
 
@@ -218,9 +218,9 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
     ]);
 
     private handleDurationSelect = (duration: number) => {
-        this.setState({
-            duration,
-        });
+        // this.setState({
+        //     duration,
+        // });
         this.props.setRealTimeDuration({ duration });
     }
 
@@ -244,17 +244,19 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
             realTimeRain,
             onHazardHover,
             setRealTimeDuration,
+            duration,
         } = this.props;
 
-        const { duration } = this.state;
+        // const { duration } = this.props;
         const rainHeader: Header<RealTimeRain>[] = this.getRainHeader(duration);
         const { setRealtime } = this.context;
 
         if (setRealtime) {
             setRealtime((prevProfile: number) => {
-                const { duration: selectedHour } = this.state;
-                if (prevProfile !== selectedHour) {
-                    return selectedHour;
+                setRealTimeDuration({ duration });
+                // const { duration: selectedHour } = this.state;
+                if (prevProfile !== duration) {
+                    return duration;
                 }
                 return prevProfile;
             });
