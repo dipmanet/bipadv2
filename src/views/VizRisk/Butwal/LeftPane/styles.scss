@@ -130,15 +130,16 @@ $button-color: rgb(0,170,223);
     
                     }
 					.iconTitleDate{
-						background: rgb(12, 12, 12);
+						background:#1a3f54;
 						color: #fff;
 						text-align: center;
 						font-size: 12px;
 						width: 100%;
-						border: 4px solid rgb(255, 252, 252);
-						padding: 5px 10px;
+						// border: 3px solid #b6d6e4;
+						padding: 8px 15px;
 						box-shadow: 0 2px 10px 0 rgba(0,0,0,0.16), 0 2px 10px 0 
 						rgba(0,0,0,0.12);
+						border-radius: 2px;
     
                     }
 					.iconTitleCurrentTemp{

@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import Hexagon from 'react-hexagon';
+import { parseStringToNumber } from '../../Functions';
 import styles from './styles.scss';
 
 
@@ -32,11 +33,11 @@ const PopulationDensityLegends = (props) => {
                                     <div className={styles.populationIndicator5} />
                                 </div>
                                 <div className={styles.populationTextContainer}>
-                                    <div className={styles.populationText}>{`${range5[0]} - ${range5[1]}`}</div>
-                                    <div className={styles.populationText}>{`${range4[0]} - ${range4[1]}`}</div>
-                                    <div className={styles.populationText}>{`${range3[0]} - ${range3[1]}`}</div>
-                                    <div className={styles.populationText}>{`${range2[0]} - ${range2[1]}`}</div>
-                                    <div className={styles.populationText}>{`${range1[0]} - ${range1[1]}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(range5[0])} - ${parseStringToNumber(range5[1])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(range4[0])} - ${parseStringToNumber(range4[1])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(range3[0])} - ${parseStringToNumber(range3[1])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(range2[0])} - ${parseStringToNumber(range2[1])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(range1[0])} - ${parseStringToNumber(range1[1])}`}</div>
                                 </div>
 
                             </div>

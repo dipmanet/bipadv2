@@ -53,6 +53,7 @@ import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
 import { getgeoJsonLayer, getHillShadeLayer } from '../utils';
 import SatelliteLegends from '../Legends/SatelliteLegend';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import { parseStringToNumber } from '../Functions';
 
 
 interface State{
@@ -404,7 +405,7 @@ const MultiHazardMap = (props: Props) => {
     	[
     		'case',
     		['boolean', ['feature-state', 'hover'], false],
-    		0,
+    		0.2,
     		1,
     	],
         };
@@ -426,8 +427,8 @@ const MultiHazardMap = (props: Props) => {
     };
 
     const filterOnMap = (val) => {
-        const yearInt = new Date(`${2011 + Number(val)}-01-01`).getTime();
-        const nextYear = new Date(`${2011 + Number(val) + 1}-01-01`).getTime();
+        const yearInt = new Date(`${2017 + Number(val)}-01-01`).getTime();
+        const nextYear = new Date(`${2017 + Number(val) + 1}-01-01`).getTime();
         let filters: T[] = [];
         if (clickedItem === 'all') {
             filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
@@ -463,7 +464,7 @@ const MultiHazardMap = (props: Props) => {
             }
         } else {
             let val: string;
-            if (Number(incidentYear) < 10) {
+            if (Number(incidentYear) < 4) {
                 setIncidentYear((prevTime) => {
                     val = String(Number(prevTime) + 1);
                     return val;
@@ -702,6 +703,7 @@ const MultiHazardMap = (props: Props) => {
                 paint: fillPaint(),
                 layout: {
                     visibility: 'none',
+
                 },
                 filter: getWardFilter(provinceId, districtId, municipalityId, wards),
             }, 'wardgeo');
@@ -885,7 +887,7 @@ const MultiHazardMap = (props: Props) => {
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
-                            <p> Total Population: ${totalPop}</p>
+                            <p> Total Population: ${parseStringToNumber(totalPop)}</p>
                         </div>
                         `,
                     ).addTo(multihazardMap);
@@ -1197,9 +1199,12 @@ const MultiHazardMap = (props: Props) => {
                     }
                     return null;
                 });
-                map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
+                if (map.current) {
+                    map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
+                }
             }
         }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clickedItem]);
 
@@ -1238,10 +1243,10 @@ const MultiHazardMap = (props: Props) => {
             if (rightElement <= layers.length - 1
                 && layers[rightElement].length > 0
             ) {
-                if (rightElement === 0 && legendElement === 'Admin Boundary') {
+                if (rightElement === 0 && legendElement === 'Adminstrative Map') {
                     layers[1].map((layer) => {
                         if (map.current) {
-                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
                         }
                         return null;
                     });
@@ -1254,7 +1259,6 @@ const MultiHazardMap = (props: Props) => {
                 } else if (rightElement === 0 && legendElement === 'Landcover') {
                     layers[1].map((layer) => {
                         if (map.current) {
-                            map.current.setLayoutProperty(layer, 'visibility', 'visible');
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
                         }
                         return null;
@@ -1272,15 +1276,16 @@ const MultiHazardMap = (props: Props) => {
                         // center: [lng, lat],
                     });
                 } else if (rightElement === 0 && legendElement === 'Population By Ward') {
-                    layers[1].map((layer) => {
-                        if (map.current) {
-                            map.current.setLayoutProperty(layer, 'visibility', 'none');
-                        }
-                        return null;
-                    });
                     layers[2].map((layer) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+
+                    layers[1].map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
                         }
                         return null;
                     });
@@ -1334,7 +1339,7 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             }
-            if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[2] === 1)) {
+            if ((rightElement === 0 && (legendElement === 'Landcover' || 'Adminstrative Map')) || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[2] === 1)) {
                 layers[1].map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1342,6 +1347,14 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             } else {
+                layers[1].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
+                });
+            }
+            if ((rightElement === 0 && legendElement === 'Population By Ward')) {
                 layers[1].map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(layer, 'visibility', 'none');
@@ -1721,8 +1734,8 @@ const MultiHazardMap = (props: Props) => {
                         rightElement === 3 && hazardLegendClickedArr[1] === 1
                 && (
                     <>
-                        <p className={_cs(styles.sliderLabel)}>
-                            Layer Opacity
+                        <p className={_cs(styles.sliderLabel2)}>
+                           Landslide Layer Opacity
                         </p>
                         <input
                             onChange={e => handleFloodChange(e, 'sus')}
@@ -1734,6 +1747,11 @@ const MultiHazardMap = (props: Props) => {
                             value={String(opacitySus)}
                             className={styles.slider}
                         />
+                        <p className={_cs(styles.opacityLevel)}>
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                        </p>
                         <LandSlideSusLegend layer="sus" />
                     </>
                 )
@@ -1742,8 +1760,8 @@ const MultiHazardMap = (props: Props) => {
                         rightElement === 3 && hazardLegendClickedArr[2] === 1
                 && (
                     <>
-                        <p className={_cs(styles.sliderLabel)}>
-                            Layer Opacity
+                        <p className={_cs(styles.sliderLabel3)}>
+                           Seismic Layer Opacity
                         </p>
                         <input
                             onChange={e => handleFloodChange(e, 'ses')}
@@ -1755,6 +1773,11 @@ const MultiHazardMap = (props: Props) => {
                             value={String(opacitySes)}
                             className={styles.slider}
                         />
+                        <p className={_cs(styles.opacityLevel)}>
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                        </p>
                         <LandSlideSusLegend layer="ses" />
                     </>
                 )
@@ -1764,7 +1787,7 @@ const MultiHazardMap = (props: Props) => {
                 && (
                     <>
                         <p className={_cs(styles.sliderLabel)}>
-                            Layer Opacity
+                           Flood Layer Opacity
                         </p>
                         <input
                             onChange={e => handleFloodChange(e, 'flood')}
@@ -1776,6 +1799,11 @@ const MultiHazardMap = (props: Props) => {
                             value={String(opacityFlood)}
                             className={styles.slider}
                         />
+                        <p className={_cs(styles.opacityLevel)}>
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                        </p>
                         <FloodDepthLegend />
                     </>
                 )

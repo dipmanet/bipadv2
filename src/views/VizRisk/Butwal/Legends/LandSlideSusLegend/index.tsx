@@ -40,8 +40,8 @@ const LandSlideSusLegend = (props) => {
             {layer === 'ses'
                 && (
                     <div>
-                        <h2>Seismic hazard (g)</h2>
                         <div className={styles.populationContainer}>
+                            <h2>Seismic hazard (g)</h2>
 
                             <div className={styles.populationIndContainerShort}>
 
@@ -63,25 +63,27 @@ const LandSlideSusLegend = (props) => {
             {layer === 'sus'
 && (
     <div>
-        <h2>
-                            Landslide Suseptibility
-        </h2>
 
         <div className={styles.populationContainer}>
-            {susep.legends.map(legend => (
-                <div key={legend.key} className={styles.legendsRow}>
-                    <div
-                        style={{
-                            backgroundColor: legend.color,
-                            marginBottom: 0,
-                        }}
-                        className={styles.populationIndicator2}
-                    >
-                        {legend.label}
-                    </div>
+            <h2>
+                            Landslide Suseptibility
+            </h2>
+            <div className={styles.populationIndContainerShort}>
+                {susep.legends.map(legend => (
+                    <div key={legend.key} className={styles.legendsRow}>
+                        <div
+                            style={{
+                                backgroundColor: legend.color,
+                                marginBottom: 0,
+                            }}
+                            className={styles.populationIndicator2}
+                        >
+                            {legend.label}
+                        </div>
 
-                </div>
-            ))}
+                    </div>
+                ))}
+            </div>
         </div>
 
     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import styles from '../LeftPane/styles.scss';
@@ -5,7 +6,7 @@ import ManWoman from '#views/VizRisk/Tikapur/Icons/ManWoman.svg';
 import Male from '#views/VizRisk/Tikapur/Icons/male.svg';
 import Female from '#views/VizRisk/Tikapur/Icons/female.svg';
 import Home from '#views/VizRisk/Tikapur/Icons/home.svg';
-
+import { parseStringToNumber } from '../Functions';
 
 export default function DemographicsPopInfo(props) {
     const { populationData } = props;
@@ -13,6 +14,7 @@ export default function DemographicsPopInfo(props) {
     const totalFemalePop = populationData.map(pop => pop.FemalePop).reduce((a, b) => a + b);
     const totalFamily = populationData.map(pop => pop.TotalHousehold).reduce((a, b) => a + b);
     const totalPopulation = totalMalePop + totalFemalePop;
+
 
     return (
         <>
@@ -23,7 +25,7 @@ export default function DemographicsPopInfo(props) {
                         src={ManWoman}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>{totalPopulation}</div>
+                        <div className={styles.iconTitle}>{parseStringToNumber(totalPopulation)}</div>
                         <div className={styles.iconText}>
                                 Total Population
                         </div>
@@ -36,7 +38,7 @@ export default function DemographicsPopInfo(props) {
                         src={Home}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>{totalFamily}</div>
+                        <div className={styles.iconTitle}>{parseStringToNumber(totalFamily)}</div>
                         <div className={styles.iconText}>
                              Total Family Count
                         </div>
@@ -53,7 +55,7 @@ export default function DemographicsPopInfo(props) {
                         src={Male}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>{totalMalePop}</div>
+                        <div className={styles.iconTitle}>{parseStringToNumber(totalMalePop)}</div>
                         <div className={styles.iconText}>
                              Male Population
                         </div>
@@ -66,7 +68,7 @@ export default function DemographicsPopInfo(props) {
                         src={Female}
                     />
                     <div className={styles.descriptionCotainer}>
-                        <div className={styles.iconTitle}>{totalFemalePop}</div>
+                        <div className={styles.iconTitle}>{parseStringToNumber(totalFemalePop)}</div>
                         <div className={styles.iconText}>
                              Female Population
                         </div>

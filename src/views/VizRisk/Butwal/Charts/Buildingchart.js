@@ -16,7 +16,21 @@ import {
 import styles from '../LeftPane/styles.scss';
 
 export default function BuildingChart(props) {
-    const { buildingsChartData, buildingToolTip } = props;
+    const { buildingsChartData } = props;
+
+
+    const buildingToolTip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Value: ${payload[0].payload.buildingcount}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
     return (
         <div>
             <ResponsiveContainer

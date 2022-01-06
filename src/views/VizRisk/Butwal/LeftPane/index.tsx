@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable linebreak-style */
@@ -45,7 +46,7 @@ import { renderLegendPopulaion,
     getArrforDesc,
     renderLegend,
     landCoverCustomTooltip,
-    urbanCustomTooltip } from '../Functions/index';
+    urbanCustomTooltip, parseStringToNumber } from '../Functions/index';
 import TempChart from '../Charts/TempChart.tsx';
 import LandCoverChart from '../Charts/LandCoverChart.tsx';
 import PopulationChart from '../Charts/PopulationChart.tsx';
@@ -55,7 +56,6 @@ import FloodHistoryLegends from '../Legends/FloodHazardLegends';
 import FloodDepthLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import PopulationDensityLegends from '../Legends/PopulationDensityLegend';
 import BuildingChart from '../Charts/Buildingchart';
-import DateTime from '../Components/Clock/index.tsx';
 
 interface State {
     showInfo: boolean;
@@ -211,6 +211,7 @@ function Leftpane(props) {
         clickedItem,
         incidentFilterYear,
     ]);
+    console.log('nonZero Arr is ', chartData);
 
     const getDescription = () => {
         const { clickedItem } = props;
@@ -220,27 +221,27 @@ function Leftpane(props) {
                     if (
                         i === nonZeroArr.length - 1
             && i === 0
-            && chartData.filter(n => n.name === item)[0].Total !== 0
+            && chartData.filter(n => n.name === item)[0].value !== 0
                     ) {
                         return ` ${item} `;
                     }
                     if (
                         i !== nonZeroArr.length - 1
             && i === 0
-            && chartData.filter(n => n.name === item)[0].Total !== 0
+            && chartData.filter(n => n.name === item)[0].value !== 0
                     ) {
                         return ` ${item} `;
                     }
                     if (
                         i === nonZeroArr.length - 1
-            && chartData.filter(n => n.name === item)[0].Total !== 0
+            && chartData.filter(n => n.name === item)[0].value !== 0
                     ) {
                         return ` and ${item} `;
                     }
                     if (
                         i !== nonZeroArr.length - 1
 
-            && chartData.filter(n => n.name === item)[0].Total !== 0
+            && chartData.filter(n => n.name === item)[0].value !== 0
                     ) {
                         return `, ${item} `;
                     }
@@ -253,7 +254,8 @@ function Leftpane(props) {
         return '';
     };
 
-    const firstpageLegendItems = ['Admin Boundary', 'Landcover', 'Population By Ward'];
+
+    const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By Ward'];
     const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard', 'Seismic Hazard'];
 
     return (
@@ -268,7 +270,7 @@ function Leftpane(props) {
                     }}
                 />
 
-                {leftElement === 0 && legendElement === 'Admin Boundary' && (
+                {leftElement === 0 && legendElement === 'Adminstrative Map' && (
                     <>
                         <div
                             style={{ textAlign: 'initial' }}
@@ -282,7 +284,7 @@ function Leftpane(props) {
                                     <div className={styles.iconTitleDate}>
 									Recorderd Time:
                                         {'  '}
-                                        {realTimeData !== undefined ? realTimeData.recordedDate.slice(0, 19) : 'Nodata'}
+                                        {realTimeData !== undefined ? realTimeData.recordedDate.slice(0, 10) : 'Nodata'}
                                     </div>
                                 </div>
                             </div>
@@ -318,8 +320,8 @@ function Leftpane(props) {
                             </div>
                             <div className={styles.infoIconsContainer}>
                                 <ScalableVectorGraphics
-                                    className={styles.infoIconMin}
-                                    src={TempMin}
+                                    className={styles.infoIconMax}
+                                    src={TempIcon}
                                 />
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
@@ -355,7 +357,7 @@ mm
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
                                         {' '}
-                                        {tempData.map(rainfall => rainfall.rainfall)}
+                                        { tempData && parseStringToNumber(tempData.filter(rainfall => rainfall.rainfall).map(item => item.rainfall)[0])}
                                         {' '}
 mm
                                     </div>
@@ -401,9 +403,7 @@ mm
                                 fontSize: '21px',
                                 margin: '15px',
                             }}
-                        >
-              Coverage (%)
-                        </p>
+                        />
                         <LandCoverChart
                             landCoverData={landCoverData}
                             landCoverCustomTooltip={landCoverCustomTooltip}
@@ -637,49 +637,54 @@ mm
                                 )}
                             </div>
                         ))}
+                        {(leftElement === 2 && clickedArr[0] === 1) && (
+                            <>
+                                <ResponsiveContainer
+                                    className={styles.respContainer}
+                                    width="100%"
+                                    height={'60%'}
+                                >
+                                    <BarChart
+                                        width={200}
+                                        height={1000}
+                                        data={cIChartData}
+                                        layout="vertical"
+                                        margin={{ left: 15, right: 45, bottom: 25 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis type="number">
+                                            <Label
+                                                value="Critical Infrastructures"
+                                                offset={0}
+                                                position="insideBottom"
+                                                style={{
+                                                    textAnchor: 'middle',
+                                                    fill: 'rgba(255, 255, 255, 0.87)',
+                                                }}
+                                            />
+                                        </XAxis>
+                                        <YAxis
+                                            type="category"
+                                            dataKey="name"
+                                            tick={{ fill: '#94bdcf' }}
+                                        />
+                                        <Tooltip
+                                            content={landCoverCustomTooltip}
+                                            cursor={{ fill: '#1c333f' }}
+                                        />
+                                        <Bar
+                                            dataKey="value"
+                                            fill="rgb(0,219,95)"
+                                            barSize={15}
+                                            tick={{ fill: '#94bdcf' }}
+                                            radius={[0, 15, 15, 0]}
+                                        />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </>
 
-                        <ResponsiveContainer
-                            className={styles.respContainer}
-                            width="100%"
-                            height={'60%'}
-                        >
-                            <BarChart
-                                width={200}
-                                height={1000}
-                                data={cIChartData}
-                                layout="vertical"
-                                margin={{ left: 15, right: 45, bottom: 25 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number">
-                                    <Label
-                                        value="Critical Infrastructures"
-                                        offset={0}
-                                        position="insideBottom"
-                                        style={{
-                                            textAnchor: 'middle',
-                                            fill: 'rgba(255, 255, 255, 0.87)',
-                                        }}
-                                    />
-                                </XAxis>
-                                <YAxis
-                                    type="category"
-                                    dataKey="name"
-                                    tick={{ fill: '#94bdcf' }}
-                                />
-                                <Tooltip
-                                    content={landCoverCustomTooltip}
-                                    cursor={{ fill: '#1c333f' }}
-                                />
-                                <Bar
-                                    dataKey="value"
-                                    fill="rgb(0,219,95)"
-                                    barSize={15}
-                                    tick={{ fill: '#94bdcf' }}
-                                    radius={[0, 15, 15, 0]}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        ) }
+
                         <CriticalInfraLegends
                             clickedArr={clickedArr}
                             exposureElementArr={exposureElementArr}
@@ -705,7 +710,7 @@ mm
                             <>
                                 <BuildingChart
                                     buildingsChartData={buildingsChartData}
-                                    buildingToolTip={landCoverCustomTooltip}
+
                                 />
                             </>
 
@@ -916,10 +921,10 @@ mm
                             >
                                 <CartesianGrid strokeDasharray="3 3" fill="#0c2432" />
                                 <XAxis dataKey="year">
-                                    <Label value="Year ------->" offset={0} position="insideBottom" fill="white" />
+                                    <Label value="Year" offset={0} position="insideBottom" fill="white" />
                                 </XAxis>
-                                <YAxis>
-                                    <Label value="Population ------>" angle={-90} position="insideLeft" fill="white" />
+                                <YAxis tickFormatter={tick => tick.toLocaleString()}>
+                                    <Label value="Population" angle={-90} position="insideLeft" fill="white" />
                                 </YAxis>
                                 <Tooltip
                                     content={urbanCustomTooltip}
@@ -928,10 +933,11 @@ mm
                                 {/* <Legend margin={{ top: 14, left: 14,
 									 bottom: 14, right: 14 }} /> */}
                                 <Line
-                                    type="monotone"
+                                    type="linear"
                                     dataKey="pop"
-                                    stroke="#036ef0 "
+                                    stroke="rgb(0,219,95) "
                                     activeDot={{ r: 8 }}
+                                    strokeWidth={3}
                                 />
                             </LineChart>
                         </ResponsiveContainer>

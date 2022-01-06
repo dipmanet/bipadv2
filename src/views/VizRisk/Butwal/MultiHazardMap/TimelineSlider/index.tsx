@@ -40,18 +40,18 @@ const TimelineSlider = (props: Props) => {
 
             <div className={styles.rangeWrap}>
                 <div
-                    style={{ left: `calc(${Number(incidentYear) * 10}% - ${Number(incidentYear) * 2}px)` }}
+                    style={{ left: `calc(${Number(incidentYear) * 24}% - ${Number(incidentYear) * 2}px)` }}
                     className={styles.rangeValue}
                     id="rangeV"
                 >
-                    {Number(incidentYear) + 2011}
+                    {Number(incidentYear) + 2017}
                 </div>
                 <input
                     onChange={handleInputChange}
                     id="slider"
                     type="range"
                     min="0"
-                    max="10"
+                    max="4"
                     step="1"
                     value={Number(incidentYear)}
                     className={styles.slider}

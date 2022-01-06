@@ -4,6 +4,13 @@ import React from 'react';
 import styles from '../LeftPane/styles.scss';
 import { ChartData } from '../../../DataArchive/Modals/Pollution/types';
 
+export const parseStringToNumber = (content) => {
+    // const changedNumber = parseInt(content, 10);
+    const str = content.toString().split('.');
+    str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return str.join('.');
+};
+
 export function renderLegend() {
     return (
         <div className={styles.climateLegendContainer}>
@@ -17,7 +24,7 @@ export function renderLegend() {
             </div>
             <div className={styles.climatelegend}>
                 <div className={styles.legendMin} />
-                <div className={styles.legendText}>Manimum</div>
+                <div className={styles.legendText}>Minimum</div>
             </div>
         </div>
     );
@@ -68,10 +75,10 @@ export function populationCustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
         return (
             <div className={styles.customTooltip}>
-                <h2>{payload[0].payload.name}</h2>
-                <p>{`Male: ${payload[0].payload.MalePop}`}</p>
-                <p>{`Female: ${payload[0].payload.FemalePop}`}</p>
-                <p>{`Household: ${payload[0].payload.TotalHousehold}`}</p>
+                <h2>{parseStringToNumber(payload[0].payload.name) }</h2>
+                <p>{`Male: ${parseStringToNumber(payload[0].payload.MalePop)}`}</p>
+                <p>{`Female: ${parseStringToNumber(payload[0].payload.FemalePop)}`}</p>
+                <p>{`Household: ${parseStringToNumber(payload[0].payload.TotalHousehold)}`}</p>
             </div>
         );
     }
@@ -96,7 +103,7 @@ export function urbanCustomTooltip({ active, payload, label }) {
         return (
             <div className={styles.customTooltip}>
                 <h2>{`Year: ${payload[0].payload.year}`}</h2>
-                <p>{`Population: ${payload[0].payload.pop}`}</p>
+                <p>{`Population: ${parseStringToNumber(payload[0].payload.pop)}`}</p>
             </div>
         );
     }
