@@ -405,7 +405,7 @@ const MultiHazardMap = (props: Props) => {
     	[
     		'case',
     		['boolean', ['feature-state', 'hover'], false],
-    		0.2,
+    		1,
     		1,
     	],
         };
@@ -887,7 +887,7 @@ const MultiHazardMap = (props: Props) => {
                     const totalPop = details[0].MalePop + details[0].FemalePop;
                     popup.setLngLat(coordinates).setHTML(
                         `<div style="padding: 5px;border-radius: 5px">
-                            <p> Total Population: ${parseStringToNumber(totalPop)}</p>
+                            <p>${details[0].name} Total Population: ${parseStringToNumber(totalPop)}</p>
                         </div>
                         `,
                     ).addTo(multihazardMap);
@@ -1256,6 +1256,9 @@ const MultiHazardMap = (props: Props) => {
                         }
                         return null;
                     });
+                    if (map.current) {
+                        layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
+                    }
                 } else if (rightElement === 0 && legendElement === 'Landcover') {
                     layers[1].map((layer) => {
                         if (map.current) {
@@ -1269,6 +1272,9 @@ const MultiHazardMap = (props: Props) => {
                         }
                         return null;
                     });
+                    if (map.current) {
+                        layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
+                    }
                     map.current.easeTo({
                         pitch: 45,
                         zoom: 11.8,
@@ -1339,7 +1345,7 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             }
-            if ((rightElement === 0 && (legendElement === 'Landcover' || 'Adminstrative Map')) || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[2] === 1)) {
+            if ((rightElement === 0 && (legendElement === 'Landcover' || 'Adminstrative Map')) || (rightElement === 2 && clickedArr[1] === 1) || (rightElement === 3 && exposureElementsArr[2] === 1)) {
                 layers[1].map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1382,7 +1388,7 @@ const MultiHazardMap = (props: Props) => {
                 }
             } else {
                 map.current.setLayoutProperty(`raster-flood-${floodLayer}`, 'visibility', 'none');
-                layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'none'));
+                // layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'none'));
             }
 
 
@@ -1402,7 +1408,7 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('sesmicHazard', 'visibility', 'none');
             }
             // ------------------------------------------Population Density Layer----------------------------------
-            if ((rightElement === 2 && clickedArr[1] === 1) || (rightElement === 3 && exposureElementsArr[0] === 1)) {
+            if ((rightElement === 2 && clickedArr[3] === 1) || (rightElement === 3 && exposureElementsArr[0] === 1)) {
                 if (map.current) {
                     map.current.setLayoutProperty('popdensitylayer3d', 'visibility', 'visible');
                     map.current.setLayoutProperty('popdensitylayer', 'visibility', 'visible');
@@ -1413,7 +1419,7 @@ const MultiHazardMap = (props: Props) => {
             }
             // ------------------------------------------------------------Buildings Data Layer-----------------------------------------
 
-            if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[3] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
+            if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
                 if (map.current) {
                     map.current.setLayoutProperty('buildingsdata', 'visibility', 'visible');
                 }

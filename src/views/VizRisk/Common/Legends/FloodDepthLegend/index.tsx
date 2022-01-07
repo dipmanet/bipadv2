@@ -15,25 +15,28 @@ const FloodHistoryLegends = (props: Props) => (
                 <div className={styles.floodDepth}>
                     <div className={styles.floodIndicator1}>
                         {'> 2m'}
+(High)
                     </div>
-                    <div className={styles.floodText}>
+                    {/* <div className={styles.floodText}>
                                  High
-                    </div>
+                    </div> */}
                 </div>
                 <div className={styles.floodDepth}>
 
                     <div className={styles.floodIndicator2}>
                         {'1m - 2m'}
+(Med)
                     </div>
-                    <div className={styles.floodText}>Med</div>
+                    {/* <div className={styles.floodText}>Med</div> */}
                 </div>
                 <div className={styles.floodDepth}>
                     <div className={styles.floodIndicator3}>
                         {'< 1m'}
+(Low)
                     </div>
-                    <div className={styles.floodText}>
+                    {/* <div className={styles.floodText}>
                                     Low
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

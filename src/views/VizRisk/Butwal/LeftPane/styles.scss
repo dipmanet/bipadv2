@@ -574,7 +574,15 @@ padding: 14px 8px;
             filter: saturate(100%);
             cursor: not-allowed;
          padding: 4px 8px;
-	
+
+		 .dummyLine{
+			height: 1px;
+			position: absolute;
+			width: 188px;
+			left: -10px;
+			top: 26px;
+			background-color: #565656;
+	     	}
 
             .educationHexagon3{
                 width: 15px;
@@ -583,7 +591,6 @@ padding: 14px 8px;
             }
            }
             .legendBtn3{
-  
                 display: flex;
                 background-color: transparent;
                 border: none;
@@ -604,7 +611,16 @@ padding: 14px 8px;
                     margin: 0 7px 0 0;
 					cursor: not-allowed;
                 }
+				.dummyLine{
+					height: 1px;
+					position: absolute;
+					width: 188px;
+					left: -10px;
+					top: 26px;
+					background-color: #565656;
+				}
             }
+		
         }
     
     }

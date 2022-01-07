@@ -46,7 +46,7 @@ import { renderLegendPopulaion,
     getArrforDesc,
     renderLegend,
     landCoverCustomTooltip,
-    urbanCustomTooltip, parseStringToNumber } from '../Functions/index';
+    urbanCustomTooltip, parseStringToNumber, cITooltip } from '../Functions/index';
 import TempChart from '../Charts/TempChart.tsx';
 import LandCoverChart from '../Charts/LandCoverChart.tsx';
 import PopulationChart from '../Charts/PopulationChart.tsx';
@@ -56,6 +56,7 @@ import FloodHistoryLegends from '../Legends/FloodHazardLegends';
 import FloodDepthLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import PopulationDensityLegends from '../Legends/PopulationDensityLegend';
 import BuildingChart from '../Charts/Buildingchart';
+
 
 interface State {
     showInfo: boolean;
@@ -133,9 +134,9 @@ function Leftpane(props) {
 
     const exposureElements = [
         'Critical Infrastructure',
-        'Population Density',
         'Landcover',
         'Building Footprint',
+        'Population Density',
     ];
 
 
@@ -211,7 +212,7 @@ function Leftpane(props) {
         clickedItem,
         incidentFilterYear,
     ]);
-    console.log('nonZero Arr is ', chartData);
+    console.log('nonZero Arr is ', nonZeroArr, chartData);
 
     const getDescription = () => {
         const { clickedItem } = props;
@@ -220,29 +221,40 @@ function Leftpane(props) {
                 return nonZeroArr.map((item, i) => {
                     if (
                         i === nonZeroArr.length - 1
-            && i === 0
-            && chartData.filter(n => n.name === item)[0].value !== 0
-                    ) {
+                            && i === 0 && chartData.map(item => item.value)[0] !== 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` ${item} `;
                     }
                     if (
+                        i === 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        return ` ${item} ,`;
+                    }
+                    if (
                         i !== nonZeroArr.length - 1
-            && i === 0
-            && chartData.filter(n => n.name === item)[0].value !== 0
-                    ) {
+                            && i === 0
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` ${item} `;
                     }
                     if (
                         i === nonZeroArr.length - 1
-            && chartData.filter(n => n.name === item)[0].value !== 0
-                    ) {
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return ` and ${item} `;
                     }
                     if (
-                        i !== nonZeroArr.length - 1
-
-            && chartData.filter(n => n.name === item)[0].value !== 0
-                    ) {
+                        i === 1
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].value !== 0) {
+                        return ` ${item} `;
+                    }
+                    if (
+                        i !== 0 && i !== nonZeroArr.length - 1 && i > 2
+                            // && chartData.filter(n => n.name === item)[0]
+                            && chartData.filter(n => n.name === item)[0].value !== 0) {
                         return `, ${item} `;
                     }
                     return '';
@@ -254,9 +266,35 @@ function Leftpane(props) {
         return '';
     };
 
+    const currentAverageTemp = (tempInString) => {
+        const numb = tempInString.match(/\d/g);
+        console.log('sep', numb);
+
+        if (numb.length === 2) {
+            const firstNum = parseInt(numb[0], 10);
+            const secondNum = parseInt(numb[1], 10);
+            return (firstNum + secondNum) / 2;
+        }
+        if (numb.length === 3) {
+            const firstNum = parseInt(numb[0], 10);
+            const secondNum = numb[1];
+            const thirdNum = numb[2];
+            return (firstNum + parseInt((secondNum + thirdNum), 10)) / 2;
+        }
+        if (numb.length === 4) {
+            const firstNum = numb[0];
+            const secondNum = numb[1];
+            const thirdNum = numb[2];
+            const fourthNum = numb[3];
+            return (parseInt((firstNum + secondNum), 10) + parseInt((thirdNum + fourthNum), 10)) / 2;
+        }
+        return '';
+    };
+
 
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By Ward'];
     const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard', 'Seismic Hazard'];
+    console.log('chartData is ', chartData);
 
     return (
         <>
@@ -299,7 +337,8 @@ function Leftpane(props) {
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
 
-                                        {realTimeData !== undefined ? realTimeData.currentTemp : '- ' }
+                                        {realTimeData !== undefined ? currentAverageTemp(realTimeData.currentTemp) : '- ' }
+℃
                                     </div>
                                     <div className={styles.iconText}>Current</div>
                                 </div>
@@ -496,7 +535,8 @@ mm
                                 {' '}
                                 {nonZeroArr.length > 0 ? ' of ' : ''}
                                 {getDescription()}
-                                 have been reported in Butwal Sub Metropolitian. These incidents
+                                {' '}
+have been reported in Butwal Sub Metropolitian. These incidents
                                  have caused
                                 {' '}
                                 {incidentDetailsData.peopleDeathCount}
@@ -522,7 +562,7 @@ mm
                                 margin={{ left: 15, right: 45 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number">
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                                     <Label
                                         value="No. of incidents"
                                         offset={0}
@@ -652,7 +692,7 @@ mm
                                         margin={{ left: 15, right: 45, bottom: 25 }}
                                     >
                                         <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis type="number">
+                                        <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                                             <Label
                                                 value="Critical Infrastructures"
                                                 offset={0}
@@ -669,7 +709,7 @@ mm
                                             tick={{ fill: '#94bdcf' }}
                                         />
                                         <Tooltip
-                                            content={landCoverCustomTooltip}
+                                            content={cITooltip}
                                             cursor={{ fill: '#1c333f' }}
                                         />
                                         <Bar
@@ -747,6 +787,7 @@ mm
                                                 className={styles.educationHexagon3}
                                             />
                                             {item}
+                                            {i === 2 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '27.8px', backgroundColor: '#565656', opacity: '0.5' }} className={styles.dummyLine} /> }
                                         </button>
                                     </div>
                                 </div>
@@ -884,7 +925,9 @@ mm
                                     className={styles.educationHexagon3}
                                 />
                                 {item}
+                                {i === 0 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '26px', backgroundColor: '#565656' }} className={styles.dummyLine} /> }
                             </button>
+
                         </div>
                     </div>
                 ))}
@@ -920,7 +963,7 @@ mm
                                 margin={{ left: 15, right: 45, bottom: 25 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" fill="#0c2432" />
-                                <XAxis dataKey="year">
+                                <XAxis dataKey="year" tick={{ fill: '#94bdcf' }}>
                                     <Label value="Year" offset={0} position="insideBottom" fill="white" />
                                 </XAxis>
                                 <YAxis tickFormatter={tick => tick.toLocaleString()}>

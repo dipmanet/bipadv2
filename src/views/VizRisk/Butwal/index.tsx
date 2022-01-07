@@ -363,12 +363,12 @@ export const Butwal = (props) => {
 
         let clickedCur = [...clicked];
         clickedCur[i] = (clickedCur[i] === 1) ? 0 : 1;
-        if (legendClicked === 'Population Density' && clickedCur[1] === 1) {
-            clickedCur = [0, 1, 0, 0];
+        if (legendClicked === 'Population Density' && clickedCur[3] === 1) {
+            clickedCur = [0, 0, 0, 1];
             setclicked(clickedCur);
-        } else if (clickedCur[1] === 1 && (clickedCur[0] === 1
-			|| clickedCur[2] === 1 || clickedCur[3] === 1)) {
-            clickedCur[1] = 0;
+        } else if (clickedCur[3] === 1 && (clickedCur[0] === 1
+			|| clickedCur[2] === 1 || clickedCur[1] === 1)) {
+            clickedCur[3] = 0;
             setclicked(clickedCur);
         } else {
             setclicked(clickedCur);

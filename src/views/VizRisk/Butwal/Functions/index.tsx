@@ -98,6 +98,18 @@ export function landCoverCustomTooltip({ active, payload, label }) {
 
     return null;
 }
+export function cITooltip({ active, payload, label }) {
+    if (active && payload && payload.length) {
+        return (
+            <div className={styles.customTooltip}>
+                <h2>{payload[0].payload.name}</h2>
+                <p>{`Count: ${payload[0].payload.value}`}</p>
+            </div>
+        );
+    }
+
+    return null;
+}
 export function urbanCustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
         return (

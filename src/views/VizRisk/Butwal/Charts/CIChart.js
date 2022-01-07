@@ -41,7 +41,7 @@ export default function CIChart(props) {
                                 fill: 'rgba(255, 255, 255, 0.87)',
                             }}
                         />
-                    </XAxis>
+                    <  XAxis     tick={{ fill: '#94bdcf' }}/>
                     <YAxis
                         type="category"
                         dataKey="name"

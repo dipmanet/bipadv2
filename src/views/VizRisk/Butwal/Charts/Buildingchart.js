@@ -46,7 +46,7 @@ export default function BuildingChart(props) {
                     margin={{ left: 15, right: 45, bottom: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number">
+                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                         <Label
                             value="Buildings Count"
                             offset={0}
