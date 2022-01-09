@@ -38,6 +38,47 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
         iconName: 'dashboard',
     },
+    {
+        name: 'login',
+        title: 'Login',
+        path: '/login',
+        load: () => import('../admin/views/Login'),
+        navbar: false,
+        // iconName: 'dashboard',
+    },
+
+    {
+        name: 'admin',
+        title: 'Admin',
+        path: '/admin',
+        load: () => import('../admin/views/Landing'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
+        name: 'epidemics',
+        title: 'Epidemics',
+        path: '/admin/epidemics',
+        load: () => import('../admin/views/Epidemics'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
+        name: 'healthinfrastructure',
+        title: 'Health Infrastructure',
+        path: '/admin/health-infrastructure',
+        load: () => import('../admin/views/Healthinfrastructure'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
+        name: 'covid19',
+        title: 'Covid-19',
+        path: '/admin/covid-19',
+        load: () => import('../admin/views/Covid-19'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
 
     {
         name: 'incident',

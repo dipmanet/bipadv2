@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&family=Poppins:wght@200&display=swap');
+body{
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+	box-sizing: border-box !important;
+
+}
+html{
+	margin: 0;
+	padding: 0;
+	scroll-behavior: smooth;
+}
+.mainNavBar{
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+	width: 100%;
+	height: 50px;
+	background-color: #F7F7F7;
+	.navLeftSide{
+		display: flex;
+		margin-left: 162px;
+		.navLogo{
+			display: flex;
+			align-items: center;
+			.colorBar{
+				width: 10px;
+				height: 43px;
+				background-color:#D80822 ;
+			}
+			.bipdLogoName{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				color: white;
+				width: 134px;
+				height: 43px;
+				background-color: #226CD7;
+				font-weight: bold;
+				font-size: 18px;
+				line-height: 29px;
+				font-weight: 600;
+			}
+			.shortInfo{
+				:first-child{
+					font-family: 'Fira Sans', sans-serif;
+					font-size: 18px;
+					font-weight: 500;
+					padding:0px 10px;
+					margin: 0;
+					color: #676767;
+				}
+				:nth-child(2){
+					font-family: 'Fira Sans', sans-serif;
+					font-size: 14px;
+					padding:0px 10px;
+					margin: 0;
+					color: #676767;
+				}
+			}
+		}
+		.navMainItems{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.navListItems{
+				display: flex;
+				list-style: none;
+				margin: 0;
+				.individualItem{
+					.mainNavLinks{
+						color: #3E3E3E	;
+						font-family: 'Fira Sans', sans-serif;
+						font-weight: 600;
+						text-decoration: none;
+						font-size: 20px;
+						padding: 10px;
+						line-height: 38px;
+						margin: 0;
+						padding: 0px 15px;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+		
+	}
+	.navRightSide{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-right: 165px;
+		.languageToggler{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			cursor: pointer;
+			.langClass{
+				font-family: 'Fira Sans', sans-serif;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				background-color: white;
+				font-family: '';
+				color: black;
+				height: 29px;
+				width: 36px;
+				font-size: 14px;
+			}
+			.activeLangClass{
+				display: flex;
+				justify-content: center;
+				font-family: 'Fira Sans', sans-serif;
+				align-items: center;
+				background-color: #A3301C;
+				color: black;
+				height: 29px;
+				width: 36px;
+				font-size: 14px;
+				color: white;
+			}
+		
+		}
+		.profileSvg{
+			display: flex;
+			justify-content: center;
+			
+			align-items: center;
+			// background-color:#A3301C;
+			border-radius: 50%;
+			height: 30px;
+			width: 30px;
+			fill: white !important;
+			margin-left: 15px;
+			.notification{
+				position: relative;
+				.dot{
+					width: 15px;
+					height: 15px;
+					border-radius: 50%;
+					position:absolute;
+					background:#A3301C;
+					font-size: 11px;
+					z-index: 9;
+					color: white;
+					text-align: center;
+					bottom: 5px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+
+				.bell{
+					position:absolute;
+					right: 3px;
+					color:#A3301C;
+					color:#003572;
+
+					font-size: 35px;
+				}
+			}
+			.notificationBtn{
+				background-color: transparent;
+				border: none;
+				filter: saturate(100%);
+				cursor: pointer;
+			}
+			.notificationBtn:hover{
+				opacity: 0.8;
+			}
+		}
+		.loggedInUserName{
+			font-size: 20px;
+			font-family: 'Fira Sans', sans-serif;
+			font-weight: 400;
+			color:#292929;
+			margin-left: 5px;
+			font-weight: 500;
+		}
+		.logoutIcon{
+			padding-top: 4px;
+			cursor: pointer;
+			margin-left: 15px;
+			
+			&:hover{
+				.toolTipText{
+					visibility: visible;
+				}
+			}
+			.logout {
+				width: 30px;
+			}
+			.toolTip{
+				position: relative;
+				display: inline-block;
+				border-bottom: 1px dotted black;
+			}
+			.toolTipText{
+				visibility: hidden;
+				width: 120px;
+				background-color: black;
+				color: #fff;
+				text-align: center;
+				padding: 5px 0;
+				border-radius: 6px;
+				position: absolute;
+				z-index: 999;
+			}
+		}
+	}
+}

@@ -3,6 +3,7 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import { navigate } from '@reach/router';
 import ListView from '#rscv/List/ListView';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
@@ -31,6 +32,7 @@ import Relief from '#components/ReliefModal';
 
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
+import Dashboard from '#views/Dashboard';
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
@@ -125,6 +127,8 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
 const menuKeySelector = (d: {name: string}) => d.name;
 
+const gotoadmin = () => navigate('/admin');
+
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
         title: data.title,
@@ -199,10 +203,12 @@ class Navbar extends React.PureComponent<Props, State> {
                         modal={<AboutModal />}
                     />
                     {user && (
-                        <Icon
-                            className={styles.userIcon}
-                            title={`${user.username}`}
-                            name="user"
+                        <MenuItemLikeButton
+                            className={styles.logoutButton}
+                            title="Admin"
+                            iconName="user"
+                            onClick={gotoadmin}
+                            disabled={logoutRequest.pending}
                         />
                     )}
                     {authenticated && (
