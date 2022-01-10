@@ -107,7 +107,7 @@ export default {
         layout: {
             visibility: 'visible',
             // 'text-allow-overlap': true,
-            'text-font': ['Rubik Regular'],
+            'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 12,
             'text-transform': 'uppercase',
