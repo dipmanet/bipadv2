@@ -23,8 +23,6 @@ import { TitleContext } from '#components/TitleContext';
 import { AppState } from '#store/types';
 import styles from './styles.scss';
 
-import * as PageType from '#store/atom/page/types';
-
 import {
     setRealTimeDurationAction,
 } from '#actionCreators';
