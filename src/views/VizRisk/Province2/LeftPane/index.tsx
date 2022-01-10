@@ -519,87 +519,14 @@ mm
 
                 {leftElement === 1 && (
                     <>
-                        <h1>Past Disaster Incidents</h1>
+                        <h1>Damage and Loss Profile</h1>
                         {chartData.length > 0 && (
                             <p>
-                                 In the year
-                                {' '}
-                                {incidentFilterYear}
-                                {' '}
-                                , total
-                                {' '}
-                                {
-                                    chartData.reduce((a, b) => ({
-                                        value: a.value + b.value || 0,
-                                    })).value
-                                }
-                                {' '}
-                                 incidents
-                                {' '}
-                                {nonZeroArr.length > 0 ? ' of ' : ''}
-                                {getDescription()}
-                                {' '}
-have been reported in Butwal Sub Metropolitian. These incidents
-                                 have caused
-                                {' '}
-                                {incidentDetailsData.peopleDeathCount}
-                                {' '}
-                                deaths and
-                                {' '}
-                                {incidentDetailsData.infrastructureDestroyedHouseCount}
-                                {' '}
-                                houses were destroyed.
+                               Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+							    Corporis itaque quibusdam dolore vero quia quis vitae! Expedita
+								 adipisci animi recusandae velit error sit vitae eveniet?
                             </p>
                         )}
-
-                        <ResponsiveContainer
-                            className={styles.respContainer}
-                            width="100%"
-                            height={'75%'}
-                        >
-                            <BarChart
-                                width={250}
-                                height={700}
-                                data={chartData}
-                                layout="vertical"
-                                margin={{ left: 15, right: 45 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                    <Label
-                                        value="No. of incidents"
-                                        offset={0}
-                                        position="insideBottom"
-                                        style={{
-                                            textAnchor: 'middle',
-                                            fill: 'rgba(255, 255, 255, 0.87)',
-                                        }}
-                                    />
-                                </XAxis>
-                                <YAxis
-                                    type="category"
-                                    dataKey="name"
-                                    tick={{ fill: '#94bdcf' }}
-                                />
-                                <Tooltip
-                                    content={pastDisasterCustomTooltip}
-                                    cursor={{ fill: '#1c333f' }}
-                                />
-                                <Bar
-                                    dataKey="value"
-                                    barSize={15}
-                                    fill="rgb(0,219,95)"
-                                    tick={{ fill: '#94bdcf' }}
-                                    radius={[0, 15, 15, 0]}
-                                >
-
-                                    {chartData.map((entry, index) => (
-                                        // eslint-disable-next-line react/no-array-index-key
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                    ))}
-                                </Bar>
-                            </BarChart>
-                        </ResponsiveContainer>
                     </>
                 )}
 

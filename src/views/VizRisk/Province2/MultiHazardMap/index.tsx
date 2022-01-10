@@ -630,8 +630,6 @@ const MultiHazardMap = (props: Props) => {
             value: item.title,
         }));
 
-        console.log('mapping data is', mapping);
-
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
             style: 'mapbox://styles/yilab/cky6ydau933qq15o7bmmblnt4',
@@ -700,14 +698,11 @@ const MultiHazardMap = (props: Props) => {
 
                 paint: {
                     'fill-color': [
-                        'interpolate',
-                        ['linear'],
-                        ['feature-state', 'value'],
-                        'Saptari', 'rgb(255,143,13)', 'Bara', 'rgb(255,111,0)',
-                        'Parsa', 'rgb(255,111,0)', 'Siraha', 'rgb(255,143,13)',
-                        'Dhanusa', 'rgb(255,111,0)', 'Mahottari', 'rgb(255,207,142)',
-                        'Sarlahi', 'rgb(255,143,13)',
-                        'Rautahat', 'rgb(255,143,13)',
+                        'match',
+                        ['id'],
+                        16, 'rgb(255,143,13)', 33, 'rgb(255,111,0)',
+                        34, 'rgb(255,143,13)', 15, 'red', 17, 'rgb(255,143,13)',
+                        18, 'rgb(255,143,13)', 19, 'rgb(255,143,13)', 32, 'green', 'red',
                     ],
                     'fill-opacity': [
                         'case',
@@ -716,11 +711,8 @@ const MultiHazardMap = (props: Props) => {
                         1,
                     ],
                 },
-                // paint: {
-                //     'fill-color': 'red',
-                // },
                 layout: {
-                    visibility: 'visible',
+                    visibility: 'none',
 
                 },
                 filter: getDistrictFilter(2, null, districts),
@@ -898,6 +890,7 @@ const MultiHazardMap = (props: Props) => {
                 if (e.features.length > 0) {
                     multihazardMap.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
+                    console.log('event', e);
 
                     const coordinates: LngLat = [lngLat.lng, lngLat.lat];
                     const wardno = e.features[0].properties.title;
@@ -1163,9 +1156,6 @@ const MultiHazardMap = (props: Props) => {
         const destroyMap = () => {
             multihazardMap.remove();
         };
-        console.log('mappppp', map);
-
-
         return destroyMap;
     }, []);
 
@@ -1720,17 +1710,6 @@ const MultiHazardMap = (props: Props) => {
     return (
         <div>
             <div style={mapCSS} ref={mapContainerRef}>
-                {
-                    incidentsPages.indexOf(rightElement + 1) !== -1
-                    && (
-                        <TimelineSlider
-                            handlePlayPause={handlePlayPause}
-                            handleInputChange={handleInputChange}
-                            playState={playState}
-                            incidentYear={incidentYear}
-                        />
-                    )
-                }
                 {
                     rightElement === 4
                     && (
