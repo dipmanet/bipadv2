@@ -222,6 +222,7 @@ const JugalMap = (props: Props) => {
             value: Number(item.title),
         }));
 
+
         const jugalMap = new mapboxgl.Map({
             container: mapContainer,
             style: mapboxStyle,

@@ -28,11 +28,10 @@ import {
     wardsSelector,
 } from '#selectors';
 
-import {
-    generatePaintByQuantile,
+import { generatePaintByQuantile,
     getWardFilter,
     incidentPointToGeojson,
-} from '#utils/domain';
+    getDistrictFilter } from '#utils/domain';
 import styles from './styles.scss';
 import TimelineSlider from './TimelineSlider';
 import EarthquakeHazardLegends from '#views/VizRisk/Common/Legends/EarthquakeHazardLegend';
@@ -54,6 +53,8 @@ import { getgeoJsonLayer, getHillShadeLayer } from '../utils';
 import SatelliteLegends from '../Legends/SatelliteLegend';
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import { parseStringToNumber } from '../Functions';
+
+import { districtsSelector } from '../../../../store/atom/page/selector';
 
 
 interface State{
@@ -172,7 +173,7 @@ if (TOKEN) {
 }
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
-    wards: wardsSelector(state),
+    districts: districtsSelector(state),
 });
 
 let hoveredWardId: (string | number |undefined);
@@ -181,7 +182,7 @@ function noop() {}
 const MultiHazardMap = (props: Props) => {
     const {
         MAINKEYNAME,
-        wards,
+        districts,
         rightElement,
         CIData,
         criticalElement,
@@ -242,10 +243,6 @@ const MultiHazardMap = (props: Props) => {
         satelliteYearDisabled,
         setsatelliteYearDisabled,
         setlegentItemDisabled,
-        togglingBetweenMun,
-        munThemeId,
-
-
     } = props;
 
 
@@ -628,16 +625,16 @@ const MultiHazardMap = (props: Props) => {
         }
         if (map.current) { return noop; }
 
-        const mapping = wards.filter(item => item.municipality === municipalityId).map(item => ({
+        const mapping = districts.filter(item => item.province === 2).map(item => ({
             ...item,
-            value: Number(item.title),
+            value: item.title,
         }));
 
         console.log('mapping data is', mapping);
 
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
-            style: mapboxStyle,
+            style: 'mapbox://styles/yilab/cky6ydau933qq15o7bmmblnt4',
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -698,22 +695,42 @@ const MultiHazardMap = (props: Props) => {
             multihazardMap.addLayer({
                 id: 'ward-fill-local',
                 source: 'vizrisk-fills',
-                'source-layer': mapSources.nepal.layers.ward,
+                'source-layer': mapSources.nepal.layers.district,
                 type: 'fill',
 
-                paint: fillPaint(),
+                paint: {
+                    'fill-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['feature-state', 'value'],
+                        'Saptari', 'rgb(255,143,13)', 'Bara', 'rgb(255,111,0)',
+                        'Parsa', 'rgb(255,111,0)', 'Siraha', 'rgb(255,143,13)',
+                        'Dhanusa', 'rgb(255,111,0)', 'Mahottari', 'rgb(255,207,142)',
+                        'Sarlahi', 'rgb(255,143,13)',
+                        'Rautahat', 'rgb(255,143,13)',
+                    ],
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0,
+                        1,
+                    ],
+                },
+                // paint: {
+                //     'fill-color': 'red',
+                // },
                 layout: {
-                    visibility: 'none',
+                    visibility: 'visible',
 
                 },
-                filter: getWardFilter(provinceId, districtId, municipalityId, wards),
-            }, 'wardgeo');
+                filter: getDistrictFilter(2, null, districts),
+            }, 'districtgeo');
             mapping.forEach((attribute) => {
                 multihazardMap.setFeatureState(
                     {
                         id: attribute.id,
                         source: 'vizrisk-fills',
-                        sourceLayer: mapSources.nepal.layers.ward,
+                        sourceLayer: mapSources.nepal.layers.district,
                     },
                     { value: attribute.value },
                 );
@@ -1139,17 +1156,18 @@ const MultiHazardMap = (props: Props) => {
             multihazardMap.easeTo({
                 pitch: 25,
                 center: [lng, lat],
-                zoom: 11.7,
+                zoom: 8.2,
                 duration: 8000,
             });
         }, 4000);
         const destroyMap = () => {
             multihazardMap.remove();
         };
+        console.log('mappppp', map);
 
 
         return destroyMap;
-    }, [togglingBetweenMun, munThemeId]);
+    }, []);
 
 
     useEffect(() => {
@@ -1278,7 +1296,7 @@ const MultiHazardMap = (props: Props) => {
                     }
                     map.current.easeTo({
                         pitch: 45,
-                        zoom: 11.8,
+                        zoom: 8.2,
                         duration: 1200,
                         // center: [lng, lat],
                     });
@@ -1314,14 +1332,14 @@ const MultiHazardMap = (props: Props) => {
             if (rightElement === 2) {
                 map.current.easeTo({
                     pitch: 27,
-                    zoom: 11.7,
+                    zoom: 8.2,
                     duration: 1200,
                     // center: [lng, lat],
                 });
             }
 
             // -----------------------------------------------------Third Page-------------------------------------------------
-            if ((ciPages && ciPages.indexOf(rightElement + 1) !== -1 && clickedArr[0] === 1) || (rightElement === 3 && exposureElementsArr[1] === 1)) {
+            if ((ciPages && rightElement === 2 && clickedArr[0] === 1) || (rightElement === 3 && exposureElementsArr[1] === 1)) {
                 ciCategoryCritical.map((item: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
@@ -1373,7 +1391,7 @@ const MultiHazardMap = (props: Props) => {
             if (rightElement === 4) {
                 map.current.easeTo({
                     pitch: 37,
-                    zoom: 11.6,
+                    zoom: 8.2,
                     duration: 1200,
                     // center: [lng, lat],
                 });
@@ -1481,7 +1499,7 @@ const MultiHazardMap = (props: Props) => {
 
     useEffect(() => {
         if (rightElement === 5) {
-            if (buildings.features && map.current) {
+            if (buildings && buildings.features && map.current) {
                 const buildingsD = buildings.features.map(item => [
                     Number(item.geometry.coordinates[0].toFixed(7)),
                     Number(item.geometry.coordinates[1].toFixed(7)),
@@ -1525,13 +1543,12 @@ const MultiHazardMap = (props: Props) => {
                 map.current.on('draw.update', updateArea);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rightElement]);
 
 
     useEffect(() => {
         if (rightElement === 6) {
-            if (vulnerabilityData.length > 0 && map.current) {
+            if (vulnerabilityData && vulnerabilityData.length > 0 && map.current) {
                 const buildingsD = vulnerabilityData.filter(item => item.point !== undefined)
                     .map(p => p.point.coordinates);
                 buildingpointsData.current = turf.points(buildingsD);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
@@ -34,7 +35,7 @@ import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import { incidentPointToGeojson } from '#utils/domain';
 import expressions from './Data/expression';
 
-import { municipalitiesSelector } from '../../../store/atom/page/selector';
+import { municipalitiesSelector, provincesSelector } from '../../../store/atom/page/selector';
 import * as PageTypes from '#store/atom/page/types';
 
 
@@ -60,7 +61,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazards: hazardTypesSelector(state),
     incidentList: incidentListSelectorIP(state),
     user: userSelector(state),
-    municipalities: municipalitiesSelector(state),
+    provinces: provincesSelector(state),
 
 });
 const transformFilters = ({
@@ -80,7 +81,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
         query: ({ params }) => {
             const filters = {
-                region: { adminLevel: 3, geoarea: params.municipalityId },
+                region: { adminLevel: 3, geoarea: 49001 },
                 hazard: [],
                 dataDateRange: {
                     rangeInDays: 'custom',
@@ -103,24 +104,15 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             setIncidentList({ incidentList });
             params.setIncidentList(incidentList);
         },
-        onMount: false,
-        // onPropsChanged: {
-        //     filters: ({
-        //         props: { filters },
-        //         prevProps: { filters: prevFilters },
-        //     }) => {
-        //         const shouldRequest = filters !== prevFilters;
-
-        //         return shouldRequest;
-        //     },
-        // },
+        onMount: true,
         extras: { schemaName: 'incidentResponse' },
     },
     htmlRequest: {
         url: '/keyvalue-html/',
         method: methods.GET,
-        query: ({ params }) => ({ municipality: params.municipalityId,
-			    limit: -1 }),
+        query: ({ params }) => ({ province: 2,
+            vizrisk_theme__theme_id: 300,
+            limit: -1 }),
 
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.HtmlData[] }
@@ -128,7 +120,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.sethtmlData(htmlData);
             // params.setPending(false);
         },
-        onMount: false,
+        onMount: true,
         // extras: { schemaName: 'htmlResponse' },
     },
     jsonDataRequest: {
@@ -136,7 +128,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
-            municipality: params.municipalityId,
+            province: 2,
+            vizrisk_theme__theme_id: 300,
             limit: -1,
 
         }),
@@ -146,7 +139,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.setjsonData(jsonData);
             // params.setPending(false);
         },
-        onMount: false,
+        onMount: true,
         // extras: { schemaName: 'jsonResponse' },
     },
 
@@ -155,7 +148,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/resource/',
         method: methods.GET,
         query: ({ params }) => ({
-            municipality: params.municipalityId,
+            province: 2,
             limit: -1,
         }),
         onSuccess: ({ params, response }) => {
@@ -164,7 +157,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.setCI(cI);
             // params.setPending(false);
         },
-        onMount: false,
+        onMount: true,
         // extras: { schemaName: 'cIResponse' },
     },
 
@@ -172,49 +165,26 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/weather/',
         method: methods.GET,
         query: ({ params }) => ({
-            location: params.realTimeDataStationName,
+            location: 'Nepalgunj',
         }),
         onSuccess: ({ params, response }) => {
             // interface Response { results: PageType.Incident[] }
             const { results: realData = [] } = response as Response;
             params.setRealTimeData(realData);
         },
-        onMount: false,
+        onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
 
-    // vulnerabilityData: {
-    //     url: '/vizrisk-building/',
-    //     method: methods.GET,
-    //     query: () => ({
-    //         municipality: params.municipalityId,
-    //         limit: -1,
-    //     }),
-    //     onSuccess: ({ params, response }) => {
-    //         const { results: vulData = [] } = response;
-    //         params.setVulData(vulData);
-    //     },
-    //     onMount: true,
-
-    // },
-    // enumData: {
-    //     url: '/enum-choice/',
-    //     method: methods.GET,
-    //     onSuccess: ({ params, response }) => {
-    //         params.setEnum(response);
-    //     },
-    //     onMount: true,
-
-    // },
 };
 
 
-export const Butwal = (props) => {
-    const { municipalities, municipalityId, togglingBetweenMun } = props;
+export const ProvinceTwo = (props) => {
+    const { provinces } = props;
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [pending, setpending] = useState<boolean>(true);
     const [clickedIncidentItem, setclickedIncidentItem] = useState('all');
-    const leftelements = [1, 2, 3, 4, 5];
+    const leftelements = [1, 2, 3, 4, 5, 6, 7, 8];
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [leftElement, setleftElement] = useState(0);
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -240,9 +210,10 @@ export const Butwal = (props) => {
     const [satelliteYearDisabled, setsatelliteYearDisabled] = useState(false);
     const [legentItemDisabled, setlegentItemDisabled] = useState(false);
     const [CIState, setCIState] = useState(false);
-
-    const municipalityInfo = municipalities.filter(item => item.id === municipalityId);
     const [selectedYear, setSelectedYear] = useState(2014);
+
+
+    const municipalityInfo = provinces.filter(item => item.id === 2);
     const bbox = municipalityInfo.map(item => item.bbox)[0];
     const lng = municipalityInfo.map(item => item.centroid.coordinates[0])[0];
     const lat = municipalityInfo.map(item => item.centroid.coordinates[1])[0];
@@ -264,16 +235,6 @@ export const Butwal = (props) => {
 
 		} } = props;
     const { incidentList } = props;
-    useEffect(() => {
-        incidentsGetRequest.setDefaultParams({
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setIncidentList,
-            municipalityId,
-
-        });
-        incidentsGetRequest.do();
-    }, [municipalityId]);
-
 
     const handleNext = () => {
         setCIState(true);
@@ -494,9 +455,10 @@ export const Butwal = (props) => {
     };
 
 
-    const THEME_ID = 101;
-    const pickKeyName = htmlData.filter(item => item.key.includes('page3_top_introhtml')).map(item => item.key)[0];
-    const KEYNAME = String(pickKeyName).slice(0, -35);
+    const THEME_ID = 300;
+    const pickKeyName = 'vizrisk_province2';
+    // const KEYNAME = String(pickKeyName).slice(0, -35);
+    const KEYNAME = 'vizrisk_province2';
     const MAINKEYNAME = String(pickKeyName).slice(8, -35);
     const MUNICIPALITYID = String(htmlData.map(item => item.municipality)[0]);
     const PROVINCEID = String(htmlData.map(item => item.province)[0]);
@@ -506,32 +468,35 @@ export const Butwal = (props) => {
     console.log('main key name is', MAINKEYNAME);
 
 
-    const SUFFIXID = `${PROVINCEID}_${DISTRICTID}_${MUNICIPALITYID}`;
+    const SUFFIXID = '2';
     const {
         regions,
         hazardTypes,
         hazards,
     } = props;
+
     useEffect(() => {
+        incidentsGetRequest.setDefaultParams({
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            setIncidentList,
+        });
         htmlRequest.setDefaultParams({
             sethtmlData,
-            municipalityId,
         });
         htmlRequest.do();
-        jsonDataRequest.setDefaultParams({ setjsonData, municipalityId });
+        jsonDataRequest.setDefaultParams({ setjsonData });
         jsonDataRequest.do();
 
 
         cIGetRequest.setDefaultParams({
             setCI,
-            municipalityId,
         });
         cIGetRequest.do();
         climateDataRequest.setDefaultParams({
             setRealTimeData,
         });
         climateDataRequest.do();
-    }, [municipalityId]);
+    }, []);
 
 
     const sanitizedIncidentList = getSanitizedIncidents(
@@ -589,6 +554,12 @@ export const Butwal = (props) => {
 		 === `${KEYNAME}_page4_legend3_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
     const page5TopIntrohtml = htmlData.filter(item => item.key
 		=== `${KEYNAME}_page5_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+    const page6TopIntrohtml = htmlData.filter(item => item.key
+		=== `${KEYNAME}_page6_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+    const page7TopIntrohtml = htmlData.filter(item => item.key
+		=== `${KEYNAME}_page7_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
+    const page8TopIntrohtml = htmlData.filter(item => item.key
+		=== `${KEYNAME}_page8_top_introhtml_${THEME_ID}_${SUFFIXID}`).map(item => item.value);
 
 
     const page1Legend1MidClimateData = jsonData.filter(item => item.key
@@ -639,6 +610,7 @@ export const Butwal = (props) => {
         }
     }, [cI, htmlData, incidentList, jsonData, pending]);
 
+    console.log('datas are', htmlData, jsonData);
 
     return (
         <>
@@ -653,12 +625,11 @@ export const Butwal = (props) => {
                         </div>
                     )
                     : (
-                        leftElement < 5
+                        leftElement < 8
                             && (
                                 <>
                                     <MultiHazardMap
                                         MAINKEYNAME={MAINKEYNAME}
-                                        togglingBetweenMun={togglingBetweenMun}
                                         incidentList={pointFeatureCollectionButwal}
                                         populationDensityRange={populationDensityRange[0]}
                                         rightElement={leftElement}
@@ -678,7 +649,7 @@ export const Butwal = (props) => {
                                         boundingBox={bbox}
                                         lng={lng}
                                         lat={lat}
-                                        municipalityId={municipalityId}
+                                        municipalityId={49001}
                                         provinceId={PROVINCEID}
                                         districtId={DISTRICTID}
                                         legendElement={legendElement}
@@ -910,8 +881,60 @@ export const Butwal = (props) => {
                     />
                 )
             }
+            {
+                leftElement === 5 && (
 
+                    <Leftpane
+                        introHtml={page6TopIntrohtml[0]}
+                        urbanData={page5MidUrbanData[0]}
+                        leftElement={leftElement}
+                        handleNext={handleNext}
+                        handlePrev={handlePrev}
+                        totalPages={leftelements.length}
+                        pagenumber={leftElement + 1}
+                        setActivePage={setActivePage}
+                        active={active}
+                        disableNavLeftBtn={disableNavLeftBtn}
+                        disableNavRightBtn={disableNavRightBtn}
+                    />
+                )
+            }
+            {
+                leftElement === 6 && (
 
+                    <Leftpane
+                        introHtml={page7TopIntrohtml[0]}
+                        urbanData={page5MidUrbanData[0]}
+                        leftElement={leftElement}
+                        handleNext={handleNext}
+                        handlePrev={handlePrev}
+                        totalPages={leftelements.length}
+                        pagenumber={leftElement + 1}
+                        setActivePage={setActivePage}
+                        active={active}
+                        disableNavLeftBtn={disableNavLeftBtn}
+                        disableNavRightBtn={disableNavRightBtn}
+                    />
+                )
+            }
+            {
+                leftElement === 7 && (
+
+                    <Leftpane
+                        introHtml={page8TopIntrohtml[0]}
+                        urbanData={page5MidUrbanData[0]}
+                        leftElement={leftElement}
+                        handleNext={handleNext}
+                        handlePrev={handlePrev}
+                        totalPages={leftelements.length}
+                        pagenumber={leftElement + 1}
+                        setActivePage={setActivePage}
+                        active={active}
+                        disableNavLeftBtn={disableNavLeftBtn}
+                        disableNavRightBtn={disableNavRightBtn}
+                    />
+                )
+            }
             <div />
 
 
@@ -924,4 +947,4 @@ export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),
     createRequestClient(requests),
-)(Butwal);
+)(ProvinceTwo);

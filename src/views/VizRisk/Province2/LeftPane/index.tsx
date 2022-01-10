@@ -267,21 +267,24 @@ function Leftpane(props) {
     };
 
     const currentAverageTemp = (tempInString) => {
-        const numb = tempInString.match(/\d/g);
+        let numb;
+        if (tempInString) {
+            numb = tempInString.match(/\d/g);
+        }
         console.log('sep', numb);
 
-        if (numb.length === 2) {
+        if (numb && numb.length === 2) {
             const firstNum = parseInt(numb[0], 10);
             const secondNum = parseInt(numb[1], 10);
             return (firstNum + secondNum) / 2;
         }
-        if (numb.length === 3) {
+        if (numb && numb.length === 3) {
             const firstNum = parseInt(numb[0], 10);
             const secondNum = numb[1];
             const thirdNum = numb[2];
             return (firstNum + parseInt((secondNum + thirdNum), 10)) / 2;
         }
-        if (numb.length === 4) {
+        if (numb && numb.length === 4) {
             const firstNum = numb[0];
             const secondNum = numb[1];
             const thirdNum = numb[2];
