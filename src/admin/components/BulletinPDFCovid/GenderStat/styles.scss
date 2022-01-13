@@ -1,0 +1,32 @@
+.itemContainer{
+    display: flex;
+    align-items: flex-end;
+    margin-right: 15px;
+    .icon{
+        img{
+            width: 42px;
+            height: 42px;
+
+            g{
+                fill: black !important;
+            }
+        }
+    }
+    .stat{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .goloBatch{
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            color: white;
+            background-color: #3457A6;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

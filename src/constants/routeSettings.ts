@@ -55,6 +55,15 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
+
+    {
+        name: 'bulletin',
+        title: 'Bulletin',
+        path: '/admin/bulletin',
+        load: () => import('../admin/views/Bulletin'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
     {
         name: 'epidemics',
         title: 'Epidemics',

@@ -13,10 +13,10 @@ export const slugRef = {
 
 
 export const Menus = {
-    editor: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Data Overview', 'Admin'],
-    validator: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Data Overview'],
-    user: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Data Overview'],
-    superuser: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Data Overview', 'Admin'],
+    editor: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
+    validator: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview'],
+    user: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview'],
+    superuser: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
 };
 export const ref = {
     'Health Infrastructure': 'health',

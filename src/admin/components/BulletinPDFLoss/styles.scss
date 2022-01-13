@@ -1,0 +1,113 @@
+.pdfContainer{
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    border: 1px solid #cecccc;
+    background-color: white;
+    position: relative;
+    .headerNLoss{
+        background-image: linear-gradient(#0d2e69, #f0f3f6);
+        .header{
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .subDiv{
+                align-items: center;
+                display: flex;
+                .govTitles{
+                    color: white;
+                    ul{
+                        list-style: none;
+                        font-size: 16px;
+                        .bold{
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+            .reportTitles{
+                color: white;
+            }
+        }
+        .loss{
+            padding: 20px 50px;
+            h2{
+                color: white;
+                
+            }
+            p{
+                color: white;
+                
+            }
+            .lossIconsRow{
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+        
+      
+    }
+    .provinceWiseLoss{
+        display: flex;
+        padding:10mm ;
+        justify-content: space-between;
+        .provinceWiseChart{
+            width: 95mm;
+            height: 70mm;
+            position: relative;
+            right: 10mm;
+            h2{
+                position: relative;
+                left: 10mm;
+                font-size: 4mm;
+                margin-bottom: 2mm;
+            }
+            
+        }
+        .provinceWiseIncidentsMap{
+            width: 105mm;
+            height: 90mm;
+            h2{
+                font-size: 4mm;
+                margin-bottom: 6mm;
+
+            }
+        }
+    }
+    .hazardWiseStats{
+        width: 90mm;
+        height: 80mm;
+        position: absolute;
+        bottom: 15mm;
+        left:20m;
+        h2{
+            font-size: 4mm;
+            margin-bottom: 2mm;
+            position: relative;
+            left: 10mm;
+        }
+    }
+    .genderWiseStats{
+        width: 90mm;
+        height: 50mm;
+        position: absolute;
+        bottom: 15mm;
+        right:20mm;
+        h2{
+            font-size: 4mm;
+            margin-bottom: 2mm;
+            position: relative;
+        }
+    }
+}
+.bold{
+    font-weight: 600;
+}
+
+.recharts-legend-item {
+    margin-top: 40px !important;
+    height: 500px !important;
+ }
+
+ 

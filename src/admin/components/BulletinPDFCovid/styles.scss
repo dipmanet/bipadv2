@@ -1,0 +1,137 @@
+.covidPDFContainer{
+width: 210mm;
+height: 297mm;
+margin: 0 auto;
+border: 1px solid #cecccc;
+background-color: white;
+position: relative;
+padding: 10mm;
+display: flex;
+.covid24{
+    padding: 5mm 10mm;
+    width: 90mm;
+    h2{
+        color: white;
+        
+    }
+    p{
+        color: white;
+        font-size: 11px;
+    }
+    .lossIconsRow{
+        display: flex;
+        justify-content: flex-start;
+        li{
+            font-size: 14px !important;
+        }
+    }
+    .middle{
+        border-left: 1px dotted rgb(3, 102, 160);
+        height: 10mm;
+        position: relative;
+        bottom: 18px;
+        left: 5px;
+    }
+    .genderRow{
+        display: flex;
+        justify-content: space-between;
+        padding-top: 15px;
+        margin-top: 15px;
+        border-left: 1px dotted rgb(3, 102, 160);
+        border-bottom: 1px dotted rgb(3, 102, 160);
+        width: 50mm;
+        position: relative;
+        bottom: 32px;
+        left: 5px;
+        li{
+            font-size: 14px !important;
+        }
+    }
+    .khopContainer{
+        h2{
+            color: #4C4C4C;
+        }
+        .khopRow{
+            // height: 40mm;
+            display: flex;
+            justify-content: space-between;
+            h2{
+                color: white;
+            }
+        }
+    }
+
+}
+.covidTotal{
+    width: 100mm;
+    height: 100mm;
+    padding: 10mm;
+    div{
+        display: flex;
+        li{
+            font-size: 14px !important;
+        }
+    }
+
+    .provinceWiseTotal{
+        display: flex;
+        flex-direction: column !important;
+        height: 80mm;
+        width: 100mm;
+        position: relative;
+        right: 10mm;
+      
+        h2{
+            left: 10mm;
+            margin-top: 10mm;
+            position: relative;
+        }
+    }
+    .provTable{
+        border-collapse: collapse;
+        position: relative;
+        right: 25mm;
+        td,th{
+            white-space: nowrap;
+            text-align: center;
+            border: 1px solid rgb(190, 188, 188);
+            padding: 4px;
+        }
+
+        tr:first-child th:first-child{
+            border: none;
+        }
+        td:first-child{
+            display: flex;
+            align-items: center;
+           text-align: left;
+        }
+        
+    }
+    .pratikriyaContainer{
+        width: 190mm;
+        position: absolute;
+        // bottom: 70mm;
+        right: 10mm;
+        display: flex;
+        margin-top: 20mm;
+        flex-direction: column;
+        .pratikriyas{
+            background-color: #EAEBEC;
+            padding: 2mm 10mm;
+            margin-top: 5mm;
+            // height: 80mm;
+            ul{
+                display: flex;
+                flex-wrap: wrap;
+                padding-left: 0;
+            }
+            ul li{
+                width: calc(48% - 4mm);
+                margin: 2mm;
+                font-size: 14px;
+            }
+        }
+    }
+}
+}
