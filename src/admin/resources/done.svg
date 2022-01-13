@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-done">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="done" clip-path="url(#clip-done)">
+    <path id="Icon_material-done" data-name="Icon material-done" d="M10.573,18.759l-4.1-4.1L5.1,16.023,10.573,21.5,22.3,9.768,20.932,8.4Z" transform="translate(-1.699 -2.947)" fill="#239524"/>
+  </g>
+</svg>

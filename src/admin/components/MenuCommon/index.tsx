@@ -37,7 +37,7 @@ const MenuCommon = (props: Props) => {
 
 
     const handleMenuItemClick = (menuItem: MenuItems) => {
-        if (menuItem === 'Data Overview' || menuItem === 'Admin') {
+        if (menuItem === 'Data Overview' || menuItem === 'Admin' || menuItem === 'Bulletin') {
             navigate(`/admin/${ref[menuItem]}`);
         }
         setActive(Menu.indexOf(menuItem));
@@ -52,7 +52,7 @@ const MenuCommon = (props: Props) => {
             const currentSlug = location.split('admin/')[1];
             setActive(Menu.indexOf(slugRef[currentSlug]));
         }
-    });
+    }, [Menu]);
 
 
     const handleClickOutside = (e) => {

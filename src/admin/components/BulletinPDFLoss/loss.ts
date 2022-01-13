@@ -1,12 +1,12 @@
 /* eslint-disable import/prefer-default-export */
-import DeathIcon from '../../resources/death.svg';
-import IncidentIcon from '../../resources/incident.svg';
-import InfraIcon from '../../resources/infrastructure.svg';
-import InjuredIcon from '../../resources/injured.svg';
-import LivestockIcon from '../../resources/livestock.svg';
-import LossIcon from '../../resources/loss.svg';
-import MissingIcon from '../../resources/missing.svg';
-import { nepaliRef } from '../Bulletin/formFields';
+import DeathIcon from 'src/admin/resources/death.svg';
+import IncidentIcon from 'src/admin/resources/incident.svg';
+import InfraIcon from 'src/admin/resources/infrastructure.svg';
+import InjuredIcon from 'src/admin/resources/injured.svg';
+import LivestockIcon from 'src/admin/resources/livestock.svg';
+import LossIcon from 'src/admin/resources/loss.svg';
+import MissingIcon from 'src/admin/resources/missing.svg';
+import { nepaliRef } from 'src/admin/components/Bulletin/formFields';
 
 
 export const lossObj = [

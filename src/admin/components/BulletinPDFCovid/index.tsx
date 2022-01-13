@@ -11,12 +11,12 @@ import {
     Legend,
     ResponsiveContainer,
 } from 'recharts';
+import { nepaliRef } from 'src/admin/components/Bulletin/formFields';
 import styles from './styles.scss';
 import LossItem from '../BulletinPDFLoss/LossItem';
 import { covidObj24HRs, covidObj24HRsRow2, covidObjTotal, vaccineStatObj } from './covid';
 import GenderStat from './GenderStat';
 import KhopBanner from './KhopBanner';
-import { nepaliRef } from '#components/SituationReportModal/Bulletin/formFields';
 
 interface Props {
 

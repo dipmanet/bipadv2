@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-import DeathIcon from '../../resources/death.svg';
-import IncidentIcon from '../../resources/incident.svg';
-import MissingIcon from '../../resources/missing.svg';
-import FemaleIcon from '../../resources/femaleGray.svg';
-import MaleIcon from '../../resources/maleGray.svg';
+import DeathIcon from 'src/admin/resources/death.svg';
+import IncidentIcon from 'src/admin/resources/incident.svg';
+import MissingIcon from 'src/admin/resources/missing.svg';
+import FemaleIcon from 'src/admin/resources/femaleGray.svg';
+import MaleIcon from 'src/admin/resources/maleGray.svg';
 import { nepaliRef } from '../Bulletin/formFields';
 
 export const covidObj24HRs = [

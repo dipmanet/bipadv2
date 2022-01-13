@@ -9,6 +9,7 @@ export const slugRef = {
     'epidemics-table': 'Epidemics',
     overview: 'Data Overview',
     admin: 'Admin',
+    Bulletin: 'Bulletin',
 };
 
 
@@ -27,4 +28,5 @@ export const ref = {
     'Bulk Upload': 'upload',
     'Data Overview': 'overview',
     Admin: 'admin',
+    Bulletin: 'bulletin',
 };

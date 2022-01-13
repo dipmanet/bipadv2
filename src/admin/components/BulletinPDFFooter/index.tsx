@@ -1,7 +1,7 @@
 import React from 'react';
+import tempMin from 'src/admin/resources/tempMin.png';
+import tempMax from 'src/admin/resources/tempMax.png';
 import styles from './styles.scss';
-import tempMin from '../../resources/tempMin.png';
-import tempMax from '../../resources/tempMax.png';
 
 const dailyRainSummary = 'Daily summary';
 

@@ -14,9 +14,9 @@ import {
     PieChart,
     Pie,
 } from 'recharts';
+import GovLogo from 'src/admin/resources/govtLogo.svg';
 import styles from './styles.scss';
 import { lossObj } from './loss';
-import GovLogo from '../../resources/govtLogo.svg';
 import LossItem from './LossItem';
 import { nepaliRef } from '../Bulletin/formFields';
 import IncidentMap from './IncidentMap/index';

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-information">
+      <rect width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="information" clip-path="url(#clip-information)">
+    <path id="Icon_ionic-md-information-circle" data-name="Icon ionic-md-information-circle" d="M11.375,3.375a8,8,0,1,0,8,8A8,8,0,0,0,11.375,3.375Zm.808,12H10.567V10.567h1.615Zm0-6.385H10.567V7.375h1.615Z" transform="translate(0.625 0.625)" fill="#405467" opacity="0.37"/>
+  </g>
+</svg>

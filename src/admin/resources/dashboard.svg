@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-dashboard">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="dashboard" clip-path="url(#clip-dashboard)">
+    <path id="Icon_material-dashboard" data-name="Icon material-dashboard" d="M4.5,17.829H15.163V4.5H4.5Zm0,10.663H15.163v-8H4.5Zm13.329,0H28.492V15.163H17.829Zm0-23.992v8H28.492v-8Z" transform="translate(-0.496 -0.496)" fill="#405467"/>
+  </g>
+</svg>
