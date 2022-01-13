@@ -11,14 +11,15 @@ const Landing = () => (
         <Navbar />
         <div className={styles.container}>
             <div className={styles.title}>
-Welcome to Government of Nepal&apos;s Integrated Disaster Information Management System.
+                Welcome to Government of Nepal&apos;s Integrated Disaster
+                Information Management System.
             </div>
             <div className={styles.subtitle}>
-Select your prefered sector to input, monitor, and analyze information
-from all three tiers of the Government.
+                Select your prefered sector to input, monitor, and analyze information
+                from all three tiers of the Government.
             </div>
         </div>
-        {/* <MenuCommon currentPage="Health Infrastructure" layout="landing" /> */}
+        <MenuCommon currentPage="Health Infrastructure" layout="landing" />
         <Footer />
     </>
 );

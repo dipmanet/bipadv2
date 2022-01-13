@@ -15,12 +15,12 @@ html{
 	display: flex;
 	justify-content: space-between;
 	padding: 10px;
-	width: 100%;
+	width: calc(100vw - 63px);
 	height: 50px;
 	background-color: #F7F7F7;
 	.navLeftSide{
 		display: flex;
-		margin-left: 162px;
+		margin-left: 5%;
 		.navLogo{
 			display: flex;
 			align-items: center;

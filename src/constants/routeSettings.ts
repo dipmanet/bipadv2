@@ -58,7 +58,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'epidemics',
         title: 'Epidemics',
-        path: '/admin/epidemics',
+        path: '/admin/epidemics-form',
         load: () => import('../admin/views/Epidemics'),
         navbar: false,
         disableIfNoAuth: true,

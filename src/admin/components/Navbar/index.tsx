@@ -4,7 +4,6 @@ import styles from './styles.module.scss';
 
 const index = () => (
     <>
-
         <div className={styles.mainNavBar}>
             <div className={styles.navLeftSide}>
                 <div className={styles.navLogo}>
@@ -17,8 +16,6 @@ const index = () => (
                 </div>
             </div>
         </div>
-
-
     </>
 );
 export default index;

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fontawesome/react-fontawesome';
+// import { faAngleDown } from '@fontawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import { navigate } from '@reach/router';
 // import { Navigate, useNavigate } from 'react-router';
 import styles from './styles.module.scss';
 import SubMenu from './SubMenu';
@@ -21,23 +22,23 @@ const MenuCommon = (props: Props) => {
     const [active, setActive] = useState<number | undefined>(undefined);
     const [activeSubMenu, setActiveSubMenu] = useState<number | undefined>(undefined);
     const [showSub, setShowSub] = useState<boolean>(false);
-    const navigate = useNavigate();
-    const { userDataMain } = useSelector((state: RootState) => state.user);
+    // const navigate = useNavigate();
+    // const { userDataMain } = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
-        if (userDataMain && userDataMain.isSuperuser) {
-            setMenu(Menus.superuser);
-        } else if (userDataMain && userDataMain.profile && userDataMain.profile.role) {
-            setMenu(Menus[userDataMain.profile.role]);
-        } else {
-            setMenu(Menus.editor);
-        }
-    }, [userDataMain]);
+        // if (userDataMain && userDataMain.isSuperuser) {
+        //     setMenu(Menus.superuser);
+        // } else if (userDataMain && userDataMain.profile && userDataMain.profile.role) {
+        //     setMenu(Menus[userDataMain.profile.role]);
+        // } else {
+        setMenu(Menus.editor);
+        // }
+    }, []);
 
 
     const handleMenuItemClick = (menuItem: MenuItems) => {
         if (menuItem === 'Data Overview' || menuItem === 'Admin') {
-            navigate(`/${ref[menuItem]}`);
+            navigate(`/admin/${ref[menuItem]}`);
         }
         setActive(Menu.indexOf(menuItem));
         setActiveSubMenu(Menu.indexOf(menuItem));
@@ -64,7 +65,7 @@ const MenuCommon = (props: Props) => {
         setShowSub(false);
 
         setActive(Menu.indexOf(menuItem));
-        navigate(`/${ref[menuItem]}-${ref[submenuItem]}`);
+        navigate(`/admin/${ref[menuItem]}-${ref[submenuItem]}`);
         // handle sub menu click
     };
 
@@ -88,7 +89,7 @@ const MenuCommon = (props: Props) => {
 
                         >
                             {menuItem}
-                            {
+                            {/* {
                                 i < 3
                                 && (
                                     <FontAwesomeIcon
@@ -96,7 +97,7 @@ const MenuCommon = (props: Props) => {
                                         className={styles.icon}
                                     />
                                 )
-                            }
+                            } */}
                         </div>
                         {
                             activeSubMenu === i
