@@ -59,8 +59,16 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'bulletin',
         title: 'Bulletin',
-        path: '/admin/bulletin',
+        path: '/admin/bulletin/bulletin-form',
         load: () => import('../admin/views/Bulletin'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
+        name: 'bulletin',
+        title: 'Bulletin',
+        path: '/admin/bulletin/bulletin-table',
+        load: () => import('../admin/views/BulletinTable'),
         navbar: false,
         disableIfNoAuth: true,
     },

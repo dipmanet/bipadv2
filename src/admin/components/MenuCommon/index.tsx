@@ -6,18 +6,25 @@ import { navigate } from '@reach/router';
 // import { Navigate, useNavigate } from 'react-router';
 import styles from './styles.module.scss';
 import SubMenu from './SubMenu';
-import { slugRef, Menus, ref } from './menu';
+import { slugRef, Menus, ref, SubLevel } from './menu';
 
 interface Props {
     currentPage: MenuItems;
     layout: string;
+    subLevel: string;
 }
 type SubMenuItems = 'Data Table' | 'Add New Data' | 'Bulk Upload';
-type MenuItems = 'Health Infrastructure' | 'COVID-19' | 'Epidemics' | 'Data Overview' | 'Admin';
+type MenuItems =
+'Health Infrastructure' |
+'COVID-19' |
+'Epidemics' |
+'Data Overview' |
+'Admin' |
+'Bulletin';
 
 
 const MenuCommon = (props: Props) => {
-    const { currentPage, layout } = props;
+    const { currentPage, layout, subLevel } = props;
     const [Menu, setMenu] = useState<MenuItems | undefined>(undefined);
     const [active, setActive] = useState<number | undefined>(undefined);
     const [activeSubMenu, setActiveSubMenu] = useState<number | undefined>(undefined);
@@ -31,28 +38,50 @@ const MenuCommon = (props: Props) => {
         // } else if (userDataMain && userDataMain.profile && userDataMain.profile.role) {
         //     setMenu(Menus[userDataMain.profile.role]);
         // } else {
-        setMenu(Menus.editor);
+        if (subLevel) {
+            setMenu(SubLevel[subLevel]);
+        } else {
+            setMenu(Menus.editor);
+        }
         // }
-    }, []);
+    }, [subLevel]);
 
 
     const handleMenuItemClick = (menuItem: MenuItems) => {
-        if (menuItem === 'Data Overview' || menuItem === 'Admin' || menuItem === 'Bulletin') {
-            navigate(`/admin/${ref[menuItem]}`);
+        if (subLevel) {
+            if (menuItem === 'Add New Bulletin') {
+                navigate('/admin/bulletin/bulletin-form');
+            } else if (menuItem === 'Bulletin Data Table') {
+                navigate('/admin/bulletin/bulletin-table');
+            } else if (menuItem === 'Bulletin Preview') {
+                navigate('/admin/bulletin/bulletin-preview');
+            }
+        } else {
+            if (menuItem === 'Data Overview' || menuItem === 'Admin' || menuItem === 'Bulletin') {
+                navigate(`/admin/${ref[menuItem]}`);
+            }
+            setActive(Menu.indexOf(menuItem));
+            setActiveSubMenu(Menu.indexOf(menuItem));
+            setShowSub(!showSub);
         }
-        setActive(Menu.indexOf(menuItem));
-        setActiveSubMenu(Menu.indexOf(menuItem));
-        setShowSub(!showSub);
     };
 
 
     useEffect(() => {
         if (Menu) {
             const location = window.location.href;
-            const currentSlug = location.split('admin/')[1];
+            let currentSlug;
+            if (subLevel) {
+                currentSlug = location.split('admin/')[1].split('/')[1];
+            } else {
+                currentSlug = location.split('admin/')[1];
+            }
+            console.log('currentSlug', currentSlug);
+            console.log('subLevel', subLevel);
+            console.log('Menu', Menu);
             setActive(Menu.indexOf(slugRef[currentSlug]));
         }
-    }, [Menu]);
+    }, [Menu, subLevel]);
 
 
     const handleClickOutside = (e) => {
@@ -99,7 +128,7 @@ const MenuCommon = (props: Props) => {
                                 )
                             } */}
                         </div>
-                        {
+                        {/* {
                             activeSubMenu === i
                             && showSub
                             && i < 3
@@ -109,7 +138,7 @@ const MenuCommon = (props: Props) => {
                                 }
                                 />
                             )
-                        }
+                        } */}
                     </div>
                 ))
             }

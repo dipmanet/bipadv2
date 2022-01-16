@@ -18,7 +18,7 @@ import GovLogo from 'src/admin/resources/govtLogo.svg';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
-import { nepaliRef } from '../Bulletin/formFields';
+import { nepaliRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 
 interface Props {

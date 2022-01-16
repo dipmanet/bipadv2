@@ -7,6 +7,25 @@ import initialState from './initialState';
 import { ModelEnum } from '#types';
 // ACTION CREATORS
 
+export const setBulletinLossAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN,
+    bulletinData,
+});
+export const setBulletinCovidAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
+    bulletinData,
+});
+export const setBulletinFeedbackAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK,
+    bulletinData,
+});
+export const setBulletinTemperatureAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE,
+    bulletinData,
+});
+
+// bulletin actions end
+
 export const setRegionAction = (
     { region }: { region: Type.Region },
 ) => ({
@@ -1175,11 +1194,93 @@ export const setProfileContactFilters = (
     return newState;
 };
 
+// bulletin data
+export const setBulletinLoss = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.incidentSummary = bulletinData.incidentSummary;
+        deferedState.bulletinPage.peopleLoss = bulletinData.peopleLoss;
+        deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
+        deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
+    });
+
+    return newState;
+};
+
+export const setBulletinCovid = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.covid24hrsStat = bulletinData.covid24hrsStat;
+        deferedState.bulletinPage.covidProvinceWiseTotal = bulletinData.covidProvinceWiseTotal;
+        deferedState.bulletinPage.covidTotalStat = bulletinData.covidTotalStat;
+        deferedState.bulletinPage.vaccineStat = bulletinData.vaccineStat;
+    });
+
+    return newState;
+};
+
+
+export const setBulletinFeedback = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.feedback = bulletinData.feedback;
+    });
+
+    return newState;
+};
+
+export const setBulletinDataTemperature = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.tempMin = bulletinData.tempMin;
+        deferedState.bulletinPage.tempMax = bulletinData.tempMax;
+    });
+
+    return newState;
+};
+
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.ADMIN__PORTAL_BULLETIN:
+            return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
+            return setBulletinCovid(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
+            return setBulletinFeedback(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE:
+            return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:

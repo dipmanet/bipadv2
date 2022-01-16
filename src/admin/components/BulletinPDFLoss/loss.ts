@@ -6,7 +6,7 @@ import InjuredIcon from 'src/admin/resources/injured.svg';
 import LivestockIcon from 'src/admin/resources/livestock.svg';
 import LossIcon from 'src/admin/resources/loss.svg';
 import MissingIcon from 'src/admin/resources/missing.svg';
-import { nepaliRef } from 'src/admin/components/Bulletin/formFields';
+import { nepaliRef } from 'src/admin/components/BulletinForm/formFields';
 
 
 export const lossObj = [

@@ -19,7 +19,7 @@ const Bulletin = (props: Props) => (
             layout="common"
             subLevel={'bulletin'}
         />
-        <BulletinForm />
+        <h1> Bulletin Table</h1>
         <Footer />
     </>
 

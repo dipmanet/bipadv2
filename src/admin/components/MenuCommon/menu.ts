@@ -10,6 +10,8 @@ export const slugRef = {
     overview: 'Data Overview',
     admin: 'Admin',
     Bulletin: 'Bulletin',
+    'bulletin-form': 'Add New Bulletin',
+    'bulletin-table': 'Bulletin Data Table',
 };
 
 
@@ -19,6 +21,11 @@ export const Menus = {
     user: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview'],
     superuser: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
 };
+
+export const SubLevel = {
+    bulletin: ['Add New Bulletin', 'Bulletin Data Table'],
+};
+
 export const ref = {
     'Health Infrastructure': 'health',
     'COVID-19': 'covid19',
@@ -28,5 +35,5 @@ export const ref = {
     'Bulk Upload': 'upload',
     'Data Overview': 'overview',
     Admin: 'admin',
-    Bulletin: 'bulletin',
+    Bulletin: 'bulletin/bulletin-form',
 };

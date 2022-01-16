@@ -3,15 +3,13 @@ import React, { useState, useEffect } from 'react';
 import {
     BarChart,
     Bar,
-    Cell,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
     ResponsiveContainer,
 } from 'recharts';
-import { nepaliRef } from 'src/admin/components/Bulletin/formFields';
+import { nepaliRef } from 'src/admin/components/BulletinForm/formFields';
 import styles from './styles.scss';
 import LossItem from '../BulletinPDFLoss/LossItem';
 import { covidObj24HRs, covidObj24HRsRow2, covidObjTotal, vaccineStatObj } from './covid';

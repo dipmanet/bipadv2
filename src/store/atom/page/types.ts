@@ -12,6 +12,129 @@ interface Centroid {
 }
 type BBox = [number, number, number, number];
 
+export interface Bulletin {
+    sitrep: number;
+    incidentSummary: {
+        numberOfIncidents: number;
+        numberOfDeath: number;
+        numberOfMissing: number;
+        numberOfInjured: number;
+        estimatedLoss: number;
+        roadBlock: number;
+        cattleLoss: number;
+    };
+    peopleLoss: {
+        p1: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+        p2: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+        bagmati: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+        gandaki: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+        lumbini: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+        karnali: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+        sudurpaschim: {
+            death: number;
+            missing: number;
+            injured: number;
+        };
+    };
+    hazardWiseLoss: {
+        hazard: {
+            deaths: number;
+            incidents: number;
+        };
+
+    };
+    genderWiseLoss: {
+        male: number;
+        female: number;
+        unknown: number;
+    };
+    covid24hrsStat: {
+        affected: number;
+        femaleAffected: number;
+        maleAffected: number;
+        deaths: number;
+        recovered: number;
+    };
+    covidTotalStat: {
+        totalAffected: number;
+        totalActive: number;
+        totalRecovered: number;
+        totalDeaths: number;
+    };
+    vaccineStat: {
+        firstDosage: number;
+        secondDosage: number;
+    };
+    covidProvinceWiseTotal: {
+        p1: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+        p2: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+        bagmati: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+        gandaki: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+        lumbini: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+        karnali: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+        sudurpaschim: {
+            totalAffected: number;
+            totalActive: number;
+            totalDeaths: number;
+        };
+    };
+    tempMin: string;
+    tempMax: string;
+    feedback: string[];
+    province: number;
+    district: number;
+    municipality: number;
+    ward: number;
+}
+
 export interface Province {
     id: number;
     bbox: BBox;
@@ -492,6 +615,7 @@ export interface PageState {
     projectsProfilePage: ProjectsProfilePage;
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
+    bulletinPage: Bulletin;
 }
 
 // ACTION TYPES
@@ -565,6 +689,12 @@ export enum PageType {
 
     // Risk info capacity and resource page
     RIC__SET_CAR_KEYS = 'page/RISKINFO_CAR/SET_CAR_KEYS',
+
+    // Bulletin
+    ADMIN__PORTAL_BULLETIN = 'page/ADMIN__PORTAL_BULLETIN',
+    ADMIN__PORTAL_BULLETIN_COVID = 'page/ADMIN__PORTAL_BULLETIN_COVID',
+    ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
+    ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
 }
 
 // ACTION CREATOR INTERFACE
@@ -572,6 +702,23 @@ export enum PageType {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
+}
+
+export interface SetBulletinData {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinDataCovid {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_COVID;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinDataFeedback {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinDataTemperature {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE;
+    bulletinData: Bulletin;
 }
 
 export interface SetCarKeys {
@@ -838,7 +985,7 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
 }
 
 export type PageActionTypes = (
-    SetRegion | SetInitialPopupHidden |
+    SetRegion | SetInitialPopupHidden | SetBulletinData |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |
@@ -851,5 +998,6 @@ export type PageActionTypes = (
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
-    SetDashboardHazardType
+    SetDashboardHazardType | SetBulletinDataCovid
+    | SetBulletinDataFeedback | SetBulletinDataTemperature
 );

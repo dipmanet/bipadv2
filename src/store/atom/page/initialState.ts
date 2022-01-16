@@ -198,5 +198,142 @@ const state: PageState = {
             pristine: true,
         },
     },
+    bulletinPage: {
+        sitrep: 123,
+        incidentSummary: {
+            numberOfIncidents: 0,
+            numberOfDeath: 0,
+            numberOfMissing: 0,
+            numberOfInjured: 0,
+            estimatedLoss: 0,
+            roadBlock: 0,
+            cattleLoss: 0,
+        },
+        peopleLoss: {
+            p1: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            p2: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            bagmati: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            gandaki: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            lumbini: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            karnali: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+            sudurpaschim: {
+                death: 0,
+                missing: 0,
+                injured: 0,
+            },
+        },
+        hazardWiseLoss: {
+            पहिरो: {
+                deaths: 0,
+                incidents: 0,
+            },
+            'हुरी बतास': {
+                deaths: 0,
+                incidents: 0,
+            },
+            भूकम्प: {
+                deaths: 0,
+                incidents: 0,
+            },
+            'हेलिकप्टर दुर्घटना': {
+                deaths: 0,
+                incidents: 0,
+            },
+            डढेलो: {
+                deaths: 0,
+                incidents: 0,
+            },
+        },
+        genderWiseLoss: {
+            male: 0,
+            female: 0,
+            unknown: 0,
+        },
+        covid24hrsStat: {
+            affected: 0,
+            femaleAffected: 0,
+            maleAffected: 0,
+            deaths: 0,
+            recovered: 0,
+        },
+        covidTotalStat: {
+            totalAffected: 0,
+            totalActive: 0,
+            totalRecovered: 0,
+            totalDeaths: 0,
+        },
+        vaccineStat: {
+            firstDosage: 0,
+            secondDosage: 0,
+        },
+        covidProvinceWiseTotal: {
+            p1: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            p2: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            bagmati: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            gandaki: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            lumbini: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            karnali: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+            sudurpaschim: {
+                totalAffected: 0,
+                totalActive: 0,
+                totalDeaths: 0,
+            },
+        },
+        tempMin: 'http://bipaddev.yilab.org.np/media/bulletin/min/sdN1tB.webp',
+        tempMax: 'http://bipaddev.yilab.org.np/media/bulletin/max/sdN1tB.webp',
+        feedback: [],
+        province: 3,
+        district: 27,
+        municipality: 27006,
+        ward: null,
+    },
 };
 export default state;

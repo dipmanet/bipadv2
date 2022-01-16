@@ -4,7 +4,7 @@ import IncidentIcon from 'src/admin/resources/incident.svg';
 import MissingIcon from 'src/admin/resources/missing.svg';
 import FemaleIcon from 'src/admin/resources/femaleGray.svg';
 import MaleIcon from 'src/admin/resources/maleGray.svg';
-import { nepaliRef } from '../Bulletin/formFields';
+import { nepaliRef } from '../BulletinForm/formFields';
 
 export const covidObj24HRs = [
     {

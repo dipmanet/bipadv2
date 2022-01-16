@@ -15,6 +15,7 @@ const emptyList: unknown[] = [];
 
 const dashboardPageSelector = ({ page }: AppState) => page.dashboardPage;
 
+
 const incidentPageSelector = ({ page }: AppState) => page.incidentPage;
 
 const responsePageSelector = ({ page }: AppState) => page.responsePage;
@@ -28,6 +29,8 @@ const regionByPropSelector = (state: unknown, props: { region?: Region }) => pro
 export const resourceTypeListSelector = ({ page }: AppState) => (
     page.resourceTypeList || emptyList
 );
+// bulletin page
+export const bulletinPageSelector = ({ page }: AppState) => page.bulletinPage;
 
 export const filtersSelector = ({ page }: AppState) => page.filters;
 

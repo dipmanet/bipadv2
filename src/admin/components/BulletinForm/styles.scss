@@ -1,0 +1,21 @@
+$boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
+.mainSection{
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-around;
+    .leftMenuSection{
+        width: 25%;
+    }
+    .rightFormSection{
+        width: 70%;
+        box-shadow: $boxShadow;
+        background-color: white;
+    }
+    .buttonsContainer{
+        width: calc(100% - 60px);
+        min-width: 600px;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 60px;
+    }
+}
