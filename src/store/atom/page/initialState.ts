@@ -199,21 +199,21 @@ const state: PageState = {
         },
     },
     bulletinPage: {
-        sitrep: 123,
+        sitRep: 123,
         incidentSummary: {
-            numberOfIncidents: 0,
-            numberOfDeath: 0,
-            numberOfMissing: 0,
-            numberOfInjured: 0,
-            estimatedLoss: 0,
-            roadBlock: 0,
+            numberOfIncidents: 1,
+            numberOfDeath: 5,
+            numberOfMissing: 6,
+            numberOfInjured: 12,
+            estimatedLoss: 50,
+            roadBlock: 1,
             cattleLoss: 0,
         },
         peopleLoss: {
             p1: {
-                death: 0,
-                missing: 0,
-                injured: 0,
+                death: 5,
+                missing: 6,
+                injured: 12,
             },
             p2: {
                 death: 0,
@@ -269,8 +269,8 @@ const state: PageState = {
             },
         },
         genderWiseLoss: {
-            male: 0,
-            female: 0,
+            male: 2,
+            female: 3,
             unknown: 0,
         },
         covid24hrsStat: {
@@ -329,6 +329,7 @@ const state: PageState = {
         },
         tempMin: 'http://bipaddev.yilab.org.np/media/bulletin/min/sdN1tB.webp',
         tempMax: 'http://bipaddev.yilab.org.np/media/bulletin/max/sdN1tB.webp',
+        dailySummary: '',
         feedback: [],
         province: 3,
         district: 27,

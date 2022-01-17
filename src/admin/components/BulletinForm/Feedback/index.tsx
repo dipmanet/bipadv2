@@ -1,24 +1,9 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import Input from '@material-ui/core/Input';
-import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import produce from 'immer';
-import {
-    incidentSummary,
-    peopleLoss,
-    hazardWiseLoss,
-    genderWiseLoss,
-    nepaliRef,
-    covid24hrsStat,
-    covidTotalStat,
-    vaccineStat,
-    covidProvinceWiseTotal,
-} from '../formFields';
 import styles from './styles.scss';
-import FileUploader from '#components/NewLoginModal/FileUploader';
 
 interface Props {
 

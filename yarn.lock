@@ -1836,6 +1836,11 @@
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
 
+"@sbmdkl/nepali-date-converter@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@sbmdkl/nepali-date-converter/-/nepali-date-converter-1.3.3.tgz#789e2907fe468aa896a88680551f4a13c78c58a8"
+  integrity sha512-exCcohAr2VqJp5EnMQ6uP7jCCS7DvvJZHv0pul1U9j6B1tHvhhCrSaCx/lPhvFHUMMKQ3kqgYvW0xg5TlsUuCQ==
+
 "@semantic-ui-react/event-stack@^3.1.0":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@semantic-ui-react/event-stack/-/event-stack-3.1.1.tgz#3263d17511db81a743167fe45281a24b3eb6b3c8"
@@ -10170,6 +10175,11 @@ neo-async@^2.5.0, neo-async@^2.6.0, neo-async@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
+
+nepali-date-converter@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/nepali-date-converter/-/nepali-date-converter-3.3.1.tgz#7b81c4b0a97572dd5ccfb69f2a973ad41d1ca15c"
+  integrity sha512-oiYJ+uWJGmdSEdJ+IEIZ4z1/vh5oTIgsEbzyoTR4tRn3vwJXtmuXOxiFzfWDUObbjPC68GoKotrm0rbD7Br8og==
 
 nice-try@^1.0.4:
   version "1.0.5"

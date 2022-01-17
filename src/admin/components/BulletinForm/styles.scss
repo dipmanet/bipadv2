@@ -7,9 +7,10 @@ $boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
         width: 25%;
     }
     .rightFormSection{
-        width: 70%;
+        width: 210mm;
         box-shadow: $boxShadow;
         background-color: white;
+
     }
     .buttonsContainer{
         width: calc(100% - 60px);

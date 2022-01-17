@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import {
     BarChart,
     Bar,
@@ -15,80 +16,27 @@ import LossItem from '../BulletinPDFLoss/LossItem';
 import { covidObj24HRs, covidObj24HRsRow2, covidObjTotal, vaccineStatObj } from './covid';
 import GenderStat from './GenderStat';
 import KhopBanner from './KhopBanner';
+import {
+    bulletinPageSelector,
+} from '#selectors';
 
+const mapStateToProps = state => ({
+    bulletinData: bulletinPageSelector(state),
+
+});
 interface Props {
 
 }
 
-const covid24hrsStat = {
-    affected: 45,
-    femaleAffected: 2,
-    maleAffected: 43,
-    deaths: 45,
-    recovered: 45,
-};
-
-const covidTotalStat = {
-    totalAffected: 0,
-    totalActive: 0,
-    totalRecovered: 0,
-    totalDeaths: 0,
-};
-
-
-const vaccineStat = {
-    firstDosage: 100,
-    secondDosage: 70,
-};
-
-const covidProvinceWiseTotal = {
-    p1: {
-        totalAffected: 1,
-        totalActive: 2,
-        totalDeaths: 3,
-    },
-    p2: {
-        totalAffected: 4,
-        totalActive: 5,
-        totalDeaths: 6,
-    },
-    bagmati: {
-        totalAffected: 7,
-        totalActive: 8,
-        totalDeaths: 9,
-    },
-    gandaki: {
-        totalAffected: 10,
-        totalActive: 11,
-        totalDeaths: 12,
-    },
-    lumbini: {
-        totalAffected: 13,
-        totalActive: 14,
-        totalDeaths: 15,
-    },
-    karnali: {
-        totalAffected: 16,
-        totalActive: 17,
-        totalDeaths: 18,
-    },
-    sudurpaschim: {
-        totalAffected: 19,
-        totalActive: 20,
-        totalDeaths: 21,
-    },
-};
-
-const feedback = [
-    'अविरल वर्षाका कारण स्थानीयवासीलाई उपचारका लागि अस्पताल पठाइएको र आकस्मिक सेवा परिचालन गरिएको छ',
-    'अविरल वर्षाका कारण स्थानीयवासीलाई उपचारका लागि अस्पताल पठाइएको र आकस्मिक सेवा परिचालन गरिएको छ',
-    'अविरल वर्षाका कारण स्थानीयवासीलाई उपचारका लागि अस्पताल पठाइएको र आकस्मिक सेवा परिचालन गरिएको छ',
-    'अविरल वर्षाका कारण स्थानीयवासीलाई उपचारका लागि अस्पताल पठाइएको र आकस्मिक सेवा परिचालन गरिएको छ',
-    'अविरल वर्षाका कारण स्थानीयवासीलाई उपचारका लागि अस्पताल पठाइएको र आकस्मिक सेवा परिचालन गरिएको छ',
-    'अविरल वर्षाका कारण स्थानीयवासीलाई उपचारका लागि अस्पताल पठाइएको र आकस्मिक सेवा परिचालन गरिएको छ',
-];
-
 const BulletinPDFLoss = (props: Props) => {
+    const {
+        covid24hrsStat,
+        covidTotalStat,
+        vaccineStat,
+        covidProvinceWiseTotal,
+        feedback,
+    } = props.bulletinData;
+
     const [provinceWiseTotal, setprovinceWiseTotal] = useState([]);
     const bullets = [
         <div style={{ width: '10px', height: '10px', backgroundColor: '#A6B2DE', marginRight: '3px' }} />,
@@ -105,7 +53,7 @@ const BulletinPDFLoss = (props: Props) => {
         console.log('cD', cD);
 
         setprovinceWiseTotal(cD);
-    }, []);
+    }, [covidProvinceWiseTotal]);
 
     return (
         <div className={styles.covidPDFContainer}>
@@ -263,4 +211,10 @@ const BulletinPDFLoss = (props: Props) => {
     );
 };
 
-export default BulletinPDFLoss;
+export default connect(mapStateToProps)(
+    // createConnectedRequestCoordinator<ReduxProps>()(
+    // createRequestClient(requests)(
+    BulletinPDFLoss,
+    // ),
+    // ),
+);

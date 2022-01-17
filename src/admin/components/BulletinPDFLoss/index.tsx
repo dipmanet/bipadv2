@@ -14,103 +14,40 @@ import {
     PieChart,
     Pie,
 } from 'recharts';
+import { connect } from 'react-redux';
 import GovLogo from 'src/admin/resources/govtLogo.svg';
+import NepaliDate from 'src/admin/components/NepaliDate';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
 import { nepaliRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
+import {
+    bulletinPageSelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    bulletinData: bulletinPageSelector(state),
+
+});
 
 interface Props {
 
 }
 
-const incidentSummaryData = {
-    numberOfIncidents: 0,
-    numberOfDeath: 0,
-    numberOfMissing: 0,
-    numberOfInjured: 0,
-    estimatedLoss: 0,
-    roadBlock: 0,
-    cattleLoss: 0,
-};
-
-export const hazardWiseLoss = {
-    पहिरो: {
-        deaths: 6,
-        incidents: 22,
-    },
-    'हुरी बतास': {
-        deaths: 1,
-        incidents: 10,
-    },
-    भूकम्प: {
-        deaths: 8,
-        incidents: 2,
-    },
-    'हेलिकप्टर दुर्घटना': {
-        deaths: 8,
-        incidents: 1,
-    },
-    डढेलो: {
-        deaths: 1,
-        incidents: 6,
-    },
-};
-
-const genderWiseLoss = {
-    male: 10,
-    female: 20,
-    unknown: 0,
-};
-
-const peopleLoss = {
-    p1: {
-        death: 0,
-        missing: 0,
-        injured: 1,
-    },
-    p2: {
-        death: 0,
-        missing: 0,
-        injured: 0,
-    },
-    bagmati: {
-        death: 0,
-        missing: 2,
-        injured: 0,
-    },
-    gandaki: {
-        death: 11,
-        missing: 8,
-        injured: 14,
-    },
-    lumbini: {
-        death: 0,
-        missing: 0,
-        injured: 4,
-    },
-    karnali: {
-        death: 4,
-        missing: 4,
-        injured: 16,
-    },
-    sudurpaschim: {
-        death: 2,
-        missing: 3,
-        injured: 0,
-    },
-
-};
-
 const COLORS_CHART = ['#DC4325', '#EC7F56', '#D6C3AF'];
 
 const BulletinPDF = (props: Props) => {
-    const [incidentSummary, setincidentSummaryData] = useState(incidentSummaryData);
+    const {
+        sitRep,
+        incidentSummary,
+        hazardWiseLoss,
+        genderWiseLoss,
+        peopleLoss,
+    } = props.bulletinData;
     const [provWiseLossChart, setProvWiseChart] = useState([]);
     const [hazardWiseLossChart, setHazardWiseChart] = useState([]);
     const [genderWiseLossChart, setGenderWiseChart] = useState([]);
-
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
         let gap;
@@ -168,18 +105,20 @@ const BulletinPDF = (props: Props) => {
         const pieChart = [
             {
                 name: 'पुरुष',
-                value: genderWiseLoss.male,
+                value: Number(genderWiseLoss.male),
             },
             {
                 name: 'महिला',
-                value: genderWiseLoss.female,
+                value: Number(genderWiseLoss.female),
             },
             {
                 name: 'पहिचान नभएको ',
-                value: genderWiseLoss.unknown,
+                value: Number(genderWiseLoss.unknown),
             },
         ];
         setGenderWiseChart(pieChart);
+
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
@@ -207,12 +146,17 @@ const BulletinPDF = (props: Props) => {
                     </div>
                     <div className={styles.reportTitles}>
                         <h1>दैनिक बिपद बुलेटिन</h1>
-                        <p>२ पौष २०७८ | SitRep #२१७</p>
+                        <p>
+                            <NepaliDate />
+                            {' '}
+                            | SitRep #
+                            {sitRep || 0}
+                        </p>
                     </div>
                 </div>
                 <div className={styles.loss}>
                     <h2>२४ घण्टा मा बिपदका विवरणहरु </h2>
-                    <p>१-२ पौष २०७८, बिहान १० बजे सम्म </p>
+                    {/* <p>१-२ पौष २०७८, बिहान १० बजे सम्म </p> */}
                     <div className={styles.lossIconsRow}>
                         {
                             lossObj.map(l => (
@@ -286,8 +230,8 @@ const BulletinPDF = (props: Props) => {
                 <h2>लिङ अनुसार मृत्‍युको बर्गिकरण </h2>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart
-                        // width={200}
-                        // height={150}
+                        width={200}
+                        height={150}
                         margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
                     >
                         <Pie
@@ -316,4 +260,10 @@ const BulletinPDF = (props: Props) => {
     );
 };
 
-export default BulletinPDF;
+export default connect(mapStateToProps)(
+    // createConnectedRequestCoordinator<ReduxProps>()(
+    // createRequestClient(requests)(
+    BulletinPDF,
+    // ),
+    // ),
+);

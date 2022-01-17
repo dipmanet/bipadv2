@@ -13,7 +13,7 @@ interface Centroid {
 type BBox = [number, number, number, number];
 
 export interface Bulletin {
-    sitrep: number;
+    sitRep: number;
     incidentSummary: {
         numberOfIncidents: number;
         numberOfDeath: number;

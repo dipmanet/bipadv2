@@ -1209,6 +1209,7 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.peopleLoss = bulletinData.peopleLoss;
         deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
+        deferedState.bulletinPage.sitRep = bulletinData.sitRep;
     });
 
     return newState;
@@ -1262,6 +1263,7 @@ export const setBulletinDataTemperature = (
         /* eslint-disable no-param-reassign */
         deferedState.bulletinPage.tempMin = bulletinData.tempMin;
         deferedState.bulletinPage.tempMax = bulletinData.tempMax;
+        deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
     });
 
     return newState;
