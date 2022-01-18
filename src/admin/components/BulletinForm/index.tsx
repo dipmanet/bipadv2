@@ -124,6 +124,24 @@ const requestQuery = ({
     ordering: '-incident_on',
     // lnd: true,
 });
+const requestQueryCovidNational = ({
+    params: {
+        startDate = `${today.toISOString().split('T')[0]}`,
+    } = {},
+}) => ({
+    limit: -1,
+    reported_on: startDate, // eslint-disable-line @typescript-eslint/camelcase
+});
+const requestQueryCovidQuarantine = ({
+    params: {
+        startDate = `${today.toISOString().split('T')[0]}`,
+    } = {},
+}) => ({
+    limit: -1,
+    summary: true,
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    summary_type: 'heoc_admin_overview_covid19_table',
+});
 
 const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     incidentsGetRequest: {
@@ -135,6 +153,36 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             if (params) {
                 params.setLossData(response.results);
             }
+        },
+    },
+    covidNationalInfo: {
+        url: '/covid19-nationalinfo/',
+        method: methods.GET,
+        query: requestQueryCovidNational,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            if (params) {
+                params.setCovidNational(response.results);
+            }
+        },
+    },
+    covidQuarantine: {
+        url: '/covid19-quarantineinfo/',
+        method: methods.GET,
+        query: requestQueryCovidQuarantine,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            if (params) {
+                params.setCovidQurantine(response.results);
+            }
+        },
+    },
+    sitRepQuery: {
+        url: '/bipad-bulletin/?ordering=-id&limit=1',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params: { setSitRep } }) => {
+            setSitRep(response.results[0].sitrep + 1);
         },
     },
 };
@@ -156,19 +204,28 @@ const Bulletin = (props: Props) => {
     const [activeProgressMenu, setActive] = useState(0);
     const [progress, setProgress] = useState(0);
     const [sitRep, setSitRep] = useState(0);
-    const incidentRef = useRef(null);
     const {
         setBulletinLoss,
         setBulletinCovid,
         setBulletinFeedback,
         setBulletinTemperature,
-        requests: { incidentsGetRequest },
+        requests: {
+            incidentsGetRequest,
+            covidNationalInfo,
+            covidQuarantine,
+            sitRepQuery,
+        },
         hazardTypes,
     } = props;
 
     const [lossData, setLossData] = useState();
+    const [covidNational, setCovidNational] = useState([]);
+    const [covidQuaratine, setCovidQurantine] = useState([]);
 
     incidentsGetRequest.setDefaultParams({ setLossData });
+    covidNationalInfo.setDefaultParams({ setCovidNational });
+    covidQuarantine.setDefaultParams({ setCovidQurantine });
+    sitRepQuery.setDefaultParams({ setSitRep });
 
     const handleDailySummary = (e) => {
         setDailySumamry(e.target.value);
@@ -180,9 +237,6 @@ const Bulletin = (props: Props) => {
     };
 
     const handleIncidentChange = (e, field) => {
-        console.log('e', e);
-        console.log('field', field);
-        console.log('incidentData', incidentData);
         const newState = produce(incidentData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
             deferedState[field] = e;
@@ -353,8 +407,6 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (lossData) {
-            console.log('lossData', lossData);
-
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
@@ -431,6 +483,89 @@ const Bulletin = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData]);
 
+    useEffect(() => {
+        if (covidNational.length > 0) {
+            console.log('covidNational', covidNational);
+            setcovid24hrsStat({
+                affected: covidNational[0].newCases || 0,
+                femaleAffected: covidNational[0].newCasesFemale || 0,
+                maleAffected: covidNational[0].newCasesMale || 0,
+                deaths: covidNational[0].newDeath || 0,
+                recovered: covidNational[0].newRecovered || 0,
+            });
+            setcovidTotalStat({
+                totalAffected: covidNational[0].totalInfected || 0,
+                // totalActive: covidNational[0]
+                totalRecovered: covidNational[0].totalRecovered || 0,
+                totalDeaths: covidNational[0].totalDeath || 0,
+            });
+        }
+    }, [covidNational]);
+
+    useEffect(() => {
+        if (covidQuaratine.length > 0) {
+            const p1Data = covidQuaratine.filter(p => p.provinceName === 'Province 1')[0];
+            const p2Data = covidQuaratine.filter(p => p.provinceName === 'Province 2')[0];
+            const p3Data = covidQuaratine.filter(p => p.provinceName === 'Bagmati')[0];
+            const p4Data = covidQuaratine.filter(p => p.provinceName === 'Gandaki')[0];
+            const p5Data = covidQuaratine.filter(p => p.provinceName === 'Lumbini')[0];
+            const p6Data = covidQuaratine.filter(p => p.provinceName === 'Karnali')[0];
+            const p7Data = covidQuaratine.filter(p => p.provinceName === 'Sudurpashchim')[0];
+            console.log('p7Data', p7Data);
+            console.log('covidQuaratine', covidQuaratine);
+            setcovidProvinceWiseTotal({
+                p1: {
+                    totalAffected: p1Data ? p1Data.totalPositive : 0,
+                    totalActive: p1Data
+                        ? (p1Data.totalPositive - p1Data.totalDeath - p1Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p1Data ? p1Data.totalDeath : 0,
+                },
+                p2: {
+                    totalAffected: p2Data ? p2Data.totalPositive : 0,
+                    totalActive: p2Data
+                        ? (p2Data.totalPositive - p2Data.totalDeath - p2Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p2Data ? p2Data.totalDeath : 0,
+                },
+                bagmati: {
+                    totalAffected: p3Data ? p3Data.totalPositive : 0,
+                    totalActive: p3Data
+                        ? (p3Data.totalPositive - p3Data.totalDeath - p3Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p3Data ? p3Data.totalDeath : 0,
+                },
+                gandaki: {
+                    totalAffected: p4Data ? p4Data.totalPositive : 0,
+                    totalActive: p4Data
+                        ? (p4Data.totalPositive - p4Data.totalDeath - p4Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p4Data ? p4Data.totalDeath : 0,
+                },
+                lumbini: {
+                    totalAffected: p5Data ? p5Data.totalPositive : 0,
+                    totalActive: p5Data
+                        ? (p5Data.totalPositive - p5Data.totalDeath - p5Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p5Data ? p5Data.totalDeath : 0,
+                },
+                karnali: {
+                    totalAffected: p6Data ? p6Data.totalPositive : 0,
+                    totalActive: p6Data
+                        ? (p6Data.totalPositive - p6Data.totalDeath - p6Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p6Data ? p6Data.totalDeath : 0,
+                },
+                sudurpaschim: {
+                    totalAffected: p7Data ? p7Data.totalPositive : 0,
+                    totalActive: p7Data
+                        ? (p7Data.totalPositive - p7Data.totalDeath - p7Data.totalRecovered)
+                        : 0,
+                    totalDeaths: p7Data ? p7Data.totalDeath : 0,
+                },
+            });
+        }
+    }, [covidQuaratine]);
     const formSections = [
         <DailyLoss
             handleIncidentChange={handleIncidentChange}
@@ -467,12 +602,25 @@ const Bulletin = (props: Props) => {
             handleDailySummary={handleDailySummary}
             dailySummary={dailySummary}
         />,
-        <PDFPreview />,
+        <PDFPreview
+            bulletinData={
+                { incidentSummary: incidentData,
+                    peopleLoss: peopleLossData,
+                    hazardWiseLoss: hazardWiseLossData,
+                    genderWiseLoss: genderWiseLossData,
+                    covidTwentyfourHrsStat: covid24hrsStatData,
+                    covidTotalStat: covidTotalStatData,
+                    vaccineStat: vaccineStatData,
+                    covidProvinceWiseTotal: covidProvinceWiseData,
+                    feedback,
+                    tempMax: maxTemp,
+                    tempMin: minTemp,
+                    dailySummary,
+                    sitrep: sitRep }
+            }
+        />,
     ];
 
-    useEffect(() => {
-        console.log('incidentData in parent', incidentData);
-    }, [incidentData]);
 
     return (
 
@@ -491,12 +639,14 @@ const Bulletin = (props: Props) => {
                     <button
                         type="button"
                         onClick={handlePrevBtn}
+                        className={styles.prevBtn}
                     >
                         Previous
                     </button>
                     <button
                         type="button"
                         onClick={handleNextBtn}
+                        className={styles.nextBtn}
                     >
                         Next
                     </button>

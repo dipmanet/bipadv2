@@ -166,4 +166,6 @@ export const nepaliRef = {
     totalActive: 'कुल सक्रिय संक्रमित संन्ख्या',
     totalDeaths: 'कुल मृत्‍यु संन्ख्या',
     totalRecovered: 'कुल निको भएका संन्ख्या',
+    firstDosage: 'पहिलो मात्रा',
+    secondDosage: 'दोस्रो मात्रा',
 };

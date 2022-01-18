@@ -1,26 +1,168 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-
+import { isList } from '@togglecorp/fujs';
+import axios from 'axios';
 import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
 import BulletinPDFFooter from 'src/admin/components/BulletinPDFFooter';
+import Loader from 'react-loader';
 import styles from './styles.scss';
+import {
+    userSelector,
+} from '#selectors';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+import Document from '#views/Profile/Document';
+
+const mapStateToProps = state => ({
+    user: userSelector(state),
+});
+
+const baseUrl = process.env.REACT_APP_API_SERVER_URL;
+
+// const requestQuery = ({
+//     params = {},
+// }) => ({
+//     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
+//     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
+//     ordering: '-incident_on',
+//     // lnd: true,
+// });
+
+const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
+    bulletinPostRequest: {
+        url: '/bipad-bulletin/',
+        method: methods.POST,
+        // query: requestQuery,
+        onMount: false,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, params }) => {
+            console.log('response', response);
+            params.doc.save('Bulletin.pdf');
+        },
+    },
+};
+
+const PDFPreview = (props) => {
+    const [province, setProvince] = useState(null);
+    const [district, setDistrict] = useState(null);
+    const [municipality, setMunicipality] = useState(null);
+    const [ward, setWard] = useState(null);
+    const [pending, setPending] = useState(false);
+
+    const {
+        bulletinData,
+        user,
+        requests: { bulletinPostRequest },
+    } = props;
+
+    const isFile = (input: any): input is File => (
+        'File' in window && input instanceof File
+    );
+    const isBlob = (input: any): input is Blob => (
+        'Blob' in window && input instanceof Blob
+    );
+
+    const sanitizeFormData = (value: any) => {
+        if (value === null) {
+            return '';
+        }
+        if (isFile(value) || isBlob(value) || typeof value === 'string') {
+            return value;
+        }
+        return JSON.stringify(value);
+    };
+
+    const getFormData = (jsonData: FormDataType | undefined) => {
+        const formDataNew = new FormData();
+        if (!jsonData) {
+            return formDataNew;
+        }
+
+        Object.entries(jsonData).forEach(
+            ([key, value]) => {
+                if (isList(value)) {
+                    value.forEach((val: unknown) => {
+                        if (val !== undefined) {
+                            const sanitizedVal = sanitizeFormData(val);
+                            formDataNew.append(key, sanitizedVal);
+                        }
+                    });
+                } else if (value !== undefined) {
+                    const sanitizedValue = sanitizeFormData(value);
+                    formDataNew.append(key, sanitizedValue);
+                }
+            },
+        );
+        return formDataNew;
+    };
+    const savePDf = (pdfFile, doc) => {
+        axios
+            .post(`${baseUrl}/bipad-bulletin/`, getFormData({
+                ...bulletinData,
+                province,
+                district,
+                municipality,
+                ward,
+                pdfFile,
+            }), {
+                headers: {
+                    Accept: 'application/json',
+                },
+            }).then((res) => {
+                doc.save('Bulletin.pdf');
+                setPending(false);
+            })
+            .catch((error) => {
+                setPending(false);
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    console.log(error.request);
+                } else {
+                    console.log('Error', error.message);
+                }
+            });
+    };
 
 
-const PDFPreview = () => {
+    useEffect(() => {
+        if (user && user.profile) {
+            if (user.profile.province) {
+                setProvince(user.profile.province);
+            }
+            if (user.profile.district) {
+                setDistrict(user.profile.district);
+            }
+            if (user.profile.municipality) {
+                setMunicipality(user.profile.municipality);
+            }
+            if (user.profile.ward) {
+                setWard(user.profile.ward);
+            }
+        }
+    }, [user]);
+
     const handleDownload = async (reportType: string) => {
-        let pageNumber = 1;
+        let pageNumber = 0;
+        setPending(true);
         const doc = new JsPDF('p', 'mm', 'a4');
         // const docSummary = new JsPDF('p', 'mm', 'a4');
 
 
         const ids = document.querySelectorAll('.page');
-        console.log('ids', ids);
         const { length } = ids;
-        console.log('length', length);
         for (let i = 0; i < length; i += 1) {
             const reportPage = document.getElementById(ids[i].id);
             console.log('reportpage, i', reportPage, i);
@@ -68,7 +210,19 @@ const PDFPreview = () => {
             });
         }
 
-        doc.save('Bulletin.pdf');
+        const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
+        savePDf(bulletin, doc);
+        // bulletinPostRequest.do({
+        //     body: {
+        //         ...bulletinData,
+        //         province,
+        //         district,
+        //         municipality,
+        //         ward,
+        //     },
+        //     doc,
+        // });
+        // doc.save('Bulletin.pdf');
     };
 
     return (
@@ -89,12 +243,26 @@ const PDFPreview = () => {
                 <button
                     type="button"
                     onClick={handleDownload}
+                    className={!pending ? styles.downloadBtn : styles.downloadBtnDisabled}
                 >
-                    Download Bulletin
+                    {
+                        pending
+                            ? '...Generating Bulletin'
+                            : 'Download Bulletin'
+                    }
+
                 </button>
             </div>
         </div>
+
     );
 };
 
-export default PDFPreview;
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            PDFPreview,
+        ),
+    ),
+);

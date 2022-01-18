@@ -83,12 +83,13 @@ const Bulletin = (props: Props) => {
                         <Input
                             type="text"
                             value={sitRep}
-                            onChange={e => handleSitRep(e.target.value)}
+                            // onChange={e => handleSitRep(e.target.value)}
                             className={styles.select}
                             disableUnderline
                             inputProps={{
                                 disableUnderline: true,
                             }}
+                            disabled
                             style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
                         />
                     </FormControl>

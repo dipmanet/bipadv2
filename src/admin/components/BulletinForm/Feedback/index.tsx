@@ -26,7 +26,7 @@ const Bulletin = (props: Props) => {
     return (
         <>
             <div className={styles.formContainer}>
-                <h2>२४ घण्टामा बिपद्का घटनाहरुमा भएको प्रतिकृया</h2>
+                <h2>२४ घण्टामा बिपद्का घटनाहरुमा भएको प्रतिकार्य</h2>
                 <div className={styles.pratikriyas}>
                     <ul>
                         {
@@ -70,7 +70,7 @@ const Bulletin = (props: Props) => {
                             onClick={handleFeedback}
                             type="button"
                         >
-                            + Submit Feedback
+                            + Submit
                         </button>
                     </div>
                 </div>
