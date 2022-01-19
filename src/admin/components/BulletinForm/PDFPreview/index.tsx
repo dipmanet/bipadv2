@@ -9,6 +9,7 @@ import axios from 'axios';
 import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
 import BulletinPDFFooter from 'src/admin/components/BulletinPDFFooter';
+import BulletinPDFAnnex from 'src/admin/components/BulletinPDFAnnex';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import styles from './styles.scss';
@@ -210,48 +211,21 @@ const PDFPreview = (props) => {
         const { length } = ids;
         for (let i = 0; i < length; i += 1) {
             const reportPage = document.getElementById(ids[i].id);
-            console.log('reportpage, i', reportPage, i);
-            // setPending(true);
-            // setProgress((i + 1) * 100 / (length + 1));
             await html2canvas(reportPage).then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
-                let imgWidth = 210;
-                let pageHeight = 295;
+                const imgWidth = 210;
+                const pageHeight = 295;
+
                 const imgHeight = canvas.height * imgWidth / canvas.width;
-                if (i > 3) {
-                    imgWidth = 295;
-                    pageHeight = 210;
-                }
-                let heightLeft = imgHeight;
-                let position = 0;
+                const heightLeft = imgHeight;
+                const position = 0;
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
 
-                if (i > 3) {
-                    heightLeft -= pageHeight;
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight; // top padding for other pages
-                        pageNumber += 1;
-                        doc.addPage('a4', 'landscape');
-                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                        // doc.text(200, 285, `page ${pageNumber}`);
-                        heightLeft -= pageHeight;
-                    }
-                }
-
-                if (i <= 1) {
+                if (i <= 2) {
                     // doc.text(270, 10, `page ${pageNumber}`);
                     doc.addPage('a4', 'portrait');
                     pageNumber += 1;
-                } else {
-                    // doc.text(270, 10, `page ${pageNumber}`);
-                    doc.addPage('a4', 'landscape');
-                    pageNumber += 1;
                 }
-                // if (i < (length - 1) && i >= 3) {
-                //     // doc.text(270, 10, `page ${pageNumber}`);
-                //     doc.addPage('a4', 'landscape');
-                //     pageNumber += 1;
-                // }
             });
         }
 
@@ -277,6 +251,10 @@ const PDFPreview = (props) => {
                 <BulletinPDFFooter />
 
             </div>
+            <div id="page4" className="page">
+                <BulletinPDFAnnex />
+
+            </div>
             <div className={styles.btnContainer}>
                 <button
                     type="button"
@@ -297,7 +275,7 @@ const PDFPreview = (props) => {
 };
 
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
         createRequestClient(requests)(
             PDFPreview,
