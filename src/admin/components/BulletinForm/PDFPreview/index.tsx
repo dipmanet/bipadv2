@@ -10,10 +10,15 @@ import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
 import BulletinPDFFooter from 'src/admin/components/BulletinPDFFooter';
 import Loader from 'react-loader';
+import { navigate } from '@reach/router';
 import styles from './styles.scss';
 import {
     userSelector,
+    bulletinEditDataSelector,
 } from '#selectors';
+import {
+    setBulletinEditDataAction,
+} from '#actionCreators';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
@@ -25,6 +30,12 @@ import Document from '#views/Profile/Document';
 
 const mapStateToProps = state => ({
     user: userSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
+
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
 
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
@@ -63,6 +74,8 @@ const PDFPreview = (props) => {
         bulletinData,
         user,
         requests: { bulletinPostRequest },
+        bulletinEditData,
+        setBulletinEditData,
     } = props;
 
     const isFile = (input: any): input is File => (
@@ -121,6 +134,38 @@ const PDFPreview = (props) => {
             }).then((res) => {
                 doc.save('Bulletin.pdf');
                 setPending(false);
+            })
+            .catch((error) => {
+                setPending(false);
+                if (error.response) {
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    console.log(error.request);
+                } else {
+                    console.log('Error', error.message);
+                }
+            });
+    };
+    const updatePDF = (pdfFile, doc) => {
+        axios
+            .patch(`${baseUrl}/bipad-bulletin/${bulletinEditData.id}/`, getFormData({
+                ...bulletinData,
+                province,
+                district,
+                municipality,
+                ward,
+                pdfFile,
+            }), {
+                headers: {
+                    Accept: 'application/json',
+                },
+            }).then((res) => {
+                doc.save('Bulletin.pdf');
+                setPending(false);
+                setBulletinEditData({});
+                navigate('/admin/bulletin/bulletin-table');
             })
             .catch((error) => {
                 setPending(false);
@@ -211,18 +256,11 @@ const PDFPreview = (props) => {
         }
 
         const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
-        savePDf(bulletin, doc);
-        // bulletinPostRequest.do({
-        //     body: {
-        //         ...bulletinData,
-        //         province,
-        //         district,
-        //         municipality,
-        //         ward,
-        //     },
-        //     doc,
-        // });
-        // doc.save('Bulletin.pdf');
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            updatePDF(bulletin, doc);
+        } else {
+            savePDf(bulletin, doc);
+        }
     };
 
     return (

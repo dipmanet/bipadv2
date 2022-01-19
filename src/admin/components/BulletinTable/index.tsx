@@ -7,7 +7,8 @@
 /* eslint-disable react/jsx-indent */
 // / <reference no-default-lib="true"/>
 
-import * as React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -29,11 +30,22 @@ import DownloadIcon from '@mui/icons-material/Download';
 // import EditIcon from '../../../resources/editicon.svg';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-
 import Loader from 'react-loader';
+import { navigate } from '@reach/router';
+import { setBulletinEditDataAction } from '#actionCreators';
+import { bulletinEditDataSelector } from '#selectors';
 import styles from './styles.module.scss';
 
 import { tableTitleRef } from './utils';
+
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
+});
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    bulletinEditData: bulletinEditDataSelector(state),
+});
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -129,20 +141,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell
-                    align="center"
-                    padding="checkbox"
-                    sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
 
-                >
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        style={{ visibility: 'hidden' }}
-                    />
-                </TableCell>
                 {headCells.map(headCell => (
                     <TableCell
                         align="left"
@@ -243,10 +242,13 @@ const BulletinTable = (props) => {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
-    const { bulletinTableData } = props;
-    const handleTableEdit = () => {
-        console.log('table edit');
+    const { bulletinTableData, setBulletinEditData, bulletinEditData } = props;
+    const handleTableEdit = (row) => {
+        console.log('row', row);
+        setBulletinEditData(row);
+        navigate('/admin/bulletin/bulletin-form');
     };
+
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -347,7 +349,7 @@ const BulletinTable = (props) => {
                                         className={styles.tablePagination}
                                         rowsPerPageOptions={[100]}
                                         component="div"
-                                        count={3}
+                                        count={bulletinTableData.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         onPageChange={() => console.log('dfsfs')}
@@ -399,19 +401,7 @@ const BulletinTable = (props) => {
                                                             key={row.id}
                                                             selected={isItemSelected}
                                                         >
-                                                            <TableCell
-                                                                align="center"
-                                                                padding="normal"
-                                                            >
-                                                                <Checkbox
-                                                                    color="primary"
-                                                                    onChange={e => handleCheck(e, row.id)}
-                                                                    checked={isItemSelected}
-                                                                    inputProps={{
-                                                                        'aria-labelledby': labelId,
-                                                                    }}
-                                                                />
-                                                            </TableCell>
+
                                                             <>
             {
                 Object.keys(tableTitleRef).map((k) => {
@@ -474,7 +464,7 @@ const BulletinTable = (props) => {
                                 {row.incidentSummary.roadBlock}
                             </TableCell>
                         );
-                    } if (k === 'estimatedLoss') {
+                    } if (k === 'cattleLoss') {
                         return (
                             <TableCell
                                 align="center"
@@ -1075,7 +1065,7 @@ const BulletinTable = (props) => {
                                  padding="normal"
                         >
                                 <IconButton
-                                    onClick={handleTableEdit}
+                                    onClick={() => handleTableEdit(row)}
                             >
                                 <EditIcon />
                                 </IconButton>
@@ -1117,4 +1107,6 @@ const BulletinTable = (props) => {
     );
 };
 
-export default BulletinTable;
+export default connect(mapStateToProps, mapDispatchToProps)(
+            BulletinTable,
+);

@@ -198,6 +198,7 @@ const state: PageState = {
             pristine: true,
         },
     },
+    bulletinEditData: {},
     bulletinPage: {
         sitRep: 123,
         incidentSummary: {

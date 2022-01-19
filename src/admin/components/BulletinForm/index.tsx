@@ -44,6 +44,7 @@ import {
     filtersSelector,
     hazardTypesSelector,
     regionsSelector,
+    bulletinEditDataSelector,
 } from '#selectors';
 import { setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
     setEventListAction } from '#actionCreators';
@@ -97,6 +98,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
     regions: regionsSelector(state),
     filters: filtersSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 
 
@@ -148,7 +150,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         url: '/incident/',
         method: methods.GET,
         query: requestQuery,
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, params }) => {
             if (params) {
                 params.setLossData(response.results);
@@ -159,7 +161,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         url: '/covid19-nationalinfo/',
         method: methods.GET,
         query: requestQueryCovidNational,
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, params }) => {
             if (params) {
                 params.setCovidNational(response.results);
@@ -170,7 +172,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         url: '/covid19-quarantineinfo/',
         method: methods.GET,
         query: requestQueryCovidQuarantine,
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, params }) => {
             if (params) {
                 params.setCovidQurantine(response.results);
@@ -180,7 +182,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     sitRepQuery: {
         url: '/bipad-bulletin/?ordering=-id&limit=1',
         method: methods.GET,
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, params: { setSitRep } }) => {
             setSitRep(response.results[0].sitrep + 1);
         },
@@ -209,6 +211,7 @@ const Bulletin = (props: Props) => {
         setBulletinCovid,
         setBulletinFeedback,
         setBulletinTemperature,
+        bulletinEditData,
         requests: {
             incidentsGetRequest,
             covidNationalInfo,
@@ -218,6 +221,7 @@ const Bulletin = (props: Props) => {
         hazardTypes,
     } = props;
 
+
     const [lossData, setLossData] = useState();
     const [covidNational, setCovidNational] = useState([]);
     const [covidQuaratine, setCovidQurantine] = useState([]);
@@ -226,6 +230,31 @@ const Bulletin = (props: Props) => {
     covidNationalInfo.setDefaultParams({ setCovidNational });
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
+
+
+    useEffect(() => {
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            console.log('...setting edit data, edit mode');
+            setSitRep(bulletinEditData.sitrep);
+            setIncidentData(bulletinEditData.incidentSummary);
+            setPeopleLoss(bulletinEditData.peopleLoss);
+            setHazardwise(bulletinEditData.hazardWiseLoss);
+            setgenderWiseLoss(bulletinEditData.genderWiseLoss);
+            setcovid24hrsStat(bulletinEditData.covidTwentyfourHrsStat);
+            setcovidTotalStat(bulletinEditData.covidTotalStat);
+            setvaccineStat(bulletinEditData.vaccineStat);
+            setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
+            setDailySumamry(bulletinEditData.dailySummary);
+        } else {
+            console.log('...fetching data, not edit mode');
+            incidentsGetRequest.do();
+            covidNationalInfo.do();
+            covidQuarantine.do();
+            sitRepQuery.do();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bulletinEditData]);
+
 
     const handleDailySummary = (e) => {
         setDailySumamry(e.target.value);
@@ -407,6 +436,7 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (lossData) {
+            console.log('loss data changed', lossData);
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
