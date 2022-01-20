@@ -1,0 +1,35 @@
+.pdfContainer{
+    // border: 1px solid red;
+    padding: 0;
+    background-color: #f8f8f8;
+   .downloadBtn{
+       margin-left: 10px;
+      background: #003572;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 3px;
+      color: rgba(255,255,255,0.95);
+      cursor: pointer;
+        filter: saturate(100%);
+        margin-bottom: 30px;
+        margin-top: 10px;
+       .loaderContainer{
+           width:5px;
+           height: 5px;
+        //    border: 1px solid red;
+        //    position: absolute;
+           left:0;
+       }
+   }
+   .downloadBtnDisabled{
+    @extend .downloadBtn;
+    background-color: gray;
+    cursor:not-allowed;
+   }
+    .btnContainer{
+        display: flex;
+        justify-content: flex-end;
+        background-color: white;
+        padding-right: 16mm;
+    }
+}

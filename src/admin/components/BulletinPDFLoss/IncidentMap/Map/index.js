@@ -158,6 +158,7 @@ const IncidentMap = (props) => {
             center: [84.2676, 28.5465],
             minZoom: 2,
             maxZoom: 22,
+            preserveDrawingBuffer: true,
         });
         // mapRef.current = Map;
 

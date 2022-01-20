@@ -23,6 +23,10 @@ export const setBulletinTemperatureAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE,
     bulletinData,
 });
+export const setBulletinEditDataAction = bulletinEditData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA,
+    bulletinEditData,
+});
 
 // bulletin actions end
 // Epidemics
@@ -1214,6 +1218,7 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.peopleLoss = bulletinData.peopleLoss;
         deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
+        deferedState.bulletinPage.sitRep = bulletinData.sitRep;
     });
 
     return newState;
@@ -1267,6 +1272,23 @@ export const setBulletinDataTemperature = (
         /* eslint-disable no-param-reassign */
         deferedState.bulletinPage.tempMin = bulletinData.tempMin;
         deferedState.bulletinPage.tempMax = bulletinData.tempMax;
+        deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
+    });
+
+    return newState;
+};
+
+export const setBulletinEditData = (
+    state: Type.PageState,
+    action: Type.SetBulletinEditData,
+) => {
+    const {
+        bulletinEditData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinEditData = bulletinEditData;
     });
 
     return newState;
@@ -1412,6 +1434,8 @@ export default function routeReducer(
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
+            return setBulletinEditData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN:
             return setBulletinLoss(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:

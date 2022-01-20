@@ -89,7 +89,7 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                <h3>हालसम्मको कुल तथ्याङ्क</h3>
+                <h3>खोपको विवरण </h3>
                 <div className={styles.formSubContainer}>
                     { Object.keys(vaccineStat).map((field, idx) => (
 

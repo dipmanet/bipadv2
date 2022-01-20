@@ -13,7 +13,7 @@ interface Centroid {
 type BBox = [number, number, number, number];
 
 export interface Bulletin {
-    sitrep: number;
+    sitRep: number;
     incidentSummary: {
         numberOfIncidents: number;
         numberOfDeath: number;
@@ -652,6 +652,8 @@ export interface PageState {
     profileContactPage: ProfileContactPage;
     bulletinPage: Bulletin;
     epidemicsPage: EpidemicPage;
+    bulletinEditData: Bulletin;
+
 }
 
 
@@ -732,6 +734,8 @@ export enum PageType {
     ADMIN__PORTAL_BULLETIN_COVID = 'page/ADMIN__PORTAL_BULLETIN_COVID',
     ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
+    ADMIN__PORTAL_BULLETIN_EDIT_DATA = 'page/ADMIN__PORTAL_BULLETIN_EDIT_DATA',
+
     // Epidemics
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
@@ -747,6 +751,12 @@ export interface SetBulletinData {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN;
     bulletinData: Bulletin;
 }
+
+export interface SetBulletinEditData {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA;
+    bulletinEditData: Bulletin;
+}
+
 export interface SetBulletinDataCovid {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_COVID;
     bulletinData: Bulletin;
@@ -1045,5 +1055,5 @@ export type PageActionTypes = (
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
     SetDashboardHazardType | SetBulletinDataCovid
-    | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage
+    | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage | SetBulletinEditData
 );

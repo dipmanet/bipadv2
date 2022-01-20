@@ -34,6 +34,7 @@ export const resourceTypeListSelector = ({ page }: AppState) => (
 );
 // bulletin page
 export const bulletinPageSelector = ({ page }: AppState) => page.bulletinPage;
+export const bulletinEditDataSelector = ({ page }: AppState) => page.bulletinEditData;
 
 export const filtersSelector = ({ page }: AppState) => page.filters;
 

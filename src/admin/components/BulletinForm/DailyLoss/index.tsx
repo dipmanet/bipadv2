@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from '@material-ui/core/Input';
 import { connect } from 'react-redux';
 import Select from '@material-ui/core/Select';
@@ -7,10 +7,39 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import produce from 'immer';
+import memoize from 'memoize-one';
+import {
+    listToGroupList,
+    isDefined,
+    listToMap,
+} from '@togglecorp/fujs';
+import {
+    sum,
+    saveChart,
+    encodeDate,
+} from '#utils/common';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    NewProps,
+    ClientAttributes,
+    methods,
+} from '#request';
+import {
+    setIncidentListActionIP,
+    setEventListAction,
+} from '#actionCreators';
+import {
+    incidentListSelectorIP,
+    filtersSelector,
+    hazardTypesSelector,
+    regionsSelector,
+} from '#selectors';
+
 import {
     incidentSummary,
     peopleLoss,
-    hazardWiseLoss,
+    // hazardWiseLoss,
     genderWiseLoss,
     nepaliRef,
 } from '../formFields';
@@ -24,6 +53,7 @@ interface Props {
     handlegenderWiseLoss: (e: Record<string, undefined>) => void;
 }
 
+
 const Bulletin = (props: Props) => {
     const {
         handleIncidentChange,
@@ -34,6 +64,8 @@ const Bulletin = (props: Props) => {
         peopleLossData,
         hazardWiseLossData,
         genderWiseLossData,
+        sitRep,
+        handleSitRep,
     } = props;
 
 
@@ -44,6 +76,23 @@ const Bulletin = (props: Props) => {
                 <h3>२४ घण्टामा बिपद्को विवरणहरु</h3>
 
                 <div className={styles.formSubContainer}>
+                    <FormControl fullWidth>
+                        <InputLabel>
+                            {'Sit Rep'}
+                        </InputLabel>
+                        <Input
+                            type="text"
+                            value={sitRep}
+                            // onChange={e => handleSitRep(e.target.value)}
+                            className={styles.select}
+                            disableUnderline
+                            inputProps={{
+                                disableUnderline: true,
+                            }}
+                            disabled
+                            style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                        />
+                    </FormControl>
                     { Object.keys(incidentSummary).map((field, idx) => (
 
                         <div className={idx > 0 ? styles.formItemHalf : styles.formItem}>
@@ -54,7 +103,7 @@ const Bulletin = (props: Props) => {
                                 <Input
                                     type="number"
                                     value={incidentData[field]}
-                                    onChange={e => handleIncidentChange(e, field)}
+                                    onChange={e => handleIncidentChange(e.target.value, field)}
                                     className={styles.select}
                                     disableUnderline
                                     inputProps={{
@@ -97,10 +146,10 @@ const Bulletin = (props: Props) => {
                 </div>
                 <h3>प्रकोप अनुसार मृत्यू, बेपत्ता र घाइते संन्ख्याको बर्गिकरण</h3>
                 <div className={styles.formSubContainer}>
-                    { Object.keys(hazardWiseLoss).map(field => (
+                    { Object.keys(hazardWiseLossData).map(field => (
                         <>
                             <h3>{field}</h3>
-                            { Object.keys(hazardWiseLoss[field]).map(subField => (
+                            { Object.keys(hazardWiseLossData[field]).map(subField => (
                                 <div className={styles.formItemHalf}>
                                     <FormControl fullWidth>
                                         <InputLabel>
@@ -156,5 +205,4 @@ const Bulletin = (props: Props) => {
 
     );
 };
-
 export default Bulletin;
