@@ -73,6 +73,22 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
     },
     {
+        name: 'epidemics-table',
+        title: 'Epidemics Table',
+        path: '/admin/epidemics-table',
+        load: () => import('../admin/views/EpidemicsTable'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
+        name: 'epidemics-upload',
+        title: 'Epidemics Table',
+        path: '/admin/epidemics-upload',
+        load: () => import('../admin/views/EpidemicBulkUpload'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
         name: 'healthinfrastructure',
         title: 'Health Infrastructure',
         path: '/admin/health-infrastructure',

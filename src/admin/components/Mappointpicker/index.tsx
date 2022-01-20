@@ -1,5 +1,11 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable max-len */
+// / <reference no-default-lib="true"/>
 
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable no-mixed-spaces-and-tabs */
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import LayersIcon from '@mui/icons-material/Layers';
 import mapboxgl from 'mapbox-gl';
 import styles from './styles.module.scss';
 import Satelliteimg from '../../resources/mapbox-satellite.png';
@@ -24,7 +30,7 @@ interface Props{
     };
 }
 
-const Mappicker = (props: Props) => {
+const index = (props: Props): JSX.Element => {
     const { centriodsForMap, resetMap, editedCoordinates,
         initialProvinceCenter,
         initialDistrictCenter,
@@ -112,16 +118,14 @@ const Mappicker = (props: Props) => {
                 },
                 // When active the map will receive updates to the device's location as it changes.
                 trackUserLocation: true,
-                // Draw an arrow next to the location dot to indicate which
-                // direction the device is heading.
+                // Draw an arrow next to the location dot to indicate which direction the device is heading.
                 showUserHeading: true,
             }),
         );
         const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
         if (editedCoordinates) {
             if (Object.keys(editedCoordinates).length > 0) {
-                const coordinates = { lat: editedCoordinates.point.coordinates[1],
-                    lng: editedCoordinates.point.coordinates[0] };
+                const coordinates = { lat: editedCoordinates.point.coordinates[1], lng: editedCoordinates.point.coordinates[0] };
                 const popup1 = new mapboxgl.Popup({ anchor: 'top' })
                     .setLngLat(coordinates)
                     .setHTML(` Lattitude : ${coordinates.lat}  Longitude : ${coordinates.lng}`)
@@ -347,14 +351,7 @@ const Mappicker = (props: Props) => {
                 });
             }
         });
-    }, [UNSUPPORTED_BROWSER,
-        centriodsForMap,
-        editedCoordinates,
-        initialDistrictCenter,
-        initialMunCenter,
-        initialProvinceCenter,
-        mapStyles,
-        props.disabled]);
+    }, [UNSUPPORTED_BROWSER, centriodsForMap, editedCoordinates, initialDistrictCenter, initialMunCenter, initialProvinceCenter, mapStyles, props.disabled]);
 
 
     useEffect(() => {
@@ -512,39 +509,34 @@ const Mappicker = (props: Props) => {
     };
 
     return (
-        <div className={styles.mapCSS} ref={mapContainerRef}>
-            <div className={styles.adminLvlTogglerMain}>
-                {/* <LayersIcon className={styles.layerIcon} onClick={handleClose} /> */}
-                <div className={showToggler ? styles.adminLvlToggler : styles.adminLvlTogglerHide}>
-                    {mapStyles.map(item => (
-                        <>
-                            <div
-                                className={styles.mapStyles}
-                                role="presentation"
-                                onKeyDown={() => handleStyleChange(item.style)}
-                                onClick={
-                                    () => handleStyleChange(item.style)
-                                }
-                            >
-                                <img src={item.icon} alt="" />
-                                <div className={styles.titleDescription}>
-                                    <span className={styles.title}>
-                                        {item.title}
+        <>
+            <div className={styles.mapCSS} ref={mapContainerRef}>
+                <div className={styles.adminLvlTogglerMain}>
+                    <LayersIcon className={styles.layerIcon} onClick={handleClose} />
+                    <div className={showToggler ? styles.adminLvlToggler : styles.adminLvlTogglerHide}>
+                        {mapStyles.map(item => (
+                            <>
+                                <div className={styles.mapStyles} role="presentation" onClick={() => handleStyleChange(item.style)}>
+                                    <img src={item.icon} alt="" />
+                                    <div className={styles.titleDescription}>
+                                        <span className={styles.title}>
+                                            {item.title}
 :
-                                    </span>
-                                    <span className={styles.description}>
-                                        {' '}
-                                        {item.description.slice(0, 55)}
+                                        </span>
+                                        <span className={styles.description}>
+                                            {' '}
+                                            {item.description.slice(0, 55)}
 ...
-                                    </span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </>
-                    ))}
+                            </>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
-export default Mappicker;
+export default index;

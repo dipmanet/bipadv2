@@ -49,7 +49,6 @@ const SubMenu = (props: Props) => {
                         ))
                     }
                 </div>
-
             }
         </div>
     );

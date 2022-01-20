@@ -1,0 +1,201 @@
+
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+$boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
+$theme-accent-color: #002e76;
+$theme-color: #3e3e3e;
+
+
+.bulkUploadContainer{
+	padding:150px 160px ;
+	.firstRowSection{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		.headTextAres{
+			width: 60%;
+			.generalInformation{
+            font-family: $Fira;
+			font-size: 24px;
+			}
+			.ideaDescription{
+				display: flex;
+				font-family: $Fira;
+				.ideaIcon{
+					margin-top: 15px;
+					margin-right: 10px;
+					height: 24px;
+				}
+				.shortDescription{
+					font-family: $Fira;
+					font-size: 14px;
+				}
+			}
+		}
+		.maintoggler{
+			padding: 4px;
+			background-color:#EBF4FE ;
+			border-radius: 3px;
+			.togglerIndGro{
+             padding: 8px 16px;
+			//  background-color: transparent;
+			 border: none;
+			 border-radius: 3px;
+			 font-family: $Fira;
+			 font-size: 14px;
+			 color: black;
+			 cursor: pointer;
+			}
+			.togglerIndGroActive{
+				padding: 8px 16px;
+				background-color: #003572;
+				border: none;
+				border-radius: 3px;
+				font-family: $Fira;
+				font-size: 14px;
+				color: #FFFFFF;
+				cursor: pointer;
+			}
+		}
+		.downloadTemplate{
+			color: white;
+			background-color: #003572;
+			border: none;
+			outline: none;
+			font-size: 14px;
+			padding: 10px 20px;
+			border-radius: 3px;
+			font-family: $Fira;
+			cursor: pointer;
+		}
+	}
+	.secondRowSection{
+		display: flex;
+		align-items: center;
+		padding: 50px 0px;
+		.uploadImageArea{
+			.app{
+				.container{
+					.dropzone {
+						img {
+
+							width: 150px;
+						}
+					}
+					p{
+						padding-left: 10px;
+					}
+				}
+			}
+		}
+		.formArea{
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			.datasetTitle{
+				width: 100%;
+				margin: 15px;
+				background-color: $inputBackground;
+				border: none;
+				outline: none;
+				border-radius: 3px;
+				// padding: 5px;
+			}
+			.textArea{
+				width: 100%;
+				border: 1px solid rgb(199, 199, 199);
+				margin: 15px;
+				background-color: $inputBackground;
+				outline: none;
+				border-radius: 3px;
+				font-size: 16px;
+				padding: 8px 0px 0px 0px;
+				text-indent: 13px;
+				font-family: $Fira;
+				resize: none;
+			}
+			.buttonSection{
+				margin: 15px;
+				.uploadButton{
+					color: white;
+					background-color: #003572;
+					border: none;
+					outline: none;
+					font-size: 16px;
+					padding: 10px 25px;
+					border-radius: 3px;
+					font-family: $Fira;
+					cursor: pointer;
+				}
+				.cancelButton{
+					background-color: transparent;
+					color: #3E3E3E;
+					border: none;
+					outline: none;
+					font-size: 16px;
+					padding: 10px 25px;
+					border-radius: 3px;
+					font-family: $Fira;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+	.thirdRowSection{
+		background-color: #FEFEFE;
+		box-shadow: $boxShadow;
+		padding: 60px 54px 45px 54px;
+		.uploadFileDisplay{
+			font-style: $Fira;
+			font-size: 24px;
+			color: #3E3E3E;
+		}
+		.mainTableSection{
+				width: 100%;
+				.table{
+					// box-shadow: $boxShadow;
+					border-collapse: collapse;
+					width: 100%;
+					.row{
+						border:1px solid #D0D0D0;
+						// box-shadow: $boxShadow;
+						h1{
+							font-size: 20px;
+							margin-left: 20px;
+							color:$theme-accent-color;
+							padding: 15px 0 20px 0;
+						}
+						.btn{
+							border:none;
+							background:#F2F4FD;
+							padding: 10px;
+							cursor: pointer;
+							color:#003572;
+							border-radius:3px;
+						}
+					}
+					.cell{
+						border: none;
+						text-align:center;
+						padding: 15px 10px;
+						color: #003572;
+
+			
+					}
+					.head{
+						border: none;
+						text-align:center;
+						background: #DCECFE;
+						background:#E5E5E5;
+						font-size: 14px;
+						color: #3e3e3e;
+						td{
+							color:#3e3e3e;
+							padding: 15px 10px;
+
+						}
+					}
+				}
+		}
+	}
+}

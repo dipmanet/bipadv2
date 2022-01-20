@@ -1,10 +1,13 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import navigate from '@reach/router';
+import { navigate } from '@reach/router';
 import Navbar from 'src/admin/components/Navbar';
 import Footer from 'src/admin/components/Footer';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Map from 'src/admin/components/Mappointpicker';
+import Modal from 'src/admin/components/Modal';
 
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { DatePicker } from '@mui/lab';
@@ -16,13 +19,286 @@ import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
 import Ideaicon from '../../resources/ideaicon.svg';
 import Page from '#components/Page';
+
+import {
+    lossFormDataInitial,
+    incidentFormDataInitial,
+    deadMaleInitial,
+    deadFemaleInitial,
+    deadOtherInitial,
+    deadDisabledInitial,
+    injuredMaleInitial,
+    injuredFemaleInitial,
+    injuredOtherInitial,
+    injuredDisabledInitial,
+} from './utils';
+
 import {
     districtsSelector,
     municipalitiesSelector,
     provincesSelector,
     wardsSelector,
+    epidemicsPageSelector,
 } from '#selectors';
+import { SetEpidemicsPageAction } from '#actionCreators';
 
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+
+
+const mapStateToProps = (state, props) => ({
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+    epidemmicsPage: epidemicsPageSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setEpidemicsPage: params => dispatch(SetEpidemicsPageAction(params)),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    loss: {
+        url: '/loss/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ lossID: response.id });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    incident: {
+        url: '/incident/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Incident added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadMale: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadFemale: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadOther: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadDisabled: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredMale: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredFemale: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredOther: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredDisabled: {
+        url: '/loss-people/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+};
 
 interface EpidemicState {
     epidemic: {
@@ -44,11 +320,11 @@ interface EpidemicState {
             'loss': number;
             'verified': boolean;
             'approved': boolean;
-            'incident_on': Date;
-            'reported_on': Date;
-            'verification_message': string;
+            'incidentOn': Date;
+            'reportedOn': Date;
+            'verificationMessage': string;
             'hazard': number;
-            'street_address': string;
+            'streetAddress': string;
             'point': {
                 'type': string;
                 'coordinates': number[];
@@ -63,11 +339,11 @@ interface EpidemicState {
             'loss': number;
             'verified': boolean;
             'approved': boolean;
-            'incident_on': Date;
-            'reported_on': Date;
-            'verification_message': string;
+            'incidentOn': Date;
+            'reportedOn': Date;
+            'verificationMessage': string;
             'hazard': number;
-            'street_address': string;
+            'streetAddress': string;
             'point': {
                 'type': string;
                 'coordinates': number[];
@@ -78,12 +354,7 @@ interface EpidemicState {
         };
     };
 }
-const mapStateToProps = (state, props) => ({
-    provinces: provincesSelector(state),
-    districts: districtsSelector(state),
-    municipalities: municipalitiesSelector(state),
-    wards: wardsSelector(state),
-});
+
 
 const Epidemics = (props) => {
     const [uniqueId, setuniqueId] = useState('');
@@ -157,6 +428,41 @@ const Epidemics = (props) => {
     const [initialDistrictCenter, setinitialDistrictCenter] = useState([]);
     const [initialMunCenter, setinitialMunCenter] = useState([]);
 
+    const { epidemmicsPage:
+        {
+            lossID,
+            lossPeopleError,
+            incidentError,
+            incidentUpdateError,
+            lossError,
+        } } = props;
+
+    const clearData = () => {
+        setuniqueId('');
+        setReportedDate(null);
+        setCause('');
+        setprovinceName('');
+        setdistrictName('');
+        setmunicipalityName('');
+        setwardName('');
+        setStreetAddress('');
+        setLattitude('');
+        setLongitude('');
+        setDeadMale('');
+        setDeadFemale('');
+        setDeadOther('');
+        setDeadDisabled('');
+        setInjuredMale('');
+        setInjuredFemale('');
+        setInjuredOther('');
+        setInjuredDisabled('');
+        setverified(false);
+        setNotVerified(false);
+        setApproved(false);
+        setNotApproved(false);
+        setVerificationMessage('');
+    };
+
     const centriodsForMap = {
         provinceName,
         districtName,
@@ -219,13 +525,302 @@ const Epidemics = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [municipalityName]);
 
-    console.log(provinces, districts, municipalities, wards);
+    useEffect(() => {
+        if (provinceId) {
+            const temp = provinceDataIs.filter(item => item.id === provinceId)
+                .map(item => item.centroid.coordinates)[0];
+            setprovinceCentriodForMap(temp);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [provinceId]);
+
+    useEffect(() => {
+        const id = wards.filter(item => item.municipality === municipalityId)
+            .filter(item => item.title === String(wardName)).map(item => item.id)[0];
+        if (wardName) {
+            setwardId(id);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [wardName]);
+
+    const handleVerifiedChange = () => {
+        setverified(true);
+        setNotVerified(false);
+    };
+    const handleNotVerifiedChange = () => {
+        setverified(false);
+        setNotVerified(true);
+    };
+    const handleApprovedChange = () => {
+        setApproved(true);
+        setNotApproved(false);
+    };
+    const handleNotApprovedChange = () => {
+        setApproved(false);
+        setNotApproved(true);
+    };
+
+    const handleUpdateSuccess = () => {
+        setAdded(false);
+        setUpdated(false);
+        setError(false);
+        navigate('/admin/epidemics-table');
+    };
+    const handleAddedSuccess = () => {
+        setAdded(false);
+        setUpdated(false);
+        setError(false);
+        clearData();
+    };
+    const handleErrorClose = () => {
+        setAdded(false);
+        setUpdated(false);
+        setError(false);
+    };
+    const handleTableButton = () => {
+        navigate('/admin/epidemics-table');
+    };
+
+    const handleEpidemicFormSubmit = async () => {
+        if (!reportedDate || !provinceName || !districtName || !municipalityName || !wardName
+            || !lattitude || !longitude || !deadFormMale || !deadFormFemale || !deadFormOther
+            || !deadFormDisabled || !injuredFormMale || !injuredFormFemale || !injuredFormOther
+            || !injuredFormDisabled) {
+            if (!reportedDate) {
+                setDateError(true);
+            } else {
+                setDateError(false);
+            }
+            if (!provinceName) {
+                setProvinceError(true);
+            } else {
+                setProvinceError(false);
+            }
+            if (!districtName) {
+                setDistrictError(true);
+            } else {
+                setDistrictError(false);
+            }
+            if (!municipalityName) {
+                setMunnicipalityError(true);
+            } else {
+                setMunnicipalityError(false);
+            }
+            if (!wardName) {
+                setWardError(true);
+            } else {
+                setWardError(false);
+            }
+            if (!lattitude) {
+                setLatError(true);
+            } else {
+                setLatError(false);
+            }
+            if (!longitude) {
+                setLongError(true);
+            } else {
+                setLongError(false);
+            }
+            if (!deadFormMale) {
+                setdmError(true);
+            } else {
+                setdmError(false);
+            }
+            if (!deadFormFemale) {
+                setdfError(true);
+            } else {
+                setdfError(false);
+            }
+            if (!deadFormOther) {
+                setdoError(true);
+            } else {
+                setdoError(false);
+            }
+            if (!deadFormDisabled) {
+                setddError(true);
+            } else {
+                setddError(false);
+            }
+            if (!injuredFormMale) {
+                setamError(true);
+            } else {
+                setamError(false);
+            }
+            if (!injuredFormFemale) {
+                setafError(true);
+            } else {
+                setafError(false);
+            }
+            if (!injuredFormOther) {
+                setaoError(true);
+            } else {
+                setaoError(false);
+            }
+            if (!injuredFormDisabled) {
+                setadError(true);
+            } else {
+                setadError(false);
+            }
+        } else {
+            // call request to add to database
+            console.log('calling loss api');
+            props.requests.loss.do(lossFormDataInitial);
+        }
+        // else if (uniqueId) {
+        //     const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
+        //     const data = { ...incidentFormDataInitial,
+        //         title,
+        //         incidentOn: reportedDate,
+        //         cause,
+        //         verified,
+        //         approved,
+        //         reportedOn: reportedDate,
+        //         verificationMessage,
+        //         loss: editLossId,
+        //         streetAddress,
+        //         point: {
+        //             type: 'Point',
+        //             coordinates: [longitude, lattitude],
+        //         },
+        //         wards: [editWardId] };
+
+        //     // dispatch(incidentUpdateData(uniqueId, data, true));
+
+
+        //     const obj = {
+        //         injuredMale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'male' && !item.disability)[0].id,
+        //         injuredFemale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'female' && !item.disability)[0].id,
+        //         injuredOther: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'others' && !item.disability)[0].id,
+        //         injuredDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && !item.gender && item.disability === 1)[0].id,
+        //         deadMale: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'male' && !item.disability)[0].id,
+        //         deadFemale: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'female' && !item.disability)[0].id,
+        //         deadOther: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'others' && !item.disability)[0].id,
+        //         deadDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && !item.gender && item.disability === 1)[0].id,
+        //     };
+
+        //     const deadMale = { ...deadMaleInitial,
+        //         loss: editLossId,
+        //         count: deadFormMale };
+        //     // dispatch(lossPeopleUpdateData(obj.deadMale, deadMale));
+        //     const deadFemale = { ...deadFemaleInitial,
+        //         loss: editLossId,
+        //         count: deadFormFemale };
+        //     // dispatch(lossPeopleUpdateData(obj.deadFemale, deadFemale));
+        //     const deadOther = { ...deadOtherInitial,
+        //         loss: editLossId,
+        //         count: deadFormOther };
+        //     // dispatch(lossPeopleUpdateData(obj.deadOther, deadOther));
+        //     const deadDisabled = { ...deadDisabledInitial,
+        //         loss: editLossId,
+        //         count: deadFormDisabled };
+        //     // dispatch(lossPeopleUpdateData(obj.deadDisabled, deadDisabled));
+        //     const injuredMale = { ...injuredMaleInitial,
+        //         loss: editLossId,
+        //         count: injuredFormMale };
+        //     // dispatch(lossPeopleUpdateData(obj.injuredMale, injuredMale));
+        //     const injuredFemale = { ...injuredFemaleInitial,
+        //         loss: editLossId,
+        //         count: injuredFormFemale };
+        //     // dispatch(lossPeopleUpdateData(obj.injuredFemale, injuredFemale));
+        //     const injuredOther = { ...injuredOtherInitial,
+        //         loss: editLossId,
+        //         count: injuredFormOther };
+        //     // dispatch(lossPeopleUpdateData(obj.injuredOther, injuredOther));
+        //     const injuredDisabled = { ...injuredDisabledInitial,
+        //         loss: editLossId,
+        //         count: injuredFormDisabled };
+        //     // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
+        //     console.log('redirecting to table view');
+        //     if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
+        //         setError(true);
+        //     }
+        //     setUpdated(true);
+        // }
+        // else {
+        //     // dispatch(lossData(lossFormDataInitial));
+        // }
+    };
+
+    useEffect(() => {
+        if (lossID) {
+            const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
+            const data = { ...incidentFormDataInitial,
+                loss: lossID,
+                title,
+                incidentOn: reportedDate,
+                cause,
+                verified,
+                approved,
+                reportedOn: reportedDate,
+                verificationMessage,
+                streetAddress,
+                point: {
+                    type: 'Point',
+                    coordinates: [longitude, lattitude],
+                },
+                wards: [wardId] };
+            console.log('test data', data);
+            props.requests.incident.do({ body: data });
+            const deadMale = { ...deadMaleInitial,
+                loss: lossID,
+                count: deadFormMale };
+            props.requests.lossDeadMale.do({ body: deadMale });
+            const deadFemale = { ...deadFemaleInitial,
+                loss: lossID,
+                count: deadFormFemale };
+            props.requests.lossDeadFemale.do({ body: deadFemale });
+            const deadOther = { ...deadOtherInitial,
+                loss: lossID,
+                count: deadFormOther };
+            props.requests.lossDeadOther.do({ body: deadOther });
+            const deadDisabled = { ...deadDisabledInitial,
+                loss: lossID,
+                count: deadFormDisabled };
+            props.requests.lossDeadDisabled.do({ body: deadDisabled });
+            const injuredMale = { ...injuredMaleInitial,
+                loss: lossID,
+                count: injuredFormMale };
+            props.requests.lossInjuredMale.do({ body: injuredMale });
+            const injuredFemale = { ...injuredFemaleInitial,
+                loss: lossID,
+                count: injuredFormFemale };
+            props.requests.lossInjuredFemale.do({ body: injuredFemale });
+            const injuredOther = { ...injuredOtherInitial,
+                loss: lossID,
+                count: injuredFormOther };
+            props.requests.lossInjuredOther.do({ body: injuredOther });
+            const injuredDisabled = { ...injuredDisabledInitial,
+                loss: lossID,
+                count: injuredFormDisabled };
+            props.requests.lossInjuredDisabled.do({ body: injuredDisabled });
+            setAdded(true);
+        }
+        if (lossPeopleError || incidentError || lossError) {
+            setError(true);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [lossID]);
     return (
         <>
             <Page hideFilter hideMap />
             <Navbar />
             <MenuCommon layout="common" currentPage={'Epidemics'} />
             <div className={styles.container}>
+                <Modal
+                    open={added || updated}
+                    title={'Thank you!'}
+                    description={
+                        added ? 'Your record has been added'
+                            : updated ? 'Your record has been updated'
+                                : lossError
+                                || incidentError
+                                || lossPeopleError
+                                || incidentUpdateError
+                    }
+                    handleClose={updated ? handleUpdateSuccess
+                        : added ? handleAddedSuccess
+                            : handleErrorClose}
+                />
 
                 <h1 className={styles.header}>Epidemics Data Structure</h1>
                 <p className={styles.dataReporting}>Data Reporting</p>
@@ -240,7 +835,7 @@ const Epidemics = (props) => {
                     <div className={styles.mainForm}>
                         <div className={styles.generalInfoAndTableButton}>
                             <h1 className={styles.generalInfo}>General Information</h1>
-                            <button className={styles.viewDataTable} type="button">View Data Table</button>
+                            <button className={styles.viewDataTable} type="button" onClick={handleTableButton}>View Data Table</button>
                         </div>
                         <div className={styles.shortGeneralInfo}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
@@ -292,7 +887,6 @@ const Epidemics = (props) => {
                             </div>
                             <TextField
                                 required
-
                                 id="outlined-basic"
                                 label="Hazard Inducer"
                                 variant="outlined"
@@ -439,6 +1033,180 @@ const Epidemics = (props) => {
                                 initialDistrictCenter={initialDistrictCenter}
                                 initialMunCenter={initialMunCenter}
                             />
+                            <div className={styles.infoBarCasuality}>
+                                <p className={styles.instInfo}>
+                                    <span style={{ color: '#003572' }} />
+                                    Casualty Statistics of the area
+                                </p>
+                            </div>
+
+
+                            <div className={styles.mycontainer}>
+                                <div className={styles.innerContainer}>
+                                    <div className={styles.label}>Dead</div>
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        error={dmError}
+                                        helperText={dmError ? 'This field is required' : null}
+                                        variant="outlined"
+                                        value={deadFormMale}
+
+                                        onChange={e => setDeadMale(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of male"
+                                    />
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        error={dfError}
+                                        helperText={dfError ? 'This field is required' : null}
+                                        value={deadFormFemale}
+                                        onChange={e => setDeadFemale(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of female"
+                                        variant="outlined"
+                                    />
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        value={deadFormOther}
+                                        error={doError}
+                                        helperText={doError ? 'This field is required' : null}
+                                        onChange={e => setDeadOther(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of others"
+                                        variant="outlined"
+
+                                    />
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        value={deadFormDisabled}
+                                        error={ddError}
+                                        helperText={ddError ? 'This field is required' : null}
+                                        onChange={e => setDeadDisabled(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of disabled"
+                                        variant="outlined"
+                                    />
+                                </div>
+                                <div className={styles.innerContainer}>
+                                    <div className={styles.label}>Affected</div>
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        value={injuredFormMale}
+                                        error={amError}
+                                        helperText={amError ? 'This field is required' : null}
+                                        onChange={e => setInjuredMale(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of male"
+                                        variant="outlined"
+                                    />
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        value={injuredFormFemale}
+                                        error={afError}
+                                        helperText={afError ? 'This field is required' : null}
+                                        onChange={e => setInjuredFemale(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of female"
+                                        variant="outlined"
+                                    />
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        value={injuredFormOther}
+                                        error={aoError}
+                                        helperText={aoError ? 'This field is required' : null}
+                                        onChange={e => setInjuredOther(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of others"
+                                        variant="outlined"
+                                    />
+                                    <TextField
+                                        className={styles.deadandaffected}
+                                        value={injuredFormDisabled}
+                                        error={adError}
+                                        helperText={adError ? 'This field is required' : null}
+                                        onChange={e => setInjuredDisabled(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Total no. of disabled"
+                                        variant="outlined"
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.infoBarCasuality}>
+                                <p className={styles.instInfo}>
+                                    <span style={{ color: '#003572' }} />
+                                        Verification of the data
+                                </p>
+                            </div>
+                            <div className={styles.checkBoxArea}>
+                                <p className={styles.verifiedOrApproved}>01.Verified</p>
+                                <div className={styles.verified}>
+
+                                    <input
+                                        type="checkbox"
+                                        name="verifiedCheck"
+                                        id="verified"
+                                        checked={verified}
+                                        onChange={e => handleVerifiedChange()}
+
+                                    />
+
+                                    <InputLabel htmlFor="verified">Yes</InputLabel>
+
+
+                                </div>
+                                <div className={styles.notVerified}>
+                                    <input
+                                        type="checkbox"
+                                        name="verifiedCheck"
+                                        id="notVerified"
+                                        checked={notVerified}
+                                        onChange={e => handleNotVerifiedChange()}
+
+
+                                    />
+                                    <InputLabel htmlFor="notVerified">No</InputLabel>
+                                </div>
+                            </div>
+                            <div className={styles.checkBoxArea}>
+
+                                <TextField
+                                    className={styles.hazardInducer}
+                                    id="outlined-basic"
+                                    label="Verification Message"
+                                    value={verificationMessage}
+                                    onChange={e => setVerificationMessage(e.target.value)}
+
+                                    variant="outlined"
+                                />
+                                <p className={styles.verifiedOrApproved}>02.Approved</p>
+
+                                <div className={styles.verified}>
+                                    <input
+                                        type="checkbox"
+                                        name="verifiedCheck"
+                                        id="verified"
+                                        checked={approved}
+                                        onChange={handleApprovedChange}
+
+                                    />
+
+                                    <InputLabel htmlFor="verified">Yes</InputLabel>
+                                </div>
+                                <div className={styles.notVerified}>
+                                    <input
+                                        type="checkbox"
+                                        name="verifiedCheck"
+                                        id="notVerified"
+                                        checked={notApproved}
+                                        onChange={handleNotApprovedChange}
+
+                                    />
+                                    <InputLabel htmlFor="notVerified">No</InputLabel>
+                                </div>
+                            </div>
+                            <div className={styles.saveOrAddButtons}>
+                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">Save and New</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -449,4 +1217,10 @@ const Epidemics = (props) => {
     );
 };
 
-export default connect(mapStateToProps)(Epidemics);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            Epidemics,
+        ),
+    ),
+);
