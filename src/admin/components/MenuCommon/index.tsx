@@ -128,7 +128,7 @@ const MenuCommon = (props: Props) => {
                                 )
                             } */}
                         </div>
-                        {
+                        {/* {
                             activeSubMenu === i
                             && showSub
                             && i < 3
@@ -138,7 +138,7 @@ const MenuCommon = (props: Props) => {
                                 }
                                 />
                             )
-                        }
+                        } */}
                     </div>
                 ))
             }

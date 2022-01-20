@@ -15,11 +15,22 @@ export const slugRef = {
 };
 
 
+// export const Menus = {
+//     editor: ['Health Infrastructure', 'COVID-19',
+// 'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
+//     validator: ['Health Infrastructure', 'COVID-19',
+// 'Epidemics', 'Bulletin', 'Data Overview'],
+//     user: ['Health Infrastructure', 'COVID-19',
+// 'Epidemics', 'Bulletin', 'Data Overview'],
+//     superuser: ['Health Infrastructure', 'COVID-19',
+//  'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
+// };
+
 export const Menus = {
-    editor: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
-    validator: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview'],
-    user: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview'],
-    superuser: ['Health Infrastructure', 'COVID-19', 'Epidemics', 'Bulletin', 'Data Overview', 'Admin'],
+    editor: ['Bulletin'],
+    validator: ['Bulletin'],
+    user: ['Bulletin'],
+    superuser: ['Bulletin'],
 };
 
 export const SubLevel = {
