@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { alpha } from '@mui/material/styles';
 import { connect } from 'react-redux';
+import { navigate } from '@reach/router';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
@@ -200,7 +201,7 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, selected, dispatch, incidentEditData } = props;
+    const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData } = props;
     // const navigate = useNavigate();
 
     // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
@@ -210,14 +211,13 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     };
     const handleEdit = () => {
         console.log('dispatching', selected);
-        incidentEditData.do({ id: selected });
-        // dispatch(epidemicFormEdit(selected[0]));
+        epidemicFormEdit.do({ id: selected });
     };
-    // useEffect(() => {
-    //     if (Object.keys(incidentEditData).length > 0) {
-    //         navigate('/epidemics-form');
-    //     }
-    // }, [incidentEditData]);
+    useEffect(() => {
+        if (Object.keys(incidentEditData).length > 0) {
+            navigate('/admin/epidemics-form');
+        }
+    }, [incidentEditData]);
 
 
     return (
@@ -265,7 +265,7 @@ const EpidemmicTable = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(100);
     const [offset, setOffset] = useState(0);
 
-    const { epidemmicsPage: { incidentData, incidentCount } } = props;
+    const { epidemmicsPage: { incidentData, incidentCount, incidentEditData } } = props;
 
     useEffect(() => {
         props.requests.incidents.do({ offset });
@@ -463,8 +463,8 @@ const EpidemmicTable = (props) => {
                         numSelected={selected.length}
                         // dispatch={dispatch}
                         // deleteEpidemmicTable={deleteEpidemicTable}
-                        incidentEditData={props.requests.incidentEditData}
-                        // epidemicFormEdit={epidemicFormEdit}
+                        epidemicFormEdit={props.requests.incidentEditData}
+                        incidentEditData={incidentEditData}
                     />
                     <TableContainer
                         sx={{ maxHeight: 800 }}

@@ -435,6 +435,7 @@ const Epidemics = (props) => {
             incidentError,
             incidentUpdateError,
             lossError,
+            incidentEditData,
         } } = props;
 
     const clearData = () => {
@@ -581,6 +582,55 @@ const Epidemics = (props) => {
         navigate('/admin/epidemics-table');
     };
 
+    useEffect(() => {
+        if (incidentEditData && Object.keys(incidentEditData).length > 0) {
+            setuniqueId(incidentEditData.id);
+            setReportedDate(incidentEditData.reportedOn);
+            setLattitude(incidentEditData.point.coordinates[1]);
+            setLongitude(incidentEditData.point.coordinates[0]);
+            setStreetAddress(incidentEditData.streetAddress);
+            setCause(incidentEditData.cause);
+            console.log('province', incidentEditData.wards[0].municipality.district.province.title);
+
+            setprovinceName(incidentEditData.wards[0].municipality.district.province.title);
+
+            setdistrictName(incidentEditData.wards[0].municipality.district.title);
+            console.log('municipality is', incidentEditData.wards[0].municipality.district.province.title, incidentEditData.wards[0].municipality.district.title, incidentEditData.wards[0].municipality.title, incidentEditData.wards[0].title);
+            setmunicipalityName(incidentEditData.wards[0].municipality.title);
+            setwardName(incidentEditData.wards[0].title);
+            // console.log('test title',incidentEditData.wards[0].title);
+            setVerificationMessage(incidentEditData.verificationMessage);
+            // setwardId(incidentEditData.wards[0].id);
+            setEditWardId(incidentEditData.wards[0].id);
+            // setEditWardName(incidentEditData.wards[0].title);
+            setDeadMale(incidentEditData.loss.peopleDeathMaleCount);
+            setDeadFemale(incidentEditData.loss.peopleDeathFemaleCount);
+            setDeadOther(incidentEditData.loss.peopleDeathOtherCount);
+            setDeadDisabled(incidentEditData.loss.peopleDeathDisabledCount);
+            setInjuredMale(incidentEditData.loss.peopleInjuredMaleCount);
+            setInjuredFemale(incidentEditData.loss.peopleInjuredFemaleCount);
+            setInjuredOther(incidentEditData.loss.peopleInjuredOtherCount);
+            setInjuredDisabled(incidentEditData.loss.peopleInjuredDisabledCount);
+            setEditLossId(incidentEditData.loss.id);
+            setEditLossPeople(incidentEditData.loss.peoples);
+            if (incidentEditData.verified) {
+                setverified(true);
+            }
+            if (!incidentEditData.verified) {
+                setNotVerified(true);
+            }
+            if (incidentEditData.approved) {
+                setApproved(true);
+            }
+            if (!incidentEditData.approved) {
+                setNotApproved(true);
+            }
+            // dispatch(clearFormEditEpidemic());
+            props.setEpidemicsPage({ incidentEditData: {} });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [incidentEditData]);
+
     const handleEpidemicFormSubmit = async () => {
         if (!reportedDate || !provinceName || !districtName || !municipalityName || !wardName
             || !lattitude || !longitude || !deadFormMale || !deadFormFemale || !deadFormOther
@@ -661,84 +711,79 @@ const Epidemics = (props) => {
             } else {
                 setadError(false);
             }
+        } else if (uniqueId) {
+            const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
+            const data = { ...incidentFormDataInitial,
+                title,
+                incidentOn: reportedDate,
+                cause,
+                verified,
+                approved,
+                reportedOn: reportedDate,
+                verificationMessage,
+                loss: editLossId,
+                streetAddress,
+                point: {
+                    type: 'Point',
+                    coordinates: [longitude, lattitude],
+                },
+                wards: [editWardId] };
+
+            // dispatch(incidentUpdateData(uniqueId, data, true));
+
+
+            const obj = {
+                injuredMale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'male' && !item.disability)[0].id,
+                injuredFemale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'female' && !item.disability)[0].id,
+                injuredOther: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'others' && !item.disability)[0].id,
+                injuredDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && !item.gender && item.disability === 1)[0].id,
+                deadMale: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'male' && !item.disability)[0].id,
+                deadFemale: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'female' && !item.disability)[0].id,
+                deadOther: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'others' && !item.disability)[0].id,
+                deadDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && !item.gender && item.disability === 1)[0].id,
+            };
+
+            const deadMale = { ...deadMaleInitial,
+                loss: editLossId,
+                count: deadFormMale };
+            // dispatch(lossPeopleUpdateData(obj.deadMale, deadMale));
+            const deadFemale = { ...deadFemaleInitial,
+                loss: editLossId,
+                count: deadFormFemale };
+            // dispatch(lossPeopleUpdateData(obj.deadFemale, deadFemale));
+            const deadOther = { ...deadOtherInitial,
+                loss: editLossId,
+                count: deadFormOther };
+            // dispatch(lossPeopleUpdateData(obj.deadOther, deadOther));
+            const deadDisabled = { ...deadDisabledInitial,
+                loss: editLossId,
+                count: deadFormDisabled };
+            // dispatch(lossPeopleUpdateData(obj.deadDisabled, deadDisabled));
+            const injuredMale = { ...injuredMaleInitial,
+                loss: editLossId,
+                count: injuredFormMale };
+            // dispatch(lossPeopleUpdateData(obj.injuredMale, injuredMale));
+            const injuredFemale = { ...injuredFemaleInitial,
+                loss: editLossId,
+                count: injuredFormFemale };
+            // dispatch(lossPeopleUpdateData(obj.injuredFemale, injuredFemale));
+            const injuredOther = { ...injuredOtherInitial,
+                loss: editLossId,
+                count: injuredFormOther };
+            // dispatch(lossPeopleUpdateData(obj.injuredOther, injuredOther));
+            const injuredDisabled = { ...injuredDisabledInitial,
+                loss: editLossId,
+                count: injuredFormDisabled };
+            // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
+            console.log('redirecting to table view');
+            if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
+                setError(true);
+            }
+            setUpdated(true);
         } else {
-            // call request to add to database
-            console.log('calling loss api');
+            // dispatch(lossData(lossFormDataInitial));
             props.requests.loss.do(lossFormDataInitial);
         }
-        // else if (uniqueId) {
-        //     const title = `Epidemic at ${provinceName}, ${districtName}, ${municipalityName}-${wardName}`;
-        //     const data = { ...incidentFormDataInitial,
-        //         title,
-        //         incidentOn: reportedDate,
-        //         cause,
-        //         verified,
-        //         approved,
-        //         reportedOn: reportedDate,
-        //         verificationMessage,
-        //         loss: editLossId,
-        //         streetAddress,
-        //         point: {
-        //             type: 'Point',
-        //             coordinates: [longitude, lattitude],
-        //         },
-        //         wards: [editWardId] };
-
-        //     // dispatch(incidentUpdateData(uniqueId, data, true));
-
-
-        //     const obj = {
-        //         injuredMale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'male' && !item.disability)[0].id,
-        //         injuredFemale: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'female' && !item.disability)[0].id,
-        //         injuredOther: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && item.gender === 'others' && !item.disability)[0].id,
-        //         injuredDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'injured' && !item.gender && item.disability === 1)[0].id,
-        //         deadMale: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'male' && !item.disability)[0].id,
-        //         deadFemale: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'female' && !item.disability)[0].id,
-        //         deadOther: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && item.gender === 'others' && !item.disability)[0].id,
-        //         deadDisabled: editLossPeople && editLossPeople.filter(item => item.status === 'dead' && !item.gender && item.disability === 1)[0].id,
-        //     };
-
-        //     const deadMale = { ...deadMaleInitial,
-        //         loss: editLossId,
-        //         count: deadFormMale };
-        //     // dispatch(lossPeopleUpdateData(obj.deadMale, deadMale));
-        //     const deadFemale = { ...deadFemaleInitial,
-        //         loss: editLossId,
-        //         count: deadFormFemale };
-        //     // dispatch(lossPeopleUpdateData(obj.deadFemale, deadFemale));
-        //     const deadOther = { ...deadOtherInitial,
-        //         loss: editLossId,
-        //         count: deadFormOther };
-        //     // dispatch(lossPeopleUpdateData(obj.deadOther, deadOther));
-        //     const deadDisabled = { ...deadDisabledInitial,
-        //         loss: editLossId,
-        //         count: deadFormDisabled };
-        //     // dispatch(lossPeopleUpdateData(obj.deadDisabled, deadDisabled));
-        //     const injuredMale = { ...injuredMaleInitial,
-        //         loss: editLossId,
-        //         count: injuredFormMale };
-        //     // dispatch(lossPeopleUpdateData(obj.injuredMale, injuredMale));
-        //     const injuredFemale = { ...injuredFemaleInitial,
-        //         loss: editLossId,
-        //         count: injuredFormFemale };
-        //     // dispatch(lossPeopleUpdateData(obj.injuredFemale, injuredFemale));
-        //     const injuredOther = { ...injuredOtherInitial,
-        //         loss: editLossId,
-        //         count: injuredFormOther };
-        //     // dispatch(lossPeopleUpdateData(obj.injuredOther, injuredOther));
-        //     const injuredDisabled = { ...injuredDisabledInitial,
-        //         loss: editLossId,
-        //         count: injuredFormDisabled };
-        //     // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
-        //     console.log('redirecting to table view');
-        //     if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
-        //         setError(true);
-        //     }
-        //     setUpdated(true);
-        // }
-        // else {
-        //     // dispatch(lossData(lossFormDataInitial));
-        // }
     };
 
     useEffect(() => {
