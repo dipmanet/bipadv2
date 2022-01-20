@@ -1,6 +1,6 @@
 // for loss api
 export const lossFormDataInitial = {
-    estimated_loss: null,
+    estimatedLoss: null,
 };
 
 // for incident api
@@ -10,11 +10,11 @@ export const incidentFormDataInitial = {
     loss: '', // get loss id from loss api call
     verified: false,
     approved: false,
-    incident_on: Date,
-    reported_on: Date,
-    verification_message: '',
+    incidentOn: Date,
+    reportedOn: Date,
+    verificationMessage: '',
     hazard: 9, // Default 9 is for Epidemmic
-    street_address: '', // use local address field
+    streetAddress: '', // use local address field
     point: {
         type: 'Point',
         coordinates: [

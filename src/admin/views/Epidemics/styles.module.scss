@@ -55,7 +55,7 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 			}
 		}
 		.mainForm {
-			padding-left: 20px;
+			padding-left: 30px;
 			width: 75%;
 			.generalInfoAndTableButton{
 				display: flex;
@@ -254,6 +254,45 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 					}
 
 				}
+			}
+			.mycontainer {
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				margin-top: 25px;
+				.innerContainer {
+					display: flex;
+					flex-direction: column;
+					width: 48%;
+					border: 1px solid #b6b6b6;
+					position: relative;
+					border-radius: 5px;
+					padding: 5px;
+					
+					.label {
+						position: absolute;
+						top: -10px;
+						left: 20px;
+						height: 20px;
+						width: 70px;
+						background-color: #F0F0F0;
+						color:#676767;
+						text-align: center;
+					}
+					.deadandaffected {
+						font-family: $Fira;
+						font-size: 16px;
+						color: #676767;
+						outline: none;
+						border-radius: 3px;
+						background-color:  $inputBackground;
+						box-shadow: $boxShadow;
+						cursor: pointer;
+						margin: 10px;
+					}
+				
+				}
+			
 			}
 		}
 	}	

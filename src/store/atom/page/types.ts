@@ -242,7 +242,6 @@ export interface Incident {
     polygon?: unknown;
     loss: Loss;
     incidentOn: string;
-
     unacknowledgedFeedbackCount?: number;
     totalFeedbackCount?: number;
 }
@@ -573,6 +572,42 @@ export interface ProjectsProfilePage {
     filters: ProjectsProfileFilters;
 }
 
+
+// Epidemics
+export interface EpidemicPage {
+    lossID: number;
+    loader: boolean;
+    lossError: string;
+    incidentError: string;
+    lossPeopleError: string;
+    successMessage: string;
+    incidentData: [];
+    incidentEditData: object;
+    incidentUpdateError: string;
+    epidemicChartHourlyLoading: boolean;
+    epidemicChartHourlyData: [];
+    epidemicChartHourlyError: object;
+    epidemicChartDailyLoading: boolean;
+    epidemicChartDailyData: [];
+    epidemicChartDailyError: object;
+    epidemicChartWeeklyLoading: boolean;
+    epidemicChartWeeklyData: [];
+    epidemicChartWeeklyError: object;
+    epidemicChartYearlyLoading: boolean;
+    epidemicChartYearlyData: [];
+    epidemicChartYearlyError: object;
+    epidemicChartMonthlyLoading: boolean;
+    epidemicChartMonthlyData: [];
+    epidemicChartMonthlyError: object;
+    epidemicTableLoading: boolean;
+    epidemicTableData: [];
+    epidemicTableError: object;
+    epidemicTotalLoading: boolean;
+    epidemicTotalData: [];
+    epidemicTotalError: object;
+    incidentCount: number;
+}
+
 export interface PageState {
     hidePopup: boolean;
     selectedMapStyle: string;
@@ -616,7 +651,9 @@ export interface PageState {
     disasterProfilePage: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
     bulletinPage: Bulletin;
+    epidemicsPage: EpidemicPage;
 }
+
 
 // ACTION TYPES
 
@@ -695,6 +732,8 @@ export enum PageType {
     ADMIN__PORTAL_BULLETIN_COVID = 'page/ADMIN__PORTAL_BULLETIN_COVID',
     ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
+    // Epidemics
+    SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
 
 // ACTION CREATOR INTERFACE
@@ -984,6 +1023,13 @@ export interface SetProfileContactFilters extends ProfileContactFilters {
     type: typeof PageType.PCP__SET_FILTERS;
 }
 
+// Epidemics
+
+export interface SetEpidemicsPage {
+    type: typeof PageType.SET_EPIDEMICS_PAGE;
+    epidemicsPage: EpidemicPage;
+}
+
 export type PageActionTypes = (
     SetRegion | SetInitialPopupHidden | SetBulletinData |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
@@ -999,5 +1045,5 @@ export type PageActionTypes = (
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
     SetDashboardHazardType | SetBulletinDataCovid
-    | SetBulletinDataFeedback | SetBulletinDataTemperature
+    | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage
 );

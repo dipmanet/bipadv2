@@ -25,6 +25,11 @@ export const setBulletinTemperatureAction = bulletinData => ({
 });
 
 // bulletin actions end
+// Epidemics
+export const SetEpidemicsPageAction = epidemicsPage => ({
+    type: Type.PageType.SET_EPIDEMICS_PAGE,
+    epidemicsPage,
+});
 
 export const setRegionAction = (
     { region }: { region: Type.Region },
@@ -1268,6 +1273,140 @@ export const setBulletinDataTemperature = (
 };
 
 
+// Epidemics
+const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) => {
+    const { epidemicsPage: {
+        lossID,
+        loader,
+        lossError,
+        incidentError,
+        lossPeopleError,
+        successMessage,
+        incidentData,
+        incidentEditData,
+        incidentUpdateError,
+        epidemicChartHourlyLoading,
+        epidemicChartHourlyData,
+        epidemicChartHourlyError,
+        epidemicChartDailyLoading,
+        epidemicChartDailyData,
+        epidemicChartDailyError,
+        epidemicChartWeeklyLoading,
+        epidemicChartWeeklyData,
+        epidemicChartWeeklyError,
+        epidemicChartYearlyLoading,
+        epidemicChartYearlyData,
+        epidemicChartYearlyError,
+        epidemicChartMonthlyLoading,
+        epidemicChartMonthlyData,
+        epidemicChartMonthlyError,
+        epidemicTableLoading,
+        epidemicTableData,
+        epidemicTableError,
+        epidemicTotalLoading,
+        epidemicTotalData,
+        epidemicTotalError,
+        incidentCount,
+    } } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (lossID) {
+            deferedState.epidemicsPage.lossID = lossID;
+        }
+        if (loader) {
+            deferedState.epidemicsPage.loader = loader;
+        }
+        if (lossError) {
+            deferedState.epidemicsPage.lossError = lossError;
+        }
+        if (incidentError) {
+            deferedState.epidemicsPage.incidentError = incidentError;
+        }
+        if (lossPeopleError) {
+            deferedState.epidemicsPage.lossPeopleError = lossPeopleError;
+        }
+        if (successMessage) {
+            deferedState.epidemicsPage.successMessage = successMessage;
+        }
+        if (incidentData) {
+            deferedState.epidemicsPage.incidentData = incidentData;
+        }
+        if (incidentEditData) {
+            deferedState.epidemicsPage.incidentEditData = incidentEditData;
+        }
+        if (incidentUpdateError) {
+            deferedState.epidemicsPage.incidentUpdateError = incidentUpdateError;
+        }
+        if (epidemicChartHourlyLoading) {
+            deferedState.epidemicsPage.epidemicChartHourlyLoading = epidemicChartHourlyLoading;
+        }
+        if (epidemicChartHourlyData) {
+            deferedState.epidemicsPage.epidemicChartHourlyData = epidemicChartHourlyData;
+        }
+        if (epidemicChartHourlyError) {
+            deferedState.epidemicsPage.epidemicChartHourlyError = epidemicChartHourlyError;
+        }
+        if (epidemicChartDailyLoading) {
+            deferedState.epidemicsPage.epidemicChartDailyLoading = epidemicChartDailyLoading;
+        }
+        if (epidemicChartDailyData) {
+            deferedState.epidemicsPage.epidemicChartDailyData = epidemicChartDailyData;
+        }
+        if (epidemicChartDailyError) {
+            deferedState.epidemicsPage.epidemicChartDailyError = epidemicChartDailyError;
+        }
+        if (epidemicChartWeeklyLoading) {
+            deferedState.epidemicsPage.epidemicChartWeeklyLoading = epidemicChartWeeklyLoading;
+        }
+        if (epidemicChartWeeklyData) {
+            deferedState.epidemicsPage.epidemicChartWeeklyData = epidemicChartWeeklyData;
+        }
+        if (epidemicChartWeeklyError) {
+            deferedState.epidemicsPage.epidemicChartWeeklyError = epidemicChartWeeklyError;
+        }
+        if (epidemicChartYearlyLoading) {
+            deferedState.epidemicsPage.epidemicChartYearlyLoading = epidemicChartYearlyLoading;
+        }
+        if (epidemicChartYearlyData) {
+            deferedState.epidemicsPage.epidemicChartYearlyData = epidemicChartYearlyData;
+        }
+        if (epidemicChartYearlyError) {
+            deferedState.epidemicsPage.epidemicChartYearlyError = epidemicChartYearlyError;
+        }
+        if (epidemicChartMonthlyLoading) {
+            deferedState.epidemicsPage.epidemicChartMonthlyLoading = epidemicChartMonthlyLoading;
+        }
+        if (epidemicChartMonthlyData) {
+            deferedState.epidemicsPage.epidemicChartMonthlyData = epidemicChartMonthlyData;
+        }
+        if (epidemicChartMonthlyError) {
+            deferedState.epidemicsPage.epidemicChartMonthlyError = epidemicChartMonthlyError;
+        }
+        if (epidemicTableLoading) {
+            deferedState.epidemicsPage.epidemicTableLoading = epidemicTableLoading;
+        }
+        if (epidemicTableData) {
+            deferedState.epidemicsPage.epidemicTableData = epidemicTableData;
+        }
+        if (epidemicTableError) {
+            deferedState.epidemicsPage.epidemicTableError = epidemicTableError;
+        }
+        if (epidemicTotalLoading) {
+            deferedState.epidemicsPage.epidemicTotalLoading = epidemicTotalLoading;
+        }
+        if (epidemicTotalData) {
+            deferedState.epidemicsPage.epidemicTotalData = epidemicTotalData;
+        }
+        if (epidemicTotalError) {
+            deferedState.epidemicsPage.epidemicTotalError = epidemicTotalError;
+        }
+        if (incidentCount) {
+            deferedState.epidemicsPage.incidentCount = incidentCount;
+        }
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
@@ -1373,6 +1512,8 @@ export default function routeReducer(
             return setAgricultureLossTypeList(state, action);
         case Type.PageType.SET_ENUM_OPTIONS:
             return setEnumOptions(state, action);
+        case Type.PageType.SET_EPIDEMICS_PAGE:
+            return setEpidemicsPage(state, action);
         default:
             return state;
     }

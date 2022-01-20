@@ -26,6 +26,9 @@ const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => p
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
 
+//  Epidemics
+export const epidemicsPageSelector = ({ page }: AppState) => page.epidemicsPage;
+
 export const resourceTypeListSelector = ({ page }: AppState) => (
     page.resourceTypeList || emptyList
 );
