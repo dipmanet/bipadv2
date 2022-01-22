@@ -1,11 +1,11 @@
 /* eslint-disable no-else-return */
 /* eslint-disable max-len */
 import React, { useRef, useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
 import * as geojson from 'geojson';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import * as turf from '@turf/turf';
 import { bound, isDefined, isInteger, _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
@@ -28,16 +28,8 @@ import {
     wardsSelector,
 } from '#selectors';
 
-import { generatePaintByQuantile,
-    getWardFilter,
-    incidentPointToGeojson,
-    getDistrictFilter } from '#utils/domain';
+import { getDistrictFilter } from '#utils/domain';
 import styles from './styles.scss';
-import TimelineSlider from './TimelineSlider';
-import EarthquakeHazardLegends from '#views/VizRisk/Common/Legends/EarthquakeHazardLegend';
-import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
-import SearchBox from './SearchBox';
-
 import HealthIcon from '#resources/icons/Health-facility.svg';
 import Education from '#resources/icons/Educationcopy.png';
 import Finance from '#resources/icons/bank.png';
@@ -48,13 +40,14 @@ import Fireengine from '#resources/icons/Fireengine.png';
 import Heli from '#resources/icons/Heli.png';
 
 
-import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
 import { getgeoJsonLayer, getHillShadeLayer } from '../utils';
-import SatelliteLegends from '../Legends/SatelliteLegend';
-import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import { parseStringToNumber } from '../Functions';
 
 import { districtsSelector } from '../../../../store/atom/page/selector';
+import RainTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Rain';
+import RiverTooltip from '#views/Dashboard/Map/Tooltips/Alerts/River';
+import PollutionTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Pollution';
+import FireTooltip from '../../../Dashboard/Map/Tooltips/Alerts/Fire/index';
 
 
 interface State{
@@ -185,18 +178,15 @@ const MultiHazardMap = (props: Props) => {
         districts,
         rightElement,
         CIData,
+        contactGeoJson,
         criticalElement,
         showPopulation,
         incidentList,
         handleIncidentChange,
         clickedItem,
         mapboxStyle,
-        boundingBox,
         lng,
         lat,
-        municipalityId,
-        provinceId,
-        districtId,
         floodHazardLayersArr,
         mapConstants: {
             layers,
@@ -243,7 +233,11 @@ const MultiHazardMap = (props: Props) => {
         satelliteYearDisabled,
         setsatelliteYearDisabled,
         setlegentItemDisabled,
+        alerts,
     } = props;
+
+
+    console.log('contact geo are', contactGeoJson);
 
 
     const [ciCategoryCritical, setciCategoryCritical] = useState<string[]>([]);
@@ -263,150 +257,47 @@ const MultiHazardMap = (props: Props) => {
     const map = useRef<mapboxgl.Map | null>(null);
     const buildingpointsData = useRef<object[]| null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
-
+    const [alertsDataArr, setAlertsDataArr] = useState([]);
 
     const susceptibilityLayerName = `${MAINKEYNAME}_durham_landslide_susceptibility`;
     const sesmicHazardLayerName = `${MAINKEYNAME}_meteor_seismic_hazard_10`;
 
 
-    const newDemoColorArray = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
+    function EarthquakeTooltip(title: any, description: any, createdDate: any, referenceData: any) {
+        throw new Error('Function not implemented.');
+    }
 
-    const totalPopulationByWard = demographicsData.map(item => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }));
-    const arrayValue = totalPopulationByWard.map(item => item.totalpop);
-    const maxPop = Math.max(...arrayValue);
-    const minPop = Math.min(...arrayValue);
-    const popStep = Math.floor((maxPop - minPop) / 5);
-    const mainArray = Array.from({ length: arrayValue.length }, (v, i) => i + 1);
-    const divider = Math.ceil(arrayValue.length / 5);
-    arrayValue.sort((a, b) => a - b);
-    const dividedSpecificData = new Array(Math.ceil(arrayValue.length / divider))
-        .fill()
-        .map(_ => arrayValue.splice(0, divider));
-    const intervals: number[] = [];
-    const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
-    nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
-        ? Math.max(...d) + 1 : Math.max(...d)));
-
-
-    const getColor = (wardId) => {
-        const colorCondition1 = totalPopulationByWard.filter(item => item.totalpop <= intervals[0]);
-        const colorCondition2 = totalPopulationByWard.filter(item => item.totalpop >= intervals[0] && item.totalpop <= intervals[1]);
-        const colorCondition3 = totalPopulationByWard.filter(item => item.totalpop >= intervals[1] && item.totalpop <= intervals[2]);
-        const colorCondition4 = totalPopulationByWard.filter(item => item.totalpop >= intervals[2] && item.totalpop <= intervals[3]);
-        const colorCondition5 = totalPopulationByWard.filter(item => item.totalpop >= intervals[3]);
-
-        const filteredWards1 = colorCondition1.map(item => item.ward);
-        const filteredWards2 = colorCondition2.map(item => item.ward);
-        const filteredWards3 = colorCondition3.map(item => item.ward);
-        const filteredWards4 = colorCondition4.map(item => item.ward);
-        const filteredWards5 = colorCondition5.map(item => item.ward);
-        if (filteredWards1.includes(`Ward ${wardId}`)) {
-            return newDemoColorArray[0];
-        } else if (filteredWards2.includes(`Ward ${wardId}`)) {
-            return newDemoColorArray[1];
-        } else if (filteredWards3.includes(`Ward ${wardId}`)) {
-            return newDemoColorArray[2];
-        } else if (filteredWards4.includes(`Ward ${wardId}`)) {
-            return newDemoColorArray[3];
-        } else if (filteredWards5.includes(`Ward ${wardId}`)) {
-            return newDemoColorArray[4];
-        } else {
-            return null;
+    const AlertTooltip = ({ title, description, referenceType, referenceData, createdDate }) => {
+        if (referenceType && referenceType === 'rain') {
+            return RainTooltip(title, description, createdDate, referenceData);
         }
+        if (referenceType && referenceType === 'river') {
+            return RiverTooltip(title, description, createdDate, referenceData);
+        }
+        if (title.toUpperCase().includes('EARTH') && referenceData) {
+            return EarthquakeTooltip(title, description, createdDate, referenceData);
+        }
+        if (referenceType && referenceType === 'fire') {
+            return FireTooltip(title, description, createdDate, referenceData);
+        }
+        if (referenceType && referenceType === 'pollution') {
+            return PollutionTooltip(title, description, createdDate, referenceData);
+        }
+        if (title) {
+            return (
+                <div className={styles.alertTooltip}>
+                    <h3 className={styles.heading}>
+                        {title}
+                    </h3>
+                    <div className={styles.description}>
+                        { description }
+                    </div>
+                </div>
+            );
+        } return null;
     };
-
 
     const colorExtrusion = ['#ffeec2', '#f6daa7', '#f6c074', '#ec8209', '#c15401'];
-
-    const range1 = populationDensityRange.map(item => item.range1)[0];
-    const range2 = populationDensityRange.map(item => item.range2)[1];
-    const range3 = populationDensityRange.map(item => item.range3)[2];
-    const range4 = populationDensityRange.map(item => item.range4)[3];
-    const range5 = populationDensityRange.map(item => item.range5)[4];
-
-
-    const calculateHeight = (density) => {
-        let extrusionHeight;
-        if (density < range1[1]) {
-            extrusionHeight = 100;
-            return extrusionHeight;
-        } else if ((density > range2[0]) && (density < range2[1])) {
-            extrusionHeight = 200;
-            return extrusionHeight;
-        } else if ((density > range3[0]) && (density < range3[1])) {
-            extrusionHeight = 300;
-            return extrusionHeight;
-        } else if ((density > range4[0]) && (density < range4[1])) {
-            extrusionHeight = 400;
-            return extrusionHeight;
-        } else {
-            extrusionHeight = 500;
-            return extrusionHeight;
-        }
-    };
-
-    const calculateColor = (density) => {
-        let extrusionColor;
-        if (density < range1[1]) {
-            extrusionColor = colorExtrusion[0];
-            return extrusionColor;
-        } else if ((density > range2[0]) && (density < range2[1])) {
-            extrusionColor = colorExtrusion[1];
-            return extrusionColor;
-        } else if ((density > range3[0]) && (density < range3[1])) {
-            extrusionColor = colorExtrusion[2];
-            return extrusionColor;
-        } else if ((density > range4[0]) && (density < range4[1])) {
-            extrusionColor = colorExtrusion[3];
-            return extrusionColor;
-        } else {
-            extrusionColor = colorExtrusion[4];
-            return extrusionColor;
-        }
-    };
-
-    const popDensityGridGeoJSon = {
-    	type: 'FeatureCollection',
-    	features: popdensitygeojson.features.map(item => ({
-    		type: 'Feature',
-    		properties: {
-    			Name: item.properties.PageName,
-    			height: calculateHeight(item.properties.Density),
-    			baseheight: 0,
-                color: calculateColor(item.properties.Density),
-
-    		},
-            geometry: item.geometry,
-    	})),
-    };
-
-
-    const fillPaint = () => {
-        const colorArray = mainArray.map(item => [item, getColor(item)]);
-
-
-        const saveArray = [];
-
-        for (let i = 0; i < colorArray.length; i += 1) {
-		 const newArray = [...colorArray[i]];
-		  saveArray.push(...newArray);
-	  }
-	  return {
-    	'fill-color': [
-    		'interpolate',
-    		['linear'],
-    		['feature-state', 'value'],
-    		...saveArray,
-    	],
-    	'fill-opacity':
-    	[
-    		'case',
-    		['boolean', ['feature-state', 'hover'], false],
-    		1,
-    		1,
-    	],
-        };
-    };
 
 
     const getIncidentsGeoJSON = (filterBy: string, data: any) => {
@@ -448,35 +339,6 @@ const MultiHazardMap = (props: Props) => {
     };
 
 
-    const handleInputChange = (e) => {
-        if (e) {
-            clearInterval(interval.current);
-            const val = e.target.value;
-
-            setIncidentYear(val);
-            handleIncidentChange(val);
-
-            if (map.current && map.current.isStyleLoaded()) {
-                filterOnMap(val);
-            }
-        } else {
-            let val: string;
-            if (Number(incidentYear) < 4) {
-                setIncidentYear((prevTime) => {
-                    val = String(Number(prevTime) + 1);
-                    return val;
-                });
-            } else {
-                setIncidentYear('0');
-                val = '0';
-            }
-            handleIncidentChange(val);
-            if (map.current && map.current.isStyleLoaded()) {
-                filterOnMap(val);
-            }
-        }
-    };
-
     const handleFloodChange = (e, mapType) => {
         const opacity = e.target.value;
         if (mapType === 'flood') {
@@ -500,100 +362,6 @@ const MultiHazardMap = (props: Props) => {
         }
     };
 
-    const resetArea = () => {
-        console.log('resetting data...');
-
-        handleDrawResetData(true);
-    };
-
-    const showPopupOnBldgs = (coordinates: [number, number], msg: string) => {
-        const popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
-        if (map.current) {
-            popup.setLngLat(coordinates).setHTML(
-                `<div style="padding: 5px;border-radius: 5px">
-                    <p>${msg}</p>
-                </div>
-                `,
-            ).addTo(map.current);
-        }
-    };
-
-
-    const showMarker = (coordinate: [number, number], msg: string) => {
-        const popup = new mapboxgl.Popup({
-            closeButton: true,
-            closeOnClick: true,
-            className: 'popup',
-        });
-        if (map.current) {
-            popup.setLngLat(coordinate).setHTML(
-                `<div style="padding: 5px;border-radius: 5px">
-                    <p>${msg}</p>
-                </div>
-                `,
-            ).addTo(map.current);
-        }
-    };
-
-    const handleSearchTerm = (e) => {
-        setsearchTerm(e.target.value);
-    };
-
-    const updateArea = () => {
-        const datad = draw.getAll();
-        const dataArr = datad.features[0].geometry.coordinates;
-        const searchWithin = turf.multiPolygon([dataArr], {});
-        const ptsWithin = turf.pointsWithinPolygon(points.current, searchWithin);
-        const ptsWithinBuildings = turf.pointsWithinPolygon(buildingpointsData.current, searchWithin);
-        const result = [];
-        ptsWithin
-            .features
-            .map((i) => {
-                result
-                    .push({
-                        geometry: i.geometry,
-                        hazardTitle: ciRef[getTitleFromLatLng(i, CIData)],
-                    });
-                return null;
-            });
-        const coordList = dataArr[0]
-            .map(position => [parseFloat(position[0]), parseFloat(position[1])]);
-        const line = turf.lineString(coordList);
-        const bbox = turf.bbox(line);
-
-        const buildingsCount = ptsWithinBuildings.features.length;
-        const bPoints = ptsWithinBuildings.features.map(item => item.geometry.coordinates);
-        result.push({
-            buildings: buildingsCount,
-            bPoints: bPoints || [],
-        });
-
-        handleDrawSelectedData(result);
-        if (map.current) {
-            map.current.fitBounds(bbox, {
-                padding: 20,
-            });
-        }
-    };
-
-    useEffect(() => {
-        if (incidentsPages.indexOf(rightElement + 1) !== -1) {
-            interval.current = setInterval(() => {
-                if (!playState) {
-                    handleInputChange(null);
-                } else if (interval.current) {
-                    clearInterval(interval.current);
-                }
-            }, 1000);
-        }
-        return () => {
-            clearInterval(interval.current);
-        };
-    });
 
     const images = [
         { name: 'education',
@@ -672,19 +440,6 @@ const MultiHazardMap = (props: Props) => {
 
 
         multihazardMap.on('style.load', () => {
-            // setTimeout(() => {
-            // multihazardMap.easeTo({
-            //     zoom: 11.4,
-            //     duration: 8000,
-            //     center: [lng, lat],
-            // });
-            // }, 10000);
-            // map.current.easeTo({
-            //     pitch: 20,
-            //     zoom: 11.4,
-            //     duration: 6000,
-            //     center: [lng, lat],
-            // });
             multihazardMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
@@ -707,7 +462,7 @@ const MultiHazardMap = (props: Props) => {
                     'fill-opacity': [
                         'case',
                         ['boolean', ['feature-state', 'hover'], false],
-                        0,
+                        1,
                         1,
                     ],
                 },
@@ -717,6 +472,14 @@ const MultiHazardMap = (props: Props) => {
                 },
                 filter: getDistrictFilter(2, null, districts),
             }, 'districtgeo');
+
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false,
+                className: 'popup',
+            });
+
+
             mapping.forEach((attribute) => {
                 multihazardMap.setFeatureState(
                     {
@@ -729,27 +492,30 @@ const MultiHazardMap = (props: Props) => {
             });
 
 
-            const incidents: any = [...new Set(incidentList.features.map(
-                item => item.properties.hazardTitle,
-            ))];
-            setIncidentsArr(incidents);
+            const alertsData = [...new Set(alerts.features.map(item => item.properties.Type))];
 
+            console.log('alerts data is', alertsData);
 
-            incidents.map((layer) => {
+            setAlertsDataArr(alertsData);
+
+            alertsData.map((layer) => {
                 multihazardMap.addSource(layer, {
-                    type: 'geojson',
-                    data: getIncidentsGeoJSON(layer, incidentList),
-                });
-                multihazardMap.addLayer(
+				 type: 'geojson',
+				 data: getGeoJSONPH(layer, alerts),
+			 });
+
+			 multihazardMap.addLayer(
                     {
-                        id: `incidents-${layer}`,
+                        id: `alerts-${layer}`,
                         type: 'circle',
                         source: layer,
                         paint: {
-                            'circle-color': ['get', 'hazardColor'],
+                            'circle-color': ['get', 'alertsColor'],
                             'circle-stroke-width': 1.2,
                             'circle-stroke-color': '#000000',
-                            'circle-radius': 8,
+                            'circle-radius-transition': { duration: 0 },
+                            'circle-opacity-transition': { duration: 0 },
+                            'circle-radius': 6,
                             'circle-opacity': 0.8,
                         },
                         layout: {
@@ -757,133 +523,40 @@ const MultiHazardMap = (props: Props) => {
                         },
                     },
                 );
-                multihazardMap.addLayer(
-                    {
-                        id: `incidents-icon-${layer}`,
-                        type: 'symbol',
-                        source: layer,
-                        layout: {
-                            'icon-image': ['get', 'hazardIcon'],
-                            visibility: 'none',
-                        },
-                    },
-                );
 
 
-                multihazardMap.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
-                multihazardMap.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
-                return null;
-            });
-
-            const ciCategory: any = [...new Set(CIData.features.map(
-                item => item.properties.Type,
-            ))];
-
-            const popup = new mapboxgl.Popup({
-                closeButton: false,
-                closeOnClick: false,
-                className: 'popup',
-            });
-            setciCategoryCritical(ciCategory);
-
-
-            images.forEach((img) => {
-                map.current.loadImage(
-                    img.url,
-                    (error, image) => {
-                        if (error) throw error;
-                        map.current.addImage(img.name, image);
-                    },
-                );
-            });
-
-            ciCategory.map((layer: string) => {
-                multihazardMap.addSource(layer, {
-                    type: 'geojson',
-                    data: getGeoJSONPH(layer, CIData),
-                    cluster: true,
-                    clusterRadius: 50,
-                });
-
-
-                multihazardMap.addLayer({
-                    id: `clusters-${layer}`,
-                    type: 'circle',
-                    source: layer,
-                    filter: ['has', 'point_count'],
-                    layout: {
-                        visibility: 'none',
-                    },
-                    paint: {
-                        'circle-color': [
-                            'step',
-                            ['get', 'point_count'],
-                            '#3da1a6',
-                            100,
-                            '#3da1a6',
-                        ],
-                        'circle-radius': [
-                            'step',
-                            ['get', 'point_count'],
-                            20,
-                            100,
-                            30,
-                            750,
-                            40,
-                        ],
-                    },
-                });
-                multihazardMap.addLayer({
-                    id: `clusters-count-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    // paint: { 'circle-color': '#d1e7e8' },
-                    layout: {
-                        'text-field': '{point_count_abbreviated}',
-                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                        'text-size': 12,
-                        visibility: 'none',
-                    },
-                });
-                multihazardMap.addLayer({
-                    id: `unclustered-point-${layer}`,
-                    type: 'symbol',
-                    source: layer,
-                    filter: ['!', ['has', 'point_count']],
-                    layout: {
-                        'icon-image': (layer === 'education' && 'education') || (layer === 'finance' && 'finance') || (layer === 'health' && 'health') || (layer === 'governance' && 'governance') || (layer === 'cultural' && 'cultural') || (layer === 'fireengine' && 'fireengine') || (layer === 'helipad' && 'helipad'),
-                        'icon-size': 0.08,
-                        'icon-anchor': 'bottom',
-                        visibility: 'none',
-
-                    },
-                });
-
-
-                ciCategory.map((ci: string) => multihazardMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
-                    if (e) {
-                        const { lngLat } = e;
-                        const coordinates: number[] = [lngLat.lng, lngLat.lat];
-                        const ciName = e.features[0].properties.Name;
-                        popup.setLngLat(coordinates).setHTML(
-                            `<div style="padding: 5px;border-radius: 5px">
-                                    <p>${ciName}</p>
-                                </div>
-                        `,
-                        ).addTo(multihazardMap);
+                multihazardMap.on('click', `alerts-${layer}`, (e) => {
+                    const coordinates = e.features[0].geometry.coordinates.slice();
+                    const { referenceData } = e.features[0].properties;
+                    const { createdDate } = e.features[0].properties;
+                    console.log('rrdata', referenceData, createdDate, e.features[0].properties.Type);
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-                }));
-
-                ciCategory.map((ci: string) => multihazardMap.on('mouseleave', `unclustered-point-${ci}`, () => {
-                    multihazardMap.getCanvas().style.cursor = '';
-                    popup.remove();
-                }));
-                multihazardMap.moveLayer(`unclustered-point-${layer}`);
-                multihazardMap.moveLayer(`clusters-${layer}`);
-                multihazardMap.moveLayer(`clusters-count-${layer}`);
+                    const popupNode = document.createElement('div');
+                    ReactDOM.render(
+                        <AlertTooltip
+                            title="test"
+                            description="test"
+                            referenceData={JSON.parse(referenceData)}
+                            createdDate={createdDate}
+                            referenceType={e.features[0].properties.Type}
+                        />, popupNode,
+                    );
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setDOMContent(popupNode)
+                        .addTo(multihazardMap);
+                });
 
                 return null;
             });
+
+
+            const incidents: any = [...new Set(incidentList.features.map(
+                item => item.properties.hazardTitle,
+            ))];
+            setIncidentsArr(incidents);
 
 
             multihazardMap.on('mousemove', 'ward-fill-local', (e) => {
@@ -907,7 +580,7 @@ const MultiHazardMap = (props: Props) => {
                             {
                                 id: hoveredWardId,
                                 source: 'vizrisk-fills',
-                                sourceLayer: mapSources.nepal.layers.ward,
+                                sourceLayer: mapSources.nepal.layers.district,
                             },
                             { hover: false },
                         );
@@ -917,13 +590,14 @@ const MultiHazardMap = (props: Props) => {
                         {
                             id: hoveredWardId,
                             source: 'vizrisk-fills',
-                            sourceLayer: mapSources.nepal.layers.ward,
+                            sourceLayer: mapSources.nepal.layers.district,
 
                         },
                         { hover: true },
                     );
                 }
             });
+
 
             if (populationWardExpression) {
                 multihazardMap.on('mouseleave', 'ward-fill-local', () => {
@@ -944,23 +618,6 @@ const MultiHazardMap = (props: Props) => {
                     hoveredWardId = null;
                 });
             }
-            // multihazardMap.addSource('hillshade', {
-            //     type: 'raster',
-            //     tiles: [getCommonRasterLayer(hillshadeLayerName)],
-            //     tileSize: 256,
-            // });
-
-            // multihazardMap.addLayer(
-            //     {
-            //         id: 'hillshadeLayer',
-            //         type: 'raster',
-            //         source: 'hillshade',
-            //         layout: {},
-            //         paint: {
-            //             'raster-opacity': 0.25,
-            //         },
-            //     },
-            // );
 
 
             if (floodHazardLayersArr && floodHazardLayersArr.length > 0) {
@@ -1050,95 +707,297 @@ const MultiHazardMap = (props: Props) => {
                 },
 
             );
-            multihazardMap.addSource('popdensityGrid', {
-                type: 'geojson',
-                data: popDensityGridGeoJSon,
 
-            });
-            multihazardMap.addLayer(
-                {
-                    id: 'popdensitylayer3d',
-                    type: 'fill-extrusion',
-                    source: 'popdensityGrid',
-                    layout: {
-                        visibility: 'none',
-                    },
-                    paint: {
-                        'fill-extrusion-color': ['get', 'color'],
-                        'fill-extrusion-height': ['get', 'height'],
-                        'fill-extrusion-base': ['get', 'baseheight'],
-                        'fill-extrusion-opacity': 0.9,
-                    },
-
-                }, 'wardgeo',
-            );
-            multihazardMap.addSource('popdensity', {
-                type: 'geojson',
-                data: popdensitygeojson,
-
+            // -----------------------------------------------SLIDE-6-------------------------------------------
+            multihazardMap.addSource('temperature-fill-2010', {
+                type: 'vector',
+                url: mapSources.nepal.url,
             });
 
-            multihazardMap.addLayer(
-                {
-                    id: 'popdensitylayer',
-                    type: 'fill',
-                    source: 'popdensity',
-                    layout: {
-                        visibility: 'none',
-                    },
-                    paint: {
-                        'fill-color': '#f8f7f7',
-                        'fill-outline-color': '#000000',
-                        'fill-opacity': 0.5,
-                    },
+            multihazardMap.addLayer({
+                id: 'temperature-fill-2010-data',
+                source: 'temperature-fill-2010',
+                'source-layer': mapSources.nepal.layers.district,
+                type: 'fill',
 
-                }, 'popdensitylayer3d',
-            );
+                paint: {
+                    'fill-color': [
+                        'match',
+                        ['id'],
+                        16, 'rgb(189, 0, 38)', 33, 'rgb(189, 0, 38)',
+                        34, 'rgb(189, 0, 38)', 15, 'rgb(189, 0, 38)', 17, 'rgb(189, 0, 38)',
+                        18, 'rgb(189, 0, 38)', 19, 'rgb(189, 0, 38)', 32, 'rgb(189, 0, 38)', 'red',
+                    ],
+                    'fill-opacity': [
+                        'case',
+                        ['boolean', ['feature-state', 'hover'], false],
+                        0.8,
+                        1,
+                    ],
+                },
+                layout: {
+                    visibility: 'none',
 
-            if (satelliteImageYears && satelliteImageYears.length > 0) {
-                satelliteImageYears.map((layer) => {
-                    multihazardMap.addSource(`satelliteImage_${layer.year}`, {
-                        type: 'raster',
-                        tiles: [getHillShadeLayer(layer.name)],
-                        tileSize: 256,
-                    });
-                    multihazardMap.addLayer(
+                },
+                filter: getDistrictFilter(2, null, districts),
+            }, 'districtgeo');
+
+            multihazardMap.on('mousemove', 'temperature-fill-2010-data', (e) => {
+                if (e.features.length > 0) {
+                    multihazardMap.getCanvas().style.cursor = 'pointer';
+                    const { lngLat } = e;
+                    console.log('event', e);
+
+                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                    const wardno = e.features[0].properties.title;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                            <p>${wardno}</p>
+                        </div>
+                        `,
+                    ).addTo(multihazardMap);
+                    if (hoveredWardId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: 'temperature-fill-2010',
+                                sourceLayer: mapSources.nepal.layers.district,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoveredWardId = e.features[0].id;
+                    multihazardMap.setFeatureState(
                         {
-                            id: `satelliteImageMain_${layer.year}`,
-                            type: 'raster',
-                            source: `satelliteImage_${layer.year}`,
-                            layout: {
-                                visibility: 'none',
-                            },
-                            paint: {
-                                'raster-opacity': 1,
-                            },
-                        },
-                    );
-                    return null;
-                });
-            }
+                            id: hoveredWardId,
+                            source: 'temperature-fill-2010',
+                            sourceLayer: mapSources.nepal.layers.district,
 
-            vulnerabilityData.map((row) => {
-                multihazardMap.setFeatureState(
-                    {
-                        id: row.osmId || 0,
-                        source: 'composite',
-                        sourceLayer: buildingSourceLayerName,
-                    },
-                    {
-                        vuln: row.vulnerabilityScore || -1,
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+            multihazardMap.on('mouseleave', 'temperature-fill-2010-data', () => {
+                multihazardMap.getCanvas().style.cursor = '';
+                popup.remove();
+                if (hoveredWardId) {
+                    multihazardMap.setFeatureState(
+                        {
+                            source: 'temperature-fill-2010',
+                            id: hoveredWardId,
+                            sourceLayer: mapSources.nepal.layers.district,
+                        },
+                        { hover: false },
+
+                    );
+                    // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                }
+                hoveredWardId = null;
+            });
+            // -----------------------------------------------SLIDE-7-------------------------------------------
+            const ciCategory: any = [...new Set(CIData.features.map(
+                item => item.properties.Type,
+            ))];
+
+
+            setciCategoryCritical(ciCategory);
+
+
+            images.forEach((img) => {
+                map.current.loadImage(
+                    img.url,
+                    (error, image) => {
+                        if (error) throw error;
+                        map.current.addImage(img.name, image);
                     },
                 );
+            });
+
+            ciCategory.map((layer: string) => {
+                multihazardMap.addSource(layer, {
+                    type: 'geojson',
+                    data: getGeoJSONPH(layer, CIData),
+                    cluster: true,
+                    clusterRadius: 50,
+                });
+
+
+                multihazardMap.addLayer({
+                    id: `clusters-${layer}`,
+                    type: 'circle',
+                    source: layer,
+                    filter: ['has', 'point_count'],
+                    layout: {
+                        visibility: 'none',
+                    },
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#3da1a6',
+                            100,
+                            '#3da1a6',
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            100,
+                            30,
+                            750,
+                            40,
+                        ],
+                    },
+                });
+                multihazardMap.addLayer({
+                    id: `clusters-count-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    // paint: { 'circle-color': '#d1e7e8' },
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12,
+                        visibility: 'none',
+                    },
+                });
+                multihazardMap.addLayer({
+                    id: `unclustered-point-${layer}`,
+                    type: 'symbol',
+                    source: layer,
+                    filter: ['!', ['has', 'point_count']],
+                    layout: {
+                        'icon-image': (layer === 'education' && 'education') || (layer === 'finance' && 'finance') || (layer === 'health' && 'health') || (layer === 'governance' && 'governance') || (layer === 'cultural' && 'cultural') || (layer === 'fireengine' && 'fireengine') || (layer === 'helipad' && 'helipad'),
+                        'icon-size': 0.08,
+                        'icon-anchor': 'bottom',
+                        visibility: 'none',
+
+                    },
+                });
+
+
+                ciCategory.map((ci: string) => multihazardMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
+                    if (e) {
+                        const { lngLat } = e;
+                        console.log('ci event is', e);
+
+                        const coordinates: number[] = [lngLat.lng, lngLat.lat];
+                        const ciName = e.features[0].properties.Name;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-radius: 5px">
+                                    <p>${ciName}</p>
+                                </div>
+                        `,
+                        ).addTo(multihazardMap);
+                    }
+                }));
+
+                ciCategory.map((ci: string) => multihazardMap.on('mouseleave', `unclustered-point-${ci}`, () => {
+                    multihazardMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                }));
+                multihazardMap.moveLayer(`unclustered-point-${layer}`);
+                multihazardMap.moveLayer(`clusters-${layer}`);
+                multihazardMap.moveLayer(`clusters-count-${layer}`);
+
                 return null;
             });
 
+            // -----------------------------------------------SLIDE-8-------------------------------------------
+            const contactDataArr = [...new Set(contactGeoJson.features.map(item => item.properties.name))];
+            console.log('contatctdataarr', contactDataArr);
+
+
+            multihazardMap.addSource('contactInfo', {
+				 type: 'geojson',
+				 data: contactGeoJson,
+				 cluster: true,
+                clusterMaxZoom: 14,
+                clusterRadius: 50,
+			 });
+
+			 multihazardMap.addLayer(
+                {
+                    id: 'contacts-layer',
+                    type: 'circle',
+                    source: 'contactInfo',
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#51bbd6',
+                            100,
+                            '#f1f075',
+                            750,
+                            '#f28cb1',
+                        ],
+                        'circle-stroke-width': 1.2,
+                        'circle-stroke-color': '#000000',
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            20,
+                            100,
+                            30,
+                            750,
+                            40,
+                        ],
+                    },
+                    layout: {
+                        visibility: 'none',
+                    },
+                },
+            );
+
+            multihazardMap.addLayer({
+                id: 'contacts-cluster-count',
+                type: 'symbol',
+                source: 'contactInfo',
+                filter: ['has', 'point_count'],
+                layout: {
+                    'text-field': '{point_count_abbreviated}',
+                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                    'text-size': 12,
+                    visibility: 'none',
+                },
+            });
+
+            multihazardMap.addLayer({
+                id: 'contacts-unclustered-point',
+                type: 'circle',
+                source: 'contactInfo',
+                filter: ['!', ['has', 'point_count']],
+                paint: {
+                    'circle-color': '#11b4da',
+                    'circle-radius': 6,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff',
+                },
+                layout: {
+                    visibility: 'none',
+                },
+            });
+            multihazardMap.on('click', 'contacts-unclustered-point', (e) => {
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const { name } = e.features[0].properties;
+                const { mobileNumber } = e.features[0].properties;
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(`<div style="padding: 5px;border-radius: 5px">
+					<p>${name}</p>
+					<p>Contact No : ${mobileNumber}</p>
+				</div>
+		`)
+                    .addTo(multihazardMap);
+            });
+
+
             multihazardMap.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
-            multihazardMap.moveLayer('hillshadeLayer', 'Population Den,sity');
-            multihazardMap.moveLayer('Ward Boundary Line');
-            multihazardMap.moveLayer('Ward No.');
-            multihazardMap.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            multihazardMap.moveLayer('ward-fill-local', 'Ward Boundary Line');
         });
 
 
@@ -1156,19 +1015,11 @@ const MultiHazardMap = (props: Props) => {
         const destroyMap = () => {
             multihazardMap.remove();
         };
+
+
         return destroyMap;
     }, []);
 
-
-    useEffect(() => {
-        if (map.current && showPopulation && map.current.isStyleLoaded() && rightElement === 0) {
-            if (showPopulation === 'popdensity') {
-                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
-            } else {
-                map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
-            }
-        }
-    }, [rightElement, showPopulation]);
 
     useEffect(() => {
         const switchFloodRasters = (floodlayer: FloodLayer) => {
@@ -1328,8 +1179,24 @@ const MultiHazardMap = (props: Props) => {
                 });
             }
 
+
+            if (rightElement === 2) {
+                alertsDataArr.map((item) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`alerts-${item}`, 'visibility', 'visible');
+                    }
+                    return null;
+                });
+            } else {
+                alertsDataArr.map((item) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`alerts-${item}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
+            }
             // -----------------------------------------------------Third Page-------------------------------------------------
-            if ((ciPages && rightElement === 2 && clickedArr[0] === 1) || (rightElement === 3 && exposureElementsArr[1] === 1)) {
+            if ((ciPages && rightElement === 6 && clickedArr[0] === 1) || (rightElement === 3 && exposureElementsArr[1] === 1)) {
                 ciCategoryCritical.map((item: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
@@ -1362,14 +1229,6 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             } else {
-                layers[1].map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'none');
-                    }
-                    return null;
-                });
-            }
-            if ((rightElement === 0 && legendElement === 'Population By Ward')) {
                 layers[1].map((layer) => {
                     if (map.current) {
                         map.current.setLayoutProperty(layer, 'visibility', 'none');
@@ -1416,16 +1275,6 @@ const MultiHazardMap = (props: Props) => {
             } else {
                 map.current.setLayoutProperty('sesmicHazard', 'visibility', 'none');
             }
-            // ------------------------------------------Population Density Layer----------------------------------
-            if ((rightElement === 2 && clickedArr[3] === 1) || (rightElement === 3 && exposureElementsArr[0] === 1)) {
-                if (map.current) {
-                    map.current.setLayoutProperty('popdensitylayer3d', 'visibility', 'visible');
-                    map.current.setLayoutProperty('popdensitylayer', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('popdensitylayer3d', 'visibility', 'none');
-                map.current.setLayoutProperty('popdensitylayer', 'visibility', 'none');
-            }
             // ------------------------------------------------------------Buildings Data Layer-----------------------------------------
 
             if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
@@ -1436,12 +1285,24 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('buildingsdata', 'visibility', 'none');
             }
 
-            if (rightElement === 4) {
+            if (rightElement === 5) {
                 if (map.current) {
-                    map.current.setLayoutProperty(`satelliteImageMain_${selectedYear}`, 'visibility', 'visible');
+                    map.current.setLayoutProperty('temperature-fill-2010-data', 'visibility', 'visible');
                 }
             } else {
-                map.current.setLayoutProperty(`satelliteImageMain_${selectedYear}`, 'visibility', 'none');
+                map.current.setLayoutProperty('temperature-fill-2010-data', 'visibility', 'none');
+            }
+
+            if (rightElement === 7) {
+                if (map.current) {
+                    map.current.setLayoutProperty('contacts-layer', 'visibility', 'visible');
+                    map.current.setLayoutProperty('contacts-cluster-count', 'visibility', 'visible');
+                    map.current.setLayoutProperty('contacts-unclustered-point', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('contacts-layer', 'visibility', 'none');
+                map.current.setLayoutProperty('contacts-cluster-count', 'visibility', 'none');
+                map.current.setLayoutProperty('contacts-unclustered-point', 'visibility', 'none');
             }
 
 
@@ -1465,210 +1326,7 @@ const MultiHazardMap = (props: Props) => {
                 });
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ciCategoryCritical, rightElement, legendElement, layers, exposureElementsArr, clickedArr, floodLayer, hazardLegendClickedArr]);
-
-
-    useEffect(() => {
-        const switchSatelliteImage = (imageLayer: FloodLayer) => {
-            if (satelliteImageYears && satelliteImageYears.length > 0 && map.current) {
-                satelliteImageYears.map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`satelliteImageMain_${layer.year}`, 'visibility', 'none');
-                    }
-                    return null;
-                });
-                map.current.setLayoutProperty(`satelliteImageMain_${selectedYear}`, 'visibility', 'visible');
-            }
-        };
-
-        if (map.current && satelliteImageYears && map.current.isStyleLoaded()) {
-            switchSatelliteImage(selectedYear);
-        }
-    }, [satelliteImageYears, selectedYear]);
-
-    useEffect(() => {
-        if (rightElement === 5) {
-            if (buildings && buildings.features && map.current) {
-                const buildingsD = buildings.features.map(item => [
-                    Number(item.geometry.coordinates[0].toFixed(7)),
-                    Number(item.geometry.coordinates[1].toFixed(7)),
-                ]);
-                buildingpointsData.current = turf.points(buildingsD);
-                if (draw) {
-                    map.current.removeControl(draw);
-                    draw = null;
-                }
-                draw = new MapboxDraw({
-                    displayControlsDefault: false,
-                    userProperties: true,
-                    controls: {
-                        polygon: true,
-                        trash: true,
-                    },
-                    styles: drawStyles,
-                    defaultMode: 'draw_polygon',
-                });
-
-                // drawElement.current = draw;
-                map.current.addControl(draw, 'top-right');
-                map.current.on('draw.modechange', () => {
-                    const data = draw.getAll();
-                    if (draw.getMode() === 'draw_polygon') {
-                        const pids = [];
-                        handleDrawResetData(true);
-                        const lid = data.features[data.features.length - 1].id;
-
-                        data.features.forEach((f) => {
-                            if (f.geometry.type === 'Polygon' && f.id !== lid) {
-                                pids.push(f.id);
-                            }
-                        });
-                        draw.delete(pids);
-                    }
-                });
-
-                map.current.on('draw.delete', resetArea);
-                map.current.on('draw.create', updateArea);
-                map.current.on('draw.update', updateArea);
-            }
-        }
-    }, [rightElement]);
-
-
-    useEffect(() => {
-        if (rightElement === 6) {
-            if (vulnerabilityData && vulnerabilityData.length > 0 && map.current) {
-                const buildingsD = vulnerabilityData.filter(item => item.point !== undefined)
-                    .map(p => p.point.coordinates);
-                buildingpointsData.current = turf.points(buildingsD);
-
-                if (draw) {
-                    map.current.removeControl(draw);
-                    draw = null;
-                }
-
-                draw = new MapboxDraw({
-                    displayControlsDefault: false,
-                    userProperties: true,
-                    controls: {
-                        polygon: true,
-                        trash: true,
-                    },
-                    styles: drawStyles,
-                    defaultMode: 'draw_polygon',
-                });
-
-                // drawElement.current = draw;
-
-                map.current.addControl(draw, 'top-right');
-                map.current.on('draw.modechange', () => {
-                    const data = draw.getAll();
-                    if (draw.getMode() === 'draw_polygon') {
-                        const pids = [];
-                        handleDrawResetData(true);
-                        const lid = data.features[data.features.length - 1].id;
-
-                        data.features.forEach((f) => {
-                            if (f.geometry.type === 'Polygon' && f.id !== lid) {
-                                pids.push(f.id);
-                            }
-                        });
-                        draw.delete(pids);
-                    }
-                });
-
-                map.current.on('draw.delete', resetArea);
-                map.current.on('draw.create', updateArea);
-                map.current.on('draw.update', updateArea);
-            }
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rightElement]);
-
-    useEffect(() => {
-        if (rightElement < 5 && map.current) {
-            if (draw) {
-                map.current.removeControl(draw);
-                draw = null;
-            }
-        }
-    }, [rightElement]);
-
-    const handleBuildingClick = (clicked: boolean, search) => {
-        let searchId: string | null;
-        if (!clicked) {
-            const housId = searchTerm;
-            searchId = getOSMidFromHouseId(housId, vulnerabilityData);
-        } else {
-            searchId = search;
-        }
-        if (searchId) {
-            const coordinatesObj = buildings
-                .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
-            let coordinate = [];
-            if (coordinatesObj.length > 0) {
-                coordinate = coordinatesObj[0].geometry.coordinates;
-                const singularBData = getSingularBuildingData(searchId, vulnerabilityData);
-                if (Object.keys(singularBData).length > 0) {
-                    setSingularBuilding(true, singularBData);
-                    setsearchTerm(null);
-                    if (map.current) {
-                        map.current.easeTo({
-                            zoom: 19,
-                            duration: 500,
-                            center: coordinate,
-                        });
-                    }
-                    showPopupOnBldgs(coordinate, getHouseId(searchId, vulnerabilityData));
-                } else {
-                    setsearchTerm(null);
-                    setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-                    showMarker(coordinatesObj[0].geometry.coordinates, 'No data');
-                    setcood(coordinatesObj[0].geometry.coordinates);
-                }
-            } else {
-                setsearchTerm(null);
-                setSingularBuilding(true, { osmId: searchId, coordinatesObj });
-            }
-        } else {
-            setSingularBuilding(true, { osmId: searchId });
-            setsearchTerm(null);
-        }
-    };
-
-    useEffect(() => {
-        if (vulnerabilityData) {
-            vulnerabilityData.map((row) => {
-                if (map.current && map.current.isStyleLoaded()) {
-                    map.current.setFeatureState(
-                        {
-                            id: row.osmId || 0,
-                            source: 'composite',
-                            sourceLayer: buildingSourceLayerName,
-                        },
-                        {
-                            vuln: row.vulnerabilityScore || -1,
-                        },
-                    );
-                }
-                return null;
-            });
-        }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [vulnerabilityData, map.current]);
-
-    useEffect(() => {
-        if (map.current) {
-            map.current.on('click', 'Buildings', (e) => {
-                setosmID(e.features[0].properties.osm_id);
-                setsearchTerm(e.features[0].properties.osm_id);
-                handleBuildingClick(true, e.features[0].properties.osm_id);
-            });
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [map.current]);
 
 
     useEffect(() => {
@@ -1685,148 +1343,12 @@ const MultiHazardMap = (props: Props) => {
             );
             map.current.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [buildingVul]);
 
-    useEffect(() => {
-        if (showAddForm) {
-            if (cood) {
-                showMarker(cood, 'Editing...');
-            }
-        }
-    }, [cood, showAddForm]);
-
-
-    // useEffect(() => {
-    //     if (singularBuilding) {
-    //         if (map.current) {
-    //             map.current.removeControl(draw);
-    //         }
-    //     } else if (map.current) {
-    //         map.current.addControl(draw, 'top-right');
-    //     }
-    // }, [singularBuilding]);
 
     return (
         <div>
-            <div style={mapCSS} ref={mapContainerRef}>
-                {
-                    rightElement === 4
-                    && (
-                        <SatelliteLegends
-                            satelliteImageYears={satelliteImageYears}
-                            selectedYear={selectedYear}
-                            handleyearClick={handleyearClick}
-                            satelliteYearDisabled={satelliteYearDisabled}
-                        />
-                    )
-                }
-
-                {
-                    rightElement === 6
-                    && (
-                        <SearchBox
-                            handleBuildingClick={handleBuildingClick}
-                            searchTeam={searchTerm}
-                            handleSearchTerm={handleSearchTerm}
-                        />
-                    )
-                }
-                <div>
-                    {
-                        rightElement === 3 && hazardLegendClickedArr[1] === 1
-                && (
-                    <>
-                        <p className={_cs(styles.sliderLabel2)}>
-                           Landslide Layer Opacity
-                        </p>
-                        <input
-                            onChange={e => handleFloodChange(e, 'sus')}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={String(opacitySus)}
-                            className={styles.slider}
-                        />
-                        <p className={_cs(styles.opacityLevel)}>
-                            <span>0</span>
-                            <span>0.5</span>
-                            <span>1</span>
-                        </p>
-                        <LandSlideSusLegend layer="sus" />
-                    </>
-                )
-                    }
-                    {
-                        rightElement === 3 && hazardLegendClickedArr[2] === 1
-                && (
-                    <>
-                        <p className={_cs(styles.sliderLabel3)}>
-                           Seismic Layer Opacity
-                        </p>
-                        <input
-                            onChange={e => handleFloodChange(e, 'ses')}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={String(opacitySes)}
-                            className={styles.slider}
-                        />
-                        <p className={_cs(styles.opacityLevel)}>
-                            <span>0</span>
-                            <span>0.5</span>
-                            <span>1</span>
-                        </p>
-                        <LandSlideSusLegend layer="ses" />
-                    </>
-                )
-                    }
-                    {
-                        (rightElement === 3 && hazardLegendClickedArr[0] === 1)
-                && (
-                    <>
-                        <p className={_cs(styles.sliderLabel)}>
-                           Flood Layer Opacity
-                        </p>
-                        <input
-                            onChange={e => handleFloodChange(e, 'flood')}
-                            id="slider"
-                            type="range"
-                            min="0"
-                            max="1"
-                            step="0.05"
-                            value={String(opacityFlood)}
-                            className={styles.slider}
-                        />
-                        <p className={_cs(styles.opacityLevel)}>
-                            <span>0</span>
-                            <span>0.5</span>
-                            <span>1</span>
-                        </p>
-                        <FloodDepthLegend />
-                    </>
-                )
-                    }
-                </div>
-
-                {
-                    (rightElement === 4 && satelliteYearDisabled)
-                        ? (
-                            <div className={styles.loaderInfo}>
-                                <Loader color="#fff" className={styles.loader} />
-                                <p className={styles.loaderText}>
-						Loading Data...
-                                </p>
-                            </div>
-                        ) : ''
-                }
-
-
-            </div>
+            <div style={mapCSS} ref={mapContainerRef} />
         </div>
     );
 };

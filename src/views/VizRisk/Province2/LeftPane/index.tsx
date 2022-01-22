@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
@@ -52,10 +53,11 @@ import LandCoverChart from '../Charts/LandCoverChart.tsx';
 import PopulationChart from '../Charts/PopulationChart.tsx';
 import LandCoverLegends from '../Legends/LandCoverLegends/index';
 import DemographicsPopInfo from '../Components/DemographicsPopInfo';
-import FloodHistoryLegends from '../Legends/FloodHazardLegends';
-import FloodDepthLegends from '#views/VizRisk/Common/Legends/FloodDepthLegend';
-import PopulationDensityLegends from '../Legends/PopulationDensityLegend';
-import BuildingChart from '../Charts/Buildingchart';
+import VRLegendHazard from '../Components/VRLegendHazard/index';
+import VRLegendFatality from '../Components/VRLegendFatality';
+import VRLegendTemp from '../Components/VRLegendTemp';
+import VRLegendPre from '../Components/VRLegendPre';
+import DRRCountBox from '../Components/DRRCountBox/index';
 
 
 interface State {
@@ -78,6 +80,8 @@ function Leftpane(props) {
         pending,
         leftElement,
         legendElement,
+        clickedFatalityInfraDamage,
+        handleFatalityInfraLayer,
         handleIncidentItemClick,
         handleIncidentChange,
         incidentDetailsData,
@@ -132,11 +136,15 @@ function Leftpane(props) {
     const [currentDate, setcurrentDate] = useState();
 
 
-    const exposureElements = [
-        'Critical Infrastructure',
-        'Landcover',
-        'Building Footprint',
-        'Population Density',
+    const temperatureRefPeriod = [
+        'Reference Period(1981-2010)',
+        'Medium Term(2016-2045)',
+        'Long Term(2036-2065)',
+    ];
+    const precipationRefPeriod = [
+        'Reference Period(1981-2010)',
+        'Medium Term(2016-2045)',
+        'Long Term(2036-2065)',
     ];
 
 
@@ -178,6 +186,7 @@ function Leftpane(props) {
             );
         }
     }, []);
+    console.log('ci chart data', cIChartData);
 
     const { clickedItem, incidentFilterYear } = props;
 
@@ -190,14 +199,6 @@ function Leftpane(props) {
             handleIncidentChange,
             cI,
         } = props;
-        if (incidentFilterYear) {
-            getIncidentData(incidentFilterYear, clickedItem);
-
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setchartData(getChartData(clickedItem, incidentFilterYear, incidentList));
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setnonZeroArr(getArrforDesc(clickedItem, chartData, incidentList));
-        }
         if (clickedItem) {
             getIncidentData(incidentFilterYear, clickedItem);
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -206,11 +207,7 @@ function Leftpane(props) {
             setnonZeroArr(getArrforDesc(clickedItem, chartData, incidentList));
         }
     }, [
-        setchartData,
-        setnonZeroArr,
         setcIChartData,
-        clickedItem,
-        incidentFilterYear,
     ]);
     console.log('nonZero Arr is ', nonZeroArr, chartData);
 
@@ -296,7 +293,7 @@ function Leftpane(props) {
 
 
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By Ward'];
-    const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard', 'Seismic Hazard'];
+    const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard'];
     console.log('chartData is ', chartData);
 
     return (
@@ -530,205 +527,8 @@ mm
                     </>
                 )}
 
-                {leftElement === 1 && (
-                    <>
 
-                        <VRLegend>
-                            <div className={styles.incidentsLegendsContainer}>
-                                <div className={styles.hazardItemContainer}>
-                                    <button
-                                        type="button"
-                                        className={
-                                            clickedItem === 'all'
-                                                ? styles.legendBtnSelected
-                                                : styles.legendBtn
-                                        }
-                                        onClick={() => handleIncidentItemClick('all')}
-                                    >
-                                        <Hexagon
-                                            style={{
-                                                stroke: '#fff',
-                                                strokeWidth: 50,
-                                                fill: clickedItem === 'all' ? '#ffffff' : '#036ef0',
-                                            }}
-                                            className={styles.educationHexagon}
-                                        />
-                    Showing All
-                                    </button>
-                                </div>
-                            </div>
-
-                            {fullhazardTitle.length > 0
-                && fullhazardTitle.map(item => (
-                    <div className={styles.incidentsLegendsContainer} key={item}>
-                        <div className={styles.hazardItemContainer}>
-                            <button
-                                key={item}
-                                type="button"
-                                className={
-                					clickedItem === item
-                						? styles.legendBtnSelected
-                						: styles.legendBtn
-                				}
-                                onClick={() => handleIncidentItemClick(item)}
-                            >
-                                <Hexagon
-                                    style={{
-                						stroke: '#fff',
-                						strokeWidth: 50,
-                						fill: legendElement === item ? 'white' : '#036ef0',
-                					}}
-                                    className={styles.educationHexagon}
-                                />
-                                {item}
-                            </button>
-                        </div>
-                    </div>
-                ))}
-                        </VRLegend>
-
-                        {/* <LandslideLegend /> */}
-                    </>
-                )}
-
-                {leftElement === 2 && (
-                    <>
-                        {[page3Legend1InroHtml, page3Legend2InroHtml,
-						 page3Legend3InroHtml, page3Legend4InroHtml].map((item, i) => (
-                            <div key={item}>
-                                {clickedArr[i] === 1 && (
-                                    <div
-                                        style={{ textAlign: 'initial' }}
-                                        className={styles.mainIntroHtmlFromAPI}
-                                        dangerouslySetInnerHTML={{
-                                            __html: item,
-                                        }}
-                                    />
-                                )}
-                            </div>
-                        ))}
-                        {(leftElement === 2 && clickedArr[0] === 1) && (
-                            <>
-                                <ResponsiveContainer
-                                    className={styles.respContainer}
-                                    width="100%"
-                                    height={'60%'}
-                                >
-                                    <BarChart
-                                        width={200}
-                                        height={1000}
-                                        data={cIChartData}
-                                        layout="vertical"
-                                        margin={{ left: 15, right: 45, bottom: 25 }}
-                                    >
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis type="number" tick={{ fill: '#94bdcf' }}>
-                                            <Label
-                                                value="Critical Infrastructures"
-                                                offset={0}
-                                                position="insideBottom"
-                                                style={{
-                                                    textAnchor: 'middle',
-                                                    fill: 'rgba(255, 255, 255, 0.87)',
-                                                }}
-                                            />
-                                        </XAxis>
-                                        <YAxis
-                                            type="category"
-                                            dataKey="name"
-                                            tick={{ fill: '#94bdcf' }}
-                                        />
-                                        <Tooltip
-                                            content={cITooltip}
-                                            cursor={{ fill: '#1c333f' }}
-                                        />
-                                        <Bar
-                                            dataKey="value"
-                                            fill="rgb(0,219,95)"
-                                            barSize={15}
-                                            tick={{ fill: '#94bdcf' }}
-                                            radius={[0, 15, 15, 0]}
-                                        />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </>
-
-                        ) }
-
-                        <CriticalInfraLegends
-                            clickedArr={clickedArr}
-                            exposureElementArr={exposureElementArr}
-                            cITypeName={cITypeName}
-                            right
-                            hide={false}
-                            handleCritical={handleCriticalInfra}
-                            criticalFlood={criticalElement}
-                            leftElement={leftElement}
-                            CIState={CIState}
-
-                        />
-                        {(leftElement === 2 && clickedArr[1] === 1) && (
-                            <>
-                                <LandCoverChart
-                                    landCoverData={landCoverDataInKm}
-                                    landCoverCustomTooltip={landCoverCustomTooltip}
-                                />
-                            </>
-
-                        ) }
-                        {(leftElement === 2 && clickedArr[2] === 1) && (
-                            <>
-                                <BuildingChart
-                                    buildingsChartData={buildingsChartData}
-
-                                />
-                            </>
-
-                        ) }
-
-                        <VRLegend>
-                            { exposureElements.map((item, i) => (
-                                <div
-                                    className={legentItemDisabled
-                                        ? styles.incidentsLegendsContainer3Disabled
-								 : styles.incidentsLegendsContainer3}
-                                    key={item}
-                                >
-                                    <div className={styles.hazardItemContainer3}>
-                                        <button
-                                            key={item}
-                                            type="button"
-                                            className={
-                                                clickedArr[i] === 1
-                                                    ? styles.legendBtnSelected3
-                                                    : styles.legendBtn3
-                                            }
-                                            onClick={() => handleMultipeLegendClicked(item, i)}
-                                            disabled={legentItemDisabled}
-                                        >
-                                            <Hexagon
-                                                style={{
-                                                    innerHeight: 80,
-                                                    stroke: '#FFFFFF',
-                                                    strokeWidth: 30,
-                                                    fill:
-													clickedArr[i] === 1 ? 'white' : 'transparent',
-                                                }}
-                                                className={styles.educationHexagon3}
-                                            />
-                                            {item}
-                                            {i === 2 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '27.8px', backgroundColor: '#565656', opacity: '0.5' }} className={styles.dummyLine} /> }
-                                        </button>
-                                    </div>
-                                </div>
-
-                            ))}
-                        </VRLegend>
-                    </>
-                )}
-
-                {((leftElement === 2 && clickedArr[1] === 1)
-				  || (leftElement === 3 && exposureElementArr[2] === 1) || (leftElement === 0 && legendElement === 'Landcover'))
+                {((leftElement === 3 && exposureElementArr[2] === 1) || (leftElement === 0 && legendElement === 'Landcover'))
 				  && (
 				               <LandCoverLegends
 				          leftElement={leftElement}
@@ -737,37 +537,104 @@ mm
 				               />
 				  )
 				  }
-                {leftElement === 3 && (
-                    <>
-                        {[page4Legend1InroHtml, page4Legend2InroHtml,
-						 page4Legend3InroHtml].map((item, i) => (
-                            <div key={Math.random()}>
-                                {hazardLegendClickedArr[i] === 1 && (
-                                    <div
 
-                                        className={styles.mainIntroHtmlFromAPI}
-                                        style={{ textAlign: 'initial' }}
-                                        dangerouslySetInnerHTML={{
-                                            __html: item,
+                {leftElement === 3 && (
+                    <VRLegendFatality>
+					 {hazardIncidentLegendName.length > 0
+		 && ['Human Poverty Index', 'Human Development Index'].map(
+			 (item, i) => (
+				 <div
+					 className={legentItemDisabled
+						 ? styles.incidentsLegendsContainer3Disabled
+				  : styles.incidentsLegendsContainer3}
+					 key={item}
+				 >
+					 <div className={styles.hazardItemContainer3}>
+						 <button
+							 key={item}
+							 type="button"
+							 className={clickedFatalityInfraDamage === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+							 disabled={legentItemDisabled}
+						 >
+							 <Hexagon
+								 style={{
+									 innerHeight: 80,
+									 stroke: '#FFFFFF',
+									 strokeWidth: 30,
+									 fill: 'transparent',
+								 }}
+								 className={styles.educationHexagon3}
+							 />
+							 {item}
+						 </button>
+					 </div>
+				 </div>
+			 ),
+		 )}
+                    </VRLegendFatality>
+                )}
+                {leftElement === 6 && (
+                    <CriticalInfraLegends
+                        exposureElementArr={exposureElementArr}
+                        clickedArr={clickedArr}
+                        cITypeName={cITypeName}
+                        right
+                        hide={false}
+                        handleCritical={handleCriticalInfra}
+                        criticalFlood={criticalElement}
+                        leftElement={leftElement}
+                        CIState={CIState}
+                    />
+                )}
+				         {(leftElement === 6) && (
+                    <>
+                        <ResponsiveContainer
+                            className={styles.respContainer}
+                            width="100%"
+                            height={'90%'}
+                        >
+                            <BarChart
+                                width={200}
+                                height={1000}
+                                data={cIChartData}
+                                layout="vertical"
+                                margin={{ left: 15, right: 45, bottom: 25 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                    <Label
+                                        value="Critical Infrastructures"
+                                        offset={0}
+                                        position="insideBottom"
+                                        style={{
+                                            textAnchor: 'middle',
+                                            fill: 'rgba(255, 255, 255, 0.87)',
                                         }}
                                     />
-                                )}
-                            </div>
-
-                        ))}
-                        <CriticalInfraLegends
-                            exposureElementArr={exposureElementArr}
-                            clickedArr={clickedArr}
-                            cITypeName={cITypeName}
-                            right
-                            hide={false}
-                            handleCritical={handleCriticalInfra}
-                            criticalFlood={criticalElement}
-                            leftElement={leftElement}
-                            CIState={CIState}
-
-                        />
-                        <VRLegend>
+                                </XAxis>
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip
+                                    content={cITooltip}
+                                    cursor={{ fill: '#1c333f' }}
+                                />
+                                <Bar
+                                    dataKey="value"
+                                    fill="rgb(0,219,95)"
+                                    barSize={15}
+                                    tick={{ fill: '#94bdcf' }}
+                                    radius={[0, 15, 15, 0]}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </>
+                ) }
+                {leftElement === 1 && (
+                    <>
+                        <VRLegendHazard>
                             <h4
                                 className={styles.hazardElementHeaderStyle}
                                 style={{ opacity: '0.5', fontWeight: '700' }}
@@ -787,23 +654,15 @@ mm
                                 <button
                                     key={item}
                                     type="button"
-                                    className={
-                						hazardLegendClicked[i] === 1
-                							? styles.legendBtnSelected3
-                							: styles.legendBtn3
-                					}
+                                    className={clickedHazardItem === item ? styles.legendBtnSelected3 : styles.legendBtn3}
                                     onClick={() => handleMultipleHazardLayer(item, i)}
-                                    disabled={legentItemDisabled}
                                 >
                                     <Hexagon
                                         style={{
                 							innerHeight: 80,
                 							stroke: '#FFFFFF',
                 							strokeWidth: 30,
-                							fill:
-											hazardLegendClicked[i] === 1
-											    ? 'white'
-											    : 'transparent',
+                							fill: clickedHazardItem === item ? 'white' : 'transparent',
                 						}}
                                         className={styles.educationHexagon3}
                                     />
@@ -813,135 +672,127 @@ mm
                         </div>
                 	),
                 )}
+                        </VRLegendHazard>
+
+                        <VRLegendFatality>
+                            {hazardIncidentLegendName.length > 0
+                && ['Fatality', 'Infrastructure Damage'].map(
+                	(item, i) => (
+                        <div
+                            className={legentItemDisabled
+                                ? styles.incidentsLegendsContainer3Disabled
+						 : styles.incidentsLegendsContainer3}
+                            key={item}
+                        >
+                            <div className={styles.hazardItemContainer3}>
+                                <button
+                                    key={item}
+                                    type="button"
+                                    className={clickedFatalityInfraDamage === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                    onClick={() => handleFatalityInfraLayer(item, i)}
+                                    disabled={legentItemDisabled}
+                                >
+                                    <Hexagon
+                                        style={{
+                							innerHeight: 80,
+                							stroke: '#FFFFFF',
+                							strokeWidth: 30,
+                							fill: clickedFatalityInfraDamage === item ? 'white' : 'transparent',
+                						}}
+                                        className={styles.educationHexagon3}
+                                    />
+                                    {item}
+                                </button>
+                            </div>
+                        </div>
+                	),
+                )}
+                        </VRLegendFatality>
+                    </>
+                )}
+
+                {leftElement === 5 && (
+                    <>
+                        <VRLegendTemp>
                             <h4
                                 className={styles.hazardElementHeaderStyle}
                                 style={{ opacity: '0.5', fontWeight: '700' }}
                             >
-                EXPOSURE ELEMENTS
+                PRECIPITATION
                             </h4>
-                            {hazardIncidentLegendName.length > 0
-                && [
-                	'Population Density',
-                	'Critical Infrastructure',
-                	'Landcover',
-                	'Building Footprint',
-                ].map((item, i) => (
-                    <div
-                        className={legentItemDisabled
-                            ? styles.incidentsLegendsContainer3Disabled
-				 : styles.incidentsLegendsContainer3}
-                        key={item}
-                    >
-                        <div className={styles.hazardItemContainer3}>
-                            <button
-                                key={item}
-                                type="button"
-                                className={
-                					exposureElementArr[i] === 1
-                						? styles.legendBtnSelected3
-                						: styles.legendBtn3
-                				}
-                                onClick={() => handleExposure(item, i)}
-                                disabled={legentItemDisabled}
-                            >
-                                <Hexagon
-                                    style={{
-                						innerHeight: 80,
-                						stroke: '#FFFFFF',
-                						strokeWidth: 30,
-                						fill:
-										exposureElementArr[i] === 1 ? 'white' : 'transparent',
-                					}}
-                                    className={styles.educationHexagon3}
-                                />
-                                {item}
-                                {i === 0 && <div style={{ height: '1px', width: '188px', position: 'absolute', left: '-10px', top: '26px', backgroundColor: '#565656' }} className={styles.dummyLine} /> }
-                            </button>
-
+                            {precipationRefPeriod.length > 0
+                && precipationRefPeriod.map(
+                	(item, i) => (
+                        <div
+                            className={legentItemDisabled
+                                ? styles.incidentsLegendsContainer3Disabled
+						 : styles.incidentsLegendsContainer3}
+                            key={item}
+                        >
+                            <div className={styles.hazardItemContainer3}>
+                                <button
+                                    key={item}
+                                    type="button"
+                                    className={clickedHazardItem === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                >
+                                    <Hexagon
+                                        style={{
+                							innerHeight: 80,
+                							stroke: '#FFFFFF',
+                							strokeWidth: 30,
+                							fill: clickedHazardItem === item ? 'white' : 'transparent',
+                						}}
+                                        className={styles.educationHexagon3}
+                                    />
+                                    {item}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-                        </VRLegend>
-                        <FloodHistoryLegends
-                            hazardLegendClickedArr={hazardLegendClickedArr}
-                            setfloodLayer={setfloodLayer}
-                        />
-                        {hazardLegendClickedArr[0] === 1 && (
-
-                            <FloodDepthLegends />
-                        )}
-
+                	),
+                )}
+                        </VRLegendTemp>
+                        <VRLegendPre>
+                            <h4
+                                className={styles.hazardElementHeaderStyle}
+                                style={{ opacity: '0.5', fontWeight: '700' }}
+                            >
+                TEMPERTAURE
+                            </h4>
+                            {temperatureRefPeriod.length > 0
+                && temperatureRefPeriod.map(
+                	(item, i) => (
+                        <div
+                            className={legentItemDisabled
+                                ? styles.incidentsLegendsContainer3Disabled
+						 : styles.incidentsLegendsContainer3}
+                            key={item}
+                        >
+                            <div className={styles.hazardItemContainer3}>
+                                <button
+                                    key={item}
+                                    type="button"
+                                    className={clickedHazardItem === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                >
+                                    <Hexagon
+                                        style={{
+                							innerHeight: 80,
+                							stroke: '#FFFFFF',
+                							strokeWidth: 30,
+                							fill: clickedHazardItem === item ? 'white' : 'transparent',
+                						}}
+                                        className={styles.educationHexagon3}
+                                    />
+                                    {item}
+                                </button>
+                            </div>
+                        </div>
+                	),
+                )}
+                        </VRLegendPre>
                     </>
                 )}
-                {((leftElement === 2 && clickedArr[3] === 1)
-				  || (leftElement === 3 && exposureElementArr[0] === 1))
-				  && (
-				      <PopulationDensityLegends
-				          populationDensityRange={populationDensityRange}
-				          leftElement={leftElement}
-				          exposureElementArr={exposureElementArr}
-				      />
-				  )}
 
-                {leftElement === 4 && (
-                    <>
-                        <ResponsiveContainer width={'100%'} height={400}>
-                            <LineChart
-                                width={500}
-                                height={370}
-                                data={urbanData}
-                                margin={{ left: 15, right: 45, bottom: 25 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" fill="#0c2432" />
-                                <XAxis dataKey="year" tick={{ fill: '#94bdcf' }}>
-                                    <Label value="Year" offset={0} position="insideBottom" fill="white" />
-                                </XAxis>
-                                <YAxis tickFormatter={tick => tick.toLocaleString()}>
-                                    <Label value="Population" angle={-90} position="insideLeft" fill="white" />
-                                </YAxis>
-                                <Tooltip
-                                    content={urbanCustomTooltip}
-                                    cursor={{ fill: '#1c333f' }}
-                                />
-                                {/* <Legend margin={{ top: 14, left: 14,
-									 bottom: 14, right: 14 }} /> */}
-                                <Line
-                                    type="linear"
-                                    dataKey="pop"
-                                    stroke="rgb(0,219,95) "
-                                    activeDot={{ r: 8 }}
-                                    strokeWidth={3}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                        <VRLegend>
-                            {hazardIncidentLegendName.length > 0
-                && ['Landcover Change'].map(item => (
-                    <div className={styles.incidentsLegendsContainer3} key={item}>
-                        <div className={styles.hazardItemContainer3}>
-                            <button
-                                key={item}
-                                type="button"
-                                className={styles.legendBtnSelected3}
-                                onClick={() => handleLegendClicked(item)}
-                            >
-                                <Hexagon
-                                    style={{
-                						innerHeight: 80,
-                						stroke: '#FFFFFF',
-                						strokeWidth: 30,
-                						fill: '#036ef0 ',
-                					}}
-                                    className={styles.educationHexagon3}
-                                />
-                                {item}
-                            </button>
-                        </div>
-                    </div>
-                ))}
-                        </VRLegend>
-                    </>
-                )}
+                {leftElement === 7 && <DRRCountBox />}
                 <div className={styles.leftBottomBar}>
                     <NavButtons
                         handleNext={handleNext}

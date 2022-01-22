@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
@@ -123,6 +124,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'htmlResponse' },
     },
+
     jsonDataRequest: {
         url: '/keyvalue-json/',
         method: methods.GET,
@@ -143,7 +145,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         // extras: { schemaName: 'jsonResponse' },
     },
 
-
     cIGetRequest: {
         url: '/resource/',
         method: methods.GET,
@@ -156,6 +157,70 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             const { results: cI = [] } = response as Response;
             params.setCI(cI);
             // params.setPending(false);
+        },
+        onMount: true,
+        // extras: { schemaName: 'cIResponse' },
+    },
+
+    alertsGetRequest: {
+        url: '/alert/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            expand: 'event',
+            province: 2,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: alerts = [] } = response as Response;
+            params.setAlerts(alerts);
+            // params.setPending(false);
+        },
+        onMount: true,
+        // extras: { schemaName: 'cIResponse' },
+    },
+
+    vulnerabilityGetRequest: {
+        url: '/vulnerability/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            province: 2,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: vunData = [] } = response as Response;
+            params.setVunData(vunData);
+            // params.setPending(false);
+        },
+        onMount: true,
+        // extras: { schemaName: 'cIResponse' },
+    },
+
+    contactGetRequest: {
+        url: '/municipality-contact/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            province: 2,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: contactData = [] } = response as Response;
+            params.setContactData(contactData);
+            // params.setPending(false);
+        },
+        onMount: true,
+        // extras: { schemaName: 'cIResponse' },
+    },
+
+    tempDataGetRequest: {
+        url: '/nap-temperature/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            province: 2,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: tempData = [] } = response as Response;
+            params.setTempData(tempData);
         },
         onMount: true,
         // extras: { schemaName: 'cIResponse' },
@@ -181,26 +246,24 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 export const ProvinceTwo = (props) => {
     const { provinces } = props;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [pending, setpending] = useState<boolean>(true);
     const [clickedIncidentItem, setclickedIncidentItem] = useState('all');
     const leftelements = [1, 2, 3, 4, 5, 6, 7, 8];
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [leftElement, setleftElement] = useState(0);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [legendElement, setlegendElement] = useState('Adminstrative Map');
     const [incidentFilterYear, setincidentFilterYear] = useState('2017');
     const [cI, setCI] = useState([]);
+    const [alerts, setAlerts] = useState([]);
     const [htmlData, sethtmlData] = useState([]);
     const [jsonData, setjsonData] = useState([]);
     const [criticalElement, setcriticalElement] = useState('all');
-    const [showPopulation, setshowPopulation] = useState('ward');
+    const [showPopulation, setshowPopulation] = useState('popdensity');
     const [showCritical, setshowCritical] = useState(false);
     const [clickedItemMultiple, setclickedItemMultiple] = useState('');
     const [clicked, setclicked] = useState([1, 0, 0, 0]);
     const [hazardLegendClickedArr, sethazardLegendClickedArr] = useState([1, 0, 0]);
     const [exposureElementsArr, setexposureElementsArr] = useState([0, 0, 0, 0]);
-    const [clickedHazardItem, setclickedHazardItem] = useState('');
+    const [clickedHazardItem, setclickedHazardItem] = useState('Flood Hazard');
     const [exposureElement, setexposureElement] = useState('');
     const [active, setactive] = useState(1);
     const [floodLayer, setfloodLayer] = useState('5');
@@ -211,6 +274,10 @@ export const ProvinceTwo = (props) => {
     const [legentItemDisabled, setlegentItemDisabled] = useState(false);
     const [CIState, setCIState] = useState(false);
     const [selectedYear, setSelectedYear] = useState(2014);
+    const [vunData, setVunData] = useState([]);
+    const [contactData, setContactData] = useState([]);
+    const [tempData, setTempData] = useState([]);
+    const [clickedFatalityInfraDamage, setClickedFatalityInfraDamage] = useState('Fatality');
 
 
     const municipalityInfo = provinces.filter(item => item.id === 2);
@@ -229,11 +296,8 @@ export const ProvinceTwo = (props) => {
         totalAnnualincidents: 0,
     });
     const { requests:
-		{
+		{ incidentsGetRequest } } = props;
 
-		    incidentsGetRequest,
-
-		} } = props;
     const { incidentList } = props;
 
     const handleNext = () => {
@@ -241,9 +305,7 @@ export const ProvinceTwo = (props) => {
         if (
             leftElement < leftelements.length) {
             setleftElement(state => state + 1);
-            // this.disableNavBtns('both');
             setactive(leftElement + 2);
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             disableNavBtns('both');
         }
     };
@@ -254,13 +316,8 @@ export const ProvinceTwo = (props) => {
         if (leftElement > 0) {
             setleftElement(state => state - 1);
             setactive(leftElement);
-            // this.disableNavBtns('both');
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             disableNavBtns('both');
         }
-        // if (leftElement === 3) {
-        //     setcriticalElement('all');
-        // }
     };
 
 
@@ -343,25 +400,11 @@ export const ProvinceTwo = (props) => {
     const handleMultipleHazardLayer = (hazardItem, i) => {
         setlegentItemDisabled(true);
         setclickedHazardItem(hazardItem);
-        const curLegend = [...hazardLegendClickedArr];
-        if (i === 0) {
-            curLegend[0] = 1;
-            curLegend[1] = 0;
-            curLegend[2] = 0;
-            sethazardLegendClickedArr(curLegend);
-        }
-        if (i === 1) {
-            curLegend[1] = 1;
-            curLegend[0] = 0;
-            curLegend[2] = 0;
-            sethazardLegendClickedArr(curLegend);
-        }
-        if (i === 2) {
-            curLegend[2] = 1;
-            curLegend[0] = 0;
-            curLegend[1] = 0;
-            sethazardLegendClickedArr(curLegend);
-        }
+        sethazardLegendClickedArr(i);
+    };
+
+    const handleFatalityInfraLayer = (layerName, i) => {
+        setClickedFatalityInfraDamage(layerName);
     };
 
 
@@ -413,7 +456,11 @@ export const ProvinceTwo = (props) => {
 		    cIGetRequest,
 		    buildingsGetRequest,
 		    climateDataRequest,
+		    alertsGetRequest,
+		    vulnerabilityGetRequest,
 		    vulnerabilityData,
+		    contactGetRequest,
+		    tempDataGetRequest,
 		    enumData,
 		} } = props;
 
@@ -465,9 +512,6 @@ export const ProvinceTwo = (props) => {
     const DISTRICTID = String(htmlData.map(item => item.district)[0]);
 
 
-    console.log('main key name is', MAINKEYNAME);
-
-
     const SUFFIXID = '2';
     const {
         regions,
@@ -477,13 +521,33 @@ export const ProvinceTwo = (props) => {
 
     useEffect(() => {
         incidentsGetRequest.setDefaultParams({
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
             setIncidentList,
         });
         htmlRequest.setDefaultParams({
             sethtmlData,
         });
         htmlRequest.do();
+
+        alertsGetRequest.setDefaultParams({
+            setAlerts,
+        });
+        alertsGetRequest.do();
+
+        tempDataGetRequest.setDefaultParams({
+            setTempData,
+        });
+        tempDataGetRequest.do();
+
+        vulnerabilityGetRequest.setDefaultParams({
+            setVunData,
+        });
+        vulnerabilityGetRequest.do();
+
+        contactGetRequest.setDefaultParams({
+            setContactData,
+        });
+        contactGetRequest.do();
+
         jsonDataRequest.setDefaultParams({ setjsonData });
         jsonDataRequest.do();
 
@@ -492,6 +556,7 @@ export const ProvinceTwo = (props) => {
             setCI,
         });
         cIGetRequest.do();
+
         climateDataRequest.setDefaultParams({
             setRealTimeData,
         });
@@ -509,6 +574,19 @@ export const ProvinceTwo = (props) => {
         hazards,
     );
 
+    const alertColorIs = (type) => {
+        if (type === 'pollution') {
+            return 'violet';
+        }
+        if (type === 'fire') {
+            return 'red';
+        }
+        if (type === 'rain') {
+            return '#418fde';
+        }
+        return 'black';
+    };
+
 
     const geoJsonCI = {
         type: 'FeatureCollection',
@@ -520,6 +598,39 @@ export const ProvinceTwo = (props) => {
                 Name: item.title,
                 layer: item.resourceType,
                 Type: item.resourceType,
+            },
+        })),
+    };
+
+
+    const alertsGeoJson = {
+        type: 'FeatureCollection',
+        features: alerts.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                Name: item.title,
+                layer: item.resourceType,
+                Type: item.referenceType,
+                alertsColor: alertColorIs(item.referenceType),
+                referenceData: item.referenceData,
+                createdDate: item.createdOn,
+            },
+        })),
+    };
+
+
+    const contactGeoJson = {
+        type: 'FeatureCollection',
+        features: contactData.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                name: item.name,
+                mobileNumber: item.mobileNumber,
+                communityAddress: item.communityAddress,
             },
         })),
     };
@@ -604,13 +715,15 @@ export const ProvinceTwo = (props) => {
         if (pending) {
             if (incidentList.length > 0
 				&& cI.length > 0 && htmlData.length > 0
-					 && jsonData.length > 0) {
+					 && jsonData.length > 0 && alerts.length > 0
+					 && contactData.length > 0 && tempData.length > 0) {
 							 setpending(false);
             }
         }
-    }, [cI, htmlData, incidentList, jsonData, pending]);
+    }, [cI, htmlData, incidentList, jsonData, alerts, contactData, tempData, pending]);
 
-    console.log('datas are', htmlData, jsonData);
+
+    console.log('temp data is', tempData);
 
     return (
         <>
@@ -644,6 +757,8 @@ export const ProvinceTwo = (props) => {
                                         floodHazardLayersArr={floodHazardLayers[0]}
                                         leftElement={leftElement}
                                         CIData={geoJsonCI}
+                                        alerts={alertsGeoJson}
+                                        contactGeoJson={contactGeoJson}
                                         criticalElement={criticalElement}
                                         satelliteImageYears={satelliteImageYears[0]}
                                         boundingBox={bbox}
@@ -768,6 +883,11 @@ export const ProvinceTwo = (props) => {
                         leftElement={leftElement}
                         incidentData={incidentList}
                         handleIncidentItemClick={handleIncidentItemClick}
+                        handleMultipeLegendClicked={handleMultipeLegendClicked}
+                        handleMultipleHazardLayer={handleMultipleHazardLayer}
+                        clickedFatalityInfraDamage={clickedFatalityInfraDamage}
+                        handleFatalityInfraLayer={handleFatalityInfraLayer}
+                        clickedHazardItem={clickedHazardItem}
                         incidentList={pointFeatureCollectionButwal}
                         handleNext={handleNext}
                         handlePrev={handlePrev}
@@ -790,11 +910,6 @@ export const ProvinceTwo = (props) => {
 
                     <Leftpane
                         introHtml={page3TopIntrohtml[0]}
-                        page3Legend1InroHtml={page3Legend1Introhtml[0]}
-                        page3Legend2InroHtml={page3Legend2Introhtml[0]}
-                        page3Legend3InroHtml={page3Legend3Introhtml[0]}
-                        page3Legend4InroHtml={page3Legend4Introhtml[0]}
-                        populationDensityRange={populationDensityRange[0]}
                         exposureElementArr={exposureElementsArr}
                         handleCriticalInfra={handleCriticalInfra}
                         leftElement={leftElement}
@@ -802,15 +917,12 @@ export const ProvinceTwo = (props) => {
                         handlePrev={handlePrev}
                         totalPages={leftelements.length}
                         pagenumber={leftElement + 1}
-                        cI={cI}
                         criticalElement={criticalElement}
                         handleMultipeLegendClicked={handleMultipeLegendClicked}
-                        // multipleLegendItem={multipleLegendItem}
                         clickedArr={clicked}
                         setActivePage={setActivePage}
                         active={active}
                         popdensitygeojson={populationGridData[0]}
-
                         buildingsChartData={buildingCountData}
                         landCoverDataInKm={page3MidLandcoverData[0]}
                         disableNavLeftBtn={disableNavLeftBtn}
@@ -844,8 +956,7 @@ export const ProvinceTwo = (props) => {
                         handlePrev={handlePrev}
                         totalPages={leftelements.length}
                         pagenumber={leftElement + 1}
-                        clickedHazardItem={clickedHazardItem}
-                        handleMultipleHazardLayer={handleMultipleHazardLayer}
+
                         handleExposure={handleMultipleExposure}
                         exposureElement={exposureElement}
                         hazardLegendClicked={hazardLegendClickedArr}
@@ -914,6 +1025,11 @@ export const ProvinceTwo = (props) => {
                         active={active}
                         disableNavLeftBtn={disableNavLeftBtn}
                         disableNavRightBtn={disableNavRightBtn}
+                        cI={cI}
+                        CIState={CIState}
+                        criticalElement={criticalElement}
+                        handleCriticalInfra={handleCriticalInfra}
+                        exposureElementArr={exposureElementsArr}
                     />
                 )
             }

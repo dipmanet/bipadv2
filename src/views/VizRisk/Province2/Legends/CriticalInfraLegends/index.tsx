@@ -28,24 +28,11 @@ const CriticalInfraLegends = (props) => {
         const newVal = !showCriticalElements;
         setshowCriticalElements(newVal);
     };
-    let val;
-    if (clickedArr[0] === 1 && leftElement === 2) {
-        val = clickedArr[0];
-    } else {
-        val = 0;
-    }
-    let val2;
-    if (exposureElementArr[1] === 1 && leftElement === 3) {
-        val2 = exposureElementArr[1];
-    } else {
-        val2 = 0;
-    }
-
 
     return (
         <>
-            {((val === 1) || (val2 === 1)) && (
-                <div className={(leftElement === 2 && clickedArr[0] === 1) ? styles.mainDivPop : styles.mainDivPopExposure}>
+            {
+                <div className={styles.mainDivPopExposure}>
                     <button
                         type="button"
                         className={styles.toggleCritical}
@@ -130,7 +117,7 @@ SHOW ALL
 
 
                 </div>
-            )}
+            }
         </>
     );
 };

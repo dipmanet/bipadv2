@@ -21,7 +21,7 @@ export default function CIChart(props) {
             <ResponsiveContainer
 
                 width="100%"
-                height={'60%'}
+                height={'80%'}
             >
                 <BarChart
                     width={200}

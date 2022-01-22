@@ -1,0 +1,45 @@
+.vrLegendContainer{
+  background: rgba( 19, 32, 55, 0.9 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 12.0px );
+  -webkit-backdrop-filter: blur( 12.0px );
+  border-radius:5px;
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+  padding: 10px;
+  margin-bottom: 40px;
+  margin-right: 10px;
+  color: white;
+  bottom: 170px;
+  right: 70px;
+  position: fixed;
+  width: 230px;
+  z-index: 201;
+
+h2{
+  font-size:14px;
+  opacity: 0.87;
+  line-height: 1em;
+  font-family: 'Source Sans Pro';
+  font-weight: 400;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  text-transform: uppercase;
+}
+h3{
+  font-size:14px;
+  opacity: 0.87;
+  line-height: 1.3em;
+  font-family: 'Source Sans Pro';
+  font-weight: 400;
+  text-align: left;
+}
+p,button,div{
+  font-size:14px;
+  font-family: 'Source Sans Pro';
+  font-weight: 700;
+}
+
+
+
+}

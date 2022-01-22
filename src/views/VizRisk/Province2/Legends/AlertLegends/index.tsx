@@ -102,59 +102,6 @@ const LandCoverLegends = (props) => {
                     />
             Shrubs
                 </p>
-                {/* <p className={styles.landcoverIconContainer}>
-                    <Hexagon
-                        style={{
-                            stroke: '#fff',
-                            strokeWidth: 50,
-                            fill: '#ffffff',
-
-                        }}
-                        className={styles.otherIcon}
-                    />
-            Snow
-
-                </p> */}
-                {/* <p className={styles.landcoverIconContainer}>
-                    <Hexagon
-                        style={{
-                            stroke: '#fff',
-                            strokeWidth: 50,
-                            fill: '#e9e1d8',
-
-                        }}
-                        className={styles.otherIcon}
-                    />
-            Rocks/Stones
-
-                </p> */}
-                <p className={styles.landcoverIconContainer}>
-                    <Hexagon
-                        style={{
-                            stroke: '#fff',
-                            strokeWidth: 50,
-                            fill: '#04771f',
-
-                        }}
-                        className={styles.otherIcon}
-                    />
-            Grassland
-
-                </p>
-                <p className={styles.landcoverIconContainer}>
-                    <span>
-                        <Hexagon
-                            style={{
-                                stroke: '#fff',
-                                strokeWidth: 50,
-                                fill: '#e0e0e0',
-
-                            }}
-                            className={styles.otherIcon}
-                        />
-                    </span>
-                            Other
-                </p>
             </div>
         </>
     );

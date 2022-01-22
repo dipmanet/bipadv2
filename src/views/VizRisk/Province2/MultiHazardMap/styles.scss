@@ -89,6 +89,65 @@
   @extend .thumb-style;
 }
 
+.alert-tooltip {
+    box-shadow: 0 -2px 4px -3px #000;
+    max-width: 240px;
+    max-height: 240px;
+    overflow: auto;
+
+    .heading {
+        background-color: var(--color-primary);
+        padding: var(--spacing-small) var(--spacing-medium);
+        color: var(--color-text-on-primary);
+    }
+
+    .description {
+        padding: var(--spacing-small) var(--spacing-medium);
+    }
+}
+
+%row {
+    display: table-row;
+
+    .label {
+        display: table-cell;
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+
+    .value {
+        display: table-cell;
+        padding: var(--spacing-extra-small) var(--spacing-small);
+    }
+}
+
+.event-tooltip {
+    box-shadow: 0 -2px 4px -3px #000;
+    max-width: 240px;
+    max-height: 240px;
+    overflow: auto;
+
+    .heading {
+        background-color: var(--color-primary);
+        padding: var(--spacing-small) var(--spacing-medium);
+        color: var(--color-text-on-primary);
+    }
+
+    .content {
+        padding: calc(var(--spacing-small) - var(--spacing-extra-small)) calc(var(--spacing-medium) - var(--spacing-small));
+
+        .description {
+            @extend %row;
+        }
+
+        .severity {
+            @extend %row;
+        }
+
+        .created-on {
+            @extend %row;
+        }
+    }
+}
 
 
 

@@ -663,8 +663,8 @@ have been reported in Butwal Sub Metropolitian. These incidents
 
                 {leftElement === 2 && (
                     <>
-                        {[page3Legend1InroHtml, page3Legend2InroHtml,
-						 page3Legend3InroHtml, page3Legend4InroHtml].map((item, i) => (
+                        {[page3Legend1InroHtml, page3Legend3InroHtml,
+						 page3Legend4InroHtml, page3Legend2InroHtml].map((item, i) => (
                             <div key={item}>
                                 {clickedArr[i] === 1 && (
                                     <div
