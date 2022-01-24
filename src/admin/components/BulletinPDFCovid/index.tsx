@@ -65,7 +65,7 @@ const BulletinPDFLoss = (props: Props) => {
                             <LossItem
                                 lossIcon={l.logo}
                                 lossTitle={l.title}
-                                loss={covid24hrsStat[l.lossKey]}
+                                loss={Number(covid24hrsStat[l.lossKey]).toLocaleString()}
                             />
                         ))
                     }
@@ -78,7 +78,7 @@ const BulletinPDFLoss = (props: Props) => {
                             <div className={styles.maleFemale}>
                                 <GenderStat
                                     title={l.title}
-                                    value={covid24hrsStat[l.lossKey]}
+                                    value={Number(covid24hrsStat[l.lossKey]).toLocaleString()}
                                     icon={l.logo}
                                 />
                             </div>
@@ -94,7 +94,7 @@ const BulletinPDFLoss = (props: Props) => {
                                 if (i === 0) {
                                     return (
                                         <KhopBanner
-                                            value={vaccineStat[l.khopKey]}
+                                            value={Number(vaccineStat[l.khopKey]).toLocaleString()}
                                             title={l.title}
                                             percentage={null}
                                         />
@@ -102,10 +102,10 @@ const BulletinPDFLoss = (props: Props) => {
                                 }
                                 return (
                                     <KhopBanner
-                                        value={vaccineStat[l.khopKey]}
+                                        value={Number(vaccineStat[l.khopKey]).toLocaleString()}
                                         title={l.title}
                                         percentage={
-                                            ((vaccineStat.secondDosage / vaccineStat.firstDosage) * 100).toFixed(0)
+                                            (Math.round((vaccineStat.secondDosage / vaccineStat.firstDosage) * 100))
                                         }
                                     />
                                 );
@@ -122,7 +122,7 @@ const BulletinPDFLoss = (props: Props) => {
                             <LossItem
                                 lossIcon={l.logo}
                                 lossTitle={l.title}
-                                loss={covidTotalStat[l.lossKey]}
+                                loss={Number(covidTotalStat[l.lossKey]).toLocaleString()}
                             />
                         ))
                     }
@@ -180,7 +180,7 @@ const BulletinPDFLoss = (props: Props) => {
                                             Object.keys(covidProvinceWiseTotal)
                                                 .map(prov => (
                                                     <td key={prov}>
-                                                        {covidProvinceWiseTotal[prov][pwT]}
+                                                        {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
                                                     </td>
                                                 ))
 
@@ -193,7 +193,7 @@ const BulletinPDFLoss = (props: Props) => {
                     </table>
                 </div>
                 <div className={styles.pratikriyaContainer}>
-                    <h2>२४ घण्टामा बिपद्का घटनाहरुमा भएको प्रतिकृया</h2>
+                    <h2>२४ घण्टामा बिपद्का घटनाहरुमा भएको प्रतिकार्य</h2>
                     <div className={styles.pratikriyas}>
                         <ul>
                             {

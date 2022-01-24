@@ -102,8 +102,16 @@ const transformFilters = ({
     ...otherFilters,
     // ...transformDataRangeToFilter(dataDateRange, 'incident_on'),
     ...transformDataRangeLocaleToFilter(dataDateRange, 'incident_on'),
-    ...transformRegionToFilter(region),
+    // ...transformRegionToFilter(region),
 });
+const today = new Date();
+const yesterday = new Date(today);
+
+yesterday.setDate(yesterday.getDate() - 1);
+
+const DEFAULT_START_DATE = yesterday;
+const DEFAULT_END_DATE = today;
+
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidentsGetRequest: {
@@ -114,6 +122,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             ...transformFilters(filters),
             expand: ['loss', 'event', 'wards'],
             ordering: '-incident_on',
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            incident_on__gt: `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            incident_on__lt: `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
             limit: -1,
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
@@ -122,16 +134,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             setIncidentList({ incidentList });
         },
         onMount: true,
-        onPropsChanged: {
-            filters: ({
-                props: { filters },
-                prevProps: { filters: prevFilters },
-            }) => {
-                const shouldRequest = filters !== prevFilters;
-
-                return shouldRequest;
-            },
-        },
         // extras: { schemaName: 'incidentResponse' },
     },
     eventsRequest: {
@@ -218,7 +220,7 @@ class Incidents extends React.PureComponent<Props, State> {
             regions,
             hazardTypes,
         );
-
+        console.log('sanitizedIncidentList', sanitizedIncidentList);
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
 
         const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
@@ -240,8 +242,11 @@ class Incidents extends React.PureComponent<Props, State> {
     }
 }
 
-export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
-    createConnectedRequestCoordinator(),
-    createRequestClient(requests),
-)(Incidents);
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            Incidents,
+        ),
+    ),
+);

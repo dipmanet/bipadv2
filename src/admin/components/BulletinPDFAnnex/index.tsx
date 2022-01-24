@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { nepaliRef } from 'src/admin/components/BulletinForm/formFields';
@@ -47,6 +48,7 @@ const BulletinPDFAnnex = (props) => {
 
     return (
         <div className={styles.footerPDFContainer}>
+            <h1>अनुसूची १</h1>
             <h3>२४ घण्टामा बिपद्को विवरणहरु</h3>
             <table className={styles.annexTable}>
                 <thead>
@@ -62,7 +64,7 @@ const BulletinPDFAnnex = (props) => {
                     <tr>
                         {incidentSummary && Object.keys(incidentSummary).map(iS => (
                             <td key={iS}>
-                                {incidentSummary[iS]}
+                                {Number(incidentSummary[iS]).toLocaleString()}
                             </td>
                         ))}
                     </tr>
@@ -94,7 +96,7 @@ const BulletinPDFAnnex = (props) => {
                                     Object.keys(peopleLoss)
                                         .map(prov => (
                                             <td key={prov}>
-                                                {peopleLoss[prov][pwT]}
+                                                {Number(peopleLoss[prov][pwT]).toLocaleString()}
                                             </td>
                                         ))
 
@@ -131,7 +133,8 @@ const BulletinPDFAnnex = (props) => {
                                         Object.keys(hazardWiseLoss)
                                             .map(haz => (
                                                 <td key={haz}>
-                                                    {hazardWiseLoss[haz][pwT]}
+                                                    {Number(hazardWiseLoss[haz][pwT])
+                                                        .toLocaleString()}
                                                 </td>
                                             ))
 
@@ -159,7 +162,7 @@ const BulletinPDFAnnex = (props) => {
                             <tr>
                                 {genderWiseLoss && Object.keys(genderWiseLoss).map(iS => (
                                     <td key={iS}>
-                                        {genderWiseLoss[iS]}
+                                        {Number(genderWiseLoss[iS]).toLocaleString()}
                                     </td>
                                 ))}
                             </tr>
@@ -183,7 +186,7 @@ const BulletinPDFAnnex = (props) => {
                             <tr>
                                 {covid24hrsStat && Object.keys(covid24hrsStat).map(iS => (
                                     <td key={iS}>
-                                        {covid24hrsStat[iS]}
+                                        {Number(covid24hrsStat[iS]).toLocaleString()}
                                     </td>
                                 ))}
                             </tr>
@@ -209,7 +212,7 @@ const BulletinPDFAnnex = (props) => {
                             <tr>
                                 {covidTotalStat && Object.keys(covidTotalStat).map(iS => (
                                     <td key={iS}>
-                                        {covidTotalStat[iS]}
+                                        {Number(covidTotalStat[iS]).toLocaleString()}
                                     </td>
                                 ))}
                             </tr>
@@ -233,7 +236,7 @@ const BulletinPDFAnnex = (props) => {
                             <tr>
                                 {vaccineStat && Object.keys(vaccineStat).map(iS => (
                                     <td key={iS}>
-                                        {vaccineStat[iS]}
+                                        {Number(vaccineStat[iS]).toLocaleString()}
                                     </td>
                                 ))}
                             </tr>
@@ -267,7 +270,7 @@ const BulletinPDFAnnex = (props) => {
                                     Object.keys(covidProvinceWiseTotal)
                                         .map(prov => (
                                             <td key={prov}>
-                                                {covidProvinceWiseTotal[prov][pwT]}
+                                                {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
                                             </td>
                                         ))
 

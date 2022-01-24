@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import DeathIcon from 'src/admin/resources/death.svg';
+import DeathIcon from 'src/admin/resources/DeathIncident.svg';
 import IncidentIcon from 'src/admin/resources/incident.svg';
 import InfraIcon from 'src/admin/resources/infrastructure.svg';
 import InjuredIcon from 'src/admin/resources/injured.svg';

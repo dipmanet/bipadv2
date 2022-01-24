@@ -49,25 +49,9 @@ export const peopleLoss = {
 };
 
 export const hazardWiseLoss = {
-    पहिरो: {
-        deaths: 0,
-        incidents: 0,
-    },
-    'हुरी बतास': {
-        deaths: 0,
-        incidents: 0,
-    },
-    भूकम्प: {
-        deaths: 0,
-        incidents: 0,
-    },
-    'हेलिकप्टर दुर्घटना': {
-        deaths: 0,
-        incidents: 0,
-    },
-    डढेलो: {
-        deaths: 0,
-        incidents: 0,
+    आगलागी: {
+        deaths: 1,
+        incidents: 5,
     },
 };
 
@@ -145,7 +129,7 @@ export const nepaliRef = {
     cattleLoss: 'चौपाय',
     p1: 'प्रदेश १',
     p2: 'प्रदेश २',
-    sudurpaschim: 'सुदुर्पस्चिम',
+    sudurpaschim: 'सुदूरपश्चिम',
     lumbini: 'लुम्बिनी',
     karnali: 'कर्णाली',
     bagmati: 'बाग्मति',
@@ -162,10 +146,10 @@ export const nepaliRef = {
     femaleAffected: 'मिहला संक्रमित संख्या',
     maleAffected: 'पुरुष संक्रमित संख्या',
     recovered: 'निको भएका संख्या',
-    totalAffected: 'कुल संक्रमित संन्ख्या',
-    totalActive: 'कुल सक्रिय संक्रमित संन्ख्या',
-    totalDeaths: 'कुल मृत्‍यु संन्ख्या',
-    totalRecovered: 'कुल निको भएका संन्ख्या',
+    totalAffected: 'कुल संक्रमित संख्या',
+    totalActive: 'कुल सक्रिय संक्रमित संख्या',
+    totalDeaths: 'कुल मृत्‍यु संख्या',
+    totalRecovered: 'कुल निको भएका संख्या',
     firstDosage: 'पहिलो मात्रा',
     secondDosage: 'दोस्रो मात्रा',
 };

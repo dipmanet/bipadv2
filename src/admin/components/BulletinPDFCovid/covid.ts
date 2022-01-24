@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export */
-import DeathIcon from 'src/admin/resources/death.svg';
-import IncidentIcon from 'src/admin/resources/incident.svg';
-import MissingIcon from 'src/admin/resources/missing.svg';
+import DeathIcon from 'src/admin/resources/Death.svg';
+import AffectedIcon from 'src/admin/resources/Cases.svg';
+import RecoveredIcon from 'src/admin/resources/Recovered.svg';
+import ActiveIcon from 'src/admin/resources/Tested.svg';
 import FemaleIcon from 'src/admin/resources/femaleGray.svg';
 import MaleIcon from 'src/admin/resources/maleGray.svg';
 import { nepaliRef } from '../BulletinForm/formFields';
@@ -9,7 +10,7 @@ import { nepaliRef } from '../BulletinForm/formFields';
 export const covidObj24HRs = [
     {
         lossKey: 'affected',
-        logo: IncidentIcon,
+        logo: AffectedIcon,
         title: nepaliRef.affected,
     },
     {
@@ -19,7 +20,7 @@ export const covidObj24HRs = [
     },
     {
         lossKey: 'recovered',
-        logo: MissingIcon,
+        logo: RecoveredIcon,
         title: nepaliRef.recovered,
 
     },
@@ -29,23 +30,23 @@ export const covidObj24HRs = [
 export const covidObjTotal = [
     {
         lossKey: 'totalAffected',
-        logo: IncidentIcon,
+        logo: AffectedIcon,
         title: nepaliRef.totalAffected,
     },
     {
         lossKey: 'totalActive',
-        logo: DeathIcon,
+        logo: ActiveIcon,
         title: nepaliRef.totalActive,
     },
     {
         lossKey: 'totalRecovered',
-        logo: MissingIcon,
+        logo: RecoveredIcon,
         title: nepaliRef.totalRecovered,
 
     },
     {
         lossKey: 'totalDeaths',
-        logo: MissingIcon,
+        logo: DeathIcon,
         title: nepaliRef.totalDeaths,
 
     },

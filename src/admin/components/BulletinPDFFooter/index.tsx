@@ -40,6 +40,11 @@ const BulletinPDFFooter = (props) => {
                 maxTemp={tempMax}
             />
 
+            <p>
+                <strong>अनुसूची १: </strong>
+घटनाको पूर्ण विवरण हरु
+                {' '}
+            </p>
 
             <div className={styles.footer}>
                 <h2>दैनिक बुलेटिन सम्भन्धी थप जानकारी का लागि</h2>

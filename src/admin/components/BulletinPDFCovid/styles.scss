@@ -1,4 +1,9 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("/src/resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    }
 .covidPDFContainer{
+font-family: "Kalimati Regular"!important;
 width: 210mm;
 height: 297mm;
 margin: 0 auto;
@@ -90,12 +95,13 @@ display: flex;
     .provTable{
         border-collapse: collapse;
         position: relative;
-        right: 40mm;
+        right: 50mm;
         td,th{
             white-space: nowrap;
             text-align: center;
             border: 1px solid rgb(190, 188, 188);
             padding: 4px;
+            font-size: 10px;
         }
 
         tr:first-child th:first-child{

@@ -20,7 +20,7 @@ import NepaliDate from 'src/admin/components/NepaliDate';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
-import { nepaliRef } from '../BulletinForm/formFields';
+import { nepaliRef, hazardWiseLoss } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 import {
     bulletinPageSelector,
@@ -41,7 +41,7 @@ const BulletinPDF = (props: Props) => {
     const {
         sitRep,
         incidentSummary,
-        hazardWiseLoss,
+        // hazardWiseLoss,
         genderWiseLoss,
         peopleLoss,
     } = props.bulletinData;
@@ -163,7 +163,7 @@ const BulletinPDF = (props: Props) => {
                                 <LossItem
                                     lossIcon={l.logo}
                                     lossTitle={l.title}
-                                    loss={incidentSummary[l.lossKey]}
+                                    loss={Number(incidentSummary[l.lossKey]).toLocaleString()}
                                 />
                             ))
                         }

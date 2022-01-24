@@ -19,7 +19,7 @@ export const Menu = {
 
         },
         {
-            name: 'Feedbacks',
+            name: 'Response',
             icon: FeedbackLogo,
             position: 2,
 

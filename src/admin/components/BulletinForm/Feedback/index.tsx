@@ -48,7 +48,7 @@ const Bulletin = (props: Props) => {
                     <div className={styles.formItem}>
                         <FormControl fullWidth>
                             <InputLabel>
-                                {'प्रतिकृया दिनुहोस्...'}
+                                {'प्रतिकार्य ...'}
                             </InputLabel>
                             <Input
                                 type="text"
