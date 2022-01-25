@@ -1,12 +1,18 @@
 import React from 'react';
+import Covid from 'src/admin/components/Covid';
+import Navbar from 'src/admin/components/Navbar';
+import MenuCommon from 'src/admin/components/MenuCommon';
+import Footer from 'src/admin/components/Footer';
 import Page from '#components/Page';
 
-const Covid = () => (
+const Covidpage = () => (
     <>
-        <Page hideMap hideFilter />
-        <div>this is covid-19 page</div>
-
+        <Page hideFilter hideMap />
+        <Navbar />
+        <MenuCommon layout="common" currentPage={'Epidemics'} />
+        <Covid key={undefined} type={undefined} props={undefined} />
+        <Footer />
     </>
 );
 
-export default Covid;
+export default Covidpage;

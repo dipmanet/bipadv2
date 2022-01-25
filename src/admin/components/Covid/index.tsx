@@ -1,0 +1,1276 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-tabs */
+/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
+import React, { createContext, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { DatePicker } from '@mui/lab';
+import Box from '@mui/material/Box';
+// import Loader from 'react-loader';
+import Modal from 'src/admin/components/Modal';
+import styles from './styles.module.scss';
+import ListSvg from '../../resources/list.svg';
+import PlusSvg from '../../resources/plus.svg';
+import MinusSvg from '../../resources/minus.svg';
+import Ideaicon from '../../resources/ideaicon.svg';
+import Map from '../Mappointpicker/index';
+// import Successfullyaddeddata from '../../Components/SucessfullyAdded/index';
+// import { provinceData, districtData, municipalityData, wardData, covidDataIndividual, covidDataGroup } from '../../Redux/actions';
+// import { RootState } from '../../Redux/store';
+// import { covidDataPutIndividualId, covidDataPutGroupId, covidDataGetClearIndividualId, covidDataGetClearGroupId } from '../../Redux/covidActions/covidActions';
+
+export const LngLatContext = createContext([]);
+
+const Covid = () => {
+    // const { loadingCovid19IndividualId, covid19DataMainIndividualId } = useSelector((state: RootState) => state.covidGetIndividualId);
+    // const { userDataMain } = useSelector((state: RootState) => state.user);
+    // const { loadingCovid19GroupId, covid19DataMainGroupId } = useSelector((state: RootState) => state.covidGetGroupId);
+    const [fieldsToDisable, setDisableFields] = useState([]);
+
+    const [uniqueId, setuniqueId] = useState('');
+    const [reportedDate, setReportedDate] = useState(null);
+    const [formtoggler, setFormtoggler] = useState('Individual Form');
+    const [hazardInducer, sethazardInducer] = useState('');
+    const [provinceName, setprovinceName] = useState('');
+    const [districtName, setdistrictName] = useState('');
+    const [municipalityName, setmunicipalityName] = useState('');
+    const [wardName, setwardName] = useState('');
+    const [LocalAddress, setLocalAddress] = useState('');
+    const [patientStatus, setpatientStatus] = useState('');
+    const [age, setAge] = useState('');
+    const [togglePlusMinus, settogglePlusMinus] = useState({
+        geo: true,
+        casuality: true,
+        verification: true,
+    });
+    const [gender, setGender] = useState('');
+    const [condition, setCondition] = useState('');
+    const [verified, setverified] = useState(false);
+    const [notVerified, setNotVerified] = useState(false);
+    const [approved, setApproved] = useState(false);
+    const [notApproved, setNotApproved] = useState(false);
+    const addedSuccessfullyRef = useRef(null);
+    const [visibility, setvisibility] = useState('hidden');
+    const [lattitude, setLattitude] = useState('');
+    const [longitude, setLongitude] = useState('');
+    const [provinceDataIs, setProvinceDataIs] = useState([]);
+    const [districtDataIs, setdistrictDataIs] = useState([]);
+    const [municipalityDataIs, setmunicipalityDataIs] = useState([]);
+    const [wardDataIs, setwardDataIs] = useState([]);
+    const [verificationMessage, setverificationMessage] = useState('');
+    const [provinceId, setprovinceId] = useState(0);
+    const [provinceCentriodForMap, setprovinceCentriodForMap] = useState<mapboxgl.LngLatLike>([0, 0]);
+    const [districtId, setdistrictId] = useState(0);
+    const [districtCentriodForMap, setdistrictCentriodForMap] = useState<mapboxgl.LngLatLike>([0, 0]);
+    const [municipalityId, setmunicipalityId] = useState(0);
+    const [municipalityCentriodForMap, setmunicipalityCentriodForMap] = useState<mapboxgl.LngLatLike>([0, 0]);
+    const [wardId, setwardId] = useState(0);
+    const [wardCentriodForMap, setwardCentriodForMap] = useState<mapboxgl.LngLatLike>([0, 0]);
+    const addedRef = useRef(null);
+    // const dispatch = useDispatch();
+    // Group Form Section
+    const [totalMaleInFected, settotalMaleInFected] = useState(0);
+    const [totalFemaleInFected, settotalFemaleInFected] = useState(0);
+    const [totalOthersInFected, settotalOthersInFected] = useState(0);
+    const [totalDisabledInfected, settotalDisabledInfected] = useState(0);
+    const [totalMaleDeath, settotalMaleDeath] = useState(0);
+    const [totalFemaleDeath, settotalFemaleDeath] = useState(0);
+    const [totalOthersDeath, settotalOthersDeath] = useState(0);
+    const [totalDisabledDeath, settotalDisabledDeath] = useState(0);
+    const [totalMaleRecovered, settotalMaleRecovered] = useState(0);
+    const [totalFemaleRecovered, settotalFemaleRecovered] = useState(0);
+    const [totalOthersRecovered, settotalOthersRecovered] = useState(0);
+    const [totalDisabledRecovered, settotalDisabledRecovered] = useState(0);
+    const [resetMap, setresetMap] = useState(false);
+
+
+    // errors
+    const [provinceError, setprovinceError] = useState(false);
+    const [districtError, setdistrictError] = useState(false);
+    const [munError, setmunError] = useState(false);
+    const [wardError, setwardError] = useState(false);
+    const [lngError, setlngError] = useState(false);
+    const [latError, setlatError] = useState(false);
+    const [dateError, setdateError] = useState(false);
+
+
+    const [added, setAdded] = useState(false);
+    const [updated, setUpdated] = useState(false);
+    const [error, setError] = useState(false);
+
+
+    // map idle functionality
+    const [provinceDisabled, setprovinceDisabled] = useState(true);
+    const [munDisabled, setmunDisabled] = useState(true);
+    const [districtDisabled, setdistrictDisabled] = useState(true);
+    const [wardDisabled, setwardDisabled] = useState(true);
+    const [initialProvinceCenter, setinitialProvinceCenter] = useState([]);
+    const [initialDistrictCenter, setinitialDistrictCenter] = useState([]);
+    const [initialMunCenter, setinitialMunCenter] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+
+    // useEffect(() => {
+    //     dispatch(provinceData());
+    // }, [dispatch]);
+
+    // useEffect(() => {
+    //     setuniqueId();
+    //     setuniqueId('');
+    // }, []);
+
+    // useEffect(() => {
+    //     if (covid19DataMainIndividualId && Object.keys(covid19DataMainIndividualId).length > 0) {
+    //         setFormtoggler('Individual Form');
+    //         window.scrollTo(0, 1000);
+    //         if (covid19DataMainIndividualId.approved) {
+    //             setApproved(true);
+    //         } else {
+    //             setNotApproved(true);
+    //         }
+    //         if (covid19DataMainIndividualId.verified) {
+    //             setverified(true);
+    //         } else {
+    //             setNotVerified(true);
+    //         }
+    //         setuniqueId(covid19DataMainIndividualId.id);
+    //         setReportedDate(covid19DataMainIndividualId.reportedOn);
+    //         setLongitude(covid19DataMainIndividualId.point.coordinates[0]);
+    //         setLattitude(covid19DataMainIndividualId.point.coordinates[1]);
+    //         setprovinceName(covid19DataMainIndividualId.province.title);
+    //         setdistrictName(covid19DataMainIndividualId.district.title);
+    //         setmunicipalityName(covid19DataMainIndividualId.municipality.title);
+    //         setwardName(covid19DataMainIndividualId.ward.title);
+    //         setpatientStatus(covid19DataMainIndividualId.currentState);
+    //         setGender(covid19DataMainIndividualId.gender);
+    //         setverificationMessage(covid19DataMainIndividualId.verificationMessage);
+    //         dispatch(covidDataGetClearIndividualId());
+    //     }
+    // }, [dispatch]);
+
+    // useEffect(() => {
+    //     if (covid19DataMainGroupId && Object.keys(covid19DataMainGroupId).length > 0) {
+    //         setFormtoggler('Group Form');
+    //         window.scrollTo(0, 1000);
+    //         if (covid19DataMainGroupId.approved) {
+    //             setApproved(true);
+    //         } else {
+    //             setNotApproved(true);
+    //         }
+    //         if (covid19DataMainGroupId.verified) {
+    //             setverified(true);
+    //         } else {
+    //             setNotVerified(true);
+    //         }
+    //         setuniqueId(covid19DataMainGroupId.id);
+    //         setReportedDate(covid19DataMainIndividualId.reportedOn);
+    //         setprovinceName(covid19DataMainGroupId.province.title);
+    //         setdistrictName(covid19DataMainGroupId.district.title);
+    //         setmunicipalityName(covid19DataMainGroupId.municipality ? covid19DataMainGroupId.municipality.title : '');
+    //         setwardName(covid19DataMainGroupId.ward ? covid19DataMainGroupId.ward.title : '');
+    //         sethazardInducer(covid19DataMainGroupId.hazardInducer);
+    //         settotalMaleInFected(covid19DataMainGroupId.newcasesMale);
+    //         dispatch(covidDataGetClearGroupId());
+    //     }
+    // }, [dispatch]);
+
+
+    // const { provincialData, loading } = useSelector((state: RootState) => state.province);
+    // const { districtDataMain, loadingDistrict } = useSelector((state: RootState) => state.district);
+    // const { municipalityDataMain, loadingMunicipality } = useSelector((state: RootState) => state.municipality);
+    // const { wardDataMain, loadingWard } = useSelector((state: RootState) => state.ward);
+    // const { loadingCovid19Individual, errorCovidIndividual } = useSelector((state: RootState) => state.covidIndividual);
+    // const { errorCovidIndividualPutId } = useSelector((state: RootState) => state.covidPutIndividualId);
+
+    // useEffect(() => {
+    //     if (errorCovidIndividual) {
+    //         setError(true);
+    //     } else {
+    //         setError(false);
+    //     }
+    // }, [errorCovidIndividual]);
+
+    // useEffect(() => {
+    //     if (!loading) {
+    //         setProvinceDataIs(provincialData);
+    //     }
+    // }, [loading, provincialData]);
+
+    // const getDisabled = (field: string) => fieldsToDisable.includes(field);
+
+
+    // console.log('userDataMain is', userDataMain);
+
+    useEffect(() => {
+        // const allFields = Object.keys(institutionDetails);
+        const allFields = [
+            'point',
+            'uniqueId',
+            'reportedDate',
+            'formtoggler',
+            'hazardInducer',
+            'provinceName',
+            'districtName',
+            'municipalityName',
+            'wardName',
+            'LocalAddress',
+            'patientStatus',
+            'age',
+            'togglePlusMinus',
+            'gender',
+            'condition',
+            'verified',
+            'notVerified',
+            'approved',
+            'notApproved',
+            'validationError',
+            'visibility',
+            'lattitude',
+            'longitude',
+            'provinceDataIs',
+            'districtDataIs',
+            'municipalityDataIs',
+            'wardDataIs',
+            'verificationMessage',
+            'provinceId',
+            'provinceCentriodForMap',
+            'districtId',
+            'districtCentriodForMap',
+            'municipalityId',
+            'municipalityCentriodForMap',
+            'wardId',
+            'wardCentriodForMap',
+            'totalMaleInFected',
+            'totalFemaleInFected',
+            'totalOthersInFected',
+            'totalDisabledInfected',
+            'totalMaleDeath',
+            'totalFemaleDeath',
+            'totalOthersDeath',
+            'totalDisabledDeath',
+            'totalMaleRecovered',
+            'totalFemaleRecovered',
+            'totalOthersRecovered',
+            'totalDisabledRecovered',
+            'resetMap',
+            'is_verified',
+            'is_approved',
+            'verification_message',
+        ];
+
+        const fieldsToGiveValidator = [
+            'verified',
+            'notVerified',
+            'approved',
+            'notApproved',
+            'verificationMessage',
+        ];
+
+        // if (uniqueId) {
+        //     if (userDataMain.isSuperuser) {
+        //         setDisableFields([]);
+        //     } else if (
+        //         userDataMain.profile
+        // 		&& userDataMain.profile.role
+        // 		&& userDataMain.profile.role === 'validator'
+        //     ) {
+        //         if (typeof covid19DataMainIndividualId !== 'array' && covid19DataMainIndividualId && covid19DataMainIndividualId.id) {
+        //             console.log('here we are covid edit');
+        //             setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
+        //         } else {
+        //             console.log('here we are covid not edit');
+        //             setDisableFields(allFields);
+        //         }
+        //     } else if (
+        //         userDataMain.profile
+        // 		&& userDataMain.profile.role
+        // 		&& userDataMain.profile.role === 'user'
+        //     ) {
+        //         setDisableFields(allFields.filter(f => fieldsToGiveValidator.includes(f)));
+        //     } else if (
+        //         userDataMain.profile
+        // 		&& userDataMain.profile.role
+        // 		&& userDataMain.profile.role === 'editor'
+        //     ) {
+        //         setDisableFields([]);
+        //     } else {
+        //         setDisableFields(allFields);
+        //     }
+        // }
+    }, [uniqueId]);
+
+
+    // useEffect(() => {
+    //     if (userDataMain && userDataMain.profile && userDataMain.profile.province && provincialData && provincialData.length > 0) {
+    //         const nameOfProvince = provincialData.filter(item => item.id === userDataMain.profile.province).map(item => item.title)[0];
+    //         setprovinceName(nameOfProvince);
+    //         const provinceCenter = provincialData.filter(item => item.id === userDataMain.profile.province).map(item => item.centroid.coordinates)[0];
+    //         setinitialProvinceCenter(provinceCenter);
+    //     }
+    //     if (userDataMain && userDataMain.profile && userDataMain.profile.district && districtDataMain && districtDataMain.length > 0) {
+    //         const nameOfDistrict = districtDataMain.filter(item => item.id === userDataMain.profile.district).map(item => item.title)[0];
+    //         setdistrictName(nameOfDistrict);
+    //         const districtCenter = districtDataMain.filter(item => item.id === userDataMain.profile.district).map(item => item.centroid.coordinates)[0];
+    //         setinitialDistrictCenter(districtCenter);
+    //     }
+    //     if (userDataMain && userDataMain.profile && userDataMain.profile.municipality && municipalityDataMain && municipalityDataMain.length > 0) {
+    //         const nameOfMunicipality = municipalityDataMain.filter(item => item.id === userDataMain.profile.municipality).map(item => item.title)[0];
+    //         setmunicipalityName(nameOfMunicipality);
+    //         const munCenter = municipalityDataMain.filter(item => item.id === userDataMain.profile.municipality).map(item => item.centroid.coordinates)[0];
+    //         setinitialMunCenter(munCenter);
+    //     }
+    //     if (userDataMain && userDataMain.profile && userDataMain.profile.ward && wardDataMain && wardDataMain.length > 0) {
+    //         const nameOfWard = wardDataMain.filter(item => item.id === userDataMain.profile.ward).map(item => item.title)[0];
+    //         setprovinceName(nameOfWard);
+    //     }
+    // }, [provincialData, districtDataMain, municipalityDataMain, wardDataMain]);
+
+
+    // useEffect(() => {
+    //     const provinceId = provinceDataIs.filter(item => item.title === provinceName).map(item => item.id)[0];
+    //     if (provinceName) {
+    //         dispatch(districtData(provinceId));
+    //         setprovinceId(provinceId);
+    //     }
+    // }, [dispatch, provinceDataIs, provinceName]);
+
+
+    // useEffect(() => {
+    //     if (!loadingDistrict) {
+    //         setdistrictDataIs(districtDataMain);
+    //     }
+    // }, [districtDataMain, loadingDistrict]);
+
+
+    // useEffect(() => {
+    //     const districtId = districtDataIs.filter(item => item.title === districtName).map(item => item.id)[0];
+    //     if (districtName) {
+    //         dispatch(municipalityData(districtId));
+    //         setdistrictId(districtId);
+    //     }
+    // }, [dispatch, districtDataIs, districtName]);
+
+
+    // useEffect(() => {
+    //     if (!loadingMunicipality) {
+    //         setmunicipalityDataIs(municipalityDataMain);
+    //     }
+    // }, [loadingMunicipality, municipalityDataMain]);
+
+
+    // useEffect(() => {
+    //     if (municipalityDataIs && municipalityDataIs.length > 0) {
+    //         const munId = municipalityDataIs.filter(item => item.title === municipalityName).map(item => item.id)[0];
+    //         if (municipalityName) {
+    //             dispatch(wardData(munId));
+    //             setmunicipalityId(munId);
+    //         }
+    //     }
+    // }, [dispatch, municipalityDataIs, municipalityName]);
+
+
+    // useEffect(() => {
+    //     if (!loadingWard) {
+    //         setwardDataIs(wardDataMain);
+    //     }
+    // }, [loadingWard, wardDataMain]);
+
+    // useEffect(() => {
+    //     if (wardDataIs && wardDataIs.length > 0) {
+    //         const wardId = wardDataIs.filter(item => item.title === String(wardName)).map(item => item.id)[0];
+    //         if (wardName) {
+    //             setwardId(wardId);
+    //         }
+    //     }
+    // }, [wardDataIs, wardName]);
+
+
+    // useEffect(() => {
+    //     if (provinceId) {
+    //         const provinceCentriodForMap = provinceDataIs.filter(item => item.id === provinceId)
+    //             .map(item => item.centroid.coordinates)[0];
+    //         setprovinceCentriodForMap(provinceCentriodForMap);
+    //     }
+    // }, [provinceDataIs, provinceId]);
+
+    // useEffect(() => {
+    //     if (districtId) {
+    //         const districtCentriodForMap = districtDataIs.filter(item => item.id === districtId)
+    //             .map(item => item.centroid.coordinates)[0];
+    //         setdistrictCentriodForMap(districtCentriodForMap);
+    //     }
+    // }, [districtDataIs, districtId]);
+
+    // useEffect(() => {
+    //     if (municipalityId) {
+    //         const municipalityCentriodForMap = municipalityDataIs.filter(item => item.id === municipalityId)
+    //             .map(item => item.centroid.coordinates)[0];
+    //         setmunicipalityCentriodForMap(municipalityCentriodForMap);
+    //     }
+    // }, [municipalityDataIs, municipalityId]);
+
+    // useEffect(() => {
+    //     if (wardId) {
+    //         const wardCentriodForMap = wardDataIs.filter(item => item.id === wardId)
+    //             .map(item => item.centroid.coordinates)[0];
+    //         setwardCentriodForMap(wardCentriodForMap);
+    //     }
+    // }, [wardDataIs, wardId]);
+
+
+    const handleVerifiedChange = () => {
+        setverified(true);
+        setNotVerified(false);
+    };
+    const handleNotVerifiedChange = () => {
+        setverified(false);
+        setNotVerified(true);
+    };
+    const handleApprovedChange = () => {
+        setApproved(true);
+        setNotApproved(false);
+    };
+    const handleNotApprovedChange = () => {
+        setApproved(false);
+        setNotApproved(true);
+    };
+    const covid19DataSummaryIndividual = {
+        gender,
+        age: age || null,
+        currentState: patientStatus || 'active',
+        point: {
+            type: 'Point',
+            coordinates: [
+                longitude, lattitude,
+            ],
+        },
+        // reportedOn : typeof reportedDate === 'object' ? reportedDate.toISOString().slice(0,10): null,
+        hazardInducer,
+        verified,
+        verificationMessage,
+        approved,
+        province: provinceId,
+        district: districtId,
+        municipality: municipalityId,
+        ward: wardId,
+    };
+
+    const covid19DataSummaryGroup = {
+        // reportedOn : typeof reportedDate === 'object' ? new Date(reportedDate).toISOString().slice(0,10): null,
+        hazardInducer,
+        gender,
+        province: provinceId,
+        district: districtId,
+        municipality: municipalityId,
+        ward: wardId,
+        newCasesMale: totalMaleInFected,
+        newCasesFemale: Number(totalFemaleInFected),
+        newCasesOther: Number(totalOthersInFected),
+        newCasesDisabled: Number(totalDisabledInfected),
+        newDeathMale: Number(totalMaleDeath),
+        newDeathFemale: Number(totalFemaleDeath),
+        newDeathOther: Number(totalOthersDeath),
+        newDeathDisabled: Number(totalDisabledDeath),
+        newRecoveredMale: Number(totalMaleRecovered),
+        newRecoveredFemale: Number(totalFemaleRecovered),
+        newRecoveredOther: Number(totalOthersRecovered),
+        newRecoveredDisabled: Number(totalDisabledRecovered),
+        isVerified: verified,
+        verificationMessage,
+        approved,
+    };
+
+    const handleCovid19DataEntry = () => {
+        if (formtoggler === 'Individual Form') {
+            if (!provinceName || !districtName || !municipalityName || !wardName || !longitude || !lattitude || !reportedDate) {
+                if (!provinceName) {
+                    setprovinceError(true);
+                } else {
+                    setprovinceError(false);
+                }
+                if (!districtName) {
+                    setdistrictError(true);
+                } else {
+                    setdistrictError(false);
+                }
+                if (!municipalityName) {
+                    setmunError(true);
+                } else {
+                    setmunError(false);
+                }
+                if (!wardName) {
+                    setwardError(true);
+                } else {
+                    setwardError(false);
+                }
+                if (!longitude) {
+                    setlngError(true);
+                } else {
+                    setlngError(false);
+                }
+                if (!longitude) {
+                    setlatError(true);
+                } else {
+                    setlatError(false);
+                }
+                if (!reportedDate) {
+                    setdateError(true);
+                } else {
+                    setdateError(false);
+                }
+                window.scrollTo(0, 500);
+            } else {
+                // if (formtoggler === 'Individual Form' && uniqueId) {
+                //     if (userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator') {
+                //         console.log('putting...');
+                //         dispatch(covidDataPutIndividualId(uniqueId, covid19DataSummaryIndividual, true));
+                //     } else {
+                //         dispatch(covidDataPutIndividualId(uniqueId, covid19DataSummaryIndividual, false));
+                //     }
+                //     setUpdated(true);
+                //     setresetMap(true);
+                // } else {
+                //     dispatch(covidDataIndividual(covid19DataSummaryIndividual));
+                //     setAdded(true);
+                //     setresetMap(true);
+                // }
+                setReportedDate(null);
+                setvisibility('visible');
+                setLongitude('');
+                setLattitude('');
+                setuniqueId('');
+                sethazardInducer('');
+                setNotVerified(false);
+                setNotApproved(false);
+                setLocalAddress('');
+                setpatientStatus('');
+                setAge('');
+                setGender('');
+                setCondition('');
+                setverified(false);
+                setverificationMessage('');
+                setApproved(false);
+            }
+        }
+        if (formtoggler === 'Group Form') {
+            if (!provinceName || !districtName || !municipalityName || !wardName) {
+                if (!provinceName) {
+                    setprovinceError(true);
+                } else {
+                    setprovinceError(false);
+                }
+                if (!districtName) {
+                    setdistrictError(true);
+                } else {
+                    setdistrictError(false);
+                }
+                if (!municipalityName) {
+                    setmunError(true);
+                } else {
+                    setmunError(false);
+                }
+                if (!wardName) {
+                    setwardError(true);
+                } else {
+                    setwardError(false);
+                }
+                if (!reportedDate) {
+                    setdateError(true);
+                } else {
+                    setdateError(false);
+                }
+                window.scrollTo(0, 500);
+            } else {
+                // if (formtoggler === 'Group Form' && uniqueId) {
+                //     dispatch(covidDataPutGroupId(uniqueId, covid19DataSummaryGroup));
+                //     setresetMap(true);
+                //     setUpdated(true);
+                // } else {
+                //     dispatch(covidDataGroup(covid19DataSummaryGroup));
+                //     setAdded(true);
+                //     setresetMap(true);
+                // }
+                setvisibility('visible');
+                setLongitude('');
+                setLattitude('');
+                // setvalidationError('');
+                setReportedDate(null);
+                setuniqueId('');
+                sethazardInducer('');
+                setLocalAddress('');
+                setpatientStatus('');
+                setAge('');
+                setGender('');
+                setCondition('');
+                setverified(false);
+                setNotVerified(false);
+                setNotApproved(false);
+                setverificationMessage('');
+                setApproved(false);
+                settotalMaleInFected('');
+                settotalFemaleInFected('');
+                settotalDisabledInfected('');
+                settotalDisabledInfected('');
+                settotalMaleDeath('');
+                settotalFemaleDeath('');
+                settotalOthersDeath('');
+                settotalDisabledDeath('');
+                settotalMaleRecovered('');
+                settotalFemaleRecovered('');
+                settotalOthersRecovered('');
+                settotalDisabledRecovered('');
+            }
+        }
+    };
+
+    const handleOk = () => {
+        // addedSuccessfullyRef.current.style.visibility = 'hidden';
+        // document.body.style.backgroundColor = '';
+        setvisibility('hidden');
+    };
+
+    const handleShowhideGeo = () => {
+        if (togglePlusMinus.geo) {
+            settogglePlusMinus(prevState => ({ ...prevState }));
+        } else {
+            // settogglePlusMinus(prevState=> prevState.geo=false);
+        }
+    };
+
+    const handleChangeForm = (formName) => {
+        if (formName === 'Group Form') {
+            setFormtoggler('Group Form');
+        } else {
+            setFormtoggler('Individual Form');
+        }
+    };
+
+    const centriodsForMap = {
+        provinceCentriodForMap,
+        districtCentriodForMap,
+        municipalityCentriodForMap,
+        wardCentriodForMap,
+        provinceId,
+        districtId,
+        municipalityId,
+        wardId,
+        setLattitude,
+        setLongitude,
+    };
+    const handleUpdateSuccess = () => {
+        setAdded(false);
+        setUpdated(false);
+        setError(false);
+    };
+
+    const handleAddedSuccess = () => {
+        setAdded(false);
+        setUpdated(false);
+        setError(false);
+    };
+    const handleErrorClose = () => {
+        setAdded(false);
+        setUpdated(false);
+        setError(false);
+    };
+    console.log('centers are', typeof reportedDate);
+
+
+    return (
+
+        <>
+            <Box>
+                <div className={styles.covid19MainFormPage}>
+                    <div className={styles.individualGroupFormToggler}>
+                        <h1 className={styles.headerCovid}>Covid-19 Data Structure</h1>
+                        <div className={styles.maintoggler}>
+                            {
+                                ['Individual Form', 'Group Form'].map(item => (
+                                    <button
+                                        key={item}
+                                        type="submit"
+                                        onClick={() => handleChangeForm(item)}
+                                        className={item === formtoggler ? styles.togglerIndGroActive
+                                            : styles.togglerIndGro}
+                                    >
+                                        {item}
+                                    </button>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <p className={styles.dataReporting}>Data Reporting</p>
+                    <div className={styles.twoSections}>
+                        <div className={styles.reportingStatus}>
+                            <div className={styles.reporting}>
+                                <img className={styles.listSvg} src={ListSvg} alt="" />
+                                <p className={styles.reportingText}>COVID-19 Reporting</p>
+                                <p className={styles.greenCircle} />
+                            </div>
+                        </div>
+                        <div className={styles.mainForm}>
+                            <div className={styles.generalInfoAndTableButton}>
+                                <h1 className={styles.generalInfo}>General Information</h1>
+                                <button type="button" className={styles.viewDataTable}>View Data Table</button>
+                            </div>
+                            <div className={styles.shortGeneralInfo}>
+                                <img className={styles.ideaIcon} src={Ideaicon} alt="" />
+                                {
+                                    formtoggler === 'Individual Form'
+                                        ? <p className={styles.ideaPara}>The individual COVID-19 form consists of the geographical information of the affected people, and the casualty details disaggregated by gender and disability.</p>
+                                        : <p className={styles.ideaPara}>The group COVID-19 form consists of the geographical information of the affected area, and the casualty details with total infected, total death, and total recovered disaggregated by gender and disability.</p>
+                                }
+
+                            </div>
+                            <div className={styles.infoBar}>
+                                <p className={styles.instInfo}>
+													Reported Date, Patient Status, and Location are required fields
+                                </p>
+                            </div>
+
+                            <div className={styles.mainCovidDataEntrySection}>
+                                <h3 className={styles.formGeneralInfo}>General Information</h3>
+                                <div className={styles.twoInputSections}>
+                                    <TextField
+                                        className={styles.materialUiInput}
+                                        type="number"
+                                        disabled
+                                        value={uniqueId}
+                                        onChange={e => setuniqueId(e.target.value)}
+                                        id="outlined-basic"
+                                        label="Id"
+                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                        <DatePicker
+                                            label="Reported Date"
+                                            value={reportedDate}
+                                            onChange={(newValue) => {
+                                                setReportedDate(newValue);
+                                            }}
+                                                            // disabled={getDisabled('reportedDate')}
+                                            renderInput={params => <TextField error={dateError} className={styles.materialUiInput} {...params} helperText={dateError ? 'This is required' : ''} />}
+                                        />
+                                    </LocalizationProvider>
+                                </div>
+
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Hazard Inducer"
+                                    variant="outlined"
+                                    className={styles.hazardInducer}
+                                                    // disabled={getDisabled('hazardInducer')}
+                                    value={hazardInducer}
+                                    onChange={e => sethazardInducer(e.target.value)}
+                                />
+
+                                <div className={styles.infoBar}>
+                                    <p className={styles.instInfo}>
+                                        <span style={{ color: '#003572' }} />
+                                                        Geographical Information on the area
+
+                                    </p>
+                                    <div role="presentation" className={styles.plusMinus} onKeyDown={handleShowhideGeo} onClick={handleShowhideGeo}>
+                                        {
+                                            togglePlusMinus ? (
+                                                <img src={PlusSvg} alt="" />
+                                            ) : (
+                                                <img src={MinusSvg} alt="" />
+                                            )
+                                        }
+                                    </div>
+                                </div>
+
+                                <div className={styles.fourInputSections}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Select Province</InputLabel>
+                                        <Select
+                                            error={provinceError}
+                                            className={styles.adminLvlSelection}
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={provinceName}
+                                            label="Select Province"
+                                            onChange={e => setprovinceName(e.target.value)}
+                                                            // disabled={getDisabled('provinceName') || (userDataMain.profile && userDataMain.profile.province)}
+                                            required
+                                        >
+                                            {provinceDataIs && provinceDataIs.map(item => (
+                                                <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+                                            ))}
+
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Select District</InputLabel>
+                                        <Select
+                                            error={districtError}
+                                                            // className={provinceName === '' && loadingDistrict ? styles.adminLvlSelectionDisabled
+                                            //     : styles.adminLvlSelection}
+                                            // disabled={provinceName === '' || getDisabled('districtName') || (userDataMain.profile && userDataMain.profile.district)}
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={districtName}
+                                            label="Select District"
+                                            onChange={e => setdistrictName(e.target.value)}
+                                        >
+                                            {districtDataIs && districtDataIs.map(item => (
+                                                <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Select Municipality</InputLabel>
+                                        <Select
+                                            error={munError}
+                                                            // className={districtName === '' || loadingMunicipality ? styles.adminLvlSelectionDisabled
+                                            //     : styles.adminLvlSelection}
+                                            // disabled={districtName === '' || getDisabled('municipalityName') || (userDataMain.profile && userDataMain.profile.municipality)}
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={municipalityName}
+                                            label="Select Municipality"
+                                            onChange={e => setmunicipalityName(e.target.value)}
+                                        >
+                                            {municipalityDataIs && municipalityDataIs.map(item => (
+                                                <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Select Ward</InputLabel>
+                                        <Select
+                                            error={wardError}
+                                                            // disabled={municipalityName === '' || getDisabled('wardName')}
+                                            // className={municipalityName === '' || loadingWard ? styles.adminLvlSelectionDisabled
+                                            //     : styles.adminLvlSelection}
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={wardName}
+                                            label="Select Ward"
+                                            onChange={e => setwardName(e.target.value)}
+                                        >
+                                            {wardDataIs && wardDataIs.map(item => Number(item.title)).sort((a, b) => a - b).map(item => (
+                                                <MenuItem key={item} value={item}>{item}</MenuItem>
+                                            ))}
+                                            {/* {wardDataIs && wardDataIs.map(item =>
+															<MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
+														)} */}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <Map
+                                    centriodsForMap={centriodsForMap}
+                                    initialProvinceCenter={initialProvinceCenter}
+                                    initialDistrictCenter={initialDistrictCenter}
+                                    initialMunCenter={initialMunCenter}
+                                />
+
+                                <div className={formtoggler === 'Individual Form' ? styles.togglingSectionIndividual : styles.togglingSectionIndividualNone}>
+                                    <TextField
+                                        className={styles.hazardInducer}
+                                        id="outlined-basic"
+                                        label="Local Address(Kindly Specify)"
+                                        variant="outlined"
+                                        value={LocalAddress}
+                                                        // disabled={getDisabled('LocalAddress')}
+
+                                        onChange={e => setLocalAddress(e.target.value)}
+                                    />
+
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            error={latError}
+                                            type="number"
+                                            value={lattitude}
+                                                            // disabled={getDisabled('lattitude')}
+
+                                            onChange={e => setLattitude(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Lattitude"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            error={lngError}
+                                            type="number"
+                                                            // disabled={getDisabled('longitude')}
+
+                                            value={longitude}
+                                            onChange={e => setLongitude(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Longitude"
+                                        />
+
+                                    </div>
+                                    <LngLatContext.Provider value={[longitude, setLongitude, lattitude, setLattitude]}>
+                                        {/* {
+                                                            (uniqueId && longitude && longitude)
+															&& (
+															    // <Map
+															    //     // disabled={getDisabled('point')}
+															    //     centriodsForMap={centriodsForMap}
+															    //     resetMap={resetMap}
+															    //     editedCoordinates={{ point: { type: 'Point', coordinates: [longitude, lattitude] } }}
+															    // />
+															)
+
+							                            }
+
+                                                        {
+							                                (!uniqueId && (initialMunCenter.length > 0 || initialDistrictCenter.length > 0 || initialProvinceCenter.length > 0))
+															&& (
+															    // <Map
+															    //     disabled={getDisabled('point')}
+															    //     centriodsForMap={centriodsForMap}
+															    //     resetMap={resetMap}
+															    //     initialProvinceCenter={initialProvinceCenter}
+															    //     initialDistrictCenter={initialDistrictCenter}
+															    //     initialMunCenter={initialMunCenter}
+															    // />
+															)
+
+							                            } */}
+
+
+                                    </LngLatContext.Provider>
+                                    <div className={styles.infoBarCasuality}>
+                                        <p className={styles.instInfo}>
+                                            {' '}
+                                            <span style={{ color: '#003572' }} />
+                                            {' '}
+                                            {' '}
+															Casuality Statistics of the area
+
+                                        </p>
+                                    </div>
+
+
+                                    <div className={styles.fourInputSections}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Patient Status</InputLabel>
+                                            <Select
+                                                // disabled={getDisabled('patientStatus')}
+                                                className={styles.adminLvlSelection}
+                                                labelId="demo-simple-select-dfghjkl"
+                                                id="demo-simple-fghjk"
+                                                value={patientStatus}
+                                                label="Patient Status"
+                                                onChange={e => setpatientStatus(e.target.value)}
+                                                style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
+                                                disableUnderline
+                                            >
+                                                <MenuItem value="death">Death</MenuItem>
+                                                <MenuItem value="active">Active</MenuItem>
+                                                <MenuItem value="recovered">Recovered</MenuItem>
+                                            </Select>
+
+                                        </FormControl>
+
+                                        <TextField
+                                            // disabled={getDisabled('age')}
+
+                                            className={styles.adminLvlSelection}
+                                            type="number"
+                                            value={age}
+                                            onChange={e => setAge(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Age"
+                                        />
+
+
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+                                            <Select
+                                                // disabled={getDisabled('gender')}
+
+                                                className={styles.adminLvlSelection}
+                                                labelId="demo-simple-select-label-random"
+                                                id="demo-simple-select-random123"
+                                                value={gender}
+                                                label="Gender"
+                                                onChange={e => setGender(e.target.value)}
+                                            >
+                                                <MenuItem value="male">Male</MenuItem>
+                                                <MenuItem value="female">Female</MenuItem>
+                                                <MenuItem value="other">Other</MenuItem>
+                                            </Select>
+                                        </FormControl>
+
+                                        <FormControl fullWidth>
+                                            <InputLabel id="demo-simple-select-label">Disabled</InputLabel>
+                                            <Select
+                                                // disabled={getDisabled('condition')}
+
+                                                className={styles.adminLvlSelection}
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={condition}
+                                                label="Disabled"
+                                                onChange={e => setCondition(e.target.value)}
+                                            >
+                                                <MenuItem value="Disabled">Disabled</MenuItem>
+                                                <MenuItem value="null">-</MenuItem>
+
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                {/* -----------------------------------Group From-----------------------------						 */}
+                                <div className={formtoggler === 'Group Form' ? styles.togglingSectionGroup : styles.togglingSectionGroupNone}>
+                                    <div className={styles.infoBarCasuality}>
+                                        <p className={styles.instInfo}>
+                                            {' '}
+                                            <span style={{ color: '#003572' }} />
+                                            {' '}
+                                            {' '}
+															Casuality Statistics of the area
+
+                                        </p>
+                                    </div>
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                            value={totalMaleInFected}
+                                            onChange={e => settotalMaleInFected(e.target.value)}
+                                                            // disabled={getDisabled('totalMaleInFected')}
+                                            id="outlined-basic"
+                                            label="Total Male Infected"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalFemaleInFected')}
+
+                                            value={totalFemaleInFected}
+                                            onChange={e => settotalFemaleInFected(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Female infected"
+                                        />
+
+                                    </div>
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalOthersInFected')}
+                                            value={totalOthersInFected}
+                                            onChange={e => settotalOthersInFected(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Disabled Infected"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalDisabledInfected')}
+
+                                            value={totalDisabledInfected}
+                                            onChange={e => settotalDisabledInfected(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Disabled Infected"
+                                        />
+
+                                    </div>
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalMaleDeath')}
+
+                                            value={totalMaleDeath}
+                                            onChange={e => settotalMaleDeath(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Male Death"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalFemaleDeath')}
+
+                                            value={totalFemaleDeath}
+                                            onChange={e => settotalFemaleDeath(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Female Death"
+                                        />
+
+                                    </div>
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalOthersDeath')}
+
+                                            value={totalOthersDeath}
+                                            onChange={e => settotalOthersDeath(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Others Death"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalDisabledDeath')}
+
+                                            value={totalDisabledDeath}
+                                            onChange={e => settotalDisabledDeath(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Disabled Death"
+                                        />
+
+                                    </div>
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalMaleRecovered')}
+
+                                            value={totalMaleRecovered}
+                                            onChange={e => settotalMaleRecovered(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Male Recovered"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalFemaleRecovered')}
+
+                                            value={totalFemaleRecovered}
+                                            onChange={e => settotalFemaleRecovered(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Female Recovered"
+                                        />
+
+                                    </div>
+                                    <div className={styles.twoInputSections}>
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalOthersRecovered')}
+
+                                            value={totalOthersRecovered}
+                                            onChange={e => settotalOthersRecovered(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Others Recovered"
+                                        />
+
+                                        <TextField
+                                            className={styles.materialUiInput}
+                                            type="number"
+                                                            // disabled={getDisabled('totalDisabledRecovered')}
+
+                                            value={totalDisabledRecovered}
+                                            onChange={e => settotalDisabledRecovered(e.target.value)}
+                                            id="outlined-basic"
+                                            label="Total Disabled Recovered"
+                                        />
+
+                                    </div>
+
+                                </div>
+                                <div className={styles.infoBarCasuality}>
+                                    <p className={styles.instInfo}>
+                                        {' '}
+                                        <span style={{ color: '#003572' }} />
+                                        {' '}
+                                        {'  '}
+														Verification of the data
+
+                                    </p>
+                                </div>
+                                <div className={styles.checkBoxArea}>
+                                    <p className={styles.verifiedOrApproved}>01.Verified</p>
+                                    <div className={styles.verified}>
+                                        <input
+                                            type="checkbox"
+                                            name="verifiedCheck"
+                                            id="verified"
+                                            checked={verified}
+                                                            // disabled={getDisabled('verified')}
+                                            onChange={handleVerifiedChange}
+                                        />
+
+
+                                        <label htmlFor="verified">Yes</label>
+
+
+                                    </div>
+                                    <div className={styles.notVerified}>
+                                        <input
+                                            type="checkbox"
+                                            name="verifiedCheck"
+                                            id="notVerified"
+                                            checked={notVerified}
+                                                            // disabled={getDisabled('notVerified')}
+
+                                            onChange={handleNotVerifiedChange}
+                                        />
+                                        <label htmlFor="notVerified">No</label>
+                                    </div>
+                                </div>
+                                <div className={styles.checkBoxArea}>
+
+                                    <TextField
+                                        className={styles.hazardInducer}
+                                        id="outlined-basic"
+                                        label="Verification Message"
+                                        value={verificationMessage}
+                                                        // disabled={getDisabled('verificationMessage')}
+
+                                        onChange={e => setverificationMessage(e.target.value)}
+                                    />
+                                    <p className={styles.verifiedOrApproved}>02.Approved</p>
+
+                                    <div className={styles.verified}>
+                                        <input
+                                            type="checkbox"
+                                            name="verifiedCheck"
+                                            id="verified"
+                                            // disabled={getDisabled('approved')}
+
+                                            checked={approved}
+                                            onChange={handleApprovedChange}
+                                        />
+
+                                        <label htmlFor="verified">Yes</label>
+
+
+                                    </div>
+                                    <div className={styles.notVerified}>
+                                        <input
+                                            type="checkbox"
+                                            name="verifiedCheck"
+                                            id="notVerified"
+                                            checked={notApproved}
+                                            onChange={handleNotApprovedChange}
+                                                            // disabled={getDisabled('notApproved')}
+                                        />
+                                        <label htmlFor="notVerified">No</label>
+                                    </div>
+                                </div>
+                                <div className={styles.saveOrAddButtons}>
+
+                                    <button className={styles.submitButtons} onClick={handleCovid19DataEntry} type="submit">{uniqueId ? 'Update' : 'Add New' }</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Box>
+        </>
+
+    );
+};
+
+export default Covid;

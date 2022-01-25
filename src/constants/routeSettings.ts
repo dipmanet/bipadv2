@@ -73,6 +73,14 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
     },
     {
+        name: 'Covid-19',
+        title: 'Covid-19',
+        path: '/admin/covid19-form',
+        load: () => import('../admin/views/Covid-19'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
         name: 'epidemics',
         title: 'Epidemics',
         path: '/admin/epidemics-form',
@@ -99,16 +107,8 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'healthinfrastructure',
         title: 'Health Infrastructure',
-        path: '/admin/health-infrastructure',
-        load: () => import('../admin/views/Healthinfrastructure'),
-        navbar: false,
-        disableIfNoAuth: true,
-    },
-    {
-        name: 'covid19',
-        title: 'Covid-19',
-        path: '/admin/covid-19',
-        load: () => import('../admin/views/Covid-19'),
+        path: '/admin/health-form',
+        load: () => import('../admin/views/HealthDataStr'),
         navbar: false,
         disableIfNoAuth: true,
     },

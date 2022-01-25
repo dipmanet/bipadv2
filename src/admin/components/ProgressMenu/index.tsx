@@ -1,7 +1,18 @@
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
+// import { useSelector } from 'react-redux';
 import styles from './styles.module.scss';
-import { Menu } from './utils';
-import Icon from '#rscg/Icon';
+import InstituteLogo from '../../resources/institute.svg';
+import DisasterManLogo from '../../resources/disaster-management.svg';
+import ContactLogo from '../../resources/contact.svg';
+import InventoryLogo from '../../resources/inventory.svg';
+import LocationLogo from '../../resources/location.svg';
+import PictureLogo from '../../resources/picture.svg';
+import VerificationLogo from '../../resources/verification.svg';
+// import { RootState } from '../../Redux/store';
+
 
 interface MenuItems {
     name: string;
@@ -13,7 +24,6 @@ interface Props {
     progress: number;
     getActiveMenu: (e: number) => void;
     activeMenu: number;
-    menuKey: string;
 }
 interface OurState{
     resourceID: number;
@@ -26,11 +36,108 @@ interface OurState{
     health: {resourceID: number;inventoryData: []};
 }
 
+const MenuItemsAll = [
+    {
+        name: 'Institution Details',
+        icon: InstituteLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Disaster Management',
+        icon: DisasterManLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Contact',
+        icon: ContactLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Location',
+        icon: LocationLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Picture',
+        icon: PictureLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Inventories',
+        icon: InventoryLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Verification',
+        icon: VerificationLogo,
+        permission: ['superuser', 'editor'],
+    },
 
+];
+const validatorMenu = [
+    {
+        name: 'Institution Details',
+        icon: InstituteLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Disaster Management',
+        icon: DisasterManLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Contact',
+        icon: ContactLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Location',
+        icon: LocationLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Picture',
+        icon: PictureLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+    {
+        name: 'Inventories',
+        icon: InventoryLogo,
+        permission: ['superuser', 'editor', 'validator', 'user'],
+    },
+
+];
 const ProgressMenu = (props: Props): JSX.Element => {
-    const { progress, activeMenu: active, menuKey } = props;
-    const [MenuItems, setMenuItems] = useState(Menu[menuKey]);
+    const { progress, getActiveMenu, activeMenu: active } = props;
+    // const { resourceID, healthFormEditData } = useSelector((state: OurState) => state.health);
+    // const { userDataMain } = useSelector((state: RootState) => state.user);
+    const [MenuItems, setMenuItems] = useState(MenuItemsAll);
 
+    // useEffect(() => {
+    //     if (userDataMain.isSuperuser) {
+    //         setMenuItems(MenuItemsAll);
+    //     } else if (userDataMain.profile && userDataMain.profile.role) {
+    //         if (userDataMain.profile.role === 'validator') {
+    //             if (resourceID) {
+    //                 setMenuItems(MenuItemsAll);
+    //             } else {
+    //                 // setMenuItems(MenuItemsAll.filter(mI => mI.permission.includes(userDataMain.profile.role)));
+    //                 setMenuItems(validatorMenu);
+    //             }
+    //         } else {
+    //             setMenuItems(MenuItemsAll.filter(mI => mI.permission.includes(userDataMain.profile.role)));
+    //         }
+    //     } else {
+    //         setMenuItems(MenuItemsAll);
+    //     }
+    // }, [resourceID, userDataMain.isSuperuser, userDataMain.profile]);
+
+    const handleClick = (menuName: string) => {
+        getActiveMenu(menuName);
+        // } else {
+        // if(resourceID || healthFormEditData.length > 0){
+        // getActiveMenu(i);
+    };
 
     return (
         <div className={styles.progressMenuContainer}>
@@ -40,7 +147,7 @@ const ProgressMenu = (props: Props): JSX.Element => {
                         role="presentation"
                         key={menuItem.name}
                         className={
-                            active === menuItem.position
+                            active === menuItem.name
                                 ? styles.menuItemActive
                                 : styles.menuItem
                         }
@@ -49,17 +156,18 @@ const ProgressMenu = (props: Props): JSX.Element => {
                             <img
                                 src={menuItem.icon}
                                 className={styles.mainIcon}
-                                alt="icon"
+                                alt=""
                             />
                             {menuItem.name}
                         </div>
-                        <Icon
-                            name={'circle'}
+                        <FontAwesomeIcon
+                            icon={faCircle}
                             className={progress <= i
                                 ? styles.circleIconOn
                                 : styles.circleIconOff
                             }
                         />
+
                     </div>
                 ))
             }
