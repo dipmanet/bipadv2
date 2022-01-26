@@ -59,7 +59,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'bulletin',
         title: 'Bulletin',
-        path: '/admin/bulletin/bulletin-form',
+        path: '/admin/bulletin/add-new-bulletin',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,
@@ -75,7 +75,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'epidemics',
         title: 'Epidemics',
-        path: '/admin/epidemics/epidemics-form',
+        path: '/admin/epidemics/add-new-epidemics',
         load: () => import('../admin/views/Epidemics'),
         navbar: false,
         disableIfNoAuth: true,
