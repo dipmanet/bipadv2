@@ -27,13 +27,14 @@ import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
 import ViewIcon from '@mui/icons-material/Visibility';
 import DownloadIcon from '@mui/icons-material/Download';
+import { getUserPermission } from 'src/admin/utils';
 // import EditIcon from '../../../resources/editicon.svg';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import { setBulletinEditDataAction } from '#actionCreators';
-import { bulletinEditDataSelector } from '#selectors';
+import { bulletinEditDataSelector, userSelector } from '#selectors';
 import styles from './styles.module.scss';
 
 import { tableTitleRef } from './utils';
@@ -45,6 +46,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     bulletinEditData: bulletinEditDataSelector(state),
+    user: userSelector(state),
 });
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -232,6 +234,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 
 const BulletinTable = (props) => {
+    const { bulletinTableData, setBulletinEditData, bulletinEditData, user } = props;
     const [searchValue, setsearchValue] = React.useState('');
     const [filteredRowDatas, setfilteredRowDatas] = React.useState(props.bulletinTableData);
     const [order, setOrder] = React.useState<Order>('desc');
@@ -241,10 +244,15 @@ const BulletinTable = (props) => {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
+    const [permission, setPermission] = React.useState(getUserPermission(user));
 
-    const { bulletinTableData, setBulletinEditData, bulletinEditData } = props;
+    useEffect(() => {
+        if (user) {
+            setPermission(getUserPermission(user));
+        }
+    }, [user]);
+
     const handleTableEdit = (row) => {
-        console.log('row', row);
         setBulletinEditData(row);
         navigate('/admin/bulletin/bulletin-form');
     };
@@ -1064,11 +1072,19 @@ const BulletinTable = (props) => {
                                  align="center"
                                  padding="normal"
                         >
+                            {
+                                (permission === 'editor' || permission === 'user' || permission === 'superuser')
+                                ? (
                                 <IconButton
                                     onClick={() => handleTableEdit(row)}
-                            >
-                                <EditIcon />
+                                >
+                                    <EditIcon />
                                 </IconButton>
+                                )
+                                : <span>No Action</span>
+
+                            }
+
 
                              </TableCell>
 
