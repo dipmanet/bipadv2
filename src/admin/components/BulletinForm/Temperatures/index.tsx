@@ -98,10 +98,10 @@ const Bulletin = (props: Props) => {
                     {
                         picFromEdit
                         && (
-                        <>
-                            <h2>Max Temp</h2>
-                            <img src={picLink} alt="temperature" />
-                        </>
+                            <>
+                                <h2>Max Temp</h2>
+                                <img src={picLink} alt="temperature" />
+                            </>
                         )
                     }
                 </div>
@@ -112,10 +112,10 @@ const Bulletin = (props: Props) => {
                     {
                         picFromEdit
                         && (
-                        <>
-                            <h2>Min Temp</h2>
-                            <img src={picLink} alt="temperature" />
-                        </>
+                            <>
+                                <h2>Min Temp</h2>
+                                <img src={picLink} alt="temperature" />
+                            </>
                         )
                     }
                 </div>
@@ -125,44 +125,44 @@ const Bulletin = (props: Props) => {
             {
                 !hideForm
             && (
-            <>
-                <div className={styles.rowTitle1}>
-                    <h2>
+                <>
+                    <div className={styles.rowTitle1}>
+                        <h2>
                          Upload Picture
-                    </h2>
-                </div>
-                <h3>दैनिक अधिकतम तापक्रम</h3>
-                <div className={styles.containerForm}>
+                        </h2>
+                    </div>
+                    <h3>दैनिक अधिकतम तापक्रम</h3>
+                    <div className={styles.containerForm}>
 
-                    <FileUploader
-                        onFileSelectSuccess={handleMaxTempInput}
-                    />
-                </div>
-                <h3>दैनिक न्युनतम तापक्रम</h3>
-                <div className={styles.containerForm}>
+                        <FileUploader
+                            onFileSelectSuccess={handleMaxTempInput}
+                        />
+                    </div>
+                    <h3>दैनिक न्युनतम तापक्रम</h3>
+                    <div className={styles.containerForm}>
 
-                    <FileUploader
-                        onFileSelectSuccess={handleMinTempInput}
-                    />
-                </div>
-                <FormControl fullWidth>
-                    <InputLabel>
-                        {'दैनिक बर्षा को सारांश'}
-                    </InputLabel>
-                    <Input
-                        type="text"
-                        value={dailySummary}
-                        onChange={e => handleDailySummary(e)}
-                        className={styles.select}
-                        disableUnderline
-                        inputProps={{
-                            disableUnderline: true,
-                        }}
-                        style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                    />
-                </FormControl>
+                        <FileUploader
+                            onFileSelectSuccess={handleMinTempInput}
+                        />
+                    </div>
+                    <FormControl fullWidth>
+                        <InputLabel>
+                            {'दैनिक बर्षा को सारांश'}
+                        </InputLabel>
+                        <Input
+                            type="text"
+                            value={dailySummary}
+                            onChange={e => handleDailySummary(e)}
+                            className={styles.select}
+                            disableUnderline
+                            inputProps={{
+                                disableUnderline: true,
+                            }}
+                            style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                        />
+                    </FormControl>
 
-            </>
+                </>
             )
             }
         </div>

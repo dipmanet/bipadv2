@@ -88,6 +88,7 @@ const index = (props: Props): JSX.Element => {
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
+        console.log('centroid', centriodsForMap);
         if (UNSUPPORTED_BROWSER) {
             console.error('No Mapboxgl support.');
             return noop;
@@ -351,7 +352,8 @@ const index = (props: Props): JSX.Element => {
                 });
             }
         });
-    }, [UNSUPPORTED_BROWSER, centriodsForMap, editedCoordinates, initialDistrictCenter, initialMunCenter, initialProvinceCenter, mapStyles, props.disabled]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialDistrictCenter, initialMunCenter, initialProvinceCenter]);
 
 
     useEffect(() => {

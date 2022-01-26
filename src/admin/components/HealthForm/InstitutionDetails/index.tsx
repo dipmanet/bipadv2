@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
-import AccentHeading from '../../../Components/AccentHeading';
+import AccentHeading from 'src/admin/components/AccentHeading';
 import { FormDataType, instDetail, institutionDetails } from '../utils';
 import NextButton from '../../NextButton';
 
@@ -170,48 +170,48 @@ const InstitutionDetails = (props: Props): JSX.Element => {
 			        formData.authority === 'Government'
 				&&				(
 				    <div className={styles.row1}>
-    <div className={styles.col1}>
-    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+				        <div className={styles.col1}>
+				            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
 
-    <InputLabel id="authorityLevelInput">Authority Level</InputLabel>
-    <Select
-    disabled={getDisabled('authority_level')}
-    labelId="authorityLevelLabel"
-    id="authorityLevel"
-    value={formData.authority === 'Government' ? formData.authority_level : null}
-    label="Authority Level"
-    onChange={e => handleFormData(e, 'authority_level')}
-    style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-    disableUnderline
-				                >
-    <MenuItem value={'Federal'}>Federal</MenuItem>
-    <MenuItem value={'Province'}>Province</MenuItem>
-    <MenuItem value={'Local'}>Local</MenuItem>
-				                </Select>
-				            </FormControl>
-				        </div>
-    <div className={styles.col1}>
+				                <InputLabel id="authorityLevelInput">Authority Level</InputLabel>
+				                <Select
+				                    disabled={getDisabled('authority_level')}
+				                    labelId="authorityLevelLabel"
+				                    id="authorityLevel"
+				                    value={formData.authority === 'Government' ? formData.authority_level : null}
+				                    label="Authority Level"
+				                    onChange={e => handleFormData(e, 'authority_level')}
+				                    style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
+				                    disableUnderline
+    >
+				                    <MenuItem value={'Federal'}>Federal</MenuItem>
+				                    <MenuItem value={'Province'}>Province</MenuItem>
+				                    <MenuItem value={'Local'}>Local</MenuItem>
+    </Select>
+    </FormControl>
+    </div>
+				        <div className={styles.col1}>
 
-    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+				            <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
 
-    <InputLabel id="ownershipInput">Ownership</InputLabel>
-    <Select
-    disabled={getDisabled('ownership')}
-    labelId="ownershipLabel"
-    id="ownership"
-    value={formData.authority === 'Government' ? formData.ownership : null}
-    label="Ownership"
-    onChange={e => handleFormData(e, 'ownership')}
-    style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-    disableUnderline
-				                >
-    {instDetail.Ownership.options.map(own => (
-				                        <MenuItem key={own} value={own}>{own}</MenuItem>
+				                <InputLabel id="ownershipInput">Ownership</InputLabel>
+				                <Select
+				                    disabled={getDisabled('ownership')}
+				                    labelId="ownershipLabel"
+				                    id="ownership"
+				                    value={formData.authority === 'Government' ? formData.ownership : null}
+				                    label="Ownership"
+				                    onChange={e => handleFormData(e, 'ownership')}
+				                    style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
+				                    disableUnderline
+    >
+				                    {instDetail.Ownership.options.map(own => (
+        <MenuItem key={own} value={own}>{own}</MenuItem>
 				                    ))
 				                }
-				                </Select>
-				            </FormControl>
-				        </div>
+    </Select>
+    </FormControl>
+    </div>
 				    </div>
 				)
 			    }
@@ -230,7 +230,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     >
                         {
 			                instDetail['Facility Type'].options.map(d => (
-    <MenuItem key={d} value={d}>{d}</MenuItem>
+                                <MenuItem key={d} value={d}>{d}</MenuItem>
                             ))
 			            }
                     </Select>
@@ -250,7 +250,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     >
                         {
 			                instDetail['Service Type'].options.map(d => (
-    <MenuItem key={d} value={d}>{d}</MenuItem>
+                                <MenuItem key={d} value={d}>{d}</MenuItem>
                             ))
 			            }
                     </Select>
@@ -270,7 +270,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     >
                         {
 			                instDetail['Operational Status'].options.map(d => (
-    <MenuItem key={d} value={d}>{d}</MenuItem>
+                                <MenuItem key={d} value={d}>{d}</MenuItem>
                             ))
 			            }
                     </Select>
@@ -359,19 +359,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                 {
 			                        Object.keys(instDetail['Services available']
 			                            .ref).slice(0, 3).map((item: string) => (
-    <FormControlLabel
-                                            control={(
-            <Checkbox
-                                                    disabled={getDisabled(instDetail['Services available'].ref[item])}
-                                                    checked={formData[instDetail['Services available']
+                                        <FormControlLabel
+        control={(
+                                                <Checkbox
+                disabled={getDisabled(instDetail['Services available'].ref[item])}
+                checked={formData[instDetail['Services available']
                                                         .ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Services available']
+                onChange={(e => handleFormData(e, instDetail['Services available']
                                                         .ref[item]))}
-                                                />
+            />
                                             )}
-                                            label={item}
-                                            key={item}
-                                        />
+        label={item}
+        key={item}
+    />
                                     ))
 			                    }
                             </FormGroup>
@@ -381,19 +381,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                 {
 			                        Object.keys(instDetail['Services available']
 			                            .ref).slice(-3).map((item: string) => (
-    <FormControlLabel
-                                            control={(
-            <Checkbox
-                                                    disabled={getDisabled(instDetail['Services available'].ref[item])}
-                                                    checked={formData[instDetail['Services available']
+                                        <FormControlLabel
+        control={(
+                                                <Checkbox
+                disabled={getDisabled(instDetail['Services available'].ref[item])}
+                checked={formData[instDetail['Services available']
                                                         .ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Services available']
+                onChange={(e => handleFormData(e, instDetail['Services available']
                                                         .ref[item]))}
-                                                />
+            />
                                             )}
-                                            label={item}
-                                            key={item}
-                                        />
+        label={item}
+        key={item}
+    />
                                     ))
 			                    }
                             </FormGroup>
@@ -410,19 +410,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 {
 							                Object.keys(instDetail['Services available (if yes)']
 							                    .ref).slice(0, 4).map((item: string) => (
-                        <FormControlLabel
-        control={(
-                                <Checkbox
-                disabled={getDisabled(instDetail['Services available (if yes)'].ref[item])}
-                checked={formData.has_safe_motherhood ? formData[instDetail['Services available (if yes)']
+    <FormControlLabel
+                            control={(
+            <Checkbox
+                                    disabled={getDisabled(instDetail['Services available (if yes)'].ref[item])}
+                                    checked={formData.has_safe_motherhood ? formData[instDetail['Services available (if yes)']
                                         .ref[item]] : null}
-                onChange={(e => handleFormData(e, instDetail['Services available (if yes)']
+                                    onChange={(e => handleFormData(e, instDetail['Services available (if yes)']
                                         .ref[item]))}
-            />
+                                />
                             )}
-        label={item}
-        key={item}
-    />
+                            label={item}
+                            key={item}
+                        />
                     ))
 							            }
             </FormGroup>
@@ -432,19 +432,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 {
 							                Object.keys(instDetail['Services available (if yes)']
 							                    .ref).slice(-3).map((item: string) => (
-                        <FormControlLabel
-        control={(
-                                <Checkbox
-                disabled={getDisabled(instDetail['Services available (if yes)'].ref[item])}
-                checked={formData.has_safe_motherhood ? formData[instDetail['Services available (if yes)']
+    <FormControlLabel
+                            control={(
+            <Checkbox
+                                    disabled={getDisabled(instDetail['Services available (if yes)'].ref[item])}
+                                    checked={formData.has_safe_motherhood ? formData[instDetail['Services available (if yes)']
                                         .ref[item]] : null}
-                onChange={(e => handleFormData(e, instDetail['Services available (if yes)']
+                                    onChange={(e => handleFormData(e, instDetail['Services available (if yes)']
                                         .ref[item]))}
-            />
+                                />
                             )}
-        label={item}
-        key={item}
-    />
+                            label={item}
+                            key={item}
+                        />
                     ))
 							            }
             </FormGroup>
@@ -486,19 +486,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     {
 							                    Object.keys(instDetail['Family Planning (if yes)']
 							                        .ref).slice(0, 3).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Family Planning (if yes)'].ref[item])}
-                checked={formData[instDetail['Family Planning (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Family Planning (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Family Planning (if yes)']
                                             .ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Family Planning (if yes)']
+                                        onChange={(e => handleFormData(e, instDetail['Family Planning (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -508,19 +508,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     {
 							                    Object.keys(instDetail['Family Planning (if yes)']
 							                        .ref).slice(-2).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Family Planning (if yes)'].ref[item])}
-                checked={formData[instDetail['Family Planning (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Family Planning (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Family Planning (if yes)']
                                             .ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Family Planning (if yes)']
+                                        onChange={(e => handleFormData(e, instDetail['Family Planning (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -558,19 +558,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     {
 							                    Object.keys(instDetail['OPD (if yes)']
 							                        .ref).slice(0, 3).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['OPD (if yes)'].ref[item])}
-                checked={formData[instDetail['OPD (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['OPD (if yes)'].ref[item])}
+                                        checked={formData[instDetail['OPD (if yes)']
                                             .ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['OPD (if yes)']
+                                        onChange={(e => handleFormData(e, instDetail['OPD (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -580,19 +580,19 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     {
 							                    Object.keys(instDetail['OPD (if yes)']
 							                        .ref).slice(-2).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['OPD (if yes)'].ref[item])}
-                checked={formData[instDetail['OPD (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['OPD (if yes)'].ref[item])}
+                                        checked={formData[instDetail['OPD (if yes)']
                                             .ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['OPD (if yes)']
+                                        onChange={(e => handleFormData(e, instDetail['OPD (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -750,18 +750,18 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Laboratory Service (if yes)'].ref).slice(0, 3).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Laboratory Service (if yes)'].ref[item])}
-                checked={formData[instDetail['Laboratory Service (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Laboratory Service (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Laboratory Service (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Laboratory Service (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Laboratory Service (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -770,17 +770,17 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Laboratory Service (if yes)'].ref).slice(-2).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Laboratory Service (if yes)'].ref[item])}
-                checked={formData[instDetail['Laboratory Service (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Laboratory Service (if yes)'].ref[item]))}
-            />
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Laboratory Service (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Laboratory Service (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Laboratory Service (if yes)'].ref[item]))}
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -905,18 +905,18 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Radiology (if yes)'].ref).slice(0, 3).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Radiology (if yes)'].ref[item])}
-                checked={formData[instDetail['Radiology (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Radiology (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Radiology (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Radiology (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Radiology (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -925,17 +925,17 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Radiology (if yes)'].ref).slice(-2).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Radiology (if yes)'].ref[item])}
-                checked={formData[instDetail['Radiology (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Radiology (if yes)'].ref[item]))}
-            />
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Radiology (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Radiology (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Radiology (if yes)'].ref[item]))}
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -973,18 +973,18 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Surgical Service (if yes)'].ref).slice(0, 3).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Surgical Service (if yes)'].ref[item])}
-                checked={formData[instDetail['Surgical Service (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Surgical Service (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Surgical Service (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Surgical Service (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Surgical Service (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -993,17 +993,17 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Surgical Service (if yes)'].ref).slice(-2).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Surgical Service (if yes)'].ref[item])}
-                checked={formData[instDetail['Surgical Service (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Surgical Service (if yes)'].ref[item]))}
-            />
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Surgical Service (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Surgical Service (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Surgical Service (if yes)'].ref[item]))}
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -1040,18 +1040,18 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Specialized Service (if yes)'].ref).slice(0, 3).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Specialized Service (if yes)'].ref[item])}
-                checked={formData[instDetail['Specialized Service (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Specialized Service (if yes)']
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Specialized Service (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Specialized Service (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Specialized Service (if yes)']
                                             .ref[item]))}
-            />
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -1060,17 +1060,17 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                 <FormGroup>
                     {
 							                    Object.keys(instDetail['Specialized Service (if yes)'].ref).slice(-2).map((item: string) => (
-                            <FormControlLabel
-        control={(
-                                    <Checkbox
-                disabled={getDisabled(instDetail['Specialized Service (if yes)'].ref[item])}
-                checked={formData[instDetail['Specialized Service (if yes)'].ref[item]]}
-                onChange={(e => handleFormData(e, instDetail['Specialized Service (if yes)'].ref[item]))}
-            />
+    <FormControlLabel
+                                control={(
+            <Checkbox
+                                        disabled={getDisabled(instDetail['Specialized Service (if yes)'].ref[item])}
+                                        checked={formData[instDetail['Specialized Service (if yes)'].ref[item]]}
+                                        onChange={(e => handleFormData(e, instDetail['Specialized Service (if yes)'].ref[item]))}
+                                    />
                                 )}
-        label={item}
-        key={item}
-    />
+                                label={item}
+                                key={item}
+                            />
                         ))
 							                }
                 </FormGroup>
@@ -1326,18 +1326,18 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormGroup>
                                 {
 			                        Object.keys(instDetail['Listed for free treatment Bipanna'].ref).slice(0, 5).map((item: string) => (
-    <FormControlLabel
-                                            control={(
-            <Checkbox
-                                                    disabled={getDisabled(instDetail['Listed for free treatment Bipanna'].ref[item])}
-                                                    checked={formData[instDetail['Listed for free treatment Bipanna'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Listed for free treatment Bipanna']
+                                        <FormControlLabel
+        control={(
+                                                <Checkbox
+                disabled={getDisabled(instDetail['Listed for free treatment Bipanna'].ref[item])}
+                checked={formData[instDetail['Listed for free treatment Bipanna'].ref[item]]}
+                onChange={(e => handleFormData(e, instDetail['Listed for free treatment Bipanna']
                                                         .ref[item]))}
-                                                />
+            />
                                             )}
-                                            label={item}
-                                            key={item}
-                                        />
+        label={item}
+        key={item}
+    />
                                     ))
 			                    }
                             </FormGroup>
@@ -1346,17 +1346,17 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormGroup>
                                 {
 			                        Object.keys(instDetail['Listed for free treatment Bipanna'].ref).slice(-5).map((item: string) => (
-    <FormControlLabel
-                                            control={(
-            <Checkbox
-                                                    disabled={getDisabled(instDetail['Listed for free treatment Bipanna'].ref[item])}
-                                                    checked={formData[instDetail['Listed for free treatment Bipanna'].ref[item]]}
-                                                    onChange={(e => handleFormData(e, instDetail['Listed for free treatment Bipanna'].ref[item]))}
-                                                />
+                                        <FormControlLabel
+        control={(
+                                                <Checkbox
+                disabled={getDisabled(instDetail['Listed for free treatment Bipanna'].ref[item])}
+                checked={formData[instDetail['Listed for free treatment Bipanna'].ref[item]]}
+                onChange={(e => handleFormData(e, instDetail['Listed for free treatment Bipanna'].ref[item]))}
+            />
                                             )}
-                                            label={item}
-                                            key={item}
-                                        />
+        label={item}
+        key={item}
+    />
                                     ))
 			                    }
                             </FormGroup>

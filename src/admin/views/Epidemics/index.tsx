@@ -39,6 +39,7 @@ import {
     provincesSelector,
     wardsSelector,
     epidemicsPageSelector,
+    userSelector,
 } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
 
@@ -51,6 +52,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
     epidemmicsPage: epidemicsPageSelector(state),
+    user: userSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -436,7 +438,41 @@ const Epidemics = (props) => {
             incidentUpdateError,
             lossError,
             incidentEditData,
-        } } = props;
+        },
+    user,
+    provinces,
+    districts,
+    municipalities,
+    wards } = props;
+
+    useEffect(() => {
+        if (user && user.profile && user.profile.province && provinces && provinces.length > 0) {
+            const nameOfProvince = provinces.filter(item => item.id === user.profile.province).map(item => item.title)[0];
+            setprovinceName(nameOfProvince);
+            const provinceCenter = provinces.filter(item => item.id === user.profile.province).map(item => item.centroid.coordinates)[0];
+            setinitialProvinceCenter(provinceCenter);
+        }
+        if (user && user.profile && user.profile.district && districts && districts.length > 0) {
+            const nameOfDistrict = districts.filter(item => item.id === user.profile.district).map(item => item.title)[0];
+            setdistrictName(nameOfDistrict);
+            const districtCenter = districts.filter(item => item.id === user.profile.district).map(item => item.centroid.coordinates)[0];
+            setinitialDistrictCenter(districtCenter);
+        }
+        if (user && user.profile && user.profile.municipality && municipalities && municipalities.length > 0) {
+            const nameOfMunicipality = municipalities.filter(item => item.id === user.profile.municipality).map(item => item.title)[0];
+            setmunicipalityName(nameOfMunicipality);
+            const munCenter = municipalities.filter(item => item.id === user.profile.municipality).map(item => item.centroid.coordinates)[0];
+            setinitialMunCenter(munCenter);
+        }
+        if (user && user.profile && user.profile.ward && wards && wards.length > 0) {
+            const nameOfWard = wards.filter(item => item.id === user.profile.ward).map(item => item.title)[0];
+            setwardName(nameOfWard);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        console.log('test', initialProvinceCenter);
+    }, [initialProvinceCenter]);
 
     const clearData = () => {
         setuniqueId('');
@@ -484,13 +520,6 @@ const Epidemics = (props) => {
         setLattitude,
         setLongitude,
     };
-
-    const {
-        provinces,
-        districts,
-        municipalities,
-        wards,
-    } = props;
 
     useEffect(() => {
         console.log(provinceId);

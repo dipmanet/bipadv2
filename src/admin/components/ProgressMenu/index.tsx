@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
+
+import Icon from '#rscg/Icon';
 // import { useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 import InstituteLogo from '../../resources/institute.svg';
@@ -160,8 +160,8 @@ const ProgressMenu = (props: Props): JSX.Element => {
                             />
                             {menuItem.name}
                         </div>
-                        <FontAwesomeIcon
-                            icon={faCircle}
+                        <Icon
+                            name="circle"
                             className={progress <= i
                                 ? styles.circleIconOn
                                 : styles.circleIconOff
