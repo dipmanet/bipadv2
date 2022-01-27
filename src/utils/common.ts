@@ -232,3 +232,63 @@ export const httpGet = (url: string) => {
     xmlHttp.send(null);
     return xmlHttp.response;
 };
+
+// user object from redux, example codeName="edit_resource", app="resource"
+export const checkPermission = (user, codeName, app) => {
+    let permission = false;
+    if (!user) {
+        permission = false;
+    } else if (user.isSuperuser) {
+        permission = true;
+    }
+    if (user && user.groups) {
+        user.groups.forEach((group) => {
+            if (group.permissions) {
+                group.permissions.forEach((p) => {
+                    if (p.codename === codeName && p.app === app) {
+                        permission = true;
+                    }
+                });
+            } else {
+                permission = false;
+            }
+        });
+    }
+    if (user && user.userPermissions) {
+        user.userPermissions.forEach((a) => {
+            if (a.codename === codeName && a.app === app) {
+                permission = true;
+            }
+        });
+    } else {
+        permission = false;
+    }
+    return permission;
+    // temporary set true to all user for testing
+    // return true;
+};
+
+// This function can be used to compare login in user's
+// federal region and filtered federal region to check the accessibility of the data.
+export const checkSameRegionPermission = (user, region) => {
+    let permission = false;
+    if (user && user.isSuperuser) {
+        permission = true;
+    } else if (region.adminLevel === 1) {
+        if (user && user.profile.province === region.geoarea
+            && user.profile.district === null && user.profile.municipality === null) {
+            permission = true;
+        }
+    } else if (region.adminLevel === 2) {
+        if (user && user.profile.district === region.geoarea && user.profile.province === null) {
+            permission = true;
+        }
+    } else if (region.adminLevel === 3) {
+        if (user && user.profile.municipality === region.geoarea) {
+            permission = true;
+        }
+    } else {
+        permission = false;
+    }
+    return permission;
+};

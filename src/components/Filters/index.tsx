@@ -156,7 +156,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 [`${destParamName}`]: params.resource_type,
                 [`${destParamName}`]: 'health',
             };
-            console.log('car region', params.region.region);
+
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 // resource_type: {params.resource_type ? params.resource_type : ''},

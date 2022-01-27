@@ -84,6 +84,7 @@ const TitleContextProvider = (props: Props) => {
         setCapacityAndResources,
         setDataArchive,
         setSource,
+
     };
 
     return (

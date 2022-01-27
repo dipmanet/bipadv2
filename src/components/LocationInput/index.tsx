@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
 import { FaramInputElement } from '@togglecorp/faram';
 
 import Map from '#re-map';
@@ -69,16 +69,17 @@ class LocationInput extends React.PureComponent<Props, State> {
             onChange,
             wards,
         } = this.props;
-
         let wardList: { id: number }[] = [];
-        if (region.adminLevel === 1) {
-            wardList = wards.filter(d => d.province === region.geoarea);
-        } else if (region.adminLevel === 2) {
-            wardList = wards.filter(d => d.district === region.geoarea);
-        } else if (region.adminLevel === 3) {
-            wardList = wards.filter(d => d.municipality === region.geoarea);
-        } else {
-            wardList = [{ id: region.ward }];
+        if (region) {
+            if (region.adminLevel === 1) {
+                wardList = wards.filter(d => d.province === region.geoarea);
+            } else if (region.adminLevel === 2) {
+                wardList = wards.filter(d => d.district === region.geoarea);
+            } else if (region.adminLevel === 3) {
+                wardList = wards.filter(d => d.municipality === region.geoarea);
+            } else {
+                wardList = [{ id: region.ward }];
+            }
         }
 
         if (onChange) {
