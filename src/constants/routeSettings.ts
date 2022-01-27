@@ -59,7 +59,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'bulletin',
         title: 'Bulletin',
-        path: '/admin/bulletin/bulletin-form',
+        path: '/admin/bulletin/add-new-bulletin',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,
@@ -67,7 +67,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'bulletin',
         title: 'Bulletin',
-        path: '/admin/bulletin/bulletin-table',
+        path: '/admin/bulletin/bulletin-data-table',
         load: () => import('../admin/views/BulletinTable'),
         navbar: false,
         disableIfNoAuth: true,
@@ -83,7 +83,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'epidemics',
         title: 'Epidemics',
-        path: '/admin/epidemics-form',
+        path: '/admin/epidemics/add-new-epidemics',
         load: () => import('../admin/views/Epidemics'),
         navbar: false,
         disableIfNoAuth: true,
@@ -91,7 +91,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'epidemics-table',
         title: 'Epidemics Table',
-        path: '/admin/epidemics-table',
+        path: '/admin/epidemics/epidemics-data-table',
         load: () => import('../admin/views/EpidemicsTable'),
         navbar: false,
         disableIfNoAuth: true,
@@ -99,7 +99,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'epidemics-upload',
         title: 'Epidemics Table',
-        path: '/admin/epidemics-upload',
+        path: '/admin/epidemics/epidemics-bulk-upload',
         load: () => import('../admin/views/EpidemicBulkUpload'),
         navbar: false,
         disableIfNoAuth: true,

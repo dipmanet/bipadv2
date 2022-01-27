@@ -6,45 +6,21 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import produce from 'immer';
-import memoize from 'memoize-one';
-import {
-    listToGroupList,
-    isDefined,
-    listToMap,
-} from '@togglecorp/fujs';
-import {
-    sum,
-    saveChart,
-    encodeDate,
-} from '#utils/common';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    NewProps,
-    ClientAttributes,
-    methods,
-} from '#request';
-import {
-    setIncidentListActionIP,
-    setEventListAction,
-} from '#actionCreators';
-import {
-    incidentListSelectorIP,
-    filtersSelector,
-    hazardTypesSelector,
-    regionsSelector,
-} from '#selectors';
+import { hazardTypesSelector } from '#selectors';
+
 
 import {
     incidentSummary,
     peopleLoss,
-    // hazardWiseLoss,
+    hazardWiseLoss,
     genderWiseLoss,
     nepaliRef,
 } from '../formFields';
 import styles from './styles.scss';
 
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    hazardTypes: hazardTypesSelector(state),
+});
 
 interface Props {
     handleIncidentChange: (e: Record<string, undefined>) => void;
@@ -66,7 +42,21 @@ const Bulletin = (props: Props) => {
         genderWiseLossData,
         sitRep,
         handleSitRep,
+        handlehazardAdd,
+        hazardTypes,
     } = props;
+    const [hazard, setHazard] = useState();
+    const [hazardIncidents, setHazardIncidents] = useState();
+    const [hazardDeaths, setHazardDeaths] = useState();
+
+
+    const handleHazardAddItem = () => {
+        handlehazardAdd(hazard);
+    };
+
+    const handleHazardChange = (e) => {
+        setHazard(e);
+    };
 
 
     return (
@@ -159,7 +149,7 @@ const Bulletin = (props: Props) => {
                                             type="number"
                                             className={styles.select}
                                             value={hazardWiseLossData[field][subField]}
-                                            onChange={e => handlehazardwiseLoss(e, field, subField)}
+                                            onChange={e => handlehazardwiseLoss(e.target.value, field, subField)}
                                             disableUnderline
                                             inputProps={{
                                                 disableUnderline: true,
@@ -172,6 +162,39 @@ const Bulletin = (props: Props) => {
                             }
                         </>
                     ))}
+                </div>
+
+
+                <div className={styles.formSubContainer}>
+                    <div className={styles.formItem}>
+                        <FormControl style={{ margin: '15px 0' }} fullWidth>
+                            <InputLabel id="hazardInput">नयाँ प्रकोप थप्नुहोस्</InputLabel>
+                            <Select
+                                labelId="hazardLabel"
+                                id="hazardInput"
+                                value={hazard}
+                                label="Add New Hazard Field"
+                                onChange={e => handleHazardChange(e.target.value)}
+                                style={{ borderRadius: '3px', padding: '0 10px' }}
+                                disableUnderline
+                            >
+                                {
+                                    hazardTypes
+                            && Object.keys(hazardTypes).map(hT => (<MenuItem value={hazardTypes[hT].titleNe}>{hazardTypes[hT].titleNe}</MenuItem>))
+                                }
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className={styles.btnContainer}>
+                        <button
+                            type="button"
+                            onClick={handleHazardAddItem}
+                            className={styles.hazardAddBtn}
+                        >
+                            + थप्नुहोस्
+                        </button>
+                    </div>
                 </div>
                 <h3>लिङ्ग अनुसार मृत्यूको बर्गिकरण</h3>
 
@@ -205,4 +228,6 @@ const Bulletin = (props: Props) => {
 
     );
 };
-export default Bulletin;
+export default connect(mapStateToProps)(
+    Bulletin,
+);

@@ -284,8 +284,13 @@ const Bulletin = (props: Props) => {
     const handlehazardwiseLoss = (e, field, subfield) => {
         const newData = { ...hazardWiseLossData };
         const newFieldData = newData[field];
-        const newSubData = { ...newFieldData, [subfield]: e.target.value };
+        const newSubData = { ...newFieldData, [subfield]: e };
         setHazardwise({ ...newData, [field]: newSubData });
+    };
+    const handlehazardAdd = (hazard) => {
+        const newData = { ...hazardWiseLossData };
+
+        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0 } });
     };
 
     const handlegenderWiseLoss = (e, field) => {
@@ -608,6 +613,7 @@ const Bulletin = (props: Props) => {
             genderWiseLossData={genderWiseLossData}
             handleSitRep={handleSitRep}
             sitRep={sitRep}
+            handlehazardAdd={handlehazardAdd}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}

@@ -1,4 +1,9 @@
-.footerPDFContainer{
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("/src/resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    }
+    .footerPDFContainer{
+    font-family: "Kalimati Regular"!important;
     width: 210mm;
     height: 297mm;
     margin: 0 auto;

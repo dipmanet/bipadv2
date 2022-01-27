@@ -1,4 +1,14 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("/src/resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    }
+    
+//   .nep{
+//     font-family: "Kalimati Regular"!important;
+//    }
+
 .pdfContainer{
+    font-family: "Kalimati Regular"!important;
     width: 210mm;
     height: 297mm;
     margin: 0 auto;
@@ -17,6 +27,8 @@
                 display: flex;
                 .govTitles{
                     color: white;
+                    position: relative;
+                    right: 30px;
                     ul{
                         list-style: none;
                         font-size: 16px;
@@ -76,16 +88,16 @@
         }
     }
     .hazardWiseStats{
-        width: 90mm;
+        width: 80mm;
         height: 80mm;
         position: absolute;
         bottom: 15mm;
-        left:20m;
+        left:10mm;
         h2{
             font-size: 4mm;
             margin-bottom: 2mm;
             position: relative;
-            left: 10mm;
+            left: 0;
         }
     }
     .genderWiseStats{

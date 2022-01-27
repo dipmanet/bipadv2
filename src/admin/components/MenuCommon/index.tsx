@@ -1,109 +1,104 @@
-import React, { useEffect, useState } from 'react';
-// import { FontAwesomeIcon } from '@fontawesome/react-fontawesome';
-// import { faAngleDown } from '@fontawesome/free-solid-svg-icons';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
-// import { Navigate, useNavigate } from 'react-router';
 import styles from './styles.module.scss';
-import SubMenu from './SubMenu';
-import { slugRef, Menus, ref, SubLevel } from './menu';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+import { userSelector } from '#selectors';
+
 
 interface Props {
-    currentPage: MenuItems;
+    currentPage?: MenuItem;
     layout: string;
     subLevel: string;
 }
-type SubMenuItems = 'Data Table' | 'Add New Data' | 'Bulk Upload';
-type MenuItems =
-'Health Infrastructure' |
-'COVID-19' |
-'Epidemics' |
-'Data Overview' |
-'Admin' |
-'Bulletin';
+interface MenuItem {
+    'id': string;
+    'children': null | MenuItem;
+    'title': string;
+    'titleNp': string;
+    'slug': string;
+    'isEnabled': boolean;
+    'lft': number;
+    'rght': number;
+    'treeId': number;
+    'level': number;
+    'parent': number;
 
+}
+
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    user: userSelector(state),
+});
+
+const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
+    getMenu: {
+        url: '/adminportal-menu/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, params: { setMenu, setAllMenu } }) => {
+            setMenu(response.results);
+            setAllMenu(response.results);
+        },
+    },
+};
 
 const MenuCommon = (props: Props) => {
-    const { currentPage, layout, subLevel } = props;
-    const [Menu, setMenu] = useState<MenuItems | undefined>(undefined);
+    const { layout, requests: { getMenu } } = props;
+    const [Menu, setMenu] = useState<MenuItem[] | undefined>([]);
+    const [AllMenu, setAllMenu] = useState<[] | undefined>([]);
     const [active, setActive] = useState<number | undefined>(undefined);
-    const [activeSubMenu, setActiveSubMenu] = useState<number | undefined>(undefined);
-    const [showSub, setShowSub] = useState<boolean>(false);
-    // const navigate = useNavigate();
-    // const { userDataMain } = useSelector((state: RootState) => state.user);
+    const currentPageSlug = useRef(null);
+    getMenu.setDefaultParams({ setMenu, setAllMenu });
 
-    useEffect(() => {
-        // if (userDataMain && userDataMain.isSuperuser) {
-        //     setMenu(Menus.superuser);
-        // } else if (userDataMain && userDataMain.profile && userDataMain.profile.role) {
-        //     setMenu(Menus[userDataMain.profile.role]);
-        // } else {
-        if (subLevel) {
-            setMenu(SubLevel[subLevel]);
+    const handleMenuItemClick = (menuItem: MenuItem) => {
+        if (menuItem.children) {
+            navigate(`/admin/${menuItem.slug}/${menuItem.children[0].slug}`);
+        } else if (menuItem.parent && AllMenu) {
+            const parentSlug = AllMenu.filter(mI => mI.id === menuItem.parent)[0].slug;
+            navigate(`/admin/${parentSlug}/${menuItem.slug}`);
         } else {
-            setMenu(Menus.editor);
-        }
-        // }
-    }, [subLevel]);
-
-
-    const handleMenuItemClick = (menuItem: MenuItems) => {
-        if (subLevel) {
-            if (menuItem === 'Add New Bulletin') {
-                navigate('/admin/bulletin/bulletin-form');
-            } else if (menuItem === 'Bulletin Data Table') {
-                navigate('/admin/bulletin/bulletin-table');
-            } else if (menuItem === 'Bulletin Preview') {
-                navigate('/admin/bulletin/bulletin-preview');
-            }
-        } else {
-            if (menuItem === 'Data Overview' || menuItem === 'Admin' || menuItem === 'Bulletin') {
-                navigate(`/admin/${ref[menuItem]}`);
-            }
-            setActive(Menu.indexOf(menuItem));
-            setActiveSubMenu(Menu.indexOf(menuItem));
-            setShowSub(!showSub);
+            navigate(`/admin/${menuItem.slug}`);
         }
     };
 
 
     useEffect(() => {
-        if (Menu) {
+        if (AllMenu) {
             const location = window.location.href;
-            let currentSlug;
-            if (subLevel) {
-                currentSlug = location.split('admin/')[1].split('/')[1];
+            const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1].split('/admin')[1];
+            if (menuSlug) {
+                const parentSlug = menuSlug.split('/')[1];
+
+                if (parentSlug.length > 2) {
+                    currentPageSlug.current = menuSlug.split('/')[menuSlug.split('/').length - 1];
+                } else {
+                    currentPageSlug.current = menuSlug.split('/')[1];
+                }
+                const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
+                if (childMenu) {
+                    const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
+                    const activeIndex = childM.map(cM => cM.slug).indexOf(currentPageSlug.current);
+                    setActive(activeIndex);
+                    setMenu(childM);
+                }
             } else {
-                currentSlug = location.split('admin/')[1];
+                setMenu(AllMenu);
             }
-            console.log('currentSlug', currentSlug);
-            console.log('subLevel', subLevel);
-            console.log('Menu', Menu);
-            setActive(Menu.indexOf(slugRef[currentSlug]));
         }
-    }, [Menu, subLevel]);
-
-
-    const handleClickOutside = (e) => {
-        if (e.target.className !== 'styles_menuItem__3ZyaX') {
-            setShowSub(false);
-        }
-    };
-
-    const getSubMenuItem = (submenuItem: SubMenuItems, menuItem: MenuItems) => {
-        setShowSub(false);
-
-        setActive(Menu.indexOf(menuItem));
-        navigate(`/admin/${ref[menuItem]}-${ref[submenuItem]}`);
-        // handle sub menu click
-    };
+    }, [AllMenu]);
 
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {
-                Menu && Menu.map((menuItem: MenuItems, i: number) => (
+                Menu && Menu.filter(item => item.isEnabled).map((menuItem: MenuItem, i: number) => (
                     <div
-                        key={menuItem}
+                        key={menuItem.id}
                         className={
                             i === active
                                 ? styles.activeMenu
@@ -114,31 +109,11 @@ const MenuCommon = (props: Props) => {
                             role="presentation"
                             onClick={() => handleMenuItemClick(menuItem)}
                             className={styles.menuItem}
-                            key={menuItem}
 
                         >
-                            {menuItem}
-                            {/* {
-                                i < 3
-                                && (
-                                    <FontAwesomeIcon
-                                        icon={faAngleDown}
-                                        className={styles.icon}
-                                    />
-                                )
-                            } */}
+                            {menuItem.title}
+
                         </div>
-                        {
-                            activeSubMenu === i
-                            && showSub
-                            && i < 3
-                            && (
-                                <SubMenu getSubMenuItem={
-                                    (e: SubMenuItems) => getSubMenuItem(e, menuItem)
-                                }
-                                />
-                            )
-                        }
                     </div>
                 ))
             }
@@ -146,4 +121,10 @@ const MenuCommon = (props: Props) => {
     );
 };
 
-export default MenuCommon;
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requests)(
+            MenuCommon,
+        ),
+    ),
+);

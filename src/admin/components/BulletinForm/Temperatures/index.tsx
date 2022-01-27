@@ -91,33 +91,34 @@ const Bulletin = (props: Props) => {
         <div className={styles.formContainer}>
 
             <div className={styles.pictureContainer}>
-                <div id="pictureContainerMax" className={styles.picture}>
-                    <h2>
-                        Maximum Temperatures
-                    </h2>
-                    {
-                        picFromEdit
+                <div className={styles.subContainer}>
+                    <h3>दैनिक अधिकतम तापक्रम</h3>
+                    <div id="pictureContainerMax" className={styles.picture}>
+                        {
+                            picFromEdit
                         && (
                             <>
                                 <h2>Max Temp</h2>
                                 <img src={picLink} alt="temperature" />
                             </>
                         )
-                    }
+                        }
+                    </div>
                 </div>
-                <div id="pictureContainerMin" className={styles.picture}>
-                    <h2>
-                        Minimum Temperatures
-                    </h2>
-                    {
-                        picFromEdit
+                <div className={styles.subContainer}>
+
+                    <h3>दैनिक न्युनतम तापक्रम</h3>
+                    <div id="pictureContainerMin" className={styles.picture}>
+                        {
+                            picFromEdit
                         && (
                             <>
                                 <h2>Min Temp</h2>
                                 <img src={picLink} alt="temperature" />
                             </>
                         )
-                    }
+                        }
+                    </div>
                 </div>
             </div>
 
