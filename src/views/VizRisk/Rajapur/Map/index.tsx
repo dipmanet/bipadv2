@@ -566,7 +566,7 @@ class FloodHistoryMap extends React.Component {
     }
 
 
-    public componentWillReceiveProps(nextProps) {
+    public UNSAFE_componentWillReceiveProps(nextProps) {
         const {
             rasterLayer,
             showPopulation,
