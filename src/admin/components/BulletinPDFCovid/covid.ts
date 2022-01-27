@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import DeathIcon from 'src/admin/resources/death.svg';
-import AffectedIcon from 'src/admin/resources/cases.svg';
+import AffectedIcon from 'src/admin/resources/Cases.svg';
 import RecoveredIcon from 'src/admin/resources/Recovered.svg';
 import ActiveIcon from 'src/admin/resources/Tested.svg';
 import FemaleIcon from 'src/admin/resources/femaleGray.svg';
