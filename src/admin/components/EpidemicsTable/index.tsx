@@ -215,7 +215,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     };
     useEffect(() => {
         if (Object.keys(incidentEditData).length > 0) {
-            navigate('/admin/epidemics-form');
+            navigate('/admin/epidemics/add-new-epidemics');
         }
     }, [incidentEditData]);
 
