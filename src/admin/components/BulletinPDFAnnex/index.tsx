@@ -45,6 +45,9 @@ const BulletinPDFAnnex = (props) => {
         setPeopleLossData(plD);
     }, [covidProvinceWiseTotal, peopleLoss]);
 
+    useEffect(() => {
+        console.log('hazardWiseLoss', hazardWiseLoss);
+    }, [hazardWiseLoss]);
 
     return (
         <div className={styles.footerPDFContainer}>
@@ -108,43 +111,49 @@ const BulletinPDFAnnex = (props) => {
                 </tbody>
             </table>
             <h3>प्रकोप अनुसार मृत्यू, बेपत्ता र घाइते संन्ख्याको बर्गिकरण</h3>
-            <table className={styles.provTable}>
-                <thead>
-                    <tr>
-                        <th>{' '}</th>
-                        {
-                            Object.keys(hazardWiseLoss).map(pwT => (
-                                <th key={pwT}>
-                                    {pwT}
-                                </th>
-                            ))
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        Object.keys(hazardWiseLoss[Object.keys(hazardWiseLoss)[0]])
-                            .map((pwT, i) => (
-                                <tr>
-                                    <td>
-                                        {nepaliRef[pwT]}
-                                    </td>
-                                    {
-                                        Object.keys(hazardWiseLoss)
-                                            .map(haz => (
-                                                <td key={haz}>
-                                                    {Number(hazardWiseLoss[haz][pwT])
-                                                        .toLocaleString()}
-                                                </td>
-                                            ))
+            {
+                typeof hazardWiseLoss === 'object'
+                && Object.keys(hazardWiseLoss).length > 0
+                && (
+                    <table className={styles.provTable}>
+                        <thead>
+                            <tr>
+                                <th>{' '}</th>
+                                {
+                                    hazardWiseLoss && Object.keys(hazardWiseLoss).map(pwT => (
+                                        <th key={pwT}>
+                                            {pwT}
+                                        </th>
+                                    ))
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                hazardWiseLoss && Object.keys(hazardWiseLoss[Object.keys(hazardWiseLoss)[0]])
+                                    .map((pwT, i) => (
+                                        <tr>
+                                            <td>
+                                                {nepaliRef[pwT]}
+                                            </td>
+                                            {
+                                                Object.keys(hazardWiseLoss)
+                                                    .map(haz => (
+                                                        <td key={haz}>
+                                                            {Number(hazardWiseLoss[haz][pwT])
+                                                                .toLocaleString()}
+                                                        </td>
+                                                    ))
 
-                                    }
+                                            }
 
-                                </tr>
-                            ))
-                    }
-                </tbody>
-            </table>
+                                        </tr>
+                                    ))
+                            }
+                        </tbody>
+                    </table>
+                )
+            }
             <div className={styles.twoCols}>
                 <div>
                     <h3>लिङ्ग अनुसार मृत्यूको बर्गिकरण</h3>

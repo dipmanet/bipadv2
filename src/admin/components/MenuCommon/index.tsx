@@ -96,26 +96,28 @@ const MenuCommon = (props: Props) => {
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {
-                Menu && Menu.filter(item => item.isEnabled).map((menuItem: MenuItem, i: number) => (
-                    <div
-                        key={menuItem.id}
-                        className={
-                            i === active
-                                ? styles.activeMenu
-                                : styles.menuItemContainer
-                        }
-                    >
+                Menu && Menu.filter(item => item.isEnabled)
+                    .filter(item => item.title !== 'DRRM Reports')
+                    .map((menuItem: MenuItem, i: number) => (
                         <div
-                            role="presentation"
-                            onClick={() => handleMenuItemClick(menuItem)}
-                            className={styles.menuItem}
-
+                            key={menuItem.id}
+                            className={
+                                i === active
+                                    ? styles.activeMenu
+                                    : styles.menuItemContainer
+                            }
                         >
-                            {menuItem.title}
+                            <div
+                                role="presentation"
+                                onClick={() => handleMenuItemClick(menuItem)}
+                                className={styles.menuItem}
 
+                            >
+                                {menuItem.title}
+
+                            </div>
                         </div>
-                    </div>
-                ))
+                    ))
             }
         </div>
     );

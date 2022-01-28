@@ -10,7 +10,7 @@ const GenderStat = (props) => {
             </div>
             <div className={styles.stat}>
                 <div className={styles.goloBatch}>
-                    {Number(value).toLocaleString()}
+                    {value}
                 </div>
                 {title}
             </div>

@@ -2,12 +2,15 @@ $boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
 .mainSection{
     padding: 20px 30px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    border: 2px solid green;
     .leftMenuSection{
         width: 25%;
     }
     .rightFormSection{
         width: 210mm;
+        width: 100%;
+        // border: 1px solid red;
         box-shadow: $boxShadow;
         background-color: white;
 

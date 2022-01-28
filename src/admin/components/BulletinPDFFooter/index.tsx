@@ -25,7 +25,7 @@ const BulletinPDFFooter = (props) => {
     return (
         <div className={styles.footerContainer}>
             <div className={styles.dailySummary}>
-                <h2>दैनिक बर्षा को सारांश</h2>
+                <h2>दैनिक बर्षा र तापक्रम को सारांश</h2>
                 <p>{dailySummary}</p>
             </div>
             {/*

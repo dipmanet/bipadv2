@@ -116,6 +116,7 @@ const BulletinPDFLoss = (props: Props) => {
 
             </div>
             <div className={styles.covidTotal}>
+                <h2>हालसम्मको COVID-19 को कुल तथ्याङ्क</h2>
                 <div className={styles.lossIconsRow}>
                     {
                         covidObjTotal.map(l => (
@@ -141,7 +142,10 @@ const BulletinPDFLoss = (props: Props) => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis type="number" />
+                            <XAxis
+                                type="number"
+                                tickFormatter={tick => tick.toLocaleString()}
+                            />
                             <YAxis
                                 type="category"
                                 dataKey="province"
