@@ -210,7 +210,6 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         console.log('...delete');
     };
     const handleEdit = () => {
-        console.log('dispatching', selected);
         epidemicFormEdit.do({ id: selected });
     };
     useEffect(() => {
@@ -272,9 +271,7 @@ const EpidemmicTable = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        console.log('selectedd', selected);
-    }, [selected]);
+
     useEffect(() => {
         if (incidentData) {
             const tableRows = incidentData.map((row) => {

@@ -492,9 +492,6 @@ const Epidemics = (props) => {
         wards,
     } = props;
 
-    useEffect(() => {
-        console.log(provinceId);
-    }, [provinceId]);
 
     useEffect(() => {
         const province = provinces.filter(
@@ -590,15 +587,12 @@ const Epidemics = (props) => {
             setLongitude(incidentEditData.point.coordinates[0]);
             setStreetAddress(incidentEditData.streetAddress);
             setCause(incidentEditData.cause);
-            console.log('province', incidentEditData.wards[0].municipality.district.province.title);
 
             setprovinceName(incidentEditData.wards[0].municipality.district.province.title);
 
             setdistrictName(incidentEditData.wards[0].municipality.district.title);
-            console.log('municipality is', incidentEditData.wards[0].municipality.district.province.title, incidentEditData.wards[0].municipality.district.title, incidentEditData.wards[0].municipality.title, incidentEditData.wards[0].title);
             setmunicipalityName(incidentEditData.wards[0].municipality.title);
             setwardName(incidentEditData.wards[0].title);
-            // console.log('test title',incidentEditData.wards[0].title);
             setVerificationMessage(incidentEditData.verificationMessage);
             // setwardId(incidentEditData.wards[0].id);
             setEditWardId(incidentEditData.wards[0].id);
@@ -775,7 +769,6 @@ const Epidemics = (props) => {
                 loss: editLossId,
                 count: injuredFormDisabled };
             // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
-            console.log('redirecting to table view');
             if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
                 setError(true);
             }
@@ -804,7 +797,6 @@ const Epidemics = (props) => {
                     coordinates: [longitude, lattitude],
                 },
                 wards: [wardId] };
-            console.log('test data', data);
             props.requests.incident.do({ body: data });
             const deadMale = { ...deadMaleInitial,
                 loss: lossID,

@@ -234,7 +234,6 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            console.log('...setting edit data, edit mode');
             setSitRep(bulletinEditData.sitrep);
             setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);
@@ -246,7 +245,6 @@ const Bulletin = (props: Props) => {
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
             setDailySumamry(bulletinEditData.dailySummary);
         } else {
-            console.log('...fetching data, not edit mode');
             incidentsGetRequest.do();
             covidNationalInfo.do();
             covidQuarantine.do();
@@ -441,7 +439,6 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (lossData) {
-            console.log('loss data changed', lossData);
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
@@ -520,7 +517,6 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (covidNational.length > 0) {
-            console.log('covidNational', covidNational);
             setcovid24hrsStat({
                 affected: covidNational[0].newCases || 0,
                 femaleAffected: covidNational[0].newCasesFemale || 0,
@@ -546,8 +542,6 @@ const Bulletin = (props: Props) => {
             const p5Data = covidQuaratine.filter(p => p.provinceName === 'Lumbini')[0];
             const p6Data = covidQuaratine.filter(p => p.provinceName === 'Karnali')[0];
             const p7Data = covidQuaratine.filter(p => p.provinceName === 'Sudurpashchim')[0];
-            console.log('p7Data', p7Data);
-            console.log('covidQuaratine', covidQuaratine);
             setcovidProvinceWiseTotal({
                 p1: {
                     totalAffected: p1Data ? p1Data.totalPositive : 0,

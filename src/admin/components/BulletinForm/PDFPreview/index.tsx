@@ -58,7 +58,6 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         onMount: false,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, params }) => {
-            console.log('response', response);
             params.doc.save('Bulletin.pdf');
         },
     },
@@ -138,15 +137,6 @@ const PDFPreview = (props) => {
             })
             .catch((error) => {
                 setPending(false);
-                if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                }
             });
     };
     const updatePDF = (pdfFile, doc) => {

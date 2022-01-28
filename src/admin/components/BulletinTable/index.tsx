@@ -723,7 +723,6 @@ const BulletinTable = (props) => {
                         );
                     }
                     if (k === 'covidAffectedDaily') {
-                        console.log('row 24hrs stat', row);
                         return (
                             <TableCell
                                 align="center"

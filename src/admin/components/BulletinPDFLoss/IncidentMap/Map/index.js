@@ -142,7 +142,6 @@ const IncidentMap = (props) => {
         },
     } = props;
 
-    console.log('fasf');
     const mapContainerRef = useRef(null);
     // const mapRef = useRef<mapboxgl.Map | null>(null);
 
@@ -301,8 +300,6 @@ const IncidentMap = (props) => {
                 },
             );
         });
-
-        console.log('pointFeatureCollection', pointFeatureCollection);
     }, [pointFeatureCollection]);
 
 

@@ -45,9 +45,6 @@ const BulletinPDFAnnex = (props) => {
         setPeopleLossData(plD);
     }, [covidProvinceWiseTotal, peopleLoss]);
 
-    useEffect(() => {
-        console.log('hazardWiseLoss', hazardWiseLoss);
-    }, [hazardWiseLoss]);
 
     return (
         <div className={styles.footerPDFContainer}>

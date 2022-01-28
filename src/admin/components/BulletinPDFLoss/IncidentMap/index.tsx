@@ -220,7 +220,6 @@ class Incidents extends React.PureComponent<Props, State> {
             regions,
             hazardTypes,
         );
-        console.log('sanitizedIncidentList', sanitizedIncidentList);
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
 
         const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
