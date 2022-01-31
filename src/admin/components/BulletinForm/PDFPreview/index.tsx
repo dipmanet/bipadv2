@@ -105,7 +105,10 @@ const PDFPreview = (props) => {
             ([key, value]) => {
                 if (isList(value)) {
                     value.forEach((val: unknown) => {
-                        if (val !== undefined) {
+                        if (val !== undefined && isBlob(value)) {
+                            const sanitizedVal = sanitizeFormData(val);
+                            formDataNew.append(key, sanitizedVal, 'Bulletin.pdf');
+                        } else if (val !== undefined && !isBlob(value)) {
                             const sanitizedVal = sanitizeFormData(val);
                             formDataNew.append(key, sanitizedVal);
                         }

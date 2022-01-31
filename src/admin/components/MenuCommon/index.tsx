@@ -28,6 +28,7 @@ interface MenuItem {
     'treeId': number;
     'level': number;
     'parent': number;
+    'isPublic': boolean;
 
 }
 
@@ -83,6 +84,7 @@ const MenuCommon = (props: Props) => {
                 const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
                 if (childMenu) {
                     const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
+                    console.log('childM', childM);
                     const activeIndex = childM.map(cM => cM.slug).indexOf(currentPageSlug.current);
                     setActive(activeIndex);
                     setMenu(childM);
@@ -96,8 +98,7 @@ const MenuCommon = (props: Props) => {
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {
-                Menu && Menu.filter(item => item.isEnabled)
-                    .filter(item => item.title !== 'DRRM Reports')
+                Menu && Menu.filter(item => item.isEnabled && item.isPublic)
                     .map((menuItem: MenuItem, i: number) => (
                         <div
                             key={menuItem.id}
