@@ -81,6 +81,14 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
     },
     {
+        name: 'Covid-19',
+        title: 'Covid-19',
+        path: '/admin/covid-19/covid-19-data-table',
+        load: () => import('../admin/views/Covid19Table'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
         name: 'epidemics',
         title: 'Epidemics',
         path: '/admin/epidemics/add-new-epidemics',
