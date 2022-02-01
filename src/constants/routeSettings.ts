@@ -59,7 +59,7 @@ const routeSettings: SomeRoute[] = [
     {
         name: 'bulletin',
         title: 'Bulletin',
-        path: '/admin/bulletin/add-new-bulletin',
+        path: '/admin/bulletin/bulletin-form',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,
