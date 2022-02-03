@@ -88,6 +88,15 @@ const routeSettings: SomeRoute[] = [
         iconName: 'riskInfoSvg',
     },
     {
+        name: 'feedbackAndSupport',
+        title: 'Feedback & Support',
+        path: '/feedback-support/',
+        load: () => import('../views/FeedbackSupport'),
+        navbar: false,
+        disabled: false,
+        iconName: 'riskInfoSvg',
+    },
+    {
         name: 'fourHundredThree',
         title: '403',
         path: '/403/',
@@ -102,6 +111,7 @@ const routeSettings: SomeRoute[] = [
         path: undefined,
         navbar: false,
     },
+
     {
         name: 'forgotPassword',
         title: 'New Password',

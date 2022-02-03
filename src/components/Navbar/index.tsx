@@ -3,6 +3,7 @@ import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 
+import { navigate } from '@reach/router';
 import ListView from '#rscv/List/ListView';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
@@ -28,7 +29,6 @@ import NewLoginModal from '#components/NewLoginModal';
 import AboutModal from '#components/AboutModal';
 import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
-
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
 
@@ -66,7 +66,7 @@ const MenuItemLikeButton = ({
             name={iconName}
         />
         <div className={styles.title}>
-            { title }
+            {title}
         </div>
     </div>
 );
@@ -123,7 +123,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
     },
 };
 
-const menuKeySelector = (d: {name: string}) => d.name;
+const menuKeySelector = (d: { name: string }) => d.name;
 
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
@@ -192,6 +192,12 @@ class Navbar extends React.PureComponent<Props, State> {
                             modal={<NewLoginModal />}
                         />
                     )}
+                    <ModalButton
+                        className={styles.reportIncidentButton}
+                        title="Feedback & Support"
+                        iconName="aboutUs"
+                        onClick={() => navigate('/feedback-support/')}
+                    />
                     <ModalButton
                         className={styles.reportIncidentButton}
                         title="About Us"
