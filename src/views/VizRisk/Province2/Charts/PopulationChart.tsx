@@ -19,13 +19,13 @@ export default function PopulationChart(props) {
     const { populationCustomTooltip, populationData, renderLegendPopulaion } = props;
     return (
         <div>
-            <ResponsiveContainer width="100%" height={1200}>
+            <ResponsiveContainer width="100%" height={600}>
                 <BarChart
                     data={populationData}
                     layout="vertical"
-                    margin={{ top: 30, bottom: 10, right: 20, left: 10 }}
+                    margin={{ top: 30, bottom: 10, right: 20, left: 40 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
                     <XAxis
                         type="number"
                         tick={{ fill: '#94bdcf' }}

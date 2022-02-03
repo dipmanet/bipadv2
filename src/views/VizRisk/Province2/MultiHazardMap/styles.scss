@@ -20,7 +20,7 @@
 .sliderLabel{
   position: fixed;
   right: 160px;
-  bottom: 400px !important;
+  bottom: 335px !important;
   color: white;
   z-index: 201;
 }
@@ -28,7 +28,7 @@
 .sliderLabel2{
   position: fixed;
   right: 138px;
-  bottom: 400px !important;
+  bottom: 335px !important;
   color: white;
   z-index: 201;
 }
@@ -36,7 +36,7 @@
 .sliderLabel3{
   position: fixed;
   right: 150px;
-  bottom: 400px !important;
+  bottom: 335px !important;
   color: white;
   z-index: 201;
 }
@@ -45,8 +45,8 @@
   right: 85px;
   display: flex;
   justify-content: space-between;
-  width: 9.3%;
-  bottom: 363px !important;
+  width: 9.5%;
+  bottom: 295px !important;
   color: white;
   z-index: 201;
 }
@@ -63,7 +63,7 @@
   transition: opacity .2s;
   position: fixed;
   right: 80px;
-  bottom: 395px;
+  bottom: 330px;
   cursor: pointer;
 
 }
@@ -148,6 +148,35 @@
         }
     }
 }
+.mainLegendDiv{
+	position: fixed;
+		width: 35%;
+		bottom:45px;
+		left: 28%;
+		z-index: 2;
+		margin: 0;
+	
+	.scale {
+		display: flex;
+		
+		.scale-element {
+			width: 25px;
+			display: flex;
+			flex-direction: column;
+			margin: 0;
+			flex-grow: 1;
+			text-align: right;
+	
+			.color-unit {
+				flex-shrink: 0;
+				margin: 0;
+				height: var(--font-size-small);
+			}
+			.value{color: white;}
+		}
+	}
+	
+	
+	
 
-
-
+}

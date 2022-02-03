@@ -29,7 +29,7 @@ export default function TempChart(props) {
                     margin={{ top: 5, right: 15, left: 15, bottom: 20 }}
                     data={tempChartData}
                 >
-                    <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={'#436578'} />
                     <XAxis
                         dataKey="name"
                         interval="preserveStart"

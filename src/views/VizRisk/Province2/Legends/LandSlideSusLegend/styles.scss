@@ -2,9 +2,9 @@
     
     .populationContainer{
         display: flex;
-		position: fixed;
-		bottom: 43px;
-		left: 526px;
+		position: relative;
+		bottom: 35px;
+		left: 2%;
 		flex-direction: column;
         .legendsRow{
             text-align: center;

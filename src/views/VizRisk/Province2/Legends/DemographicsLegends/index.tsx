@@ -27,13 +27,16 @@ const DemoGraphicsLegends = (props) => {
         ? Math.max(...d) + 1 : Math.max(...d)));
 
 
+    console.log('intervals', intervals);
+
+
     return (
         <>
             <div style={{ position: 'fixed', bottom: '145px', right: '82px', zIndex: '15', backgroundColor: 'rgba(19,32,55,0.9)', padding: '15px', borderRadius: '10px' }}>
                 {showPopulationWard
                     && (
                         <div>
-                            <h4 style={{ marginLeft: '10px' }}>Population by ward</h4>
+                            <h4 style={{ marginLeft: '10px' }}>Population by district</h4>
                             <div className={styles.populationContainer}>
                                 <div className={styles.populationIndContainerShort}>
                                     <div className={styles.populationIndicator1} />
@@ -43,11 +46,11 @@ const DemoGraphicsLegends = (props) => {
                                     <div className={styles.populationIndicator5} />
                                 </div>
                                 <div className={styles.populationTextContainer}>
-                                    <div className={styles.populationText}>{`${parseStringToNumber(intervals[3])} - ${parseStringToNumber(intervals[4])}`}</div>
+                                    {/* <div className={styles.populationText}>{`${parseStringToNumber(intervals[3])} - ${parseStringToNumber(intervals[4])}`}</div> */}
                                     <div className={styles.populationText}>{`${parseStringToNumber(intervals[2])} - ${parseStringToNumber(intervals[3])}`}</div>
                                     <div className={styles.populationText}>{`${parseStringToNumber(intervals[1])} - ${parseStringToNumber(intervals[2])}`}</div>
                                     <div className={styles.populationText}>{`${parseStringToNumber(intervals[0])} - ${parseStringToNumber(intervals[1])}`}</div>
-                                    <div className={styles.populationText}>{`0- ${parseStringToNumber(intervals[0])}`}</div>
+                                    <div className={styles.populationText}>{`${minPop}- ${parseStringToNumber(intervals[0])}`}</div>
                                 </div>
 
                             </div>

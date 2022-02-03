@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-tabs */
 /* eslint-disable no-else-return */
 /* eslint-disable max-len */
 import React, { useRef, useState, useEffect, useCallback } from 'react';
@@ -7,8 +9,9 @@ import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
 import * as geojson from 'geojson';
 import * as turf from '@turf/turf';
-import { bound, isDefined, isInteger, _cs } from '@togglecorp/fujs';
+import { bound, isDefined, isInteger, listToMap, _cs } from '@togglecorp/fujs';
 import Loader from 'react-loader';
+import { number } from 'prop-types';
 import { mapSources } from '#constants';
 import * as PageTypes from '#store/atom/page/types';
 import {
@@ -24,10 +27,7 @@ import {
 } from './utils';
 import { AppState } from '#store/types';
 
-import {
-    wardsSelector,
-} from '#selectors';
-
+import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import { getDistrictFilter } from '#utils/domain';
 import styles from './styles.scss';
 import HealthIcon from '#resources/icons/Health-facility.svg';
@@ -41,13 +41,15 @@ import Heli from '#resources/icons/Heli.png';
 
 
 import { getgeoJsonLayer, getHillShadeLayer } from '../utils';
-import { parseStringToNumber } from '../Functions';
+import { getColor, parseStringToNumber } from '../Functions';
 
 import { districtsSelector } from '../../../../store/atom/page/selector';
 import RainTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Rain';
 import RiverTooltip from '#views/Dashboard/Map/Tooltips/Alerts/River';
 import PollutionTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Pollution';
 import FireTooltip from '../../../Dashboard/Map/Tooltips/Alerts/Fire/index';
+import { hdiData, hpiData } from '../Data/vulnerabilityData';
+import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
 
 
 interface State{
@@ -145,7 +147,7 @@ interface MapConstants {
     incidentsSliderDelay: number;
     municipalityId: number;
     susceptibilityLayerName: string;
-    sesmicHazardLayerName: string;
+    inundationLayerLayerName: string;
     drawStyles: object[];
     ciRef: object;
     semicPages: number[];
@@ -234,33 +236,40 @@ const MultiHazardMap = (props: Props) => {
         setsatelliteYearDisabled,
         setlegentItemDisabled,
         alerts,
+        climateTempData,
+        tempSelectedData,
+        precipitationData,
+        prepSelectedData,
+        climateDataType,
+        tempDataForMapUpto2010,
+        tempDataForMapUpto2045,
+        tempDataForMapUpto2065,
+        prepDataForMapUpto2010,
+        prepDataForMapUpto2045,
+        prepDataForMapUpto2065,
+        setclimateLineChartData,
+        setdistrictIdIs,
+        vulnerability,
+        totalFloodLossData,
+        totalLandslideLossData,
+        clickedHazardItem,
+        clickedFatalityInfraDamage,
     } = props;
 
 
-    console.log('contact geo are', contactGeoJson);
-
-
     const [ciCategoryCritical, setciCategoryCritical] = useState<string[]>([]);
-    const [incidentsArr, setIncidentsArr] = useState<string[]>([]);
-    const [playState, setPlayState] = useState<boolean>(false);
-    const [incidentYear, setIncidentYear] = useState<string>('0');
     const [opacitySus, setopacitySus] = useState<number>(0.5);
     const [opacitySes, setopacitySes] = useState<number>(0.5);
     const [opacityFlood, setopacityFlood] = useState<number>(0.5);
-    const [osmID, setosmID] = useState<number | null>(null);
-    const [searchTerm, setsearchTerm] = useState<string | null>(null);
-    const [cood, setcood] = useState<[number, number] | null>(null);
-    const [rangeArr, setrangeArr] = useState([]);
-    const [demoColor, setdemoColor] = useState([]);
-    const points = useRef<turf.AllGeoJSON | null>(null);
-    const interval = useRef<Timeout>(null);
     const map = useRef<mapboxgl.Map | null>(null);
-    const buildingpointsData = useRef<object[]| null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const [alertsDataArr, setAlertsDataArr] = useState([]);
+    const [lossLegendsData, setlossLegendsData] = useState([]);
 
-    const susceptibilityLayerName = `${MAINKEYNAME}_durham_landslide_susceptibility`;
-    const sesmicHazardLayerName = `${MAINKEYNAME}_meteor_seismic_hazard_10`;
+
+    const susceptibilityLayerName = 'province_2_durham_landslide_susceptibility';
+
+    const newDemoColorArray = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
 
     function EarthquakeTooltip(title: any, description: any, createdDate: any, referenceData: any) {
@@ -297,48 +306,6 @@ const MultiHazardMap = (props: Props) => {
         } return null;
     };
 
-    const colorExtrusion = ['#ffeec2', '#f6daa7', '#f6c074', '#ec8209', '#c15401'];
-
-
-    const getIncidentsGeoJSON = (filterBy: string, data: any) => {
-        const geoObj = {
-            type: 'FeatureCollection',
-            features: [],
-        };
-        const d = data.features.filter(item => item.properties.hazardTitle === filterBy);
-        geoObj.features.push(...d);
-        return geoObj;
-    };
-
-    const handlePlayPause = () => {
-        setPlayState(!playState);
-    };
-
-    const filterOnMap = (val) => {
-        const yearInt = new Date(`${2017 + Number(val)}-01-01`).getTime();
-        const nextYear = new Date(`${2017 + Number(val) + 1}-01-01`).getTime();
-        let filters: T[] = [];
-        if (clickedItem === 'all') {
-            filters = ['all', ['>', 'incidentOn', yearInt], ['<', 'incidentOn', nextYear]];
-        } else {
-            filters = ['all',
-                ['>', 'incidentOn', yearInt],
-                ['<', 'incidentOn', nextYear],
-                ['==', 'hazardTitle', clickedItem]];
-        }
-        const hazardTitle = [...new Set(incidentList.features.map(
-            item => item.properties.hazardTitle,
-        ))];
-
-        hazardTitle.map((layer) => {
-            if (map.current) {
-                map.current.setFilter(`incidents-${layer}`, filters);
-            }
-            return null;
-        });
-    };
-
-
     const handleFloodChange = (e, mapType) => {
         const opacity = e.target.value;
         if (mapType === 'flood') {
@@ -351,7 +318,7 @@ const MultiHazardMap = (props: Props) => {
             });
         } else if (mapType === 'ses') {
             if (map.current) {
-                map.current.setPaintProperty('sesmicHazard', 'raster-opacity', Number(opacity));
+                map.current.setPaintProperty('inundationLayer', 'raster-opacity', Number(opacity));
             }
             setopacitySes(opacity);
         } else if (mapType === 'sus') {
@@ -361,6 +328,204 @@ const MultiHazardMap = (props: Props) => {
             }
         }
     };
+
+    const generatePaintByQuantile = (
+        colorDomain: string[],
+        minValue: number,
+        maxValue: number,
+        categoryData: number[],
+        parts: number,
+    ) => {
+        const range = maxValue - minValue;
+        const gap = range / colorDomain.length;
+
+        const data = categoryData;
+        const divider = Math.ceil(data.length / parts);
+        data.sort((a, b) => a - b);
+        const dividedSpecificData = new Array(Math.ceil(data.length / divider))
+            .fill()
+            .map(_ => data.splice(0, divider));
+
+        const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
+
+        const intervals: number[] = [];
+        nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+            ? Math.max(...d) + 1 : Math.max(...d)));
+
+        /* Quantile Division ends */
+
+        const countBasedIntervals = intervals;
+        const colors: (string | number)[] = [];
+
+        colorDomain.forEach((color, i) => {
+            const val = +(minValue + (i + 1) * gap).toFixed(1);
+            // NOTE: avoid duplicates
+            if (colors.length > 0 && colors[colors.length - 1] === val) {
+                return;
+            }
+            colors.push(color);
+            colors.push(val);
+        });
+
+
+        if (colors.length !== 0) {
+            return colors;
+        }
+        return null;
+    };
+    const generateColor = (maxValue, minValue, colorMapping) => {
+        const newColor = [];
+        const { length } = colorMapping;
+        const range = maxValue - minValue;
+        colorMapping.forEach((color, i) => {
+            const val = minValue + ((i * range) / (length - 1));
+            newColor.push(val);
+            newColor.push(color);
+        });
+        return newColor;
+    };
+
+    const generatePaint = color => ({
+        'fill-color': [
+            'interpolate',
+            ['linear'],
+            ['feature-state', 'value'],
+            ...color,
+        ],
+        'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            0.8,
+            1,
+        ],
+    });
+    const generatePaintQuantile = color => ({
+        'fill-color': [
+            'interpolate',
+            ['linear'],
+            ['feature-state', 'value'],
+            0,
+            ...color.slice(0, -1),
+        ],
+        'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            0.8,
+            1,
+        ],
+    });
+
+    const colorGrade = [
+        '#ffe5d4',
+        '#f9d0b8',
+        '#f2bb9e',
+        '#eca685',
+        '#e4906e',
+        '#dd7a59',
+        '#d46246',
+        '#cb4836',
+        '#c22727',
+    ];
+
+    const vulColors = [
+        '#c73c32',
+        '#d98452',
+        '#e9bf8c',
+        '#fff5d8',
+        '#d3dba0',
+        '#94c475',
+        '#31ad5c',
+    ];
+
+    const tempDataAccordingToYear = ['temp2010', 'temp2045', 'temp2065'];
+    const prepDataAccordingToYear = ['prep2010', 'prep2045', 'prep2065'];
+
+    const tempColors: string[] = [
+        '#31a354',
+        '#93ce82',
+        '#ddf1b3',
+        '#fef6cb',
+        '#f2b294',
+        '#d7595d',
+        '#bd0026',
+    ];
+
+    const rainColors: string[] = [
+        '#ffffcc',
+        '#c7e4b9',
+        '#7fcdbb',
+        '#41b6c4',
+        '#1d91c0',
+        '#225ea8',
+        '#0c2c84',
+    ];
+
+
+    const getChartData = (measurment: string, district: number) => {
+        const mainData = (measurment === 'temp' ? climateTempData : precipitationData).filter(d => d.district === district);
+        const { rcp45, sdRcp45, rcp85, sdRcp85 } = mainData[0];
+        const mapSdRcp45 = listToMap(sdRcp45, d => d.year, d => d.value);
+        const mapRcp85 = listToMap(rcp85, d => d.year, d => d.value);
+        const mapSdRcp85 = listToMap(sdRcp85, d => d.year, d => d.value);
+        const yearWiseData = rcp45.map(({ year, value }) => ({
+            year,
+            rcp45Value: value || 0,
+            sdRcp45Value: mapSdRcp45[year] || 0,
+            rcp85Value: mapRcp85[year] || 0,
+            sdRcp85Value: mapSdRcp85[year] || 0,
+        })).map(({ year, rcp45Value, sdRcp45Value, rcp85Value, sdRcp85Value }) => ({
+            year,
+            'RCP 4.5': Number(rcp45Value.toFixed(2)),
+            'SD RCP 4.5': [
+                Number((rcp45Value - sdRcp45Value).toFixed(2)),
+                Number((rcp45Value + sdRcp45Value).toFixed(2)),
+            ],
+            'RCP 8.5': Number(rcp85Value.toFixed(2)),
+            'SD RCP 8.5': [
+                Number((rcp85Value - sdRcp85Value).toFixed(2)),
+                Number((rcp85Value + sdRcp85Value).toFixed(2)),
+            ],
+        }));
+        return yearWiseData;
+    };
+
+
+    const totalPopulationByWard = demographicsData.map(item => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }));
+    const arrayValue = totalPopulationByWard.map(item => item.totalpop);
+    const maxPop = Math.max(...arrayValue);
+    const minPop = Math.min(...arrayValue);
+
+
+    const colorForDemographics = generateColor(maxPop, minPop, newDemoColorArray);
+
+    console.log('demo color', colorForDemographics);
+
+
+    const colorForTemp = generateColor(26, 24, tempColors);
+    const colorForPrep = generateColor(1800, 1500, rainColors);
+
+    const colorForhdi = ['#c73c32', 0.386, '#c73c32', 0.4, '#e9bf8c', '#e9bf8c'];
+    const colorForhpi = generatePaintByQuantile([...vulColors].reverse(), 36.4, 46.4, hpiData.map(item => item.value), 7);
+
+
+    const totalPeopleDeathFlood = totalFloodLossData.map(item => item.totalPeopleDeath);
+    const totalInfraDamageFlood = totalFloodLossData.map(item => item.totalInfraDamage);
+    const totalPeopleDeathLandslide = totalLandslideLossData.map(item => item.totalPeopleDeath);
+    const totalInfraDamageLandslide = totalLandslideLossData.map(item => item.totalInfraDamage);
+
+    const damageLossArray = ['totalPeopleDeathFlood', 'totalInfraDamageFlood', 'totalPeopleDeathLandslide', 'totalInfraDamageLandslide'];
+    const damageLossDataArray = [totalFloodLossData, totalFloodLossData, totalLandslideLossData, totalLandslideLossData];
+
+    console.log('data array', damageLossDataArray);
+
+    const color1 = generateColor(Math.max(...totalPeopleDeathFlood), Math.min(...totalPeopleDeathFlood), colorGrade);
+    const color2 = generateColor(Math.max(...totalInfraDamageFlood), Math.min(...totalInfraDamageFlood), colorGrade);
+    const color3 = generateColor(Math.max(...totalPeopleDeathLandslide), Math.min(...totalPeopleDeathLandslide), colorGrade);
+    const color4 = generateColor(Math.max(...totalInfraDamageLandslide), Math.min(...totalInfraDamageLandslide), colorGrade);
+
+    const allDamageColors = [color1, color2, color3, color4];
+
+    console.log('all damage colors', allDamageColors);
 
 
     const images = [
@@ -395,8 +560,9 @@ const MultiHazardMap = (props: Props) => {
 
         const mapping = districts.filter(item => item.province === 2).map(item => ({
             ...item,
-            value: item.title,
+            value: item.id,
         }));
+
 
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
@@ -414,10 +580,6 @@ const MultiHazardMap = (props: Props) => {
 
         multihazardMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        // multihazardMap.fitBounds([
-        //     [boundingBox[0], boundingBox[1]],
-        //     [boundingBox[2], boundingBox[3]],
-        // ]);
         disableNavBtns('both');
         const syncWait = (ms) => {
             const end = Date.now() + ms;
@@ -440,10 +602,12 @@ const MultiHazardMap = (props: Props) => {
 
 
         multihazardMap.on('style.load', () => {
+            // -------------------------------------------------SLIDE-1----------------------------------------------
             multihazardMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
             });
+
 
             multihazardMap.addLayer({
                 id: 'ward-fill-local',
@@ -451,21 +615,7 @@ const MultiHazardMap = (props: Props) => {
                 'source-layer': mapSources.nepal.layers.district,
                 type: 'fill',
 
-                paint: {
-                    'fill-color': [
-                        'match',
-                        ['id'],
-                        16, 'rgb(255,143,13)', 33, 'rgb(255,111,0)',
-                        34, 'rgb(255,143,13)', 15, 'red', 17, 'rgb(255,143,13)',
-                        18, 'rgb(255,143,13)', 19, 'rgb(255,143,13)', 32, 'green', 'red',
-                    ],
-                    'fill-opacity': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        1,
-                        1,
-                    ],
-                },
+                paint: generatePaint(colorForDemographics),
                 layout: {
                     visibility: 'none',
 
@@ -480,21 +630,128 @@ const MultiHazardMap = (props: Props) => {
             });
 
 
-            mapping.forEach((attribute) => {
+            demographicsData.forEach((attribute) => {
                 multihazardMap.setFeatureState(
                     {
                         id: attribute.id,
                         source: 'vizrisk-fills',
                         sourceLayer: mapSources.nepal.layers.district,
                     },
-                    { value: attribute.value },
+                    { value: attribute.MalePop + attribute.FemalePop },
                 );
             });
 
+            multihazardMap.on('mousemove', 'ward-fill-local', (e) => {
+                if (e.features.length > 0) {
+                    multihazardMap.getCanvas().style.cursor = 'pointer';
+                    const { lngLat } = e;
+                    console.log('features', e.features[0]);
+
+                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                    const wardno = e.features[0].properties.title;
+                    const details = demographicsData.filter(item => item.name === `${wardno}`);
+                    const totalPop = details[0].MalePop + details[0].FemalePop;
+                    popup.setLngLat(coordinates).setHTML(
+                        `<div style="padding: 5px;border-radius: 5px">
+                            <p>${details[0].name} Total Population: ${parseStringToNumber(totalPop)}</p>
+                        </div>
+                        `,
+                    ).addTo(multihazardMap);
+                    if (hoveredWardId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: 'vizrisk-fills',
+                                sourceLayer: mapSources.nepal.layers.ward,
+                            },
+                            { hover: false },
+                        );
+                    }
+                    hoveredWardId = e.features[0].id;
+                    multihazardMap.setFeatureState(
+                        {
+                            id: hoveredWardId,
+                            source: 'vizrisk-fills',
+                            sourceLayer: mapSources.nepal.layers.ward,
+
+                        },
+                        { hover: true },
+                    );
+                }
+            });
+
+            if (populationWardExpression) {
+                multihazardMap.on('mouseleave', 'ward-fill-local', () => {
+                    multihazardMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                    if (hoveredWardId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                source: 'vizrisk-fills',
+                                id: hoveredWardId,
+                                sourceLayer: mapSources.nepal.layers.ward,
+                            },
+                            { hover: false },
+
+                        );
+                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    }
+                    hoveredWardId = null;
+                });
+            }
+
+            // -------------------------------------------------------------SLIDE-2----------------------------------------------------
+            damageLossArray.map((layer, i) => {
+                multihazardMap.addSource(`damageloss-${layer}`, {
+                    type: 'vector',
+                    url: mapSources.nepal.url,
+                });
+
+                multihazardMap.addLayer({
+                    id: `${layer}`,
+                    source: `damageloss-${layer}`,
+                    'source-layer': mapSources.nepal.layers.district,
+                    type: 'fill',
+                    paint: generatePaint(allDamageColors[i]),
+                    layout: {
+                        visibility: 'none',
+
+                    },
+                    filter: getDistrictFilter(2, null, districts),
+                }, 'districtgeo');
+
+                if (i === 0 || i === 2) {
+                    damageLossDataArray[i].forEach((attribute) => {
+                        multihazardMap.setFeatureState(
+                            {
+                                id: attribute.id,
+                                source: `damageloss-${layer}`,
+                                sourceLayer: mapSources.nepal.layers.district,
+                            },
+                            { value: attribute.totalPeopleDeath },
+                        );
+                    });
+                }
+                if (i === 1 || i === 3) {
+                    damageLossDataArray[i].forEach((attribute) => {
+                        multihazardMap.setFeatureState(
+                            {
+                                id: attribute.id,
+                                source: `damageloss-${layer}`,
+                                sourceLayer: mapSources.nepal.layers.district,
+                            },
+                            { value: attribute.totalInfraDamage },
+                        );
+                    });
+                }
+
+                return null;
+            });
+
+
+            // ------------------------------------------------SLIDE-3-------------------------------------------------------
 
             const alertsData = [...new Set(alerts.features.map(item => item.properties.Type))];
-
-            console.log('alerts data is', alertsData);
 
             setAlertsDataArr(alertsData);
 
@@ -504,7 +761,7 @@ const MultiHazardMap = (props: Props) => {
 				 data: getGeoJSONPH(layer, alerts),
 			 });
 
-			 multihazardMap.addLayer(
+                multihazardMap.addLayer(
                     {
                         id: `alerts-${layer}`,
                         type: 'circle',
@@ -529,7 +786,6 @@ const MultiHazardMap = (props: Props) => {
                     const coordinates = e.features[0].geometry.coordinates.slice();
                     const { referenceData } = e.features[0].properties;
                     const { createdDate } = e.features[0].properties;
-                    console.log('rrdata', referenceData, createdDate, e.features[0].properties.Type);
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
@@ -551,74 +807,7 @@ const MultiHazardMap = (props: Props) => {
 
                 return null;
             });
-
-
-            const incidents: any = [...new Set(incidentList.features.map(
-                item => item.properties.hazardTitle,
-            ))];
-            setIncidentsArr(incidents);
-
-
-            multihazardMap.on('mousemove', 'ward-fill-local', (e) => {
-                if (e.features.length > 0) {
-                    multihazardMap.getCanvas().style.cursor = 'pointer';
-                    const { lngLat } = e;
-                    console.log('event', e);
-
-                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
-                    const wardno = e.features[0].properties.title;
-                    const details = demographicsData.filter(item => item.name === `Ward ${wardno}`);
-                    const totalPop = details[0].MalePop + details[0].FemalePop;
-                    popup.setLngLat(coordinates).setHTML(
-                        `<div style="padding: 5px;border-radius: 5px">
-                            <p>${details[0].name} Total Population: ${parseStringToNumber(totalPop)}</p>
-                        </div>
-                        `,
-                    ).addTo(multihazardMap);
-                    if (hoveredWardId) {
-                        multihazardMap.setFeatureState(
-                            {
-                                id: hoveredWardId,
-                                source: 'vizrisk-fills',
-                                sourceLayer: mapSources.nepal.layers.district,
-                            },
-                            { hover: false },
-                        );
-                    }
-                    hoveredWardId = e.features[0].id;
-                    multihazardMap.setFeatureState(
-                        {
-                            id: hoveredWardId,
-                            source: 'vizrisk-fills',
-                            sourceLayer: mapSources.nepal.layers.district,
-
-                        },
-                        { hover: true },
-                    );
-                }
-            });
-
-
-            if (populationWardExpression) {
-                multihazardMap.on('mouseleave', 'ward-fill-local', () => {
-                    multihazardMap.getCanvas().style.cursor = '';
-                    popup.remove();
-                    if (hoveredWardId) {
-                        multihazardMap.setFeatureState(
-                            {
-                                source: 'vizrisk-fills',
-                                id: hoveredWardId,
-                                sourceLayer: mapSources.nepal.layers.ward,
-                            },
-                            { hover: false },
-
-                        );
-                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
-                    }
-                    hoveredWardId = null;
-                });
-            }
-
+            // -----------------------------------------------------------SLIDE-4---------------------------------------------------------
 
             if (floodHazardLayersArr && floodHazardLayersArr.length > 0) {
                 floodHazardLayersArr.map((layer) => {
@@ -662,17 +851,17 @@ const MultiHazardMap = (props: Props) => {
                     },
                 },
             );
-            multihazardMap.addSource('seicHazard', {
+            multihazardMap.addSource('floodInundation', {
                 type: 'raster',
-                tiles: [getCommonRasterLayer(sesmicHazardLayerName)],
+                tiles: [getCommonRasterLayer('province_2_wfp_flood_inundation_2019')],
                 tileSize: 256,
             });
 
             multihazardMap.addLayer(
                 {
-                    id: 'sesmicHazard',
+                    id: 'inundationLayer',
                     type: 'raster',
-                    source: 'seicHazard',
+                    source: 'floodInundation',
                     layout: {
                         visibility: 'none',
                     },
@@ -708,93 +897,266 @@ const MultiHazardMap = (props: Props) => {
 
             );
 
-            // -----------------------------------------------SLIDE-6-------------------------------------------
-            multihazardMap.addSource('temperature-fill-2010', {
-                type: 'vector',
-                url: mapSources.nepal.url,
-            });
+            // -----------------------------------------------SLIDE-4-------------------------------------------
+            const avialableVulColors = [colorForhdi, colorForhpi];
+            const availableData = [hdiData, hpiData];
+            ['hdiData', 'hpiData'].map((layer, i) => {
+                multihazardMap.addSource(`vulnerability-fill-${layer}`, {
+                    type: 'vector',
+                    url: mapSources.nepal.url,
+                });
 
-            multihazardMap.addLayer({
-                id: 'temperature-fill-2010-data',
-                source: 'temperature-fill-2010',
-                'source-layer': mapSources.nepal.layers.district,
-                type: 'fill',
+                multihazardMap.addLayer({
+                    id: layer,
+                    source: `vulnerability-fill-${layer}`,
+                    'source-layer': mapSources.nepal.layers.district,
+                    type: 'fill',
+                    paint: generatePaintQuantile(avialableVulColors[i]),
+                    layout: {
+                        visibility: 'none',
 
-                paint: {
-                    'fill-color': [
-                        'match',
-                        ['id'],
-                        16, 'rgb(189, 0, 38)', 33, 'rgb(189, 0, 38)',
-                        34, 'rgb(189, 0, 38)', 15, 'rgb(189, 0, 38)', 17, 'rgb(189, 0, 38)',
-                        18, 'rgb(189, 0, 38)', 19, 'rgb(189, 0, 38)', 32, 'rgb(189, 0, 38)', 'red',
-                    ],
-                    'fill-opacity': [
-                        'case',
-                        ['boolean', ['feature-state', 'hover'], false],
-                        0.8,
-                        1,
-                    ],
-                },
-                layout: {
-                    visibility: 'none',
+                    },
+                    filter: getDistrictFilter(2, null, districts),
+                }, 'districtgeo');
 
-                },
-                filter: getDistrictFilter(2, null, districts),
-            }, 'districtgeo');
+                availableData[i].forEach((attribute) => {
+                    multihazardMap.setFeatureState(
+                        {
+                            id: attribute.id,
+                            source: `vulnerability-fill-${layer}`,
+                            sourceLayer: mapSources.nepal.layers.district,
+                        },
+                        { value: attribute.value },
+                    );
+                });
+                multihazardMap.on('mousemove', layer, (e) => {
+                    if (e.features.length > 0) {
+                        multihazardMap.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                        const wardno = e.features[0].state.value;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-top : 3px solid red;">
+						     <p>${vulnerability === 'Human Poverty Index' ? 'HPI' : 'HDI'}: ${wardno}</p></div>`,
+                        ).addTo(multihazardMap);
 
-            multihazardMap.on('mousemove', 'temperature-fill-2010-data', (e) => {
-                if (e.features.length > 0) {
-                    multihazardMap.getCanvas().style.cursor = 'pointer';
-                    const { lngLat } = e;
-                    console.log('event', e);
 
-                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
-                    const wardno = e.features[0].properties.title;
-                    popup.setLngLat(coordinates).setHTML(
-                        `<div style="padding: 5px;border-radius: 5px">
-                            <p>${wardno}</p>
-                        </div>
-                        `,
-                    ).addTo(multihazardMap);
-                    if (hoveredWardId) {
+                        if (hoveredWardId !== null) {
+                            multihazardMap.setFeatureState(
+                                {
+                                    id: hoveredWardId,
+                                    source: `vulnerability-fill-${layer}`,
+                                    sourceLayer: mapSources.nepal.layers.district,
+                                },
+                                { hover: false },
+                            );
+                        }
+                        hoveredWardId = e.features[0].id;
                         multihazardMap.setFeatureState(
                             {
                                 id: hoveredWardId,
-                                source: 'temperature-fill-2010',
+                                source: `vulnerability-fill-${layer}`,
+                                sourceLayer: mapSources.nepal.layers.district,
+
+                            },
+                            { hover: true },
+                        );
+                    }
+                });
+                multihazardMap.on('mouseleave', layer, () => {
+                    multihazardMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                    if (hoveredWardId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                source: `vulnerability-fill-${layer}`,
+                                id: hoveredWardId,
                                 sourceLayer: mapSources.nepal.layers.district,
                             },
                             { hover: false },
+
+                        );
+                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    }
+                    hoveredWardId = null;
+                });
+
+                return null;
+            });
+
+
+            // -----------------------------------------------SLIDE-6-------------------------------------------
+            const mainTempData = [tempDataForMapUpto2010, tempDataForMapUpto2045, tempDataForMapUpto2065];
+            const mainPrepData = [prepDataForMapUpto2010, prepDataForMapUpto2045, prepDataForMapUpto2065];
+            tempDataAccordingToYear.map((layer, i) => {
+                multihazardMap.addSource(`temperature-fill-${layer}`, {
+                    type: 'vector',
+                    url: mapSources.nepal.url,
+                });
+
+                multihazardMap.addLayer({
+                    id: layer,
+                    source: `temperature-fill-${layer}`,
+                    'source-layer': mapSources.nepal.layers.district,
+                    type: 'fill',
+                    paint: generatePaint(colorForTemp),
+                    layout: {
+                        visibility: 'none',
+
+                    },
+                    filter: getDistrictFilter(2, null, districts),
+                }, 'districtgeo');
+
+                mainTempData[i].forEach((attribute) => {
+                    multihazardMap.setFeatureState(
+                        {
+                            id: attribute.id,
+                            source: `temperature-fill-${layer}`,
+                            sourceLayer: mapSources.nepal.layers.district,
+                        },
+                        { value: parseFloat(attribute.value) },
+                    );
+                });
+                multihazardMap.on('mousemove', layer, (e) => {
+                    if (e.features.length > 0) {
+                        multihazardMap.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                        const wardno = e.features[0].state.value;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-top : 3px solid red;">
+						     <p>RCP 4.5: ${wardno}</p></div>`,
+                        ).addTo(multihazardMap);
+
+
+                        if (hoveredWardId !== null) {
+                            multihazardMap.setFeatureState(
+                                {
+                                    id: hoveredWardId,
+                                    source: `temperature-fill-${layer}`,
+                                    sourceLayer: mapSources.nepal.layers.district,
+                                },
+                                { hover: false },
+                            );
+                        }
+                        hoveredWardId = e.features[0].id;
+                        multihazardMap.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: `temperature-fill-${layer}`,
+                                sourceLayer: mapSources.nepal.layers.district,
+
+                            },
+                            { hover: true },
                         );
                     }
-                    hoveredWardId = e.features[0].id;
+                });
+                multihazardMap.on('mouseleave', layer, () => {
+                    multihazardMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                    if (hoveredWardId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                source: `temperature-fill-${layer}`,
+                                id: hoveredWardId,
+                                sourceLayer: mapSources.nepal.layers.district,
+                            },
+                            { hover: false },
+
+                        );
+                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    }
+                    hoveredWardId = null;
+                });
+
+                return null;
+            });
+
+            prepDataAccordingToYear.map((layer, i) => {
+                multihazardMap.addSource(`precipitation-fill-${layer}`, {
+                    type: 'vector',
+                    url: mapSources.nepal.url,
+                });
+
+                multihazardMap.addLayer({
+                    id: layer,
+                    source: `precipitation-fill-${layer}`,
+                    'source-layer': mapSources.nepal.layers.district,
+                    type: 'fill',
+                    paint: generatePaint(colorForPrep),
+                    layout: {
+                        visibility: 'none',
+
+                    },
+                    filter: getDistrictFilter(2, null, districts),
+                }, 'districtgeo');
+
+                mainPrepData[i].forEach((attribute) => {
                     multihazardMap.setFeatureState(
                         {
-                            id: hoveredWardId,
-                            source: 'temperature-fill-2010',
-                            sourceLayer: mapSources.nepal.layers.district,
-
-                        },
-                        { hover: true },
-                    );
-                }
-            });
-            multihazardMap.on('mouseleave', 'temperature-fill-2010-data', () => {
-                multihazardMap.getCanvas().style.cursor = '';
-                popup.remove();
-                if (hoveredWardId) {
-                    multihazardMap.setFeatureState(
-                        {
-                            source: 'temperature-fill-2010',
-                            id: hoveredWardId,
+                            id: attribute.id,
+                            source: `precipitation-fill-${layer}`,
                             sourceLayer: mapSources.nepal.layers.district,
                         },
-                        { hover: false },
-
+                        { value: parseFloat(attribute.value) },
                     );
-                    // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
-                }
-                hoveredWardId = null;
+                });
+                multihazardMap.on('mousemove', layer, (e) => {
+                    if (e.features.length > 0) {
+                        multihazardMap.getCanvas().style.cursor = 'pointer';
+                        const { lngLat } = e;
+                        const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                        const wardno = e.features[0].state.value;
+                        popup.setLngLat(coordinates).setHTML(
+                            `<div style="padding: 5px;border-top : 3px solid red;">
+						     <p>RCP 4.5: ${wardno}</p></div>`,
+                        ).addTo(multihazardMap);
+
+
+                        if (hoveredWardId !== null) {
+                            multihazardMap.setFeatureState(
+                                {
+                                    id: hoveredWardId,
+                                    source: `precipitation-fill-${layer}`,
+                                    sourceLayer: mapSources.nepal.layers.district,
+                                },
+                                { hover: false },
+                            );
+                        }
+                        hoveredWardId = e.features[0].id;
+                        multihazardMap.setFeatureState(
+                            {
+                                id: hoveredWardId,
+                                source: `precipitation-fill-${layer}`,
+                                sourceLayer: mapSources.nepal.layers.district,
+
+                            },
+                            { hover: true },
+                        );
+                    }
+                });
+                multihazardMap.on('mouseleave', layer, () => {
+                    multihazardMap.getCanvas().style.cursor = '';
+                    popup.remove();
+                    if (hoveredWardId) {
+                        multihazardMap.setFeatureState(
+                            {
+                                source: `precipitation-fill-${layer}`,
+                                id: hoveredWardId,
+                                sourceLayer: mapSources.nepal.layers.district,
+                            },
+                            { hover: false },
+
+                        );
+                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
+                    }
+                    hoveredWardId = null;
+                });
+
+                return null;
             });
+
+
             // -----------------------------------------------SLIDE-7-------------------------------------------
             const ciCategory: any = [...new Set(CIData.features.map(
                 item => item.properties.Type,
@@ -880,8 +1242,6 @@ const MultiHazardMap = (props: Props) => {
                 ciCategory.map((ci: string) => multihazardMap.on('mousemove', `unclustered-point-${ci}`, (e: any) => {
                     if (e) {
                         const { lngLat } = e;
-                        console.log('ci event is', e);
-
                         const coordinates: number[] = [lngLat.lng, lngLat.lat];
                         const ciName = e.features[0].properties.Name;
                         popup.setLngLat(coordinates).setHTML(
@@ -906,8 +1266,6 @@ const MultiHazardMap = (props: Props) => {
 
             // -----------------------------------------------SLIDE-8-------------------------------------------
             const contactDataArr = [...new Set(contactGeoJson.features.map(item => item.properties.name))];
-            console.log('contatctdataarr', contactDataArr);
-
 
             multihazardMap.addSource('contactInfo', {
 				 type: 'geojson',
@@ -1041,34 +1399,6 @@ const MultiHazardMap = (props: Props) => {
 
 
     useEffect(() => {
-        if (rightElement === 1) {
-            if (clickedItem === 'all') {
-                if (map.current && map.current.isStyleLoaded()) {
-                    filterOnMap(incidentYear);
-                }
-                incidentsArr.map((ht) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'visible');
-                    }
-                    return null;
-                });
-            } else {
-                incidentsArr.map((ht) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`incidents-${ht}`, 'visibility', 'none');
-                    }
-                    return null;
-                });
-                if (map.current) {
-                    map.current.setLayoutProperty(`incidents-${clickedItem}`, 'visibility', 'visible');
-                }
-            }
-        }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clickedItem]);
-
-    useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
             ciCategoryCritical.map((layer) => {
                 if (map.current) {
@@ -1096,6 +1426,59 @@ const MultiHazardMap = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [criticalElement]);
+
+    useEffect(() => {
+        if (map.current) {
+            tempDataAccordingToYear.map((layer) => {
+                map.current.on('click', layer, (e) => {
+                    const { lngLat } = e;
+                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                    const districtId = e.features[0].id;
+                    setdistrictIdIs(districtId);
+                    if (tempSelectedData === 'temp2010') {
+                        const data = getChartData('temp', districtId).filter(item => item.year <= 2010);
+					    setclimateLineChartData(data);
+                    }
+                    if (tempSelectedData === 'temp2045') {
+                        const data = getChartData('temp', districtId).filter(item => item.year <= 2045 && item.year >= 2015);
+					    setclimateLineChartData(data);
+                    }
+                    if (tempSelectedData === 'temp2065') {
+                        const data = getChartData('temp', districtId).filter(item => item.year <= 2065 && item.year >= 2035);
+					    setclimateLineChartData(data);
+                    }
+                });
+                return null;
+            });
+        }
+    }, [tempSelectedData]);
+
+    useEffect(() => {
+        if (map.current) {
+            prepDataAccordingToYear.map((layer) => {
+                map.current.on('click', layer, (e) => {
+                    const { lngLat } = e;
+                    const coordinates: LngLat = [lngLat.lng, lngLat.lat];
+                    const districtId = e.features[0].id;
+                    setdistrictIdIs(districtId);
+                    if (prepSelectedData === 'prep2010') {
+                        const data = getChartData('prep', districtId).filter(item => item.year <= 2010);
+					    setclimateLineChartData(data);
+                    }
+                    if (prepSelectedData === 'prep2045') {
+                        const data = getChartData('prep', districtId).filter(item => item.year <= 2045 && item.year >= 2015);
+					    setclimateLineChartData(data);
+                    }
+                    if (prepSelectedData === 'prep2065') {
+                        const data = getChartData('prep', districtId).filter(item => item.year <= 2065 && item.year >= 2035);
+					    setclimateLineChartData(data);
+                    }
+                });
+                return null;
+            });
+        }
+    }, [prepSelectedData]);
+
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
@@ -1141,7 +1524,7 @@ const MultiHazardMap = (props: Props) => {
                         duration: 1200,
                         // center: [lng, lat],
                     });
-                } else if (rightElement === 0 && legendElement === 'Population By Ward') {
+                } else if (rightElement === 0 && legendElement === 'Population By District') {
                     layers[2].map((layer) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1237,17 +1620,71 @@ const MultiHazardMap = (props: Props) => {
                 });
             }
 
-            if (rightElement === 4) {
-                map.current.easeTo({
-                    pitch: 37,
-                    zoom: 8.2,
-                    duration: 1200,
-                    // center: [lng, lat],
+            // ------------------------------------------------------------Vulenerability Slide-Layer---------------------------------------------
+            if (rightElement === 3) {
+                if (map.current) {
+                    if (vulnerability === 'Human Poverty Index') {
+                        map.current.setLayoutProperty('hpiData', 'visibility', 'visible');
+                    } else {
+                        map.current.setLayoutProperty('hpiData', 'visibility', 'none');
+                    }
+                    if (vulnerability === 'Human Development Index') {
+                        map.current.setLayoutProperty('hdiData', 'visibility', 'visible');
+                    } else {
+                        map.current.setLayoutProperty('hdiData', 'visibility', 'none');
+                    }
+                }
+            } else {
+                ['hpiData', 'hdiData'].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
+            }
+
+            // --------------------------------------------------------Damage and loss Layer---------------------------------------------
+            if (rightElement === 1) {
+                if (clickedHazardItem === 'Flood Hazard' && clickedFatalityInfraDamage === 'Fatality') {
+                    if (map.current) {
+                        map.current.setLayoutProperty('totalPeopleDeathFlood', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('totalPeopleDeathFlood', 'visibility', 'none');
+                }
+
+                if (clickedHazardItem === 'Flood Hazard' && clickedFatalityInfraDamage === 'Infrastructure Damage') {
+                    if (map.current) {
+                        map.current.setLayoutProperty('totalInfraDamageFlood', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('totalInfraDamageFlood', 'visibility', 'none');
+                }
+                if (clickedHazardItem === 'Landslide Hazard' && clickedFatalityInfraDamage === 'Fatality') {
+                    if (map.current) {
+                        map.current.setLayoutProperty('totalPeopleDeathLandslide', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('totalPeopleDeathLandslide', 'visibility', 'none');
+                }
+                if (clickedHazardItem === 'Landslide Hazard' && clickedFatalityInfraDamage === 'Infrastructure Damage') {
+                    if (map.current) {
+                        map.current.setLayoutProperty('totalInfraDamageLandslide', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('totalInfraDamageLandslide', 'visibility', 'none');
+                }
+            } else {
+                damageLossArray.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                    }
+                    return null;
                 });
             }
 
             // -----------------------------------------------------Hazard Page-------------------------------------------------
-            if (rightElement === 3 && hazardLegendClickedArr[0] === 1) {
+            if ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[0] === 1) {
                 if (map.current) {
                     layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
                     if (floodLayer) {
@@ -1260,7 +1697,7 @@ const MultiHazardMap = (props: Props) => {
             }
 
 
-            if (rightElement === 3 && hazardLegendClickedArr[1] === 1) {
+            if ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[2] === 1) {
                 if (map.current) {
                     map.current.setLayoutProperty('landslideLayer', 'visibility', 'visible');
                 }
@@ -1268,14 +1705,14 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('landslideLayer', 'visibility', 'none');
             }
 
-            if (rightElement === 3 && hazardLegendClickedArr[2] === 1) {
+            if ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[1] === 1) {
                 if (map.current) {
-                    map.current.setLayoutProperty('sesmicHazard', 'visibility', 'visible');
+                    map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
                 }
             } else {
-                map.current.setLayoutProperty('sesmicHazard', 'visibility', 'none');
+                map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
             }
-            // ------------------------------------------------------------Buildings Data Layer-----------------------------------------
+            // ------------------------------------------------------------Climate Data Layer-----------------------------------------
 
             if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
                 if (map.current) {
@@ -1285,13 +1722,60 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('buildingsdata', 'visibility', 'none');
             }
 
-            if (rightElement === 5) {
-                if (map.current) {
-                    map.current.setLayoutProperty('temperature-fill-2010-data', 'visibility', 'visible');
-                }
+            if (rightElement === 5 && climateDataType === 'Temperature') {
+                tempDataAccordingToYear.map((layer) => {
+                    if (layer === tempSelectedData) {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                        }
+                    } else if (map.current) {
+                        map.current.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
             } else {
-                map.current.setLayoutProperty('temperature-fill-2010-data', 'visibility', 'none');
+                tempDataAccordingToYear.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
             }
+
+            if (rightElement === 5 && climateDataType === 'Precipitation') {
+                prepDataAccordingToYear.map((layer) => {
+                    if (layer === prepSelectedData) {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`${layer}`, 'visibility', 'visible');
+                        }
+                    } else if (map.current) {
+                        map.current.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
+            } else {
+                prepDataAccordingToYear.map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`${layer}`, 'visibility', 'none');
+                    }
+                    return null;
+                });
+            }
+
+
+            if (clickedHazardItem === 'Flood Hazard' && clickedFatalityInfraDamage === 'Fatality') {
+                setlossLegendsData(color1);
+            }
+            if (clickedHazardItem === 'Flood Hazard' && clickedFatalityInfraDamage === 'Infrastructure Damage') {
+                setlossLegendsData(color2);
+            }
+            if (clickedHazardItem === 'Landslide Hazard' && clickedFatalityInfraDamage === 'Fatality') {
+                setlossLegendsData(color3);
+            }
+            if (clickedHazardItem === 'Landslide Hazard' && clickedFatalityInfraDamage === 'Infrastructure Damage') {
+                setlossLegendsData(color4);
+            }
+
 
             if (rightElement === 7) {
                 if (map.current) {
@@ -1304,29 +1788,28 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('contacts-cluster-count', 'visibility', 'none');
                 map.current.setLayoutProperty('contacts-unclustered-point', 'visibility', 'none');
             }
-
-
-            if (incidentsArr.length > 0 && incidentsPages.indexOf(rightElement + 1) !== -1) {
-                incidentsArr.map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'visible');
-                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'visible');
-                    }
-                    return null;
-                });
-            } else {
-                incidentsArr.map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`incidents-${layer}`, 'visibility', 'none');
-                        map.current.moveLayer(`incidents-${layer}`);
-                        map.current.setLayoutProperty(`incidents-icon-${layer}`, 'visibility', 'none');
-                        map.current.moveLayer(`incidents-icon-${layer}`);
-                    }
-                    return null;
-                });
-            }
+            map.current.easeTo({
+                pitch: 37,
+                zoom: 8.2,
+                duration: 1200,
+                // center: [lng, lat],
+            });
         }
-    }, [ciCategoryCritical, rightElement, legendElement, layers, exposureElementsArr, clickedArr, floodLayer, hazardLegendClickedArr]);
+    }, [ciCategoryCritical,
+        rightElement,
+        legendElement,
+        layers,
+        exposureElementsArr,
+        clickedArr,
+        floodLayer,
+        hazardLegendClickedArr,
+        tempSelectedData,
+        prepSelectedData,
+        climateDataType,
+        vulnerability,
+        clickedHazardItem,
+        clickedFatalityInfraDamage,
+    ]);
 
 
     useEffect(() => {
@@ -1347,12 +1830,144 @@ const MultiHazardMap = (props: Props) => {
 
 
     return (
-        <div>
-            <div style={mapCSS} ref={mapContainerRef} />
+
+        <div style={mapCSS} ref={mapContainerRef}>
+
+            {rightElement === 1 && (
+                <div className={styles.mainLegendDiv}>
+                    <p style={{ color: 'white', margin: '0' }}>People Death</p>
+                    <div className={styles.scale}>
+                        { lossLegendsData.map((c, i) => {
+                            if (i % 2 === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <div className={styles.scaleElement} key={c}>
+                                    <div
+                                        key={c}
+                                        className={styles.colorUnit}
+                                        style={{
+                                            // width: colorUnitWidth,
+                                            backgroundColor: c,
+                                        }}
+                                    />
+                                    <div className={styles.value}>
+                                        { Math.round(lossLegendsData[i - 1]) }
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+            {rightElement === 5 && (
+                <div className={styles.mainLegendDiv}>
+                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{climateDataType === 'Temperature' ? 'Temperature (°C) ' : 'Precipitation (mm/year) ' }</p>
+                    <div className={styles.scale}>
+                        {(climateDataType === 'Temperature' ? colorForTemp : colorForPrep).map((c, i) => {
+                            if (i % 2 === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <div className={styles.scaleElement} key={c}>
+                                    <div
+                                        key={c}
+                                        className={styles.colorUnit}
+                                        style={{
+                                            // width: colorUnitWidth,
+                                            backgroundColor: c,
+                                        }}
+                                    />
+                                    <div className={styles.value}>
+                                        { climateDataType === 'Temperature' ? colorForTemp[i - 1].toFixed(2) : Math.round(colorForPrep[i - 1])}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+            {rightElement === 3 && (
+                <div className={styles.mainLegendDiv}>
+                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{vulnerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</p>
+                    <div className={styles.scale}>
+                        {(vulnerability === 'Human Development Index' ? ['#c73c32', '#e9bf8c', '#fff5d8'] : vulColors.reverse()).map((c, i) => (
+                            <div className={styles.scaleElement} key={c}>
+                                <div
+                                    key={c}
+                                    className={styles.colorUnit}
+                                    style={{
+                                        // width: colorUnitWidth,
+                                        backgroundColor: c,
+                                    }}
+                                />
+                                <div className={styles.value}>
+                                    {(vulnerability === 'Human Development Index' ? [0.4, 0.5, 0.6][i] : colorForhpi.filter(item => typeof item === 'number')[i])}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {
+                ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[0] === 1)
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel)}>
+                           Flood Layer Opacity
+                        </p>
+                        <input
+                            onChange={e => handleFloodChange(e, 'flood')}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(opacityFlood)}
+                            className={styles.slider}
+                        />
+                        <p className={_cs(styles.opacityLevel)}>
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                        </p>
+                        <FloodDepthLegend />
+                    </>
+                )
+            }
+            {
+                (rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[2] === 1
+                && (
+                    <>
+                        <p className={_cs(styles.sliderLabel2)}>
+                           Landslide Layer Opacity
+                        </p>
+                        <input
+                            onChange={e => handleFloodChange(e, 'sus')}
+                            id="slider"
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            value={String(opacitySus)}
+                            className={styles.slider}
+                        />
+                        <p className={_cs(styles.opacityLevel)}>
+                            <span>0</span>
+                            <span>0.5</span>
+                            <span>1</span>
+                        </p>
+                        <LandSlideSusLegend layer="sus" />
+                    </>
+                )
+            }
+
         </div>
+
+
     );
 };
 export default connect(mapStateToProps)(MultiHazardMap);
-function filterRange(totalPopulationByWard: any, arg1: number, arg2: number) {
-    throw new Error('Function not implemented.');
-}

@@ -31,11 +31,11 @@ export default function LandCoverChart(props) {
                     layout="vertical"
                     margin={{ left: 15, right: 45, bottom: 25 }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
                     <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                         <Label
                             value="Coverage in Square Km"
-                            offset={0}
+                            offset={-10}
                             position="insideBottom"
                             style={{
                                 textAnchor: 'middle',

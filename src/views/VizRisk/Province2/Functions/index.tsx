@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-tabs */
 
 /* eslint-disable import/prefer-default-export */
@@ -224,3 +225,48 @@ export function getDescription(props, nonZeroArr, chartData) {
     }
     return '';
 }
+
+
+export const customLableList = (props) => {
+    const { x, y, width, value } = props;
+    const radius = -12;
+    return (
+        <g>
+            <text
+                x={x + width + 2}
+                y={y - radius}
+                fill="white"
+                textAnchor="right"
+                dominantBaseline="right"
+            >
+                {value}
+            </text>
+        </g>
+    );
+};
+
+export const getColor = (totalPopulationByWard, intervals, newDemoColorArray, wardId) => {
+    const colorCondition1 = totalPopulationByWard.filter(item => item.totalpop <= intervals[0]);
+    const colorCondition2 = totalPopulationByWard.filter(item => item.totalpop >= intervals[0] && item.totalpop <= intervals[1]);
+    const colorCondition3 = totalPopulationByWard.filter(item => item.totalpop >= intervals[1] && item.totalpop <= intervals[2]);
+    const colorCondition4 = totalPopulationByWard.filter(item => item.totalpop >= intervals[2] && item.totalpop <= intervals[3]);
+    const colorCondition5 = totalPopulationByWard.filter(item => item.totalpop >= intervals[3]);
+
+    const filteredWards1 = colorCondition1.map(item => item.ward);
+    const filteredWards2 = colorCondition2.map(item => item.ward);
+    const filteredWards3 = colorCondition3.map(item => item.ward);
+    const filteredWards4 = colorCondition4.map(item => item.ward);
+    const filteredWards5 = colorCondition5.map(item => item.ward);
+    if (filteredWards1.includes(`Ward ${wardId}`)) {
+        return newDemoColorArray[0];
+    } if (filteredWards2.includes(`Ward ${wardId}`)) {
+        return newDemoColorArray[1];
+    } if (filteredWards3.includes(`Ward ${wardId}`)) {
+        return newDemoColorArray[2];
+    } if (filteredWards4.includes(`Ward ${wardId}`)) {
+        return newDemoColorArray[3];
+    } if (filteredWards5.includes(`Ward ${wardId}`)) {
+        return newDemoColorArray[4];
+    }
+    return null;
+};

@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-danger */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
@@ -9,20 +11,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Label,
     Bar,
     BarChart,
     CartesianGrid,
-    Cell,
-    Legend,
-    Line,
-    LineChart,
     ResponsiveContainer,
     Tooltip,
     XAxis,
     YAxis,
+    ComposedChart,
+    Legend,
+    Area,
+    Line,
+    LabelList,
 } from 'recharts';
 // import NavButtons from '#views/VizRisk/Common/NavButtons';
 import Hexagon from 'react-hexagon';
@@ -32,25 +35,19 @@ import CriticalInfraLegends from '../Legends/CriticalInfraLegends';
 import NavButtons from '../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import TempIcon from '#resources/icons/Temp.svg';
-import TempMin from '../../Common/Icons/TempMin.svg';
 import AvgRainFall from '#resources/icons/RainFall.svg';
-import ElevationIcon from '#resources/icons/ElevationFromSea.svg';
-
 import styles from './styles.scss';
 import VRLegend from '../Components/VRLegend/index';
 import DemoGraphicsLegends from '../Legends/DemographicsLegends/index';
-import LandslideLegend from '../Legends/LandslideLegend/index';
 import { renderLegendPopulaion,
     CustomTooltip,
     populationCustomTooltip,
-    getChartData,
-    getArrforDesc,
     renderLegend,
     landCoverCustomTooltip,
-    urbanCustomTooltip, parseStringToNumber, cITooltip, pastDisasterCustomTooltip } from '../Functions/index';
-import TempChart from '../Charts/TempChart.tsx';
-import LandCoverChart from '../Charts/LandCoverChart.tsx';
-import PopulationChart from '../Charts/PopulationChart.tsx';
+    parseStringToNumber, cITooltip, customLableList } from '../Functions/index';
+import TempChart from '../Charts/TempChart';
+import LandCoverChart from '../Charts/LandCoverChart';
+import PopulationChart from '../Charts/PopulationChart';
 import LandCoverLegends from '../Legends/LandCoverLegends/index';
 import DemographicsPopInfo from '../Components/DemographicsPopInfo';
 import VRLegendHazard from '../Components/VRLegendHazard/index';
@@ -58,6 +55,12 @@ import VRLegendFatality from '../Components/VRLegendFatality';
 import VRLegendTemp from '../Components/VRLegendTemp';
 import VRLegendPre from '../Components/VRLegendPre';
 import DRRCountBox from '../Components/DRRCountBox/index';
+import BuildingChart from '../Charts/Buildingchart';
+import AlertsLegend from '../Legends/AlertLegends';
+import { hdiData, hpiData } from '../Data/vulnerabilityData';
+import CIChart from '../Charts/CIChart';
+import EstimatedLossChart from '../Charts/EstimatedLossChart';
+import FloodHistoryLegends from '../Legends/FloodHazardLegends';
 
 
 interface State {
@@ -71,6 +74,8 @@ function Leftpane(props) {
     const {
         introHtml,
         handleLegendClicked,
+        totalFloodLossData,
+        totalLandslideLossData,
         handleNext,
         handlePrev,
         disableNavLeftBtn,
@@ -82,96 +87,108 @@ function Leftpane(props) {
         legendElement,
         clickedFatalityInfraDamage,
         handleFatalityInfraLayer,
-        handleIncidentItemClick,
-        handleIncidentChange,
-        incidentDetailsData,
-        cI,
         tempData,
         tempChartData,
         landCoverData,
+        setfloodLayer,
+        hazardLegendClickedArr,
         populationData,
-        urbanData,
         criticalElement,
         handleCriticalInfra,
-        handlePopulationChange,
-        handleMultipeLegendClicked,
-        multipleLegendItem,
+        alertsChartData,
         clickedArr,
         clickedHazardItem,
+        handleMultipleHazardLayerDamageLoss,
         handleMultipleHazardLayer,
-        exposureElement,
-        handleExposure,
-        hazardLegendClicked,
         exposureElementArr,
         active,
         setActivePage,
-        populationDensityRange,
-        hazardLegendClickedArr,
-        setfloodLayer,
-        buildingsChartData,
-        landCoverDataInKm,
         realTimeData,
-		 page1Legend1InroHtml,
-		 page1Legend2InroHtml,
-		  page1Legend3InroHtml,
-		  page3Legend1InroHtml,
-		  page3Legend2InroHtml,
-		  page3Legend3InroHtml,
-		  page3Legend4InroHtml,
-		  page4Legend1InroHtml,
-		  page4Legend2InroHtml,
-		  page4Legend3InroHtml,
-		  legentItemDisabled,
-		  CIState,
+        page1Legend1InroHtml,
+        page1Legend2InroHtml,
+        page1Legend3InroHtml,
+        legentItemDisabled,
+        CIState,
+        climateLineChartData,
+        tempSelectedData,
+        handleClimateTemp,
+        prepSelectedData,
+        handleClimatePrep,
+        climateDataType,
+        climateDataYearWise,
+        districtIdIs,
+        vulnrerability,
+        setVulnerability,
 
     } = props;
 
-
-    const [fullhazardTitle, setfullhazardTitle] = useState([]);
-    const [nonZeroArr, setnonZeroArr] = useState([]);
     const [chartData, setchartData] = useState([]);
     const [cIChartData, setcIChartData] = useState([]);
     const [cITypeName, setcITypeName] = useState([]);
-    const [incidentColor, setincidentColor] = useState([]);
-    const [currentDate, setcurrentDate] = useState();
-
+    const [climateBarChartData, setclimateBarChartData] = useState([]);
+    const [climateChartTitle, setclimateChartTitle] = useState('');
+    const [vulChartData, setvulChartData] = useState([]);
+    const [estimatedDataSelection, setestimatedDataSelection] = useState([]);
+    const vrSideBarRef = useRef<HTMLDivElement>(null);
 
     const temperatureRefPeriod = [
-        'Reference Period(1981-2010)',
-        'Medium Term(2016-2045)',
-        'Long Term(2036-2065)',
+        { name: 'Reference Period(1981-2010)',
+            value: 'temp2010' },
+        { name: 'Medium Term(2016-2045)',
+            value: 'temp2045' },
+        { name: 'Long Term(2036-2065)',
+            value: 'temp2065' },
     ];
     const precipationRefPeriod = [
-        'Reference Period(1981-2010)',
-        'Medium Term(2016-2045)',
-        'Long Term(2036-2065)',
+        { name: 'Reference Period(1981-2010)',
+            value: 'prep2010' },
+        { name: 'Medium Term(2016-2045)',
+            value: 'prep2045' },
+        { name: 'Long Term(2036-2065)',
+            value: 'prep2065' },
     ];
+
+    const districtIdToName = (id: number) => {
+        if (id === 16) {
+            return 'Saptari';
+        }
+        if (id === 33) {
+            return 'Bara';
+        }
+        if (id === 34) {
+            return 'Parsa';
+        }
+        if (id === 17) {
+            return 'Dhanusa';
+        }
+        if (id === 18) {
+            return 'Mahottari';
+        }
+        if (id === 19) {
+            return 'Sarlahi';
+        }
+        if (id === 32) {
+            return 'Rautahat';
+        }
+        if (id === 15) {
+            return 'Siraha';
+        }
+        return '';
+    };
+
+    useEffect(() => {
+        if (clickedHazardItem === 'Landslide Hazard') {
+            setestimatedDataSelection(totalLandslideLossData);
+        } else {
+            setestimatedDataSelection(totalFloodLossData);
+        }
+    }, [clickedHazardItem]);
 
 
     useEffect(() => {
         const {
-            incidentList,
-            incidentFilterYear,
-            clickedItem,
-            handleIncidentChange,
             cI,
-            handlePopulationChange,
         } = props;
-
-        if (incidentList) {
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setchartData(getChartData(clickedItem, incidentFilterYear, incidentList));
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setnonZeroArr(getArrforDesc(clickedItem, chartData, incidentList));
-            setfullhazardTitle([
-                ...new Set(
-                    incidentList.features.map(item => item.properties.hazardTitle),
-                ),
-            ]);
-            setincidentColor([...new Set(incidentList.features.map(
-                item => item.properties.hazardColor,
-            ))]);
-        }
         if (cI) {
             const categoriesCriticalArr = [
                 ...new Set(cI.map(item => item.resourceType)),
@@ -180,95 +197,63 @@ function Leftpane(props) {
             setcIChartData(
                 categoriesCriticalArr.map(item => ({
                     name: item.charAt(0).toUpperCase() + item.slice(1),
-                    // total cI
                     value: cI.filter(ci => ci.resourceType === item).length,
                 })),
             );
         }
     }, []);
-    console.log('ci chart data', cIChartData);
-
-    const { clickedItem, incidentFilterYear } = props;
 
     useEffect(() => {
-        const {
-            incidentList,
-            incidentFilterYear,
-            getIncidentData,
-            clickedItem,
-            handleIncidentChange,
-            cI,
-        } = props;
-        if (clickedItem) {
-            getIncidentData(incidentFilterYear, clickedItem);
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setchartData(getChartData(clickedItem, incidentFilterYear, incidentList));
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            setnonZeroArr(getArrforDesc(clickedItem, chartData, incidentList));
-        }
-    }, [
-        setcIChartData,
-    ]);
-    console.log('nonZero Arr is ', nonZeroArr, chartData);
-
-    const getDescription = () => {
-        const { clickedItem } = props;
-        if (clickedItem === 'all') {
-            if (nonZeroArr.length > 0) {
-                return nonZeroArr.map((item, i) => {
-                    if (
-                        i === nonZeroArr.length - 1
-                            && i === 0 && chartData.map(item => item.value)[0] !== 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
-                        return ` ${item} `;
-                    }
-                    if (
-                        i === 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
-                        return ` ${item} ,`;
-                    }
-                    if (
-                        i !== nonZeroArr.length - 1
-                            && i === 0
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
-                        return ` ${item} `;
-                    }
-                    if (
-                        i === nonZeroArr.length - 1
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
-                        return ` and ${item} `;
-                    }
-                    if (
-                        i === 1
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
-                        return ` ${item} `;
-                    }
-                    if (
-                        i !== 0 && i !== nonZeroArr.length - 1 && i > 2
-                            // && chartData.filter(n => n.name === item)[0]
-                            && chartData.filter(n => n.name === item)[0].value !== 0) {
-                        return `, ${item} `;
-                    }
-                    return '';
-                });
-            }
+        if (vulnrerability === 'Human Development Index') {
+            setvulChartData(hdiData);
         } else {
-            return ` of ${clickedItem} `;
+            setvulChartData(hpiData);
         }
-        return '';
-    };
+    }, [vulnrerability]);
 
-    const currentAverageTemp = (tempInString) => {
+    useEffect(() => {
+        if (districtIdIs) {
+            vrSideBarRef.current?.scrollTo({ top: 1000, behavior: 'smooth' });
+        }
+    }, [districtIdIs]);
+
+
+    useEffect(() => {
+        console.log('running', tempSelectedData, prepSelectedData);
+
+        if (tempSelectedData === 'temp2010' && climateDataType === 'Temperature') {
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateChartTitle('Temperature Reference Period(1981-2010)');
+        }
+
+        if (tempSelectedData === 'temp2045' && climateDataType === 'Temperature') {
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2045.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateChartTitle('Temperature Reference Period(2016-2045)');
+        }
+        if (tempSelectedData === 'temp2065' && climateDataType === 'Temperature') {
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2065.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateChartTitle('Temperature Reference Period(2036-2065)');
+        }
+        if (prepSelectedData === 'prep2010' && climateDataType === 'Precipitation') {
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateChartTitle('Precipitation Reference Period(1981-2010)');
+        }
+        if (prepSelectedData === 'prep2045' && climateDataType === 'Precipitation') {
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2045.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateChartTitle('Precipitation Reference Period(2016-2045)');
+        }
+        if (prepSelectedData === 'prep2065' && climateDataType === 'Precipitation') {
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2065.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateChartTitle('Precipitation Reference Period(2036-2065)');
+        }
+    }, [tempSelectedData, prepSelectedData, climateDataType]);
+
+
+    const currentAverageTemp = (tempInString: string) => {
         let numb;
         if (tempInString) {
             numb = tempInString.match(/\d/g);
         }
-        console.log('sep', numb);
 
         if (numb && numb.length === 2) {
             const firstNum = parseInt(numb[0], 10);
@@ -292,13 +277,13 @@ function Leftpane(props) {
     };
 
 
-    const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By Ward'];
+    const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By District'];
     const hazardIncidentLegendName = ['Flood Hazard', 'Landslide Hazard'];
-    console.log('chartData is ', chartData);
+
 
     return (
         <>
-            <div className={styles.vrSideBar}>
+            <div className={styles.vrSideBar} ref={vrSideBarRef}>
                 <div className={styles.leftTopBar} />
                 <div
                     style={{ textAlign: 'initial' }}
@@ -450,7 +435,7 @@ mm
                         />
                     </>
                 )}
-                {leftElement === 0 && legendElement === 'Population By Ward' && (
+                {leftElement === 0 && legendElement === 'Population By District' && (
                     <>
                         <div
                             style={{ textAlign: 'initial' }}
@@ -513,30 +498,23 @@ mm
                         </div>
                     </VRLegend>
                 )}
-
-                {leftElement === 1 && (
-                    <>
-                        <h1>Damage and Loss Profile</h1>
-                        {chartData.length > 0 && (
-                            <p>
-                               Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-							    Corporis itaque quibusdam dolore vero quia quis vitae! Expedita
-								 adipisci animi recusandae velit error sit vitae eveniet?
-                            </p>
-                        )}
-                    </>
-                )}
-
-
-                {((leftElement === 3 && exposureElementArr[2] === 1) || (leftElement === 0 && legendElement === 'Landcover'))
-				  && (
-				               <LandCoverLegends
-				          leftElement={leftElement}
-				          clickedArr={clickedArr}
-				          exposureElementArr={exposureElementArr}
-				               />
-				  )
-				  }
+                {leftElement === 2
+&& (
+    <>
+	    <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{"Alert's Count"}</h2>
+        <BuildingChart buildingsChartData={alertsChartData} />
+        <AlertsLegend />
+    </>
+)
+                }
+                {leftElement === 3
+&& (
+    <>
+        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{vulnrerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</h2>
+        <CIChart buildingsChartData={vulChartData} vulnrerability={vulnrerability} />
+    </>
+)
+                }
 
                 {leftElement === 3 && (
                     <VRLegendFatality>
@@ -553,15 +531,16 @@ mm
 						 <button
 							 key={item}
 							 type="button"
-							 className={clickedFatalityInfraDamage === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+							 className={vulnrerability === item ? styles.legendBtnSelected3 : styles.legendBtn3}
 							 disabled={legentItemDisabled}
+							 onClick={() => setVulnerability(item)}
 						 >
 							 <Hexagon
 								 style={{
 									 innerHeight: 80,
 									 stroke: '#FFFFFF',
 									 strokeWidth: 30,
-									 fill: 'transparent',
+									 fill: vulnrerability === item ? 'white' : 'transparent',
 								 }}
 								 className={styles.educationHexagon3}
 							 />
@@ -573,6 +552,103 @@ mm
 		 )}
                     </VRLegendFatality>
                 )}
+
+                {(leftElement === 4 || leftElement === 6) && (
+                    <>
+                        <div className={styles.hazardContainer}>
+                            <h4
+		 className={styles.hazardElementHeaderStyle}
+		 style={{ opacity: '0.5', fontWeight: '700' }}
+                            >
+HAZARDS
+                            </h4>
+                            { ['Flood Hazard', 'Induntation', 'Landslide Hazard'].map(
+                                (item, i) => (
+                                    <div
+                                        className={legentItemDisabled
+                                            ? styles.incidentsLegendsContainer3Disabled
+                                            : styles.incidentsLegendsContainer3}
+                                        key={item}
+                                    >
+                                        <div className={styles.hazardItemContainer3}>
+                                            <button
+                                                key={item}
+                                                type="button"
+                                                className={
+                                                    hazardLegendClickedArr[i] === 1
+                                                        ? styles.legendBtnSelected3
+                                                        : styles.legendBtn3
+                                                }
+                                                onClick={() => handleMultipleHazardLayer(item, i)}
+                                                disabled={legentItemDisabled}
+                                            >
+                                                <Hexagon
+                                                    style={{
+                                                        innerHeight: 80,
+                                                        stroke: '#FFFFFF',
+                                                        strokeWidth: 30,
+                                                        fill: hazardLegendClickedArr[i] === 1
+                                                            ? 'white'
+                                                            : 'transparent',
+                                                    }}
+                                                    className={styles.educationHexagon3}
+                                                />
+                                                {item}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ),
+                            )}
+
+                        </div>
+                        <VRLegend>
+                            <h4
+		 className={styles.hazardElementHeaderStyle}
+		 style={{ opacity: '0.5', fontWeight: '700' }}
+                            >
+RISK
+                            </h4>
+                            {hazardIncidentLegendName.length > 0
+&& ['Earthquake Risk'].map(
+    (item, i) => (
+        <div
+            className={legentItemDisabled
+                ? styles.incidentsLegendsContainer3Disabled
+                : styles.incidentsLegendsContainer3}
+            key={item}
+        >
+            <div className={styles.hazardItemContainer3}>
+                <button
+                    key={item}
+                    type="button"
+                    className={clickedFatalityInfraDamage === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                    onClick={() => handleFatalityInfraLayer(item, i)}
+                    disabled={legentItemDisabled}
+                >
+                    <Hexagon
+                        style={{
+                            innerHeight: 80,
+                            stroke: '#FFFFFF',
+                            strokeWidth: 30,
+                            fill: clickedFatalityInfraDamage === item ? 'white' : 'transparent',
+                        }}
+                        className={styles.educationHexagon3}
+                    />
+                    {item}
+                </button>
+            </div>
+        </div>
+    ),
+)}
+                        </VRLegend>
+                        <FloodHistoryLegends
+                            hazardLegendClickedArr={hazardLegendClickedArr}
+                            setfloodLayer={setfloodLayer}
+                        />
+                    </>
+
+                )}
+
                 {leftElement === 6 && (
                     <CriticalInfraLegends
                         exposureElementArr={exposureElementArr}
@@ -634,6 +710,11 @@ mm
                 ) }
                 {leftElement === 1 && (
                     <>
+					        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
+                            {clickedHazardItem === 'Flood Hazard' ? 'Estimated Loss due to Flood'
+							 : 'Estimated Loss due to Landslide'}
+                        </h2>
+                        <EstimatedLossChart estimatedLossData={estimatedDataSelection} />
                         <VRLegendHazard>
                             <h4
                                 className={styles.hazardElementHeaderStyle}
@@ -655,7 +736,7 @@ mm
                                     key={item}
                                     type="button"
                                     className={clickedHazardItem === item ? styles.legendBtnSelected3 : styles.legendBtn3}
-                                    onClick={() => handleMultipleHazardLayer(item, i)}
+                                    onClick={() => handleMultipleHazardLayerDamageLoss(item, i)}
                                 >
                                     <Hexagon
                                         style={{
@@ -727,24 +808,25 @@ mm
                             className={legentItemDisabled
                                 ? styles.incidentsLegendsContainer3Disabled
 						 : styles.incidentsLegendsContainer3}
-                            key={item}
+                            key={item.value}
                         >
                             <div className={styles.hazardItemContainer3}>
                                 <button
-                                    key={item}
+                                    key={item.value}
                                     type="button"
-                                    className={clickedHazardItem === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                    className={prepSelectedData === item.value && climateDataType === 'Precipitation' ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                    onClick={() => handleClimatePrep(item.value)}
                                 >
                                     <Hexagon
                                         style={{
                 							innerHeight: 80,
                 							stroke: '#FFFFFF',
                 							strokeWidth: 30,
-                							fill: clickedHazardItem === item ? 'white' : 'transparent',
+                							fill: prepSelectedData === item.value && climateDataType === 'Precipitation' ? 'white' : 'transparent',
                 						}}
                                         className={styles.educationHexagon3}
                                     />
-                                    {item}
+                                    {item.name}
                                 </button>
                             </div>
                         </div>
@@ -765,30 +847,166 @@ mm
                             className={legentItemDisabled
                                 ? styles.incidentsLegendsContainer3Disabled
 						 : styles.incidentsLegendsContainer3}
-                            key={item}
+                            key={item.value}
                         >
                             <div className={styles.hazardItemContainer3}>
                                 <button
-                                    key={item}
+                                    key={item.value}
                                     type="button"
-                                    className={clickedHazardItem === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                    className={tempSelectedData === item.value && climateDataType === 'Temperature' ? styles.legendBtnSelected3 : styles.legendBtn3}
+                                    onClick={() => handleClimateTemp(item.value)}
                                 >
                                     <Hexagon
                                         style={{
                 							innerHeight: 80,
                 							stroke: '#FFFFFF',
                 							strokeWidth: 30,
-                							fill: clickedHazardItem === item ? 'white' : 'transparent',
+                							fill: tempSelectedData === item.value && climateDataType === 'Temperature' ? 'white' : 'transparent',
                 						}}
                                         className={styles.educationHexagon3}
                                     />
-                                    {item}
+                                    {item.name}
                                 </button>
                             </div>
                         </div>
                 	),
                 )}
                         </VRLegendPre>
+                        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{climateChartTitle}</h2>
+                        <ResponsiveContainer
+                            className={styles.respContainer}
+                            width="100%"
+                            height={'60%'}
+                        >
+                            <BarChart
+                                width={200}
+                                height={1000}
+                                data={climateBarChartData}
+                                layout="vertical"
+                                margin={{ left: 15, right: 70, bottom: 25 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
+                                <XAxis
+                                    type="number"
+                                    tick={{ fill: '#94bdcf' }}
+                                    domain={climateDataType === 'Temperature' ? [dataMin => parseInt(dataMin, 10), dataMax => parseInt(dataMax + 1, 10)]
+                                        : [dataMin => Math.floor(dataMin - 100), dataMax => parseInt(dataMax + 100, 10)]}
+                                >
+                                    {/* <Label
+                                        value="Critical Infrastructures"
+                                        offset={0}
+                                        position="insideBottom"
+                                        style={{
+                                            textAnchor: 'middle',
+                                            fill: 'rgba(255, 255, 255, 0.87)',
+                                        }}
+                                    /> */}
+                                </XAxis>
+                                <YAxis
+                                    type="category"
+                                    dataKey="name"
+                                    tick={{ fill: '#94bdcf' }}
+                                />
+                                <Tooltip
+                                    content={cITooltip}
+                                    cursor={{ fill: '#1c333f' }}
+                                />
+                                <Bar
+                                    dataKey="value"
+                                    fill="rgb(0,219,95)"
+                                    barSize={15}
+                                    tick={{ fill: '#94bdcf' }}
+                                    radius={[0, 15, 15, 0]}
+                                >
+                                    <LabelList dataKey="value" position="right" content={customLableList} />
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+
+                        {
+                            districtIdIs
+							&& (
+							    <h2 style={{ fontSize: '14px', marginBottom: '15px' }}>
+							Ensemble Mean of Annual
+							    {' '}
+							    {climateDataType === 'Temperature' ? 'Temperature' : 'Precipitation'}
+							    {' '}
+							of
+							    {' '}
+							    {districtIdToName(districtIdIs)}
+							    </h2>
+							)
+                        }
+
+                        {climateLineChartData && climateLineChartData.length > 0 && (
+                            <ResponsiveContainer className={styles.chart}>
+                                <ComposedChart
+                                    data={climateLineChartData}
+                                    height={400}
+                                    margin={{
+                                        top: 25,
+                                        right: 40,
+                                        left: 0,
+                                        bottom: 15,
+                                    }}
+
+                                >
+                                    <CartesianGrid fill="white" />
+
+                                    <XAxis
+                                        dataKey="year"
+                                        type="number"
+                                        scale="time"
+                                        domain={['dataMin', 'dataMax']}
+                                        angle={-30}
+                                    >
+                                        <Label
+                                            value="Year"
+                                            fill="white"
+                                            offset={-5}
+                                            position="insideBottom"
+                                        />
+                                    </XAxis>
+                                    <YAxis
+                                        type="number"
+                                        domain={['auto', 'auto']}
+                                        padding={{ top: 5, bottom: 0 }}
+                                    >
+                                        <Label
+		                                    value={climateDataType === 'Temperature' ? 'Temperature' : 'Precipitation(mm/year)'}
+                                            angle={270}
+                                            offset={-10}
+                                            fill="white"
+                                            position="left"
+                                            style={{ textAnchor: 'middle' }}
+                                        />
+                                    </YAxis>
+                                    <Tooltip />
+                                    <Legend
+                                        verticalAlign="top"
+                                        wrapperStyle={{
+                                            marginTop: '-16px',
+                                        }}
+                                    />
+									       <Area
+                                        type="monotone"
+                                        dataKey="SD RCP 4.5"
+                                        fill="red"
+                                        fillOpacity={0.3}
+                                        stroke="none"
+                                        legendType="square"
+									       />
+                                    <Line
+                                        strokeWidth={2}
+                                        type="monotone"
+                                        dataKey="RCP 4.5"
+                                        stroke="#1f78b4"
+                                        dot={false}
+                                    />
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        )}
+
                     </>
                 )}
 

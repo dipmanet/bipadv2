@@ -8,6 +8,10 @@ interface Props{
     disableNavRightBtn: boolean;
     pagenumber: number;
     totalPages: number;
+    pending: boolean;
+    leftElement: number;
+    active: number;
+    setActivePage: (item: number) => void;
 }
 
 const NavButtons = (props: Props) => {
