@@ -15,15 +15,22 @@ const setCovidPage = (state: Type.CovidState, action: Type.SetCovidPage) => {
     const { covidPage: {
         covidIndivisualData,
         covidIndivisualCount,
+        covidGroupData,
+        covidGroupCount,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         if (covidIndivisualData) {
-            // console.log('test', covidIndivisualData);
             deferedState.covidPage.covidIndivisualData = covidIndivisualData;
         }
         if (covidIndivisualCount) {
             deferedState.covidPage.covidIndivisualCount = covidIndivisualCount;
+        }
+        if (covidGroupData) {
+            deferedState.covidPage.covidGroupData = covidGroupData;
+        }
+        if (covidGroupCount) {
+            deferedState.covidPage.covidGroupCount = covidGroupCount;
         }
     });
     return newState;
