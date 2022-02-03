@@ -358,8 +358,6 @@ export const ProvinceTwo = (props: Props) => {
     const lng = municipalityInfo.map(item => item.centroid.coordinates[0])[0];
     const lat = municipalityInfo.map(item => item.centroid.coordinates[1])[0];
 
-    console.log('temp data is', tempData);
-
     const meanValueCalculator = (array) => {
         if (array.length > 0) {
             const obtVal = array.map(item => item.value).reduce((a, b) => a + b);
@@ -853,8 +851,6 @@ export const ProvinceTwo = (props: Props) => {
         FemalePop: item.data.femalePopulationSum,
         TotalHousehold: item.data.householdCountSum }));
 
-    console.log('demo data are', populationData);
-
 
     const alertsChartData = [];
     // eslint-disable-next-line no-plusplus
@@ -890,8 +886,6 @@ export const ProvinceTwo = (props: Props) => {
 		   totalEstimatedLoss: item.data.estimatedLoss,
 		 }));
 
-
-    console.log('flood Hazards', tempData);
 
     return (
         <>

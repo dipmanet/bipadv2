@@ -497,10 +497,6 @@ const MultiHazardMap = (props: Props) => {
 
 
     const colorForDemographics = generateColor(maxPop, minPop, newDemoColorArray);
-
-    console.log('demo color', colorForDemographics);
-
-
     const colorForTemp = generateColor(26, 24, tempColors);
     const colorForPrep = generateColor(1800, 1500, rainColors);
 
@@ -516,16 +512,12 @@ const MultiHazardMap = (props: Props) => {
     const damageLossArray = ['totalPeopleDeathFlood', 'totalInfraDamageFlood', 'totalPeopleDeathLandslide', 'totalInfraDamageLandslide'];
     const damageLossDataArray = [totalFloodLossData, totalFloodLossData, totalLandslideLossData, totalLandslideLossData];
 
-    console.log('data array', damageLossDataArray);
-
     const color1 = generateColor(Math.max(...totalPeopleDeathFlood), Math.min(...totalPeopleDeathFlood), colorGrade);
     const color2 = generateColor(Math.max(...totalInfraDamageFlood), Math.min(...totalInfraDamageFlood), colorGrade);
     const color3 = generateColor(Math.max(...totalPeopleDeathLandslide), Math.min(...totalPeopleDeathLandslide), colorGrade);
     const color4 = generateColor(Math.max(...totalInfraDamageLandslide), Math.min(...totalInfraDamageLandslide), colorGrade);
 
     const allDamageColors = [color1, color2, color3, color4];
-
-    console.log('all damage colors', allDamageColors);
 
 
     const images = [
@@ -645,8 +637,6 @@ const MultiHazardMap = (props: Props) => {
                 if (e.features.length > 0) {
                     multihazardMap.getCanvas().style.cursor = 'pointer';
                     const { lngLat } = e;
-                    console.log('features', e.features[0]);
-
                     const coordinates: LngLat = [lngLat.lng, lngLat.lat];
                     const wardno = e.features[0].properties.title;
                     const details = demographicsData.filter(item => item.name === `${wardno}`);

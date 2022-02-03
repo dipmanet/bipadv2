@@ -27,9 +27,6 @@ const DemoGraphicsLegends = (props) => {
         ? Math.max(...d) + 1 : Math.max(...d)));
 
 
-    console.log('intervals', intervals);
-
-
     return (
         <>
             <div style={{ position: 'fixed', bottom: '145px', right: '82px', zIndex: '15', backgroundColor: 'rgba(19,32,55,0.9)', padding: '15px', borderRadius: '10px' }}>

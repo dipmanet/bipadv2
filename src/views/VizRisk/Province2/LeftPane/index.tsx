@@ -219,8 +219,6 @@ function Leftpane(props) {
 
 
     useEffect(() => {
-        console.log('running', tempSelectedData, prepSelectedData);
-
         if (tempSelectedData === 'temp2010' && climateDataType === 'Temperature') {
             setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Temperature Reference Period(1981-2010)');

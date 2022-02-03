@@ -200,7 +200,6 @@ export const getaverageAnnualincomeChartData = (d) => {
 };
 
 export const getsingularAgeGroupsChart = (d) => {
-    console.log('agegroup chart object', d);
     if (
         typeof d === 'object'
     && d.seniorCitizens !== undefined
