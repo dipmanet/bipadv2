@@ -218,8 +218,8 @@ export const Butwal = (props) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [leftElement, setleftElement] = useState(0);
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [legendElement, setlegendElement] = useState('Admin Boundary');
-    const [incidentFilterYear, setincidentFilterYear] = useState('2011');
+    const [legendElement, setlegendElement] = useState('Adminstrative Map');
+    const [incidentFilterYear, setincidentFilterYear] = useState('2017');
     const [cI, setCI] = useState([]);
     const [htmlData, sethtmlData] = useState([]);
     const [jsonData, setjsonData] = useState([]);
@@ -332,7 +332,7 @@ export const Butwal = (props) => {
 
 
     const handleIncidentChange = (incidentYear) => {
-        const y = `${Number(incidentYear) + 2011}`;
+        const y = `${Number(incidentYear) + 2017}`;
         setincidentFilterYear(y);
     };
 
@@ -363,12 +363,12 @@ export const Butwal = (props) => {
 
         let clickedCur = [...clicked];
         clickedCur[i] = (clickedCur[i] === 1) ? 0 : 1;
-        if (legendClicked === 'Population Density' && clickedCur[1] === 1) {
-            clickedCur = [0, 1, 0, 0];
+        if (legendClicked === 'Population Density' && clickedCur[3] === 1) {
+            clickedCur = [0, 0, 0, 1];
             setclicked(clickedCur);
-        } else if (clickedCur[1] === 1 && (clickedCur[0] === 1
-			|| clickedCur[2] === 1 || clickedCur[3] === 1)) {
-            clickedCur[1] = 0;
+        } else if (clickedCur[3] === 1 && (clickedCur[0] === 1
+			|| clickedCur[2] === 1 || clickedCur[1] === 1)) {
+            clickedCur[3] = 0;
             setclicked(clickedCur);
         } else {
             setclicked(clickedCur);
@@ -384,19 +384,19 @@ export const Butwal = (props) => {
         setclickedHazardItem(hazardItem);
         const curLegend = [...hazardLegendClickedArr];
         if (i === 0) {
-            curLegend[0] = curLegend[0] === 1 ? 0 : 1;
+            curLegend[0] = 1;
             curLegend[1] = 0;
             curLegend[2] = 0;
             sethazardLegendClickedArr(curLegend);
         }
         if (i === 1) {
-            curLegend[1] = curLegend[1] === 1 ? 0 : 1;
+            curLegend[1] = 1;
             curLegend[0] = 0;
             curLegend[2] = 0;
             sethazardLegendClickedArr(curLegend);
         }
         if (i === 2) {
-            curLegend[2] = curLegend[2] === 1 ? 0 : 1;
+            curLegend[2] = 1;
             curLegend[0] = 0;
             curLegend[1] = 0;
             sethazardLegendClickedArr(curLegend);
@@ -407,7 +407,7 @@ export const Butwal = (props) => {
     const handleMultipleExposure = (exposureItem, i) => {
         setlegentItemDisabled(true);
         setexposureElement(exposureItem);
-
+        setexposureElementsArr(incidentDetailsData);
         let curExposure = [...exposureElementsArr];
         curExposure[i] = curExposure[i] === 1 ? 0 : 1;
 
@@ -715,7 +715,7 @@ export const Butwal = (props) => {
                         </div>
                     ) : (
 
-                        (leftElement === 0 && legendElement === 'Admin Boundary') && (
+                        (leftElement === 0 && legendElement === 'Adminstrative Map') && (
                         // The real html data is started from Array's third element
                             <Leftpane
                                 introHtml={page1TopIntrohtml[0]}
@@ -907,7 +907,6 @@ export const Butwal = (props) => {
                         active={active}
                         disableNavLeftBtn={disableNavLeftBtn}
                         disableNavRightBtn={disableNavRightBtn}
-
                     />
                 )
             }

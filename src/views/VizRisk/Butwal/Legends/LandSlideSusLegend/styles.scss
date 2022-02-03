@@ -2,6 +2,10 @@
     
     .populationContainer{
         display: flex;
+		position: fixed;
+		bottom: 43px;
+		left: 526px;
+		flex-direction: column;
         .legendsRow{
             text-align: center;
             padding-left: 0;

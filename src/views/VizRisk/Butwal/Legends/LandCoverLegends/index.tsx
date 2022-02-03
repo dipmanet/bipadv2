@@ -11,7 +11,7 @@ const LandCoverLegends = (props) => {
         <>
 
 
-            <div className={(leftElement === 2 && clickedArr[2] === 1)
+            <div className={(leftElement === 2 && clickedArr[1] === 1)
 				 ? styles.mainDivLandClicked : (leftElement === 3 && exposureElementArr[2] === 1)
 				  ? styles.mainDivLandEx : styles.mainDivLand}
             >
@@ -90,20 +90,6 @@ const LandCoverLegends = (props) => {
                             Bridges
                 </div>
 
-                <p className={styles.landcoverIconContainer}>
-                    <span>
-                        <Hexagon
-                            style={{
-                                stroke: '#fff',
-                                strokeWidth: 50,
-                                fill: '#e0e0e0',
-
-                            }}
-                            className={styles.otherIcon}
-                        />
-                    </span>
-                            Other
-                </p>
 
                 <p className={styles.landcoverIconContainer}>
                     <Hexagon
@@ -117,7 +103,7 @@ const LandCoverLegends = (props) => {
                     />
             Shrubs
                 </p>
-                <p className={styles.landcoverIconContainer}>
+                {/* <p className={styles.landcoverIconContainer}>
                     <Hexagon
                         style={{
                             stroke: '#fff',
@@ -129,8 +115,8 @@ const LandCoverLegends = (props) => {
                     />
             Snow
 
-                </p>
-                <p className={styles.landcoverIconContainer}>
+                </p> */}
+                {/* <p className={styles.landcoverIconContainer}>
                     <Hexagon
                         style={{
                             stroke: '#fff',
@@ -142,7 +128,7 @@ const LandCoverLegends = (props) => {
                     />
             Rocks/Stones
 
-                </p>
+                </p> */}
                 <p className={styles.landcoverIconContainer}>
                     <Hexagon
                         style={{
@@ -155,6 +141,20 @@ const LandCoverLegends = (props) => {
                     />
             Grassland
 
+                </p>
+                <p className={styles.landcoverIconContainer}>
+                    <span>
+                        <Hexagon
+                            style={{
+                                stroke: '#fff',
+                                strokeWidth: 50,
+                                fill: '#e0e0e0',
+
+                            }}
+                            className={styles.otherIcon}
+                        />
+                    </span>
+                            Other
                 </p>
             </div>
         </>

@@ -2,6 +2,7 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import Hexagon from 'react-hexagon';
+import { parseStringToNumber } from '../../Functions';
 import styles from './styles.scss';
 
 
@@ -32,7 +33,7 @@ const DemoGraphicsLegends = (props) => {
                 {showPopulationWard
                     && (
                         <div>
-                            <h4>Population by ward</h4>
+                            <h4 style={{ marginLeft: '10px' }}>Population by ward</h4>
                             <div className={styles.populationContainer}>
                                 <div className={styles.populationIndContainerShort}>
                                     <div className={styles.populationIndicator1} />
@@ -42,11 +43,11 @@ const DemoGraphicsLegends = (props) => {
                                     <div className={styles.populationIndicator5} />
                                 </div>
                                 <div className={styles.populationTextContainer}>
-                                    <div className={styles.populationText}>{`${intervals[3]} - ${intervals[4]}`}</div>
-                                    <div className={styles.populationText}>{`${intervals[2]} - ${intervals[3]}`}</div>
-                                    <div className={styles.populationText}>{`${intervals[1]} - ${intervals[2]}`}</div>
-                                    <div className={styles.populationText}>{`${intervals[0]} - ${intervals[1]}`}</div>
-                                    <div className={styles.populationText}>{`0- ${intervals[0]}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(intervals[3])} - ${parseStringToNumber(intervals[4])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(intervals[2])} - ${parseStringToNumber(intervals[3])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(intervals[1])} - ${parseStringToNumber(intervals[2])}`}</div>
+                                    <div className={styles.populationText}>{`${parseStringToNumber(intervals[0])} - ${parseStringToNumber(intervals[1])}`}</div>
+                                    <div className={styles.populationText}>{`0- ${parseStringToNumber(intervals[0])}`}</div>
                                 </div>
 
                             </div>

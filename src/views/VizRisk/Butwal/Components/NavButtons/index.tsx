@@ -27,7 +27,7 @@ const NavButtons = (props: Props) => {
 
     return (
         <div className={(disableNavRightBtn && disableNavLeftBtn)
-		 ? styles.navRowDisabled : styles.navRow}
+            ? styles.navRowDisabled : styles.navRow}
         >
             <div className={styles.pagination}>
                 {[1, 2, 3, 4, 5].map(item => (
@@ -36,7 +36,7 @@ const NavButtons = (props: Props) => {
                         key={item}
                         type="button"
                         className={active === item
-							 ? styles.activePage : styles.paginationIndividual}
+                            ? styles.activePage : styles.paginationIndividual}
                         onClick={() => setActivePage(item)}
                         disabled={disableNavRightBtn && disableNavLeftBtn}
                     >

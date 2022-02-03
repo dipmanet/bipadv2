@@ -16,7 +16,21 @@ import {
 import styles from '../LeftPane/styles.scss';
 
 export default function BuildingChart(props) {
-    const { buildingsChartData, buildingToolTip } = props;
+    const { buildingsChartData } = props;
+
+
+    const buildingToolTip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Buildings Count: ${payload[0].payload.buildingcount}`}</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
     return (
         <div>
             <ResponsiveContainer
@@ -32,7 +46,7 @@ export default function BuildingChart(props) {
                     margin={{ left: 15, right: 45, bottom: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number">
+                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                         <Label
                             value="Buildings Count"
                             offset={0}

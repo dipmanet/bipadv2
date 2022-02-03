@@ -19,8 +19,34 @@
 
 .sliderLabel{
   position: fixed;
-  right: 75px;
-  bottom: 390px !important;
+  right: 160px;
+  bottom: 400px !important;
+  color: white;
+  z-index: 201;
+}
+
+.sliderLabel2{
+  position: fixed;
+  right: 138px;
+  bottom: 400px !important;
+  color: white;
+  z-index: 201;
+}
+
+.sliderLabel3{
+  position: fixed;
+  right: 150px;
+  bottom: 400px !important;
+  color: white;
+  z-index: 201;
+}
+.opacityLevel{
+  position: fixed;
+  right: 85px;
+  display: flex;
+  justify-content: space-between;
+  width: 9.3%;
+  bottom: 363px !important;
   color: white;
   z-index: 201;
 }
@@ -37,7 +63,7 @@
   transition: opacity .2s;
   position: fixed;
   right: 80px;
-  bottom: 388px;
+  bottom: 395px;
   cursor: pointer;
 
 }

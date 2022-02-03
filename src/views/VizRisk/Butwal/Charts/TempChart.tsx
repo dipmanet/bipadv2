@@ -26,7 +26,7 @@ export default function TempChart(props) {
                 height={350}
             >
                 <LineChart
-                    margin={{ top: 5, right: 2, left: 15, bottom: 20 }}
+                    margin={{ top: 5, right: 15, left: 15, bottom: 20 }}
                     data={tempChartData}
                 >
                     <CartesianGrid vertical={false} strokeDasharray="3 3" />

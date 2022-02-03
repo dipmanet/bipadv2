@@ -57,7 +57,6 @@ const CriticalInfraLegends = (props) => {
 
                         </h4>
 
-
                         {showCriticalElements === true ? (
                             <Icon
                                 name="chevronRight"
