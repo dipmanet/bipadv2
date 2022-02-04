@@ -254,7 +254,7 @@ const BulletinTable = (props) => {
 
     const handleTableEdit = (row) => {
         setBulletinEditData(row);
-        navigate('/admin/bulletin/bulletin-form');
+        navigate('/admin/bulletin/add-new-bulletin');
     };
 
 
