@@ -159,7 +159,7 @@ const PDFPreview = (props) => {
                 doc.save('Bulletin.pdf');
                 setPending(false);
                 setBulletinEditData({});
-                navigate('/admin/bulletin/bulletin-table');
+                navigate('/admin/bulletin/bulletin-data-table');
             })
             .catch((error) => {
                 setPending(false);
