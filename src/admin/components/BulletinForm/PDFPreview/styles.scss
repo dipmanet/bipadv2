@@ -5,7 +5,10 @@
     background-color: #f8f8f8;
     margin: 50px auto;
    .downloadBtn{
-       margin-left: 10px;
+       display: flex;
+       align-items: center;
+       justify-content: space-around;
+    //    margin-left: 10px;
       background: #003572;
       border: none;
       padding: 8px 12px;
@@ -31,7 +34,19 @@
     .btnContainer{
         display: flex;
         justify-content: flex-end;
+        align-items: center;
         background-color: white;
-        padding-right: 16mm;
+        padding-top: 20px;
+        // padding-right: 16mm;
+        .prevBtn{
+            margin-right: 10px;
+            margin-bottom: 16px;
+            color: #003572;
+            background-color: transparent;
+            border: none;
+            padding: 0 12px;
+            cursor: pointer;
+            filter: saturate(100%);
+        }
     }
 }

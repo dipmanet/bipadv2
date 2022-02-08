@@ -60,6 +60,8 @@
         
       
     }
+
+    
     .provinceWiseLoss{
         display: flex;
         padding:10mm ;
@@ -74,6 +76,9 @@
                 left: 10mm;
                 font-size: 4mm;
                 margin-bottom: 2mm;
+                width: 85mm;
+                font-size: 16px;
+                // color: rgb(15, 11, 11)
             }
             
         }
@@ -82,8 +87,8 @@
             height: 90mm;
             h2{
                 font-size: 4mm;
-                margin-bottom: 6mm;
-
+                margin: 0 0 6mm 4mm;
+                
             }
         }
     }

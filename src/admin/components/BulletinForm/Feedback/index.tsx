@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
+
 import styles from './styles.scss';
 
 interface Props {
@@ -27,23 +30,28 @@ const Bulletin = (props: Props) => {
         <>
             <div className={styles.formContainer}>
                 <h2>२४ घण्टामा बिपद्का घटनाहरुमा भएको प्रतिकार्य</h2>
-                <div className={styles.pratikriyas}>
-                    <ul>
-                        {
-                            feedback.map(p => (
-                                <li key={p}>
-                                    {p}
-                                    <button
-                                        type="button"
-                                        onClick={() => deleteFeedbackChange(p)}
-                                    >
-                                        Delete
-                                    </button>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
+                {
+                    feedback && feedback.length > 0
+                    && (
+                        <div className={styles.pratikriyas}>
+                            <ul>
+                                {
+                                    feedback.map((p, i) => (
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        <li key={`${p}index${i}`}>
+                                            {p}
+                                            <IconButton
+                                                type="button"
+                                                onClick={() => deleteFeedbackChange(i)}
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    )}
                 <div className={styles.formSubContainer}>
                     <div className={styles.formItem}>
                         <FormControl fullWidth>
@@ -70,7 +78,7 @@ const Bulletin = (props: Props) => {
                             onClick={handleFeedback}
                             type="button"
                         >
-                            + Submit
+                            + थप्नुहोस्
                         </button>
                     </div>
                 </div>

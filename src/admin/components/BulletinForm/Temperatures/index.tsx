@@ -4,7 +4,7 @@ import FileUploader from 'src/admin/components/FileUploader';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-
+import Placeholder from 'src/admin/resources/placeholder.png';
 import styles from './styles.scss';
 
 interface Props {
@@ -98,8 +98,15 @@ const Bulletin = (props: Props) => {
                             picFromEdit
                         && (
                         <>
-                            <h2>Max Temp</h2>
                             <img src={picLink} alt="temperature" />
+                        </>
+                        )
+                        }
+                        {
+                            !picFromEdit && !maxTemp
+                        && (
+                        <>
+                            <img className={styles.placeholder} src={Placeholder} alt="temperature" />
                         </>
                         )
                         }
@@ -113,8 +120,15 @@ const Bulletin = (props: Props) => {
                             picFromEdit
                         && (
                         <>
-                            <h2>Min Temp</h2>
                             <img src={picLink} alt="temperature" />
+                        </>
+                        )
+                        }
+                        {
+                            !picFromEdit && !minTemp
+                        && (
+                        <>
+                            <img className={styles.placeholder} src={Placeholder} alt="temperature" />
                         </>
                         )
                         }
@@ -129,7 +143,7 @@ const Bulletin = (props: Props) => {
             <>
                 <div className={styles.rowTitle1}>
                     <h2>
-                         Upload Picture
+                    तस्विर अपलोड गर्नुहोस्
                     </h2>
                 </div>
                 <h3>दैनिक अधिकतम तापक्रम</h3>
@@ -146,22 +160,25 @@ const Bulletin = (props: Props) => {
                         onFileSelectSuccess={handleMinTempInput}
                     />
                 </div>
-                <FormControl fullWidth>
-                    <InputLabel>
-                        {'दैनिक बर्षा को सारांश'}
-                    </InputLabel>
-                    <Input
-                        type="text"
-                        value={dailySummary}
-                        onChange={e => handleDailySummary(e)}
-                        className={styles.select}
-                        disableUnderline
-                        inputProps={{
-                            disableUnderline: true,
-                        }}
-                        style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                    />
-                </FormControl>
+                <div className={styles.formItem}>
+
+                    <FormControl fullWidth>
+                        <InputLabel>
+                            {'दैनिक बर्षा को सारांश'}
+                        </InputLabel>
+                        <Input
+                            type="text"
+                            value={dailySummary}
+                            onChange={e => handleDailySummary(e)}
+                            className={styles.select}
+                            disableUnderline
+                            inputProps={{
+                                disableUnderline: true,
+                            }}
+                            style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                        />
+                    </FormControl>
+                </div>
 
             </>
             )

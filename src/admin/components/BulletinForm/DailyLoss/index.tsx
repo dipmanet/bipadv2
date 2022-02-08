@@ -66,23 +66,25 @@ const Bulletin = (props: Props) => {
                 <h3>२४ घण्टामा बिपद्को विवरणहरु</h3>
 
                 <div className={styles.formSubContainer}>
-                    <FormControl fullWidth>
-                        <InputLabel>
-                            {'Sit Rep'}
-                        </InputLabel>
-                        <Input
-                            type="text"
-                            value={sitRep}
+                    <div className={styles.formItem}>
+                        <FormControl fullWidth>
+                            <InputLabel>
+                                {'Sit Rep'}
+                            </InputLabel>
+                            <Input
+                                type="text"
+                                value={sitRep}
                             // onChange={e => handleSitRep(e.target.value)}
-                            className={styles.select}
-                            disableUnderline
-                            inputProps={{
-                                disableUnderline: true,
-                            }}
-                            disabled
-                            style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                        />
-                    </FormControl>
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                disabled
+                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                        </FormControl>
+                    </div>
                     { Object.keys(incidentSummary).map((field, idx) => (
 
                         <div className={idx > 0 ? styles.formItemHalf : styles.formItem}>

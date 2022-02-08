@@ -342,9 +342,9 @@ const Bulletin = (props: Props) => {
         setMinTemp(e);
     };
 
-    const deleteFeedbackChange = (d) => {
+    const deleteFeedbackChange = (idx) => {
         const n = [...feedback];
-        setFeedback(n.filter(item => item !== d));
+        setFeedback(n.filter((item, i) => i !== idx));
     };
 
     const handlePrevBtn = () => {
@@ -633,6 +633,7 @@ const Bulletin = (props: Props) => {
             dailySummary={dailySummary}
         />,
         <PDFPreview
+            handlePrevBtn={handlePrevBtn}
             bulletinData={
                 { incidentSummary: incidentData,
                     peopleLoss: peopleLossData,
@@ -665,22 +666,28 @@ const Bulletin = (props: Props) => {
 
             <div className={styles.rightFormSection}>
                 {formSections[activeProgressMenu]}
-                <div className={styles.buttonsContainer}>
-                    <button
-                        type="button"
-                        onClick={handlePrevBtn}
-                        className={styles.prevBtn}
-                    >
+                {
+                    progress < 4
+                    && (
+                        <div className={styles.buttonsContainer}>
+                            <button
+                                type="button"
+                                onClick={handlePrevBtn}
+                                className={styles.prevBtn}
+                            >
                         Previous
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleNextBtn}
-                        className={styles.nextBtn}
-                    >
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={handleNextBtn}
+                                className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
+                            >
                         Next
-                    </button>
-                </div>
+                            </button>
+                        </div>
+                    )
+                }
             </div>
 
 
