@@ -24,11 +24,14 @@ import { nepaliRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 import {
     bulletinPageSelector,
+    hazardTypesSelector,
 } from '#selectors';
+import IncidentLegend from '#rscz/Legend';
+import HazardsLegend from '#components/HazardsLegend';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
-
+    hazardTypes: hazardTypesSelector(state),
 });
 
 interface Props {
@@ -37,6 +40,23 @@ interface Props {
 
 const COLORS_CHART = ['#DC4325', '#EC7F56', '#D6C3AF'];
 
+const labelSelector = (d: LegendItem) => d.label;
+const keySelector = (d: LegendItem) => d.label;
+const classNameSelector = (d: LegendItem) => d.style;
+const colorSelector = (d: LegendItem) => d.color;
+const radiusSelector = (d: LegendItem) => d.radius;
+const incidentPointSizeData: LegendItem[] = [
+    { label: 'Minor (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+];
+
+// const filteredHazardTypes = [{
+//     title: 'fire',
+//     color: '#E53935',
+// }];
+
 const BulletinPDF = (props: Props) => {
     const {
         sitRep,
@@ -44,10 +64,60 @@ const BulletinPDF = (props: Props) => {
         hazardWiseLoss,
         genderWiseLoss,
         peopleLoss,
+
     } = props.bulletinData;
+
+    const { hazardTypes } = props;
+
     const [provWiseLossChart, setProvWiseChart] = useState([]);
     const [hazardWiseLossChart, setHazardWiseChart] = useState([]);
     const [genderWiseLossChart, setGenderWiseChart] = useState([]);
+    const [filteredHazardTypes, setHazardLegends] = useState([]);
+    const [newHazardGeoJson, setHazardGeoJson] = useState([]);
+    const [incidentPoints, setincidentPoints] = useState({});
+
+
+    useEffect(() => {
+        if (hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) {
+            const getHazardColor = (hazardName) => {
+                const h = Object
+                    .keys(hazardTypes)
+                    .filter(k => hazardTypes[k].titleNe === hazardName);
+                return hazardTypes[h[0]].color;
+            };
+            const obj = Object.keys(hazardWiseLoss).map(hazardName => (
+                {
+                    title: hazardName,
+                    color: getHazardColor(hazardName),
+                }
+            ));
+            console.log('obj', obj);
+            setHazardLegends(obj);
+            const features = [];
+            Object.keys(hazardWiseLoss).map((h) => {
+                if (Object.keys(hazardWiseLoss[h]).length > 2) {
+                    // setHazardGeoJson([...newHazardGeoJson,
+                    features.push({
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: [hazardWiseLoss[h].longitude, hazardWiseLoss[h].latitude] },
+                        properties: {
+                            hazardColor: getHazardColor(h),
+                            severity: 'Minor',
+                        },
+                    // }]);
+                    });
+                }
+                return null;
+            });
+
+            console.log('features', features);
+            setincidentPoints({
+                type: 'FeatureCollection',
+                features,
+            });
+        }
+    }, [hazardTypes, hazardWiseLoss, newHazardGeoJson]);
+
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
         let gap;
@@ -121,6 +191,8 @@ const BulletinPDF = (props: Props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
     return (
         <div className={styles.pdfContainer}>
             <div className={styles.headerNLoss}>
@@ -196,7 +268,36 @@ const BulletinPDF = (props: Props) => {
                 </div>
                 <div className={styles.provinceWiseIncidentsMap}>
                     <h2>प्रकोप अनुसार घटनाको विवरण (२४ घण्टा)</h2>
-                    <IncidentMap />
+                    <IncidentMap
+                        hazardWiseLoss={hazardWiseLoss}
+                        incidentPoints={incidentPoints}
+                    />
+                    <div className={styles.pointSizeLegendContainer}>
+                        <header className={styles.header}>
+                            <h4 className={styles.heading}>
+                                मृत्‍यु संख्या
+                            </h4>
+                        </header>
+                        <IncidentLegend
+                            className={styles.pointSizeLegend}
+                            colorSelector={colorSelector}
+                            radiusSelector={radiusSelector}
+                            data={incidentPointSizeData}
+                            emptyComponent={null}
+                            itemClassName={styles.legendItem}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            symbolClassNameSelector={classNameSelector}
+                        />
+                        <div className={styles.hazardLegend}>
+                            <div className={styles.legendTitle}>प्रकोप लेजेन्ड</div>
+                            <HazardsLegend
+                                filteredHazardTypes={filteredHazardTypes}
+                                className={styles.legend}
+                                itemClassName={styles.legendItem}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className={styles.hazardWiseStats}>

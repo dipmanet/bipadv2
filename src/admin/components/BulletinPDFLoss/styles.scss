@@ -85,6 +85,98 @@
         .provinceWiseIncidentsMap{
             width: 105mm;
             height: 90mm;
+            position: relative;
+            .pointSizeLegendContainer {
+                flex-shrink: 0;
+                background-color: var(--color-foreground);
+                // padding: var(--spacing-medium);
+                position:absolute;
+                bottom: -25mm;
+                padding: var(--spacing-medium);
+                padding-bottom: 0;
+                z-index: 3;
+                .header {
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0;
+                    justify-content: flex-end;
+                    // margin-bottom: var(--spacing-medium);
+                    height: 2mm;
+                    .heading {
+                        align-self: flex-start;
+                        flex-grow: 1;
+                        color: var(--color-primary);
+                    }
+                }
+            
+                .pointSizeLegend {
+                    display: flex;
+                    justify-content: center;
+                    border-bottom: 1px solid rgba(0,0,0, 0.1);
+                    // border: 1px solid red;
+                    height: 14mm;
+                    .legend-item {
+                        margin: var(--spacing-small) 0;
+                        // height: var(--font-size-medium);
+                        overflow: hidden;
+            
+                        >:nth-child(2) {
+                            // padding: 0 var(--spacing-medium);
+                            padding: 0 var(--spacing-extra-small-alt);
+                            font-size: var(--font-size-small);
+                        }
+                    }
+            
+                    .symbol {
+                        border-radius: 50%;
+                        background-color: transparent !important;
+                        border: 1px solid rgba(0,0,0, 0.4);
+                        box-sizing: border-box;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        padding-left: var(--spacing-medium) !important;
+                    }
+                }
+            }
+            .hazard-legend {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                padding: var(--spacing-medium) 0;
+        
+                .legend-title {
+                    flex-shrink: 0;
+                    padding: 0 var(--spacing-medium);
+                    color: var(--color-primary);
+                    font-size: var(--font-size-medium);
+                    font-weight: var(--font-weight-bold);
+                }
+        
+                .legend {
+                    display: flex;
+                    align-content: flex-start;
+                    align-items: flex-start;
+                    flex-grow: 1;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    padding: var(--spacing-small) var(--spacing-medium);
+                    max-width: calc(100vw - var(--width-left-panel) - var(--width-navbar) - 128px - 172px);
+        
+                    .legend-item {
+                        padding: var(--spacing-extra-small) 0;
+        
+                        >:first-child {
+                            border-radius: 50%;
+                            width: var(--font-size-small);
+                            height: var(--font-size-small);
+                        }
+        
+                        >:nth-child(2) {
+                            font-size: var(--font-size-small);
+                        }
+                    }
+                }
+            }
             h2{
                 font-size: 4mm;
                 margin: 0 0 6mm 4mm;

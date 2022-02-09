@@ -152,4 +152,6 @@ export const nepaliRef = {
     totalRecovered: 'कुल निको भएका संख्या',
     firstDosage: 'पहिलो मात्रा',
     secondDosage: 'दोस्रो मात्रा',
+    latitude: 'अक्षांश',
+    longitude: 'देशान्तर',
 };

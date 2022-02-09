@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import memoize from 'memoize-one';
 import { isDefined, unique } from '@togglecorp/fujs';
 import mapboxgl from 'mapbox-gl';
-
+import { getSanitizedIncidents } from '#views/LossAndDamage/common';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import MapState from '#re-map/MapSource/MapState';
@@ -140,6 +140,7 @@ const IncidentMap = (props) => {
                 pending: incidentDeletePending,
             },
         },
+        incidentPoints,
     } = props;
 
     const mapContainerRef = useRef(null);
@@ -147,6 +148,8 @@ const IncidentMap = (props) => {
 
     const getPointFeatureCollection = memoize(incidentPointToGeojson);
     const pointFeatureCollection = getPointFeatureCollection(incidentList, hazards);
+
+
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
 
@@ -154,7 +157,7 @@ const IncidentMap = (props) => {
             container: mapContainer,
             style: process.env.REACT_APP_MAP_STYLE_LIGHT,
             zoom: 5.0,
-            center: [84.2676, 28.5465],
+            center: [84, 27],
             minZoom: 2,
             maxZoom: 22,
             preserveDrawingBuffer: true,
@@ -299,12 +302,37 @@ const IncidentMap = (props) => {
                     },
                 },
             );
+            Map.addSource('incidents-added', {
+                type: 'geojson',
+                data: incidentPoints,
+            });
+            Map.addLayer(
+                {
+                    id: 'incidents-bulletin-layer-new',
+                    type: 'circle',
+                    source: 'incidents-added',
+                    paint: {
+                        'circle-color': ['get', 'hazardColor'],
+                        'circle-stroke-width': 1.2,
+                        'circle-stroke-color': '#000000',
+                        'circle-radius': 8,
+                    },
+                },
+            );
         });
-    }, [pointFeatureCollection]);
-
+    }, [incidentPoints, pointFeatureCollection]);
+    // const filteredHazardTypes = getIncidentHazardTypesList(sanitizedIncidentList);
+    // const sanitizedIncidentList = getSanitizedIncidents(
+    //     incidentList,
+    //     regions,
+    //     hazardTypes,
+    // );
 
     return (
-        <div style={mapCSS} ref={mapContainerRef} />
+        <>
+            <div style={mapCSS} ref={mapContainerRef} />
+
+        </>
     );
 };
 

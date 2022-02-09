@@ -231,6 +231,9 @@ const Bulletin = (props: Props) => {
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 
+    useEffect(() => {
+        console.log('hazardWiseLossData', hazardWiseLossData);
+    }, [hazardWiseLossData]);
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
@@ -288,7 +291,7 @@ const Bulletin = (props: Props) => {
     const handlehazardAdd = (hazard) => {
         const newData = { ...hazardWiseLossData };
 
-        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0 } });
+        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0, latitude: 0, longitude: 0 } });
     };
 
     const handlegenderWiseLoss = (e, field) => {
