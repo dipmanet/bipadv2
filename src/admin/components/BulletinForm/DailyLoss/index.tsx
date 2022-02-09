@@ -45,13 +45,16 @@ const Bulletin = (props: Props) => {
         handlehazardAdd,
         hazardTypes,
     } = props;
-    const [hazard, setHazard] = useState();
+    const [hazard, setHazard] = useState(null);
     const [hazardIncidents, setHazardIncidents] = useState();
     const [hazardDeaths, setHazardDeaths] = useState();
 
 
     const handleHazardAddItem = () => {
-        handlehazardAdd(hazard);
+        if (hazard) {
+            handlehazardAdd(hazard);
+            setHazard(null);
+        }
     };
 
     const handleHazardChange = (e) => {
@@ -180,6 +183,7 @@ const Bulletin = (props: Props) => {
                                 style={{ borderRadius: '3px', padding: '0 10px' }}
                                 disableUnderline
                             >
+                                <MenuItem value={null}>--</MenuItem>
                                 {
                                     hazardTypes
                             && Object.keys(hazardTypes).map(hT => (<MenuItem value={hazardTypes[hT].titleNe}>{hazardTypes[hT].titleNe}</MenuItem>))
@@ -193,6 +197,7 @@ const Bulletin = (props: Props) => {
                             type="button"
                             onClick={handleHazardAddItem}
                             className={styles.hazardAddBtn}
+                            disabled={hazard === null}
                         >
                             + थप्नुहोस्
                         </button>

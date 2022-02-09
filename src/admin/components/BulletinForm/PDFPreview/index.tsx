@@ -139,6 +139,7 @@ const PDFPreview = (props) => {
             }).then((res) => {
                 doc.save('Bulletin.pdf');
                 setPending(false);
+                navigate('/admin/bulletin/bulletin-data-table');
             })
             .catch((error) => {
                 setPending(false);

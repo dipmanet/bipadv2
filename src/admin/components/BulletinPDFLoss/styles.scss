@@ -114,7 +114,7 @@
                     justify-content: center;
                     border-bottom: 1px solid rgba(0,0,0, 0.1);
                     // border: 1px solid red;
-                    height: 14mm;
+                    height: 15mm;
                     .legend-item {
                         margin: var(--spacing-small) 0;
                         // height: var(--font-size-medium);
@@ -144,9 +144,9 @@
                 flex-grow: 1;
                 padding: var(--spacing-medium) 0;
         
-                .legend-title {
+                .legendTitle {
                     flex-shrink: 0;
-                    padding: 0 var(--spacing-medium);
+                    padding: 0;
                     color: var(--color-primary);
                     font-size: var(--font-size-medium);
                     font-weight: var(--font-weight-bold);
@@ -189,12 +189,12 @@
         height: 80mm;
         position: absolute;
         bottom: 15mm;
-        left:10mm;
+        left:5mm;
         h2{
             font-size: 4mm;
             margin-bottom: 2mm;
             position: relative;
-            left: 0;
+            left: 5mm;
         }
     }
     .genderWiseStats{

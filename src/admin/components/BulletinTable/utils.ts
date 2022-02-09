@@ -248,5 +248,5 @@ export const tableTitleRef = {
     covidp7totalAffected: 'Sudurpaschim Covid Affected',
     covidp7totalActive: 'Sudurpaschim Covid Active',
     covidp7totalDeaths: 'Sudurpaschim Covid Death',
-    action: 'Actions',
+    // action: 'Actions',
 };

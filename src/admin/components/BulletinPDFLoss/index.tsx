@@ -211,7 +211,7 @@ const BulletinPDF = (props: Props) => {
                                 गृह मन्त्रालय
                                 </li>
                                 <li className={styles.bold}>
-                                राष्ट्रिय बिपद जोखिम न्युनिकरन तथा व्यवस्थापना प्राधिकरण
+                                राष्ट्रिय बिपद जोखिम न्युनिकरन तथा व्यवस्थापन प्राधिकरण
                                 </li>
                             </ul>
                         </div>
@@ -309,7 +309,7 @@ const BulletinPDF = (props: Props) => {
                         margin={{
                             top: 20,
                             right: 0,
-                            left: 0,
+                            left: 15,
                             bottom: 5,
                         }}
                     >
