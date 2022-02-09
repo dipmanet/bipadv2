@@ -48,12 +48,12 @@ Add new Health Infrastructure data
                     <div className={styles.mainContent}>
 
                         <div className={styles.formDataContainer}>
-                            {/* <HealthForm
+                            <HealthForm
                                 getActiveMenu={getActiveMenu}
                                 activeMenu={activeMenu}
                                 progress={progress}
                                 handleProgress={handleProgress}
-                            /> */}
+                            />
                         </div>
 
                     </div>

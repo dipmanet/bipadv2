@@ -6,6 +6,7 @@ import routeReducer from './atom/route/reducer';
 import pageReducer from './atom/page/reducer';
 import authReducer from './atom/auth/reducer';
 import covidReducer from './atom/covid/reducer';
+import healthInfrastructureReducer from './atom/healthinfrastructure/reducer';
 
 const filterPageContent = createFilter(
     'page',
@@ -36,6 +37,7 @@ const rootReducer = persistCombineReducers(
         page: pageReducer as any,
         auth: authReducer as any,
         covid: covidReducer as any,
+        healthInfrastructure: healthInfrastructureReducer as any,
     },
 );
 

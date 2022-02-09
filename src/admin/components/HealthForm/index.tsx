@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import CamelCase from 'snakecase-keys';
 import InstitutionDetails from './InstitutionDetails';
 import DisasterManagement from './DisasterManagement';
@@ -8,12 +9,12 @@ import Contact from './Contact';
 import Inventories from './Inventories';
 import Location from './Location';
 import { institutionDetails, FormDataType } from './utils';
-
 import Picture from './Picture';
 import Verification from './Verification';
-import { RootState } from '../../Redux/store';
-import { setResourceID, getInventoryItem, clearFormEdit } from '../../Redux/actions';
 import styles from './styles.module.scss';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector } from '#selectors';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 
 interface Props {
     progress: number;
@@ -22,12 +23,37 @@ interface Props {
     handleProgress: (e: number) => void;
 }
 
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+});
+
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    inventory: {
+        url: '/inventory/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            resouce: params.resource,
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                inventoryData: response.results,
+            });
+        },
+    },
+};
+
 const HealthForm = (props: Props): JSX.Element => {
     const [formData, setFormData] = useState<FormDataType>(institutionDetails);
     const { progress, activeMenu, getActiveMenu, handleProgress } = props;
-    const { healthFormEditData } = useSelector((state: RootState) => state.health);
-    const dispatch = useDispatch();
-
+    const { setHealthInfrastructurePage,
+        healthInfrastructurePage: { healthFormEditData } } = props;
 
     useEffect(() => {
         if (Object.keys(healthFormEditData).length > 0) {
@@ -35,11 +61,11 @@ const HealthForm = (props: Props): JSX.Element => {
             const newObj = CamelCase(healthFormEditData);
             const editData = { ...newObj, resource_type: 'health' };
             setFormData(editData);
-            dispatch(setResourceID(healthFormEditData.id));
-            dispatch(getInventoryItem(healthFormEditData.id));
-            dispatch(clearFormEdit());
+            setHealthInfrastructurePage({ resourceID: healthFormEditData.id });
+            props.requests.inventory.do({ resource: healthFormEditData.id });
+            setHealthInfrastructurePage({ healthFormEditData: {} });
         }
-    }, [dispatch, healthFormEditData]);
+    }, [healthFormEditData, props.requests.inventory, setHealthInfrastructurePage]);
 
 
     const getVal = (fN, e: string) => {
@@ -55,8 +81,8 @@ const HealthForm = (props: Props): JSX.Element => {
         return e;
     };
     const handleFormData = (e, fN: string) => {
-        // console.log('ward is this',e.target.value);
         if (fN === 'ward') {
+            console.log('ward is this', e);
             setFormData({ ...formData, ward: e });
         } else {
             setFormData({ ...formData, [fN]: getVal(fN, e.target.value) });
@@ -108,105 +134,111 @@ const HealthForm = (props: Props): JSX.Element => {
     return (
         <>
             {
-			    activeMenu === 'Institution Details'
-            &&			(
-                <InstitutionDetails
-                    handleFormData={handleFormData}
-                    handleDate={handleDate}
-                    formData={formData}
-                    progress={progress}
-                    getActiveMenu={getActiveMenu}
-                    handleProgress={handleProgress}
-                    activeMenu={activeMenu}
-                />
-            )
+                activeMenu === 'Institution Details'
+                && (
+                    <InstitutionDetails
+                        handleFormData={handleFormData}
+                        handleDate={handleDate}
+                        formData={formData}
+                        progress={progress}
+                        getActiveMenu={getActiveMenu}
+                        handleProgress={handleProgress}
+                        activeMenu={activeMenu}
+                    />
+                )
             }
             {
-			    activeMenu === 'Disaster Management'
-            &&			(
-                <DisasterManagement
-                    handleFormData={handleFormData}
-                    handleTime={handleDate}
-                    formData={formData}
-                    progress={progress}
-                    activeMenu={activeMenu}
-                    getActiveMenu={getActiveMenu}
-                    handleProgress={handleProgress}
-                />
-            )
+                activeMenu === 'Disaster Management'
+                && (
+                    <DisasterManagement
+                        handleFormData={handleFormData}
+                        handleTime={handleDate}
+                        formData={formData}
+                        progress={progress}
+                        activeMenu={activeMenu}
+                        getActiveMenu={getActiveMenu}
+                        handleProgress={handleProgress}
+                    />
+                )
             }
             {
-			    activeMenu === 'Contact'
-            &&			(
-                <Contact
-                    handleFormData={handleFormData}
-                    handleTime={handleTime}
-                    formData={formData}
-                    progress={progress}
-                    activeMenu={activeMenu}
-                    getActiveMenu={getActiveMenu}
-                    handleProgress={handleProgress}
-                />
-            )
+                activeMenu === 'Contact'
+                && (
+                    <Contact
+                        handleFormData={handleFormData}
+                        handleTime={handleTime}
+                        formData={formData}
+                        progress={progress}
+                        activeMenu={activeMenu}
+                        getActiveMenu={getActiveMenu}
+                        handleProgress={handleProgress}
+                    />
+                )
             }
             {
-			    activeMenu === 'Location'
-            &&			(
-                <Location
-                    handleFormData={handleFormData}
-                    formData={formData}
-                    progress={progress}
-                    activeMenu={activeMenu}
-                    getActiveMenu={getActiveMenu}
-                    setPoint={setPoint}
-                    handleProgress={handleProgress}
-                />
-            )
+                activeMenu === 'Location'
+                && (
+                    <Location
+                        handleFormData={handleFormData}
+                        formData={formData}
+                        progress={progress}
+                        activeMenu={activeMenu}
+                        getActiveMenu={getActiveMenu}
+                        setPoint={setPoint}
+                        handleProgress={handleProgress}
+                    />
+                )
             }
             {
-			    activeMenu === 'Verification'
-            &&			(
-                <Verification
-                    formData={formData}
-                    progress={progress}
-                    activeMenu={activeMenu}
-                    getActiveMenu={getActiveMenu}
-                    handleFile={handleFile}
-                    handleFormData={handleFormData}
-                    handleProgress={handleProgress}
-                />
-            )
+                activeMenu === 'Verification'
+                && (
+                    <Verification
+                        formData={formData}
+                        progress={progress}
+                        activeMenu={activeMenu}
+                        getActiveMenu={getActiveMenu}
+                        handleFile={handleFile}
+                        handleFormData={handleFormData}
+                        handleProgress={handleProgress}
+                    />
+                )
             }
             {
-			    activeMenu === 'Picture'
-            &&			(
-                <Picture
-                    formData={formData}
-                    progress={progress}
-                    activeMenu={activeMenu}
-                    getActiveMenu={getActiveMenu}
-                    handleFile={handleFile}
-                    handleFormData={handleFormData}
-                    handleProgress={handleProgress}
-                />
-            )
+                activeMenu === 'Picture'
+                && (
+                    <Picture
+                        formData={formData}
+                        progress={progress}
+                        activeMenu={activeMenu}
+                        getActiveMenu={getActiveMenu}
+                        handleFile={handleFile}
+                        handleFormData={handleFormData}
+                        handleProgress={handleProgress}
+                    />
+                )
             }
             {
-			    activeMenu === 'Inventories'
-            &&			(
-                <Inventories
-                    formData={formData}
-                    progress={progress}
-                    activeMenu={activeMenu}
-                    getActiveMenu={getActiveMenu}
-                    resetForm={resetForm}
-                    handleProgress={handleProgress}
-                />
-            )
+                activeMenu === 'Inventories'
+                && (
+                    <Inventories
+                        formData={formData}
+                        progress={progress}
+                        activeMenu={activeMenu}
+                        getActiveMenu={getActiveMenu}
+                        resetForm={resetForm}
+                        handleProgress={handleProgress}
+                    />
+                )
             }
-
         </>
     );
 };
 
-export default HealthForm;
+// export default HealthForm;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            HealthForm,
+        ),
+    ),
+);

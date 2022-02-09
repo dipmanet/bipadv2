@@ -1,6 +1,4 @@
-/* eslint-disable no-tabs */
 /* eslint-disable max-len */
-/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -17,13 +15,25 @@ import { DatePicker, TimePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-// import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
 import AccentHeading from 'src/admin/components/AccentHeading';
+import { connect } from 'react-redux';
 import { FormDataType, institutionDetails, instDetail } from '../utils';
 import NextButton from '../../NextButton';
 
 import styles from './styles.module.scss';
+
+
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector, userSelector } from '#selectors';
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+    userDataMain: userSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+});
 
 type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
@@ -38,17 +48,18 @@ interface Props{
 
 }
 
-
-const InstitutionDetails = (props: Props): JSX.Element => {
+const Contact = (props: Props): JSX.Element => {
     const {
         handleFormData,
         handleTime,
         formData,
         progress,
+        userDataMain,
+        healthInfrastructurePage: {
+            validationError,
+        },
     } = props;
 
-
-    // const navigate = useNavigate();
     const handleViewTableBtn = () => {
         navigate('/health-table');
     };
@@ -56,41 +67,31 @@ const InstitutionDetails = (props: Props): JSX.Element => {
         window.scrollTo({ top: 400, left: 0 });
     }, []);
 
-    const [validationError, setValidationError] = useState();
-    // const { userDataMain } = useSelector((state: RootState) => state.user);
-    // const { validationError } = useSelector((state: RootState) => state.health);
-
     const [fieldsToDisable, setDisableFields] = useState([]);
     const getDisabled = (field: string) => fieldsToDisable.includes(field);
 
-    // useEffect(() => {
-    //     const allFields = Object.keys(institutionDetails);
-    //     const fieldsToGiveValidator = ['hf_code', 'authority'];
-    //     window.scrollTo({ top: 400, left: 0 });
-    //     if (userDataMain.isSuperuser) {
-    //         setDisableFields([]);
-    //     } else if (
-    //         userDataMain.profile
-    // 		&& userDataMain.profile.role
-    // 		&& userDataMain.profile.role === 'validator'
-    //     ) {
-    //         setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
-    //     } else if (
-    //         userDataMain.profile
-    // 		&& userDataMain.profile.role
-    // 		&& userDataMain.profile.role === 'user'
-    //     ) {
-    //         setDisableFields(allFields.filter(f => fieldsToGiveValidator.includes(f)));
-    //     } else if (
-    //         userDataMain.profile
-    // 		&& userDataMain.profile.role
-    // 		&& userDataMain.profile.role === 'editor'
-    //     ) {
-    //         setDisableFields([]);
-    //     } else {
-    //         setDisableFields(allFields);
-    //     }
-    // }, [userDataMain.isSuperuser, userDataMain.profile]);
+    useEffect(() => {
+        const allFields = Object.keys(institutionDetails);
+        const fieldsToGiveValidator = ['hf_code', 'authority'];
+        window.scrollTo({ top: 400, left: 0 });
+        if (userDataMain.isSuperuser) {
+            setDisableFields([]);
+        } else if (
+            userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator'
+        ) {
+            setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
+        } else if (
+            userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'user'
+        ) {
+            setDisableFields(allFields.filter(f => fieldsToGiveValidator.includes(f)));
+        } else if (
+            userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'editor'
+        ) {
+            setDisableFields([]);
+        } else {
+            setDisableFields(allFields);
+        }
+    }, [userDataMain.isSuperuser, userDataMain.profile]);
 
     return (
         <>
@@ -101,7 +102,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     onClick={handleViewTableBtn}
                     type="button"
                 >
-View Data Table
+                    View Data Table
                 </button>
             </div>
             <div className={styles.rowTitle2}>
@@ -224,4 +225,6 @@ View Data Table
     );
 };
 
-export default InstitutionDetails;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    Contact,
+);

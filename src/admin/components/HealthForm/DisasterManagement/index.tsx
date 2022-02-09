@@ -1,6 +1,4 @@
-// / <reference no-default-lib="true"/>
-
-/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -13,12 +11,23 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import AccentHeading from 'src/admin/components/AccentHeading';
-import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
+import { navigate } from '@reach/router';
+import { connect, useSelector } from 'react-redux';
 import NextButton from '../../NextButton';
 import { FormDataType, institutionDetails } from '../utils';
 import styles from './styles.module.scss';
 
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector, userSelector } from '#selectors';
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+    userDataMain: userSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+});
 
 type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>;
 
@@ -35,7 +44,7 @@ interface Props{
 }
 
 
-const InstitutionDetails = (props: Props): JSX.Element => {
+const DisasterManagement = (props: Props): JSX.Element => {
     const {
         handleFormData,
         handleTime,
@@ -43,8 +52,9 @@ const InstitutionDetails = (props: Props): JSX.Element => {
         progress,
         getActiveMenu,
         activeMenu,
+        userDataMain,
     } = props;
-    const { userDataMain } = useSelector((state: RootState) => state.user);
+
     const [fieldsToDisable, setDisableFields] = useState([]);
     const getDisabled = (field: string) => fieldsToDisable.includes(field);
 
@@ -55,21 +65,15 @@ const InstitutionDetails = (props: Props): JSX.Element => {
         if (userDataMain.isSuperuser) {
             setDisableFields([]);
         } else if (
-            userDataMain.profile
-			&& userDataMain.profile.role
-			&& userDataMain.profile.role === 'validator'
+            userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator'
         ) {
             setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
         } else if (
-            userDataMain.profile
-			&& userDataMain.profile.role
-			&& userDataMain.profile.role === 'user'
+            userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'user'
         ) {
             setDisableFields(allFields.filter(f => fieldsToGiveValidator.includes(f)));
         } else if (
-            userDataMain.profile
-			&& userDataMain.profile.role
-			&& userDataMain.profile.role === 'editor'
+            userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'editor'
         ) {
             setDisableFields([]);
         } else {
@@ -77,7 +81,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
         }
     }, [userDataMain.isSuperuser, userDataMain.profile]);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const handleViewTableBtn = () => {
         navigate('/health-table');
     };
@@ -89,14 +93,13 @@ const InstitutionDetails = (props: Props): JSX.Element => {
     return (
         <>
             <div className={styles.rowTitle1}>
-                <h2>
-							Disaster Management Details
-                </h2>
+                <h2>Disaster Management Details</h2>
                 <button
                     className={styles.viewTablebtn}
+                    type="button"
                     onClick={handleViewTableBtn}
                 >
-							View Data Table
+                    View Data Table
                 </button>
             </div>
             <div className={styles.rowTitle2}>
@@ -105,7 +108,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     className={styles.infoIcon}
                 />
                 <p>
-				This section contains information regarding the disaster management capacity of the institution. It includes information on whether the facility is disaster friendly, built following building code, has DRR focal person, has open space, and a helipad.
+                    This section contains information regarding the disaster management capacity of the institution. It includes information on whether the facility is disaster friendly, built following building code, has DRR focal person, has open space, and a helipad.
                 </p>
             </div>
             <div className={styles.row3}>
@@ -153,27 +156,26 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-			        formData.has_disable_friendly_infrastructure
-						&&						(
-<>
-    <h2>Please specify</h2>
-    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-        <TextField
-            disabled={getDisabled('specify_infrastructure')}
-            id="specify_infrastructureID"
-            label="Please specify"
-            variant="filled"
-            value={formData.specify_infrastructure}
-            onChange={e => handleFormData(e, 'specify_infrastructure')}
-            InputProps={{
-							            disableUnderline: true,
-							        }}
-            style={{ border: '1px solid #d5d5d5' }}
-        />
-    </FormControl>
-</>
-						)
-			    }
+                    formData.has_disable_friendly_infrastructure && (
+                    <>
+                        <h2>Please specify</h2>
+                        <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                            <TextField
+                                disabled={getDisabled('specify_infrastructure')}
+                                id="specify_infrastructureID"
+                                label="Please specify"
+                                variant="filled"
+                                value={formData.specify_infrastructure}
+                                onChange={e => handleFormData(e, 'specify_infrastructure')}
+                                InputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #d5d5d5' }}
+                            />
+                        </FormControl>
+                    </>
+                    )
+                }
                 <div className={styles.row1}>
                     <div className={styles.col1}>
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
@@ -230,45 +232,40 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-			        formData.has_focal_person
-				&&				(
-				    <div className={styles.row1}>
-    <div className={styles.col1}>
-    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-    <TextField
-    disabled={getDisabled('focal_person_name')}
-    id="focal_person_nameID"
-    label="Name of disaster focal point person"
-    variant="filled"
-    value={formData.focal_person_name}
-    onChange={e => handleFormData(e, 'focal_person_name')}
-    InputProps={{
-				                    disableUnderline: true,
-				                }}
-    style={{ border: '1px solid #d5d5d5' }}
-				                />
-				            </FormControl>
-				        </div>
-    <div className={styles.col1}>
-    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-    <TextField
-    disabled={getDisabled('focal_person_phone_number')}
-    id="focal_person_phone_numberID"
-    label="Phone number of disaster focal point person"
-    variant="filled"
-    value={formData.focal_person_phone_number}
-    onChange={e => handleFormData(e, 'focal_person_phone_number')}
-    InputProps={{
-				                    disableUnderline: true,
-				                }}
-    style={{ border: '1px solid #d5d5d5' }}
-				                />
-				            </FormControl>
+                    formData.has_focal_person && (
+                        <div className={styles.row1}>
+                            <div className={styles.col1}>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <TextField
+                                        disabled={getDisabled('focal_person_name')}
+                                        id="focal_person_nameID"
+                                        label="Name of disaster focal point person"
+                                        variant="filled"
+                                        value={formData.focal_person_name}
+                                        onChange={e => handleFormData(e, 'focal_person_name')}
+                                        InputProps={{ disableUnderline: true }}
+                                        style={{ border: '1px solid #d5d5d5' }}
+                                    />
+                                </FormControl>
+                            </div>
+                            <div className={styles.col1}>
+                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                    <TextField
+                                        disabled={getDisabled('focal_person_phone_number')}
+                                        id="focal_person_phone_numberID"
+                                        label="Phone number of disaster focal point person"
+                                        variant="filled"
+                                        value={formData.focal_person_phone_number}
+                                        onChange={e => handleFormData(e, 'focal_person_phone_number')}
+                                        InputProps={{ disableUnderline: true }}
+                                        style={{ border: '1px solid #d5d5d5' }}
+                                    />
+                                </FormControl>
 
-				        </div>
-				    </div>
-				)
-			    }
+                            </div>
+                        </div>
+                    )
+                }
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                     <InputLabel id="has_open_space-Input">Does the facility have open space?</InputLabel>
                     <Select
@@ -286,24 +283,23 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     </Select>
                 </FormControl>
                 {
-			        formData.has_open_space
-				&&				(
-				    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-    <TextField
-    disabled={getDisabled('area_of_open_space')}
-    id="area_of_open_spaceID"
-    label="Please specify the area of open space in sq km."
-    variant="filled"
-    value={formData.area_of_open_space}
-    onChange={e => handleFormData(e, 'area_of_open_space')}
-    InputProps={{
-				            disableUnderline: true,
-				        }}
-    style={{ border: '1px solid #d5d5d5' }}
-				        />
-				    </FormControl>
-				)
-			    }
+                    formData.has_open_space && (
+                        <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                            <TextField
+                                disabled={getDisabled('area_of_open_space')}
+                                id="area_of_open_spaceID"
+                                label="Please specify the area of open space in sq km."
+                                variant="filled"
+                                value={formData.area_of_open_space}
+                                onChange={e => handleFormData(e, 'area_of_open_space')}
+                                InputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #d5d5d5' }}
+                            />
+                        </FormControl>
+                    )
+                }
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                     <InputLabel id="has_medicine_storage_space-Input">Has medicine storage space?</InputLabel>
                     <Select
@@ -349,4 +345,6 @@ const InstitutionDetails = (props: Props): JSX.Element => {
     );
 };
 
-export default InstitutionDetails;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    DisasterManagement,
+);
