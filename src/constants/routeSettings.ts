@@ -144,6 +144,14 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
+    {
+        name: 'overview',
+        title: 'Overview',
+        path: '/admin/overview',
+        load: () => import('../admin/views/Overview'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
 
     {
         name: 'incident',
