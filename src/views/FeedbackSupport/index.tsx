@@ -1,7 +1,7 @@
 import React from 'react';
 import Page from '#components/Page';
 import styles from './styles.scss';
-import Feedback1 from './Feedback1';
+import Welcome from './Welcome';
 
 const FeedbackSupport = () => (
     <>
@@ -11,7 +11,7 @@ const FeedbackSupport = () => (
         />
         <div className={styles.mainDiv}>
 
-            <Feedback1 />
+            <Welcome />
         </div>
 
     </>

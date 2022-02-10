@@ -1,5 +1,5 @@
 .container_welcome_feedback {
-  background: gray;
+  background: #00000099;
   width: 100%;
   height: 100%;
   display: flex;
@@ -7,10 +7,10 @@
   justify-content: center;
 
   .wrapper_welcome_feedback {
-    
     display: flex;
-    height: 60%;
-    width: 70%;
+    height: 45.5%;
+    width: 51.8%;
+    margin-left: 3.2%;
 
     .welcome_container {
       background: white;
@@ -23,35 +23,31 @@
         flex-direction: column;
         width: 80%;
         height: 100%;
-       margin: 10%;
-
+        margin-top: 6.9%;
+        margin-left: 11.2%;
 
         .welcome_head {
           font-weight: 600;
           font-style: normal;
-          font-size: 2.25rem;
-          line-height: 20px;
+          font-size: 1.125rem;
           color: #0069de;
         }
 
         .welcome_intro {
-          font-size: 1.5rem;
-          line-height: 167%;
-          font-style: normal;
-          font-weight: 500;
-          letter-spacing: 0em;
+          font-size: 0.75rem;
+          line-height: 165%;
+          font-weight: 600;
           color: #6f7072;
-          margin-top: 5.7%;
+          margin-top: 4%;
         }
 
         .welcome_desc {
-          font-size: 1.5rem;
-          line-height: 167%;
-          font-style: normal;
-          font-weight: 500;
+          font-size: 0.75rem;
+          line-height: 165%;
+          font-weight: 600;
           letter-spacing: 0em;
           color: #6f7072;
-          margin-top: 1.5%;
+          margin-top: -1.5%;
         }
       }
     }
@@ -69,7 +65,6 @@
         width: 90%;
         margin-right: 4%;
         margin-left: auto;
-        margin-top: 3%;
 
         .cross_btn {
           background: transparent;
@@ -83,82 +78,87 @@
       .feedback_wrapper {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-       margin: 10%;
+        // justify-content: space-between;
+        margin-left: 7.2%;
+        margin-right: auto;
+        margin-top: 7.8%;
+        width: 87%;
+        height: 100%;
 
         .tech_feedback {
           width: 100%;
-        
           display: flex;
           flex-direction: column;
 
           .tech_head {
             font-weight: 600;
-            font-size: 1.75rem;
+            font-size: 0.875rem;
             font-style: normal;
             color: #ffffff;
           }
           .tech_desc {
-            font-size: 1.5rem;
-            line-height: 33px;
+            font-size: 0.75rem;
+            line-height: 140%;
             letter-spacing: 0em;
             font-style: normal;
             font-weight: 400;
             color: #ffffff;
-            margin-top: 3%;
+            margin-top: 2.7%;
           }
 
-         
-            .tech_btn {
-              background: transparent;
-              border: 2px solid #ffffff;
-              border-radius: 50px;
-           width: 60%;
-           font-size: 9px;
-              font-style: normal;
-              font-weight: 600;
-              color: #ffffff;
-              padding: 2.5% 2.5% 2.5% 2.5%;
+          .tech_btn {
+            background: transparent;
+            border: 1px solid #ffffff;
+            border-radius: 8vh;
+            width: 47%;
+            font-size: 0.625rem;
+            font-style: normal;
+            font-weight: 600;
+            color: #ffffff;
+            padding: 1.3%;
+            margin-top: 0.8%;
 
-              &:hover {
-                cursor: pointer;
-              }
+            &:hover {
+              cursor: pointer;
             }
-          
+          }
         }
 
         .leave_feedback {
           width: 100%;
-        padding-top: 20px;
+          margin-top: 13.3%;
 
           .feedback_head {
             font-weight: 600;
-            font-size: 1.75rem;
+            font-size: 0.875rem;
             font-style: normal;
             color: #ffffff;
           }
 
           .feedback_desc {
-            font-size: 1.5rem;
-            line-height: 33px;
+            font-size: 0.75rem;
+            line-height: 140%;
             letter-spacing: 0em;
             font-style: normal;
             font-weight: 400;
             color: #ffffff;
-            margin-top: 3%;
+            margin-top: 2.6%;
           }
           .feedback_button {
-            margin-top: 3.5%;
+            margin-top: 3.8%;
 
             .feed_btn {
               background: transparent;
-              border: 2px solid #ffffff;
-              border-radius: 50px;
-              font-size: 20px;
+              border: 1px solid #ffffff;
+              border-radius: 8vh;
+              width: 25%;
+              font-size: 0.625rem;
               font-style: normal;
               font-weight: 600;
               color: #ffffff;
-              padding: 2.5% 2.5% 2.5% 2.5%;
+              padding: 1.3% 1.2%;
+              text-align: center;
+              word-spacing: 2px;
 
               &:hover {
                 cursor: pointer;
