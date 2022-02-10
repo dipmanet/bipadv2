@@ -39,8 +39,6 @@ import { tableTitleRef, institutionDetails, downloadedTitle } from './utils';
 import HealthForm from '../HealthForm';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 // import { getHealthTable, deleteHealthTable, formDataForEdit, setInventoryItem, healthDataLoading } from '../../Redux/actions';
-// import { RootState } from '../../../../Redux';
-
 
 import { SetHealthInfrastructurePageAction } from '#actionCreators';
 import {
@@ -62,19 +60,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/resource/',
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => {
-            console.log('test params', params);
-            return ({
-                format: 'json',
-                resource_type: 'health',
-                meta: true,
-                offset: params.offset,
-                limit: 100,
-                count: true,
-                expand: ['ward', 'ward.municipality', 'ward.municipality.district', 'ward.municipality.district.province'],
-                ordering: '-last_modified_date',
-            });
-        },
+        query: ({ params }) => ({
+            format: 'json',
+            resource_type: 'health',
+            meta: true,
+            offset: params.offset,
+            limit: 100,
+            count: true,
+            expand: ['ward', 'ward.municipality', 'ward.municipality.district', 'ward.municipality.district.province'],
+            ordering: '-last_modified_date',
+        }),
         onSuccess: ({ response, props }) => {
             props.setHealthInfrastructurePage({
                 healthTableData: response.results,
@@ -175,7 +170,6 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, inventoryItem } = props;
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => onRequestSort(event, property);
-    // const tableFields = ['title','category','quantity','unit'];
     const headCells = Object.keys(tableTitleRef)
         .filter(fI => fI !== 'resource_type')
         .filter(fI => fI !== 'title_ne')
@@ -195,7 +189,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                     align="center"
                     padding="checkbox"
                     sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
-
                 >
                     <Checkbox
                         color="primary"
