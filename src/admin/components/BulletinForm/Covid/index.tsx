@@ -51,7 +51,7 @@ const Bulletin = (props: Props) => {
                                     {nepaliRef[field]}
                                 </InputLabel>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     value={covid24hrsStatData[field]}
                                     onChange={e => handleCovid24hrStat(e, field)}
                                     className={styles.select}
@@ -75,7 +75,7 @@ const Bulletin = (props: Props) => {
                                     {nepaliRef[field]}
                                 </InputLabel>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     value={covidTotalStatData[field]}
                                     onChange={e => handleCovidTotalStat(e, field)}
                                     className={styles.select}
@@ -99,7 +99,7 @@ const Bulletin = (props: Props) => {
                                     {nepaliRef[field]}
                                 </InputLabel>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     value={vaccineStatData[field]}
                                     onChange={e => handleVaccineStat(e, field)}
                                     className={styles.select}
@@ -125,7 +125,7 @@ const Bulletin = (props: Props) => {
                                             {nepaliRef[subField]}
                                         </InputLabel>
                                         <Input
-                                            type="text"
+                                            type="number"
                                             value={covidProvinceWiseData[field][subField]}
                                             onChange={e => handleprovincewiseTotal(e, field, subField)}
                                             className={styles.select}

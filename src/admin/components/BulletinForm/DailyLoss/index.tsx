@@ -75,7 +75,7 @@ const Bulletin = (props: Props) => {
                                 {'Sit Rep'}
                             </InputLabel>
                             <Input
-                                type="text"
+                                type="number"
                                 value={sitRep}
                             // onChange={e => handleSitRep(e.target.value)}
                                 className={styles.select}
@@ -214,7 +214,7 @@ const Bulletin = (props: Props) => {
                                     {nepaliRef[field]}
                                 </InputLabel>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     value={genderWiseLossData[field]}
                                     onChange={e => handlegenderWiseLoss(e, field)}
                                     className={styles.select}
