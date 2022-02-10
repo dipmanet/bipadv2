@@ -142,7 +142,6 @@ bytes
     //             const msgKey = Object.keys(errorCovid19PutBulkData.response.data);
     //             const msgValues = Object.values(errorCovid19PutBulkData.response.data);
     //             const result = convertToObj(msgKey, msgValues);
-    //             console.log(result);
     //             setFormValidationError(result);
     //         }
     //     }

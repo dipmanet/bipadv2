@@ -6,7 +6,6 @@ interface Props {
 }
 
 const LossItem = (props: Props) => {
-    console.log('props');
     const { lossIcon, lossTitle, loss } = props;
     return (
         <div className={styles.itemContainer}>

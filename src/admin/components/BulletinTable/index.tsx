@@ -7,7 +7,7 @@
 /* eslint-disable react/jsx-indent */
 // / <reference no-default-lib="true"/>
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -34,7 +34,11 @@ import { visuallyHidden } from '@mui/utils';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import { setBulletinEditDataAction } from '#actionCreators';
-import { bulletinEditDataSelector, userSelector } from '#selectors';
+import {
+    bulletinEditDataSelector,
+    bulletinPageSelector,
+    userSelector,
+} from '#selectors';
 import styles from './styles.module.scss';
 
 import { tableTitleRef } from './utils';
@@ -46,6 +50,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     bulletinEditData: bulletinEditDataSelector(state),
+    bulletinData: bulletinPageSelector(state),
     user: userSelector(state),
 });
 
@@ -130,16 +135,8 @@ interface EnhancedTableProps {
 
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { onSelectAllClick, order, orderBy,
-        numSelected, rowCount, onRequestSort, inventoryItem } = props;
+        numSelected, rowCount, onRequestSort, inventoryItem, headCells } = props;
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => onRequestSort(event, property);
-    // const tableFields = ['title','category','quantity','unit'];
-    const headCells = Object.keys(tableTitleRef)
-        .map((invD: string) => ({
-            id: invD,
-            disablePadding: false,
-            label: tableTitleRef[invD],
-        }));
-
     return (
         <TableHead>
             <TableRow>
@@ -245,6 +242,8 @@ const BulletinTable = (props) => {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
     const [permission, setPermission] = React.useState(getUserPermission(user));
+    const [headCells, setHeadCells] = useState([]);
+    const [tableTitle, setFinalObj] = useState({});
 
     useEffect(() => {
         if (user) {
@@ -252,9 +251,40 @@ const BulletinTable = (props) => {
         }
     }, [user]);
 
+    useEffect(() => {
+        if (bulletinTableData[0] && bulletinTableData[0].hazardWiseLoss && Object.keys(bulletinTableData[0].hazardWiseLoss).length > 0) {
+            const temp = {};
+            Object.keys(bulletinTableData[0].hazardWiseLoss).map((kys, i) => {
+                temp[`Hazard${i + 1} (${kys}) Deaths`] = `Hazard${i + 1} (${kys}) Deaths`;
+                temp[`Hazard${i + 1} (${kys}) Incidents`] = `Hazard${i + 1} (${kys}) Incidents`;
+                return null;
+            });
+            const finalObj = { ...tableTitleRef, ...temp, action: 'Actions' };
+            setFinalObj(finalObj);
+            const headCellsData = Object.keys(finalObj)
+                .map((invD: string) => ({
+                    id: invD,
+                    disablePadding: false,
+                    label: finalObj[invD],
+                }));
+                setHeadCells(headCellsData);
+        } else {
+            const finalObj = { ...tableTitleRef, action: 'Actions' };
+            setFinalObj(finalObj);
+
+            const headCellsData = Object.keys(finalObj)
+                .map((invD: string) => ({
+                    id: invD,
+                    disablePadding: false,
+                    label: finalObj[invD],
+                }));
+                setHeadCells(headCellsData);
+        }
+    }, [bulletinTableData]);
+
     const handleTableEdit = (row) => {
         setBulletinEditData(row);
-        navigate('/admin/bulletin/bulletin-form');
+        navigate('/admin/bulletin/add-new-bulletin');
     };
 
 
@@ -391,7 +421,7 @@ const BulletinTable = (props) => {
                                             onSelectAllClick={handleSelectAllClick}
                                             onRequestSort={handleRequestSort}
                                             rowCount={filteredRowDatas.length}
-                                            // inventoryItem={inventoryItem}
+                                            headCells={headCells}
                                         />
 
                                         <TableBody>
@@ -412,7 +442,7 @@ const BulletinTable = (props) => {
 
                                                             <>
             {
-                Object.keys(tableTitleRef).map((k) => {
+               tableTitle && Object.keys(tableTitle).map((k) => {
                     if (k === 'numberOfIncidents') {
                         return (
                             <TableCell
@@ -723,7 +753,6 @@ const BulletinTable = (props) => {
                         );
                     }
                     if (k === 'covidAffectedDaily') {
-                        console.log('row 24hrs stat', row);
                         return (
                             <TableCell
                                 align="center"
@@ -1064,7 +1093,24 @@ const BulletinTable = (props) => {
                                 {row[k].split('T')[0]}
                             </TableCell>
                         );
+                    } if (k.includes('Hazard') && row.hazardWiseLoss) {
+                        const haz = k.substring(
+                            k.indexOf('(') + 1,
+                            k.lastIndexOf(')'),
+                        );
+                        const ici = k.split(')')[1].toLowerCase().trim();
+
+                            return (
+                            <TableCell
+                                align="center"
+                                padding="normal"
+
+                                                        >
+                            { row.hazardWiseLoss[haz] ? row.hazardWiseLoss[haz][ici] : '-'}
+                            </TableCell>
+);
                     }
+
                     if (k === 'action') {
                         return (
 

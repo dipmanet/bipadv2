@@ -231,10 +231,12 @@ const Bulletin = (props: Props) => {
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 
+    useEffect(() => {
+        console.log('hazardWiseLossData', hazardWiseLossData);
+    }, [hazardWiseLossData]);
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            console.log('...setting edit data, edit mode');
             setSitRep(bulletinEditData.sitrep);
             setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);
@@ -246,7 +248,6 @@ const Bulletin = (props: Props) => {
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
             setDailySumamry(bulletinEditData.dailySummary);
         } else {
-            console.log('...fetching data, not edit mode');
             incidentsGetRequest.do();
             covidNationalInfo.do();
             covidQuarantine.do();
@@ -290,7 +291,7 @@ const Bulletin = (props: Props) => {
     const handlehazardAdd = (hazard) => {
         const newData = { ...hazardWiseLossData };
 
-        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0 } });
+        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0, latitude: 0, longitude: 0 } });
     };
 
     const handlegenderWiseLoss = (e, field) => {
@@ -344,9 +345,9 @@ const Bulletin = (props: Props) => {
         setMinTemp(e);
     };
 
-    const deleteFeedbackChange = (d) => {
+    const deleteFeedbackChange = (idx) => {
         const n = [...feedback];
-        setFeedback(n.filter(item => item !== d));
+        setFeedback(n.filter((item, i) => i !== idx));
     };
 
     const handlePrevBtn = () => {
@@ -441,7 +442,6 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (lossData) {
-            console.log('loss data changed', lossData);
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
@@ -520,7 +520,6 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => {
         if (covidNational.length > 0) {
-            console.log('covidNational', covidNational);
             setcovid24hrsStat({
                 affected: covidNational[0].newCases || 0,
                 femaleAffected: covidNational[0].newCasesFemale || 0,
@@ -546,8 +545,6 @@ const Bulletin = (props: Props) => {
             const p5Data = covidQuaratine.filter(p => p.provinceName === 'Lumbini')[0];
             const p6Data = covidQuaratine.filter(p => p.provinceName === 'Karnali')[0];
             const p7Data = covidQuaratine.filter(p => p.provinceName === 'Sudurpashchim')[0];
-            console.log('p7Data', p7Data);
-            console.log('covidQuaratine', covidQuaratine);
             setcovidProvinceWiseTotal({
                 p1: {
                     totalAffected: p1Data ? p1Data.totalPositive : 0,
@@ -639,6 +636,7 @@ const Bulletin = (props: Props) => {
             dailySummary={dailySummary}
         />,
         <PDFPreview
+            handlePrevBtn={handlePrevBtn}
             bulletinData={
                 { incidentSummary: incidentData,
                     peopleLoss: peopleLossData,
@@ -671,22 +669,28 @@ const Bulletin = (props: Props) => {
 
             <div className={styles.rightFormSection}>
                 {formSections[activeProgressMenu]}
-                <div className={styles.buttonsContainer}>
-                    <button
-                        type="button"
-                        onClick={handlePrevBtn}
-                        className={styles.prevBtn}
-                    >
+                {
+                    progress < 4
+                    && (
+                        <div className={styles.buttonsContainer}>
+                            <button
+                                type="button"
+                                onClick={handlePrevBtn}
+                                className={styles.prevBtn}
+                            >
                         Previous
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleNextBtn}
-                        className={styles.nextBtn}
-                    >
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={handleNextBtn}
+                                className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
+                            >
                         Next
-                    </button>
-                </div>
+                            </button>
+                        </div>
+                    )
+                }
             </div>
 
 

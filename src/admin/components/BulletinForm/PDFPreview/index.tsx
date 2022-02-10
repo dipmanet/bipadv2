@@ -10,6 +10,7 @@ import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
 import BulletinPDFFooter from 'src/admin/components/BulletinPDFFooter';
 import BulletinPDFAnnex from 'src/admin/components/BulletinPDFAnnex';
+import DownloadIcon from '@mui/icons-material/Download';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import styles from './styles.scss';
@@ -58,7 +59,6 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         onMount: false,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, params }) => {
-            console.log('response', response);
             params.doc.save('Bulletin.pdf');
         },
     },
@@ -77,6 +77,7 @@ const PDFPreview = (props) => {
         requests: { bulletinPostRequest },
         bulletinEditData,
         setBulletinEditData,
+        handlePrevBtn,
     } = props;
 
     const isFile = (input: any): input is File => (
@@ -106,7 +107,10 @@ const PDFPreview = (props) => {
             ([key, value]) => {
                 if (isList(value)) {
                     value.forEach((val: unknown) => {
-                        if (val !== undefined) {
+                        if (val !== undefined && isBlob(value)) {
+                            const sanitizedVal = sanitizeFormData(val);
+                            formDataNew.append(key, sanitizedVal, 'Bulletin.pdf');
+                        } else if (val !== undefined && !isBlob(value)) {
                             const sanitizedVal = sanitizeFormData(val);
                             formDataNew.append(key, sanitizedVal);
                         }
@@ -135,18 +139,10 @@ const PDFPreview = (props) => {
             }).then((res) => {
                 doc.save('Bulletin.pdf');
                 setPending(false);
+                navigate('/admin/bulletin/bulletin-data-table');
             })
             .catch((error) => {
                 setPending(false);
-                if (error.response) {
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                }
             });
     };
     const updatePDF = (pdfFile, doc) => {
@@ -166,7 +162,7 @@ const PDFPreview = (props) => {
                 doc.save('Bulletin.pdf');
                 setPending(false);
                 setBulletinEditData({});
-                navigate('/admin/bulletin/bulletin-table');
+                navigate('/admin/bulletin/bulletin-data-table');
             })
             .catch((error) => {
                 setPending(false);
@@ -256,6 +252,13 @@ const PDFPreview = (props) => {
 
             </div>
             <div className={styles.btnContainer}>
+                <button
+                    type="button"
+                    onClick={handlePrevBtn}
+                    className={styles.prevBtn}
+                >
+                    Previous
+                </button>
                 <button
                     type="button"
                     onClick={handleDownload}

@@ -124,7 +124,8 @@ export const nepaliRef = {
     numberOfDeath: 'मृत्‍यु संख्या',
     numberOfMissing: 'बेपत्ता संख्या',
     numberOfInjured: 'घाइते संख्या',
-    estimatedLoss: 'अनुमानित क्ष्यती (लाख)',
+    // estimatedLoss: 'अनुमानित क्ष्यती (लाख)',
+    estimatedLoss: 'अनुमानित क्ष्यती',
     roadBlock: 'सडक अवरोध',
     cattleLoss: 'चौपाय',
     p1: 'प्रदेश १',
@@ -152,4 +153,6 @@ export const nepaliRef = {
     totalRecovered: 'कुल निको भएका संख्या',
     firstDosage: 'पहिलो मात्रा',
     secondDosage: 'दोस्रो मात्रा',
+    latitude: 'अक्षांश',
+    longitude: 'देशान्तर',
 };

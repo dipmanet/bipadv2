@@ -44,8 +44,8 @@ import Loading from '#components/Loading';
 import HazardsLegend from '#components/HazardsLegend';
 
 import Map from './Map';
-
 import { getSanitizedIncidents } from '#views/LossAndDamage/common';
+import styles from './styles.scss';
 
 const emptyHoverAttributeList: {
     id: number;
@@ -162,6 +162,23 @@ interface LegendItem {
 }
 
 
+const labelSelector = (d: LegendItem) => d.label;
+
+const keySelector = (d: LegendItem) => d.label;
+
+const classNameSelector = (d: LegendItem) => d.style;
+
+const colorSelector = (d: LegendItem) => d.color;
+
+const radiusSelector = (d: LegendItem) => d.radius;
+
+const incidentPointSizeData: LegendItem[] = [
+    { label: 'Minor (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+];
+
 class Incidents extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
@@ -201,6 +218,7 @@ class Incidents extends React.PureComponent<Props, State> {
         }];
     }
 
+
     public render() {
         const {
             incidentList,
@@ -211,6 +229,7 @@ class Incidents extends React.PureComponent<Props, State> {
             regions,
             hazardTypes,
             filters,
+            incidentPoints,
         } = this.props;
 
         const { hoveredIncidentId } = this.state;
@@ -220,11 +239,7 @@ class Incidents extends React.PureComponent<Props, State> {
             regions,
             hazardTypes,
         );
-        console.log('sanitizedIncidentList', sanitizedIncidentList);
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
-
-        const filteredHazardTypes = this.getIncidentHazardTypesList(sanitizedIncidentList);
-
         const pending = pendingEvents || pendingIncidents;
 
         return (
@@ -236,6 +251,7 @@ class Incidents extends React.PureComponent<Props, State> {
                     onIncidentHover={this.handleIncidentHover}
                     mapHoverAttributes={mapHoverAttributes}
                     isHovered={!!hoveredIncidentId}
+                    incidentPoints={incidentPoints}
                 />
             </div>
         );
