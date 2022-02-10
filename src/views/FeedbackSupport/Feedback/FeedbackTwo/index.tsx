@@ -6,8 +6,7 @@ import { navigate } from '@reach/router';
 import Page from '#components/Page';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
-import Calender from '../../calender.svg';
-import Clock from '../../clock.svg';
+
 
 const FeedbackTwo = () => {
     const [data, setdata] = useState({ feedback: '', date: '', time: '' });

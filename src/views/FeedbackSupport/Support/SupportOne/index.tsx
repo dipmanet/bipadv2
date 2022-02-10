@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable @typescript-eslint/indent */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'src/vendor/react-store/v2/Action/Button';
 import { navigate } from '@reach/router';
 import Page from '#components/Page';
@@ -14,9 +15,18 @@ const SupportOne = () => {
   const [data, setdata] = useState({
     fullName: '',
     designation: '',
-    institutionName: '',
+    nameOfTheInstitution: '',
     email: '',
+    isAnonymous: false,
+    feedback: '',
+    screenshot: '',
   });
+
+
+  useEffect(() => {
+    setdata({ ...data, isAnonymous: checked });
+  }, [checked]);
+
 
   const formHandler = (e: any) => {
     setdata({
@@ -24,7 +34,7 @@ const SupportOne = () => {
       [e.target.name]: e.target.value,
     });
   };
-
+  console.log('values', data);
   return (
     <>
       <Page
@@ -90,10 +100,10 @@ const SupportOne = () => {
                   <div className={styles.input}>
                     <input
                       type="text"
-                      name="institutionName"
+                      name="nameOfTheInstitution"
                       className={styles.insname}
                       placeholder="Name of the Institution"
-                      value={data.institutionName}
+                      value={data.nameOfTheInstitution}
                       onChange={formHandler}
                     />
                   </div>
@@ -134,8 +144,8 @@ const SupportOne = () => {
               <div className={styles.next_button}>
                 <Button
                   className={styles.next_btn}
-                  disabled={!checked}
-                  onClick={() => navigate('/support-2/')}
+                  disabled={!data.isAnonymous}
+                  onClick={() => navigate('/support-2/', { state: { data } })}
                 >
                   next
                 </Button>

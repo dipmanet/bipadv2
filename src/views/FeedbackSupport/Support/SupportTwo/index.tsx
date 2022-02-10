@@ -1,26 +1,92 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable react/jsx-indent */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'src/vendor/react-store/v2/Action/Button';
 import { navigate } from '@reach/router';
+import { connect } from 'react-redux';
 import Page from '#components/Page';
 import styles from './styles.scss';
 import Icon from '#rscg/Icon';
+import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 
-const SupportTwo = () => {
-  const [feedback, setfeedback] = useState('');
-  const [file, setfile] = useState({ screenshot: '' });
+
+const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> } = {
+  TechnicalSupportPostRequest: {
+    url: '/technical-support/',
+    method: methods.POST,
+    body: ({ params }) => params && params.body,
+    onSuccess: ({ response, params }) => {
+      console.log('This is response', response.results);
+      if (params && params.receivedResponse) {
+        params.receivedResponse(response.results);
+      }
+    },
+    onFailure: ({ error, params }) => {
+      if (params && params.receivedResponse) {
+        params.receivedResponse(error);
+      }
+      if (params && params.setFaramErrors) {
+        // TODO: handle error
+        console.warn('failure', error);
+        params.setFaramErrors({
+          $internal: ['Some problem occurred'],
+        });
+      }
+    },
+    onFatal: ({ params }) => {
+      if (params && params.setFaramErrors) {
+        params.setFaramErrors({
+          $internal: ['Some problem occurred'],
+        });
+      }
+    },
+    extras: { hasFile: true },
+  },
+};
+
+
+const SupportTwo = (props) => {
   const [checked, setChecked] = useState(false);
+  const [finalData, setFinalData] = useState({});
+  const [screenShotImage, setScreenShotImage] = useState();
+  const [message, setMessage] = useState('');
+
+  const { location: { state: { data } }, requests: { TechnicalSupportPostRequest } } = props;
 
   const fileHandler = (e: any) => {
-    const screenshot = e.target.files;
-    const reader = new FileReader();
-    reader.readAsDataURL(screenshot[0]);
-    reader.onload = (event: any) => setfile({ screenshot: event.target.result });
+    setScreenShotImage(e.target.files[0]);
+  };
+
+
+  useEffect(() => {
+    if (screenShotImage) {
+      setFinalData({ ...finalData, screenshot: screenShotImage });
+    }
+  }, [screenShotImage]);
+
+
+  useEffect(() => {
+    setFinalData(data);
+  }, [data]);
+  console.log('This is location', data);
+  console.log('final data', finalData);
+
+  const receivedSuccessFulOrErrorMessage = (messageFromBackend) => {
+    setMessage(messageFromBackend);
+  };
+
+
+  const handleSubmit = () => {
+    TechnicalSupportPostRequest.do({
+      body: finalData,
+      receivedResponse: receivedSuccessFulOrErrorMessage,
+
+    });
   };
 
 
@@ -69,8 +135,8 @@ const SupportTwo = () => {
                       name="feedback"
                       placeholder="Please Specify.."
                       className={styles.input_comment}
-                      value={feedback}
-                      onChange={(e => setfeedback(e.target.value))}
+                      value={finalData ? finalData.feedback : ''}
+                      onChange={(e => setFinalData({ ...finalData, feedback: e.target.value }))}
                     />
                   </div>
                 </div>
@@ -82,11 +148,13 @@ const SupportTwo = () => {
                   <div className={styles.screenshot_container}>
                     <div className={styles.choose_button}>
                       <input
-                        type="file"
                         name="screenshot"
+                        type="file"
+                        placeholder="Photo "
                         className={styles.choose_btn}
                         onChange={e => fileHandler(e)}
                       />
+
                     </div>
                   </div>
                 </div>
@@ -124,9 +192,7 @@ const SupportTwo = () => {
                 <Button
                   className={styles.submit_btn}
                   disabled={!checked}
-                  onClick={() => {
-                    console.log(feedback, file);
-                  }}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>
@@ -139,4 +205,11 @@ const SupportTwo = () => {
   );
 };
 
-export default SupportTwo;
+
+export default connect()(
+  createConnectedRequestCoordinator()(
+    createRequestClient(requestOptions)(
+      SupportTwo,
+    ),
+  ),
+);
