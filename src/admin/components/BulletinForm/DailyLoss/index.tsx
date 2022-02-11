@@ -6,7 +6,13 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import { hazardTypesSelector } from '#selectors';
+import { _cs } from '@togglecorp/fujs';
+import {
+    hazardTypesSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+} from '#selectors';
 
 
 import {
@@ -17,9 +23,13 @@ import {
     nepaliRef,
 } from '../formFields';
 import styles from './styles.scss';
+import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
 });
 
 interface Props {
@@ -44,11 +54,57 @@ const Bulletin = (props: Props) => {
         handleSitRep,
         handlehazardAdd,
         hazardTypes,
+        provinces,
+        districts,
+        municipalities,
     } = props;
     const [hazard, setHazard] = useState(null);
     const [hazardIncidents, setHazardIncidents] = useState();
     const [hazardDeaths, setHazardDeaths] = useState();
+    const [resetFilterProps, setResetFilterProps] = useState(false);
+    const [filtered, setFiltered] = useState(false);
 
+    const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
+        if (adminLevel === 1) {
+            return provinces.find(p => p.id === geoarea);
+        }
+
+        if (adminLevel === 2) {
+            return districts.find(p => p.id === geoarea);
+        }
+
+        if (adminLevel === 3) {
+            return municipalities.find(p => p.id === geoarea);
+        }
+
+        return '';
+    };
+
+
+    const handleFormRegion = (region, field, subfield) => {
+        if (region) {
+            const { coordinates } = getRegionDetails(region).centroid;
+            handlehazardwiseLoss(coordinates, field, 'coordinates');
+        } else {
+            handlehazardwiseLoss([0, 0], field, 'coordinates');
+        }
+    };
+
+    const handleCheckFilterDisableButtonForProvince = (province) => {
+        if (province) {
+            setFiltered(false);
+        }
+    };
+    const handleCheckFilterDisableButtonForDistrict = (district) => {
+        if (district) {
+            setFiltered(false);
+        }
+    };
+    const handleCheckFilterDisableButtonForMunicipality = (municipality) => {
+        if (municipality) {
+            setFiltered(false);
+        }
+    };
 
     const handleHazardAddItem = () => {
         if (hazard) {
@@ -144,26 +200,49 @@ const Bulletin = (props: Props) => {
                     { Object.keys(hazardWiseLossData).map(field => (
                         <>
                             <h3>{field}</h3>
-                            { Object.keys(hazardWiseLossData[field]).map(subField => (
-                                <div className={styles.formItemHalf}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>
-                                            {nepaliRef[subField]}
-                                        </InputLabel>
-                                        <Input
-                                            type="number"
-                                            className={styles.select}
-                                            value={hazardWiseLossData[field][subField]}
-                                            onChange={e => handlehazardwiseLoss(e.target.value, field, subField)}
-                                            disableUnderline
-                                            inputProps={{
-                                                disableUnderline: true,
-                                            }}
-                                            style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                            { Object.keys(hazardWiseLossData[field]).map((subField) => {
+                                if (subField !== 'coordinates') {
+                                    return (
+                                        <div className={styles.formItemHalf}>
+                                            <FormControl fullWidth>
+                                                <InputLabel>
+                                                    {nepaliRef[subField]}
+                                                </InputLabel>
+                                                <Input
+                                                    type="number"
+                                                    className={styles.select}
+                                                    value={hazardWiseLossData[field][subField]}
+                                                    onChange={e => handlehazardwiseLoss(e.target.value, field, subField)}
+                                                    disableUnderline
+                                                    inputProps={{
+                                                        disableUnderline: true,
+                                                    }}
+                                                    style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                                                />
+                                            </FormControl>
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <div className={styles.inputContainer}>
+                                        <StepwiseRegionSelectInput
+                                            className={
+                                                _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                            faramElementName="region"
+                                            wardsHidden
+                                            onChange={region => handleFormRegion(region, field, subField)}
+                                            checkProvince={handleCheckFilterDisableButtonForProvince}
+                                            checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                            checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                            reset={resetFilterProps}
+                                            provinceInputClassName={styles.snprovinceinput}
+                                            districtInputClassName={styles.sndistinput}
+                                            municipalityInputClassName={styles.snmuniinput}
                                         />
-                                    </FormControl>
-                                </div>
-                            ))
+                                    </div>
+
+                                );
+                            })
                             }
                         </>
                     ))}

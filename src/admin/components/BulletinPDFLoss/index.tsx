@@ -85,6 +85,23 @@ const BulletinPDF = (props: Props) => {
                     .filter(k => hazardTypes[k].titleNe === hazardName);
                 return hazardTypes[h[0]].color;
             };
+
+            const getSeverity = (deaths) => {
+                if (deaths) {
+                    if (deaths === 0) {
+                        return 8;
+                    }
+                    if (deaths < 10) {
+                        return 11;
+                    } if (deaths >= 10 && deaths < 100) {
+                        return 15;
+                    } if (deaths >= 100) {
+                        return 20;
+                    }
+                }
+                return 8;
+            };
+
             const obj = Object.keys(hazardWiseLoss).map(hazardName => (
                 {
                     title: hazardName,
@@ -99,10 +116,10 @@ const BulletinPDF = (props: Props) => {
                     // setHazardGeoJson([...newHazardGeoJson,
                     features.push({
                         type: 'Feature',
-                        geometry: { type: 'Point', coordinates: [hazardWiseLoss[h].longitude, hazardWiseLoss[h].latitude] },
+                        geometry: { type: 'Point', coordinates: hazardWiseLoss[h].coordinates },
                         properties: {
                             hazardColor: getHazardColor(h),
-                            severity: 'Minor',
+                            severityScale: getSeverity(hazardWiseLoss[h].deaths),
                         },
                     // }]);
                     });
