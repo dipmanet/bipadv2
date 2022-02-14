@@ -456,22 +456,28 @@ class SlideFivePane extends React.PureComponent<Props, State> {
 
                                             <p>
                                  Economic Factors
-                                                <ul>
-                                                    <li>
-                                             Main source of income:
+                                            </p>
+
+                                            <table className={styles.singularPaneTable}>
+                                                <tr>
+                                                    <td> Main source of income:</td>
+                                                    <td>
+                                                        {' '}
                                                         {' '}
                                                         {(singularBuldingData && singularBuldingData.majorOccupation) || '-'}
                                                         {' '}
-                                                    </li>
-                                                    <li>
-                                         Average yearly income (NPR):
-                                                        {' '}
-                                                        {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
-                                                        {' '}
-                                                    </li>
 
-                                                </ul>
-                                            </p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>  Average yearly income (NPR):</td>
+                                                    {' '}
+                                                    {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
+                                                    {' '}
+                                                </tr>
+
+                                            </table>
+
                                             <div className={styles.backBtnContainer}>
                                                 <button
                                                     onClick={this.handleBackBtn}
