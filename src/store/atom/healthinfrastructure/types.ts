@@ -28,12 +28,8 @@ export interface HealthInfrastructurePage {
     formDataEditPending: boolean;
     formDataEditError: {'message': ''};
     formDataEditSuccess: boolean;
-    healthOverviewTableLoading: boolean;
     healthOverviewTableData: {};
-    healthOverviewTableError: {'message': ''};
-    healthOverviewChartLoading: boolean;
     healthOverviewChartData: {};
-    healthOverviewChartError: {'message': ''};
     healthFormLoader: boolean;
     healthUploadLoading: boolean;
     healthError: boolean;

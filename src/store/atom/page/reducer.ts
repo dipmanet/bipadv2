@@ -1329,6 +1329,7 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         epidemicTotalData,
         epidemicTotalError,
         incidentCount,
+        uploadData,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -1424,6 +1425,9 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
         }
         if (incidentCount) {
             deferedState.epidemicsPage.incidentCount = incidentCount;
+        }
+        if (uploadData) {
+            deferedState.epidemicsPage.uploadData = uploadData;
         }
     });
     return newState;

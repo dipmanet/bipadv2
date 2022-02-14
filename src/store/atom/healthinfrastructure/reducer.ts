@@ -21,6 +21,8 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         inventoryData,
         healthTableData,
         healthDataCount,
+        healthOverviewTableData,
+        healthOverviewChartData,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -44,8 +46,15 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         }
         if (healthTableData) {
             deferedState.healthInfrastructurePage.healthTableData = healthTableData;
-        } if (healthDataCount) {
+        }
+        if (healthDataCount) {
             deferedState.healthInfrastructurePage.healthDataCount = healthDataCount;
+        }
+        if (healthOverviewTableData) {
+            deferedState.healthInfrastructurePage.healthOverviewTableData = healthOverviewTableData;
+        }
+        if (healthOverviewChartData) {
+            deferedState.healthInfrastructurePage.healthOverviewChartData = healthOverviewChartData;
         }
     });
     return newState;

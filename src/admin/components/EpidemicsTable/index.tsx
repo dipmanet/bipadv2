@@ -202,7 +202,6 @@ interface EnhancedTableToolbarProps {
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData } = props;
-    // const navigate = useNavigate();
 
     // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
 
@@ -288,7 +287,6 @@ const EpidemmicTable = (props) => {
                     totalInjuredFemale: row.loss && row.loss.peopleInjuredFemaleCount,
                     totalInjuredOther: row.loss && row.loss.peopleInjuredOtherCount,
                     totalInjuredDisabled: row.loss && row.loss.peopleInjuredDisabledCount,
-
 
                     totalDeadMale: row.loss && row.loss.peopleDeathMaleCount,
                     totalDeadFemale: row.loss && row.loss.peopleDeathFemaleCount,
@@ -631,8 +629,6 @@ const EpidemmicTable = (props) => {
         </>
     );
 };
-
-// export default EpidemmicTable;
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(

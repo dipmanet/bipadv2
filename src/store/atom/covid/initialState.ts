@@ -6,6 +6,12 @@ const state: CovidState = {
         covidIndivisualCount: 0,
         covidGroupData: [],
         covidGroupCount: 0,
+        dailyCovidData: [],
+        weeklyCovidData: [],
+        monthlyCovidData: [],
+        yearlyCovidData: [],
+        tableCovidData: [],
+        covidRegionWiseData: [],
     },
 };
 export default state;

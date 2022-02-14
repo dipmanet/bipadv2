@@ -82,12 +82,19 @@ const MenuCommon = (props: Props) => {
                     currentPageSlug.current = menuSlug.split('/')[1];
                 }
                 const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
+                console.log('test', childMenu);
                 if (childMenu) {
                     const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
                     console.log('childM', childM);
-                    const activeIndex = childM.map(cM => cM.slug).indexOf(currentPageSlug.current);
-                    setActive(activeIndex);
-                    setMenu(childM);
+                    if (childM) {
+                        // eslint-disable-next-line max-len
+                        const activeIndex = childM.map(cM => cM.slug).indexOf(currentPageSlug.current);
+                        setActive(activeIndex);
+                        setMenu(childM);
+                    } else {
+                        setActive(0);
+                        setMenu([childMenu]);
+                    }
                 }
             } else {
                 setMenu(AllMenu);
@@ -98,7 +105,7 @@ const MenuCommon = (props: Props) => {
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {
-                Menu && Menu.filter(item => item.isEnabled && item.isPublic)
+                Menu && Menu.filter(item => item.isEnabled)
                     .map((menuItem: MenuItem, i: number) => (
                         <div
                             key={menuItem.id}

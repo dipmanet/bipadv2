@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 // import { getHealthOverviewTable ,getHealthOverviewChart } from '../../../Redux/actions';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import {
@@ -15,77 +16,114 @@ import {
 } from 'recharts';
 import { navigate } from '@reach/router';
 import styles from './styles.module.scss';
-import { tableHeadRef } from './utils';
+import tableHeadRef from './utils';
 
-const HealthOverview = () => {
+import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import {
+    healthInfrastructurePageSelector,
+    userSelector,
+} from '#selectors';
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+    userDataMain: userSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    resourceTable: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: false,
+        query: () => ({
+            format: 'json',
+            summary: 'true',
+            summary_type: 'heoc_admin_overview_health_infrastructure_table',
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                healthOverviewTableData: response.results,
+            });
+        },
+    },
+    resourceChart: {
+        url: '/resource/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            summary: 'true',
+            summary_type: 'heoc_admin_overview_health_infrastructure_graph',
+            province: params.province,
+            municipality: params.municipality,
+            district: params.district,
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                healthOverviewChartData: response.results,
+            });
+        },
+    },
+};
+
+
+const HealthOverview = (props) => {
     const [healthFacilityChart, sethealthFacilityChart] = useState([]);
     const [emergencyService, setEmergencyService] = useState([]);
     const [tableHead, setTableHead] = useState([]);
-    // const {
-    // healthOverviewTableLoading,
-    // healthOverviewTableData,
-    // healthOverviewTableError,
-    // healthOverviewChartLoading,
-    // healthOverviewChartData,
-    // healthOverviewChartError,
-    // } = useSelector((state) => state.health);
+    const {
+        healthInfrastructurePage: {
+            healthOverviewTableData,
+            healthOverviewChartData,
+        },
+        userDataMain,
+    } = props;
 
-    // const {
-    // userDataMain
-    // } = useSelector((state) => state.user);
+    useEffect(() => {
+        props.requests.resourceTable.do();
+        props.requests.resourceChart.do({
+            province: userDataMain.profile.province,
+            district: userDataMain.profile.district,
+            municipality: userDataMain.profile.municipality,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-
-    // useEffect(() => {
-    //     const region = {};
-    //     if (userDataMain && userDataMain.profile && Object.keys(userDataMain).length > 0) {
-    //         console.log('user data main', userDataMain);
-    //         if (userDataMain.profile.municipality) {
-    //             region.municipality = userDataMain.profile.municipality;
-    //         }
-    //         if (userDataMain.profile.district) {
-    //             region.district = userDataMain.profile.district;
-    //         }
-    //         if (userDataMain.profile.province) {
-    //             region.province = userDataMain.profile.province;
-    //         }
-    //     }
-    //     dispatch(getHealthOverviewTable(region));
-    //     dispatch(getHealthOverviewChart(region));
-    // }, []);
-
-    // useEffect(() => {
-    //     if (Object.keys(healthOverviewChartData).length > 0) {
-    //         const fcD = [
-    //             {
-    //                 name: 'New Health Facilities',
-    //                 Total: healthOverviewChartData.healthFacility.new,
-    //             },
-    //             {
-    //                 name: 'Total Health Facilities',
-    //                 Total: healthOverviewChartData.healthFacility.total,
-    //             },
-    //         ];
-    //         const ecD = [
-    //             {
-    //                 name: 'New Emergency Services',
-    //                 Total: healthOverviewChartData.emergencyService.new,
-    //             },
-    //             {
-    //                 name: 'Total Emergency Services',
-    //                 Total: healthOverviewChartData.emergencyService.total,
-    //             },
-    //         ];
-    //         console.log('facility', fcD);
-    //         console.log('emergency', ecD);
-    //         sethealthFacilityChart(fcD);
-    //         setEmergencyService(ecD);
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (healthOverviewChartData && Object.keys(healthOverviewChartData).length > 0) {
+            const fcD = [
+                {
+                    name: 'New Health Facilities',
+                    Total: healthOverviewChartData.healthFacility.new,
+                },
+                {
+                    name: 'Total Health Facilities',
+                    Total: healthOverviewChartData.healthFacility.total,
+                },
+            ];
+            const ecD = [
+                {
+                    name: 'New Emergency Services',
+                    Total: healthOverviewChartData.emergencyService.new,
+                },
+                {
+                    name: 'Total Emergency Services',
+                    Total: healthOverviewChartData.emergencyService.total,
+                },
+            ];
+            sethealthFacilityChart(fcD);
+            setEmergencyService(ecD);
+        }
+    }, [healthOverviewChartData]);
 
     const handleTableButton = () => {
-        navigate('/health-table');
+        navigate('/admin/health-infrastructure/health-infrastructure-data-table');
     };
-    // const scale = scaleLog().base(Math.E);
+
     return (
         <>
             <h2 className={styles.mainHeading}>Health Infrastructure Data Visualization</h2>
@@ -171,23 +209,27 @@ const HealthOverview = () => {
                                         <TableCell align="center">Total Bed Capacity</TableCell>
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
-                                    {/* {Object.keys(healthOverviewTableData).map((tD, i) => (
-                                        <TableRow key={tD} className={styles.row}>
-                                            <TableCell className={styles.cell}>
-                                                {tableHeadRef[Object.keys(healthOverviewTableData)[i]]}
-                                            </TableCell>
-                                            {
-                                                Object.keys(healthOverviewTableData[tD]).map(tC => (
-                                                    <TableCell key={tC} className={styles.cell} align="center">
-                                                        {typeof healthOverviewTableData[tD][tC] === 'number' ? healthOverviewTableData[tD][tC] : '-'}
-                                                    </TableCell>
-                                                ))
+                                { healthOverviewTableData && Object.keys(healthOverviewTableData).length > 0
+                                && (
+                                    <TableBody>
+                                        {Object.keys(healthOverviewTableData).map((tD, i) => (
+                                            <TableRow key={tD} className={styles.row}>
+                                                <TableCell className={styles.cell}>
+                                                    {tableHeadRef[Object.keys(healthOverviewTableData)[i]]}
+                                                </TableCell>
+                                                {
+                                                    Object.keys(healthOverviewTableData[tD]).map(tC => (
+                                                        <TableCell key={tC} className={styles.cell} align="center">
+                                                            {typeof healthOverviewTableData[tD][tC] === 'number' ? healthOverviewTableData[tD][tC] : '-'}
+                                                        </TableCell>
+                                                    ))
 
-                                            }
-                                        </TableRow>
-                                    ))} */}
-                                </TableBody>
+                                                }
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                )
+                                }
                             </Table>
                         </TableContainer>
                     </div>
@@ -198,4 +240,10 @@ const HealthOverview = () => {
     );
 };
 
-export default HealthOverview;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            HealthOverview,
+        ),
+    ),
+);

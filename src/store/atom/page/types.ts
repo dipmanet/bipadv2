@@ -606,6 +606,7 @@ export interface EpidemicPage {
     epidemicTotalData: [];
     epidemicTotalError: object;
     incidentCount: number;
+    uploadData: [];
 }
 
 export interface PageState {

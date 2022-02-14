@@ -17,6 +17,12 @@ const setCovidPage = (state: Type.CovidState, action: Type.SetCovidPage) => {
         covidIndivisualCount,
         covidGroupData,
         covidGroupCount,
+        dailyCovidData,
+        weeklyCovidData,
+        monthlyCovidData,
+        yearlyCovidData,
+        tableCovidData,
+        covidRegionWiseData,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -31,6 +37,24 @@ const setCovidPage = (state: Type.CovidState, action: Type.SetCovidPage) => {
         }
         if (covidGroupCount) {
             deferedState.covidPage.covidGroupCount = covidGroupCount;
+        }
+        if (dailyCovidData) {
+            deferedState.covidPage.dailyCovidData = dailyCovidData;
+        }
+        if (weeklyCovidData) {
+            deferedState.covidPage.weeklyCovidData = weeklyCovidData;
+        }
+        if (monthlyCovidData) {
+            deferedState.covidPage.monthlyCovidData = monthlyCovidData;
+        }
+        if (yearlyCovidData) {
+            deferedState.covidPage.yearlyCovidData = yearlyCovidData;
+        }
+        if (tableCovidData) {
+            deferedState.covidPage.tableCovidData = tableCovidData;
+        }
+        if (covidRegionWiseData) {
+            deferedState.covidPage.covidRegionWiseData = covidRegionWiseData;
         }
     });
     return newState;

@@ -14,6 +14,12 @@ export interface CovidPage {
     covidIndivisualCount: number;
     covidGroupData: [];
     covidGroupCount: number;
+    dailyCovidData: [];
+    weeklyCovidData: [];
+    monthlyCovidData: [];
+    yearlyCovidData: [];
+    tableCovidData: [];
+    covidRegionWiseData: [];
 }
 
 export interface CovidState {

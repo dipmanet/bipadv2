@@ -370,6 +370,7 @@ const state: PageState = {
         epidemicTotalData: [],
         epidemicTotalError: {},
         incidentCount: null,
+        uploadData: [],
     },
 };
 export default state;
