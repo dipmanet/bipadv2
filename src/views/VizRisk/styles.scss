@@ -42,20 +42,18 @@
     
     .navBtnsContainer{
         display: flex;
-        position: absolute;
+        position: relative;
         // height: 5px;
-        top: 10px;
-        right: 0px;
+        // top: 10px;
+        // right: 0px;
         justify-content: space-between;
-        align-items: center;
+        // align-items: center;
         // background-color: transparent;
-        // border: 1px solid red;
         z-index: 202;
         width: 100%;
-	
 
         .nextPrevBtnContainer{
-            position: absolute;
+            position: relative;
             right: 80px;
             top: 20px;
             width: 50px;
@@ -72,21 +70,22 @@
             }
         }
         .hamburgerBtnContainer{
-            position: fixed;
-            // width: 100%;
-            // display: flex;
-            // justify-content: flex-end;   
-            // right: 95%;        
-			left: 18px;
-            top: 41px; 
+            position: absolute;
+            display: flex;
+            justify-content: flex-start;   
+            background-color:rgb(12,36,50);
+
+            // right: 50%;        
+			left: 20px;
+            // bottom: 0px !important;
+            top: 0px !important;
+
+            width: calc(30% - 80px);
             .hamburgerBtn{
                 color: white;
                 display: flex;
-               align-items: center;
-            //    border: 1px solid red;
-            padding: 0;
-
-               filter:saturate(100%);
+                align-items: center;
+                filter:saturate(100%);
                 .hamburgerBtnIcon{
                 font-size: 30px;  
                 color: rgb(175, 220, 241);
@@ -106,15 +105,12 @@
             width: 100%;
             display: flex;
             justify-content: flex-end;   
-                 
             top: 10px; 
             .hamburgerBtn{
                 color: white;
                 display: flex;
                align-items: center;
-            //    border: 1px solid red;
-            padding: 0;
-
+                padding: 0;
                filter:saturate(100%);
                 .hamburgerBtnIcon{
                 font-size: 30px;  

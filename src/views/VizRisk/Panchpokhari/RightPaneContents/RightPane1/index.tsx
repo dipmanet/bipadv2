@@ -43,6 +43,17 @@ class Rajapur extends React.PureComponent<Props, State> {
         </div>
     )
 
+    public renderLegendRainfall = () => (
+        <div className={styles.climateLegendContainer}>
+            <div className={styles.climatelegend}>
+                <div className={styles.legendMax} />
+                <div className={styles.legendText}>
+                       Rainfall
+                </div>
+            </div>
+        </div>
+    )
+
     public CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
@@ -156,11 +167,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </div>
                     </div>
                 </div>
-                <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
+                <p style={{ fontSize: '16px', marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
                 <div className={styles.climateChart}>
-                    <ResponsiveContainer className={styles.chartContainer} height={300}>
+                    <ResponsiveContainer>
                         <LineChart
-                            margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                            margin={{ top: 0, right: 0, left: 0, bottom: 10 }}
                             data={lineData}
                         >
                             <CartesianGrid
@@ -192,11 +203,11 @@ class Rajapur extends React.PureComponent<Props, State> {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
-                <div className={styles.climateChart}>
-                    <p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
-                    <ResponsiveContainer className={styles.chartContainer} height={300}>
+                <p style={{ fontSize: '16px', marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Rainfall</p>
+                <div className={styles.rainChart}>
+                    <ResponsiveContainer>
                         <LineChart
-                            margin={{ top: 0, right: 10, left: 10, bottom: 10 }}
+                            margin={{ top: 0, right: 0, left: 0, bottom: 10 }}
                             data={rainfallData}
                         >
                             <CartesianGrid

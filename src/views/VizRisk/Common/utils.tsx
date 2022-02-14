@@ -103,11 +103,14 @@ export const popupElement = (buildingData, msg, handleClick, showButton, permiss
         });
     }
     if (permission && showButton) {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add(styles.btnContainer);
         const button = document.createElement('BUTTON');
         button.innerHTML = 'Add/Edit Details';
         button.addEventListener('click', handleClick, false);
         button.classList.add(styles.addButton);
-        content.appendChild(button);
+        buttonContainer.appendChild(button);
+        content.appendChild(buttonContainer);
     }
 
     return content;

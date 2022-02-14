@@ -3,15 +3,13 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    // border: 1px solid gray;
     height: 100%;
 }
 
 .loaderInfo{
     position: fixed;
-top: 50%;
-left: 60%;
-// border: 1px solid red;
+    top: 50%;
+    left: 60%;
     .loader{
         background-color: white;
     }

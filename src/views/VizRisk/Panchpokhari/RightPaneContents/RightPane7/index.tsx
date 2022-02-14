@@ -481,7 +481,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                                     dataKey="name"
                                                                     tick={{ fill: '#94bdcf' }}
                                                                 />
-                                                                <Tooltip />
+                                                                <Tooltip
+                                                                    cursor={{ fill: '#1c333f' }}
+                                                                />
                                                                 <Bar
                                                                     dataKey="Total"
                                                                     fill="rgb(0,219,95)"
@@ -639,7 +641,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -675,7 +679,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -712,7 +718,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -759,7 +767,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -805,7 +815,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"
@@ -850,7 +862,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                     dataKey="name"
                                                     tick={{ fill: '#94bdcf' }}
                                                 />
-                                                <Tooltip />
+                                                <Tooltip
+                                                    cursor={{ fill: '#1c333f' }}
+                                                />
                                                 <Bar
                                                     dataKey="Total"
                                                     fill="rgb(0,219,95)"

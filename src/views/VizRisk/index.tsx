@@ -26,7 +26,8 @@ import { ClientAttributes, createConnectedRequestCoordinator, createRequestClien
 import { incidentListSelectorIP } from '#selectors';
 import { setIncidentListActionIP } from '#actionCreators';
 import Loading from '#components/Loading';
-import ProvinceTwo from './Province2';
+// import ProvinceTwo from './Province2';
+
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     incidentList: incidentListSelectorIP(state),
@@ -240,9 +241,10 @@ const VizRiskMainPage = (props) => {
 
                                                 </div>
                                             </>
-                                        ) : ((munThemeId === 101 && <Butwal municipalityId={municipalityId} togglingBetweenMun={togglingBetweenMun} munThemeId={munThemeId} />)
+                                        ) : (
+                                            (munThemeId === 101 && <Butwal municipalityId={municipalityId} togglingBetweenMun={togglingBetweenMun} munThemeId={munThemeId} />)
 		 || (munThemeId === 109 && <Jugal />)
-		 || (munThemeId === 110 && <Panchpokhari />) || (munThemeId === 300 && <ProvinceTwo />))
+		 || (munThemeId === 110 && <Panchpokhari />))
                                         }
                                     </div>
                                 )
