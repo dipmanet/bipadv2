@@ -423,7 +423,9 @@ class SlideFivePane extends React.Component<Props, State> {
                                                 </tr>
                                                 <tr>
                                                     <td>Ownership of house</td>
-                                                    {(singularBuldingData && singularBuldingData.ownership) || '-'}
+                                                    <td>
+                                                        {(singularBuldingData && singularBuldingData.ownership) || '-'}
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>People with disability</td>
@@ -499,22 +501,28 @@ class SlideFivePane extends React.Component<Props, State> {
 
                                             <p>
                                 Economic Factors
-                                                <ul>
-                                                    <li>
-                                            Main source of income:
+                                            </p>
+
+                                            <table className={styles.singularPaneTable}>
+                                                <tr>
+                                                    <td>Main source of income</td>
+                                                    <td>
                                                         {' '}
                                                         {(singularBuldingData && singularBuldingData.majorOccupation) || '-'}
                                                         {' '}
-                                                    </li>
-                                                    <li>
-                                        Average yearly income (NPR):
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Average yearly income (NPR)</td>
+                                                    <td>
                                                         {' '}
                                                         {(singularBuldingData && singularBuldingData.averageAnnualIncome) || '-'}
                                                         {' '}
-                                                    </li>
+                                                    </td>
+                                                </tr>
+                                            </table>
 
-                                                </ul>
-                                            </p>
                                             <div className={styles.backBtnContainer}>
                                                 <button
                                                     onClick={this.handleBackBtn}
