@@ -1,96 +1,101 @@
 .content{
-    max-height : 350px;
-    width : 300px;
-    position: relative;
-    right: 30px !important;
-    overflow : scroll;
-    padding : 10px 30px 40px 30px;
-    background : #ffffff;
-    display : flex;
-    flex-direction : column;
-    align-items : flex-start;
-  }
+  max-height : 350px;
+  width : 300px;
+  position: relative;
+  right: 30px !important;
+  overflow : scroll;
+  padding : 10px 30px 80px 30px;
+  background : #ffffff;
+  display : flex;
+  flex-direction : column;
+  align-items : flex-start;
+}
 
-  .noDataHeading{
-    @extend .heading;
-    color: #1E88FB !important;
-    background-color: #fff !important;
-    overflow:hidden !important;
-    font-size: 22px !important;
+.noDataHeading{
+  @extend .heading;
+  color: #1E88FB !important;
+  background-color: #fff !important;
+  overflow:hidden !important;
+  font-size: 22px !important;
 
-  }
+}
 
-  .content::-webkit-scrollbar {
-    display: none;
-  }
-  .noDataContent::-webkit-scrollbar {
-    display: none;
-  }
-  .noDataContent{
-    @extend .content;
-    background-color: #fff;
-    display: flex;
-    justify-content: center !important;
-    align-items: center !important;
-    padding : 0 0 20px 0 !important;
-    min-height: 350px;
-  }
-  
-  .listItem{
-    display : flex;
-    justify-content : space-between;
-    padding : 5px 10px;
-    border-bottom : 1px solid #dddddd;
-    width : 100%;
-    align-items : center;
-  
-  }
-  .listItem:nth-child(odd){
-   background: rgb(235, 235, 235);
-  
-  }
-  .listItem:first-child{
-    border-top: 1px solid #ddd;
-  
-  }
-  
-  .heading{
-    background-color:rgb(50,50,50);
-    background-color:rgba(255, 255, 255, 0);
-    width :100%;
-    position:relative;
-    color : #1E88FB;
-    padding : 10px;
-    font-size : 15px;
-    // min-height: 100px;
-    // text-align: center;
-  }
-  
-  .m{
-    text-align : right;
-    padding-left : 10px;
-  }
-  .btnContainer{
-    position: fixed;
-    bottom: 10px;
-    height: 55px;
-    width: 300px;
-    left: -30px;
-    display: flex;
-    align-items: center;
-    background-color: white;
-  }
-  .addButton{
-    width: 90%;
-    border: none;
-    padding: 5px;
-    position: relative;
-    // bottom: 12px;
-    height: 30px;
-    left: 5%;
-    background-color: rgb(92,135,233);
-  cursor: pointer;
-  filter: saturate(100%);
-  border-radius: 4px;
-  color: white;
-  }
+.content::-webkit-scrollbar {
+  display: none;
+}
+.noDataContent::-webkit-scrollbar {
+  display: none;
+}
+.noDataContent{
+  @extend .content;
+  background-color: #fff;
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  padding : 0 0 20px 0 !important;
+  min-height: 350px;
+}
+
+.listItem{
+  display : flex;
+  justify-content : space-between;
+  padding : 5px 10px;
+  border-bottom : 1px solid #dddddd;
+  width : 100%;
+  align-items : center;
+  font-size: 12px;
+}
+.listItem:nth-child(odd){
+ background: rgb(235, 235, 235);
+
+}
+.listItem:first-child{
+  border-top: 1px solid #ddd;
+
+}
+.listItem:last-child{
+  margin-bottom: 20px;
+  border: 1px solid red;
+}
+
+.heading{
+  background-color:rgb(50,50,50);
+  background-color:rgba(255, 255, 255, 0);
+  width :100%;
+  position:relative;
+  color : #1E88FB;
+  padding : 10px;
+  font-size : 15px;
+  // min-height: 100px;
+  // text-align: center;
+}
+
+.m{
+  text-align : right;
+  padding-left : 20px;
+}
+.btnContainer{
+  position: fixed;
+  bottom: 10px;
+  height: 55px;
+  width: 300px;
+  left: -30px;
+  display: flex;
+  // display: none;
+  align-items: center;
+  background-color: white;
+}
+.addButton{
+  width: 90%;
+  border: none;
+  padding: 5px;
+  position: relative;
+  // bottom: 12px;
+  height: 30px;
+  left: 5%;
+  background-color: rgb(92,135,233);
+cursor: pointer;
+filter: saturate(100%);
+border-radius: 4px;
+color: white;
+}
