@@ -1,49 +1,97 @@
-/* eslint-disable no-tabs */
 /* eslint-disable max-len */
+import { useDropzone } from 'react-dropzone';
+import { TextField } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import Dropzone, { useDropzone } from 'react-dropzone';
-import { TextareaAutosize, TextField } from '@mui/material';
 import { isList } from '@togglecorp/fujs';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import DownloadIcon from '@mui/icons-material/Download';
-import styledEngineSc from '@mui/styled-engine-sc';
-import Loader from 'react-loader';
 import axios from 'axios';
-import Footer from 'src/admin/components/Footer';
-import MenuCommon from 'src/admin/components/MenuCommon';
 import Navbar from 'src/admin/components/Navbar';
+import MenuCommon from 'src/admin/components/MenuCommon';
+import Footer from 'src/admin/components/Footer';
+import { useForm, Controller } from 'react-hook-form';
+import Loader from 'react-loader';
 import styles from './styles.module.scss';
 import Ideaicon from '../../resources/ideaicon.svg';
 import UploadIcon from '../../resources/uploadIcon.svg';
-import EyeIcon from '../../resources/eye.svg';
-import EditIcon from '../../resources/editicon.svg';
-import DeleteIcon from '../../resources/deleteicon.svg';
 import Page from '#components/Page';
 
-// import { posthealthBulkData, getUploadData, getNotifications } from '../../Redux/actions';
-// import { RootState } from '../../Redux/store';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { healthInfrastructurePageSelector, userSelector } from '#selectors';
+
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+    userDataMain: userSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    uploadData: {
+        url: '/bulkupload/',
+        method: methods.GET,
+        onMount: false,
+        query: () => ({
+            format: 'json',
+            ordering: '-last_modified_date',
+        }),
+        onSuccess: ({ response, props, params }) => {
+            props.setHealthInfrastructurePage({
+                uploadData: response.results,
+            });
+            params.setLoading(false);
+        },
+    },
+};
+
 
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
 
-const BulkUpload = (props) => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+const HealthBulkUpload = (props) => {
+    const [loading, setLoading] = useState(false);
     const [role, setRole] = useState(null);
-    const [fileNames, setFileNames] = useState([]);
-    const [fileSize, setfileSize] = useState([]);
-    const [formtoggler, setFormtoggler] = useState('Individual Form');
-    const [formValidationError, setFormValidationError] = useState(null);
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-    // const { uploadData, uploadDataLoading, healthError, healthUploadLoading, uploadDataError } = useSelector((state: OurState) => state.health);
-    // const { userDataMain } = useSelector((state: OurState) => state.user);
-    // useEffect(() => {
-    //     if (userDataMain.profile
-    // 		&& userDataMain.profile.role) {
-    //         setRole(userDataMain.profile.role);
-    //     } else if (userDataMain.isSuperuser) {
-    //         setRole('superuser');
-    //     }
-    // }, [userDataMain]);
+    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({ accept: '.xls,.xlsx' });
+    const {
+        healthInfrastructurePage: {
+            uploadData,
+        },
+        userDataMain,
+    } = props;
+
+    const {
+        register,
+        reset,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
+    useEffect(() => {
+        if (userDataMain && userDataMain.profile && userDataMain.profile.role) {
+            setRole(userDataMain.profile.role);
+        } else if (userDataMain && userDataMain.isSuperuser) {
+            setRole('superuser');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useState(() => {
+        props.requests.uploadData.do({ setLoading });
+    }, []);
+
+    const removeAll = () => {
+        acceptedFiles.length = 0;
+        acceptedFiles.splice(0, acceptedFiles.length);
+    };
+
+    const cancelForm = () => {
+        reset({ title: '', description: '' });
+        removeAll();
+    };
     const getDisabled = () => {
         if (!role) {
             return true;
@@ -53,33 +101,6 @@ const BulkUpload = (props) => {
         }
         return false;
     };
-
-    const files = acceptedFiles.map(file => (
-        <li key={file.path}>
-            {file.path}
-            {' '}
--
-            {' '}
-            {file.size}
-            {' '}
-bytes
-        </li>
-    ));
-
-    const handleDrop = (acceptedFile) => {
-        setFileNames(acceptedFile.map(file => file.name));
-        setfileSize(acceptedFile.map(file => file.size));
-    };
-
-
-    const handleChangeForm = (item) => {
-        if (item === 'Individual Form') {
-            setFormtoggler('Individual Form');
-        } else {
-            setFormtoggler('Group Form');
-        }
-    };
-
 
     const isFile = (input: any): input is File => (
         'File' in window && input instanceof File
@@ -121,70 +142,45 @@ bytes
         );
         return formDataNew;
     };
-    const dispatch = useDispatch();
-    const uploadBulkFile = () => {
-        const individulaBulkData = {
-            title,
-            description,
-            dataTemplate: 'Health facility admin',
-            dataType: 'Individual',
-            file: acceptedFiles[0],
-        };
-        // dispatch(posthealthBulkData(getFormData(individulaBulkData)));
-    };
-
-    // React.useEffect(() => {
-    //     dispatch(getUploadData());
-    // }, [dispatch]);
-    // const { loadingCovid19PutBulkData, errorCovid19PutBulkData } = useSelector((state: RootState) => state.covidIndividualBulkData);
-
-
-    const convertToObj = (a, b) => {
-        if (a.length !== b.length || a.length === 0 || b.length === 0) {
-            return null;
+    const uploadBulkFile = (formdata) => {
+        setLoading(true);
+        if (acceptedFiles.length === 0) {
+            console.log('add file before submit');
+            setLoading(false);
+        } else {
+            const individulaBulkData = {
+                title: formdata.title,
+                description: formdata.description,
+                dataTemplate: 'Health facility admin',
+                dataType: 'Group',
+                file: acceptedFiles[0],
+            };
+            if (Object.keys(errors).length === 0 && acceptedFiles[0]) {
+                axios.post(`${baseUrl}/bulkupload/`, getFormData(individulaBulkData))
+                    .then(() => {
+                        props.requests.uploadData.do({ setLoading });
+                        removeAll();
+                        reset();
+                    })
+                    .catch((error) => {
+                        console.log('tesst error', error);
+                    });
+            } else {
+                console.log('Something went wrong');
+            }
         }
-        const obj = {};
-
-        a.forEach((k, i) => { obj[k] = b[i]; });
-        return obj;
     };
-    // useEffect(() => {
-    //     if (uploadData.length > 0) {
-    //         dispatch(getNotifications());
-    //         if (uploadDataError.message) {
-    //             const msgKey = Object.keys(uploadDataError.response.data);
-    //             const msgValues = Object.values(uploadDataError.response.data);
-    //             const result = convertToObj(msgKey, msgValues);
-    //             setFormValidationError(result);
-    //         }
-    //     }
-    //     dispatch(getUploadData());
-    // }, []);
 
-
-    // useEffect(() => {
-    //     if (!healthUploadLoading) {
-    //         if (healthError) {
-    //             const msgKey = Object.keys(healthError.response.data);
-    //             const msgValues = Object.values(healthError.response.data);
-    //             const result = convertToObj(msgKey, msgValues);
-    //             setFormValidationError(result);
-    //         }
-    //     }
-    //     dispatch(getUploadData());
-    // }, [dispatch]);
-
-    if (formValidationError) {
-        console.log('main error', formValidationError);
-    }
     // template download
     const downloadFile = () => {
         axios.get(`${baseUrl}/data_template_file/`)
             .then((file) => {
-                const template = file.data.results.filter(item => item.dataTemplateSlug === 'heoc_admin_health_facility_bulk_upload');
+                const template = file.data.results.filter(item => item.dataTemplateSlug
+                     === 'heoc_admin_health_facility_bulk_upload');
                 window.open(template[0].file);
             });
     };
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -198,22 +194,31 @@ bytes
                         <div className={styles.ideaDescription}>
                             <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                             <p className={styles.shortDescription}>
-						To upload a list of health institution data, kindly download the template sheet, fill the data in the required heading, and upload it below. Do make sure that the data are in excel (.xsls) format and headings provided in the template are unchanged before uploading it. The bulk data uploaded will be processed, and verified by the system before integrating into HEOC and in BIPAD portal and the user will be notified about the status of the bulk upload.
+                                        To upload a list of health institution data, kindly
+                                        download the template sheet, fill the data in the required
+                                        heading, and upload it below. Do make sure that the data are
+                                        in excel (.xsls) format and headings provided in the template
+                                        are unchanged before uploading it. The bulk data uploaded will
+                                        be processed, and verified by the system before integrating
+                                        into HEOC and in BIPAD portal and the user will be notified
+                                        about the status of the bulk upload.
                             </p>
                         </div>
                     </div>
 
-
-                    <button disabled={getDisabled()} type="button" className={styles.downloadTemplate} onClick={downloadFile}>Download the Template</button>
+                    <button
+                        disabled={getDisabled()}
+                        className={styles.downloadTemplate}
+                        onClick={downloadFile}
+                        type="button"
+                    >
+                        Download the Template
+                    </button>
                 </div>
 
                 <div className={styles.secondRowSection}>
                     <div className={styles.uploadImageArea}>
                         <div className={styles.app}>
-                            {
-                                formValidationError
-						&& <p style={{ color: 'red' }}>{formValidationError.file}</p>
-                            }
                             <section className={styles.container}>
                                 <div {...getRootProps({ className: 'dropzone' })}>
                                     <input disabled={getDisabled()} {...getInputProps()} />
@@ -225,110 +230,113 @@ bytes
                             <div>
                                 {
                                     acceptedFiles.length > 0
-								&& <strong>Files:</strong>
+                                        ? (
+                                            <>
+                                                <strong>Files:</strong>
+                                                <aside>
+                                                    {acceptedFiles.map(file => `${file.name} ${file.size}`)}
+                                                </aside>
+                                            </>
+                                        ) : (
+                                            'Add some file'
+                                        )
                                 }
-
-                                <aside>
-                                    <ul>{files}</ul>
-                                </aside>
-                                <ul>
-                                    {fileNames.map(fileName => (
-                                        <li key={fileName}>
-										Filename :
-                                            {' '}
-                                            {fileName}
-                                        </li>
-                                    ))}
-                                    {fileSize.map(fileName => (
-                                        <li key={fileName}>
-                                            {' '}
-										Size :
-                                            {' '}
-                                            {fileName}
-										KB
-                                        </li>
-                                    ))}
-                                </ul>
                             </div>
                         </div>
                     </div>
-                    <div className={styles.formArea}>
-                        {
-                            formValidationError
-						&& <p style={{ color: 'red' }}>{formValidationError.title}</p>
-                        }
-                        <TextField
-                            className={styles.datasetTitle}
-                            fullWidth
-                            id="outlined-basic"
-                            label="Title"
-                            variant="outlined"
-                            value={title}
-                            disabled={getDisabled()}
-                            onChange={e => setTitle(e.target.value)}
-                        />
-                        <TextareaAutosize
-                            className={styles.textArea}
-                            aria-label="empty textarea"
-                            placeholder="Empty"
-                            style={{ height: '180px' }}
-                            value={description}
-                            disabled={getDisabled()}
-                            onChange={e => setDescription(e.target.value)}
-                        />
-                        <div className={styles.buttonSection}>
-                            {/* <input className={styles.uploadButton} type="file" name="" id="" title='h' /> */}
+                    <form className={styles.form}>
+                        <div className={styles.formArea}>
+                            <Controller
+                                name={'title'}
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextField
+                                        className={styles.datasetTitle}
+                                        onChange={onChange}
+                                        value={value}
+                                        label={'Title'}
+                                        placeholder="Title"
+                                        fullWidth
+                                        disabled={getDisabled()}
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        {...register('title', { required: true })}
+                                        error={errors.title}
+                                        helperText={errors.title ? 'This field is required' : null}
+                                    />
+                                )}
+                            />
 
-
-                            {/* <button disabled={healthUploadLoading && getDisabled()} className={healthUploadLoading ? styles.uploadButtonDisabled : styles.uploadButton} onClick={uploadBulkFile} type="submit"> */}
-                            <button className={styles.uploadButton} onClick={uploadBulkFile} type="submit">
-                                {/* {
-                                healthUploadLoading
-                                    ? 'Uploading...'
-                                    : 'Upload File'
-                            } */}
-							Upload File
-                            </button>
-                            <button disabled={getDisabled()} className={styles.cancelButton} type="submit">Cancel</button>
+                            <Controller
+                                name={'description'}
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextField
+                                        className={styles.datasetTitle}
+                                        multiline
+                                        rows="4"
+                                        fullWidth
+                                        label={'Description'}
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        onChange={onChange}
+                                        disabled={getDisabled()}
+                                        placeholder="Description"
+                                        value={value}
+                                        {...register('description', { required: true })}
+                                        error={errors.description}
+                                        helperText={errors.description ? 'This field is required' : null}
+                                    />
+                                )}
+                            />
+                            <div className={styles.buttonSection}>
+                                <button disabled={getDisabled()} onClick={handleSubmit(uploadBulkFile)} className={styles.uploadButton} type="submit">Upload File</button>
+                                <button
+                                    disabled={getDisabled()}
+                                    onClick={cancelForm}
+                                    className={styles.cancelButton}
+                                    type="button"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
+
                 {
-                    // uploadDataLoading ? (
-                    //     <Loader options={{
-                    //         position: 'fixed',
-                    //         top: '48%',
-                    //         right: 0,
-                    //         bottom: 0,
-                    //         left: '48%',
-                    //         background: 'gray',
-                    //         zIndex: 9999,
-                    //     }}
-                    //     />
-                    // )
-                    //     :
-                    (
-                        <div className={styles.thirdRowSection}>
-                            <h1 className={styles.uploadFileDisplay}>Uploaded Files</h1>
-                            <div className={styles.mainTableSection}>
-                                <table className={styles.table}>
-                                    <thead className={styles.head}>
-                                        <tr className={styles.row}>
-                                            <td>S.N</td>
-                                            <td>Title</td>
-                                            <td>Description</td>
-                                            <td>Date Created</td>
-                                            <td>Date Modified</td>
-                                            <td>Status</td>
-                                            <td>Progress</td>
-                                            <td>Download</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/* {
-                                        uploadData
-                                            .filter(f => f.dataTemplate === 'Health facility admin')
-                                            .map((uI, i) => (
+
+                    loading ? (
+                        <Loader options={{
+                            position: 'fixed',
+                            top: '48%',
+                            right: 0,
+                            bottom: 0,
+                            left: '48%',
+                            background: 'gray',
+                            zIndex: 9999,
+                        }}
+                        />
+                    ) : (
+                        uploadData && uploadData.length > 0 && (
+                            <div className={styles.thirdRowSection}>
+                                <h1 className={styles.uploadFileDisplay}>Uploaded Files</h1>
+                                <div className={styles.mainTableSection}>
+                                    <table className={styles.table}>
+                                        <thead className={styles.head}>
+                                            <tr className={styles.row}>
+                                                <td>S.N</td>
+                                                <td>Title</td>
+                                                <td>Description</td>
+                                                <td>Date Created</td>
+                                                <td>Date Modified</td>
+                                                <td>Status</td>
+                                                <td>Progress</td>
+                                                <td>Download</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {uploadData.filter(f => f.dataTemplate === 'Health facility admin').map((uI, i) => (
                                                 <tr className={styles.row} key={uI.id}>
                                                     <td className={styles.cell}>{i + 1}</td>
                                                     <td className={styles.cell}>{uI.title || '-'}</td>
@@ -337,14 +345,17 @@ bytes
                                                     <td className={styles.cell}>{uI.modifiedOn.split('T')[0] || '-'}</td>
                                                     <td className={styles.cell}>{uI.status || '-'}</td>
                                                     <td className={styles.cell}>{uI.progress || '-'}</td>
-                                                    <td className={styles.cell}><a href={uI.file}><DownloadIcon /></a></td>
+                                                    <td className={styles.cell}>
+                                                        <a href={uI.file}><DownloadIcon /></a>
+                                                    </td>
                                                 </tr>
                                             ))
-                                    } */}
-                                    </tbody>
-                                </table>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+                        )
                     )
                 }
             </div>
@@ -353,4 +364,10 @@ bytes
     );
 };
 
-export default BulkUpload;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            HealthBulkUpload,
+        ),
+    ),
+);

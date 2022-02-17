@@ -12,6 +12,8 @@ const state: CovidState = {
         yearlyCovidData: [],
         tableCovidData: [],
         covidRegionWiseData: [],
+        covid19BulkIndividualData: [],
+        covid19BulkGroupData: [],
     },
 };
 export default state;

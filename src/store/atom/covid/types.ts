@@ -20,6 +20,8 @@ export interface CovidPage {
     yearlyCovidData: [];
     tableCovidData: [];
     covidRegionWiseData: [];
+    covid19BulkIndividualData: [];
+    covid19BulkGroupData: [];
 }
 
 export interface CovidState {

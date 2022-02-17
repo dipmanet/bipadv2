@@ -23,6 +23,7 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         healthDataCount,
         healthOverviewTableData,
         healthOverviewChartData,
+        uploadData,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -55,6 +56,9 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         }
         if (healthOverviewChartData) {
             deferedState.healthInfrastructurePage.healthOverviewChartData = healthOverviewChartData;
+        }
+        if (uploadData) {
+            deferedState.healthInfrastructurePage.uploadData = uploadData;
         }
     });
     return newState;

@@ -76,9 +76,9 @@ $theme-color: #3e3e3e;
 		.uploadImageArea{
 			.app{
 				.container{
+					cursor: pointer;
 					.dropzone {
 						img {
-
 							width: 150px;
 						}
 					}
@@ -88,55 +88,61 @@ $theme-color: #3e3e3e;
 				}
 			}
 		}
-		.formArea{
+		.form{
 			display: flex;
 			flex-direction: column;
 			width: 100%;
-			.datasetTitle{
-				width: 100%;
-				margin: 15px;
-				background-color: $inputBackground;
-				border: none;
-				outline: none;
-				border-radius: 3px;
-				// padding: 5px;
-			}
-			.textArea{
-				width: 100%;
-				border: 1px solid rgb(199, 199, 199);
-				margin: 15px;
-				background-color: $inputBackground;
-				outline: none;
-				border-radius: 3px;
-				font-size: 16px;
-				padding: 8px 0px 0px 0px;
-				text-indent: 13px;
-				font-family: $Fira;
-				resize: none;
-			}
-			.buttonSection{
-				margin: 15px;
-				.uploadButton{
-					color: white;
-					background-color: #003572;
+			.formArea{
+				// display: flex;
+				// flex-direction: column;
+				// width: 100%;
+				margin: 30px;
+				.datasetTitle{
+					width: 100%;
+					margin: 20px;
+					// background-color: $inputBackground;
 					border: none;
 					outline: none;
-					font-size: 16px;
-					padding: 10px 25px;
 					border-radius: 3px;
-					font-family: $Fira;
-					cursor: pointer;
+					padding: 5px;
 				}
-				.cancelButton{
-					background-color: transparent;
-					color: #3E3E3E;
-					border: none;
+				.textArea{
+					width: 100%;
+					border: 1px solid rgb(199, 199, 199);
+					margin: 20px;
+					background-color: $inputBackground;
 					outline: none;
-					font-size: 16px;
-					padding: 10px 25px;
 					border-radius: 3px;
+					font-size: 16px;
+					padding: 8px 0px 0px 0px;
+					text-indent: 13px;
 					font-family: $Fira;
-					cursor: pointer;
+					resize: none;
+				}
+				.buttonSection{
+					margin: 15px;
+					.uploadButton{
+						color: white;
+						background-color: #003572;
+						border: none;
+						outline: none;
+						font-size: 16px;
+						padding: 10px 25px;
+						border-radius: 3px;
+						font-family: $Fira;
+						cursor: pointer;
+					}
+					.cancelButton{
+						background-color: transparent;
+						color: #3E3E3E;
+						border: none;
+						outline: none;
+						font-size: 16px;
+						padding: 10px 25px;
+						border-radius: 3px;
+						font-family: $Fira;
+						cursor: pointer;
+					}
 				}
 			}
 		}

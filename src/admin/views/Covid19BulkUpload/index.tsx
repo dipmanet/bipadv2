@@ -1,42 +1,113 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-len */
 import { useDropzone } from 'react-dropzone';
 import { TextareaAutosize, TextField } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { isList } from '@togglecorp/fujs';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Loader from 'react-loader';
 import axios from 'axios';
 import DownloadIcon from '@mui/icons-material/Download';
 import Navbar from 'src/admin/components/Navbar';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
+import { useForm, Controller } from 'react-hook-form';
 import styles from './styles.module.scss';
 import Ideaicon from '../../resources/ideaicon.svg';
 import UploadIcon from '../../resources/uploadIcon.svg';
-import Page from '#components/Page';
 // import { covidPostIndividualBulkData, covidGetIndividualBulkData, covidPostGroupBulkData, covidGetGroupBulkData } from '../../Redux/covidActions/covidActions';
 // import { RootState } from '../../Redux/store';
 
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { SetCovidPageAction } from '#actionCreators';
+import { covidPageSelector, userSelector } from '#selectors';
+import Page from '#components/Page';
+
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    covidPage: covidPageSelector(state),
+    userDataMain: userSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setCovidPage: params => dispatch(SetCovidPageAction(params)),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    uploadIndividualData: {
+        url: '/bulkupload/',
+        method: methods.GET,
+        onMount: false,
+        query: () => ({
+            format: 'json',
+            ordering: '-last_modified_date',
+            data_template: 'Covid individual admin',
+        }),
+        onSuccess: ({ response, props, params }) => {
+            props.setCovidPage({
+                covid19BulkIndividualData: response.results,
+            });
+            params.setLoading(false);
+        },
+    },
+    uploadGroupData: {
+        url: '/bulkupload/',
+        method: methods.GET,
+        onMount: false,
+        query: () => ({
+            format: 'json',
+            ordering: '-last_modified_date',
+            data_template: 'Covid group admin',
+        }),
+        onSuccess: ({ response, props, params }) => {
+            props.setCovidPage({
+                covid19BulkGroupData: response.results,
+            });
+            params.setLoading(false);
+        },
+    },
+};
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
 
-const BulkUpload = (props) => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+const CovidBulkUpload = (props) => {
+    const [loading, setLoading] = useState(false);
     const [role, setRole] = useState(null);
-    const [fileNames, setFileNames] = useState([]);
-    const [fileSize, setfileSize] = useState([]);
     const [formtoggler, setFormtoggler] = useState('Individual Form');
-    const [formValidationError, setFormValidationError] = useState(null);
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-    // const { userDataMain } = useSelector((state: OurState) => state.user);
-    // React.useEffect(() => {
-    //     if (userDataMain.profile
-    // && userDataMain.profile.role) {
-    //         setRole(userDataMain.profile.role);
-    //     } else if (userDataMain.isSuperuser) {
-    //         setRole('superuser');
-    //     }
-    // }, [userDataMain]);
+    const {
+        covidPage: {
+            covid19BulkIndividualData,
+            covid19BulkGroupData,
+        },
+        userDataMain,
+    } = props;
+
+    const {
+        register,
+        reset,
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
+    const removeAll = () => {
+        acceptedFiles.length = 0;
+        acceptedFiles.splice(0, acceptedFiles.length);
+    };
+
+    const cancelForm = () => {
+        reset({ title: '', description: '' });
+        removeAll();
+    };
+
+    useEffect(() => {
+        if (userDataMain && userDataMain.profile && userDataMain.profile.role) {
+            setRole(userDataMain.profile.role);
+        } else if (userDataMain && userDataMain.isSuperuser) {
+            setRole('superuser');
+        }
+    }, [userDataMain]);
+
     const getDisabled = () => {
         if (!role) {
             return true;
@@ -46,23 +117,6 @@ const BulkUpload = (props) => {
         }
         return false;
     };
-    const files = acceptedFiles.map(file => (
-        <li key={file.path}>
-            {file.path}
-            {' '}
--
-            {' '}
-            {file.size}
-            {' '}
-bytes
-        </li>
-    ));
-
-    const handleDrop = (acceptedFile) => {
-        setFileNames(acceptedFile.map(file => file.name));
-        setfileSize(acceptedFile.map(file => file.size));
-    };
-
 
     const handleChangeForm = (item) => {
         if (item === 'Individual Form') {
@@ -113,97 +167,85 @@ bytes
         return formDataNew;
     };
 
-
-    const dispatch = useDispatch();
-    const uploadBulkFile = () => {
-        if (formtoggler === 'Individual Form') {
+    const uploadBulkFile = (formData) => {
+        setLoading(true);
+        if (acceptedFiles.length === 0) {
+            console.log('add file before submit');
+            setLoading(false);
+        } else if (formtoggler === 'Individual Form') {
             const individulaBulkData = {
-                title,
-                description,
+                title: formData.title,
+                description: formData.description,
                 dataTemplate: 'Covid individual admin',
                 dataType: 'Individual',
                 file: acceptedFiles[0],
             };
-            // dispatch(covidPostIndividualBulkData(getFormData(individulaBulkData)));
+            if (Object.keys(errors).length === 0 && acceptedFiles[0]) {
+                axios.post(`${baseUrl}/bulkupload/`, getFormData(individulaBulkData))
+                    .then(() => {
+                        props.requests.uploadIndividualData.do({ setLoading });
+                        removeAll();
+                        reset();
+                    })
+                    .catch((error) => {
+                        console.log('tesst error', error);
+                    });
+            } else {
+                console.log('Something went wrong');
+            }
         } else {
             const groupBulkData = {
-                title,
-                description,
+                title: formData.title,
+                description: formData.description,
                 dataTemplate: 'Covid group admin',
                 dataType: 'Group',
                 file: acceptedFiles[0],
             };
-            // dispatch(covidPostGroupBulkData(getFormData(groupBulkData)));
+            if (Object.keys(errors).length === 0 && acceptedFiles[0]) {
+                axios.post(`${baseUrl}/bulkupload/`, getFormData(groupBulkData))
+                    .then(() => {
+                        props.requests.uploadGroupData.do({ setLoading });
+                        removeAll();
+                        reset();
+                    })
+                    .catch((error) => {
+                        console.log('tesst error', error);
+                    });
+            } else {
+                console.log('Something went wrong');
+            }
         }
-
-        setTitle('');
-        setDescription('');
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (formtoggler === 'Individual Form') {
-            // dispatch(covidGetIndividualBulkData());
+            props.requests.uploadIndividualData.do({ setLoading });
         } else {
-            // dispatch(covidGetGroupBulkData());
+            props.requests.uploadGroupData.do({ setLoading });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formtoggler]);
 
-    // const { loadingCovid19PutBulkData, errorCovid19PutBulkData } = useSelector((state: RootState) => state.covidIndividualBulkData);
-    // const { loadingCovid19IndividualBulkData, covid19BulkIndividualData } = useSelector((state: RootState) => state.getCovidIndividualBulkData);
-    // const { loadingGetCovid19Group, covid19BulkGroupData } = useSelector((state: RootState) => state.covidGetBulkData);
-
-
-    // React.useEffect(() => {
-    //     if (!loadingCovid19PutBulkData) {
-    //         dispatch(covidGetIndividualBulkData());
-    //     }
-    // }, [loadingCovid19PutBulkData]);
-
-    const convertToObj = (a, b) => {
-        if (a.length !== b.length || a.length === 0 || b.length === 0) {
-            return null;
-        }
-        const obj = {};
-
-        a.forEach((k, i) => { obj[k] = b[i]; });
-        return obj;
-    };
-
-
-    // React.useEffect(() => {
-    //     if (!loadingCovid19PutBulkData) {
-    //         if (errorCovid19PutBulkData) {
-    //             const msgKey = Object.keys(errorCovid19PutBulkData.response.data);
-    //             const msgValues = Object.values(errorCovid19PutBulkData.response.data);
-    //             const result = convertToObj(msgKey, msgValues);
-    //             console.log(result);
-    //             setFormValidationError(result);
-    //         }
-    //     }
-    // }, [loadingCovid19PutBulkData]);
-    if (formValidationError) {
-        console.log('main error', formValidationError);
-    }
-
     // template download
-    // const downloadFile = () => {
-    //     axios.get(`${baseUrl}/data_template_file/`)
-    //         .then((file) => {
-    //             let template;
-    //             formtoggler === 'Individual Form'
-    //                 ? template = file.data.results.filter(item => item.dataTemplateSlug === 'heoc_admin_covid19_individual_bulk_upload')
-    //                 : template = file.data.results.filter(item => item.dataTemplateSlug === 'heoc_admin_covid19_group_bulk_upload');
-    //             window.open(template[0].file);
-    //         });
-    // };
+    const downloadFile = () => {
+        axios.get(`${baseUrl}/data_template_file/`)
+            .then((file) => {
+                let template;
+                if (formtoggler === 'Individual Form') {
+                    template = file.data.results.filter(item => item.dataTemplateSlug === 'heoc_admin_covid19_individual_bulk_upload');
+                } else {
+                    template = file.data.results.filter(item => item.dataTemplateSlug === 'heoc_admin_covid19_group_bulk_upload');
+                }
+                window.open(template[0].file);
+            });
+    };
     console.log('accepted files', acceptedFiles);
 
     return (
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon currentPage={'Epidemics'} layout={'common'} />
-
+            <MenuCommon currentPage={'Covid'} layout={'common'} />
             <div className={styles.bulkUploadContainer}>
                 <div className={styles.firstRowSection}>
                     <div className={styles.headTextAres}>
@@ -214,23 +256,22 @@ bytes
                                 formtoggler === 'Individual Form'
                                     ? (
                                         <p className={styles.shortDescription}>
-To upload a list of individual COVID data, kindly download the template sheet,
-fill the data in the required heading, and upload it below.
-Do make sure that the data are in excel (.xsls) format and headings provided
-in the template are unchanged before uploading it. The bulk data uploaded will be processed,
-and verified by the system before integrating into HEOC and the user will be notified
-about the status of the bulk upload.
+                                        To upload a list of individual COVID data, kindly download
+                                        the template sheet, fill the data in the required heading,
+                                        and upload it below. Do make sure that the data are in excel (.xsls)
+                                        format and headings provided in the template are unchanged before uploading
+                                        it. The bulk data uploaded will be processed, and verified by the system
+                                        before integrating into HEOC and the user will be notified about the status
+                                        of the bulk upload.
                                         </p>
                                     )
                                     : (
                                         <p className={styles.shortDescription}>
-                            To upload group COVID data in bulk, kindly download the template sheet,
-                            fill the data in the required heading, and upload it below. Do make sure
-that the data are in excel (.xsls) format and headings provided in the template
-are unchanged before uploading it. The bulk data uploaded will be processed,
-and verified by the system before integrating into HEOC and the user will be notified about the status of the bulk upload.
-
-
+                                        To upload group COVID data in bulk, kindly download the template sheet,
+                                        fill the data in the required heading, and upload it below. Do make sure
+                                        that the data are in excel (.xsls) format and headings provided in the template
+                                        are unchanged before uploading it. The bulk data uploaded will be processed,
+                                        and verified by the system before integrating into HEOC and the user will be notified about the status of the bulk upload.
                                         </p>
                                     )
                             }
@@ -255,23 +296,20 @@ and verified by the system before integrating into HEOC and the user will be not
                     </div>
                     <button
                         className={styles.downloadTemplate}
-                    // onClick={downloadFile}
+                        onClick={downloadFile}
                         disabled={getDisabled()}
                         type="button"
                     >
-Download the Template
+                    Download the Template
                     </button>
                 </div>
 
                 <div className={styles.secondRowSection}>
                     <div className={styles.uploadImageArea}>
-                        <div className="App">
-                            {
-                                formValidationError && <p style={{ color: 'red' }}>{formValidationError.file}</p>
-                            }
-                            <section className="container">
+                        <div className={styles.app}>
+                            <section className={styles.container}>
                                 <div {...getRootProps({ className: 'dropzone' })}>
-                                    <input disabled={getDisabled()} {...getInputProps()} {...handleDrop} />
+                                    <input disabled={getDisabled()} {...getInputProps()} />
                                     <p>Drag drop some files here, or click to select files</p>
                                     <img src={UploadIcon} alt="" width="400px" />
                                 </div>
@@ -279,116 +317,131 @@ Download the Template
 
                             <div>
                                 {
-                                    acceptedFiles.length > 0 && (
-                                        <>
-                                            <strong>Files:</strong>
-                                            <aside>
-                                                {acceptedFiles.map(file => file.name)}
-                                            </aside>
-                                        </>
-                                    )
+                                    acceptedFiles.length > 0
+                                        ? (
+                                            <>
+                                                <strong>Files:</strong>
+                                                <aside>
+                                                    {acceptedFiles.map(file => `${file.name} ${file.size}`)}
+                                                </aside>
+                                            </>
+                                        ) : (
+                                            'Add some file'
+                                        )
                                 }
-                                <ul>
-                                    {fileNames.map(fileName => (
-                                        <li key={fileName}>
-Filename :
-                                            {' '}
-                                            {fileName}
-                                        </li>
-                                    ))}
-                                    { fileSize.map(fileName => (
-                                        <li key={fileName}>
-                                            {' '}
-Size :
-                                            {' '}
-                                            {fileName}
-KB
-                                        </li>
-                                    ))}
-                                </ul>
                             </div>
                         </div>
                     </div>
-                    <div className={styles.formArea}>
-                        {
-                            formValidationError && <p style={{ color: 'red' }}>{formValidationError.title}</p>
-                        }
-                        <TextField
-                            className={styles.datasetTitle}
-                            fullWidth
-                            id="outlined-basic"
-                            label="Title"
-                            variant="outlined"
-                            value={title}
-                            disabled={getDisabled()}
-                            onChange={e => setTitle(e.target.value)}
-                        />
-                        <TextareaAutosize
-                            className={styles.textArea}
-                            aria-label="empty textarea"
-                            placeholder="Empty"
-                            style={{ height: '180px' }}
-                            value={description}
-                            disabled={getDisabled()}
-                            onChange={e => setDescription(e.target.value)}
-                        />
-                        <div className={styles.buttonSection}>
-                            {/* <input className={styles.uploadButton} type="file" name="" id="" title='h' /> */}
-                            {/* <button disabled={loadingCovid19PutBulkData && getDisabled()} className={loadingCovid19PutBulkData ? styles.uploadButtonDisabled : styles.uploadButton} onClick={uploadBulkFile} type="submit"> */}
-                            <button onClick={uploadBulkFile} type="submit">
-                                {/* {
-                                loadingCovid19PutBulkData
-                                    ? 'Uploading...'
-                                    : 'Upload File'
-                            } */}
-Upload File
-                            </button>
-                            <button disabled={getDisabled()} className={styles.cancelButton} type="submit">Cancel</button>
+                    <form className={styles.form}>
+                        <div className={styles.formArea}>
+                            <Controller
+                                name={'title'}
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextField
+                                        className={styles.datasetTitle}
+                                        onChange={onChange}
+                                        value={value}
+                                        label={'Title'}
+                                        placeholder="Title"
+                                        fullWidth
+                                        disabled={getDisabled()}
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        {...register('title', { required: true })}
+                                        error={errors.title}
+                                        helperText={errors.title ? 'This field is required' : null}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name={'description'}
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextField
+                                        className={styles.datasetTitle}
+                                        multiline
+                                        rows="4"
+                                        fullWidth
+                                        label={'Description'}
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        onChange={onChange}
+                                        disabled={getDisabled()}
+                                        placeholder="Description"
+                                        value={value}
+                                        {...register('description', { required: true })}
+                                        error={errors.description}
+                                        helperText={errors.description ? 'This field is required' : null}
+                                    />
+                                )}
+                            />
+                            <div className={styles.buttonSection}>
+                                <button disabled={getDisabled()} onClick={handleSubmit(uploadBulkFile)} className={styles.uploadButton} type="submit">Upload File</button>
+                                <button
+                                    disabled={getDisabled()}
+                                    onClick={cancelForm}
+                                    className={styles.cancelButton}
+                                    type="button"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 {
-
-                    <>
-
-                        <div className={styles.thirdRowSection}>
-                            <h1 className={styles.uploadFileDisplay}>Uploaded Files</h1>
-                            <div className={styles.mainTableSection}>
-                                <table className={styles.table}>
-                                    <thead className={styles.head}>
-                                        <tr className={styles.row}>
-                                            <td>S.N</td>
-                                            <td>Title</td>
-                                            <td>Description</td>
-
-                                            <td>Date Created</td>
-                                            <td>Date Modified</td>
-                                            <td>Status</td>
-                                            <td>Progress</td>
-                                            <td>Download</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {/* { (formtoggler === 'Individual Form' ? covid19BulkIndividualData : covid19BulkGroupData).map((data, i) => (
-                                        <tr className={styles.row} key={data.id}>
-                                            <td className={styles.cell}>{i + 1}</td>
-                                            <td className={styles.cell}>{data.title || '-'}</td>
-                                            <td className={styles.cell}>{data.description || '-'}</td>
-                                            <td className={styles.cell}>{data.createdOn.split('T')[0] || '-'}</td>
-                                            <td className={styles.cell}>{data.modifiedOn.split('T')[0] || '-'}</td>
-                                            <td className={styles.cell}>{data.status || '-'}</td>
-                                            <td className={styles.cell}>{data.progress || '-'}</td>
-                                            <td className={styles.cell}><a href={data.file}><DownloadIcon /></a></td>
-                                        </tr>
-                                    ))} */}
-                                    </tbody>
-                                </table>
+                    loading ? (
+                        <Loader options={{
+                            position: 'fixed',
+                            top: '48%',
+                            right: 0,
+                            bottom: 0,
+                            left: '48%',
+                            background: 'gray',
+                            zIndex: 9999,
+                        }}
+                        />
+                    ) : (
+                        <>
+                            <div className={styles.thirdRowSection}>
+                                <h1 className={styles.uploadFileDisplay}>Uploaded Files</h1>
+                                <div className={styles.mainTableSection}>
+                                    <table className={styles.table}>
+                                        <thead className={styles.head}>
+                                            <tr className={styles.row}>
+                                                <td>S.N</td>
+                                                <td>Title</td>
+                                                <td>Description</td>
+                                                <td>Date Created</td>
+                                                <td>Date Modified</td>
+                                                <td>Status</td>
+                                                <td>Progress</td>
+                                                <td>Download</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            { (formtoggler === 'Individual Form' ? covid19BulkIndividualData : covid19BulkGroupData).map((data, i) => (
+                                                <tr className={styles.row} key={data.id}>
+                                                    <td className={styles.cell}>{i + 1}</td>
+                                                    <td className={styles.cell}>{data.title || '-'}</td>
+                                                    <td className={styles.cell}>{data.description || '-'}</td>
+                                                    <td className={styles.cell}>{data.createdOn.split('T')[0] || '-'}</td>
+                                                    <td className={styles.cell}>{data.modifiedOn.split('T')[0] || '-'}</td>
+                                                    <td className={styles.cell}>{data.status || '-'}</td>
+                                                    <td className={styles.cell}>{data.progress || '-'}</td>
+                                                    <td className={styles.cell}><a href={data.file}><DownloadIcon /></a></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
 
 
-                    </>
-
+                        </>
+                    )
                 }
 
             </div>
@@ -397,4 +450,10 @@ Upload File
     );
 };
 
-export default BulkUpload;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            CovidBulkUpload,
+        ),
+    ),
+);
