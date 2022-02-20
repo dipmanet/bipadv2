@@ -11,9 +11,10 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 }
 .covid19MainFormPage{
 	width: 100%;
+	height: 100vh;
 	display: flex;
 	justify-content: center;
-	background-color: white;
+	background-color: rgb(255, 255, 255);
 	border-radius: 6px;
 	.individualGroupFormToggler{
 		display: flex;
