@@ -8,6 +8,7 @@ import authReducer from './atom/auth/reducer';
 import covidReducer from './atom/covid/reducer';
 import healthInfrastructureReducer from './atom/healthinfrastructure/reducer';
 import notificationReducer from './atom/notification/reducer';
+import adminReducer from './atom/admin/reducer';
 
 const filterPageContent = createFilter(
     'page',
@@ -40,6 +41,7 @@ const rootReducer = persistCombineReducers(
         covid: covidReducer as any,
         healthInfrastructure: healthInfrastructureReducer as any,
         notification: notificationReducer as any,
+        admin: adminReducer as any,
     },
 );
 

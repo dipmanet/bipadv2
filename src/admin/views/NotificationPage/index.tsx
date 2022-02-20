@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FormControl, InputLabel } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,7 +14,6 @@ import IconButton from '@mui/material/IconButton';
 import html2canvas from 'html2canvas';
 import JsPDF from 'jspdf';
 import Card from './Card';
-// import { setNotificationPane, getNotifications } from '../../Redux/actions';
 import styles from './style.module.scss';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
@@ -55,7 +54,7 @@ const NotificationPage = (props) => {
     const [showDetail, setShowDetail] = useState(false);
     const [notiKey, setNotiKey] = useState(null);
     const [detailItem, setDetailItem] = useState({});
-    const dispatch = useDispatch();
+
     const handleFilterChange = (e) => {
         setFilterType(e.target.value);
     };

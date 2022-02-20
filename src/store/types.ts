@@ -4,6 +4,7 @@ import { AuthState } from './atom/auth/types';
 import { CovidState } from './atom/covid/types';
 import { HealthInfrastructureState } from './atom/healthinfrastructure/types';
 import { NotificationState } from './atom/notification/types';
+import { AdminState } from './atom/admin/types';
 
 // eslint-disable-next-line import/prefer-default-export
 export interface AppState {
@@ -13,4 +14,5 @@ export interface AppState {
     covid: CovidState;
     healthInfrastructure: HealthInfrastructureState;
     notification: NotificationState;
+    admin: AdminState;
 }
