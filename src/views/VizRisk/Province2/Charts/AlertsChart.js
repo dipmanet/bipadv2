@@ -15,18 +15,17 @@ import {
     YAxis,
 } from 'recharts';
 import styles from '../LeftPane/styles.scss';
-import { customLableList } from '../Functions';
 
-export default function BuildingChart(props) {
-    const { buildingsChartData, vulnrerability } = props;
+export default function AlertsChart(props) {
+    const { buildingsChartData } = props;
 
 
-    const customToolTip = ({ active, payload, label }) => {
+    const buildingToolTip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <h2>{payload[0].payload.provinceName}</h2>
-                    <p>{`${vulnrerability === 'Human Development Index' ? 'HDI' : 'HPI'}: ${payload[0].payload.value}`}</p>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Count: ${payload[0].payload.count}`}</p>
                 </div>
             );
         }
@@ -38,26 +37,19 @@ export default function BuildingChart(props) {
             <ResponsiveContainer
                 // className={styles.respContainer}
                 width="100%"
-                height={500}
+                height={300}
             >
                 <BarChart
                     width={300}
-                    height={500}
+                    height={300}
                     data={buildingsChartData}
                     layout="vertical"
                     margin={{ left: 15, right: 45, bottom: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
-                    <XAxis
-                        type="number"
-                        tick={{ fill: '#94bdcf' }}
-                        domain={vulnrerability === 'Human Poverty Index' ? [dataMin => Math.floor(dataMin - 10), dataMax => Math.floor(dataMax + 5)]
-                            : [dataMin => parseFloat(dataMin - 0.1).toFixed(2),
-                                dataMax => parseFloat(dataMax + 0.1).toFixed(2)]
-                        }
-                    >
+                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                         <Label
-                            value="HDI/HPI Score"
+                            value="Alert's Count"
                             offset={-10}
                             position="insideBottom"
                             style={{
@@ -69,19 +61,24 @@ export default function BuildingChart(props) {
                     </XAxis>
                     <YAxis
                         type="category"
-                        dataKey="provinceName"
+                        dataKey="name"
                         tick={{ fill: '#94bdcf' }}
                     />
                     {/* <Legend /> */}
-                    <Tooltip cursor={{ fill: '#1c333f' }} content={customToolTip} />
+                    <Tooltip content={buildingToolTip} cursor={{ fill: '#1c333f' }} />
                     <Bar
-                        dataKey="value"
+                        dataKey="count"
                         fill="green"
                         barSize={18}
                         tick={{ fill: '#94bdcf' }}
                         radius={[0, 5, 5, 0]}
                     >
-                        <LabelList dataKey="value" position="right" content={customLableList} />
+                        {' '}
+                        {buildingsChartData.map((entry, index) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                        <LabelList dataKey="count" position="right" />
 
                     </Bar>
                 </BarChart>

@@ -10,7 +10,7 @@ import RiverTooltip from '#views/Dashboard/Map/Tooltips/Alerts/River';
 import FireTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Fire';
 import PollutionTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Pollution';
 
-export const parseStringToNumber = (content) => {
+export const parseStringToNumber = (content: string) => {
     // const changedNumber = parseInt(content, 10);
     const str = content.toString().split('.');
     str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -121,7 +121,7 @@ export function cITooltip({ active, payload, label }) {
         return (
             <div className={styles.customTooltip}>
                 <h2>{payload[0].payload.name}</h2>
-                <p>{`Count: ${payload[0].payload.value}`}</p>
+                <p>{`Value: ${payload[0].payload.value}`}</p>
             </div>
         );
     }
@@ -234,10 +234,25 @@ export function getDescription(props, nonZeroArr, chartData) {
 export const customLableList = (props) => {
     const { x, y, width, value } = props;
     const radius = -12;
+    if (value > 0) {
+        return (
+            <g>
+                <text
+                    x={x + width + 2}
+                    y={y - radius}
+                    fill="white"
+                    textAnchor="right"
+                    dominantBaseline="right"
+                >
+                    {value}
+                </text>
+            </g>
+        );
+    }
     return (
         <g>
             <text
-                x={x + width + 2}
+                x={x + width - 25}
                 y={y - radius}
                 fill="white"
                 textAnchor="right"
@@ -300,7 +315,24 @@ export const currentAverageTemp = (tempInString: string) => {
     if (tempInString) {
         numb = tempInString.match(/\d/g);
         if (tempInString.split('')[0] === '-') {
-            return tempInString;
+            if (numb && numb.length === 2) {
+                const firstNum = parseInt(numb[0], 10);
+                const secondNum = parseInt(numb[1], 10);
+                return -(firstNum + secondNum) / 2;
+            }
+            if (numb && numb.length === 3) {
+                const firstNum = parseInt(numb[0], 10);
+                const secondNum = numb[1];
+                const thirdNum = numb[2];
+                return -(firstNum + parseInt((secondNum + thirdNum), 10)) / 2;
+            }
+            if (numb && numb.length === 4) {
+                const firstNum = numb[0];
+                const secondNum = numb[1];
+                const thirdNum = numb[2];
+                const fourthNum = numb[3];
+                return -(parseInt((firstNum + secondNum), 10) + parseInt((thirdNum + fourthNum), 10)) / 2;
+            }
         }
         if (numb && numb.length === 2) {
             const firstNum = parseInt(numb[0], 10);

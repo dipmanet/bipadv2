@@ -105,7 +105,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     htmlRequest: {
         url: '/keyvalue-html/',
         method: methods.GET,
-        query: ({ params }) => ({ province: 2,
+        query: ({ params }) => ({ province: 6,
             vizrisk_theme__theme_id: 300,
             limit: -1 }),
 
@@ -124,7 +124,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             // eslint-disable-next-line @typescript-eslint/camelcase
-            province: 2,
+            province: 6,
             vizrisk_theme__theme_id: 300,
             limit: -1,
 
@@ -143,7 +143,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/resource/',
         method: methods.GET,
         query: ({ params }) => ({
-            province: 2,
+            province: 6,
             limit: -1,
         }),
         onSuccess: ({ params, response }) => {
@@ -161,7 +161,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             expand: 'event',
-            province: 2,
+            province: 6,
         }),
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -177,7 +177,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/vulnerability/',
         method: methods.GET,
         query: ({ params }) => ({
-            province: 2,
+            province: 6,
         }),
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -193,7 +193,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/municipality-contact/',
         method: methods.GET,
         query: ({ params }) => ({
-            province: 2,
+            province: 6,
         }),
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -209,7 +209,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/nap-temperature/',
         method: methods.GET,
         query: ({ params }) => ({
-            province: 2,
+            province: 6,
         }),
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -223,7 +223,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/nap-precipitation/',
         method: methods.GET,
         query: ({ params }) => ({
-            province: 2,
+            province: 6,
         }),
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -238,7 +238,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/weather/',
         method: methods.GET,
         query: ({ params }) => ({
-            location: 'Jankapur',
+            location: 'Jumla',
         }),
         onSuccess: ({ params, response }) => {
             interface Response { results: PageTypes.Incident[] }
@@ -253,7 +253,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             aggrigated_sum: 'district',
-            province: 2,
+            province: 6,
             hazard: 11,
         }),
         onSuccess: ({ params, response }) => {
@@ -269,7 +269,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             aggrigated_sum: 'district',
-            province: 2,
+            province: 6,
             hazard: 17,
 
         }),
@@ -286,7 +286,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.GET,
         query: ({ params }) => ({
             aggrigated_sum: 'district',
-            province: 2,
+            province: 6,
 
         }),
         onSuccess: ({ params, response }) => {
@@ -301,7 +301,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 
-export const ProvinceTwo = (props: Props) => {
+export const Kailali = (props: Props) => {
     const { provinces } = props;
     const [pending, setpending] = useState<boolean>(true);
     const leftelements = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -338,18 +338,18 @@ export const ProvinceTwo = (props: Props) => {
     const [precipitationData, setPrecipitationData] = useState<MainTempData>([]);
     const [climateDataType, setclimateDataType] = useState('Precipitation');
     const [climateLineChartData, setclimateLineChartData] = useState([]);
-    const [districtIdIs, setdistrictIdIs] = useState(0);
+    const [districtIdIs, setdistrictIdIs] = useState<number>();
     const [vulnerability, setVulnerability] = useState('Human Poverty Index');
     const [lossDataFlood, setlossDataFlood] = useState([]);
     const [lossDataLandslide, setlossDataLandslide] = useState([]);
     const [demographicData, setdemographicData] = useState([]);
 
-    const municipalityInfo = provinces.filter(item => item.id === 2);
+    const municipalityInfo = provinces.filter(item => item.id === 6);
     const bbox = municipalityInfo.map(item => item.bbox)[0];
     const lng = municipalityInfo.map(item => item.centroid.coordinates[0])[0];
     const lat = municipalityInfo.map(item => item.centroid.coordinates[1])[0];
 
-    const meanValueCalculator = (array) => {
+    const meanValueCalculator = (array: []) => {
         if (array.length > 0) {
             const obtVal = array.map(item => item.value).reduce((a, b) => a + b);
             const num = (obtVal / array.length).toFixed(2);
@@ -358,7 +358,7 @@ export const ProvinceTwo = (props: Props) => {
         return null;
     };
 
-    const tempDataTo2010 = tempData.map(item => item.rcp45.filter(obtVal => obtVal.year <= 2010));
+    const tempDataTo2010: RCPData[][] = tempData.map(item => item.rcp45.filter(obtVal => obtVal.year <= 2010));
 
     const tempDataForMapUpto2010 = tempData.map((item, i) => ({ value: meanValueCalculator(tempDataTo2010[i]), id: item.district }));
 
@@ -463,6 +463,10 @@ export const ProvinceTwo = (props: Props) => {
         }
     };
 
+    const handlePopulationChange = (showPop: string) => {
+        setshowPopulation(showPop);
+    };
+
 
     const handleMultipeLegendClicked = (legendClicked: string, i: number) => {
         setlegentItemDisabled(true);
@@ -485,7 +489,7 @@ export const ProvinceTwo = (props: Props) => {
         }
     };
 
-    const handleMultipleHazardLayer = (hazardItem, i) => {
+    const handleMultipleHazardLayer = (hazardItem: string, i: number) => {
         setlegentItemDisabled(true);
         setclickedHazardItem(hazardItem);
         const curLegend = [...hazardLegendClickedArr];
@@ -554,6 +558,7 @@ export const ProvinceTwo = (props: Props) => {
     htmlRequest,
     jsonDataRequest,
     cIGetRequest,
+    buildingsGetRequest,
     climateDataRequest,
     alertsGetRequest,
     vulnerabilityGetRequest,
@@ -568,13 +573,13 @@ export const ProvinceTwo = (props: Props) => {
 
 
     const THEME_ID = 300;
-    const pickKeyName = 'vizrisk_province2';
-    const KEYNAME = 'vizrisk_province2';
+    const pickKeyName = 'vizrisk_karnali';
+    const KEYNAME = 'vizrisk_karnali';
     const MAINKEYNAME = String(pickKeyName).slice(8, -35);
     const PROVINCEID = String(htmlData.map(item => item.province)[0]);
 
 
-    const SUFFIXID = '2';
+    const SUFFIXID = '6';
 
     useEffect(() => {
         htmlRequest.setDefaultParams({
@@ -839,7 +844,7 @@ export const ProvinceTwo = (props: Props) => {
 		   name: item.district.title,
 		   totalPeopleDeath: item.data?.peopleDeathCountSum,
 		   totalInfraDamage: item.data?.infrastructureAffectedCountSum,
-		   totalEstimatedLoss: item.data?.estimatedLoss,
+		   totalEstimatedLoss: isNaN(item.data?.estimatedLoss) ? 0 : item.data?.estimatedLoss,
 		 }));
 
 
@@ -847,8 +852,7 @@ export const ProvinceTwo = (props: Props) => {
 		   id: item.district.id,
 		   name: item.district.title,
 		   totalPeopleDeath: isNaN(item.data.peopleDeathCountSum) ? 0 : item.data.peopleDeathCountSum,
-		   totalInfraDamage: isNaN(item.data.infrastructureAffectedCountSum) ? 0
-		    : item.data.infrastructureAffectedCountSum,
+		   totalInfraDamage: isNaN(item.data.infrastructureAffectedCountSum) ? 0 : item.data.infrastructureAffectedCountSum,
 		   totalEstimatedLoss: isNaN(item.data.estimatedLoss) ? 0 : item.data.estimatedLoss,
 		 }));
 
@@ -1007,6 +1011,7 @@ export const ProvinceTwo = (props: Props) => {
                         legendElement={legendElement}
                         totalPages={leftelements.length}
                         pagenumber={leftElement + 1}
+                        handlePopulationChange={handlePopulationChange}
                         setActivePage={setActivePage}
                         active={active}
                         disableNavLeftBtn={disableNavLeftBtn}
@@ -1213,4 +1218,4 @@ export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),
     createRequestClient(requests),
-)(ProvinceTwo);
+)(Kailali);

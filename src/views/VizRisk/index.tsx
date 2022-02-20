@@ -27,6 +27,7 @@ import { incidentListSelectorIP } from '#selectors';
 import { setIncidentListActionIP } from '#actionCreators';
 import Loading from '#components/Loading';
 import ProvinceTwo from './Province2';
+import Kailali from './Kailali';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     incidentList: incidentListSelectorIP(state),
@@ -50,14 +51,17 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     },
 };
 
-const VizRiskMainPage = (props) => {
+interface Props{}
+
+const VizRiskMainPage = (props: Props) => {
     const [showMenu, setShowMenu] = useState(true);
-    const [mun, setMun] = useState('');
+    const [mun, setMun] = useState<string>('');
     const [vizRiskId, setvizRiskId] = useState([]);
-    const [munThemeId, setmunThemeId] = useState(null);
-    const [municipalityId, setmunicipalityId] = useState(null);
-    const [pendingMainPage, setpendingMainPage] = useState(true);
-	const [togglingBetweenMun, settogglingBetweenMun] = useState(false);
+    const [munThemeId, setmunThemeId] = useState<number>();
+    const [municipalityId, setmunicipalityId] = useState<number>();
+    const [pendingMainPage, setpendingMainPage] = useState<boolean>(true);
+	const [togglingBetweenMun, settogglingBetweenMun] = useState<boolean>(false);
+	const [provinceId, setprovinceId] = useState<number>();
 
 
     const handleMenuIconClick = () => {
@@ -65,8 +69,9 @@ const VizRiskMainPage = (props) => {
 		settogglingBetweenMun(true);
     };
 
-    const handleMenuTitleClick = (municipality, themeid, munId) => {
+    const handleMenuTitleClick = (municipality: string, themeid: number, provinceIdIs: number, munId: number) => {
         setShowMenu(false);
+		setprovinceId(provinceIdIs);
         setMun(municipality);
         setmunThemeId(themeid);
         setmunicipalityId(munId);
@@ -77,6 +82,7 @@ const VizRiskMainPage = (props) => {
     const floodMunicipality = vizRiskId.filter(item => item.category === 'Visualizing Flood Exposure');
     const LandslideMunicipality = vizRiskId.filter(item => item.category === 'Visualizing Landslide Exposure');
     const MultiHazradMunicipality = vizRiskId.filter(item => item.category === 'Visualizing Multi Hazard Exposure');
+
     const vrcontextProps: VizRiskContextProps = {
         showFirstSlide: false,
         infraChosen: 'all',
@@ -165,7 +171,7 @@ const VizRiskMainPage = (props) => {
                                                         <div key={munName.id} className={styles.vizriskmunicipalityName}>
                                                             <Button
                                                                 transparent
-                                                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.municipality)}
+                                                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
                                                             >
                                                                 <h1
                                                                     className={styles.menuItems}
@@ -196,7 +202,7 @@ const VizRiskMainPage = (props) => {
                                                         <div key={munName.id} className={styles.vizriskmunicipalityName}>
                                                             <Button
                                                                 transparent
-                                                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.municipality)}
+                                                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
                                                             >
                                                                 <h1
                                                                     className={styles.menuItems}
@@ -224,7 +230,7 @@ const VizRiskMainPage = (props) => {
                                                         <div key={munName.id} className={styles.vizriskmunicipalityName}>
                                                             <Button
                                                                 transparent
-                                                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.municipality)}
+                                                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
                                                             >
                                                                 <h1
                                                                     className={styles.menuItems}
@@ -242,7 +248,10 @@ const VizRiskMainPage = (props) => {
                                             </>
                                         ) : ((munThemeId === 101 && <Butwal municipalityId={municipalityId} togglingBetweenMun={togglingBetweenMun} munThemeId={munThemeId} />)
 		 || (munThemeId === 109 && <Jugal />)
-		 || (munThemeId === 110 && <Panchpokhari />) || (munThemeId === 300 && <ProvinceTwo />))
+		 || (munThemeId === 110 && <Panchpokhari />)
+		 || ((munThemeId === 300 && provinceId === 2) && <ProvinceTwo />)
+		 || ((munThemeId === 300 && provinceId === 6) && <Kailali />)
+		 )
                                         }
                                     </div>
                                 )

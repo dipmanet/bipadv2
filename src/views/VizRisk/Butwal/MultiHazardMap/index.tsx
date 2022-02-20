@@ -1456,6 +1456,12 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             }
+            map.current.easeTo({
+                pitch: 37,
+                zoom: 11.7,
+                duration: 1200,
+                // center: [lng, lat],
+            });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ciCategoryCritical, rightElement, legendElement, layers, exposureElementsArr, clickedArr, floodLayer, hazardLegendClickedArr]);
@@ -1523,8 +1529,15 @@ const MultiHazardMap = (props: Props) => {
                 map.current.on('draw.delete', resetArea);
                 map.current.on('draw.create', updateArea);
                 map.current.on('draw.update', updateArea);
+                map.current.easeTo({
+                    pitch: 37,
+                    zoom: 11.7,
+                    duration: 1200,
+                    // center: [lng, lat],
+                });
             }
         }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rightElement]);
 

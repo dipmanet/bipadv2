@@ -1,37 +1,66 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
     Label,
     Bar,
     BarChart,
     CartesianGrid,
-    Cell,
-    Legend,
-    Line,
-    LineChart,
     ResponsiveContainer,
     LabelList,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
+import { parseStringToNumber } from '../Functions';
 import styles from '../LeftPane/styles.scss';
-import { customLableList } from '../Functions';
 
-export default function BuildingChart(props) {
-    const { buildingsChartData, vulnrerability } = props;
+export default function EstimatedLossChart({ estimatedLossData, clickedHazardItem }) {
+    const convertToInternationalCurrencySystem = labelValue => (
+        Math.abs(Number(labelValue)) >= 1.0e+9
+
+            ? `${(Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2)}B`
+        // Six Zeroes for Millions
+            : Math.abs(Number(labelValue)) >= 1.0e+6
+
+                ? `${(Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2)}M`
+            // Three Zeroes for Thousands
+                : Math.abs(Number(labelValue)) >= 1.0e+3
+
+                    ? `${(Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2)}K`
+
+                    : Math.abs(Number(labelValue)));
 
 
     const customToolTip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
-                    <h2>{payload[0].payload.provinceName}</h2>
-                    <p>{`${vulnrerability === 'Human Development Index' ? 'HDI' : 'HPI'}: ${payload[0].payload.value}`}</p>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>{`Total Loss: ${convertToInternationalCurrencySystem(payload[0].payload.totalEstimatedLoss)}`}</p>
                 </div>
             );
         }
 
         return null;
+    };
+
+
+    const customLableList = (props) => {
+        const { x, y, width, value } = props;
+        const radius = -12;
+        return (
+            <g>
+                <text
+                    x={x + width + 2}
+                    y={y - radius}
+                    fill="white"
+                    textAnchor="right"
+                    dominantBaseline="right"
+                >
+                    {convertToInternationalCurrencySystem(value)}
+                </text>
+            </g>
+        );
     };
     return (
         <div>
@@ -43,7 +72,7 @@ export default function BuildingChart(props) {
                 <BarChart
                     width={300}
                     height={500}
-                    data={buildingsChartData}
+                    data={estimatedLossData}
                     layout="vertical"
                     margin={{ left: 15, right: 45, bottom: 25 }}
                 >
@@ -51,37 +80,38 @@ export default function BuildingChart(props) {
                     <XAxis
                         type="number"
                         tick={{ fill: '#94bdcf' }}
-                        domain={vulnrerability === 'Human Poverty Index' ? [dataMin => Math.floor(dataMin - 10), dataMax => Math.floor(dataMax + 5)]
-                            : [dataMin => parseFloat(dataMin - 0.1).toFixed(2),
-                                dataMax => parseFloat(dataMax + 0.1).toFixed(2)]
-                        }
+                        tickFormatter={tick => convertToInternationalCurrencySystem(tick)}
+                        domain={[1, 'dataMax']}
+                        scale={clickedHazardItem === 'Flood Hazard' ? 'quantile' : 'linear'}
                     >
                         <Label
-                            value="HDI/HPI Score"
+                            value="Estimated Loss"
                             offset={-10}
                             position="insideBottom"
                             style={{
                                 textAnchor: 'middle',
                                 fill: 'rgba(255, 255, 255, 0.87)',
+                                marginTop: 25,
 
                             }}
                         />
                     </XAxis>
                     <YAxis
                         type="category"
-                        dataKey="provinceName"
+                        dataKey="name"
                         tick={{ fill: '#94bdcf' }}
+
                     />
                     {/* <Legend /> */}
                     <Tooltip cursor={{ fill: '#1c333f' }} content={customToolTip} />
                     <Bar
-                        dataKey="value"
+                        dataKey="totalEstimatedLoss"
                         fill="green"
                         barSize={18}
                         tick={{ fill: '#94bdcf' }}
                         radius={[0, 5, 5, 0]}
                     >
-                        <LabelList dataKey="value" position="right" content={customLableList} />
+                        <LabelList dataKey="totalEstimatedLoss" position="right" content={customLableList} />
 
                     </Bar>
                 </BarChart>

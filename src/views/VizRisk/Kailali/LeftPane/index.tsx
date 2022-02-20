@@ -1,8 +1,14 @@
+/* eslint-disable react/jsx-closing-tag-location */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-danger */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
+/* eslint-disable linebreak-style */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-shadow */
+/* eslint-disable no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,8 +26,12 @@ import {
     Area,
     Line,
     LabelList,
+    ReferenceLine,
 } from 'recharts';
+// import NavButtons from '#views/VizRisk/Common/NavButtons';
 import Hexagon from 'react-hexagon';
+
+
 import CriticalInfraLegends from '../Legends/CriticalInfraLegends';
 import NavButtons from '../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -39,13 +49,14 @@ import { renderLegendPopulaion,
 import TempChart from '../Charts/TempChart';
 import LandCoverChart from '../Charts/LandCoverChart';
 import PopulationChart from '../Charts/PopulationChart';
+import LandCoverLegends from '../Legends/LandCoverLegends/index';
 import DemographicsPopInfo from '../Components/DemographicsPopInfo';
 import VRLegendHazard from '../Components/VRLegendHazard/index';
 import VRLegendFatality from '../Components/VRLegendFatality';
 import VRLegendTemp from '../Components/VRLegendTemp';
 import VRLegendPre from '../Components/VRLegendPre';
 import DRRCountBox from '../Components/DRRCountBox/index';
-import AlertsChart from '../Charts/AlertsChart';
+import BuildingChart from '../Charts/Buildingchart';
 import AlertsLegend from '../Legends/AlertLegends';
 import { hdiData, hpiData } from '../Data/vulnerabilityData';
 import CIChart from '../Charts/CIChart';
@@ -57,74 +68,10 @@ interface State {
     showInfo: boolean;
 }
 
-interface RealTimeDataTypes {
-	recordedDate: string;
-	currentTemp: string;
-	minimumTemp: string;
-	maximumTemp: string;
-	rainfall: string;
-}
+interface Props {}
+interface ComponentProps {}
 
-interface Props {
-	introHtml: string;
-	handleLegendClicked: (item: string) => void;
-	totalFloodLossData: any;
-	totalLandslideLossData: any;
-	handleNext: any;
-	handlePrev: any;
-	disableNavLeftBtn: any;
-	disableNavRightBtn: any;
-	pagenumber: number;
-	totalPages: number;
-	pending: boolean;
-	leftElement: number;
-	legendElement: string;
-	clickedFatalityInfraDamage: any;
-	handleFatalityInfraLayer: (item: string, i: number) => void;
-	tempData: any;
-	tempChartData: any;
-	landCoverData: any;
-	setfloodLayer: any;
-	hazardLegendClickedArr: [];
-	populationData: [];
-	criticalElement: any;
-	handleCriticalInfra: () => void;
-	alertsChartData: [];
-	clickedArr: [];
-	clickedHazardItem: any;
-	handleMultipleHazardLayerDamageLoss: any;
-	handleMultipleHazardLayer: any;
-	exposureElementArr: number[];
-	active: any;
-	setActivePage: any;
-	realTimeData: RealTimeDataTypes;
-	page1Legend1InroHtml: string;
-	page1Legend2InroHtml: string;
-	page1Legend3InroHtml: string;
-	legentItemDisabled: boolean;
-	CIState: any;
-	climateLineChartData: [];
-	tempSelectedData: any;
-	handleClimateTemp: (item: string) => void;
-	prepSelectedData: any;
-	handleClimatePrep: (item: string) => void;
-	climateDataType: any;
-	climateDataYearWise: any;
-	districtIdIs: any;
-	vulnrerability: any;
-	setVulnerability: any;
-	cI: any;
-
-}
-interface HdiDataType {
-    id: number;
-    provinceName: string;
-    value: number;
-}
-
-type HdiData = HdiDataType[]
-
-function Leftpane(props: Props) {
+function Leftpane(props) {
     const {
         introHtml,
         handleLegendClicked,
@@ -180,7 +127,7 @@ function Leftpane(props: Props) {
     const [cITypeName, setcITypeName] = useState([]);
     const [climateBarChartData, setclimateBarChartData] = useState([]);
     const [climateChartTitle, setclimateChartTitle] = useState('');
-    const [vulChartData, setvulChartData] = useState<HdiData>([]);
+    const [vulChartData, setvulChartData] = useState([]);
     const [estimatedDataSelection, setestimatedDataSelection] = useState([]);
     const vrSideBarRef = useRef<HTMLDivElement>(null);
 
@@ -201,30 +148,73 @@ function Leftpane(props: Props) {
             value: 'prep2065' },
     ];
 
+	 function climateTooltip({ active, payload, label }) {
+        if (active && payload && payload.length) {
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{payload[0].payload.name}</h2>
+                    <p>
+                        {`Value: ${payload[0].payload.value}`}
+                        {climateDataType === 'Temperature' ? '℃ ' : 'mm'}
+                    </p>
+                </div>
+            );
+        }
+
+        return null;
+    }
+	 function climateLineChartTooltip({ active, payload, label }) {
+        if (active && payload && payload.length) {
+            console.log('payload', payload);
+
+            return (
+                <div className={styles.customTooltip}>
+                    <h2>{`Year:${payload[0].payload.year}`}</h2>
+                    <p style={{ color: '#1f78b4' }}>
+                        {`RCP 4.5: ${payload[0].payload['RCP 4.5']}`}
+                        {climateDataType === 'Temperature' ? '℃ ' : 'mm'}
+                    </p>
+                    <p style={{ color: 'red' }}>
+                        {`SD RCP 4.5: ${payload[0].payload['SD RCP 4.5'][0]} ~ ${payload[0].payload['SD RCP 4.5'][1]}`}
+                        {climateDataType === 'Temperature' ? '℃ ' : 'mm'}
+                    </p>
+                </div>
+            );
+        }
+
+        return null;
+    }
+
     const districtIdToName = (id: number) => {
-        if (id === 16) {
-            return 'Saptari';
+        if (id === 58) {
+            return 'Mugu';
         }
-        if (id === 33) {
-            return 'Bara';
+        if (id === 60) {
+            return 'Jumla';
         }
-        if (id === 34) {
-            return 'Parsa';
+        if (id === 63) {
+            return 'Dailekh';
         }
-        if (id === 17) {
-            return 'Dhanusa';
+        if (id === 64) {
+            return 'Surkhet';
         }
-        if (id === 18) {
-            return 'Mahottari';
+        if (id === 55) {
+            return 'Salyan';
         }
-        if (id === 19) {
-            return 'Sarlahi';
+        if (id === 57) {
+            return 'Dolpa';
         }
-        if (id === 32) {
-            return 'Rautahat';
+        if (id === 59) {
+            return 'Humla';
         }
-        if (id === 15) {
-            return 'Siraha';
+        if (id === 61) {
+            return 'Kalikot';
+        }
+        if (id === 62) {
+            return 'Jajarkot';
+        }
+        if (id === 542) {
+            return 'Rukum West';
         }
         return '';
     };
@@ -243,14 +233,14 @@ function Leftpane(props: Props) {
             cI,
         } = props;
         if (cI) {
-            const categoriesCriticalArr: any = [
-                ...new Set(cI.map((item: any) => item.resourceType)),
+            const categoriesCriticalArr = [
+                ...new Set(cI.map(item => item.resourceType)),
             ];
             setcITypeName(categoriesCriticalArr);
             setcIChartData(
-                categoriesCriticalArr.map((item: any) => ({
+                categoriesCriticalArr.map(item => ({
                     name: item.charAt(0).toUpperCase() + item.slice(1),
-                    value: cI.filter((ci: any) => ci.resourceType === item).length,
+                    value: cI.filter(ci => ci.resourceType === item).length,
                 })),
             );
         }
@@ -273,40 +263,28 @@ function Leftpane(props: Props) {
 
     useEffect(() => {
         if (tempSelectedData === 'temp2010' && climateDataType === 'Temperature') {
-            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2010.map(
-                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
-            ));
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Temperature Reference Period(1981-2010)');
         }
 
         if (tempSelectedData === 'temp2045' && climateDataType === 'Temperature') {
-            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2045.map(
-                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
-            ));
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2045.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Temperature Reference Period(2016-2045)');
         }
         if (tempSelectedData === 'temp2065' && climateDataType === 'Temperature') {
-            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2065.map(
-                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
-            ));
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2065.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Temperature Reference Period(2036-2065)');
         }
         if (prepSelectedData === 'prep2010' && climateDataType === 'Precipitation') {
-            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2010.map(
-                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
-            ));
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Precipitation Reference Period(1981-2010)');
         }
         if (prepSelectedData === 'prep2045' && climateDataType === 'Precipitation') {
-            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2045.map(
-                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
-            ));
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2045.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Precipitation Reference Period(2016-2045)');
         }
         if (prepSelectedData === 'prep2065' && climateDataType === 'Precipitation') {
-            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2065.map(
-                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
-            ));
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2065.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
             setclimateChartTitle('Precipitation Reference Period(2036-2065)');
         }
     }, [tempSelectedData, prepSelectedData, climateDataType]);
@@ -342,7 +320,7 @@ function Leftpane(props: Props) {
                                     <div className={styles.iconTitleDate}>
 									Recorderd Time:
                                         {'  '}
-                                        {realTimeData !== undefined ? realTimeData?.recordedDate.slice(0, 10) : 'Nodata'}
+                                        {realTimeData !== undefined ? realTimeData.recordedDate.slice(0, 10) : 'Nodata'}
                                     </div>
                                 </div>
                             </div>
@@ -416,8 +394,7 @@ mm
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
                                         {' '}
-                                        { tempData && parseStringToNumber(tempData.filter((rainfall: any) => rainfall.rainfall)
-                                            .map((item: any) => item.rainfall)[0])}
+                                        { tempData && parseStringToNumber(tempData.filter(rainfall => rainfall.rainfall).map(item => item.rainfall)[0])}
                                         {' '}
 mm
                                     </div>
@@ -538,7 +515,7 @@ mm
 && (
     <>
 	    <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{"Alert's Count"}</h2>
-        <AlertsChart buildingsChartData={alertsChartData} />
+        <BuildingChart buildingsChartData={alertsChartData} />
         <AlertsLegend />
     </>
 )
@@ -546,11 +523,7 @@ mm
                 {leftElement === 3
 && (
     <>
-        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
-            {vulnrerability === 'Human Development Index'
-		 ? 'Human Development Index' : 'Human Poverty Index'}
-
-        </h2>
+        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{vulnrerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</h2>
         <CIChart buildingsChartData={vulChartData} vulnrerability={vulnrerability} />
     </>
 )
@@ -714,7 +687,7 @@ RISK
                                 height={1000}
                                 data={cIChartData}
                                 layout="vertical"
-                                margin={{ left: 25, right: 45, bottom: 25 }}
+                                margin={{ left: 25, right: 60, bottom: 25 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
                                 <XAxis type="number" tick={{ fill: '#94bdcf' }} domain={[0, 'dataMax+1000']} scale={'sqrt'}>
@@ -752,11 +725,9 @@ RISK
                 ) }
                 {leftElement === 1 && (
                     <>
-                        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
+					        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
                             {clickedHazardItem === 'Flood Hazard' ? 'Estimated Loss due to Flood'
 							 : 'Estimated Loss due to Landslide'}
-                            {' '}
-
                         </h2>
                         <EstimatedLossChart estimatedLossData={estimatedDataSelection} clickedHazardItem={clickedHazardItem} />
                         <VRLegendHazard>
@@ -928,31 +899,35 @@ RISK
                                 data={climateBarChartData}
                                 layout="vertical"
                                 margin={{ left: 15, right: 70, bottom: 25 }}
+                                stackOffset={'sign'}
                             >
                                 <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
+
                                 <XAxis
                                     type="number"
                                     tick={{ fill: '#94bdcf' }}
-                                    domain={climateDataType === 'Temperature' ? [dataMin => parseInt(dataMin, 10), dataMax => parseInt(dataMax + 1, 10)]
+                                    domain={climateDataType === 'Temperature' ? [-5, 25]
                                         : [dataMin => Math.floor(dataMin - 100), dataMax => parseInt(dataMax + 100, 10)]}
                                 >
-                                    {/* <Label
+                                    <Label
                                         value="Critical Infrastructures"
-                                        offset={0}
+                                        offset={-10}
                                         position="insideBottom"
                                         style={{
                                             textAnchor: 'middle',
                                             fill: 'rgba(255, 255, 255, 0.87)',
                                         }}
-                                    /> */}
+                                    />
                                 </XAxis>
                                 <YAxis
                                     type="category"
                                     dataKey="name"
                                     tick={{ fill: '#94bdcf' }}
                                 />
+
+                                <ReferenceLine stroke={'white'} strokeWidth={1} x={0} />
                                 <Tooltip
-                                    content={cITooltip}
+                                    content={climateTooltip}
                                     cursor={{ fill: '#1c333f' }}
                                 />
                                 <Bar
@@ -995,7 +970,7 @@ RISK
                                     }}
 
                                 >
-                                    <CartesianGrid fill="white" />
+                                    <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} fill="white" />
 
                                     <XAxis
                                         dataKey="year"
@@ -1025,7 +1000,7 @@ RISK
                                             style={{ textAnchor: 'middle' }}
                                         />
                                     </YAxis>
-                                    <Tooltip labelFormatter={value => `Year: ${value}`} />
+                                    <Tooltip content={climateLineChartTooltip} cursor={{ fill: '#1c333f' }} />
                                     <Legend
                                         verticalAlign="top"
                                         wrapperStyle={{
