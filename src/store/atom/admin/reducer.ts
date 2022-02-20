@@ -19,6 +19,7 @@ const setAdminPage = (state: Type.AdminState, action: Type.SetAdminPage) => {
         errorAdminId,
     } } = action;
     const newState = produce(state, (deferedState) => {
+        console.log('test admin', adminDataMain);
         /* eslint-disable no-param-reassign */
         if (adminDataMain) {
             deferedState.adminPage.adminDataMain = adminDataMain;

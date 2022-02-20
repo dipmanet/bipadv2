@@ -30,8 +30,6 @@ import styles from './styles.module.scss';
 import EditIcon from '../../resources/editicon.svg';
 import DeleteIconSvg from '../../resources/deleteicon.svg';
 
-import Page from '#components/Page';
-
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetAdminPageAction } from '#actionCreators';
 import { adminPageSelector, userSelector } from '#selectors';
@@ -48,30 +46,26 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     admin: {
-        // url: '/bulkupload/',
-        // method: methods.GET,
-        // onMount: false,
-        // query: () => ({
-        //     format: 'json',
-        //     ordering: '-last_modified_date',
-        // }),
-        // onSuccess: ({ response, props, params }) => {
-        //     props.setEpidemicsPage({
-        //         uploadData: response.results,
-        //     });
-        //     params.setLoading(false);
-        // },
+        url: '/user/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            limit: -1,
+            province: params.province,
+            district: params.district,
+            munincipality: params.municipality,
+            expand: ['province', 'district', 'municipality', 'ward'],
+        }),
+        onSuccess: ({ response, props, params }) => {
+            props.setAdminPage({
+                adminDataMain: response.results,
+            });
+            params.setLoading(false);
+        },
     },
 };
 
-
-interface Data {
-    calories: number;
-    carbs: number;
-    fat: number;
-    name: string;
-    protein: number;
-}
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -262,6 +256,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 
 const AdminTable = (props) => {
+    const [loading, setLoading] = useState(false);
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -273,12 +268,18 @@ const AdminTable = (props) => {
             adminDataMain,
             loadingAdmin,
         },
+        userDataMain,
     } = props;
 
-    // const dispatch = useDispatch();
-
     useEffect(() => {
-        // dispatch(adminData());
+        setLoading(true);
+        props.requests.admin.do({
+            province: userDataMain.profile.province,
+            district: userDataMain.profile.district,
+            municipality: userDataMain.profile.municipality,
+            setLoading,
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -355,8 +356,7 @@ const AdminTable = (props) => {
     return (
 
         <>
-
-            {loadingAdmin ? (
+            {loading ? (
                 <Loader options={{
                     position: 'fixed',
                     top: '48%',
@@ -386,11 +386,12 @@ const AdminTable = (props) => {
                                         onSelectAllClick={handleSelectAllClick}
                                     />
                                     <TableBody>
-                                        {stableSort(adminDataMain, getComparator(order, orderBy))
+                                        { adminDataMain && stableSort(adminDataMain, getComparator(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row, index) => {
                                                 const isItemSelected = isSelected(row.province);
                                                 const labelId = `enhanced-table-checkbox-${index}`;
+                                                console.log('Test row', row);
                                                 return (
                                                     <TableRow
                                                         hover
@@ -428,11 +429,11 @@ const AdminTable = (props) => {
 
                                                         </TableCell>
                                                         <TableCell className={styles.setStyleForTableCell} align="right">
-                                                            {row.profile.province ? provinceName(row.profile.province) : '-'}
+                                                            {row.profile.province ? provinceName(row.profile.province.title) : '-'}
 
                                                         </TableCell>
                                                         <TableCell className={styles.setStyleForTableCell} align="right">
-                                                            {row.profile.district ? row.profile.district : '-'}
+                                                            {row.profile.district ? row.profile.district.title : '-'}
 
                                                         </TableCell>
                                                         <TableCell className={styles.setStyleForTableCell} align="right">
@@ -457,17 +458,15 @@ const AdminTable = (props) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box className={styles.boxStyle}>
-                                {/* <AdminForm toggleForm={toggleForm} handleClose={handleClose} /> */}
-                            </Box>
+                            {/* <Box className={styles.boxStyle}> */}
+                            <AdminForm toggleForm={toggleForm} handleClose={handleClose} />
+                            {/* </Box> */}
                         </Modal>
                         <div className={styles.saveOrAddButtons}>
                             <button className={styles.submitButtons} onClick={toggleAdminForm} type="submit">Add New User</button>
                         </div>
                     </Box>
                 ) }
-
-
         </>
     );
 };
