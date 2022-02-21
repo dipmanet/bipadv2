@@ -4,13 +4,11 @@ import * as Type from './types';
 
 import initialState from './initialState';
 
-// Covid
 export const SetAdminPageAction = adminPage => ({
     type: Type.PageType.SET_ADMIN_PAGE,
     adminPage,
 });
 
-// Covid
 const setAdminPage = (state: Type.AdminState, action: Type.SetAdminPage) => {
     const { adminPage: {
         adminDataMain,
@@ -19,7 +17,6 @@ const setAdminPage = (state: Type.AdminState, action: Type.SetAdminPage) => {
         errorAdminId,
     } } = action;
     const newState = produce(state, (deferedState) => {
-        console.log('test admin', adminDataMain);
         /* eslint-disable no-param-reassign */
         if (adminDataMain) {
             deferedState.adminPage.adminDataMain = adminDataMain;

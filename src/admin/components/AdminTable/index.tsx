@@ -32,12 +32,14 @@ import DeleteIconSvg from '../../resources/deleteicon.svg';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetAdminPageAction } from '#actionCreators';
-import { adminPageSelector, userSelector } from '#selectors';
+import { adminPageSelector, userSelector, provincesSelector, districtsSelector } from '#selectors';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     adminPage: adminPageSelector(state),
     userDataMain: userSelector(state),
+    province: provincesSelector(state),
+    district: districtsSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -51,11 +53,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: false,
         query: ({ params }) => ({
             format: 'json',
-            limit: -1,
             province: params.province,
             district: params.district,
             munincipality: params.municipality,
-            expand: ['province', 'district', 'municipality', 'ward'],
         }),
         onSuccess: ({ response, props, params }) => {
             props.setAdminPage({
@@ -118,7 +118,7 @@ const headCells: readonly HeadCell[] = [
     {
         id: 'firstName',
         numeric: false,
-        disablePadding: true,
+        disablePadding: false,
         label: 'NAME',
     },
     {
@@ -178,7 +178,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -188,12 +188,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
+                </TableCell> */}
                 {headCells.map(headCell => (
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        // padding={headCell.disablePadding ? 'none' : 'normal'}
+                        sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
                         <TableSortLabel
@@ -268,6 +269,8 @@ const AdminTable = (props) => {
             adminDataMain,
             loadingAdmin,
         },
+        province,
+        distict,
         userDataMain,
     } = props;
 
@@ -336,23 +339,9 @@ const AdminTable = (props) => {
         window.scrollTo(0, 0);
         settoggleForm(false);
     };
-    const provinceName = (provinceId) => {
-        if (provinceId === 1) {
-            return 'Province 1';
-        } if (provinceId === 2) {
-            return 'Province 2';
-        } if (provinceId === 3) {
-            return 'Bagmati';
-        } if (provinceId === 4) {
-            return 'Gandaki';
-        } if (provinceId === 5) {
-            return 'Lumbini';
-        } if (provinceId === 6) {
-            return 'Karnali';
-        }
-        return 'Sudurpashchim';
-    };
+    const provinceName = provinceId => props.province.filter(item => item.id === provinceId)[0].title;
 
+    const districtName = districtId => props.district.filter(item => item.id === districtId)[0].title;
     return (
 
         <>
@@ -372,7 +361,6 @@ const AdminTable = (props) => {
                 : (
                     <Box sx={{ width: '100%' }}>
                         <Paper sx={{ width: '100%', mb: 2 }}>
-                            <EnhancedTableToolbar numSelected={selected.length} />
                             <TableContainer sx={{ maxHeight: 600 }}>
                                 <Table
                                     sx={{ minWidth: 750 }}
@@ -391,7 +379,6 @@ const AdminTable = (props) => {
                                             .map((row, index) => {
                                                 const isItemSelected = isSelected(row.province);
                                                 const labelId = `enhanced-table-checkbox-${index}`;
-                                                console.log('Test row', row);
                                                 return (
                                                     <TableRow
                                                         hover
@@ -402,7 +389,7 @@ const AdminTable = (props) => {
                                                         key={row.name}
                                                         selected={isItemSelected}
                                                     >
-                                                        <TableCell padding="checkbox">
+                                                        {/* <TableCell padding="checkbox">
                                                             <Checkbox
                                                                 color="primary"
                                                                 checked={isItemSelected}
@@ -410,13 +397,12 @@ const AdminTable = (props) => {
                                                                     'aria-labelledby': labelId,
                                                                 }}
                                                             />
-                                                        </TableCell>
+                                                        </TableCell> */}
                                                         <TableCell
                                                             className={styles.setStyleForTableCell}
                                                             component="th"
                                                             id={labelId}
                                                             scope="row"
-                                                            padding="none"
                                                         >
                                                             {row.firstName && row.lastName ? `${row.firstName}${' '}${row.lastName}` : '-'}
                                                         </TableCell>
@@ -429,11 +415,11 @@ const AdminTable = (props) => {
 
                                                         </TableCell>
                                                         <TableCell className={styles.setStyleForTableCell} align="right">
-                                                            {row.profile.province ? provinceName(row.profile.province.title) : '-'}
+                                                            {row.profile.province ? provinceName(row.profile.province) : '-'}
 
                                                         </TableCell>
                                                         <TableCell className={styles.setStyleForTableCell} align="right">
-                                                            {row.profile.district ? row.profile.district.title : '-'}
+                                                            {row.profile.district ? districtName(row.profile.district) : '-'}
 
                                                         </TableCell>
                                                         <TableCell className={styles.setStyleForTableCell} align="right">
