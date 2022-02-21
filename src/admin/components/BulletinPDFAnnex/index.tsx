@@ -5,6 +5,7 @@ import { nepaliRef } from 'src/admin/components/BulletinForm/formFields';
 import {
     bulletinPageSelector,
 } from '#selectors';
+import Response from '../BulletinForm/Response';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
@@ -25,6 +26,11 @@ const BulletinPDFAnnex = (props) => {
             covidTotalStat,
             vaccineStat,
             covidProvinceWiseTotal,
+            handleFeedbackChange,
+            feedback,
+            deleteFeedbackChange,
+            hazardWiseLossData,
+            handleSubFieldChange,
         },
     } = props;
 
@@ -49,6 +55,15 @@ const BulletinPDFAnnex = (props) => {
     return (
         <div className={styles.footerPDFContainer}>
             <h1>अनुसूची १</h1>
+            <h3>घट्िा साराांश</h3>
+            <Response
+                annex
+                handleFeedbackChange={handleFeedbackChange}
+                feedback={feedback}
+                deleteFeedbackChange={deleteFeedbackChange}
+                hazardWiseLossData={hazardWiseLossData}
+                handleSubFieldChange={handleSubFieldChange}
+            />
             <h3>२४ घण्टामा बिपद्को विवरणहरु</h3>
             <table className={styles.annexTable}>
                 <thead>
@@ -107,8 +122,8 @@ const BulletinPDFAnnex = (props) => {
                     }
                 </tbody>
             </table>
-            <h3>प्रकोप अनुसार मृत्यू, बेपत्ता र घाइते संन्ख्याको बर्गिकरण</h3>
-            {
+
+            {/* {
                 typeof hazardWiseLoss === 'object'
                 && Object.keys(hazardWiseLoss).length > 0
                 && (
@@ -150,7 +165,7 @@ const BulletinPDFAnnex = (props) => {
                         </tbody>
                     </table>
                 )
-            }
+            } */}
             <div className={styles.twoCols}>
                 <div>
                     <h3>लिङ्ग अनुसार मृत्यूको बर्गिकरण</h3>

@@ -289,7 +289,7 @@ const Bulletin = (props: Props) => {
     };
     const handlehazardAdd = (hazard) => {
         const newData = { ...hazardWiseLossData };
-        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0, coordinates: [0, 0] } });
+        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0, missing: 0, coordinates: [0, 0] } });
     };
 
     const handlegenderWiseLoss = (e, field) => {
@@ -535,6 +535,9 @@ const Bulletin = (props: Props) => {
                     deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
                     incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
                     missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount,
+                    injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount,
+                    district: lossData.filter(l => l.hazard === h).peopleInjuredCount,
+
                     // response: '',
                     // district: '',
                     // incidentdescription: '',
@@ -677,6 +680,11 @@ const Bulletin = (props: Props) => {
         />,
         <PDFPreview
             handlePrevBtn={handlePrevBtn}
+            handleFeedbackChange={handleFeedbackChange}
+            feedback={feedback}
+            deleteFeedbackChange={deleteFeedbackChange}
+            hazardWiseLossData={hazardWiseLossData}
+            handleSubFieldChange={handleSubFieldChange}
             bulletinData={
                 { incidentSummary: incidentData,
                     peopleLoss: peopleLossData,

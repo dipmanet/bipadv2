@@ -78,6 +78,11 @@ const PDFPreview = (props) => {
         bulletinEditData,
         setBulletinEditData,
         handlePrevBtn,
+        handleFeedbackChange,
+        feedback,
+        deleteFeedbackChange,
+        hazardWiseLossData,
+        handleSubFieldChange,
     } = props;
 
     const isFile = (input: any): input is File => (
@@ -248,7 +253,13 @@ const PDFPreview = (props) => {
 
             </div>
             <div id="page4" className="page">
-                <BulletinPDFAnnex />
+                <BulletinPDFAnnex
+                    handleFeedbackChange={handleFeedbackChange}
+                    feedback={feedback}
+                    deleteFeedbackChange={deleteFeedbackChange}
+                    hazardWiseLossData={hazardWiseLossData}
+                    handleSubFieldChange={handleSubFieldChange}
+                />
 
             </div>
             <div className={styles.btnContainer}>

@@ -25,6 +25,7 @@ const Response = (props: Props) => {
         hazardWiseLossData,
         districts,
         handleSubFieldChange,
+        annex,
     } = props;
 
 
@@ -54,7 +55,6 @@ const Response = (props: Props) => {
     };
 
     useEffect(() => {
-        console.log('hazardWiseLossData', hazardWiseLossData);
         if (hazardWiseLossData) {
             const temp = {};
             Object.keys(hazardWiseLossData).map((item) => {
@@ -62,13 +62,12 @@ const Response = (props: Props) => {
                     district: '',
                     description: '',
                     deaths: hazardWiseLossData[item].deaths || 0,
-                    missing: hazardWiseLossData[item].incidents || 0,
-                    injured: hazardWiseLossData[item].missing || 0,
+                    missing: hazardWiseLossData[item].missing || 0,
+                    injured: hazardWiseLossData[item].injured || 0,
                     response: '',
                 };
                 return null;
             });
-            console.log('temp', temp);
             if (temp && Object.keys(temp).length > 0) {
                 handleFeedbackChange({ ...temp });
             }
@@ -77,11 +76,15 @@ const Response = (props: Props) => {
     }, [hazardWiseLossData]);
     return (
         <>
-            <div className={styles.formContainer}>
-                <h2>प्रतिकार्य</h2>
-                <div className={styles.pratikriyas}>
-                    {
-                        feedback && Object.keys(feedback).length > 0
+            <div className={annex ? styles.formContainerAnnex : styles.formContainer}>
+                {
+                    !annex
+                    && <h2>प्रतिकार्य</h2>
+                }
+                {
+                    <div className={styles.pratikriyas}>
+                        {
+                            feedback && Object.keys(feedback).length > 0
 
                             && (
                                 <table className={styles.responseTable}>
@@ -117,31 +120,81 @@ const Response = (props: Props) => {
                                                 <td>
                                                     {feedback[hwL].district}
                                                 </td>
-                                                <td>
-                                                    {feedback[hwL].description}
-                                                </td>
-                                                <td>
-                                                    {feedback[hwL].deaths || '-'}
-                                                </td>
-                                                <td>
-                                                    {feedback[hwL].missing || '-'}
-                                                </td>
-                                                <td>
-                                                    {feedback[hwL].injured || '-'}
-                                                </td>
-                                                <td>
-                                                    {feedback[hwL].response || '-'}
-                                                </td>
 
+                                                <td>
+                                                    {typeof feedback[hwL].deaths === 'number' ? feedback[hwL].deaths : '-'}
+                                                </td>
+                                                <td>
+                                                    {typeof feedback[hwL].missing === 'number'
+                                                        ? feedback[hwL].missing : '-'}
+                                                </td>
+                                                <td>
+                                                    {typeof feedback[hwL].injured === 'number'
+                                                        ? feedback[hwL].injured : '-'}
+                                                </td>
+                                                <td>
+                                                    <div className={styles.formItemHalf}>
+                                                        {
+                                                            annex
+                                                                ? feedback[hwL].description || ''
+                                                                : (
+                                                                    <div className={styles.inputContainer}>
+                                                                        <textarea
+                                                                            placeholder="घटना विवरण"
+                                                                            onChange={e => handleSubFieldChange(e.target.value, hwL, 'description')}
+                                                                            value={feedback[hwL].description || ''}
+                                                                            rows={5}
+                                                                        />
+                                                                    </div>
+                                                                )
+                                                        }
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className={styles.formItemHalf}>
+                                                        {
+                                                            annex
+                                                                ? feedback[hwL].response || ''
+                                                                : (
+                                                                    <div className={styles.inputContainer}>
+                                                                        <textarea
+                                                                            placeholder="प्रतिकार्य"
+                                                                            onChange={e => handleSubFieldChange(e.target.value, hwL, 'response')}
+                                                                            value={feedback[hwL].response || ''}
+                                                                            rows={5}
+                                                                        />
+                                                                    </div>
+                                                                    // <FormControl fullWidth>
+                                                                    //     <InputLabel>
+                                                                    //         {'प्रतिकार्य'}
+                                                                    //     </InputLabel>
+                                                                    //     <Input
+                                                                    //         type="text"
+                                                                    //         value={feedback[hwL].response || ''}
+                                                                    //         onChange={e => handleSubFieldChange(e.target.value, hwL, 'response')}
+                                                                    //         rows={5}
+                                                                    //         className={styles.select}
+                                                                    //         disableUnderline
+                                                                    //         inputProps={{
+                                                                    //             disableUnderline: true,
+                                                                    //         }}
+                                                                    //         style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                                                                    //     />
+                                                                    // </FormControl>
+                                                                )
+                                                        }
+                                                    </div>
+                                                </td>
                                             </tr>
                                         ))
                                     }
                                 </table>
                             )
-                    }
-                </div>
-                {
-                    feedback && Object.keys(feedback).length > 0
+                        }
+                    </div>
+                }
+                {/* {
+                    !annex && feedback && Object.keys(feedback).length > 0
                     && (
                         <>
                             {Object.keys(feedback).map(f => (
@@ -207,7 +260,7 @@ const Response = (props: Props) => {
                                             />
                                         </FormControl>
                                     </div>
-                                    <div className={styles.formItemHalf}>
+                                    <div className={styles.formItemThird}>
                                         <FormControl fullWidth>
                                             <InputLabel>
                                                 {'म्रितक'}
@@ -226,7 +279,7 @@ const Response = (props: Props) => {
                                             />
                                         </FormControl>
                                     </div>
-                                    <div className={styles.formItemHalf}>
+                                    <div className={styles.formItemThird}>
                                         <FormControl fullWidth>
                                             <InputLabel>
                                                 {'घाइते'}
@@ -235,6 +288,25 @@ const Response = (props: Props) => {
                                                 type="text"
                                                 value={feedback[f].injured || ''}
                                                 onChange={e => handleSubFieldChange(e.target.value, f, 'injured')}
+                                                rows={5}
+                                                className={styles.select}
+                                                disableUnderline
+                                                inputProps={{
+                                                    disableUnderline: true,
+                                                }}
+                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                                            />
+                                        </FormControl>
+                                    </div>
+                                    <div className={styles.formItemThird}>
+                                        <FormControl fullWidth>
+                                            <InputLabel>
+                                                {'बेपता'}
+                                            </InputLabel>
+                                            <Input
+                                                type="text"
+                                                value={feedback[f].missing || ''}
+                                                onChange={e => handleSubFieldChange(e.target.value, f, 'missing')}
                                                 rows={5}
                                                 className={styles.select}
                                                 disableUnderline
@@ -269,7 +341,7 @@ const Response = (props: Props) => {
                             ))}
 
                         </>
-                    )}
+                    )} */}
                 {/* <div className={styles.formSubContainer}>
                     <div className={styles.formItemHalf}>
                         <FormControl fullWidth>

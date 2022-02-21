@@ -4,8 +4,8 @@
     margin-bottom: 100px;
     background-color: white;
     .pratikriyas{
-        background-color: #EAEBEC;
-        padding: 2mm 10mm;
+        // background-color: #EAEBEC;
+        // padding: 2mm 10mm;
         margin-top: 5mm;
         // height: 80mm;
         ul{
@@ -27,11 +27,59 @@
         td,th{
             height: 20px;
             border: 1px solid rgb(107, 106, 106);
-            padding: 2px;
+            padding: 2px 8px;
             text-align: left;
+        }
+        td{
+            font-size: 12px;
+        }
+        th{
+            font-size: 14px;
+            padding: 8px 10px !important;
         }
         width: 100%;
         position: relative;
+        .formItemHalf{
+            @extend .formItem;
+            justify-content: space-between;
+            width: calc(100%) !important;
+            // margin-left: 4;
+            .inputContainer{
+                display: flex;
+                border-radius: 4px;
+                background-color: rgb(232,232,232);
+                justify-content: flex-start;
+                align-items: center;
+                margin: 4px 0 7px 0;
+          
+                textarea::-webkit-input-placeholder{
+                    font-size: 10px;
+                    vertical-align:middle !important;
+                    line-height: 25px !important;
+                }
+     
+                textarea{
+                    border: none;
+                    padding: 12px 7px;
+                    margin-left: 10px;
+                    background: transparent;
+                    width: 100%;
+                }
+     
+                textarea:focus{
+                    outline: none;
+                }
+     
+                textarea::placeholder{
+                    font-size: 12px;
+                }
+     
+                .inputIcon{
+                    color: rgb(152,152,152);
+                }
+     
+                }
+             }
     }
 .formSubContainer{
     display: flex;
@@ -57,11 +105,7 @@
         height: 65px;
         width: 100%;
         }
-    .formItemHalf{
-       @extend .formItem;
-       justify-content: space-between;
-       width: 49% !important;
-        }
+    
     .formItemThird{
        @extend .formItem;
        width:
@@ -89,4 +133,27 @@ h3{
     font-weight: 400;
 }
 
+}
+
+.formContainerAnnex{
+    @extend .formContainer;
+    padding: 0px;
+    margin-bottom: 0;
+    .pratikriyas{
+        background-color: #ffffff;
+        padding: 0 0;
+        margin-top: 0mm;
+        // height: 80mm;
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+            padding-left: 0;
+        }
+        ul li{
+            width: calc(48% - 4mm);
+            margin: 2mm;
+            font-size: 14px;
+            list-style: none;
+        }
+    }
 }
