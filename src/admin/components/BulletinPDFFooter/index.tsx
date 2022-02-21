@@ -19,7 +19,11 @@ const BulletinPDFFooter = (props) => {
     const {
         tempMin,
         tempMax,
+        handleRainSummaryPic,
         dailySummary,
+        rainSummaryPic,
+        maxTempFooter,
+        minTempFooter,
     } = props.bulletinData;
 
     return (
@@ -38,6 +42,10 @@ const BulletinPDFFooter = (props) => {
                 hideForm
                 minTemp={tempMin}
                 maxTemp={tempMax}
+                handleRainSummaryPic={handleRainSummaryPic}
+                rainSummaryPic={rainSummaryPic}
+                maxTempFooter={maxTempFooter}
+                minTempFooter={minTempFooter}
             />
 
             <p>

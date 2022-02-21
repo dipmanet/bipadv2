@@ -17,6 +17,7 @@ const TemperaturesMin = (props: Props) => {
         minTemp,
         handleMinTemp,
         hideForm,
+        minTempFooter,
     } = props;
 
     const [picFromEdit, setPicFromEdit] = useState(false);
@@ -85,6 +86,7 @@ const TemperaturesMin = (props: Props) => {
                             && (
                             <>
                                 <img src={picLink} alt="temperature" />
+
                             </>
                             )
                         }
@@ -93,10 +95,18 @@ const TemperaturesMin = (props: Props) => {
                             && (
                             <>
                                 <img className={styles.placeholder} src={Placeholder} alt="temperature" />
+
                             </>
                             )
                         }
                     </div>
+                    {hideForm && minTempFooter
+                        && (
+                            <p className={styles.footerText}>
+                                {minTempFooter}
+                            </p>
+                        )
+                    }
                 </div>
             </div>
         </div>

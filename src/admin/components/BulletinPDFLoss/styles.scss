@@ -61,7 +61,42 @@
       
     }
 
-    
+    .pratikriyaContainer{
+        width: 220mm;
+        position: relative;
+        // bottom: 70mm;
+        right: 10mm;
+        display: flex;
+        margin-top: 10mm;
+        flex-direction: column;
+        left: -10mm;
+        h2{
+            margin-left: 20mm;
+            font-size: 18px;
+            color: #004877;
+        }
+        .pratikriyas{
+            // background-color: #EAEBEC;
+            padding: 0mm 10mm;
+            // margin-top: 5mm;
+            margin-left: 8mm;
+            // height: 80mm;
+            color: #004877;
+            ul{
+                display: flex;
+                flex-wrap: wrap;
+                padding-left: 0;
+            }
+            ul li{
+                // width: calc(48% - 4mm);
+                margin: 2mm;
+                font-size: 16px;
+                list-style: none;
+            }
+        }
+    }
+
+  
     .provinceWiseLoss{
         display: flex;
         padding:10mm ;
@@ -184,31 +219,7 @@
             }
         }
     }
-    .hazardWiseStats{
-        width: 80mm;
-        height: 80mm;
-        position: absolute;
-        bottom: 15mm;
-        left:5mm;
-        h2{
-            font-size: 4mm;
-            margin-bottom: 2mm;
-            position: relative;
-            left: 5mm;
-        }
-    }
-    .genderWiseStats{
-        width: 90mm;
-        height: 50mm;
-        position: absolute;
-        bottom: 15mm;
-        right:20mm;
-        h2{
-            font-size: 4mm;
-            margin-bottom: 2mm;
-            position: relative;
-        }
-    }
+  
 }
 .bold{
     font-weight: 600;

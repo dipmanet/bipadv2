@@ -14,11 +14,9 @@ import {
     municipalitiesSelector,
 } from '#selectors';
 
-
 import {
     incidentSummary,
     peopleLoss,
-    hazardWiseLoss,
     genderWiseLoss,
     nepaliRef,
 } from '../formFields';
@@ -57,7 +55,10 @@ const Bulletin = (props: Props) => {
         provinces,
         districts,
         municipalities,
+        hilight,
+        handleHilightChange,
     } = props;
+
     const [hazard, setHazard] = useState(null);
     const [hazardIncidents, setHazardIncidents] = useState();
     const [hazardDeaths, setHazardDeaths] = useState();
@@ -125,6 +126,25 @@ const Bulletin = (props: Props) => {
                 <h3>२४ घण्टामा बिपद्को विवरणहरु</h3>
 
                 <div className={styles.formSubContainer}>
+                    <h3>बिपद्को हिलाईट</h3>
+                    <div className={styles.formItem}>
+                        <FormControl fullWidth>
+                            <InputLabel>
+                                {'हिलाईट...'}
+                            </InputLabel>
+                            <Input
+                                type="number"
+                                value={hilight}
+                                onChange={e => handleHilightChange(e)}
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                        </FormControl>
+                    </div>
                     <div className={styles.formItem}>
                         <FormControl fullWidth>
                             <InputLabel>
@@ -166,6 +186,8 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
+
+
                 <h3>प्रदेश अनुसार मृत्यू, बेपत्ता र घाइते संन्ख्याको बर्गिकरण</h3>
                 <div className={styles.formSubContainer}>
                     { Object.keys(peopleLoss).map(field => (
@@ -203,7 +225,7 @@ const Bulletin = (props: Props) => {
                             { Object.keys(hazardWiseLossData[field]).map((subField) => {
                                 if (subField !== 'coordinates') {
                                     return (
-                                        <div className={styles.formItemHalf}>
+                                        <div className={styles.formItemThird}>
                                             <FormControl fullWidth>
                                                 <InputLabel>
                                                     {nepaliRef[subField]}

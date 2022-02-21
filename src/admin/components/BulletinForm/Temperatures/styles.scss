@@ -2,6 +2,8 @@
     width: 100%;
     // padding: 5px;
     // margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
     background-color: white;
     p{
         padding-left: 30px;
@@ -9,16 +11,21 @@
     }
   .picContainer{
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       max-width: calc(100% - 60px);
-      margin-left: 30px;
-    //   padding: 30px;
+      padding: 30px;
+    // margin: 0 auto;
       cursor: pointer;
-      
       img{
-          max-width: 200mm;
-          width: 95%;
+          width: 95mm ;
           border: 1px solid #b8b7b7;
+      }
+      .formItemfooter{
+          @extend .formItemDailySummary;
+          position: relative;
+          width: 95mm !important;
+          right: 30px !important;
       }
   }
   .picContainerReport{
@@ -26,8 +33,11 @@
     padding: 0 !important;
     max-width: 100% !important;
     margin-left: 0 !important;
+    flex-direction: row;
+    justify-content: space-between;
+    // flex-direction: column;
     img{
-        width: 100%;
+        width: 92mm;
     }
   }
     ::-webkit-scrollbar {
@@ -47,19 +57,20 @@ h3{
     font-weight: 400;
 }
 
-.formItem{
+.formItemDailySummary{
+    max-width: calc(100% - 60px);
+    margin-left: 30px;
+    cursor: pointer;
     border: 1px solid #cecccc;
     border-radius: 3px;
     padding: 0 0 10px 10px;
     margin-top: 12px;
-    margin-left: 30px;
-    margin-bottom: 30px;
+    justify-content: space-between;
     display: flex !important;
     align-items: center;
-    // bottom: 10px;
     background-color: #f3f3f3;
     height: 65px;
-    width: calc(100% - 60px);
-    }
+    width: 100%;
+}
 
 }

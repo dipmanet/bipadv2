@@ -17,13 +17,28 @@
             width: calc(48% - 4mm);
             margin: 2mm;
             font-size: 14px;
+            list-style: none;
         }
+    }
+
+    .responseTable{
+        border-collapse: collapse;
+        position: relative;
+        td,th{
+            height: 20px;
+            border: 1px solid rgb(107, 106, 106);
+            padding: 2px;
+            text-align: left;
+        }
+        width: 100%;
+        position: relative;
     }
 .formSubContainer{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0;
+    margin-bottom: 40px;
     .btnContainer{
         width: 100%;
         display: flex;
@@ -44,6 +59,7 @@
         }
     .formItemHalf{
        @extend .formItem;
+       justify-content: space-between;
        width: 49% !important;
         }
     .formItemThird{

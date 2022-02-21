@@ -1273,6 +1273,9 @@ export const setBulletinDataTemperature = (
         deferedState.bulletinPage.tempMin = bulletinData.tempMin;
         deferedState.bulletinPage.tempMax = bulletinData.tempMax;
         deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
+        deferedState.bulletinPage.rainSummaryPic = bulletinData.rainSummaryPic;
+        deferedState.bulletinPage.maxTempFooter = bulletinData.maxTempFooter;
+        deferedState.bulletinPage.minTempFooter = bulletinData.minTempFooter;
     });
 
     return newState;

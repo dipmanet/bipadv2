@@ -1,0 +1,46 @@
+.formContainer{
+    margin-left: 10mm;
+    margin-bottom: 10mm;
+    margin: 0 auto;
+    width: 100%;
+    ::-webkit-scrollbar {
+        display: none;
+    }  
+    .subContainer{
+        margin-left: 30px;
+        margin-bottom: 30px;
+        h3{
+            color:#707070;
+            margin: 40px 0 20px 0px;
+            font-size: 16px;
+            font-weight: 400;
+        
+        }
+        .picture{
+            .reportPic{
+                width: 170mm;
+                height: 80mm !important;
+
+            }
+            .placeholder{
+                width: 90mm;
+                border: 1px solid rgb(196, 195, 195);
+                cursor: pointer;
+            }
+        }
+    
+
+    }
+    .subContainerReport{
+           @extend .picture;
+            // border: 1px solid red;
+            position: relative;
+            // right: 30px;
+            h3{
+                position: relative;
+            }
+    }
+        
+
+
+}

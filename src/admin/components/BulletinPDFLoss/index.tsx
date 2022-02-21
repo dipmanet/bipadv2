@@ -24,21 +24,18 @@ import { nepaliRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 import {
     bulletinPageSelector,
-    hazardTypesSelector,
 } from '#selectors';
 import IncidentLegend from '#rscz/Legend';
 import HazardsLegend from '#components/HazardsLegend';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
-    hazardTypes: hazardTypesSelector(state),
 });
 
 interface Props {
 
 }
 
-const COLORS_CHART = ['#DC4325', '#EC7F56', '#D6C3AF'];
 
 const labelSelector = (d: LegendItem) => d.label;
 const keySelector = (d: LegendItem) => d.label;
@@ -61,21 +58,39 @@ const BulletinPDF = (props: Props) => {
     const {
         sitRep,
         incidentSummary,
-        hazardWiseLoss,
-        genderWiseLoss,
         peopleLoss,
-
+        hilight,
+        hazardWiseLoss,
     } = props.bulletinData;
 
-    const { hazardTypes } = props;
-
     const [provWiseLossChart, setProvWiseChart] = useState([]);
-    const [hazardWiseLossChart, setHazardWiseChart] = useState([]);
-    const [genderWiseLossChart, setGenderWiseChart] = useState([]);
     const [filteredHazardTypes, setHazardLegends] = useState([]);
     const [newHazardGeoJson, setHazardGeoJson] = useState([]);
     const [incidentPoints, setincidentPoints] = useState({});
 
+    const { hazardTypes } = props;
+
+    const renderLegendContent = (p, layout) => {
+        const { payload } = p;
+        let gap;
+        if (layout === 'vertical') {
+            gap = '10px';
+        } else {
+            gap = '35px';
+        }
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: gap }}>
+                {
+                    payload.map((entry, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
+                            <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
+                            <span>{entry.value}</span>
+                        </div>
+                    ))
+                }
+            </div>
+        );
+    };
 
     useEffect(() => {
         if (hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) {
@@ -108,7 +123,6 @@ const BulletinPDF = (props: Props) => {
                     color: getHazardColor(hazardName),
                 }
             ));
-            console.log('obj', obj);
             setHazardLegends(obj);
             const features = [];
             Object.keys(hazardWiseLoss).map((h) => {
@@ -135,44 +149,6 @@ const BulletinPDF = (props: Props) => {
         }
     }, [hazardTypes, hazardWiseLoss, newHazardGeoJson]);
 
-    const renderLegendContent = (p, layout) => {
-        const { payload } = p;
-        let gap;
-        if (layout === 'vertical') {
-            gap = '10px';
-        } else {
-            gap = '35px';
-        }
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: gap }}>
-                {
-                    payload.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
-                            <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
-                            <span>{entry.value}</span>
-                        </div>
-                    ))
-                }
-            </div>
-        );
-    };
-    const renderLegendPie = (p, layout) => {
-        const { payload } = p;
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', width: '100%', height: '50mm', paddingTop: '20px' }}>
-                {
-                    payload.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: '20px' }}>
-                            <div style={{ width: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '30px', color: '#fff', borderRadius: '50%', marginRight: '4px', backgroundColor: `${entry.color}` }}>
-                                {entry.payload.value}
-                            </div>
-                            <span>{entry.value}</span>
-                        </div>
-                    ))
-                }
-            </div>
-        );
-    };
     useEffect(() => {
         const cD = Object.keys(peopleLoss).map(pL => ({
             province: nepaliRef[pL],
@@ -181,31 +157,6 @@ const BulletinPDF = (props: Props) => {
             घाईते: peopleLoss[pL].injured,
         }));
         setProvWiseChart(cD);
-        const hcD = Object.keys(hazardWiseLoss).map(h => (
-            {
-                hazard: h,
-                घटना: hazardWiseLoss[h].incidents,
-                मृत्यु: hazardWiseLoss[h].deaths,
-            }
-        ));
-        setHazardWiseChart(hcD);
-        const pieChart = [
-            {
-                name: 'पुरुष',
-                value: Number(genderWiseLoss.male),
-            },
-            {
-                name: 'महिला',
-                value: Number(genderWiseLoss.female),
-            },
-            {
-                name: 'पहिचान नभएको ',
-                value: Number(genderWiseLoss.unknown),
-            },
-        ];
-        setGenderWiseChart(pieChart);
-
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -257,6 +208,18 @@ const BulletinPDF = (props: Props) => {
                             ))
                         }
                     </div>
+                </div>
+            </div>
+            <div className={styles.pratikriyaContainer}>
+                <h2>बिपद्का हाइलाईट</h2>
+                <div className={styles.pratikriyas}>
+                    <ul>
+                        {
+                            <li>
+                                {hilight}
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
             <div className={styles.provinceWiseLoss}>
@@ -316,63 +279,6 @@ const BulletinPDF = (props: Props) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className={styles.hazardWiseStats}>
-                <h2>प्रकोप अनुसार घटना र मृत्‍यु संख्याको बर्गिकरण </h2>
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                        layout="vertical"
-                        data={hazardWiseLossChart}
-                        margin={{
-                            top: 20,
-                            right: 0,
-                            left: 15,
-                            bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis type="number" />
-                        <YAxis
-                            type="category"
-                            dataKey="hazard"
-                        />
-
-                        <Tooltip />
-                        <Legend content={e => renderLegendContent(e, 'vertical')} />
-                        <Bar dataKey="मृत्यु" fill="#D10000" barSize={7} />
-                        <Bar dataKey="घटना" fill="#D4A367" barSize={7} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-            <div className={styles.genderWiseStats}>
-                <h2>लिङ अनुसार मृत्‍युको बर्गिकरण </h2>
-                <ResponsiveContainer width="100%" height="100%">
-                    <PieChart
-                        width={200}
-                        height={150}
-                        margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
-                    >
-                        <Pie
-                            data={genderWiseLossChart}
-                            innerRadius={40}
-                            outerRadius={60}
-                            fill="#8884d8"
-                            paddingAngle={0}
-                            dataKey="value"
-                            stroke="none"
-                            label
-                            startAngle={90}
-                            endAngle={450}
-                        >
-                            {
-                                genderWiseLossChart.map((entry, index) => <Cell label key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
-                            }
-                        </Pie>
-                        <Tooltip />
-                        <Legend layout="vertical" align="right" content={renderLegendPie} />
-                    </PieChart>
-
-                </ResponsiveContainer>
             </div>
         </div>
     );

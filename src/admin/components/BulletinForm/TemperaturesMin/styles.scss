@@ -5,8 +5,12 @@
     .subContainer{
         padding: 0;
         width: 95%;
+        
+        .footerText{
+            padding: 0;
+            width: 80mm;
+        }
     }
-  
     ::-webkit-scrollbar {
         display: none;
     }  

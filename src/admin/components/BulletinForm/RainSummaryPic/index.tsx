@@ -1,5 +1,9 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import FileUploader from 'src/admin/components/FileUploader';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Placeholder from 'src/admin/resources/placeholder.png';
 import { useDropzone } from 'react-dropzone';
 import styles from './styles.scss';
@@ -8,28 +12,28 @@ interface Props {
 
 }
 
-const TemperatureMax = (props: Props) => {
+const TemperaturesMin = (props: Props) => {
     const {
-        maxTemp,
-        handleMaxTemp,
-        maxTempFooter,
+        rainSummaryPic,
+        handleRainSummaryPic,
         hideForm,
     } = props;
+
     const [picFromEdit, setPicFromEdit] = useState(false);
     const [picLink, setpicLink] = useState(false);
 
-    const showPicMax = (file) => {
+    const showPicMin = (file) => {
         // const file = document.getElementById('file').files[0];
         const reader = new FileReader();
         // eslint-disable-next-line func-names
         reader.onload = function (e) {
             const image = document.createElement('img');
-            const picNode = document.getElementById('pictureContainerMax');
+            const picNode = document.getElementById('pictureContainerRain');
             image.src = e.target.result;
             if (picNode.firstChild) {
                 picNode.removeChild(picNode.lastChild);
             }
-            document.getElementById('pictureContainerMax').appendChild(image);
+            document.getElementById('pictureContainerRain').appendChild(image);
         };
         reader.readAsDataURL(file);
     };
@@ -37,67 +41,69 @@ const TemperatureMax = (props: Props) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
     useEffect(() => {
-        console.log('acceptedFiles', acceptedFiles);
         if (acceptedFiles.length > 0) {
-            handleMaxTemp(acceptedFiles[0]);
+            handleRainSummaryPic(acceptedFiles[0]);
             const reader = new FileReader();
             // eslint-disable-next-line func-names
             reader.onload = function (e) {
                 const image = document.createElement('img');
-                const picNode = document.getElementById('pictureContainerMax');
+                const picNode = document.getElementById('pictureContainerRain');
                 image.src = e.target.result;
                 if (picNode.firstChild) {
                     picNode.removeChild(picNode.lastChild);
                 }
-                document.getElementById('pictureContainerMax').appendChild(image);
+                document.getElementById('pictureContainerRain').appendChild(image);
             };
             reader.readAsDataURL(acceptedFiles[0]);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [acceptedFiles]);
 
-
+    const handleMinTempInput = (file: File) => {
+        handleRainSummaryPic(file);
+        showPicMin(file);
+    };
     useEffect(() => {
         window.scrollTo({ top: 400, left: 0 });
-        if (maxTemp && typeof maxTemp !== 'string') {
-            showPicMax(maxTemp);
+        if (rainSummaryPic && typeof rainSummaryPic !== 'string') {
+            showPicMin(rainSummaryPic);
         }
-    }, [maxTemp]);
+    }, [rainSummaryPic]);
 
     return (
         <div className={styles.formContainer}>
             <div {...getRootProps({ className: 'dropzone' })}>
                 <input {...getInputProps()} />
 
-                <div className={styles.subContainer}>
+                <div className={hideForm ? styles.subContainerReport : styles.subContainer}>
 
-                    <h3>दैनिक अधिकतम तापक्रम</h3>
-                    <div id="pictureContainerMax" className={styles.picture}>
+                    {!hideForm && <h3>दैनिक बर्षा को नक्सा</h3>}
+                    <div id="pictureContainerRain" className={styles.picture}>
                         {
                             picFromEdit
                             && (
                             <>
-                                <img src={picLink} alt="temperature" />
+                                <img
+                                    src={picLink}
+                                    alt="temperature"
+                                />
                             </>
                             )
                         }
                         {
-                            !picFromEdit && !maxTemp
+                            !picFromEdit && !rainSummaryPic
                             && (
                             <>
-                                <img className={styles.placeholder} src={Placeholder} alt="temperature" />
-
+                                <img
+                                    src={Placeholder}
+                                    alt="temperature"
+                                    title="Click to select picture"
+                                    className={styles.placeholder}
+                                />
                             </>
                             )
                         }
                     </div>
-                    {hideForm && maxTempFooter
-                        && (
-                            <p className={styles.footerText}>
-                                {maxTempFooter}
-                            </p>
-                        )
-                    }
                 </div>
             </div>
         </div>
@@ -106,4 +112,4 @@ const TemperatureMax = (props: Props) => {
     );
 };
 
-export default TemperatureMax;
+export default TemperaturesMin;

@@ -155,4 +155,7 @@ export const nepaliRef = {
     secondDosage: 'दोस्रो मात्रा',
     latitude: 'अक्षांश',
     longitude: 'देशान्तर',
+    response: 'प्रतिकार्य',
+    district: 'जिल्ला',
+    incidentdescription: 'घटना विवरण',
 };

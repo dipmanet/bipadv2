@@ -11,7 +11,7 @@ import {
 } from '@togglecorp/fujs';
 import DailyLoss from './DailyLoss';
 import Covid from './Covid';
-import Feedback from './Feedback';
+import Response from './Response';
 import Temperatures from './Temperatures';
 import PDFPreview from './PDFPreview';
 import ProgressMenu from '../ProgressMenu';
@@ -201,7 +201,11 @@ const Bulletin = (props: Props) => {
     const [feedback, setFeedback] = useState([]);
     const [maxTemp, setMaxTemp] = useState(null);
     const [minTemp, setMinTemp] = useState(null);
+    const [rainSummaryPic, setRainSummaryPic] = useState(null);
+    const [maxTempFooter, setMaxTempFooter] = useState(null);
+    const [minTempFooter, setMinTempFooter] = useState(null);
     const [showPdf, setshowPdf] = useState(false);
+    const [hilight, setHilight] = useState('');
     const [dailySummary, setDailySumamry] = useState(null);
     const [activeProgressMenu, setActive] = useState(0);
     const [progress, setProgress] = useState(0);
@@ -253,21 +257,20 @@ const Bulletin = (props: Props) => {
     }, [bulletinEditData]);
 
 
-    const handleDailySummary = (e) => {
-        setDailySumamry(e.target.value);
-    };
-
-
     const handleSitRep = (num) => {
         setSitRep(num);
     };
+
+    const handleHilightChange = (e) => {
+        setHilight(e.target.value);
+    };
+
 
     const handleIncidentChange = (e, field) => {
         const newState = produce(incidentData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
             deferedState[field] = e;
         });
-
         setIncidentData(newState);
     };
 
@@ -286,7 +289,6 @@ const Bulletin = (props: Props) => {
     };
     const handlehazardAdd = (hazard) => {
         const newData = { ...hazardWiseLossData };
-
         setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0, coordinates: [0, 0] } });
     };
 
@@ -330,7 +332,13 @@ const Bulletin = (props: Props) => {
     };
 
     const handleFeedbackChange = (e) => {
-        setFeedback([...feedback, e]);
+        setFeedback(Object.assign({}, feedback, e));
+    };
+
+    const handleSubFieldChange = (e, field, subfield) => {
+        const newObj = { ...feedback[field] };
+        newObj[subfield] = e;
+        setFeedback(Object.assign({}, feedback, { [field]: newObj }));
     };
 
     const handleMaxTemp = (e) => {
@@ -340,6 +348,24 @@ const Bulletin = (props: Props) => {
     const handleMinTemp = (e) => {
         setMinTemp(e);
     };
+
+    const handleDailySummary = (e) => {
+        setDailySumamry(e.target.value);
+    };
+
+
+    const handleFooterMax = (e) => {
+        setMaxTempFooter(e.target.value);
+    };
+
+    const handleFooterMin = (e) => {
+        setMinTempFooter(e.target.value);
+    };
+
+    const handleRainSummaryPic = (e) => {
+        setRainSummaryPic(e);
+    };
+
 
     const deleteFeedbackChange = (idx) => {
         const n = [...feedback];
@@ -382,6 +408,9 @@ const Bulletin = (props: Props) => {
                     tempMin: minTemp,
                     tempMax: maxTemp,
                     dailySummary,
+                    rainSummaryPic,
+                    maxTempFooter,
+                    minTempFooter,
                 });
             }
             setProgress(progress + 1);
@@ -437,7 +466,8 @@ const Bulletin = (props: Props) => {
     };
 
     useEffect(() => {
-        if (lossData) {
+        if (lossData && lossData.length > 0) {
+            console.log('lossData', lossData);
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
@@ -454,14 +484,13 @@ const Bulletin = (props: Props) => {
                 unknown: summary.peopleDeathOtherCount,
             });
 
-
-            const p1Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 1);
-            const p2Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 2);
-            const p3Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 3);
-            const p4Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 4);
-            const p5Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 5);
-            const p6Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 6);
-            const p7Data = lossData.filter(lD => lD.wards[0].municipality.district.province === 7);
+            const p1Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 1);
+            const p2Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 2);
+            const p3Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 3);
+            const p4Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 4);
+            const p5Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 5);
+            const p6Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 6);
+            const p7Data = lossData.filter(lD => lD.wards[0] && lD.wards[0].municipality.district.province === 7);
             setPeopleLoss({
                 p1: {
                     death: calculateSummaryProvince(p1Data).peopleDeathCount,
@@ -505,6 +534,11 @@ const Bulletin = (props: Props) => {
                 newhazardData[hazardTypes[h].titleNe] = {
                     deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
                     incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
+                    missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount,
+                    // response: '',
+                    // district: '',
+                    // incidentdescription: '',
+                    // coordinates: [0, 0],
                 };
                 return null;
             });
@@ -607,6 +641,8 @@ const Bulletin = (props: Props) => {
             handleSitRep={handleSitRep}
             sitRep={sitRep}
             handlehazardAdd={handlehazardAdd}
+            handleHilightChange={handleHilightChange}
+            hilight={hilight}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}
@@ -618,10 +654,12 @@ const Bulletin = (props: Props) => {
             handleVaccineStat={handleVaccineStat}
             handleprovincewiseTotal={handleprovincewiseTotal}
         />,
-        <Feedback
+        <Response
             handleFeedbackChange={handleFeedbackChange}
             feedback={feedback}
             deleteFeedbackChange={deleteFeedbackChange}
+            hazardWiseLossData={hazardWiseLossData}
+            handleSubFieldChange={handleSubFieldChange}
         />,
         <Temperatures
             minTemp={minTemp}
@@ -630,6 +668,12 @@ const Bulletin = (props: Props) => {
             handleMinTemp={handleMinTemp}
             handleDailySummary={handleDailySummary}
             dailySummary={dailySummary}
+            rainSummaryPic={rainSummaryPic}
+            handleRainSummaryPic={handleRainSummaryPic}
+            maxTempFooter={maxTempFooter}
+            minTempFooter={minTempFooter}
+            handleFooterMax={handleFooterMax}
+            handleFooterMin={handleFooterMin}
         />,
         <PDFPreview
             handlePrevBtn={handlePrevBtn}
