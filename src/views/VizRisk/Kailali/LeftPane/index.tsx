@@ -910,7 +910,7 @@ RISK
                                         : [dataMin => Math.floor(dataMin - 100), dataMax => parseInt(dataMax + 100, 10)]}
                                 >
                                     <Label
-                                        value="Critical Infrastructures"
+                                        value="Climate Change"
                                         offset={-10}
                                         position="insideBottom"
                                         style={{
