@@ -10,7 +10,7 @@ $inputBackground : #F7F7F7;
 	position: fixed;
 	left: 15%;
 	top: 5%;
-	padding: 30px;
+	padding: 50px;
 
 	.title {
 		font-family: $Fira;
@@ -22,6 +22,7 @@ $inputBackground : #F7F7F7;
 	.myRow {
 		display: flex;
 		flex-direction: row;
+		width: 100%;
 		// justify-content: space-around;  
 		.saveOrAddButtons{
 			justify-content: flex-end;
