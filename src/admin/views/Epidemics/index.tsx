@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 import React, { useEffect, useRef, useState } from 'react';
@@ -108,9 +109,81 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    incidentUpdate: {
+        url: ({ params }) => `/incident/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Incident Updated' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    incidentPatch: {
+        url: ({ params }) => `/incident/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Incident verified' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossDeadMale: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadMaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -156,9 +229,57 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossDeadFemaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossDeadOther: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadOtherUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -204,9 +325,57 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossDeadDisabledUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossInjuredMale: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredMaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -252,6 +421,30 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossInjuredFemaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossInjuredOther: {
         url: '/loss-people/',
         method: methods.POST,
@@ -276,9 +469,57 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossInjuredOtherUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossInjuredDisabled: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredDisabledUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -590,7 +831,7 @@ const Epidemics = (props) => {
         setAdded(false);
         setUpdated(false);
         setError(false);
-        navigate('/admin/epidemics-table');
+        navigate('/admin/epidemics/epidemics-data-table');
     };
     const handleAddedSuccess = () => {
         setAdded(false);
@@ -604,7 +845,7 @@ const Epidemics = (props) => {
         setError(false);
     };
     const handleTableButton = () => {
-        navigate('/admin/epidemics-table');
+        navigate('/admin/epidemics/epidemics-data-table');
     };
 
     useEffect(() => {
@@ -750,8 +991,19 @@ const Epidemics = (props) => {
                     coordinates: [longitude, lattitude],
                 },
                 wards: [editWardId] };
-
-            // dispatch(incidentUpdateData(uniqueId, data, true));
+            if (user
+                    && user.profile
+                    && user.profile.role === 'validator'
+            ) {
+                const verify = {
+                    verified,
+                    approved,
+                    verification_message: verificationMessage,
+                };
+                props.requests.incidentPatch.do({ id: uniqueId, body: verify });
+            } else {
+                props.requests.incidentUpdate.do({ id: uniqueId, body: data });
+            }
 
 
             const obj = {
@@ -768,34 +1020,42 @@ const Epidemics = (props) => {
             const deadMale = { ...deadMaleInitial,
                 loss: editLossId,
                 count: deadFormMale };
+            props.requests.lossDeadMaleUpdate.do({ id: obj.deadMale, body: deadMale });
             // dispatch(lossPeopleUpdateData(obj.deadMale, deadMale));
             const deadFemale = { ...deadFemaleInitial,
                 loss: editLossId,
                 count: deadFormFemale };
+            props.requests.lossDeadFemaleUpdate.do({ id: obj.deadFemale, body: deadFemale });
             // dispatch(lossPeopleUpdateData(obj.deadFemale, deadFemale));
             const deadOther = { ...deadOtherInitial,
                 loss: editLossId,
                 count: deadFormOther };
+            props.requests.lossDeadOtherUpdate.do({ id: obj.deadOther, body: deadOther });
             // dispatch(lossPeopleUpdateData(obj.deadOther, deadOther));
             const deadDisabled = { ...deadDisabledInitial,
                 loss: editLossId,
                 count: deadFormDisabled };
+            props.requests.lossDeadDisabledUpdate.do({ id: obj.deadDisabled, body: deadDisabled });
             // dispatch(lossPeopleUpdateData(obj.deadDisabled, deadDisabled));
             const injuredMale = { ...injuredMaleInitial,
                 loss: editLossId,
                 count: injuredFormMale };
+            props.requests.lossInjuredMaleUpdate.do({ id: obj.injuredMale, body: injuredMale });
             // dispatch(lossPeopleUpdateData(obj.injuredMale, injuredMale));
             const injuredFemale = { ...injuredFemaleInitial,
                 loss: editLossId,
                 count: injuredFormFemale };
+            props.requests.lossInjuredFemaleUpdate.do({ id: obj.injuredFemale, body: injuredFemale });
             // dispatch(lossPeopleUpdateData(obj.injuredFemale, injuredFemale));
             const injuredOther = { ...injuredOtherInitial,
                 loss: editLossId,
                 count: injuredFormOther };
+            props.requests.lossInjuredOtherUpdate.do({ id: obj.injuredOther, body: injuredOther });
             // dispatch(lossPeopleUpdateData(obj.injuredOther, injuredOther));
             const injuredDisabled = { ...injuredDisabledInitial,
                 loss: editLossId,
                 count: injuredFormDisabled };
+            props.requests.lossInjuredDisabledUpdate.do({ id: obj.injuredDisabled, body: injuredDisabled });
             // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
             if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
                 setError(true);

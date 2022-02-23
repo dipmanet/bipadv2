@@ -65,10 +65,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
     },
     userPut: {
-        url: ({ params }) => {
-            console.log('test in api', params);
-            return (`/user/${params.id}/`);
-        },
+        url: ({ params }) => (`/user/${params.id}/`),
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
