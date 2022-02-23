@@ -2,18 +2,11 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { InputLabel,
-    MenuItem,
+import { MenuItem,
     FormControl,
-    FormHelperText,
-    Select,
-    Modal,
     Box,
-    Grid,
     TextField } from '@mui/material';
 
-import SuccessfullyAdded from 'src/admin/components/SucessfullyAdded';
-import { useForm, Controller } from 'react-hook-form';
 import styles from './styles.module.scss';
 
 import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
@@ -58,7 +51,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             console.log('posted data', response);
-            // props.setEpidemicsPage({ successMessage: 'Incident added' });
         },
         onFailure: ({ error, params }) => {
             if (params && params.setEpidemicsPage) {
@@ -84,8 +76,9 @@ const formData = {
 };
 
 const validationSchema = {
-    userNameError: '',
-    passwordError: '',
+    userName: null,
+    password: null,
+    confirmPassword: null,
 };
 
 const AdminForm = (props) => {
@@ -101,13 +94,7 @@ const AdminForm = (props) => {
     const { handleClose } = props;
     const [formDataState, setformDataState] = useState(formData);
     const [validationError, setvalidationError] = useState(validationSchema);
-    const [userNameError, setUserNameError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-    const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-    const [passwordLengthError, setPasswordLengthError] = useState(false);
     const [loggedUserName, setloggedUserName] = useState('');
-    const [passwordNotMatching, setpasswordNotMatching] = useState('');
-    const [successFullAdd, setsuccessFullAdd] = useState(false);
     const [subfix, setSubfix] = useState('');
     const {
         userDataMain,
@@ -121,14 +108,6 @@ const AdminForm = (props) => {
         wards,
     } = props;
 
-    const {
-        register,
-        reset,
-        control,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
-
     useEffect(() => {
         if (userDataMain.profile.region === 'province') {
             setSubfix(provinces.filter(item => item.id === userDataMain.profile.province)[0].title);
@@ -141,10 +120,6 @@ const AdminForm = (props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    useEffect(() => {
-        console.log('validatino error', validationError);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [Object.values(validationError)]);
 
     const userDataPost = {
         profile: {
@@ -182,44 +157,50 @@ const AdminForm = (props) => {
     };
 
     const handleChange = (e, name) => {
+        e.preventDefault();
+        const myerror = { ...validationError };
+        switch (name) {
+            case 'userName':
+                myerror.userName = e.target.value.length < 1
+                    ? 'This field is required'
+                    : '';
+                break;
+            case 'password':
+                myerror.password = e.target.value.length < 8
+                    ? 'Password must be at least 8 characters long!'
+                    : '';
+                break;
+            case 'confirmPassword':
+                console.log('tetst', e.target.value, formDataState.confirmPassword);
+                if (formDataState.password !== e.target.value) {
+                    myerror.confirmPassword = 'Password does not match';
+                } else {
+                    myerror.confirmPassword = '';
+                }
+                break;
+            default:
+                break;
+        }
+        setvalidationError(myerror);
         setformDataState({ ...formDataState, [name]: e.target.value });
-        // console.log('posting', formDataState);
     };
 
-    useEffect(() => {
-        console.log('change in validationError', validationError);
-    }, [validationError]);
-
     const handlePostData = () => {
-        if (!formDataState.userName || !formDataState.password || !formDataState.confirmPassword) {
-            if (formDataState.userName === '') {
-                setUserNameError(true);
-            } else {
-                setUserNameError(false);
-            }
-            if (formDataState.password === '') {
-                setPasswordError(true);
-            } else {
-                setPasswordError(false);
-            }
-            if (formDataState.confirmPassword === '') {
-                setConfirmPasswordError(true);
-            } else {
-                setConfirmPasswordError(false);
-            }
-            if (formDataState.password !== formDataState.confirmPassword) {
-                setpasswordNotMatching(true);
-            } else {
-                setpasswordNotMatching(false);
-            }
-            if (formDataState.password && formDataState.password.length < 8) {
-                setPasswordLengthError(true);
-            } else {
-                setPasswordLengthError(false);
-            }
+        if (!formDataState.userName && !formDataState.password && !formDataState.confirmPassword) {
+            const pass = { ...validationError };
+            pass.userName = 'This field is required';
+            pass.password = 'This field is required';
+            pass.confirmPassword = 'This field is required';
+            setvalidationError(pass);
         } else {
             props.requests.userPost.do({ body: userDataPost });
         }
+        // console.info('Valid Form');
+        // if (validateForm(validationError)) {
+        //     // props.requests.userPost.do({ body: userDataPost });
+        // } else {
+        //     console.error('Invalid Form');
+        // }
         // if (Object.values(validationError)) {
         //     console.log('threre is error', validationError.userNameError);
         // } else {
@@ -387,8 +368,8 @@ const AdminForm = (props) => {
                                         id="outlined-basic"
                                         label="Username"
                                         variant="outlined"
-                                        error={userNameError}
-                                        helperText={userNameError ? 'This field is required' : null}
+                                        error={validationError.userName}
+                                        helperText={validationError.userName ? validationError.userName : null}
                                     />
                                 </FormControl>
                                 <FormControl fullWidth sx={{ m: 2 }}>
@@ -413,8 +394,8 @@ const AdminForm = (props) => {
                                         id="outlined-basic"
                                         label="Password"
                                         variant="outlined"
-                                        error={passwordError}
-                                        helperText={passwordError ? 'This field is required' : null}
+                                        error={validationError.password}
+                                        helperText={validationError.password ? validationError.password : null}
                                     />
                                 </FormControl>
                                 <FormControl fullWidth sx={{ m: 1 }}>
@@ -426,8 +407,8 @@ const AdminForm = (props) => {
                                         id="outlined-basic"
                                         label="Confirm Password"
                                         variant="outlined"
-                                        error={passwordError}
-                                        helperText={passwordError ? 'This field is required' : null}
+                                        error={validationError.confirmPassword}
+                                        helperText={validationError.confirmPassword ? validationError.confirmPassword : null}
                                     />
                                 </FormControl>
                             </div>
