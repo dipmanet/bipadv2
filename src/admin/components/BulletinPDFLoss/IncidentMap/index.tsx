@@ -120,7 +120,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         // We have to transform dateRange to incident_on__lt and incident_on__gt
         query: ({ props: { filters } }) => ({
             ...transformFilters(filters),
-            expand: ['loss', 'event', 'wards'],
+            expand: ['loss', 'event', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
             ordering: '-incident_on',
             // eslint-disable-next-line @typescript-eslint/camelcase
             incident_on__gt: `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,

@@ -49,10 +49,10 @@ export const peopleLoss = {
 };
 
 export const hazardWiseLoss = {
-    आगलागी: {
-        deaths: 1,
-        incidents: 5,
-    },
+    // आगलागी: {
+    //     deaths: 1,
+    //     incidents: 5,
+    // },
 };
 
 export const genderWiseLoss = {

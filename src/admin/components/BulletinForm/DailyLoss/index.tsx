@@ -57,6 +57,9 @@ const Bulletin = (props: Props) => {
         municipalities,
         hilight,
         handleHilightChange,
+        handleSameHazardAdd,
+        addedHazardFields,
+        handleSameHazardChange,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -71,24 +74,25 @@ const Bulletin = (props: Props) => {
         }
 
         if (adminLevel === 2) {
-            return districts.find(p => p.id === geoarea);
+            return {
+                centroid: districts.find(p => p.id === geoarea).centroid,
+                district: districts.find(p => p.id === geoarea).title_ne,
+            };
         }
 
         if (adminLevel === 3) {
-            return municipalities.find(p => p.id === geoarea);
+            return {
+                centroid: municipalities.find(p => p.id === geoarea).centroid,
+                district: districts.filter(d => d.id === (municipalities.find(p => p.id === geoarea).district))[0].title_ne,
+            };
         }
 
         return '';
     };
 
-
     const handleFormRegion = (region, field, subfield) => {
-        if (region) {
-            const { coordinates } = getRegionDetails(region).centroid;
-            handlehazardwiseLoss(coordinates, field, 'coordinates');
-        } else {
-            handlehazardwiseLoss([0, 0], field, 'coordinates');
-        }
+        const { centroid: { coordinates }, district } = getRegionDetails(region);
+        handleSameHazardChange({ district, coordinates }, field, 'location');
     };
 
     const handleCheckFilterDisableButtonForProvince = (province) => {
@@ -109,7 +113,8 @@ const Bulletin = (props: Props) => {
 
     const handleHazardAddItem = () => {
         if (hazard) {
-            handlehazardAdd(hazard);
+            // handlehazardAdd(hazard);
+            handleSameHazardAdd(hazard);
             setHazard(null);
         }
     };
@@ -117,7 +122,6 @@ const Bulletin = (props: Props) => {
     const handleHazardChange = (e) => {
         setHazard(e);
     };
-
 
     return (
         <>
@@ -127,24 +131,6 @@ const Bulletin = (props: Props) => {
 
                 <div className={styles.formSubContainer}>
                     <h3>बिपद्को हिलाईट</h3>
-                    <div className={styles.formItem}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'हिलाईट...'}
-                            </InputLabel>
-                            <Input
-                                type="number"
-                                value={hilight}
-                                onChange={e => handleHilightChange(e)}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
-                    </div>
                     <div className={styles.formItem}>
                         <FormControl fullWidth>
                             <InputLabel>
@@ -164,6 +150,25 @@ const Bulletin = (props: Props) => {
                             />
                         </FormControl>
                     </div>
+                    <div className={styles.formItem}>
+                        <FormControl fullWidth>
+                            <InputLabel>
+                                {'हिलाईट...'}
+                            </InputLabel>
+                            <Input
+                                type="number"
+                                value={hilight}
+                                onChange={e => handleHilightChange(e)}
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                        </FormControl>
+                    </div>
+
                     { Object.keys(incidentSummary).map((field, idx) => (
 
                         <div className={idx > 0 ? styles.formItemHalf : styles.formItem}>
@@ -219,13 +224,21 @@ const Bulletin = (props: Props) => {
                 </div>
                 <h3>प्रकोप अनुसार मृत्यू, बेपत्ता र घाइते संन्ख्याको बर्गिकरण</h3>
                 <div className={styles.formSubContainer}>
-                    { Object.keys(hazardWiseLossData).map(field => (
-                        <>
-                            <h3>{field}</h3>
-                            { Object.keys(hazardWiseLossData[field]).map((subField) => {
-                                if (subField !== 'coordinates') {
+                    {hazardWiseLossData
+                        && Object.keys(hazardWiseLossData).length > 0
+                        && Object.keys(hazardWiseLossData).map(field => (
+                            <>
+                                <h3>{field}</h3>
+                                { field && Object.keys(hazardWiseLossData[field]).map((subField) => {
+                                    if (subField === 'hazard') {
+                                        return null;
+                                    }
+                                    if (subField === 'coordinates') {
+                                        return null;
+                                    }
+
                                     return (
-                                        <div className={styles.formItemThird}>
+                                        <div className={styles.formItemHalf}>
                                             <FormControl fullWidth>
                                                 <InputLabel>
                                                     {nepaliRef[subField]}
@@ -244,30 +257,71 @@ const Bulletin = (props: Props) => {
                                             </FormControl>
                                         </div>
                                     );
+                                })
+                                }
+
+                            </>
+                        ))}
+                    {addedHazardFields
+                    && Object.keys(addedHazardFields).length > 0
+                    && Object.keys(addedHazardFields).map(field => (
+                        <>
+                            <h3>{field && addedHazardFields[field].hazard}</h3>
+                            { field && Object.keys(addedHazardFields[field]).map((subField) => {
+                                if (subField === 'coordinates') {
+                                    return (
+                                        <div className={styles.inputContainer}>
+                                            <StepwiseRegionSelectInput
+                                                className={
+                                                    _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
+                                                faramElementName="region"
+                                                wardsHidden
+                                                onChange={region => handleFormRegion(region, field, subField)}
+                                                checkProvince={handleCheckFilterDisableButtonForProvince}
+                                                checkDistrict={handleCheckFilterDisableButtonForDistrict}
+                                                checkMun={handleCheckFilterDisableButtonForMunicipality}
+                                                reset={resetFilterProps}
+                                                provinceInputClassName={styles.snprovinceinput}
+                                                districtInputClassName={styles.sndistinput}
+                                                municipalityInputClassName={styles.snmuniinput}
+                                            />
+                                        </div>
+
+                                    );
+                                } if (subField === 'hazard') {
+                                    return null;
+                                } if (subField === 'district') {
+                                    return null;
                                 }
                                 return (
-                                    <div className={styles.inputContainer}>
-                                        <StepwiseRegionSelectInput
-                                            className={
-                                                _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
-                                            faramElementName="region"
-                                            wardsHidden
-                                            onChange={region => handleFormRegion(region, field, subField)}
-                                            checkProvince={handleCheckFilterDisableButtonForProvince}
-                                            checkDistrict={handleCheckFilterDisableButtonForDistrict}
-                                            checkMun={handleCheckFilterDisableButtonForMunicipality}
-                                            reset={resetFilterProps}
-                                            provinceInputClassName={styles.snprovinceinput}
-                                            districtInputClassName={styles.sndistinput}
-                                            municipalityInputClassName={styles.snmuniinput}
-                                        />
+                                    <div className={styles.formItemThird}>
+                                        <FormControl fullWidth>
+                                            <InputLabel>
+                                                {nepaliRef[subField]}
+                                            </InputLabel>
+                                            <Input
+                                                type="number"
+                                                className={styles.select}
+                                                value={addedHazardFields[field][subField]}
+                                                onChange={e => handleSameHazardChange(e.target.value, field, subField)}
+                                                disableUnderline
+                                                inputProps={{
+                                                    disableUnderline: true,
+                                                }}
+                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                                            />
+                                        </FormControl>
                                     </div>
-
                                 );
                             })
                             }
+
                         </>
-                    ))}
+                    ))
+
+                    }
+
+
                 </div>
 
 

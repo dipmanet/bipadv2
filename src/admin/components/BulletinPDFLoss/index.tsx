@@ -23,13 +23,14 @@ import LossItem from './LossItem';
 import { nepaliRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 import {
-    bulletinPageSelector,
+    bulletinPageSelector, hazardTypeListSelector,
 } from '#selectors';
 import IncidentLegend from '#rscz/Legend';
 import HazardsLegend from '#components/HazardsLegend';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
+    hazardTypes: hazardTypeListSelector(state),
 });
 
 interface Props {
@@ -61,6 +62,7 @@ const BulletinPDF = (props: Props) => {
         peopleLoss,
         hilight,
         hazardWiseLoss,
+        feedback,
     } = props.bulletinData;
 
     const [provWiseLossChart, setProvWiseChart] = useState([]);
@@ -95,22 +97,23 @@ const BulletinPDF = (props: Props) => {
     useEffect(() => {
         if (hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) {
             const getHazardColor = (hazardName) => {
+                console.log('hazar name supplied', hazardName);
                 const h = Object
                     .keys(hazardTypes)
                     .filter(k => hazardTypes[k].titleNe === hazardName);
-                return hazardTypes[h[0]].color;
+                return hazardTypes[h[0]] ? hazardTypes[h[0]].color : '#000000';
             };
 
             const getSeverity = (deaths) => {
                 if (deaths) {
-                    if (deaths === 0) {
+                    if (Number(deaths) === 0) {
                         return 8;
                     }
-                    if (deaths < 10) {
+                    if (Number(deaths) < 10) {
                         return 11;
-                    } if (deaths >= 10 && deaths < 100) {
+                    } if (Number(deaths) >= 10 && Number(deaths) < 100) {
                         return 15;
-                    } if (deaths >= 100) {
+                    } if (Number(deaths) >= 100) {
                         return 20;
                     }
                 }
@@ -123,7 +126,19 @@ const BulletinPDF = (props: Props) => {
                     color: getHazardColor(hazardName),
                 }
             ));
-            setHazardLegends(obj);
+
+            const allHazardsAdded = Object.keys(feedback)
+                .map(item => feedback[item])
+                .filter(item => item.coordinates)
+                .map(item => item.hazard);
+            const uniqueAddedHazards = [...new Set(allHazardsAdded)];
+            const newhazardLegends = uniqueAddedHazards.map(h => ({
+                title: h,
+                color: getHazardColor(h),
+            }));
+
+            setHazardLegends([...obj, ...newhazardLegends]);
+
             const features = [];
             Object.keys(hazardWiseLoss).map((h) => {
                 if (Object.keys(hazardWiseLoss[h]).length > 2) {
@@ -141,13 +156,31 @@ const BulletinPDF = (props: Props) => {
                 return null;
             });
 
+            Object.keys(feedback)
+                .map(item => feedback[item])
+                .filter(item => item.coordinates)
+                .map((f) => {
+                    features.push({
+                        type: 'Feature',
+                        geometry: { type: 'Point', coordinates: f.coordinates },
+                        properties: {
+                            hazardColor: getHazardColor(f.hazard),
+                            severityScale: getSeverity(f.deaths),
+                        },
+                    });
+
+                    return null;
+                });
+
+
             console.log('features', features);
             setincidentPoints({
                 type: 'FeatureCollection',
                 features,
             });
         }
-    }, [hazardTypes, hazardWiseLoss, newHazardGeoJson]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [feedback, hazardWiseLoss]);
 
     useEffect(() => {
         const cD = Object.keys(peopleLoss).map(pL => ({

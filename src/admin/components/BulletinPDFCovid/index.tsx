@@ -85,7 +85,18 @@ const BulletinPDFLoss = (props: Props) => {
                 मृत्यु: hazardWiseLoss[h].deaths,
             }
         ));
-        setHazardWiseChart(hcD);
+        const newAddedHazardArr = Object.keys(feedback).map(f => feedback[f]);
+
+        const uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
+        const uniqueFieldHazard = Object.keys(hazardWiseLoss);
+        const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr])];
+        const newAddedHazard = uniqueField.map(f => ({
+            hazard: f,
+            घटना: newAddedHazardArr.filter(item => item.hazard === f).length,
+            मृत्यु: newAddedHazardArr.filter(item => item.hazard === f).reduce((a, b) => ({ deaths: Number(a.deaths) + Number(b.deaths) })).deaths,
+        }));
+
+        setHazardWiseChart(newAddedHazard);
         const pieChart = [
             {
                 name: 'पुरुष',

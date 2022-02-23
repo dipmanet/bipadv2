@@ -17,6 +17,8 @@ const BulletinPDFAnnex = (props) => {
     const [peopleLossData, setPeopleLossData] = useState([]);
 
     const {
+        handleFeedbackChange,
+        // feedback,
         bulletinData: {
             incidentSummary,
             peopleLoss,
@@ -26,13 +28,13 @@ const BulletinPDFAnnex = (props) => {
             covidTotalStat,
             vaccineStat,
             covidProvinceWiseTotal,
-            handleFeedbackChange,
             feedback,
             deleteFeedbackChange,
             hazardWiseLossData,
             handleSubFieldChange,
         },
     } = props;
+
 
     useEffect(() => {
         const cD = Object.keys(covidProvinceWiseTotal).map(c => ({

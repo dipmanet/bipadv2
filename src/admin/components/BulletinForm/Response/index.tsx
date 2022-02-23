@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { districtsSelector } from '#selectors';
+import { districtsSelector, incidentListSelectorIP, hazardTypesSelector } from '#selectors';
 import styles from './styles.scss';
 
 interface Props {
@@ -16,6 +16,10 @@ interface Props {
 }
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     districts: districtsSelector(state),
+    incidentList: incidentListSelectorIP(state),
+    hazardTypes: hazardTypesSelector(state),
+
+
 });
 const Response = (props: Props) => {
     const {
@@ -26,6 +30,8 @@ const Response = (props: Props) => {
         districts,
         handleSubFieldChange,
         annex,
+        incidentList,
+        hazardTypes,
     } = props;
 
 
@@ -55,15 +61,17 @@ const Response = (props: Props) => {
     };
 
     useEffect(() => {
-        if (hazardWiseLossData) {
+        if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
             const temp = {};
-            Object.keys(hazardWiseLossData).map((item) => {
-                temp[item] = {
-                    district: '',
+            incidentList.map((item) => {
+                const hazard = hazardTypes[item.hazard].titleNe;
+                temp[item.id] = {
+                    hazard,
+                    district: item.wards[0] && item.wards[0].municipality.district.titleNe,
                     description: '',
-                    deaths: hazardWiseLossData[item].deaths || 0,
-                    missing: hazardWiseLossData[item].missing || 0,
-                    injured: hazardWiseLossData[item].injured || 0,
+                    deaths: item.loss.peopleDeathCount || 0,
+                    missing: item.loss.peopleMissingCount || 0,
+                    injured: item.loss.peopleInjuredCount || 0,
                     response: '',
                 };
                 return null;
@@ -73,7 +81,7 @@ const Response = (props: Props) => {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hazardWiseLossData]);
+    }, [incidentList, hazardTypes]);
     return (
         <>
             <div className={annex ? styles.formContainerAnnex : styles.formContainer}>
@@ -90,13 +98,13 @@ const Response = (props: Props) => {
                                 <table className={styles.responseTable}>
                                     <tr>
                                         <th>
+                                        S.N
+                                        </th>
+                                        <th>
                                         घटना
                                         </th>
                                         <th>
                                         जिल्ला
-                                        </th>
-                                        <th>
-                                        घटना विवरण
                                         </th>
                                         <th>
                                         म्रितक
@@ -108,6 +116,9 @@ const Response = (props: Props) => {
                                         घाइते
                                         </th>
                                         <th>
+                                        घटना विवरण
+                                        </th>
+                                        <th>
                                         प्रतिकार्य
                                         </th>
                                     </tr>
@@ -115,22 +126,29 @@ const Response = (props: Props) => {
                                         feedback && Object.keys(feedback).map((hwL, i) => (
                                             <tr>
                                                 <td>
-                                                    {hwL}
+                                                    {i + 1}
+                                                </td>
+                                                <td>
+                                                    {feedback[hwL].hazard}
                                                 </td>
                                                 <td>
                                                     {feedback[hwL].district}
                                                 </td>
 
                                                 <td>
-                                                    {typeof feedback[hwL].deaths === 'number' ? feedback[hwL].deaths : '-'}
+                                                    {
+                                                        feedback[hwL].deaths
+                                                    }
                                                 </td>
                                                 <td>
-                                                    {typeof feedback[hwL].missing === 'number'
-                                                        ? feedback[hwL].missing : '-'}
+                                                    {
+                                                        feedback[hwL].missing
+                                                    }
                                                 </td>
                                                 <td>
-                                                    {typeof feedback[hwL].injured === 'number'
-                                                        ? feedback[hwL].injured : '-'}
+                                                    {
+                                                        feedback[hwL].injured
+                                                    }
                                                 </td>
                                                 <td>
                                                     <div className={styles.formItemHalf}>
@@ -164,23 +182,6 @@ const Response = (props: Props) => {
                                                                             rows={5}
                                                                         />
                                                                     </div>
-                                                                    // <FormControl fullWidth>
-                                                                    //     <InputLabel>
-                                                                    //         {'प्रतिकार्य'}
-                                                                    //     </InputLabel>
-                                                                    //     <Input
-                                                                    //         type="text"
-                                                                    //         value={feedback[hwL].response || ''}
-                                                                    //         onChange={e => handleSubFieldChange(e.target.value, hwL, 'response')}
-                                                                    //         rows={5}
-                                                                    //         className={styles.select}
-                                                                    //         disableUnderline
-                                                                    //         inputProps={{
-                                                                    //             disableUnderline: true,
-                                                                    //         }}
-                                                                    //         style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                                                    //     />
-                                                                    // </FormControl>
                                                                 )
                                                         }
                                                     </div>
@@ -193,283 +194,6 @@ const Response = (props: Props) => {
                         }
                     </div>
                 }
-                {/* {
-                    !annex && feedback && Object.keys(feedback).length > 0
-                    && (
-                        <>
-                            {Object.keys(feedback).map(f => (
-                                <div className={styles.formSubContainer}>
-                                    <div className={styles.formItemHalf}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'घटना'}
-                                            </InputLabel>
-                                            <Input
-                                                type="text"
-                                                value={f || '--'}
-                                                // onChange={e => handleRemarksChange(e.target.value, 'hazard')}
-                                                disabled
-                                                rows={5}
-                                                className={styles.select}
-                                                disableUnderline
-                                                inputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className={styles.formItemHalf}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'जिल्ला'}
-                                            </InputLabel>
-                                            <Select
-                                                labelId="hazardLabel"
-                                                id="hazardInput"
-                                                value={feedback[f].district || null}
-                                                label="Add New Hazard Field"
-                                                onChange={e => handleSubFieldChange(e.target.value, f, 'district')}
-                                                style={{ borderRadius: '3px', padding: '0 10px' }}
-                                                disableUnderline
-                                            >
-                                                <MenuItem value={null}>--</MenuItem>
-                                                {
-                                                    districts
-                                        && districts.map(hT => (<MenuItem value={hT.title}>{hT.title}</MenuItem>))
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                    <div className={styles.formItem}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'घटना विवरण'}
-                                            </InputLabel>
-                                            <Input
-                                                type="text"
-                                                value={feedback[f].description || ''}
-                                                onChange={e => handleSubFieldChange(e.target.value, f, 'description')}
-                                                rows={5}
-                                                className={styles.select}
-                                                disableUnderline
-                                                inputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className={styles.formItemThird}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'म्रितक'}
-                                            </InputLabel>
-                                            <Input
-                                                type="text"
-                                                value={feedback[f].deaths || ''}
-                                                onChange={e => handleSubFieldChange(e.target.value, f, 'deaths')}
-                                                rows={5}
-                                                className={styles.select}
-                                                disableUnderline
-                                                inputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className={styles.formItemThird}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'घाइते'}
-                                            </InputLabel>
-                                            <Input
-                                                type="text"
-                                                value={feedback[f].injured || ''}
-                                                onChange={e => handleSubFieldChange(e.target.value, f, 'injured')}
-                                                rows={5}
-                                                className={styles.select}
-                                                disableUnderline
-                                                inputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                    <div className={styles.formItemThird}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'बेपता'}
-                                            </InputLabel>
-                                            <Input
-                                                type="text"
-                                                value={feedback[f].missing || ''}
-                                                onChange={e => handleSubFieldChange(e.target.value, f, 'missing')}
-                                                rows={5}
-                                                className={styles.select}
-                                                disableUnderline
-                                                inputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                            />
-                                        </FormControl>
-                                    </div>
-
-                                    <div className={styles.formItem}>
-                                        <FormControl fullWidth>
-                                            <InputLabel>
-                                                {'प्रतिकार्य'}
-                                            </InputLabel>
-                                            <Input
-                                                type="text"
-                                                value={feedback[f].response || ''}
-                                                onChange={e => handleSubFieldChange(e.target.value, f, 'response')}
-                                                rows={5}
-                                                className={styles.select}
-                                                disableUnderline
-                                                inputProps={{
-                                                    disableUnderline: true,
-                                                }}
-                                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                </div>
-                            ))}
-
-                        </>
-                    )} */}
-                {/* <div className={styles.formSubContainer}>
-                    <div className={styles.formItemHalf}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'घटना'}
-                            </InputLabel>
-                            <Input
-                                type="text"
-                                value={remarks ? remarks.hazard : '--'}
-                                onChange={e => handleRemarksChange(e.target.value, 'hazard')}
-                                rows={5}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
-                    </div>
-                    <div className={styles.formItemHalf}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'जिल्ला'}
-                            </InputLabel>
-                            <Select
-                                labelId="hazardLabel"
-                                id="hazardInput"
-                                value={remarks ? remarks.district : null}
-                                label="Add New Hazard Field"
-                                onChange={e => handleRemarksChange(e.target.value, 'district')}
-                                style={{ borderRadius: '3px', padding: '0 10px' }}
-                                disableUnderline
-                            >
-                                <MenuItem value={null}>--</MenuItem>
-                                {
-                                    districts
-                            && districts.map(hT => (<MenuItem value={hT.title}>{hT.title}</MenuItem>))
-                                }
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div className={styles.formItem}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'घटना विवरण'}
-                            </InputLabel>
-                            <Input
-                                type="text"
-                                value={remarks ? remarks.description : ''}
-                                onChange={e => handleRemarksChange(e.target.value, 'description')}
-                                rows={5}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
-                    </div>
-                    <div className={styles.formItemHalf}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'म्रितक'}
-                            </InputLabel>
-                            <Input
-                                type="text"
-                                value={remarks ? remarks.deaths : ''}
-                                onChange={e => handleRemarksChange(e.target.value, 'deaths')}
-                                rows={5}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
-                    </div>
-                    <div className={styles.formItemHalf}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'घाइते'}
-                            </InputLabel>
-                            <Input
-                                type="text"
-                                value={remarks ? remarks.injured : ''}
-                                onChange={e => handleRemarksChange(e.target.value, 'injured')}
-                                rows={5}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
-                    </div>
-
-                    <div className={styles.formItem}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                {'प्रतिकार्य'}
-                            </InputLabel>
-                            <Input
-                                type="text"
-                                value={remarks ? remarks.response : ''}
-                                onChange={e => handleRemarksChange(e.target.value, 'response')}
-                                rows={5}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
-                    </div>
-                    <div className={styles.btnContainer}>
-                        <button
-                            onClick={handleFeedback}
-                            type="button"
-                        >
-                            + थप्नुहोस्
-                        </button>
-                    </div>
-                </div> */}
             </div>
         </>
 

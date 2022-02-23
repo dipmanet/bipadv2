@@ -72,6 +72,8 @@ const lossMetricsProvince = [
 const lossMetricsHazard = [
     { key: 'peopleDeathCount', label: 'People death' },
     { key: 'count', label: 'Incidents' },
+    { key: 'peopleMissingCount', label: 'People missing' },
+    { key: 'peopleInjuredCount', label: 'People injured' },
 ];
 const lossMetricsProvinceRef = [
     { peopleDeathCount: 'death' },
@@ -150,9 +152,10 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         url: '/incident/',
         method: methods.GET,
         query: requestQuery,
-        onMount: false,
-        onSuccess: ({ response, params }) => {
-            if (params) {
+        onMount: true,
+        onSuccess: ({ response, params, props: { setIncidentList } }) => {
+            setIncidentList({ incidentList: response.results });
+            if (params && params.setLossData) {
                 params.setLossData(response.results);
             }
         },
@@ -193,12 +196,13 @@ const Bulletin = (props: Props) => {
     const [incidentData, setIncidentData] = useState(incidentSummary);
     const [peopleLossData, setPeopleLoss] = useState(peopleLoss);
     const [hazardWiseLossData, setHazardwise] = useState(hazardWiseLoss);
+    const [addedHazardFields, setAddedData] = useState({});
     const [genderWiseLossData, setgenderWiseLoss] = useState(genderWiseLoss);
     const [covid24hrsStatData, setcovid24hrsStat] = useState(covid24hrsStat);
     const [covidTotalStatData, setcovidTotalStat] = useState(covidTotalStat);
     const [vaccineStatData, setvaccineStat] = useState(vaccineStat);
     const [covidProvinceWiseData, setcovidProvinceWiseTotal] = useState(covidProvinceWiseTotal);
-    const [feedback, setFeedback] = useState([]);
+    const [feedback, setFeedback] = useState({});
     const [maxTemp, setMaxTemp] = useState(null);
     const [minTemp, setMinTemp] = useState(null);
     const [rainSummaryPic, setRainSummaryPic] = useState(null);
@@ -210,6 +214,7 @@ const Bulletin = (props: Props) => {
     const [activeProgressMenu, setActive] = useState(0);
     const [progress, setProgress] = useState(0);
     const [sitRep, setSitRep] = useState(0);
+    const countId = useRef(0);
     const {
         setBulletinLoss,
         setBulletinCovid,
@@ -248,7 +253,7 @@ const Bulletin = (props: Props) => {
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
             setDailySumamry(bulletinEditData.dailySummary);
         } else {
-            incidentsGetRequest.do();
+            // incidentsGetRequest.do();
             covidNationalInfo.do();
             covidQuarantine.do();
             sitRepQuery.do();
@@ -264,7 +269,6 @@ const Bulletin = (props: Props) => {
     const handleHilightChange = (e) => {
         setHilight(e.target.value);
     };
-
 
     const handleIncidentChange = (e, field) => {
         const newState = produce(incidentData, (deferedState) => {
@@ -287,11 +291,39 @@ const Bulletin = (props: Props) => {
         const newSubData = { ...newFieldData, [subfield]: e };
         setHazardwise({ ...newData, [field]: newSubData });
     };
-    const handlehazardAdd = (hazard) => {
-        const newData = { ...hazardWiseLossData };
-        setHazardwise({ ...newData, [hazard]: { deaths: 0, incidents: 0, missing: 0, coordinates: [0, 0] } });
+
+    const handleSameHazardChange = (e, field, subfield) => {
+        const newData = { ...addedHazardFields };
+        const newFieldData = newData[field];
+        if (subfield === 'location') {
+            const newSubData = { ...newFieldData, coordinates: e.coordinates, district: e.district };
+            setAddedData({ ...newData, [field]: newSubData });
+            setFeedback({ ...newData, [field]: newSubData });
+        } else {
+            const newSubData = { ...newFieldData, [subfield]: e };
+            setAddedData({ ...newData, [field]: newSubData });
+            setFeedback({ ...newData, [field]: newSubData });
+        }
     };
 
+    const handlehazardAdd = (hazard) => {
+        const newData = { ...addedHazardFields };
+        setAddedData({ ...newData, [Math.random()]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
+        // add it to hazard too
+        const hazardData = { ...hazardWiseLossData };
+    };
+    // this runs when button is clicked
+    const handleSameHazardAdd = (hazard) => {
+        const newData = { ...addedHazardFields };
+        setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
+        setFeedback({ ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
+        countId.current += 1;
+    };
+
+    useEffect(() => {
+        console.log('hazardwiseLossdata, addedHazardFields, feedback', hazardWiseLossData, addedHazardFields,
+            feedback);
+    });
     const handlegenderWiseLoss = (e, field) => {
         const newState = produce(genderWiseLossData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
@@ -466,8 +498,11 @@ const Bulletin = (props: Props) => {
     };
 
     useEffect(() => {
+        console.log('hazardWiseLoss', hazardWiseLossData);
+    });
+    // eslint-disable-next-line consistent-return
+    useEffect(() => {
         if (lossData && lossData.length > 0) {
-            console.log('lossData', lossData);
             const summary = calculateSummary(lossData);
             setIncidentData({
                 numberOfIncidents: summary.count,
@@ -531,25 +566,35 @@ const Bulletin = (props: Props) => {
             const newhazardData = {};
             const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
             const hD = uniqueHazards.map((h) => {
+                console.log('calculateSummaryHazard', calculateSummaryHazard(lossData.filter(l => l.hazard === h)));
                 newhazardData[hazardTypes[h].titleNe] = {
                     deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
                     incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
-                    missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount,
-                    injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount,
-                    district: lossData.filter(l => l.hazard === h).peopleInjuredCount,
+                    missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount || 0,
+                    injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount || 0,
+                    coordinates: [0, 0],
 
-                    // response: '',
-                    // district: '',
-                    // incidentdescription: '',
-                    // coordinates: [0, 0],
                 };
                 return null;
             });
+
+            // const hD = lossData.map((h) => {
+            //     newhazardData[h.id] = {
+            //         hazard: hazardTypes[h.hazard].titleNe,
+            //         deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
+            //         incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
+            //         missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount,
+            //         injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount,
+            //         district: lossData.filter(l => l.hazard === h).peopleInjuredCount,
+            //     };
+            //     return null;
+            // });
 
             setHazardwise(newhazardData);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData]);
+
 
     useEffect(() => {
         if (covidNational.length > 0) {
@@ -646,6 +691,9 @@ const Bulletin = (props: Props) => {
             handlehazardAdd={handlehazardAdd}
             handleHilightChange={handleHilightChange}
             hilight={hilight}
+            handleSameHazardAdd={handleSameHazardAdd}
+            addedHazardFields={addedHazardFields}
+            handleSameHazardChange={handleSameHazardChange}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}
