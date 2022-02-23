@@ -64,6 +64,20 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             params.setLoading(false);
         },
     },
+    getUser: {
+        url: ({ params }) => `/user/${params.id}`,
+        method: methods.GET,
+        onMount: false,
+        query: () => ({
+            format: 'json',
+        }),
+        onSuccess: ({ response, props, params }) => {
+            props.setAdminPage({
+                adminDataMainId: response,
+            });
+            params.setLoading(false);
+        },
+    },
 };
 
 
@@ -319,8 +333,10 @@ const AdminTable = (props) => {
 
     const handleEditForm = (id) => {
         settoggleForm(true);
-        console.log(id);
+        setLoading(true);
+        console.log('test id', id);
         if (id) {
+            props.requests.getUser.do({ id, setLoading });
             // dispatch(adminGetDataId(id));
         }
     };

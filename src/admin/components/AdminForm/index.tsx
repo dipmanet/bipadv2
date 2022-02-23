@@ -52,6 +52,27 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             console.log('posted data', response);
+            props.setAdminPage({
+                adminDataMainId: [],
+            });
+        },
+        onFailure: ({ error, props }) => {
+            // TODO: handle error
+            console.error('server failure', error);
+        },
+        onFatal: ({ error }) => {
+            console.error('server failure', error);
+        },
+    },
+    userPut: {
+        url: ({ params }) => {
+            console.log('test in api', params);
+            return (`/user/${params.id}/`);
+        },
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            console.log('posted data', response);
         },
         onFailure: ({ error, params }) => {
             if (params && params.setEpidemicsPage) {
@@ -59,7 +80,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 console.warn('failure', error);
             }
         },
-
     },
 };
 
@@ -80,6 +100,7 @@ const validationSchema = {
     userName: null,
     password: null,
     confirmPassword: null,
+    serverError: null,
 };
 
 const AdminForm = (props) => {
@@ -110,6 +131,23 @@ const AdminForm = (props) => {
         setDistrict(userDataMain.profile.district);
         setMunicipality(userDataMain.profile.municipality);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        // if (!loadingAdminGetId) {
+        if (adminDataMainId.id) {
+            setformDataState({ ...formDataState,
+                userName: adminDataMainId.username,
+                email: adminDataMainId.email,
+                firstName: adminDataMainId.firstName,
+                lastName: adminDataMainId.lastName,
+                phoneNumber: adminDataMainId.phoneNumber,
+                role: adminDataMainId.profile.role,
+                institution: adminDataMainId.profile.institution,
+                designation: adminDataMainId.profile.designation });
+        }
+        // }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -154,13 +192,13 @@ const AdminForm = (props) => {
             institution: formDataState.institution,
             designation: formDataState.designation,
             ward,
-            municipality: userDataMain.profile.municipality,
-            province: userDataMain.profile.province,
-            district: userDataMain.profile.district,
+            municipality: userDataMain.profile.municipality || municipality,
+            province: userDataMain.profile.province || province,
+            district: userDataMain.profile.district || district,
         },
         first_name: formDataState.firstName,
         last_name: formDataState.lastName,
-        username: `${subfix}_${formDataState.userName}`,
+        username: `${subfix}${formDataState.userName}`,
         email: formDataState.email,
     };
 
@@ -194,7 +232,7 @@ const AdminForm = (props) => {
     };
 
     const handlePostData = () => {
-        if (!formDataState.userName || !formDataState.password || !formDataState.confirmPassword) {
+        if (!adminDataMainId && (!formDataState.userName || !formDataState.password || !formDataState.confirmPassword)) {
             const pass = { ...validationError };
             if (!formDataState.userName) {
                 pass.userName = 'This field is required';
@@ -206,40 +244,13 @@ const AdminForm = (props) => {
                 pass.confirmPassword = 'This field is required';
             }
             setvalidationError(pass);
+        } else if (!adminDataMainId.id) {
+            props.requests.userPost.do({ body: userDataPost, setvalidationError });
         } else {
-            props.requests.userPost.do({ body: userDataPost });
+            props.requests.userPut.do({ id: adminDataMainId.id, body: userDataPatch, setvalidationError });
         }
-        // console.info('Valid Form');
-        // if (validateForm(validationError)) {
-        //     // props.requests.userPost.do({ body: userDataPost });
-        // } else {
-        //     console.error('Invalid Form');
-        // }
-        // if (Object.values(validationError)) {
-        //     console.log('threre is error', validationError.userNameError);
-        // } else {
-        //     console.log('testing validation error', validationError);
-        //     if (!Object.values(validationError)) {
-        //         console.log('there is error');
-        //         // if (formDataState.password !== formDataState.confirmPassword) {
-        //         //     setpasswordNotMatching('Password is not matching');
-        //         // }
-        //         // setvalidationError('All fields are required');
-        //     } else {
-        //         setvalidationError(null);
-        //         if (adminDataMainId.id) {
-        //         // dispatch(adminDataPut(adminDataMainId.id, userDataPatch));
-        //         } else {
-        //             console.log('posting submmit', userDataPost);
-        //             props.requests.userPost.do({ body: userDataPost });
-        //         // dispatch(adminDataPost(userDataPost));
-        //         }
-        //         setsuccessFullAdd(true);
-        //         setmunicipalityName('');
-        //         setwardName('');
-        //         setformDataState(formData);
-        //     }
-        // }
+        setformDataState(formData);
+        setwardName('');
     };
 
     useEffect(() => {
@@ -248,7 +259,6 @@ const AdminForm = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log('testing ward change', wardName, municipality);
         if (municipality && wardName !== '') {
             setWard(wards
                 .filter(item => item.municipality === municipality)
@@ -383,35 +393,36 @@ const AdminForm = (props) => {
                                     </span>
                                 </FormControl>
                             </div>
-                            <div className={styles.myRow}>
-                                <FormControl fullWidth sx={{ m: 1 }}>
-                                    <TextField
-                                        size="small"
-                                        type="password"
-                                        value={formDataState.password}
-                                        onChange={e => handleChange(e, 'password')}
-                                        id="outlined-basic"
-                                        label="Password"
-                                        variant="outlined"
-                                        error={validationError.password}
-                                        helperText={validationError.password ? validationError.password : null}
-                                    />
-                                </FormControl>
-                                <FormControl fullWidth sx={{ m: 1 }}>
-                                    <TextField
-                                        size="small"
-                                        type="password"
-                                        value={formDataState.confirmPassword}
-                                        onChange={e => handleChange(e, 'confirmPassword')}
-                                        id="outlined-basic"
-                                        label="Confirm Password"
-                                        variant="outlined"
-                                        error={validationError.confirmPassword}
-                                        helperText={validationError.confirmPassword ? validationError.confirmPassword : null}
-                                    />
-                                </FormControl>
-                            </div>
-
+                            {!adminDataMainId && (
+                                <div className={styles.myRow}>
+                                    <FormControl fullWidth sx={{ m: 1 }}>
+                                        <TextField
+                                            size="small"
+                                            type="password"
+                                            value={formDataState.password}
+                                            onChange={e => handleChange(e, 'password')}
+                                            id="outlined-basic"
+                                            label="Password"
+                                            variant="outlined"
+                                            error={validationError.password}
+                                            helperText={validationError.password ? validationError.password : null}
+                                        />
+                                    </FormControl>
+                                    <FormControl fullWidth sx={{ m: 1 }}>
+                                        <TextField
+                                            size="small"
+                                            type="password"
+                                            value={formDataState.confirmPassword}
+                                            onChange={e => handleChange(e, 'confirmPassword')}
+                                            id="outlined-basic"
+                                            label="Confirm Password"
+                                            variant="outlined"
+                                            error={validationError.confirmPassword}
+                                            helperText={validationError.confirmPassword ? validationError.confirmPassword : null}
+                                        />
+                                    </FormControl>
+                                </div>
+                            )}
                             <div className={styles.myRow}>
                                 <div className={styles.title}>
                                     <h3>User Information</h3>

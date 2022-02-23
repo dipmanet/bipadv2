@@ -522,13 +522,10 @@ const index = (props: Props): JSX.Element => {
                                     <img src={item.icon} alt="" />
                                     <div className={styles.titleDescription}>
                                         <span className={styles.title}>
-                                            {item.title}
-:
+                                            {`${item.title}:`}
                                         </span>
                                         <span className={styles.description}>
-                                            {' '}
-                                            {item.description.slice(0, 55)}
-...
+                                            {`${item.description.slice(0, 55)}...`}
                                         </span>
                                     </div>
                                 </div>
