@@ -151,16 +151,16 @@ const BulletinPDFLoss = (props: Props) => {
         setprovinceWiseTotal(cD);
     }, [covidProvinceWiseTotal]);
 
-    const DataFormater = number => number / 100000;
-    // if(number > 10000000){
-    //   return (number/1000000000).toString() + 'B';
-    // }else if(number > 1000000){
-    //   return (number/1000000).toString() + 'M';
-    // }else if(number > 1000){
-    //   return (number/1000).toString() + 'K';
-    // }else{
-    //   return number.toString();
-    // }
+    const DataFormater = (number) => {
+        if (number > 10000000) {
+            return `${(number / 10000000).toLocaleString()}करोड`;
+        } if (number > 1000000) {
+            return `${(number / 100000).toLocaleString()}लाख`;
+        } if (number > 1000) {
+            return `${(number / 1000).toLocaleString()}हजार`;
+        }
+        return number.toLocaleString();
+    };
 
 
     return (
@@ -181,7 +181,10 @@ const BulletinPDFLoss = (props: Props) => {
                             }}
                         >
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis type="number" />
+                            <XAxis
+                                type="number"
+                                tickFormatter={DataFormater}
+                            />
                             <YAxis
                                 type="category"
                                 dataKey="hazard"
@@ -311,7 +314,7 @@ const BulletinPDFLoss = (props: Props) => {
                                 data={provinceWiseTotal}
                                 margin={{
                                     top: 20,
-                                    right: 0,
+                                    right: 10,
                                     left: 0,
                                     bottom: 5,
                                 }}
@@ -319,12 +322,15 @@ const BulletinPDFLoss = (props: Props) => {
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                                 <XAxis
                                     type="number"
-                                    tickFormatter={tick => tick.toLocaleString()}
+                                    // tickFormatter={tick => tick.toLocaleString()}
+                                    tickFormatter={DataFormater}
+                                    tick={{ fontSize: 10, width: 250 }}
                                     // unit={'लाख'}
                                 />
                                 <YAxis
                                     type="category"
                                     dataKey="province"
+                                    tick={{ fontSize: 11, width: 250 }}
                                 />
 
                                 {/* <Tooltip /> */}

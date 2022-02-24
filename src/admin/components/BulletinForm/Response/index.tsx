@@ -45,13 +45,12 @@ const Response = (props: Props) => {
         response: '',
     });
 
+    const [cumulative, setCumulative] = useState();
+
     const handleRemarksChange = (e, field) => {
         setRemarks({ ...remarks, [field]: e });
     };
 
-    useEffect(() => {
-        console.log('feedback', feedback);
-    }, [feedback]);
 
     const handleFeedback = () => {
         if (remarks) {
@@ -82,6 +81,29 @@ const Response = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [incidentList, hazardTypes]);
+
+    useEffect(() => {
+        if (feedback && Object.keys(feedback).length > 0) {
+            const getIncidents = () => Object.keys(feedback).length;
+            const getDistricts = () => {
+                const aD = Object.keys(feedback)
+                    .map(item => feedback[item].district);
+                return [...new Set(aD)].length;
+            };
+            const cumulativeData = Object.keys(feedback)
+                .map(item => feedback[item])
+                .reduce((acc, cur) => ({
+                    deaths: acc.deaths + Number(cur.deaths || 0),
+                    missing: acc.missing + Number(cur.missing || 0),
+                    injured: acc.injured + Number(cur.injured || 0),
+                }));
+            const other = {
+                district: getDistricts(),
+                incidents: getIncidents(),
+            };
+            setCumulative({ ...cumulativeData, ...other });
+        }
+    }, [feedback]);
     return (
         <>
             <div className={annex ? styles.formContainerAnnex : styles.formContainer}>
@@ -92,7 +114,7 @@ const Response = (props: Props) => {
                 {
                     <div className={styles.pratikriyas}>
                         {
-                            feedback && Object.keys(feedback).length > 0
+                            cumulative && Object.keys(cumulative).length > 0 && feedback && Object.keys(feedback).length > 0
 
                             && (
                                 <table className={styles.responseTable}>
@@ -189,6 +211,16 @@ const Response = (props: Props) => {
                                             </tr>
                                         ))
                                     }
+                                    <tr className={styles.lastRow}>
+                                        <td>जम्मा</td>
+                                        <td>{cumulative.incidents}</td>
+                                        <td>{cumulative.district}</td>
+                                        <td>{cumulative.deaths}</td>
+                                        <td>{cumulative.missing}</td>
+                                        <td>{cumulative.injured}</td>
+                                        <td>{' '}</td>
+                                        <td>{' '}</td>
+                                    </tr>
                                 </table>
                             )
                         }

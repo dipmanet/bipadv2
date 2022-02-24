@@ -320,10 +320,7 @@ const Bulletin = (props: Props) => {
         countId.current += 1;
     };
 
-    useEffect(() => {
-        console.log('hazardwiseLossdata, addedHazardFields, feedback', hazardWiseLossData, addedHazardFields,
-            feedback);
-    });
+
     const handlegenderWiseLoss = (e, field) => {
         const newState = produce(genderWiseLossData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
@@ -497,9 +494,7 @@ const Bulletin = (props: Props) => {
         return stat;
     };
 
-    useEffect(() => {
-        console.log('hazardWiseLoss', hazardWiseLossData);
-    });
+
     // eslint-disable-next-line consistent-return
     useEffect(() => {
         if (lossData && lossData.length > 0) {
@@ -566,7 +561,6 @@ const Bulletin = (props: Props) => {
             const newhazardData = {};
             const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
             const hD = uniqueHazards.map((h) => {
-                console.log('calculateSummaryHazard', calculateSummaryHazard(lossData.filter(l => l.hazard === h)));
                 newhazardData[hazardTypes[h].titleNe] = {
                     deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
                     incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,

@@ -42,7 +42,6 @@ const TemperaturesMin = (props: Props) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
     useEffect(() => {
-        console.log('acceptedFiles', acceptedFiles);
         if (acceptedFiles.length > 0) {
             handleMinTemp(acceptedFiles[0]);
             const reader = new FileReader();

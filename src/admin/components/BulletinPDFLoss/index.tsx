@@ -236,7 +236,7 @@ const BulletinPDF = (props: Props) => {
                                 <LossItem
                                     lossIcon={l.logo}
                                     lossTitle={l.title}
-                                    loss={Number(incidentSummary[l.lossKey]).toLocaleString()}
+                                    loss={Number(incidentSummary[l.lossKey])}
                                 />
                             ))
                         }

@@ -79,6 +79,8 @@ export interface Bulletin {
         deaths: number;
         recovered: number;
     };
+    yearlyData: object;
+
     covidTotalStat: {
         totalAffected: number;
         totalActive: number;
@@ -735,7 +737,7 @@ export enum PageType {
     ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
     ADMIN__PORTAL_BULLETIN_EDIT_DATA = 'page/ADMIN__PORTAL_BULLETIN_EDIT_DATA',
-
+    ADMIN__PORTAL_BULLETIN_YEARLYDATA='page/ADMIN__PORTAL_BULLETIN_YEARLYDATA',
     // Epidemics
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
@@ -759,6 +761,10 @@ export interface SetBulletinEditData {
 
 export interface SetBulletinDataCovid {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_COVID;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinYearlyData {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA;
     bulletinData: Bulletin;
 }
 export interface SetBulletinDataFeedback {
@@ -1054,6 +1060,6 @@ export type PageActionTypes = (
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
-    SetDashboardHazardType | SetBulletinDataCovid
+    SetDashboardHazardType | SetBulletinDataCovid | SetBulletinYearlyData
     | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage | SetBulletinEditData
 );

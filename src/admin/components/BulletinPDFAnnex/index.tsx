@@ -6,6 +6,7 @@ import {
     bulletinPageSelector,
 } from '#selectors';
 import Response from '../BulletinForm/Response';
+import YearlyData from './YearlyData';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
@@ -57,7 +58,9 @@ const BulletinPDFAnnex = (props) => {
     return (
         <div className={styles.footerPDFContainer}>
             <h1>अनुसूची १</h1>
-            <h3>घट्िा साराांश</h3>
+
+            <YearlyData />
+            <h3>घटना साराांश</h3>
             <Response
                 annex
                 handleFeedbackChange={handleFeedbackChange}

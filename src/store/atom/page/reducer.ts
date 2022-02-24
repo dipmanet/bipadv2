@@ -7,6 +7,10 @@ import initialState from './initialState';
 import { ModelEnum } from '#types';
 // ACTION CREATORS
 
+export const setBulletinYearlyDataAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
+    bulletinData,
+});
 export const setBulletinLossAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN,
     bulletinData,
@@ -1281,6 +1285,22 @@ export const setBulletinDataTemperature = (
     return newState;
 };
 
+export const setBulletinYearlyData = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.yearlyData = bulletinData.yearlyData;
+    });
+
+    return newState;
+};
+
 export const setBulletinEditData = (
     state: Type.PageState,
     action: Type.SetBulletinEditData,
@@ -1441,6 +1461,8 @@ export default function routeReducer(
             return setBulletinEditData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN:
             return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA:
+            return setBulletinYearlyData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
             return setBulletinCovid(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:

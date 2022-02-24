@@ -337,6 +337,7 @@ const state: PageState = {
         feedback: [],
         province: 3,
         district: 27,
+        yearlyData: {},
         municipality: 27006,
         ward: null,
     },

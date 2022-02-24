@@ -144,7 +144,7 @@ const PDFPreview = (props) => {
             }).then((res) => {
                 doc.save('Bulletin.pdf');
                 setPending(false);
-                navigate('/admin/bulletin/bulletin-data-table');
+                // navigate('/admin/bulletin/bulletin-data-table');
             })
             .catch((error) => {
                 setPending(false);
@@ -205,7 +205,7 @@ const PDFPreview = (props) => {
         let pageNumber = 0;
         setPending(true);
         const doc = new JsPDF('p', 'mm', 'a4');
-        // const docSummary = new JsPDF('p', 'mm', 'a4');
+        // const doc = new JsPDF('p', 'mm', 'a4');
 
 
         const ids = document.querySelectorAll('.page');
@@ -215,18 +215,58 @@ const PDFPreview = (props) => {
             await html2canvas(reportPage).then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const imgWidth = 210;
-                const pageHeight = 295;
-
+                const pageHeight = 297;
                 const imgHeight = canvas.height * imgWidth / canvas.width;
-                const heightLeft = imgHeight;
-                const position = 0;
+                // if (i < (length - 1) && i > 2) {
+                //     imgWidth = 295;
+                //     pageHeight = 210;
+                // }
+                let heightLeft = imgHeight;
+                let position = 0;
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                if (i < 3) {
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                    // if (i < 1) {
+                    //     doc.addPage('a4', 'portrait');
+                    // }
+                }
+                if (i >= 3) {
+                    heightLeft -= pageHeight;
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight; // top padding for other pages
+                        pageNumber += 1;
+                        doc.addPage('a4', 'portrait');
+                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                        // doc.text(200, 285, `page ${pageNumber}`);
+                        heightLeft -= pageHeight;
+                    }
+                }
 
-                if (i <= 2) {
+                if (i < (length - 1) && i < 1) {
                     // doc.text(270, 10, `page ${pageNumber}`);
                     doc.addPage('a4', 'portrait');
                     pageNumber += 1;
                 }
+                if (i < (length - 1) && i >= 1) {
+                    // doc.text(270, 10, `page ${pageNumber}`);
+                    doc.addPage('a4', 'portrait');
+                    pageNumber += 1;
+                }
+
+                // const imgData = canvas.toDataURL('image/png');
+                // const imgWidth = 210;
+                // const pageHeight = 295;
+
+                // const imgHeight = canvas.height * imgWidth / canvas.width;
+                // const heightLeft = imgHeight;
+                // const position = 0;
+                // doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+
+                // if (i <= 2) {
+                //     // doc.text(270, 10, `page ${pageNumber}`);
+                //     doc.addPage('a4', 'portrait');
+                //     pageNumber += 1;
+                // }
             });
         }
 

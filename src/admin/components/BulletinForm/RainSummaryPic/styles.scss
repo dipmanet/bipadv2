@@ -18,9 +18,11 @@
         }
         .picture{
             .reportPic{
-                width: 170mm;
+                width: 160mm;
                 height: 80mm !important;
-
+            }
+            img{
+                max-width: 170mm;
             }
             .placeholder{
                 width: 90mm;
@@ -36,6 +38,9 @@
             // border: 1px solid red;
             position: relative;
             // right: 30px;
+            img{
+                max-width: 160mm;
+            }
             h3{
                 position: relative;
             }
