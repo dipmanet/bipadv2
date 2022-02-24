@@ -22,7 +22,7 @@
         margin-right: $spacing-small;
         color: $color-text-label;
     }
-
+    
     .value {
         flex-grow: 1;
     }
@@ -59,10 +59,17 @@
         color: $color-text-label;
         font-weight: $font-weight-bold;
     }
-
+    .infoIcon{
+        color: #444;
+        padding-right: 4px;
+        font-size: 12px;
+        margin-left: 20px;
+        cursor: pointer;
+    }
     .value {
         color: $color-accent;
         font-size: $font-size-large;
         font-weight: $font-weight-bold;
+        cursor: pointer;
     }
 }

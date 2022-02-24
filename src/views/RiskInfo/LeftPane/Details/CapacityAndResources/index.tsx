@@ -237,7 +237,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                             transparent
                             className={styles.editButton}
                         >
-                    Edit data
+                            Edit data
                         </AccentButton>
                     ) : ''}
 
@@ -245,7 +245,7 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                 <AccentButton
                     title={
                         resourceDetails.resourceType === 'openspace'
-                       || resourceDetails.resourceType === 'communityspace'
+                            || resourceDetails.resourceType === 'communityspace'
                             ? 'View Details'
                             : 'Show Inventory'
                     }
@@ -253,8 +253,8 @@ const ResourceTooltip = (props: ResourceTooltipProps) => {
                     transparent
                     className={styles.editButton}
                 >
-                    { resourceDetails.resourceType === 'openspace'
-                     || resourceDetails.resourceType === 'communityspace'
+                    {resourceDetails.resourceType === 'openspace'
+                        || resourceDetails.resourceType === 'communityspace'
                         ? 'View Details'
                         : 'Show Inventory'}
                 </AccentButton>
@@ -515,7 +515,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     public componentDidUpdate(prevProps, prevState, snapshot) {
         const { faramValues: { region } } = this.props.filters;
-
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
             this.props.requests.resourceGetRequest.do(
                 {
@@ -575,8 +574,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 newArr.push(...carKeys);
             }
             setCarKeys(newArr);
-
-
             this.props.requests.resourceGetRequest.do({
                 resourceType: newArr,
                 region: this.props.filters.faramValues.region,
@@ -1285,14 +1282,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1357,14 +1354,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1428,14 +1425,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1500,14 +1497,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1572,14 +1569,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1643,14 +1640,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1714,14 +1711,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1785,14 +1782,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -1878,7 +1875,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 onHide={this.handleTooltipClose}
                                             >
                                                 <ResourceTooltip
-                                                // FIXME:hide tooltip edit if there is no permission
+                                                    // FIXME:hide tooltip edit if there is no permission
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
@@ -1976,7 +1973,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 onHide={this.handleTooltipClose}
                                             >
                                                 <ResourceTooltip
-                                                // FIXME:hide tooltip edit if there is no permission
+                                                    // FIXME:hide tooltip edit if there is no permission
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
@@ -2054,14 +2051,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -2126,14 +2123,14 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             },
                                         }}
                                     />
-                                    { resourceLngLat && resourceInfo && (
+                                    {resourceLngLat && resourceInfo && (
                                         <MapTooltip
                                             coordinates={resourceLngLat}
                                             tooltipOptions={tooltipOptions}
                                             onHide={this.handleTooltipClose}
                                         >
                                             <ResourceTooltip
-                                            // FIXME: hide tooltip edit if there is no permission
+                                                // FIXME: hide tooltip edit if there is no permission
                                                 isLoggedInUser={isLoggedInUser}
                                                 {...resourceInfo}
                                                 {...resourceDetails}
@@ -2150,7 +2147,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         </>
                     )}
                 </div>
-                { showResourceForm && resourceDetails && (
+                {showResourceForm && resourceDetails && (
                     <AddResourceForm
                         resourceId={resourceDetails.id}
                         resourceDetails={resourceDetails}

@@ -594,7 +594,7 @@ class Filters extends React.PureComponent<Props, State> {
         //         };
 
         //         this.setState({ faramValues: newFaramValues });
-        //         console.log('region set: ', newFaramValues);
+
         //     }
         // }
         const { activeView } = this.state;
