@@ -297,6 +297,22 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    earthquakeDataRequest: {
+        url: '/earthquake-riskscore/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            aggrigated_sum: 'district',
+            province: 6,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: earthquakeData = [] } = response as Response;
+            params.setearthquakeData(earthquakeData);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 
 };
 
@@ -315,7 +331,7 @@ export const Kailali = (props: Props) => {
     const [showPopulation, setshowPopulation] = useState('popdensity');
     const [clickedItemMultiple, setclickedItemMultiple] = useState('');
     const [clicked, setclicked] = useState([1, 0, 0, 0]);
-    const [hazardLegendClickedArr, sethazardLegendClickedArr] = useState([1, 0, 0]);
+    const [hazardLegendClickedArr, sethazardLegendClickedArr] = useState([1, 0]);
     const [exposureElementsArr, setexposureElementsArr] = useState([0, 0, 0, 0]);
     const [clickedHazardItem, setclickedHazardItem] = useState('Flood Hazard');
     const [exposureElement, setexposureElement] = useState('');
@@ -343,6 +359,9 @@ export const Kailali = (props: Props) => {
     const [lossDataFlood, setlossDataFlood] = useState([]);
     const [lossDataLandslide, setlossDataLandslide] = useState([]);
     const [demographicData, setdemographicData] = useState([]);
+    const [earthquakeRisk, setearthquakeRisk] = useState('');
+    const [earthquakeData, setearthquakeData] = useState([]);
+
 
     const municipalityInfo = provinces.filter(item => item.id === 6);
     const bbox = municipalityInfo.map(item => item.bbox)[0];
@@ -491,27 +510,25 @@ export const Kailali = (props: Props) => {
 
     const handleMultipleHazardLayer = (hazardItem: string, i: number) => {
         setlegentItemDisabled(true);
+        setearthquakeRisk('');
         setclickedHazardItem(hazardItem);
         const curLegend = [...hazardLegendClickedArr];
         if (i === 0) {
             curLegend[0] = 1;
             curLegend[1] = 0;
-            curLegend[2] = 0;
             sethazardLegendClickedArr(curLegend);
         }
         if (i === 1) {
             curLegend[1] = 1;
             curLegend[0] = 0;
-            curLegend[2] = 0;
-            sethazardLegendClickedArr(curLegend);
-        }
-        if (i === 2) {
-            curLegend[2] = 1;
-            curLegend[0] = 0;
-            curLegend[1] = 0;
             sethazardLegendClickedArr(curLegend);
         }
     };
+    const handleEarthQuakeRisk = (item: string) => {
+        setearthquakeRisk(item);
+        sethazardLegendClickedArr([0, 0, 0]);
+    };
+
     const handleMultipleHazardLayerDamageLoss = (hazardItem: string, i: number) => {
         setlegentItemDisabled(true);
         setclickedHazardItem(hazardItem);
@@ -568,7 +585,7 @@ export const Kailali = (props: Props) => {
     precipitationDataGetRequest,
     damageandLossDataFlood,
     damageandLossDataLandslide,
-
+    earthquakeDataRequest,
 } } = props;
 
 
@@ -641,6 +658,10 @@ export const Kailali = (props: Props) => {
             setdemographicData,
         });
         demographyRequest.do();
+        earthquakeDataRequest.setDefaultParams({
+            setearthquakeData,
+        });
+        earthquakeDataRequest.do();
     }, []);
 
 
@@ -888,11 +909,13 @@ export const Kailali = (props: Props) => {
                                         totalFloodLossData={totalFloodLossData}
                                         totalLandslideLossData={totalLandslideLossData}
                                         setclimateLineChartData={setclimateLineChartData}
+                                        earthquakeData={earthquakeData}
                                         clickedHazardItem={clickedHazardItem}
                                         clickedFatalityInfraDamage={clickedFatalityInfraDamage}
                                         mapConstants={mapConstants}
                                         expressions={expressions}
                                         vulnerability={vulnerability}
+                                        earthquakeRisk={earthquakeRisk}
                                         mapboxStyle={mapBoxStyle[0]}
                                         floodHazardLayersArr={floodHazardLayers[0]}
                                         leftElement={leftElement}
@@ -1123,6 +1146,8 @@ export const Kailali = (props: Props) => {
                         urbanData={page5MidUrbanData[0]}
                         setfloodLayer={setfloodLayer}
                         handleMultipleHazardLayer={handleMultipleHazardLayer}
+                        handleEarthQuakeRisk={handleEarthQuakeRisk}
+                        earthquakeRisk={earthquakeRisk}
                         hazardLegendClickedArr={hazardLegendClickedArr}
                         leftElement={leftElement}
                         handleNext={handleNext}
@@ -1172,6 +1197,8 @@ export const Kailali = (props: Props) => {
                         handleNext={handleNext}
                         setfloodLayer={setfloodLayer}
                         handleMultipleHazardLayer={handleMultipleHazardLayer}
+                        handleEarthQuakeRisk={handleEarthQuakeRisk}
+                        earthquakeRisk={earthquakeRisk}
                         hazardLegendClickedArr={hazardLegendClickedArr}
                         handlePrev={handlePrev}
                         totalPages={leftelements.length}

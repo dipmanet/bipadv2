@@ -237,6 +237,8 @@ const MultiHazardMap = (props: Props) => {
         totalLandslideLossData,
         clickedHazardItem,
         clickedFatalityInfraDamage,
+        earthquakeData,
+        earthquakeRisk,
     } = props;
 
 
@@ -373,6 +375,7 @@ const MultiHazardMap = (props: Props) => {
     const colorForDemographics = generateColor(maxPop, minPop, newDemoColorArray);
     const colorForTemp = generateColor(26, 24, tempColors);
     const colorForPrep = generateColor(1800, 1500, rainColors);
+    const colorForEarthquake = generateColor(2.18, 1.48, colorGrade);
 
     const colorForhdi = ['#c73c32', 0.386, '#c73c32', 0.4, '#e9bf8c', '#e9bf8c'];
     const colorForhpi = generatePaintByQuantile([...vulColors]
@@ -404,6 +407,8 @@ const MultiHazardMap = (props: Props) => {
         Math.min(...totalInfraDamageLandslide), colorGrade);
 
     const allDamageColors = [color1, color2, color3, color4];
+
+    const earthquakeRiskScoreArray = earthquakeData.map((item: any) => ({ value: item.data.riskScore, districtId: item.district }));
 
 
     const images = [
@@ -746,33 +751,8 @@ const MultiHazardMap = (props: Props) => {
                 },
 
             );
-            multihazardMap.addSource('buildingsPolygon', {
-                type: 'geojson',
-                data: getgeoJsonLayer(`${MAINKEYNAME}_buildings`),
 
-            });
-            multihazardMap.addLayer(
-                {
-                    id: 'buildingsdata',
-                    type: 'fill-extrusion',
-                    source: 'buildingsPolygon',
-                    layout: {
-                        visibility: 'none',
-
-                    },
-                    paint: {
-
-                        'fill-extrusion-color': '#964B00',
-                        'fill-extrusion-height': 10,
-                        'fill-extrusion-base': 0,
-                        'fill-extrusion-opacity': 1,
-                    },
-
-                },
-
-            );
-
-            // -----------------------------------------------SLIDE-4-----------------------
+            // -----------------------------------------------SLIDE-5-----------------------------
             const avialableVulColors = [colorForhdi, colorForhpi];
             const availableData = [hdiData, hpiData];
             ['hdiData', 'hpiData'].map((layer, i) => {
@@ -858,6 +838,34 @@ const MultiHazardMap = (props: Props) => {
                 return null;
             });
 
+            multihazardMap.addSource('earthquake-data', {
+                type: 'vector',
+                url: mapSources.nepal.url,
+            });
+
+            multihazardMap.addLayer({
+                id: 'earthquake-risk-score',
+                source: 'earthquake-data',
+                'source-layer': mapSources.nepal.layers.district,
+                type: 'fill',
+                paint: generatePaint(colorForEarthquake),
+                layout: {
+                    visibility: 'none',
+
+                },
+                filter: getDistrictFilter(2, null, districts),
+            }, 'districtgeo');
+
+            earthquakeRiskScoreArray.forEach((attribute) => {
+                multihazardMap.setFeatureState(
+                    {
+                        id: attribute.districtId,
+                        source: 'earthquake-data',
+                        sourceLayer: mapSources.nepal.layers.district,
+                    },
+                    { value: attribute.value },
+                );
+            });
 
             // ------------------------------SLIDE-6---------------------------
             const mainTempData = [
@@ -1240,9 +1248,6 @@ const MultiHazardMap = (props: Props) => {
 		`)
                     .addTo(multihazardMap);
             });
-
-
-            multihazardMap.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
         });
 
 
@@ -1339,6 +1344,26 @@ const MultiHazardMap = (props: Props) => {
             }
         }
     }, [criticalElement, floodLayer, floodHazardLayersArr, clickedHazardItem, hazardLegendClickedArr, layers]);
+
+    useEffect(() => {
+        if (rightElement === 4) {
+            const switchFloodRasters = (floodlayer: FloodLayer) => {
+                if (floodHazardLayersArr && floodHazardLayersArr.length > 0 && map.current) {
+                    floodHazardLayersArr.map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`raster-flood-${layer.year}`, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    map.current.setLayoutProperty(`raster-flood-${floodlayer}`, 'visibility', 'visible');
+                }
+            };
+
+            if (map.current && floodHazardLayersArr && map.current.isStyleLoaded()) {
+                switchFloodRasters(floodLayer);
+            }
+        }
+    }, [floodLayer, floodHazardLayersArr]);
 
     useEffect(() => {
         if (map.current) {
@@ -1621,15 +1646,15 @@ const MultiHazardMap = (props: Props) => {
             } else {
                 map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
             }
-            // ------------------------------------------------------------Climate Data Layer-----------------------------------------
-
-            if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
+            if ((rightElement === 4) && (earthquakeRisk === 'Earthquake Risk')) {
                 if (map.current) {
-                    map.current.setLayoutProperty('buildingsdata', 'visibility', 'visible');
+                    map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'visible');
                 }
             } else {
-                map.current.setLayoutProperty('buildingsdata', 'visibility', 'none');
+                map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'none');
             }
+            // ------------------------------------------------------------Climate Data Layer-----------------------------------------
+
 
             if (rightElement === 5 && climateDataType === 'Temperature') {
                 tempDataAccordingToYear.map((layer) => {
@@ -1751,6 +1776,7 @@ const MultiHazardMap = (props: Props) => {
                     </div>
                 </div>
             )}
+
             {rightElement === 5 && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{climateDataType === 'Temperature' ? 'Temperature (°C) ' : 'Precipitation (mm/year) ' }</p>
@@ -1779,6 +1805,7 @@ const MultiHazardMap = (props: Props) => {
                     </div>
                 </div>
             )}
+
             {rightElement === 3 && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{vulnerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</p>
@@ -1798,6 +1825,34 @@ const MultiHazardMap = (props: Props) => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+            {(rightElement === 4 && earthquakeRisk === 'Earthquake Risk') && (
+                <div className={styles.mainLegendDiv}>
+                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>Earthquake Risk Score</p>
+                    <div className={styles.scale}>
+                        {colorForEarthquake.map((c, i) => {
+                            if (i % 2 === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <div className={styles.scaleElement} key={c}>
+                                    <div
+                                        key={c}
+                                        className={styles.colorUnit}
+                                        style={{
+                                            // width: colorUnitWidth,
+                                            backgroundColor: c,
+                                        }}
+                                    />
+                                    <div className={styles.value}>
+                                        { colorForEarthquake[i - 1].toFixed(2)}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             )}
@@ -1828,6 +1883,7 @@ const MultiHazardMap = (props: Props) => {
                     </>
                 )
             }
+
             {
                 (rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[2] === 1
                 && (

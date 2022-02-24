@@ -120,6 +120,8 @@ function Leftpane(props) {
         districtIdIs,
         vulnrerability,
         setVulnerability,
+        handleEarthQuakeRisk,
+        earthquakeRisk,
 
     } = props;
 
@@ -446,6 +448,7 @@ mm
                             landCoverCustomTooltip={landCoverCustomTooltip}
 
                         />
+                        <LandCoverLegends />
                     </>
                 )}
                 {leftElement === 0 && legendElement === 'Population By District' && (
@@ -575,7 +578,7 @@ mm
                             >
 HAZARDS
                             </h4>
-                            { ['Flood Hazard', 'Induntation', 'Landslide Hazard'].map(
+                            { ['Flood Hazard', 'Landslide Hazard'].map(
                                 (item, i) => (
                                     <div
                                         className={legentItemDisabled
@@ -593,7 +596,7 @@ HAZARDS
                                                         : styles.legendBtn3
                                                 }
                                                 onClick={() => handleMultipleHazardLayer(item, i)}
-                                                disabled={legentItemDisabled}
+                                                disabled={legentItemDisabled || disableNavRightBtn}
                                             >
                                                 <Hexagon
                                                     style={{
@@ -605,6 +608,8 @@ HAZARDS
                                                             : 'transparent',
                                                     }}
                                                     className={styles.educationHexagon3}
+                                                    disabled={legentItemDisabled || disableNavRightBtn}
+
                                                 />
                                                 {item}
                                             </button>
@@ -634,8 +639,8 @@ RISK
                 <button
                     key={item}
                     type="button"
-                    className={clickedFatalityInfraDamage === item ? styles.legendBtnSelected3 : styles.legendBtn3}
-                    onClick={() => handleFatalityInfraLayer(item, i)}
+                    className={earthquakeRisk === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                    onClick={() => handleEarthQuakeRisk(item)}
                     disabled={legentItemDisabled}
                 >
                     <Hexagon
@@ -643,7 +648,7 @@ RISK
                             innerHeight: 80,
                             stroke: '#FFFFFF',
                             strokeWidth: 30,
-                            fill: clickedFatalityInfraDamage === item ? 'white' : 'transparent',
+                            fill: earthquakeRisk === item ? 'white' : 'transparent',
                         }}
                         className={styles.educationHexagon3}
                     />

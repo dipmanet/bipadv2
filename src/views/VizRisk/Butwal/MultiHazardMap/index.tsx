@@ -633,8 +633,6 @@ const MultiHazardMap = (props: Props) => {
             value: Number(item.title),
         }));
 
-        console.log('mapping data is', mapping);
-
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
             style: mapboxStyle,

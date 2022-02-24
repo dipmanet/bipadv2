@@ -297,6 +297,22 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onMount: true,
         // extras: { schemaName: 'incidentResponse' },
     },
+    earthquakeDataRequest: {
+        url: '/earthquake-riskscore/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            aggrigated_sum: 'district',
+            province: 2,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: earthquakeData = [] } = response as Response;
+            params.setearthquakeData(earthquakeData);
+        },
+        onMount: true,
+        // extras: { schemaName: 'incidentResponse' },
+    },
 
 };
 
@@ -343,6 +359,8 @@ export const ProvinceTwo = (props: Props) => {
     const [lossDataFlood, setlossDataFlood] = useState([]);
     const [lossDataLandslide, setlossDataLandslide] = useState([]);
     const [demographicData, setdemographicData] = useState([]);
+    const [earthquakeRisk, setearthquakeRisk] = useState('');
+    const [earthquakeData, setearthquakeData] = useState([]);
 
     const municipalityInfo = provinces.filter(item => item.id === 2);
     const bbox = municipalityInfo.map(item => item.bbox)[0];
@@ -488,6 +506,7 @@ export const ProvinceTwo = (props: Props) => {
     const handleMultipleHazardLayer = (hazardItem, i) => {
         setlegentItemDisabled(true);
         setclickedHazardItem(hazardItem);
+        setearthquakeRisk('');
         const curLegend = [...hazardLegendClickedArr];
         if (i === 0) {
             curLegend[0] = 1;
@@ -508,6 +527,11 @@ export const ProvinceTwo = (props: Props) => {
             sethazardLegendClickedArr(curLegend);
         }
     };
+    const handleEarthQuakeRisk = (item: string) => {
+        setearthquakeRisk(item);
+        sethazardLegendClickedArr([0, 0, 0]);
+    };
+
     const handleMultipleHazardLayerDamageLoss = (hazardItem: string, i: number) => {
         setlegentItemDisabled(true);
         setclickedHazardItem(hazardItem);
@@ -563,6 +587,7 @@ export const ProvinceTwo = (props: Props) => {
     precipitationDataGetRequest,
     damageandLossDataFlood,
     damageandLossDataLandslide,
+    earthquakeDataRequest,
 
 } } = props;
 
@@ -636,6 +661,10 @@ export const ProvinceTwo = (props: Props) => {
             setdemographicData,
         });
         demographyRequest.do();
+        earthquakeDataRequest.setDefaultParams({
+            setearthquakeData,
+        });
+        earthquakeDataRequest.do();
     }, []);
 
 
@@ -800,7 +829,8 @@ export const ProvinceTwo = (props: Props) => {
             if (cI.length > 0 && htmlData.length > 0
 				&& jsonData.length > 0 && alerts.length > 0
 				&& contactData.length > 0 && tempData.length > 0
-				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0) {
+				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0
+				&& earthquakeData.length > 0) {
                 setpending(false);
             }
         }
@@ -852,7 +882,6 @@ export const ProvinceTwo = (props: Props) => {
 		   totalEstimatedLoss: isNaN(item.data.estimatedLoss) ? 0 : item.data.estimatedLoss,
 		 }));
 
-
     return (
         <>
             {
@@ -881,9 +910,11 @@ export const ProvinceTwo = (props: Props) => {
                                         prepDataForMapUpto2010={prepDataForMapUpto2010}
                                         prepDataForMapUpto2045={prepDataForMapUpto2045}
                                         prepDataForMapUpto2065={prepDataForMapUpto2065}
+                                        earthquakeData={earthquakeData}
                                         totalFloodLossData={totalFloodLossData}
                                         totalLandslideLossData={totalLandslideLossData}
                                         setclimateLineChartData={setclimateLineChartData}
+                                        earthquakeRisk={earthquakeRisk}
                                         clickedHazardItem={clickedHazardItem}
                                         clickedFatalityInfraDamage={clickedFatalityInfraDamage}
                                         mapConstants={mapConstants}
@@ -1075,9 +1106,7 @@ export const ProvinceTwo = (props: Props) => {
                 leftElement === 3 && (
 
                     <Leftpane
-
                         introHtml={page4TopIntrohtml[0]}
-
                         page4Legend1InroHtml={page4Legend1Introhtml[0]}
                         page4Legend2InroHtml={page4Legend2Introhtml[0]}
                         page4Legend3InroHtml={page4Legend3Introhtml[0]}
@@ -1118,6 +1147,8 @@ export const ProvinceTwo = (props: Props) => {
                         urbanData={page5MidUrbanData[0]}
                         setfloodLayer={setfloodLayer}
                         handleMultipleHazardLayer={handleMultipleHazardLayer}
+                        handleEarthQuakeRisk={handleEarthQuakeRisk}
+                        earthquakeRisk={earthquakeRisk}
                         hazardLegendClickedArr={hazardLegendClickedArr}
                         leftElement={leftElement}
                         handleNext={handleNext}
@@ -1167,6 +1198,8 @@ export const ProvinceTwo = (props: Props) => {
                         handleNext={handleNext}
                         setfloodLayer={setfloodLayer}
                         handleMultipleHazardLayer={handleMultipleHazardLayer}
+                        handleEarthQuakeRisk={handleEarthQuakeRisk}
+                        earthquakeRisk={earthquakeRisk}
                         hazardLegendClickedArr={hazardLegendClickedArr}
                         handlePrev={handlePrev}
                         totalPages={leftelements.length}

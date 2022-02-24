@@ -242,6 +242,8 @@ const MultiHazardMap = (props: Props) => {
         totalLandslideLossData,
         clickedHazardItem,
         clickedFatalityInfraDamage,
+        earthquakeRisk,
+        earthquakeData,
     } = props;
 
 
@@ -255,7 +257,7 @@ const MultiHazardMap = (props: Props) => {
     const [lossLegendsData, setlossLegendsData] = useState([]);
 
 
-    const susceptibilityLayerName = 'province_2_durham_landslide_susceptibility';
+    const susceptibilityLayerName = 'karnali_durham_landslide';
 
     const newDemoColorArray: string[] = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
@@ -377,6 +379,8 @@ const MultiHazardMap = (props: Props) => {
     const colorForDemographics = generateColor(maxPop, minPop, newDemoColorArray);
     const colorForTemp = generateColor(19, -4, tempColors);
     const colorForPrep = generateColor(1800, 1500, rainColors);
+    const colorForEarthquake = generateColor(4, 1.5, colorGrade);
+
 
     const colorForhdi = ['#c73c32', 0.386, '#c73c32', 0.4, '#e9bf8c', '#e9bf8c'];
     const colorForhpi = generatePaintByQuantile([...vulColors].reverse(), 36.4, 46.4, hpiData.map(item => item.value), 7);
@@ -397,7 +401,7 @@ const MultiHazardMap = (props: Props) => {
 
     const allDamageColors = [color1, color2, color3, color4];
 
-    console.log('color temp is', colorForTemp);
+    const earthquakeRiskScoreArray = earthquakeData.map((item: any) => ({ value: item.data.riskScore, districtId: item.district }));
 
     const images = [
         { name: 'education',
@@ -718,7 +722,7 @@ const MultiHazardMap = (props: Props) => {
                     paint: {
                         'raster-opacity': opacitySus,
                     },
-                },
+                }, 'districtgeo',
             );
             multihazardMap.addSource('floodInundation', {
                 type: 'raster',
@@ -740,33 +744,38 @@ const MultiHazardMap = (props: Props) => {
                 },
 
             );
-            multihazardMap.addSource('buildingsPolygon', {
-                type: 'geojson',
-                data: getgeoJsonLayer(`${MAINKEYNAME}_buildings`),
 
+
+            multihazardMap.addSource('earthquake-data', {
+                type: 'vector',
+                url: mapSources.nepal.url,
             });
-            multihazardMap.addLayer(
-                {
-                    id: 'buildingsdata',
-                    type: 'fill-extrusion',
-                    source: 'buildingsPolygon',
-                    layout: {
-                        visibility: 'none',
 
-                    },
-                    paint: {
-
-                        'fill-extrusion-color': '#964B00',
-                        'fill-extrusion-height': 10,
-                        'fill-extrusion-base': 0,
-                        'fill-extrusion-opacity': 1,
-                    },
+            multihazardMap.addLayer({
+                id: 'earthquake-risk-score',
+                source: 'earthquake-data',
+                'source-layer': mapSources.nepal.layers.district,
+                type: 'fill',
+                paint: generatePaint(colorForEarthquake),
+                layout: {
+                    visibility: 'none',
 
                 },
+                filter: getDistrictFilter(6, null, districts),
+            }, 'districtgeo');
 
-            );
+            earthquakeRiskScoreArray.forEach((attribute) => {
+                multihazardMap.setFeatureState(
+                    {
+                        id: attribute.districtId,
+                        source: 'earthquake-data',
+                        sourceLayer: mapSources.nepal.layers.district,
+                    },
+                    { value: attribute.value },
+                );
+            });
 
-            // -----------------------------------------------SLIDE-4-------------------------------------------
+            // -----------------------------------------------SLIDE-5-------------------------------------------
             const avialableVulColors = [colorForhdi, colorForhpi];
             const availableData = [hdiData, hpiData];
             ['hdiData', 'hpiData'].map((layer, i) => {
@@ -1171,9 +1180,6 @@ const MultiHazardMap = (props: Props) => {
 		`)
                     .addTo(multihazardMap);
             });
-
-
-            multihazardMap.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
         });
 
 
@@ -1311,7 +1317,6 @@ const MultiHazardMap = (props: Props) => {
 
                 if (hazardLegendClickedArr[0] === 1) {
                     if (map.current) {
-                        layers[3].map(layermain => map.current.setLayoutProperty(layermain, 'visibility', 'visible'));
                         if (floodLayer) {
                             map.current.setLayoutProperty(`raster-flood-${floodLayer}`, 'visibility', 'visible');
                         }
@@ -1321,24 +1326,36 @@ const MultiHazardMap = (props: Props) => {
                 }
 
 
-                if (hazardLegendClickedArr[2] === 1) {
+                if (hazardLegendClickedArr[1] === 1) {
                     if (map.current) {
                         map.current.setLayoutProperty('landslideLayer', 'visibility', 'visible');
                     }
                 } else {
                     map.current.setLayoutProperty('landslideLayer', 'visibility', 'none');
                 }
-
-                if (hazardLegendClickedArr[1] === 1) {
-                    if (map.current) {
-                        map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
-                    }
-                } else {
-                    map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
-                }
             }
         }
     }, [criticalElement, floodLayer, floodHazardLayersArr, clickedHazardItem, hazardLegendClickedArr, layers]);
+
+    useEffect(() => {
+        if (rightElement === 4) {
+            const switchFloodRasters = (floodlayer: FloodLayer) => {
+                if (floodHazardLayersArr && floodHazardLayersArr.length > 0 && map.current) {
+                    floodHazardLayersArr.map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`raster-flood-${layer.year}`, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    map.current.setLayoutProperty(`raster-flood-${floodlayer}`, 'visibility', 'visible');
+                }
+            };
+
+            if (map.current && floodHazardLayersArr && map.current.isStyleLoaded()) {
+                switchFloodRasters(floodLayer);
+            }
+        }
+    }, [floodLayer, floodHazardLayersArr]);
 
     useEffect(() => {
         if (map.current) {
@@ -1396,10 +1413,8 @@ const MultiHazardMap = (props: Props) => {
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
             // -----------------------------------------------------First Page-------------------------------------------------
-            if (rightElement === 0
-                && layers[rightElement].length > 0
-            ) {
-                if (rightElement === 0 && legendElement === 'Adminstrative Map') {
+            if (rightElement === 0) {
+                if (legendElement === 'Adminstrative Map') {
                     layers[1].map((layer: string) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1412,10 +1427,13 @@ const MultiHazardMap = (props: Props) => {
                         }
                         return null;
                     });
-                    if (map.current) {
-                        layers[3].map((layer: string) => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
-                    }
-                } else if (rightElement === 0 && legendElement === 'Landcover') {
+                    layers[3].map((layer: string) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                } else if (legendElement === 'Landcover') {
                     layers[1].map((layer: string) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1428,16 +1446,19 @@ const MultiHazardMap = (props: Props) => {
                         }
                         return null;
                     });
-                    if (map.current) {
-                        layers[3].map((layer: string) => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
-                    }
+                    layers[3].map((layer: string) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(layer, 'visibility', 'none');
+                        }
+                        return null;
+                    });
                     map.current.easeTo({
                         pitch: 45,
                         zoom: 8.2,
                         duration: 1200,
                         // center: [lng, lat],
                     });
-                } else if (rightElement === 0 && legendElement === 'Population By District') {
+                } else if (legendElement === 'Population By District') {
                     layers[2].map((layer: string) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1504,21 +1525,6 @@ const MultiHazardMap = (props: Props) => {
                         map.current.moveLayer(`clusters-count-${item}`);
                         map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'none');
                         map.current.moveLayer(`unclustered-point-${item}`);
-                    }
-                    return null;
-                });
-            }
-            if ((rightElement === 0 && (legendElement === 'Landcover' || 'Adminstrative Map')) || (rightElement === 2 && clickedArr[1] === 1) || (rightElement === 3 && exposureElementsArr[2] === 1)) {
-                layers[1].map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'visible');
-                    }
-                    return null;
-                });
-            } else {
-                layers[1].map((layer) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(layer, 'visibility', 'none');
                     }
                     return null;
                 });
@@ -1590,7 +1596,6 @@ const MultiHazardMap = (props: Props) => {
             // -----------------------------------------------------Hazard Page-------------------------------------------------
             if ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[0] === 1) {
                 if (map.current) {
-                    layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
                     if (floodLayer) {
                         map.current.setLayoutProperty(`raster-flood-${floodLayer}`, 'visibility', 'visible');
                     }
@@ -1600,7 +1605,7 @@ const MultiHazardMap = (props: Props) => {
             }
 
 
-            if ((rightElement === 4) && hazardLegendClickedArr[2] === 1) {
+            if ((rightElement === 4) && hazardLegendClickedArr[1] === 1) {
                 if (map.current) {
                     map.current.setLayoutProperty('landslideLayer', 'visibility', 'visible');
                 }
@@ -1608,22 +1613,16 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('landslideLayer', 'visibility', 'none');
             }
 
-            if ((rightElement === 4) && hazardLegendClickedArr[1] === 1) {
+            if ((rightElement === 4) && (earthquakeRisk === 'Earthquake Risk')) {
                 if (map.current) {
-                    map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
+                    map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'visible');
                 }
             } else {
-                map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
+                map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'none');
             }
+
             // ------------------------------------------------------------Climate Data Layer-----------------------------------------
 
-            if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
-                if (map.current) {
-                    map.current.setLayoutProperty('buildingsdata', 'visibility', 'visible');
-                }
-            } else {
-                map.current.setLayoutProperty('buildingsdata', 'visibility', 'none');
-            }
 
             if (rightElement === 5 && climateDataType === 'Temperature') {
                 tempDataAccordingToYear.map((layer) => {
@@ -1775,6 +1774,35 @@ const MultiHazardMap = (props: Props) => {
                     </div>
                 </div>
             )}
+
+            {(rightElement === 4 && earthquakeRisk === 'Earthquake Risk') && (
+                <div className={styles.mainLegendDiv}>
+                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>Earthquake Risk Score</p>
+                    <div className={styles.scale}>
+                        {colorForEarthquake.map((c, i) => {
+                            if (i % 2 === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <div className={styles.scaleElement} key={c}>
+                                    <div
+                                        key={c}
+                                        className={styles.colorUnit}
+                                        style={{
+                                            // width: colorUnitWidth,
+                                            backgroundColor: c,
+                                        }}
+                                    />
+                                    <div className={styles.value}>
+                                        { colorForEarthquake[i - 1].toFixed(2)}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
             {rightElement === 3 && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{vulnerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</p>
@@ -1825,7 +1853,7 @@ const MultiHazardMap = (props: Props) => {
                 )
             }
             {
-                (rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[2] === 1
+                (rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[1] === 1
                 && (
                     <>
                         <p className={_cs(styles.sliderLabel2)}>
