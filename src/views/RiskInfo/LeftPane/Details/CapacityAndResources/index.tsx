@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-nested-ternary */
 import React from 'react';
