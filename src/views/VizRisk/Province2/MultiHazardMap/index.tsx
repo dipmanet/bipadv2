@@ -1341,9 +1341,16 @@ const MultiHazardMap = (props: Props) => {
                 } else {
                     map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
                 }
+                if (earthquakeRisk === 'Earthquake Risk') {
+                    if (map.current) {
+                        map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'none');
+                }
             }
         }
-    }, [criticalElement, floodLayer, floodHazardLayersArr, clickedHazardItem, hazardLegendClickedArr, layers]);
+    }, [criticalElement, floodLayer, floodHazardLayersArr, clickedHazardItem, hazardLegendClickedArr, layers, earthquakeRisk]);
 
     useEffect(() => {
         if (rightElement === 4) {
@@ -1646,7 +1653,7 @@ const MultiHazardMap = (props: Props) => {
             } else {
                 map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
             }
-            if ((rightElement === 4) && (earthquakeRisk === 'Earthquake Risk')) {
+            if ((rightElement === 4 || rightElement === 6) && (earthquakeRisk === 'Earthquake Risk')) {
                 if (map.current) {
                     map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'visible');
                 }
@@ -1828,7 +1835,7 @@ const MultiHazardMap = (props: Props) => {
                     </div>
                 </div>
             )}
-            {(rightElement === 4 && earthquakeRisk === 'Earthquake Risk') && (
+            {((rightElement === 4 || rightElement === 6) && earthquakeRisk === 'Earthquake Risk') && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>Earthquake Risk Score</p>
                     <div className={styles.scale}>

@@ -27,7 +27,8 @@ import { incidentListSelectorIP } from '#selectors';
 import { setIncidentListActionIP } from '#actionCreators';
 import Loading from '#components/Loading';
 import ProvinceTwo from './Province2';
-import Kailali from './Kailali';
+import Karnali from './Karnali';
+import Ratnanagar from './RatnaNagar';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     incidentList: incidentListSelectorIP(state),
@@ -250,7 +251,7 @@ const VizRiskMainPage = (props: Props) => {
 		 || (munThemeId === 109 && <Jugal />)
 		 || (munThemeId === 110 && <Panchpokhari />)
 		 || ((munThemeId === 300 && provinceId === 2) && <ProvinceTwo />)
-		 || ((munThemeId === 300 && provinceId === 6) && <Kailali />)
+		 || ((munThemeId === 300 && provinceId === 6) && <Karnali />)
 		 )
                                         }
                                     </div>

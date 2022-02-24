@@ -122,6 +122,7 @@ function Leftpane(props) {
         setVulnerability,
         handleEarthQuakeRisk,
         earthquakeRisk,
+        contactData,
 
     } = props;
 
@@ -1034,7 +1035,7 @@ RISK
                     </>
                 )}
 
-                {leftElement === 7 && <DRRCountBox />}
+                {leftElement === 7 && <DRRCountBox contactData={contactData} />}
                 <div className={styles.leftBottomBar}>
                     <NavButtons
                         handleNext={handleNext}

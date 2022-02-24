@@ -505,8 +505,8 @@ export const ProvinceTwo = (props: Props) => {
 
     const handleMultipleHazardLayer = (hazardItem, i) => {
         setlegentItemDisabled(true);
-        setclickedHazardItem(hazardItem);
         setearthquakeRisk('');
+        setclickedHazardItem(hazardItem);
         const curLegend = [...hazardLegendClickedArr];
         if (i === 0) {
             curLegend[0] = 1;
@@ -1223,6 +1223,7 @@ export const ProvinceTwo = (props: Props) => {
                         introHtml={page8TopIntrohtml[0]}
                         urbanData={page5MidUrbanData[0]}
                         leftElement={leftElement}
+                        contactData={contactData}
                         handleNext={handleNext}
                         handlePrev={handlePrev}
                         totalPages={leftelements.length}

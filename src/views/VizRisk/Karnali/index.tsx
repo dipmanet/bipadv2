@@ -317,7 +317,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 
-export const Kailali = (props: Props) => {
+export const Karnali = (props: Props) => {
     const { provinces } = props;
     const [pending, setpending] = useState<boolean>(true);
     const leftelements = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -1224,6 +1224,7 @@ export const Kailali = (props: Props) => {
                         leftElement={leftElement}
                         handleNext={handleNext}
                         handlePrev={handlePrev}
+                        contactData={contactData}
                         totalPages={leftelements.length}
                         pagenumber={leftElement + 1}
                         setActivePage={setActivePage}
@@ -1245,4 +1246,4 @@ export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createConnectedRequestCoordinator<ReduxProps>(),
     createRequestClient(requests),
-)(Kailali);
+)(Karnali);

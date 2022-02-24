@@ -3,22 +3,27 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { Item } from 'semantic-ui-react';
+import { Hotel } from '@material-ui/icons';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
 import Governance from '#resources/icons/icon_set_government.svg';
 import Culture from '#resources/icons/icon_set_religion.svg';
 import Health from '#resources/icons/icon_set_health-01.svg';
-import Industry from '#resources/icons/icon_set_industry.svg';
 import Tourism from '#resources/icons/icon_set_hotel.svg';
 import Bank from '#resources/icons/icon_set_bank.svg';
 import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
+import Bridge from '#resources/icons/bridge copy.svg';
+import Communication from '#resources/icons/communication.svg';
+import Road from '#resources/icons/Road-barrier.svg';
+import Sanitation from '#resources/icons/Sanitation.svg';
+import Industry from '#resources/icons/IndustryVR.svg';
 import Icon from '#rscg/Icon';
 import Fireengine from '../../../Common/Icons/Fireengine.svg';
 import Heli from '../../../Common/Icons/Heli.svg';
+import Waterway from '#resources/icons/Spring-water.svg';
 import style from '#mapStyles/rasterStyle';
-import ManualIcon from '#resources/images/manualicon.png';
 
 
 const CriticalInfraLegends = (props) => {
@@ -96,13 +101,25 @@ SHOW ALL
 
                                             <ScalableVectorGraphics
                                                 className={styles.svgIcon}
-                                                src={(item === 'education' && Education)
-					 || (item === 'governance' && Governance)
-					  || (item === 'health' && Health)
-					  || (item === 'cultural' && Culture)
-					   || (item === 'finance' && Bank)
-						|| (item === 'fireengine' && Fireengine)
-						 || (item === 'helipad' && Heli)}
+                                                src={
+					     (item === 'education' && Education)
+					     || (item === 'governance' && Governance)
+					     || (item === 'health' && Health)
+					     || (item === 'cultural' && Culture)
+					     || (item === 'finance' && Bank)
+						 || (item === 'fireengine' && Fireengine)
+						 || (item === 'bridge' && Bridge)
+						 || (item === 'airway' && Bridge)
+						 || (item === 'communication' && Communication)
+						 || (item === 'watersupply' && Water)
+						 || (item === 'sanitation' && Sanitation)
+						 || (item === 'industry' && Industry)
+						 || (item === 'communityspace' && Communication)
+						 || (item === 'hotelandrestaurant' && Heli)
+						 || (item === 'roadway' && Road)
+						 || (item === 'firefightingapparatus' && Fireengine)
+						 || (item === 'waterway' && Waterway)
+                                                }
                                             />
 
 

@@ -44,7 +44,6 @@ export const getgeoJsonLayer = (layer: string) => [
 
 export const getbuildingVul = (d) => {
     if (d.length > 0) {
-        console.log('data recieved for vul:', d);
         const arr = d.filter(item => typeof item.vulnerabilityScore === 'number');
         console.log('arr', arr);
         if (arr.length > 0) {
