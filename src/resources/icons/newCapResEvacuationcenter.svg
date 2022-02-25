@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Evacuation_center">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Evacuation_center" data-name="Evacuation center" clip-path="url(#clip-Evacuation_center)">
+    <g id="Layer_2" data-name="Layer 2" transform="translate(5.172 5.173)">
+      <path id="Path_2000" data-name="Path 2000" d="M27.5,5.715a.675.675,0,0,0-.266-.456L20.654.152a.744.744,0,0,0-.9,0L13.174,5.259a.675.675,0,0,0-.266.456L12.56,8.286l1.4-1.083a2.1,2.1,0,0,1,2.563,0l2.554,1.985.9.7,1.214.943.578.447L23.086,12.3a1.991,1.991,0,0,1,.767,1.232h4.7Z" transform="translate(-6.893 0)" fill="#0070ab"/>
+      <path id="Path_2001" data-name="Path 2001" d="M15.376,23.258,13.084,21.48l-.415-.325-.487-.379L8.8,18.15A.728.728,0,0,0,8.347,18a.719.719,0,0,0-.451.153L5.41,20.081,1.317,23.258a.675.675,0,0,0-.266.456L0,31.532H8.121V27.151a.132.132,0,0,1,.135-.131.136.136,0,0,1,.117.068l2.454,4.444h5.865l-1.051-7.819a.675.675,0,0,0-.266-.456Z" transform="translate(0 -9.877)" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

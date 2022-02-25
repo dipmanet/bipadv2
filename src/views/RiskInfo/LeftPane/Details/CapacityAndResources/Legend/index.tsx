@@ -21,6 +21,8 @@ interface Props {
         communication: boolean;
         openspace: boolean;
         communityspace: boolean;
+        bridge: boolean;
+        evacuationcenter: boolean;
     };
     resourceIdForLegend: number | null;
 }

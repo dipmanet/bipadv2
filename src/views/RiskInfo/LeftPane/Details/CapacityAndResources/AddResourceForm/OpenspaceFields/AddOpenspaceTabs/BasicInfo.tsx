@@ -31,7 +31,7 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
 
     <React.Fragment>
         <br />
-        <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} />
+        {/* <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} /> */}
         <TextInput
             faramElementName="oid"
             label="OID"
@@ -95,26 +95,26 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
             label="Change Remarks"
         />
 
-        {
+        {/* {
             openspacePostError && (
                 <NonFieldErrors
                     faramElement
                     errors={['Some error occured!']}
                 />
             )
-        }
+        } */}
         {resourceId === undefined
 
 && <span>Please make sure to complete all the steps while filling the form.</span>}
         <div className={styles.stepButtons}>
-            <PrimaryButton
+            {/* <PrimaryButton
                 type="submit"
                 // disabled={pristine}
                 // pending={addResourcePending || editResourcePending}
                 onClick={() => handleTabClick('closeModal')}
             >
             Close
-            </PrimaryButton>
+            </PrimaryButton> */}
 
             <PrimaryButton
                 onClick={() => postBasicInfo()}
