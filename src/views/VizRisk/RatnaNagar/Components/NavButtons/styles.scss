@@ -1,0 +1,75 @@
+.pagination {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    width: calc(30% - 60px);
+    padding: 35px 0px;
+    background-color: #0c2432;
+    left: 0;
+    height: 40px;
+    z-index: 999;
+
+    .numberContainer {
+        display: flex;
+        justify-content: space-between;
+        width: 50%;
+        padding: 2px 5px;
+
+        .button {
+            color: white;
+            position: relative;
+            width: 35px;
+            height: 35px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+            outline: none;
+            cursor: pointer;
+            border: 0;
+            background-color: #17546c;
+            border-radius: 50%;
+        }
+
+        .buttonFill {
+            color: white;
+            position: relative;
+            width: 35px;
+            height: 35px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+            outline: none;
+            cursor: pointer;
+            border: 0;
+            background-color: blue;
+        }
+    }
+
+    .previousNextButton {
+        cursor: pointer;
+    }
+}
+
+
+.circleProgress {
+    position: absolute;
+    stroke: white;
+    left: 0;
+    top: 0;
+}
+
+h3 {
+    padding: 0;
+    margin: 0;
+}
+
+
+
+@media screen and (max-width:600px) {
+    .pagination {
+        width: 100%;
+    }
+
+}
