@@ -649,7 +649,7 @@ const visualizationKeyValues = [
             {
                 label: 'Industry Types',
                 key: 'subtype',
-                values: ['Cottage Industry', 'Micro Industry', 'Small Industry', 'Medium Industry', 'Large Industry'],
+                values: ['Cottage Industry', 'Micro Industry', 'Small Industry', 'Medium Industry', 'Large Industry', 'Other'],
                 isBoolean: false,
             },
             {
@@ -1195,6 +1195,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         let calculatedValueData;
         let filterDataForCalculation;
         console.log('selected Resource data', selectedResourceData);
+        console.log('key', key);
         if (typeof key === 'string') {
             filteredResourceChartDataType = visualizationKeyValues
                 .filter(item => item.resourceType === resourceType)[0].chartDataType

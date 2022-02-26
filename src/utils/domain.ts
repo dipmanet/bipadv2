@@ -2411,6 +2411,11 @@ export const capacityResource = [
                 name: 'Large Industry',
                 type: 'Large Industry',
             },
+            {
+                id: 999,
+                name: 'Other',
+                type: 'Other',
+            },
         ],
     },
     {
