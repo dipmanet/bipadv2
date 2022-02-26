@@ -76,7 +76,6 @@ import MapTooltip from '#re-map/MapTooltip';
 import MapShapeEditor from '#re-map/MapShapeEditor';
 import { MultiResponse } from '#store/atom/response/types';
 import { MapChildContext } from '#re-map/context';
-
 import Cloak, { getParams } from '#components/Cloak';
 import TextOutput from '#components/TextOutput';
 import Option from '#components/RadioInput/Option';
