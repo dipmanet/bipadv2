@@ -37,6 +37,8 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
             <DateInput
                 faramElementName="operatingDate"
                 label="Operating Date"
+                inputFieldClassName={styles.dateInput}
+
             />
             <SelectInput
                 faramElementName="ownership"

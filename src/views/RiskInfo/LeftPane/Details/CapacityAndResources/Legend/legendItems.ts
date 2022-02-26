@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/indent */
 import styles from './styles.scss';
 
 type ToggleValues = 'education' | 'health' | 'finance' | 'governance'
-| 'tourism' | 'cultural' | 'industry' | 'communication' | 'openspace' |
-'communityspace'|'fireengine'|'helipad'|'bridge'|'airway'|'roadway'|'waterway';
+    | 'hotelandrestaurant' | 'cultural' | 'industry' | 'communication' | 'openspace' |
+    'communityspace' | 'fireengine' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway';
 
 interface LegendItems {
     color: string;
@@ -15,7 +16,7 @@ const capacityAndResourcesLegendItems: LegendItems[] = [
     { color: '#EADAA2', key: 'health', label: 'Health', style: styles.symbol },
     { color: '#BD93BD', key: 'finance', label: 'Finance', style: styles.symbol },
     { color: '#82ddf0', key: 'governance', label: 'Governance', style: styles.symbol },
-    { color: '#7dcd85', key: 'tourism', label: 'Tourism', style: styles.symbol },
+    { color: '#7dcd85', key: 'hotelandrestaurant', label: 'Hotel and Restaurant', style: styles.symbol },
     { color: '#c4b2bc', key: 'cultural', label: 'Cultural', style: styles.symbol },
     { color: '#a6a867', key: 'industry', label: 'Industry', style: styles.symbol },
     { color: '#efa8b8', key: 'communication', label: 'Communication', style: styles.symbol },

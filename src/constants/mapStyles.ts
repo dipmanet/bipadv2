@@ -372,7 +372,7 @@ export default {
         },
         roadway: {
             ...resourceClusterInitial,
-            'circle-color': '#000000',
+            'circle-color': '#1698EE',
         },
         waterway: {
             ...resourceClusterInitial,
@@ -456,7 +456,7 @@ export default {
         },
         roadway: {
             ...resourcePointInitial,
-            'circle-color': '#000000',
+            'circle-color': '#1698EE',
         },
         waterway: {
             ...resourcePointInitial,
@@ -540,7 +540,7 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-radius': 16,
+            'circle-radius': 8,
             'circle-stroke-color': '#000000',
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -558,7 +558,7 @@ export default {
                 ['==', ['get', 'status'], 'ABOVE DANGER LEVEL'], '#e53935',
                 '#000000',
             ],
-            'circle-radius': 16,
+            'circle-radius': 8,
             'circle-stroke-color': '#000000',
             'circle-stroke-width': ['case',
                 ['boolean', ['feature-state', 'hover'], false],
@@ -572,7 +572,7 @@ export default {
             ],
         },
         paint: {
-            'circle-radius': 16,
+            'circle-radius': 8,
             'circle-color': [
                 'case',
                 // ['==', ['get', 'status'], 'BELOW WARNING LEVEL'], '#7CB342',
@@ -727,7 +727,7 @@ export default {
                 '■',
             ],
             'text-allow-overlap': true,
-            'text-size': 48,
+            'text-size': 32,
         },
         text: {
             'text-color': [

@@ -835,18 +835,50 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { isFilterClicked, FilterClickedStatus } = this.context;
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
-
+        console.log('selectedCategory name', selectedCategoryName);
+        console.log('carkey', carKeys);
 
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
             this.setState({ disableCheckbox: true });
+            if (carKeys.length === 0) {
+                this.setState({ disableCheckbox: false });
+                this.setState({
+                    resourceCollection: {
+                        education: [],
+                        health: [],
+                        finance: [],
+                        governance: [],
+                        hotelandrestaurant: [],
+                        cultural: [],
+                        industry: [],
+                        communication: [],
+                        openspace: [],
+                        communityspace: [],
+                        firefightingapparatus: [],
+                        fireengine: [],
+                        helipad: [],
+                        bridge: [],
+                        roadway: [],
+                        waterway: [],
+                        airway: [],
+                        electricity: [],
+                        sanitation: [],
+                        watersupply: [],
+                        evacuationcentre: [],
 
-            this.props.requests.resourceGetRequest.do(
-                {
-                    region,
-                    resourceType: carKeys,
-                    filterClickCheckCondition: isFilterClicked,
-                },
-            );
+
+                    },
+                });
+            }
+            if (carKeys.length) {
+                this.props.requests.resourceGetRequest.do(
+                    {
+                        region,
+                        resourceType: carKeys,
+                        filterClickCheckCondition: isFilterClicked,
+                    },
+                );
+            }
         }
 
         const reportWindowSize = () => {
@@ -944,6 +976,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 temp[item] = lvl2UncheckCondition
             ));
         }
+        console.log('lvl 2', filteredSubCategoriesLvl2ResourceType);
         const trueKeys = Object.keys(temp).filter(id => temp[id]);
         this.setState({ activeLayersIndication: temp });
         const { handleActiveLayerIndication } = this.props;
@@ -971,11 +1004,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             }
             setCarKeys(newArr);
             this.setState({ disableCheckbox: true });
-            this.props.requests.resourceGetRequest.do({
-                resourceType: newArr,
-                region: this.props.filters.faramValues.region,
-                filterClickCheckCondition: isFilterClicked,
-            });
+            if (newArr.length === 0) {
+                this.setState({ disableCheckbox: false });
+            }
+            if (newArr.length) {
+                this.props.requests.resourceGetRequest.do({
+                    resourceType: newArr,
+                    region: this.props.filters.faramValues.region,
+                    filterClickCheckCondition: isFilterClicked,
+                });
+            }
         } else if (temp[key] && resourceCollection[key].length === 0) {
             const newArr = [];
             newArr.push(key);
@@ -985,13 +1023,18 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 newArr.push(...carKeys);
             }
             setCarKeys(newArr);
-
+            console.log('entered');
             this.setState({ disableCheckbox: true });
-            this.props.requests.resourceGetRequest.do({
-                resourceType: newArr,
-                region: this.props.filters.faramValues.region,
-                filterClickCheckCondition: isFilterClicked,
-            });
+            if (newArr.length === 0) {
+                this.setState({ disableCheckbox: false });
+            }
+            if (newArr.length) {
+                this.props.requests.resourceGetRequest.do({
+                    resourceType: newArr,
+                    region: this.props.filters.faramValues.region,
+                    filterClickCheckCondition: isFilterClicked,
+                });
+            }
         } else return null;
         return null;
     }
@@ -1330,16 +1373,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     private handleLayerClick = (layerKey: ResourceTypeKeys) => {
         const { isFilterClicked, FilterClickedStatus } = this.context;
+        const { carKeys } = this.props;
         this.setState({
             activeLayerKey: layerKey,
             showResourceForm: false,
             showInventoryModal: false,
         });
         this.setState({ disableCheckbox: true });
-        this.props.requests.resourceGetRequest.do({
-            resourceType: layerKey,
-            filterClickCheckCondition: isFilterClicked,
-        });
+        if (carKeys.length === 0) {
+            this.setState({ disableCheckbox: false });
+        }
+        if (carKeys.length) {
+            this.props.requests.resourceGetRequest.do({
+                resourceType: layerKey,
+                filterClickCheckCondition: isFilterClicked,
+            });
+        }
     }
 
     private handleLayerUnselect = () => {
@@ -2327,6 +2376,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filterPermissionGranted = checkSameRegionPermission(user, region);
         console.log('feature', mainCategoryCheckboxChecked);
         console.log('carkeys', carKeys);
+        console.log('resource collectioon', resourceCollection);
 
         return (
             <>

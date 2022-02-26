@@ -15,7 +15,7 @@ interface Props {
         health: boolean;
         finance: boolean;
         governance: boolean;
-        tourism: boolean;
+        hotelandrestaurant: boolean;
         cultural: boolean;
         industry: boolean;
         communication: boolean;
@@ -110,11 +110,11 @@ const CapacityAndResourcesLegend = (props: Props) => {
                 <div className={styles.title}>Capacity and Resources</div>
                 <Legend
                     className={styles.legend}
-                // data={capacityAndResourcesLegendItems}
+                    // data={capacityAndResourcesLegendItems}
                     data={activeLegends}
                     itemClassName={styles.legendItem}
                     keySelector={itemSelector}
-            // iconSelector={iconSelector}
+                    // iconSelector={iconSelector}
                     labelSelector={legendLabelSelector}
                     symbolClassNameSelector={classNameSelector}
                     colorSelector={legendColorSelector}
