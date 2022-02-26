@@ -952,12 +952,13 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             !!resourceCollection[item].length
         ))).filter(item => item === true);
         const filterCarKeys = carKeys.find(d => d === key);
-        if (filterCarKeys) {
-            const data = carKeys.filter(d => d !== key);
-            setCarKeys(data);
-        } else {
-            setCarKeys([...carKeys, key]);
-        }
+        console.log('key', key);
+        // if (filterCarKeys) {
+        //     const data = carKeys.filter(d => d !== key);
+        //     setCarKeys(data);
+        // } else {
+        //     setCarKeys([...carKeys, key]);
+        // }
         if (typeName && checkingResourceCollection && (checkingResourceCollection.length !== filteredSubCategoriesLvl2ResourceType.length)) {
             const newArr = [];
             filteredSubCategoriesLvl2ResourceType.map(item => newArr.push(item));
@@ -2324,6 +2325,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
+        console.log('feature', mainCategoryCheckboxChecked);
+        console.log('carkeys', carKeys);
+
         return (
             <>
                 <Loading pending={pending} />
