@@ -33,6 +33,7 @@ const iconNames = {
 
     calendar: 'ion-ios-calendar-outline',
     location: 'ion-ios-location-outline',
+    gps: 'ion-ios-location',
     distance: 'ion-android-locate',
 
     expand: 'ion-arrow-expand',
@@ -59,6 +60,7 @@ const iconNames = {
 
     eye: 'ion-eye',
     eyeOff: 'ion-eye-off',
+    basin: 'fa-square',
 
     sliders: 'fa fa-sliders',
     table: 'fa fa-table',
@@ -89,11 +91,33 @@ const iconNames = {
     document: 'ion-android-document',
     textDocument: 'ion-document-text',
     cart: 'ion-ios-cart-outline',
+    cog: 'ion-ios-cog',
+    circle: 'fa fa-circle',
+    square: 'fa fa-square',
+
     lock: 'fa fa-unlock-alt',
     times: 'fa fa-times',
-    info: 'fa  fa-info-circle',
+    info: 'fa fa-info-circle',
+
+    search: 'fa fa-search',
+    home: 'fa fa-home',
+
     sortDown: 'fa fa-angle-down',
     sortUp: 'fa fa-angle-up',
+
+    chart: 'fa fa-line-chart',
+    cloud: 'fa fa-cloud',
+    filePdf: 'fa fa-file-pdf-o',
+    education: 'fa fa-graduation-cap',
+    dropdown: 'fa fa-caret-down',
+    dropRight: 'fa fa-caret-right',
+    capResAddFormDropdown: 'fa fa-angle-down',
+    phoneContact: 'fas fa-phone-alt',
+    tableView: 'fa fa-list-ul',
+    lgprofilePopupDownArrow: 'fa fa-chevron-down',
+    lgprofilePopupUpArrow: 'fa fa-chevron-up',
+
+
 };
 
 export default iconNames;

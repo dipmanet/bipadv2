@@ -109,6 +109,7 @@ import evacuationCentre from '#resources/icons/newCapResEvacuationcenter.svg';
 import airway from '#resources/icons/airway.svg';
 import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
+import helipad from '#resources/icons/heli.svg';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
 import InventoriesModal from './InventoriesModal';
@@ -633,7 +634,7 @@ const sidepanelLogo = [
     },
     {
         name: 'Helipad',
-        image: bridge,
+        image: helipad,
     },
     {
         name: 'Electricity',
@@ -952,12 +953,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         ))).filter(item => item === true);
         const filterCarKeys = carKeys.find(d => d === key);
         console.log('key', key);
-        // if (filterCarKeys) {
-        //     const data = carKeys.filter(d => d !== key);
-        //     setCarKeys(data);
-        // } else {
-        //     setCarKeys([...carKeys, key]);
-        // }
+        if (filterCarKeys) {
+            const data = carKeys.filter(d => d !== key);
+            setCarKeys(data);
+        } else {
+            setCarKeys([...carKeys, key]);
+        }
         if (typeName && checkingResourceCollection && (checkingResourceCollection.length !== filteredSubCategoriesLvl2ResourceType.length)) {
             const newArr = [];
             filteredSubCategoriesLvl2ResourceType.map(item => newArr.push(item));

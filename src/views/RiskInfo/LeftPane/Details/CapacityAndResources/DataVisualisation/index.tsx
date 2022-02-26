@@ -63,6 +63,7 @@ import evacuationCentre from '#resources/icons/newCapResEvacuationcenter.svg';
 import airway from '#resources/icons/airway.svg';
 import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
+import helipad from '#resources/icons/heli.svg';
 import TableData from './DataSet';
 import styles from './styles.scss';
 import BarChartVisualization from './BarChart';
@@ -281,7 +282,7 @@ const sidepanelLogo = [
     },
     {
         name: 'Helipad',
-        image: bridge,
+        image: helipad,
     },
     {
         name: 'Electricity',

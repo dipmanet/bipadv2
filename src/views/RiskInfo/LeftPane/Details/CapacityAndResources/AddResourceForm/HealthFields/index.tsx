@@ -706,14 +706,14 @@ const HeathFields: FunctionComponent<Props> = ({ resourceEnums, faramValues,
                 label="Date of Validity"
                 inputFieldClassName={styles.dateInput}
             />
-            <Checkbox
+            {/* <Checkbox
                 faramElementName="hasInternetFacility"
                 label="Internet Facility"
-            />
+            /> */}
             <h1>DISASTER MANAGEMENT</h1>
             <SelectInput
                 faramElementName="isDesignedFollowingBuildingCode"
-                label="Is the school designed following building codes?"
+                label="Is the facility designed following building codes?"
                 options={booleanCondition}
                 keySelector={keySelector}
                 labelSelector={labelSelector}

@@ -28,12 +28,13 @@ const HelipadFields: FunctionComponent = ({ resourceEnums, faramValues,
     const helipadCondition = [{ key: 'Operational', label: 'Operational' }, { key: 'Need Repair', label: 'Need Repair' },
     { key: 'Not in working condition', label: 'Not in working condition' }];
     return (
-        // <DateInput
-        // faramElementName="operatingDate"
-        //     label="Operating Date"
-        // />
+
         <>
-            <TextInput
+            {/* <TextInput
+                faramElementName="operatingDate"
+                label="Operating Date"
+            /> */}
+            <DateInput
                 faramElementName="operatingDate"
                 label="Operating Date"
             />
