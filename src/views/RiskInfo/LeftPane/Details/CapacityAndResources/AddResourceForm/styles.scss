@@ -1,27 +1,97 @@
-.add-resource-modal {
-    max-height: 90vh;
+// .add-resource-modal {
+//   max-height: 90vh;
 
-    .form {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        overflow-y: auto;
-    }
+//   .form {
+//     display: flex;
+//     flex-direction: column;
+//     height: 100%;
+//     overflow-y: auto;
+//     button {
+//       filter: saturate(100%);
+//     }
+//   }
 
-    .header {
-        flex-shrink: 0;
-    }
+//   .header {
+//     flex-shrink: 0;
+//   }
 
-    .modal-body {
-        flex-grow: 1;
-        overflow-y: auto;
-    }
+//   .modal-body {
+//     flex-grow: 1;
+//     overflow-y: auto;
+//   }
 
-    .footer {
-        flex-shrink: 0;
-    }
+//   .footer {
+//     flex-shrink: 0;
+//   }
 
-    .location-input {
-        height: 300px;
+//   .location-input {
+//     height: 300px;
+//   }
+// }
+
+.resourceType {
+  .option {
+    button {
+      font-size: 20px !important;
     }
+  }
 }
+.optionsClassName {
+  font-size: 18px !important;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+
+  .locationInput {
+    display: flex;
+    flex-direction: column;
+  }
+  .submitButnDisabled {
+    width: 100%;
+    margin-top: 10px;
+    button {
+      filter: saturate(100%);
+      background-color: #f6f6f4 !important;
+      color: #a9a9a9 !important;
+      width: 100% !important;
+      height: 50px;
+      font-size: 14px;
+    }
+  }
+  .submitButn {
+    width: 100%;
+    margin-top: 10px;
+
+    button {
+      filter: saturate(100%);
+      background-color: #1a70ac !important;
+      color: white !important;
+      width: 100% !important;
+      height: 50px;
+      font-size: 14px;
+    }
+  }
+  .dateInput {
+    display: flex;
+  }
+}
+
+.header {
+  flex-shrink: 0;
+}
+
+.modal-body {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.footer {
+  flex-shrink: 0;
+}
+
+// .location-input {
+//   height: 300px;
+// }
