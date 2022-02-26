@@ -835,9 +835,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const { isFilterClicked, FilterClickedStatus } = this.context;
         const { PreserveresourceCollection, resourceCollection, selectedCategoryName,
             selectCategoryForinitialFilter, selectedSubCategorynameList, selectedSubCategoryName, checked } = this.state;
-        console.log('selectedCategory name', selectedCategoryName);
-        console.log('carkey', carKeys);
-
         if (prevProps.filters.faramValues.region !== this.props.filters.faramValues.region) {
             this.setState({ disableCheckbox: true });
             if (carKeys.length === 0) {
@@ -976,7 +973,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 temp[item] = lvl2UncheckCondition
             ));
         }
-        console.log('lvl 2', filteredSubCategoriesLvl2ResourceType);
         const trueKeys = Object.keys(temp).filter(id => temp[id]);
         this.setState({ activeLayersIndication: temp });
         const { handleActiveLayerIndication } = this.props;
@@ -985,7 +981,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             !!resourceCollection[item].length
         ))).filter(item => item === true);
         const filterCarKeys = carKeys.find(d => d === key);
-        console.log('key', key);
         if (filterCarKeys) {
             const data = carKeys.filter(d => d !== key);
             setCarKeys(data);
@@ -1023,7 +1018,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 newArr.push(...carKeys);
             }
             setCarKeys(newArr);
-            console.log('entered');
             this.setState({ disableCheckbox: true });
             if (newArr.length === 0) {
                 this.setState({ disableCheckbox: false });
@@ -2374,10 +2368,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-        console.log('feature', mainCategoryCheckboxChecked);
-        console.log('carkeys', carKeys);
-        console.log('resource collectioon', resourceCollection);
-
         return (
             <>
                 <Loading pending={pending} />

@@ -65,7 +65,6 @@ const emptyObject = {};
 
 class LocationInput extends React.PureComponent<Props, State> {
     private handlePointMove = (geoJson: object, region: Region) => {
-        console.log('handle point move', geoJson);
         const {
             onChange,
             wards,

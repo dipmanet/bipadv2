@@ -1146,7 +1146,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         if (calculatedSum > 0) {
             this.setState({ isValueCalculated: true });
         }
-        console.log('isCalculated', isValueCalculated);
         if (prevState) {
             if (prevState.isValueCalculated !== isValueCalculated) {
                 this.setState({ GraphVisualizationData });
@@ -1173,12 +1172,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             });
 
         const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
-        console.log('visualizationKeyValues', visualizationKeyValues);
-        console.log('Graph data', GraphVisualizationData);
-        console.log('error issue', resourceType);
-        console.log('resource collection', resourceCollection);
-        console.log('api pending', pendingAPICall);
-        console.log('calculated sum', calculatedSum);
         if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
             this.setState({ isValueCalculated: true });
         }
@@ -1195,14 +1188,10 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         let filteredResourceChartDataType;
         let calculatedValueData;
         let filterDataForCalculation;
-        console.log('selected Resource data', selectedResourceData);
-        console.log('key', key);
         if (typeof key === 'string') {
             filteredResourceChartDataType = visualizationKeyValues
                 .filter(item => item.resourceType === resourceType)[0].chartDataType
                 .filter(dat => dat.key === key)[0].values;
-            console.log('filteredResourceChartDataType', filteredResourceChartDataType);
-
             calculatedValueData = filteredResourceChartDataType.map((item, i) => {
                 filterDataForCalculation = selectedResourceData.filter(d => d[key] === item);
 

@@ -836,13 +836,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             districts,
             municipalities,
         );
-
         const orderedLayers = this.getLayerOrder(activeLayers);
         const hideFilters = false;
-
-
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        console.log('extraFilterName', extraFilterName);
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>

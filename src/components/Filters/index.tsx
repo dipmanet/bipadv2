@@ -489,7 +489,6 @@ class Filters extends React.PureComponent<Props, State> {
                 region: subdomainLoc,
             };
             setFilters({ filters: tempF });
-            console.log('tempF', tempF);
             this.setState({ faramValues: tempF, activeView: undefined });
         } else {
             this.setState({

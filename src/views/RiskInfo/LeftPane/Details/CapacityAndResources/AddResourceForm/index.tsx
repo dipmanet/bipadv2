@@ -939,9 +939,6 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 type: 'Production Oriented',
             },
         ];
-        console.log('selected type', selectedType);
-        console.log('Faram values', faramValues);
-        console.log('selected attribute', selectedAttribute);
         return (
 
             <>

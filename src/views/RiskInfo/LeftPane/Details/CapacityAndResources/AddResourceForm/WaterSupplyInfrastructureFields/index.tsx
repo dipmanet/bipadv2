@@ -69,7 +69,6 @@ const WaterSupplyInfrastructureFields:
                 label: 'Lifting water ',
             },
         ];
-        console.log('resource enum', resourceEnums);
         return (
             <>
                 <SelectInput

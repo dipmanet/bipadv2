@@ -15,10 +15,7 @@ const CustomizedAxisTick = ({ x, y, stroke, payload }) => (
 
 const BarChartVisualization = (props) => {
     const { item } = props;
-
     const excludingZeroValueData = item.filter(itm => itm.value !== 0);
-    console.log('item', item);
-    console.log('excluding zero data', excludingZeroValueData);
     const BarchartHeight = (data) => {
         if (data.length === 1) {
             return 100;
