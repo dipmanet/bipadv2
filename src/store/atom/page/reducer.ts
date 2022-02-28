@@ -5,7 +5,41 @@ import * as Type from './types';
 import initialState from './initialState';
 
 import { ModelEnum } from '#types';
+
 // ACTION CREATORS
+
+// IBF
+export const setIbfPageAction = ibfPage => ({
+    type: Type.PageType.SET_IBF_PAGE,
+    ibfPage,
+});
+export const setBulletinLossAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN,
+    bulletinData,
+});
+export const setBulletinCovidAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
+    bulletinData,
+});
+export const setBulletinFeedbackAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK,
+    bulletinData,
+});
+export const setBulletinTemperatureAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE,
+    bulletinData,
+});
+export const setBulletinEditDataAction = bulletinEditData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA,
+    bulletinEditData,
+});
+
+// bulletin actions end
+// Epidemics
+export const SetEpidemicsPageAction = epidemicsPage => ({
+    type: Type.PageType.SET_EPIDEMICS_PAGE,
+    epidemicsPage,
+});
 
 export const setRegionAction = (
     { region }: { region: Type.Region },
@@ -310,6 +344,12 @@ export const setRealTimeRiverListAction = (
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
     realTimeRiverList,
+});
+export const setRealTimeDurationAction = (
+    { duration }: { duration: Type.Duration},
+) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_DURATION,
+    duration,
 });
 
 export const setRealTimeEarthquakeListAction = (
@@ -1061,6 +1101,19 @@ export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealT
 
     return newState;
 };
+export const setRealTimeDuration = (state: Type.PageState, action: Type.SetRealTimeeDuration) => {
+    const {
+        duration,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.duration = duration;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
 
 export const setRealTimeRiverList = (state: Type.PageState, action: Type.SetRealTimeRiverList) => {
     const {
@@ -1160,6 +1213,194 @@ export const setRealTimeFilters = (
 
     return newState;
 };
+
+// data archive
+export const setDataArchiveRainList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainList,
+) => {
+    const {
+        dataArchiveRainList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveRainList = dataArchiveRainList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverList,
+) => {
+    const {
+        dataArchiveRiverList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveRiverList = dataArchiveRiverList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchivePollutionList = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionList,
+) => {
+    const {
+        dataArchivePollutionList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchivePollutionList = dataArchivePollutionList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveEarthquakeList = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveEarthquakeList,
+) => {
+    const {
+        dataArchiveEarthquakeList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.dataArchivePage.dataArchiveEarthquakeList = dataArchiveEarthquakeList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+export const setDataArchiveEarthquakeFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveEarthquakeFilters,
+) => {
+    const {
+        dataArchiveEarthquakeFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daEarthquakeFilter = dataArchiveEarthquakeFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchivePollutionFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionFilters,
+) => {
+    const {
+        dataArchivePollutionFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daPollutionFilter = dataArchivePollutionFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRainFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainFilters,
+) => {
+    const {
+        dataArchiveRainFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daRainFilter = dataArchiveRainFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverFilters = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverFilters,
+) => {
+    const {
+        dataArchiveRiverFilters,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.daRiverFilter = dataArchiveRiverFilters;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchivePollutionStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchivePollutionStations,
+) => {
+    const {
+        dataArchivePollutionStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.pollutionStations = dataArchivePollutionStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRainStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRainStations,
+) => {
+    const {
+        dataArchiveRainStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.rainStations = dataArchiveRainStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+export const setDataArchiveRiverStations = (
+    state: Type.PageState,
+    action: Type.SetDataArchiveRiverStations,
+) => {
+    const {
+        dataArchiveRiverStations,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.riverStations = dataArchiveRiverStations;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
 
 // loss and damage page
 export const setLossAndDamageFilters = (
@@ -1359,6 +1600,102 @@ const setBudgetActivityData = (state: Type.PageState, action: Type.SetBudgetActi
     });
     return newState;
 };
+// IBF
+const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
+    const { ibfPage:
+        {
+            demo,
+            stations,
+            stationDetail,
+            selectedStation,
+            calendarData,
+            returnPeriod,
+            leadTime,
+            overallFloodHazard,
+            filter,
+            householdJson,
+            showHouseHold,
+            selectedIndicator,
+            householdDistrictAverage,
+            selectedLegend,
+        } } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (demo) {
+            deferedState.ibfPage.demo = demo;
+        }
+        if (demo === 0) {
+            deferedState.ibfPage.demo = demo;
+        }
+        if (stations) {
+            deferedState.ibfPage.stations = stations;
+        }
+        if (stationDetail) {
+            deferedState.ibfPage.stationDetail = stationDetail;
+        }
+        if (selectedStation) {
+            deferedState.ibfPage.selectedStation = selectedStation;
+        }
+        if (calendarData) {
+            deferedState.ibfPage.calendarData = calendarData;
+        }
+        if (returnPeriod) {
+            deferedState.ibfPage.returnPeriod = returnPeriod;
+        }
+        if (returnPeriod === 0) {
+            deferedState.ibfPage.returnPeriod = returnPeriod;
+        }
+        if (leadTime) {
+            deferedState.ibfPage.leadTime = leadTime;
+        }
+        if (leadTime === 0) {
+            deferedState.ibfPage.leadTime = leadTime;
+        }
+        if (overallFloodHazard) {
+            deferedState.ibfPage.overallFloodHazard = overallFloodHazard;
+        }
+        if (householdJson) {
+            deferedState.ibfPage.householdJson = householdJson;
+        }
+        if (showHouseHold) {
+            deferedState.ibfPage.showHouseHold = showHouseHold;
+        }
+        if (showHouseHold === 0) {
+            deferedState.ibfPage.showHouseHold = showHouseHold;
+        }
+        if (selectedIndicator) {
+            deferedState.ibfPage.selectedIndicator = selectedIndicator;
+        }
+        if (householdDistrictAverage) {
+            deferedState.ibfPage.householdDistrictAverage = householdDistrictAverage;
+        }
+        if (selectedLegend) {
+            deferedState.ibfPage.selectedLegend = selectedLegend;
+        }
+        if (selectedLegend === '') {
+            deferedState.ibfPage.selectedLegend = selectedLegend;
+        }
+        if (filter) {
+            if (filter.district) {
+                deferedState.ibfPage.filter.district = filter.district;
+            }
+            if (filter.district === '') {
+                deferedState.ibfPage.filter.district = filter.district;
+            }
+            if (filter.municipality) {
+                deferedState.ibfPage.filter.municipality = filter.municipality;
+            }
+            if (filter.municipality === '') {
+                deferedState.ibfPage.filter.municipality = filter.municipality;
+            }
+            if (filter.ward) {
+                deferedState.ibfPage.filter.ward = filter.ward;
+            }
+        }
+        /* eslint-disable no-param-reassign */
+    });
+    return newState;
+};
 
 const setProgramAndPolicyData = (state: Type.PageState, action: Type.SetProgramAndPolicyData) => {
     const { programAndPolicyData } = action;
@@ -1449,6 +1786,231 @@ const setDrrmProgress = (state: Type.PageState, action: Type.SetDrrmProgress) =>
     });
     return newState;
 };
+// bulletin data
+export const setBulletinLoss = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.incidentSummary = bulletinData.incidentSummary;
+        deferedState.bulletinPage.peopleLoss = bulletinData.peopleLoss;
+        deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
+        deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
+        deferedState.bulletinPage.sitRep = bulletinData.sitRep;
+    });
+
+    return newState;
+};
+
+export const setBulletinCovid = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.covid24hrsStat = bulletinData.covid24hrsStat;
+        deferedState.bulletinPage.covidProvinceWiseTotal = bulletinData.covidProvinceWiseTotal;
+        deferedState.bulletinPage.covidTotalStat = bulletinData.covidTotalStat;
+        deferedState.bulletinPage.vaccineStat = bulletinData.vaccineStat;
+    });
+
+    return newState;
+};
+
+
+export const setBulletinFeedback = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.feedback = bulletinData.feedback;
+    });
+
+    return newState;
+};
+
+export const setBulletinDataTemperature = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.tempMin = bulletinData.tempMin;
+        deferedState.bulletinPage.tempMax = bulletinData.tempMax;
+        deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
+    });
+
+    return newState;
+};
+
+export const setBulletinEditData = (
+    state: Type.PageState,
+    action: Type.SetBulletinEditData,
+) => {
+    const {
+        bulletinEditData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinEditData = bulletinEditData;
+    });
+
+    return newState;
+};
+
+
+// Epidemics
+const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) => {
+    const { epidemicsPage: {
+        lossID,
+        loader,
+        lossError,
+        incidentError,
+        lossPeopleError,
+        successMessage,
+        incidentData,
+        incidentEditData,
+        incidentUpdateError,
+        epidemicChartHourlyLoading,
+        epidemicChartHourlyData,
+        epidemicChartHourlyError,
+        epidemicChartDailyLoading,
+        epidemicChartDailyData,
+        epidemicChartDailyError,
+        epidemicChartWeeklyLoading,
+        epidemicChartWeeklyData,
+        epidemicChartWeeklyError,
+        epidemicChartYearlyLoading,
+        epidemicChartYearlyData,
+        epidemicChartYearlyError,
+        epidemicChartMonthlyLoading,
+        epidemicChartMonthlyData,
+        epidemicChartMonthlyError,
+        epidemicTableLoading,
+        epidemicTableData,
+        epidemicTableError,
+        epidemicTotalLoading,
+        epidemicTotalData,
+        epidemicTotalError,
+        incidentCount,
+    } } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (lossID) {
+            deferedState.epidemicsPage.lossID = lossID;
+        }
+        if (loader) {
+            deferedState.epidemicsPage.loader = loader;
+        }
+        if (lossError) {
+            deferedState.epidemicsPage.lossError = lossError;
+        }
+        if (incidentError) {
+            deferedState.epidemicsPage.incidentError = incidentError;
+        }
+        if (lossPeopleError) {
+            deferedState.epidemicsPage.lossPeopleError = lossPeopleError;
+        }
+        if (successMessage) {
+            deferedState.epidemicsPage.successMessage = successMessage;
+        }
+        if (incidentData) {
+            deferedState.epidemicsPage.incidentData = incidentData;
+        }
+        if (incidentEditData) {
+            deferedState.epidemicsPage.incidentEditData = incidentEditData;
+        }
+        if (incidentUpdateError) {
+            deferedState.epidemicsPage.incidentUpdateError = incidentUpdateError;
+        }
+        if (epidemicChartHourlyLoading) {
+            deferedState.epidemicsPage.epidemicChartHourlyLoading = epidemicChartHourlyLoading;
+        }
+        if (epidemicChartHourlyData) {
+            deferedState.epidemicsPage.epidemicChartHourlyData = epidemicChartHourlyData;
+        }
+        if (epidemicChartHourlyError) {
+            deferedState.epidemicsPage.epidemicChartHourlyError = epidemicChartHourlyError;
+        }
+        if (epidemicChartDailyLoading) {
+            deferedState.epidemicsPage.epidemicChartDailyLoading = epidemicChartDailyLoading;
+        }
+        if (epidemicChartDailyData) {
+            deferedState.epidemicsPage.epidemicChartDailyData = epidemicChartDailyData;
+        }
+        if (epidemicChartDailyError) {
+            deferedState.epidemicsPage.epidemicChartDailyError = epidemicChartDailyError;
+        }
+        if (epidemicChartWeeklyLoading) {
+            deferedState.epidemicsPage.epidemicChartWeeklyLoading = epidemicChartWeeklyLoading;
+        }
+        if (epidemicChartWeeklyData) {
+            deferedState.epidemicsPage.epidemicChartWeeklyData = epidemicChartWeeklyData;
+        }
+        if (epidemicChartWeeklyError) {
+            deferedState.epidemicsPage.epidemicChartWeeklyError = epidemicChartWeeklyError;
+        }
+        if (epidemicChartYearlyLoading) {
+            deferedState.epidemicsPage.epidemicChartYearlyLoading = epidemicChartYearlyLoading;
+        }
+        if (epidemicChartYearlyData) {
+            deferedState.epidemicsPage.epidemicChartYearlyData = epidemicChartYearlyData;
+        }
+        if (epidemicChartYearlyError) {
+            deferedState.epidemicsPage.epidemicChartYearlyError = epidemicChartYearlyError;
+        }
+        if (epidemicChartMonthlyLoading) {
+            deferedState.epidemicsPage.epidemicChartMonthlyLoading = epidemicChartMonthlyLoading;
+        }
+        if (epidemicChartMonthlyData) {
+            deferedState.epidemicsPage.epidemicChartMonthlyData = epidemicChartMonthlyData;
+        }
+        if (epidemicChartMonthlyError) {
+            deferedState.epidemicsPage.epidemicChartMonthlyError = epidemicChartMonthlyError;
+        }
+        if (epidemicTableLoading) {
+            deferedState.epidemicsPage.epidemicTableLoading = epidemicTableLoading;
+        }
+        if (epidemicTableData) {
+            deferedState.epidemicsPage.epidemicTableData = epidemicTableData;
+        }
+        if (epidemicTableError) {
+            deferedState.epidemicsPage.epidemicTableError = epidemicTableError;
+        }
+        if (epidemicTotalLoading) {
+            deferedState.epidemicsPage.epidemicTotalLoading = epidemicTotalLoading;
+        }
+        if (epidemicTotalData) {
+            deferedState.epidemicsPage.epidemicTotalData = epidemicTotalData;
+        }
+        if (epidemicTotalError) {
+            deferedState.epidemicsPage.epidemicTotalError = epidemicTotalError;
+        }
+        if (incidentCount) {
+            deferedState.epidemicsPage.incidentCount = incidentCount;
+        }
+    });
+    return newState;
+};
 
 export default function routeReducer(
     state = initialState,
@@ -1481,6 +2043,18 @@ export default function routeReducer(
             return setBudgetData(state, action);
         case Type.PageType.SET_GENERAL_DATA:
             return setGeneralData(state, action);
+        case Type.PageType.SET_IBF_PAGE:
+            return setIbfPage(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
+            return setBulletinEditData(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN:
+            return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
+            return setBulletinCovid(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
+            return setBulletinFeedback(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE:
+            return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
@@ -1539,6 +2113,8 @@ export default function routeReducer(
             return setInventoryItemListAction(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST:
             return setRealTimeRainList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_DURATION:
+            return setRealTimeDuration(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST:
             return setRealTimeRiverList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST:
@@ -1547,6 +2123,28 @@ export default function routeReducer(
             return setRealTimeFireList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST:
             return setRealTimePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST:
+            return setDataArchiveRainList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST:
+            return setDataArchiveRiverList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST:
+            return setDataArchivePollutionList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST:
+            return setDataArchiveEarthquakeList(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS:
+            return setDataArchiveEarthquakeFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS:
+            return setDataArchivePollutionFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS:
+            return setDataArchiveRainFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS:
+            return setDataArchiveRiverFilters(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS:
+            return setDataArchivePollutionStations(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS:
+            return setDataArchiveRainStations(state, action);
+        case Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS:
+            return setDataArchiveRiverStations(state, action);
         case Type.PageType.LD__SET_FILTERS:
             return setLossAndDamageFilters(state, action);
         case Type.PageType.LD__SET_LOSS_AND_DAMAGE_LIST:
@@ -1573,6 +2171,8 @@ export default function routeReducer(
             return setAgricultureLossTypeList(state, action);
         case Type.PageType.SET_ENUM_OPTIONS:
             return setEnumOptions(state, action);
+        case Type.PageType.SET_EPIDEMICS_PAGE:
+            return setEpidemicsPage(state, action);
         default:
             return state;
     }

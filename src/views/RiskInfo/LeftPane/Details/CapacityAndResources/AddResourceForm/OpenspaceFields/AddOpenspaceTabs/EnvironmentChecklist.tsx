@@ -138,8 +138,9 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
     private postEia = () => {
         const { allEiaToPost } = this.state;
         const {
-            handleTabClick,
+            handleTabClick,LoadingSuccessHalt
         } = this.props;
+        LoadingSuccessHalt(true)
         if (allEiaToPost.length !== 0) {
             for (let i = 0; i < allEiaToPost.length; i++) {
                 const requestOptions = {
@@ -155,11 +156,13 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
                     .then(() => {
                         if (i === allEiaToPost.length - 1) {
                             handleTabClick('media');
+                            LoadingSuccessHalt(false)
                         }
                     });
             }
         } else {
             handleTabClick('media');
+            LoadingSuccessHalt(false)
         }
     }
 
@@ -245,11 +248,11 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
 
 
                 <div className={styles.stepButtons}>
-                    <PrimaryButton
+                    {/* <PrimaryButton
                         onClick={() => handleTabClick('onSiteAmenties')}
                     >
                         Back
-                    </PrimaryButton>
+                    </PrimaryButton> */}
                     <PrimaryButton
                         // disabled={pristine}
                         // pending={addResourcePending || editResourcePending}

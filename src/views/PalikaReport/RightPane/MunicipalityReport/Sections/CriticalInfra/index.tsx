@@ -66,7 +66,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     province: params.province,
                     district: params.district,
                     municipality: params.municipality,
-                    limit: params.page,
+                    limit: -1,
 
                     meta: params.meta,
 

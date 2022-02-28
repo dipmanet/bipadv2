@@ -137,9 +137,9 @@ class Details extends React.PureComponent<Props, State> {
         } = this.state;
 
         const {
-            openspaceId, closeModal,
+            openspaceId, closeModal, LoadingSuccessHalt, faramValueSetNull,
         } = this.props;
-
+        LoadingSuccessHalt(true);
         const formdata = new FormData();
         formdata.append('communitySpace', JSON.stringify(openspaceId));
         if (coverImage) formdata.append('image', coverImage);
@@ -152,15 +152,19 @@ class Details extends React.PureComponent<Props, State> {
             body: formdata,
             // credentials: 'same origin'
         };
+
         fetch(`${process.env.REACT_APP_API_SERVER_URL}/communityspace-detail/${objectId}/`, requestOptions)
             .then(response => response.json())
             .then(() => {
                 closeModal();
+                LoadingSuccessHalt(false);
+                faramValueSetNull();
             })
             .catch((error) => {
                 this.setState({
                     openspacePostError: true,
                 });
+                LoadingSuccessHalt(false);
             });
     }
 
@@ -275,12 +279,12 @@ class Details extends React.PureComponent<Props, State> {
                 }
 
 
-                <div className={styles.stepButtons}>
-                    <PrimaryButton
+                <div className={styles.submitButn}>
+                    {/* <PrimaryButton
                         disabled
                     >
                         Back
-                    </PrimaryButton>
+                    </PrimaryButton> */}
                     <PrimaryButton
                         onClick={() => this.submitDetails()}
                     >

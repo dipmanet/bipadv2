@@ -33,6 +33,14 @@ class LayerSelectionItem extends React.PureComponent<Props> {
     // TOOD: memoize
     private getIsActive = (activeLayers: LayerHierarchy[], layerKey: LayerHierarchy['id']) => {
         const layerIndex = activeLayers.findIndex(d => d.id === layerKey);
+        // let demo = [];
+        // if (activeLayers.length > 1 && layerIndex !== -1) {
+        //     demo = activeLayers.filter(item => item.id === layerKey);
+
+        //     activeLayers.push(demo[0]);
+        // }
+
+
         return layerIndex !== -1;
     }
 

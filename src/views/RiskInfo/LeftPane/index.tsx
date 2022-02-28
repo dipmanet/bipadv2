@@ -5,6 +5,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+
 import {
     createRequestClient,
     NewProps,
@@ -14,14 +15,13 @@ import {
 } from '#request';
 
 import Button from '#rsca/Button';
-
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import {
     setHashToBrowser,
     getHashFromBrowser,
 } from '#rscg/HashManager';
-
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { AttributeKey } from '#types';
 import { Layer, LayerMap, LayerGroup } from '#store/atom/page/types';
 import {
@@ -31,8 +31,11 @@ import {
 
 import Overview from './Overview';
 import Details from './Details';
+import { generatePaint,
+    getLayerHierarchy } from '#utils/domain';
 
 import styles from './styles.scss';
+
 
 interface OwnProps {
     className?: string;
@@ -121,8 +124,13 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     }
 
     private handleDetailsBackButtonClick = () => {
-        this.setState({ activeAttribute: undefined });
-        setHashToBrowser(undefined);
+        const { setAddResource, addResource } = this.context;
+        if (addResource) {
+            setAddResource(false);
+        } else {
+            this.setState({ activeAttribute: undefined });
+            setHashToBrowser(undefined);
+        }
     }
 
     public render() {
@@ -137,12 +145,14 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { activeAttribute } = this.state;
-
         const layerList = getResults(requests, 'layerGetRequest');
+
         const layerGroupList = getResults(requests, 'layerGroupGetRequest');
         const pending = isAnyRequestPending(requests);
 
+
         const groupedLayers = this.getGroupedLayers(layerList, layerGroupList);
+
 
         return (
             <div className={
@@ -202,7 +212,7 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         );
     }
 }
-
+RiskInfoLeftPane.contextType = RiskInfoLayerContext;
 export default createConnectedRequestCoordinator<OwnProps>()(
     createRequestClient(requestOptions)(RiskInfoLeftPane),
 );

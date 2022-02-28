@@ -21,12 +21,14 @@ class RiskInfo extends React.PureComponent<Props> {
             health: false,
             finance: false,
             governance: false,
-            tourism: false,
+            hotelandrestaurant: false,
             cultural: false,
             industry: false,
             communication: false,
             openspace: false,
             communityspace: false,
+            fireengine: false,
+            helipad: false,
         },
     }
 
@@ -53,6 +55,7 @@ class RiskInfo extends React.PureComponent<Props> {
             resourceIdForLegend,
             droneImagePending,
         } = this.state;
+
         return (
             <>
                 <RiskInfoMap />

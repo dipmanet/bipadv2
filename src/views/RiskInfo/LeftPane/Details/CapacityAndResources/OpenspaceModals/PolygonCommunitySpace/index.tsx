@@ -124,6 +124,7 @@ class Polygon extends React.PureComponent<Props, State> {
             });
             map.flyTo({
                 zoom: 16,
+
             });
         }
     };

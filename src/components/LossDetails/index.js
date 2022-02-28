@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
-
 import { _cs, isDefined } from '@togglecorp/fujs';
 
 
@@ -23,8 +22,9 @@ const defaultProps = {
     hideIncidentCount: false,
 };
 const emptyList = [];
+// eslint-disable-next-line space-infix-ops
 
-export default class LossDetails extends React.PureComponent {
+export default class LossDetails extends React.Component {
     static propTypes = propTypes;
 
     static defaultProps = defaultProps;
@@ -43,14 +43,25 @@ export default class LossDetails extends React.PureComponent {
         return stat;
     });
 
+    null_check=(m) => {
+        const { nullCondition, data = emptyList } = this.props;
+        if (nullCondition) {
+            const summaryData = this.calculateSummary(data);
+            summaryData.estimatedLoss = '-';
+
+            return summaryData[m];
+        }
+        const summaryData = this.calculateSummary(data);
+
+        return summaryData[m];
+    }
+
     render() {
         const {
             className,
-            data = emptyList,
             hideIncidentCount,
         } = this.props;
 
-        const summaryData = this.calculateSummary(data);
 
         return (
             <div className={_cs(className, styles.lossDetails)}>
@@ -62,7 +73,7 @@ export default class LossDetails extends React.PureComponent {
                         <StatOutput
                             key={metric.key}
                             label={metric.label}
-                            value={summaryData[metric.key]}
+                            value={this.null_check(metric.key)}
                         />
                     );
                 })}

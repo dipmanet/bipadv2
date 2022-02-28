@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="171" height="171" viewBox="0 0 171 171">
+  <defs>
+    <clipPath id="clip-safe_shelter">
+      <rect width="171" height="171"/>
+    </clipPath>
+  </defs>
+  <g id="safe_shelter" data-name="safe shelter" clip-path="url(#clip-safe_shelter)">
+    <g id="Group_18236" data-name="Group 18236" transform="translate(11.537 -2.117)">
+      <g id="Group_18235" data-name="Group 18235" transform="translate(12.463 51.632)">
+        <path id="Path_36892" data-name="Path 36892" d="M23.935,22.941H35.35V53.394H23.935Z" transform="translate(25.543 41.751)" fill="#1664c1"/>
+        <path id="Path_36893" data-name="Path 36893" d="M126.352,60.474,76.878,16.5a5.71,5.71,0,0,0-7.582,0L19.821,60.474A5.708,5.708,0,1,0,27.4,69.008l5.728-5.088v40.571a5.709,5.709,0,0,0,5.7,5.711H55.961V74.046a5.715,5.715,0,0,1,5.711-5.711H84.5a5.71,5.71,0,0,1,5.711,5.711V110.2h17.126a5.716,5.716,0,0,0,5.711-5.711V63.92l5.72,5.088a5.708,5.708,0,1,0,7.582-8.534Z" transform="translate(-17.906 -15.057)" fill="#1664c1"/>
+      </g>
+      <line id="Line_16" data-name="Line 16" x1="19.753" y2="19.753" transform="translate(114.97 55.048)" fill="none" stroke="#1664c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+      <line id="Line_17" data-name="Line 17" x1="19.753" y2="19.753" transform="translate(115.71 28.459)" fill="none" stroke="#1664c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+      <line id="Line_18" data-name="Line 18" x1="19.753" y2="19.753" transform="translate(88.38 28.459)" fill="none" stroke="#1664c1" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+    </g>
+  </g>
+</svg>

@@ -203,11 +203,11 @@ const ReportModal: React.FC<Props> = (props: Props) => {
     const d = districts.filter(dis => dis.id === district);
     const p = provinces.filter(pro => pro.id === province);
 
-    if (drrmLanguage.language === 'en') {
+    if (drrmLanguage.language === 'en' && m && m[0] && d && d[0] && p && p[0]) {
         municipalityName = m[0].title;
         provinceName = p[0].title;
         districtName = d[0].title;
-    } else {
+    } else if (drrmLanguage.language === 'np' && m && m[0] && d && d[0] && p && p[0]) {
         municipalityName = m[0].title_ne;
         provinceName = p[0].title_ne;
         districtName = d[0].title_ne;

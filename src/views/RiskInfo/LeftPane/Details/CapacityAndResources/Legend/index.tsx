@@ -15,12 +15,14 @@ interface Props {
         health: boolean;
         finance: boolean;
         governance: boolean;
-        tourism: boolean;
+        hotelandrestaurant: boolean;
         cultural: boolean;
         industry: boolean;
         communication: boolean;
         openspace: boolean;
         communityspace: boolean;
+        bridge: boolean;
+        evacuationcenter: boolean;
     };
     resourceIdForLegend: number | null;
 }
@@ -33,8 +35,10 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const CapacityAndResourcesLegend = (props: Props) => {
     const titleContext = useContext(TitleContext);
     // for dynamic legend render
+
     const getActiveLegends = () => {
         const { activeLayersIndication } = props;
+
         const activeLegends = legendItems.filter((item) => {
             if (activeLayersIndication[item.key]) {
                 return item;
@@ -85,6 +89,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
     } else legendTitle = 'Openspace Boundary';
 
     const { resourceIdForLegend, handleDroneImage } = props;
+
     return (
         <React.Fragment>
             {!resourceIdForLegend && openspaceOn && (
@@ -105,11 +110,11 @@ const CapacityAndResourcesLegend = (props: Props) => {
                 <div className={styles.title}>Capacity and Resources</div>
                 <Legend
                     className={styles.legend}
-                // data={capacityAndResourcesLegendItems}
+                    // data={capacityAndResourcesLegendItems}
                     data={activeLegends}
                     itemClassName={styles.legendItem}
                     keySelector={itemSelector}
-            // iconSelector={iconSelector}
+                    // iconSelector={iconSelector}
                     labelSelector={legendLabelSelector}
                     symbolClassNameSelector={classNameSelector}
                     colorSelector={legendColorSelector}

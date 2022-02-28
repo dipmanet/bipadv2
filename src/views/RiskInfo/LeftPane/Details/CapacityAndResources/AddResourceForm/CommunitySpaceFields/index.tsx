@@ -47,11 +47,22 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    params.setFaramErrors({
+                        $internal: ['Some problem occurred'],
+
+
+                        // location: [(error.response.ward)[0]],
+                    });
+                }
             }
         },
         onFatal: ({ params }) => {
@@ -77,11 +88,22 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         },
         onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                console.warn('failure', error);
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    params.setFaramErrors({
+                        $internal: ['Some problem occurred'],
+
+
+                        // location: [(error.response.ward)[0]],
+                    });
+                }
             }
         },
         onFatal: ({ params }) => {
@@ -130,6 +152,10 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
                 postBasicInfo: this.postBasicInfo,
                 openspacePostError: this.state.openspacePostError,
                 keySelector,
+                faramValueSetNull: this.props.faramValueSetNull,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
+                faramValues: this.props.faramValues,
+                optionsClassName: this.props.optionsClassName,
             }),
         },
         details: {
@@ -141,6 +167,8 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
                 openspaceId: this.state.openspaceId,
                 closeModal: this.props.closeModal,
                 keySelector,
+                faramValueSetNull: this.props.faramValueSetNull,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
             }),
         },
     };
@@ -166,7 +194,7 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
         const {
             province, district, municipality,
         } = this.state;
-        let values = others;
+        let values = { resourceType, ...others };
         if (location) {
             const point = location.geoJson.features[0].geometry;
             const { ward } = location.region;
@@ -182,9 +210,11 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
                 municipality,
             };
         }
+
         const {
-            requests: { addResourcePostRequest, editResourcePostRequest },
+            requests: { addResourcePostRequest, editResourcePostRequest }, LoadingSuccessHalt,
         } = this.props;
+        LoadingSuccessHalt(true);
         if (isNotDefined(resourceId)) {
             addResourcePostRequest.do({
                 body: values,
@@ -202,15 +232,19 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
     }
 
 
-    private handleFaramValidationFailure = () => {
+    private handleFaramValidationFailure = (faramErrors) => {
+        const { LoadingSuccessHalt, handleFaramValidationFailure } = this.props;
+
         this.setState({
             openspacePostError: true,
         });
+        LoadingSuccessHalt(false);
+        handleFaramValidationFailure(faramErrors);
     }
 
     private handleOpenspacePostSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess } = this.props;
-
+        const { onAddSuccess, LoadingSuccessHalt } = this.props;
+        LoadingSuccessHalt(false);
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
@@ -224,6 +258,7 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
 
     public render() {
         const { currentView } = this.state;
+        const { faramValueSetNull, LoadingSuccessHalt, faramValues } = this.props;
         return (
             <>
                 <ScrollTabs
@@ -231,10 +266,15 @@ class CommunitySpaceFields extends React.PureComponent<any, State> {
                     tabs={this.tabs}
                     active={currentView}
                     onClick={this.handleTabClick}
+                    faramValueSetNull={faramValueSetNull}
+                    LoadingSuccessHalt={LoadingSuccessHalt}
+                    faramValues={faramValues}
                 />
                 <MultiViewContainer
                     views={this.views}
                     active={currentView}
+                    faramValueSetNull={faramValueSetNull}
+                    LoadingSuccessHalt={LoadingSuccessHalt}
                 />
             </>
         );

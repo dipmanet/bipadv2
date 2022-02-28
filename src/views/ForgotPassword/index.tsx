@@ -107,7 +107,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         },
         onFailure: ({ error, params }) => {
             params.handlePending(false);
-            console.log(error);
+
             alert('There was a problem, please try again or contact support. ');
             const query = window.location.href;
             const href = query.split('/set')[0];
@@ -161,7 +161,6 @@ class SetNewPassword extends React.PureComponent {
     }
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: object) => {
-        console.log(faramValues);
         this.setState({
             faramValues,
             faramErrors,

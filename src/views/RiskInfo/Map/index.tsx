@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getRasterTile } from '#utils/domain';
+import { getRasterTile, getBuildingFootprint } from '#utils/domain';
 
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
@@ -64,15 +64,12 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
             feature,
             hoverLngLat,
         } = this.state;
-
         const rasterLayers = activeLayers.filter(d => d.type === 'raster');
         const choroplethLayers = activeLayers.filter(d => d.type === 'choropleth');
 
         return (
             <>
-                <CommonMap
-                    sourceKey="risk-infoz"
-                />
+
                 { rasterLayers.map(layer => (
                     <MapSource
                         key={layer.id}
@@ -94,6 +91,27 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         />
                     </MapSource>
                 ))}
+
+                {/* <MapSource
+                    key={'buildingKey'}
+                    sourceKey={'buildingFootprint'}
+                    sourceOptions={{
+                        type: 'raster',
+                        tiles: [getBuildingFootprint()],
+                        tileSize: 256,
+                    }}
+                >
+                    <MapLayer
+                        layerKey="raster-layer"
+                        layerOptions={{
+                            type: 'raster',
+                            paint: {
+                                'raster-opacity': 1,
+                            },
+                        }}
+                    />
+                </MapSource> */}
+
                 { choroplethLayers.map(layer => (
                     <MapSource
                         key={layer.id}
@@ -151,6 +169,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         }
                     </MapSource>
                 ))}
+                <CommonMap
+                    sourceKey="risk-infoz"
+                />
             </>
         );
     }
