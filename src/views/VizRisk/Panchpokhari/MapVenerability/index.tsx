@@ -71,6 +71,7 @@ class FloodHistoryMap extends React.Component {
             opacitySus: 0.5,
             opacityFlood: 0.5,
             currentPoint: null,
+            mapStyle: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
         };
     }
 
@@ -83,7 +84,7 @@ class FloodHistoryMap extends React.Component {
         mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
-            style: process.env.REACT_APP_VIZRISK_PANCHPOKHARI_MULTIHAZARD,
+            style: this.state.mapStyle,
             center: [lng, lat],
             zoom,
             minZoom: 2,
@@ -443,7 +444,8 @@ class FloodHistoryMap extends React.Component {
     public handleButtonClick = () => {
         // showing the data add form
         this.props.handleShowAddForm(true);
-
+        // this.map.setStyle(process.env.REACT_APP_MAP_STYLE_SATELLITE);
+        // this.setState({ mapStyle: process.env.REACT_APP_MAP_STYLE_SATELLITE });
         // change the popup
         this.showPopupOnBldgs(
             this.state.cood,
