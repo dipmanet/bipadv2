@@ -64,6 +64,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
                     municipality: params.submitQuery.municipality,
                     limit: params.page,
                     offset: params.offset,
+                    expand: params.expand,
 
                 };
             }
@@ -183,7 +184,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     FiscalYearFetch.setDefaultParams({
         fiscalYear: handleFiscalYear,
     });
-    console.log('This data>>>', submenuId);
+
     const handleSubmenuId = (data) => {
         setSubmenuId(data);
     };
@@ -221,15 +222,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         return '';
     };
 
-    console.log('This progress', drrmProgress);
+
     const handleSubmit = () => {
         if (filtered && newRegionValues !== undefined) {
             setResetFilterProps(true);
             setDateTo('');
             setDateFrom('');
             PalikaReportGetRequest.do({
-
+                annualBudget: handleFetchedData,
                 submitQuery: getRegionDetails(),
+                url,
+                expand: 'updated_by',
 
             });
             setClearFilter(true);
@@ -241,10 +244,12 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setDisableFilterButton(true);
         } else {
             PalikaReportGetRequest.do({
-
+                url,
                 submitQuery: getRegionDetails(newRegionValues),
                 dateFrom,
                 dateTo,
+                annualBudget: handleFetchedData,
+                expand: 'updated_by',
             });
             setClearFilter(false);
         }
@@ -274,8 +279,6 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         });
     };
     const getSubmenuId = (data) => {
-        console.log('Hang', data);
-        console.log('Hang', url);
         setSubmenuId(data);
         setCurrentPageNumber(1);
         if (user) {
@@ -285,9 +288,8 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
 
                 },
             } = user;
-            console.log('Hang', municipality);
+
             if (data === 2) {
-                console.log('Hang on');
                 PalikaReportGetRequest.do({
                     annualBudget: handleFetchedData,
                     municipality,
@@ -312,7 +314,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
     useEffect(() => {
         // Example POST method implementation:
-        function postData(link = `http://bipaddev.yilab.org.np/api/v1${url}`) {
+        function postData(link = `${process.env.REACT_APP_DOMAIN}${url}`) {
             // Default options are marked with *
             fetch(link, {
                 method: 'OPTIONS',
@@ -353,6 +355,9 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
             setDisableFilterButton(true);
             PalikaReportGetRequest.do({
                 submitQuery: getRegionDetails(),
+                annualBudget: handleFetchedData,
+                url,
+                expand: 'updated_by',
             });
             setFiltered(false);
         }
@@ -365,10 +370,17 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
         if (district) {
             setDisableFilterButton(false);
             setFiltered(false);
+        } if (!district) {
+            setDisableFilterButton(false);
+            setFiltered(false);
         }
     };
     const handleCheckFilterDisableButtonForMunicipality = (municipality) => {
         if (municipality) {
+            setDisableFilterButton(false);
+            setFiltered(false);
+        }
+        if (!municipality) {
             setDisableFilterButton(false);
             setFiltered(false);
         }

@@ -270,7 +270,10 @@ const General = (props: Props) => {
             setShowInfo(true);
         }
     }, [cao, focalPerson, mayor]);
-    console.log('This fiscal year', (fiscalYear));
+    useEffect(() => {
+        console.log('This fiscal year list', (fiscalYearList));
+    });
+
     const validationErrs = () => {
         if (!generalData.item && generalData.fiscalYear) {
             setfiscalYear(generalData.fiscalYear);
