@@ -269,7 +269,7 @@ class Filters extends React.PureComponent<Props, State> {
         const {
             locRecv,
         } = this.state;
-        // this.setState({ faramValues });
+        this.setState({ faramValues });
 
         if (
             (Object.keys(municipalities).length > 0
@@ -527,6 +527,9 @@ class Filters extends React.PureComponent<Props, State> {
             setFilters({ filters: propFilters });
         }
         const { activeRouteDetails } = this.context;
+
+        /** This API is already called in capacity and resource module */
+
         // if (Object.keys(activeRouteDetails).length !== 0) {
         //     const { name: activePage } = activeRouteDetails;
         //     if (activePage === 'riskInfo') {
