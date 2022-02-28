@@ -22,10 +22,14 @@ const responsePageSelector = ({ page }: AppState) => page.responsePage;
 
 const realTimeMonitoringPageSelector = ({ page }: AppState) => page.realTimeMonitoringPage;
 
+const dataArchivePageSelector = ({ page }: AppState) => page.dataArchivePage;
+
 const incidentIdSelector = (state: unknown, props: { incidentId?: number }) => props.incidentId;
 
 const regionByPropSelector = (state: unknown, props: { region?: Region }) => props.region;
 
+// ibf
+export const ibfPageSelector = ({ page }: AppState) => page.ibfPage;
 //  Epidemics
 export const epidemicsPageSelector = ({ page }: AppState) => page.epidemicsPage;
 
@@ -37,6 +41,19 @@ export const bulletinPageSelector = ({ page }: AppState) => page.bulletinPage;
 export const bulletinEditDataSelector = ({ page }: AppState) => page.bulletinEditData;
 
 export const filtersSelector = ({ page }: AppState) => page.filters;
+
+export const eqFiltersSelector = ({ page }: AppState) => page.daEarthquakeFilter;
+
+export const pollutionFiltersSelector = ({ page }: AppState) => page.daPollutionFilter;
+
+export const rainFiltersSelector = ({ page }: AppState) => page.daRainFilter;
+
+export const riverFiltersSelector = ({ page }: AppState) => page.daRiverFilter;
+
+export const pollutionStationsSelector = ({ page }: AppState) => page.pollutionStations;
+export const rainStationsSelector = ({ page }: AppState) => page.rainStations;
+export const riverStationsSelector = ({ page }: AppState) => page.riverStations;
+
 
 // Popup
 
@@ -413,6 +430,10 @@ export const realTimeRainListSelector = createSelector(
     realTimeMonitoringPageSelector,
     ({ realTimeRainList }) => realTimeRainList,
 );
+export const realTimeDurationSelector = createSelector(
+    realTimeMonitoringPageSelector,
+    ({ duration }) => duration,
+);
 
 export const realTimeRiverListSelector = createSelector(
     realTimeMonitoringPageSelector,
@@ -462,6 +483,27 @@ export const realTimeFiltersSelector = createSelector(
 export const realTimeFiltersValuesSelector = createSelector(
     realTimeFiltersSelector,
     ({ faramValues }) => faramValues,
+);
+
+// data archive
+export const dataArchiveRainListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveRainList }) => dataArchiveRainList,
+);
+
+export const dataArchiveRiverListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveRiverList }) => dataArchiveRiverList,
+);
+
+export const dataArchivePollutionListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchivePollutionList }) => dataArchivePollutionList,
+);
+
+export const dataArchiveEarthquakeListSelector = createSelector(
+    dataArchivePageSelector,
+    ({ dataArchiveEarthquakeList }) => dataArchiveEarthquakeList,
 );
 
 // loss and damage page
@@ -555,6 +597,21 @@ export const profileContactListSelector = createSelector(
 
 // risk info page
 export const carKeysSelector = ({ page }: AppState) => page.carKeys;
+
+// palika report
+export const generalDataSelector = ({ page }: AppState) => page.generalData;
+export const budgetDataSelector = ({ page }: AppState) => page.budgetData;
+export const budgetActivityDataSelector = ({ page }: AppState) => page.budgetActivityData;
+export const programAndPolicySelector = ({ page }: AppState) => page.programAndPolicyData;
+export const budgetIdSelector = ({ page }: AppState) => page.budgetId;
+export const palikaRedirectSelector = ({ page }: AppState) => page.palikaRedirect;
+export const palikaLanguageSelector = ({ page }: AppState) => page.palikaLanguage;
+export const drrmOrgSelecter = ({ page }: AppState) => page.drrmOrg;
+export const drrmInventorySelecter = ({ page }: AppState) => page.drrmInventory;
+export const drrmCriticalSelecter = ({ page }: AppState) => page.drrmCritical;
+export const drrmContactsSelecter = ({ page }: AppState) => page.drrmContacts;
+export const drrmRegionSelector = ({ page }: AppState) => page.drrmRegion;
+export const drrmProgresSelector = ({ page }: AppState) => page.drrmProgress;
 
 // bounds
 export const selectedProvinceIdSelector = createSelector(

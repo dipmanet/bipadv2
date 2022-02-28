@@ -59,12 +59,24 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 onSuccess(response as PageType.Resource);
             }
         },
-        onFailure: ({ params }) => {
+        onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    params.setFaramErrors({
+                        $internal: ['Some problem occurred'],
+
+
+                        // location: [(error.response.ward)[0]],
+                    });
+                }
             }
         },
         onFatal: ({ params }) => {
@@ -88,12 +100,24 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
                 onSuccess(response as PageType.Resource);
             }
         },
-        onFailure: ({ params }) => {
+        onFailure: ({ error, params }) => {
             if (params && params.setFaramErrors) {
-                // TODO: handle error
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+                const errorKey = Object.keys(error.response).find(i => i === 'ward');
+
+                if (errorKey) {
+                    const errorList = error.response;
+                    errorList.location = errorList.ward;
+                    delete errorList.ward;
+
+                    params.setFaramErrors(errorList);
+                } else {
+                    params.setFaramErrors({
+                        $internal: ['Some problem occurred'],
+
+
+                        // location: [(error.response.ward)[0]],
+                    });
+                }
             }
         },
         onFatal: ({ params }) => {
@@ -147,6 +171,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 handleTabClick: this.procceedTabClick,
                 postBasicInfo: this.postBasicInfo,
                 keySelector,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
             }),
         },
         details: {
@@ -157,6 +182,8 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 resourceId: this.props.resourceId,
                 openspaceId: this.state.openspaceId,
                 keySelector,
+
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
             }),
         },
         suggestedUses: {
@@ -167,6 +194,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 resourceId: this.props.resourceId,
                 openspaceId: this.state.openspaceId,
                 keySelector,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
             }),
         },
         onSiteAmenties: {
@@ -178,6 +206,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 resourceId: this.props.resourceId,
                 openspaceId: this.state.openspaceId,
                 keySelector,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
             }),
         },
         environmentChecklist: {
@@ -189,6 +218,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 resourceId: this.props.resourceId,
                 openspaceId: this.state.openspaceId,
                 keySelector,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
             }),
         },
         media: {
@@ -200,12 +230,25 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                 resourceId: this.props.resourceId,
                 openspaceId: this.state.openspaceId,
                 keySelector,
+                LoadingSuccessHalt: this.props.LoadingSuccessHalt,
+                faramValueSetNull: this.props.faramValueSetNull,
             }),
         },
     };
 
+    // private tabs = {
+    //     basicInfo: 'Basic Info',
+    //     details: 'Details',
+    //     suggestedUses: 'Suggested Uses',
+    //     onSiteAmenties: 'Amenities',
+    //     environmentChecklist: 'Environment Checklist',
+    //     media: 'Media',
+    // };
+
     private handleTabClick = (tab: string) => {
         const { resourceId } = this.props;
+        const { currentView } = this.state;
+
         if (isDefined(resourceId)) {
             this.setState({ currentView: tab });
         }
@@ -220,10 +263,13 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
     };
 
 
-    private handleFaramValidationFailure = () => {
+    private handleFaramValidationFailure = (error) => {
+        const { LoadingSuccessHalt, handleFaramValidationFailure } = this.props;
         this.setState({
             openspacePostError: true,
         });
+        LoadingSuccessHalt(false);
+        handleFaramValidationFailure(error);
     }
 
     private setAdministrativeParameters = (name, value) => {
@@ -242,8 +288,8 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         let values = others;
         if (location) {
             const point = location.geoJson.features[0].geometry;
-            // const { ward } = location.region;
-            const ward = 1;
+            const { ward } = location.region;
+            // const ward = 1;
             values = {
                 ...values,
                 point,
@@ -255,8 +301,9 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
         }
 
         const {
-            requests: { addResourcePostRequest, editResourcePostRequest },
+            requests: { addResourcePostRequest, editResourcePostRequest }, LoadingSuccessHalt,
         } = this.props;
+        LoadingSuccessHalt(true);
         if (isNotDefined(resourceId)) {
             addResourcePostRequest.do({
                 body: values,
@@ -274,7 +321,8 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
     }
 
     private handleOpenspacePostSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess } = this.props;
+        const { onAddSuccess, LoadingSuccessHalt } = this.props;
+        LoadingSuccessHalt(false);
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
@@ -288,6 +336,7 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
 
     public render() {
         const { currentView } = this.state;
+        const { addResourcePending, LoadingSuccessHalt, faramValueSetNull } = this.props;
 
         return (
             <>
@@ -296,10 +345,14 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
                     tabs={this.tabs}
                     active={currentView}
                     onClick={this.handleTabClick}
+                    faramValueSetNull={faramValueSetNull}
+                    LoadingSuccessHalt={LoadingSuccessHalt}
                 />
                 <MultiViewContainer
                     views={this.views}
                     active={currentView}
+                    faramValueSetNull={faramValueSetNull}
+                    LoadingSuccessHalt={LoadingSuccessHalt}
                 />
             </>
         );

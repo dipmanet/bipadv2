@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Sanitation_Service">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Sanitation_Service" data-name="Sanitation Service" clip-path="url(#clip-Sanitation_Service)">
+    <g id="Group_257" data-name="Group 257" transform="translate(-522.437 -859.131)">
+      <path id="Path_644" data-name="Path 644" d="M541.481,873.566a3.473,3.473,0,0,0,3.479-3.466c0-1.731-2.848-5.384-3.392-6.058a.11.11,0,0,0-.174,0c-.544.674-3.392,4.327-3.392,6.058A3.473,3.473,0,0,0,541.481,873.566Z" transform="translate(-5.652 1.567)" fill="#0070ab"/>
+      <path id="Path_645" data-name="Path 645" d="M544.961,890.737H539.09a1.529,1.529,0,0,0-1.522,1.522,1.524,1.524,0,0,0,1.522,1.522h2.392a.875.875,0,0,1,.87.87.872.872,0,0,1-.87.87h-3.914a1.082,1.082,0,0,1-.7-.261l-5.91-5.753a1.747,1.747,0,0,0-2.583.13,1.791,1.791,0,0,0,.17,2.387l6.623,6.466A1.741,1.741,0,0,0,536.4,899h8.558a3.914,3.914,0,0,0,3.914-3.914v-.435A3.914,3.914,0,0,0,544.961,890.737Z" transform="translate(0 -14.338)" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

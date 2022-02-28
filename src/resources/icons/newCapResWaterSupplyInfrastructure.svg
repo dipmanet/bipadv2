@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Water_Supply_Infrastructure">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Water_Supply_Infrastructure" data-name="Water Supply Infrastructure" clip-path="url(#clip-Water_Supply_Infrastructure)">
+    <g id="Group_258" data-name="Group 258" transform="translate(-426.3 -377)">
+      <path id="Path_646" data-name="Path 646" d="M470.712,415.071c.534.727,2.438,3.412,2.438,4.639a2.575,2.575,0,1,1-5.15,0c0-1.227,1.9-3.912,2.438-4.639A.168.168,0,0,1,470.712,415.071Z" transform="translate(-20.55 -17.696)" fill="#0070ab"/>
+      <path id="Path_647" data-name="Path 647" d="M432.858,384.429h1.288a.859.859,0,0,1,.858.858v2.146h5.15v-2.146h-1.931a.644.644,0,1,1,0-1.288h6.008a.644.644,0,0,1,0,1.288H442.3v2.146h4.355a5.093,5.093,0,0,1,5.087,5.087v.921h.429a.429.429,0,0,1,.429.429v1.288a.429.429,0,0,1-.429.429h-4.292a.429.429,0,0,1-.429-.429v-1.288a.429.429,0,0,1,.429-.429h.429v-.921a1.655,1.655,0,0,0-1.654-1.654H435v2.146a.859.859,0,0,1-.858.858h-1.288a.859.859,0,0,1-.858-.858v-7.725A.859.859,0,0,1,432.858,384.429Z" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

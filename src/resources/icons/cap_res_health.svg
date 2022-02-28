@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-health">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="health" clip-path="url(#clip-health)">
+    <g id="Group_250" data-name="Group 250" transform="translate(-10.515 -6.516)">
+      <path id="Path_629" data-name="Path 629" d="M30.4,8.994v9.615h9.653V26.34H30.462v9.7H22.653V26.406H12.982V18.674h9.646V8.994Z" transform="translate(0)" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

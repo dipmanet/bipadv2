@@ -104,6 +104,8 @@ class LocationInput extends React.PureComponent<Props, State> {
             value = emptyObject,
             hint,
             error,
+            classCategory,
+            category,
         } = this.props;
 
         const {
@@ -112,37 +114,61 @@ class LocationInput extends React.PureComponent<Props, State> {
         } = value;
 
         return (
-            <div className={_cs(className, styles.locationInput)}>
-                <Map
-                    mapStyle={mapStyle}
+            category
+                ? (
+                    <div className={_cs(className, styles.locationInput)}>
 
-                    mapOptions={{
-                        logoPosition: 'top-left',
-                        minZoom: 5,
-                    }}
+                        <AreaMap />
+                        <Point
+                            className={_cs(classCategory, styles.point)}
+                            geoJson={geoJson}
+                            onPointMove={this.handlePointMove}
+                            region={region}
+                            provinces={provinces}
+                            districts={districts}
+                            municipalities={municipalities}
+                            pointShape={pointShape}
+                            hint={hint}
+                            error={error}
+                        />
 
-                    scaleControlShown
-                    scaleControlPosition="bottom-right"
+                    </div>
+                ) : (
+                    <div className={_cs(className, styles.locationInput)}>
+                        <Map
+                            mapStyle={mapStyle}
 
-                    navControlShown
-                    navControlPosition="bottom-right"
-                >
-                    <AreaMap />
-                    <Point
-                        className={styles.point}
-                        geoJson={geoJson}
-                        onPointMove={this.handlePointMove}
-                        region={region}
-                        provinces={provinces}
-                        districts={districts}
-                        municipalities={municipalities}
-                        pointShape={pointShape}
-                        hint={hint}
-                        error={error}
-                    />
-                    <MapContainer className={styles.mapContainer} />
-                </Map>
-            </div>
+                            mapOptions={{
+                                logoPosition: 'top-left',
+                                minZoom: 5,
+                            }}
+
+                            scaleControlShown
+                            scaleControlPosition="bottom-right"
+
+                            navControlShown
+                            navControlPosition="bottom-right"
+                        >
+                            <AreaMap />
+                            <Point
+                                className={styles.point}
+                                geoJson={geoJson}
+                                onPointMove={this.handlePointMove}
+                                region={region}
+                                provinces={provinces}
+                                districts={districts}
+                                municipalities={municipalities}
+                                pointShape={pointShape}
+                                hint={hint}
+                                error={error}
+                            />
+                            <MapContainer className={styles.mapContainer} />
+                        </Map>
+                    </div>
+
+                )
+
+
         );
     }
 }

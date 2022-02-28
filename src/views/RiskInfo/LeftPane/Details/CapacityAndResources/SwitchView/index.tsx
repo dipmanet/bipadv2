@@ -9,14 +9,14 @@ type toggleValues =
     | 'health'
     | 'finance'
     | 'governance'
-    | 'tourism'
+    | 'hotelandrestaurant'
     | 'cultural'
     | 'industry'
     | 'communication'
     | 'communityspace'
     | 'openspace'
-    |'fireengine'
-    |'helipad'
+    | 'fireengine'
+    | 'helipad'
     ;
 
 interface Props {
@@ -25,7 +25,7 @@ interface Props {
         health: boolean;
         finance: boolean;
         governance: boolean;
-        tourism: boolean;
+        hotelandrestaurant: boolean;
         cultural: boolean;
         industry: boolean;
         communication: boolean;
@@ -45,7 +45,7 @@ const SwitchView = (props: Props) => {
         health,
         finance,
         governance,
-        tourism,
+        hotelandrestaurant,
         cultural,
         industry,
         communication,
@@ -53,9 +53,9 @@ const SwitchView = (props: Props) => {
         communityspace,
         fireengine,
         helipad },
-    handleToggleClick,
-    handleIconClick,
-    disabled } = props;
+        handleToggleClick,
+        handleIconClick,
+        disabled } = props;
     return (
         <div className={styles.lists}>
             <div className={styles.listItem}>
@@ -116,12 +116,12 @@ const SwitchView = (props: Props) => {
                     disabled={disabled}
                     on
                     off={false}
-                    value={tourism}
+                    value={hotelandrestaurant}
                     onChange={(value: boolean) => {
-                        handleToggleClick('tourism', value);
+                        handleToggleClick('hotelandrestaurant', value);
                     }}
                 />
-                <div className={styles.listTitle}> Tourism </div>
+                <div className={styles.listTitle}> Hotel and Restaurant </div>
             </div>
             <div className={styles.listItem}>
                 <Switch
@@ -220,7 +220,7 @@ const SwitchView = (props: Props) => {
                     />
                 </div>
             </div>
-            {/* <div className={styles.listItem}>
+            <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
                     disabled={disabled}
@@ -232,7 +232,7 @@ const SwitchView = (props: Props) => {
                     }}
                 />
                 <div className={styles.listTitle}> Fire Engine </div>
-            </div> */}
+            </div>
             <div className={styles.listItem}>
                 <Switch
                     className={styles.switch}
