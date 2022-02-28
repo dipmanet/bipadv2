@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-health">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="health" clip-path="url(#clip-health)">
+    <path id="Layer_2" data-name="Layer 2" d="M9.937.135a.532.532,0,0,0-.707,0L.175,8.361A.532.532,0,0,0,0,8.755V23.428H19.168V8.755a.532.532,0,0,0-.175-.394Zm3.374,15.306h-2.13v2.13a1.6,1.6,0,1,1-3.195,0v-2.13H5.857a1.6,1.6,0,1,1,0-3.195h2.13v-2.13a1.6,1.6,0,1,1,3.195,0v2.13h2.13a1.6,1.6,0,1,1,0,3.195Z" transform="translate(6 3.999)" fill="#0070ab"/>
+  </g>
+</svg>

@@ -170,7 +170,8 @@ class SuggestedUses extends React.PureComponent<Props, State> {
             pristine: true,
         });
         const { checkedSuggestedUses } = this.state;
-        const { handleTabClick } = this.props;
+        const { handleTabClick,LoadingSuccessHalt } = this.props;
+        LoadingSuccessHalt(true)
 
         if (checkedSuggestedUses.length !== 0) {
             for (let i = 0; i < checkedSuggestedUses.length; i++) {
@@ -189,12 +190,14 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                             this.setState({
                                 pristine: false,
                             });
+                            LoadingSuccessHalt(false)
                             handleTabClick('onSiteAmenties');
                         }
                     });
             }
         } else {
             handleTabClick('onSiteAmenties');
+            LoadingSuccessHalt(false)
         }
     }
 
@@ -236,7 +239,9 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                         alignItems: 'center',
                                         paddingBottom: '10px',
 
-                                    }} key={item.id}>
+                                    }}
+                                    className={styles.mainParentCheckBox}
+                                    key={item.id}>
                                         <i
                                             className={item.iconName}
                                             style={{
@@ -247,13 +252,14 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <input
-                                            style={{ margin: '0 5px' }}
+                                            style={{ margin: '0 5px',width:'4%'}}
                                             type="checkbox"
                                             defaultChecked={checkDefault && checkDefault}
 
                                             onClick={(e) => {
                                                 this.handleEditSuggestedChange(e, item.id, item);
                                             }}
+                                            className={styles.checkBox}
                                         />
                                         <p
                                             style={{
@@ -272,7 +278,9 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                         display: 'flex',
                                         alignItems: 'center',
                                         paddingBottom: '10px',
-                                    }}>
+                                    }}
+                                    className={styles.mainParentCheckBox}
+                                    >
                                     <i
                                         className={item.iconName}
                                         style={{
@@ -283,9 +291,11 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                                         }}
                                     />
                                     <input
-                                        style={{ margin: '0 5px' }}
+                                        style={{ margin: '0 5px',width:'4%' }}
                                         type="checkbox"
                                         onClick={e => this.handleSuggestedChange(e, item.id)}
+                                        className={styles.checkBox}
+                                        
                                     />
                                     <p
                                         style={{
@@ -304,11 +314,11 @@ class SuggestedUses extends React.PureComponent<Props, State> {
                     )
                 }
                 <div className={styles.stepButtons}>
-                    <PrimaryButton
+                    {/* <PrimaryButton
                         onClick={() => handleTabClick('details')}
                     >
                         Back
-                    </PrimaryButton>
+                    </PrimaryButton> */}
                     <PrimaryButton
                         onClick={
                             resourceId === undefined
