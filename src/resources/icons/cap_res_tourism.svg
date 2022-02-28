@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Hotel_Restaurant">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Hotel_Restaurant" data-name="Hotel &amp; Restaurant" clip-path="url(#clip-Hotel_Restaurant)">
+    <g id="Group_259" data-name="Group 259" transform="translate(-337 -1340.7)">
+      <path id="Path_648" data-name="Path 648" d="M359.875,1350H345.058a1.061,1.061,0,0,0-1.058,1.058V1362.7h16.933v-11.642A1.061,1.061,0,0,0,359.875,1350Zm-10.054,3.7a1.058,1.058,0,1,1-1.058,1.058A1.062,1.062,0,0,1,349.821,1353.7Zm9.525,6.085a.794.794,0,0,1-1.587,0V1359H347.175v.794a.794.794,0,0,1-1.588,0v-6.879a.794.794,0,0,1,1.588,0v4.5h12.171Zm0-4.953a.982.982,0,0,1-.984.984h-4.911a.982.982,0,0,1-.984-.984v-.148a.982.982,0,0,1,.984-.984h4.911a.982.982,0,0,1,.984.984Z" transform="translate(0 -2.825)" fill="#0070ab"/>
+      <path id="Path_649" data-name="Path 649" d="M349.058,1346.117h10.583a1.058,1.058,0,0,0,0-2.117H349.058a1.058,1.058,0,0,0,0,2.117Z" transform="translate(-1.883)" fill="#0070ab"/>
+      <path id="Path_650" data-name="Path 650" d="M344,1384.467h6.35v-5.292a1.061,1.061,0,0,1,1.058-1.058h2.117a1.061,1.061,0,0,1,1.058,1.058v5.292h6.35V1376H344Z" transform="translate(0 -15.067)" fill="#0070ab"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="101" viewBox="0 0 32 101">
+  <defs>
+    <clipPath id="clip-boxplot">
+      <rect width="32" height="101"/>
+    </clipPath>
+  </defs>
+  <g id="boxplot" clip-path="url(#clip-boxplot)">
+    <g id="Group_249" data-name="Group 249" transform="translate(-548.196 -574.131)">
+      <line id="Line_59" data-name="Line 59" y2="21.864" transform="translate(564.195 577.131)" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+      <line id="Line_60" data-name="Line 60" x1="22.305" transform="translate(553.043 670.165)" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+      <line id="Line_61" data-name="Line 61" x1="22.305" transform="translate(553.043 577.131)" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+      <line id="Line_62" data-name="Line 62" y1="21.864" transform="translate(564.195 648.3)" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+      <line id="Line_63" data-name="Line 63" x2="22.305" transform="translate(553.043 623.648)" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="4"/>
+      <rect id="Rectangle_878" data-name="Rectangle 878" width="22.304" height="47.304" rx="2" transform="translate(553.043 599.996)" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="bevel" stroke-miterlimit="10" stroke-width="4"/>
+    </g>
+  </g>
+</svg>

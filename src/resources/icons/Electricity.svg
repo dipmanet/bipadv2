@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="171" height="171" viewBox="0 0 171 171">
+  <defs>
+    <clipPath id="clip-electricity">
+      <rect width="171" height="171"/>
+    </clipPath>
+  </defs>
+  <g id="electricity" clip-path="url(#clip-electricity)">
+    <g id="flash" transform="translate(-58.017 28)">
+      <g id="Group_18249" data-name="Group 18249" transform="translate(110.933)">
+        <path id="Path_36904" data-name="Path 36904" d="M175.921,39.441a1.916,1.916,0,0,0-1.736-1.108H151.472L173.887,2.942A1.917,1.917,0,0,0,172.267,0H141.6a1.918,1.918,0,0,0-1.715,1.06l-28.75,57.5a1.917,1.917,0,0,0,1.715,2.773H132.56L111.083,112.34a1.918,1.918,0,0,0,3.233,1.98L175.65,41.486A1.918,1.918,0,0,0,175.921,39.441Z" transform="translate(-110.933 0)" fill="#1664c1"/>
+      </g>
+    </g>
+  </g>
+</svg>

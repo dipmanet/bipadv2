@@ -73,6 +73,12 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         pointShape: 'circle',
     }
 
+
+    public componentDidMount() {
+        const { pointShape } = this.props;
+        this.setMapEvents(this.context.map, pointShape);
+    }
+
     public componentDidUpdate() {
         const { pointShape } = this.props;
         this.setMapEvents(this.context.map, pointShape);
