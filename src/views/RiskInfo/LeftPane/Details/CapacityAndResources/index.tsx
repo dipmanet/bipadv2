@@ -109,6 +109,7 @@ import evacuationCentre from '#resources/icons/newCapResEvacuationcenter.svg';
 import airway from '#resources/icons/airway.svg';
 import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
+import visualization from '#resources/icons/visualization.svg';
 import helipad from '#resources/icons/heli.svg';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
@@ -1307,7 +1308,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
         const { properties: { id, title, description, ward, resourceType, point } } = feature;
-
         const { coordinates } = JSON.parse(point);
         const { map } = this.context;
 
@@ -1564,9 +1564,18 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     };
 
     private handleShowOpenspaceDetailsClick = (openspaceDeleted?: boolean) => {
-        this.setState(prevState => ({
-            singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
-        }));
+        const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+        if (resourceType === 'openspace') {
+            this.setState(prevState => ({
+                singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
+            }));
+        } else {
+            this.setState({
+                showInventoryModal: !showInventoryModal,
+                resourceLngLat: undefined,
+            });
+        }
+
         if (openspaceDeleted) {
             this.setState({
                 resourceLngLat: undefined,
@@ -1578,13 +1587,24 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleShowCommunitypaceDetails = (
         communityspaceDeleted?: boolean,
     ) => {
-        this.setState(prevState => ({
-            CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
-        }));
+        const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+        if (resourceType === 'communityspace') {
+            this.setState(prevState => ({
+                CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
+            }));
+        } else {
+            this.setState({
+                showInventoryModal: !showInventoryModal,
+                resourceLngLat: undefined,
+            });
+        }
+
+
         if (communityspaceDeleted) {
             this.setState({
                 resourceLngLat: undefined,
                 resourceInfo: undefined,
+
             });
         }
     };
@@ -2368,6 +2388,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
+
         return (
             <>
                 <Loading pending={pending} />
@@ -2524,9 +2545,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 <div style={{ display: 'flex', alignItems: 'center', marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px' }}>
                                                     {item.level === 1 ? (
                                                         <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, item.name, item.resourceType, item.level, item.name, item.typeName)}>
-                                                            <Icon
+                                                            {/* <Icon
                                                                 name="table"
                                                                 className={styles.inputIcon}
+                                                            /> */}
+                                                            <ScalableVectorGraphics
+                                                                className={styles.visualizationIcon}
+
+
+                                                                src={visualization}
                                                             />
 
                                                         </button>
@@ -3847,18 +3874,13 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 onHide={this.handleTooltipClose}
                                             >
                                                 <ResourceTooltip
-                                                    // FIXME:hide tooltip edit if there is no permission
+                                                    // FIXME: hide tooltip edit if there is no permission
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
-                                                    onEditClick={
-                                                        this.handleEditClick
-                                                    }
-                                                    onShowInventoryClick={
-                                                        () => this.handleShowCommunitypaceDetails()
-                                                    }
-                                                    authenticated={authenticated}
+                                                    onEditClick={this.handleEditClick}
                                                     wardsRef={wardsRef}
+                                                    onShowInventoryClick={this.handleShowInventoryClick}
                                                     filterPermissionGranted={filterPermissionGranted}
                                                 />
                                             </MapTooltip>

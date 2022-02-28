@@ -1070,12 +1070,18 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     optionsClassName={styles.optionsClassName}
                                     handleFaramValidationFailure={this.handleFaramValidationFailure}
                                 />
-                                <LocationInput
-                                    // className={styles.locationInput}
-                                    faramElementName="location"
-                                    classCategory={styles.locationInput}
-                                    category={'capacityResource'}
-                                />
+                                {((faramValues.resourceType === 'communityspace') || (faramValues.resourceType === 'openspace'))
+
+                                    ? (
+                                        ''
+                                    ) : (
+                                        <LocationInput
+                                            // className={styles.locationInput}
+                                            faramElementName="location"
+                                            classCategory={styles.locationInput}
+                                            category={'capacityResource'}
+                                        />
+                                    )}
                             </>
                         )
                     }

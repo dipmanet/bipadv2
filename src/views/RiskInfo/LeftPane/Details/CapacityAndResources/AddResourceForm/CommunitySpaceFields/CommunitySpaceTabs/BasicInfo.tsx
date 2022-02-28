@@ -11,6 +11,7 @@ import { AuthState } from '#store/atom/auth/types';
 import styles from './styles.scss';
 import RegionSelectInput from '../../OpenspaceFields/AddOpenspaceTabs/RegionSelectInput';
 import NumberInput from '#rsci/NumberInput';
+import LocationInput from '#components/LocationInput';
 
 interface PropsFromState {
     authState: AuthState;
@@ -102,6 +103,12 @@ function BasicInfo({ postBasicInfo, openspacePostError,
             {/*
             {authState.authenticated
                  && ( */}
+            <LocationInput
+                // className={styles.locationInput}
+                faramElementName="location"
+                classCategory={styles.locationInput}
+                category={'capacityResource'}
+            />
             <div className={styles.submitButn}>
                 <PrimaryButton
                     onClick={() => postBasicInfo()}
