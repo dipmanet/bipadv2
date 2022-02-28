@@ -230,7 +230,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 }),
             }}
         >
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <>
                     <Tooltip title="Edit">
 
@@ -241,12 +241,6 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                         </IconButton>
                     </Tooltip>
                 </>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
             )}
         </Toolbar>
     );
