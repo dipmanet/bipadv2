@@ -125,7 +125,7 @@ export default class Visualizations extends React.PureComponent {
         const hazardSummary = this.getHazardSummary(incidentList);
         const lifeLossSummary = this.getLifeLossSummary(incidentList);
         // const eventSummary = this.getEventSummary(incidentList);
-
+        console.log('lifeLossSummary', lifeLossSummary);
 
         return (
             <div className={styles.visualizations}>
@@ -149,7 +149,7 @@ export default class Visualizations extends React.PureComponent {
                         id="hazardSummary"
                     >
                         <h4>Number of Incidents</h4>
-                        <ResponsiveContainer height={300}>
+                        <ResponsiveContainer height={hazardSummary.length * 40}>
 
                             <BarChart
                                 layout="vertical"
@@ -228,7 +228,7 @@ export default class Visualizations extends React.PureComponent {
                             </PieChart>
                         </ResponsiveContainer> */}
                         <h4>Hazard Severity (Fatality due to Hazard)</h4>
-                        <ResponsiveContainer height={300}>
+                        <ResponsiveContainer height={lifeLossSummary.length * 40}>
 
                             <BarChart
                                 layout="vertical"

@@ -1,3 +1,8 @@
+.visualizationIcon{
+  height: 18px;
+  fill-opacity: 0.5;
+  
+}
 .capacity-and-resources {
   display: flex;
   flex-direction: column;
@@ -36,6 +41,7 @@
       background-color: #e8e8e8;
       height: 50px;
     }
+    
   }
 
   .header {
@@ -76,6 +82,7 @@
       width: 100%;
       justify-content: space-between;
       cursor: pointer;
+      
       .inputIcon {
         margin-left: 10px;
         margin-right: 10px;
