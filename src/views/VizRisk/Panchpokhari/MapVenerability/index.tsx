@@ -47,6 +47,11 @@ const draw = new MapboxDraw({
     defaultMode: 'draw_polygon',
 });
 
+const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: true,
+    className: 'popup',
+});
 
 class FloodHistoryMap extends React.Component {
     public constructor(props) {
@@ -65,6 +70,7 @@ class FloodHistoryMap extends React.Component {
             opacitySes: 0.5,
             opacitySus: 0.5,
             opacityFlood: 0.5,
+            currentPoint: null,
         };
     }
 
@@ -89,6 +95,7 @@ class FloodHistoryMap extends React.Component {
         // this.map.on('closeAllPopups', () => {
         //     popup.remove();
         // });
+
         const { CIData: cidata, buildings } = this.props;
 
         if (isDefined(cidata.features)) {
@@ -102,9 +109,21 @@ class FloodHistoryMap extends React.Component {
         if (isDefined(buildings.length > 0)) {
             const buildingsD = buildings.filter(item => item.point !== undefined)
                 .map(p => p.point.coordinates);
-            const buildingpointsData = turf.points(buildingsD);
-            this.setState({ buildingpoints: buildingpointsData });
+            // const buildingpointsData = turf.points(buildingsD);
+            const features = buildings.filter(item => (item.osmId)).map(b => ({
+                type: 'Feature',
+                geometry: b.point,
+                properties: {
+                    osmId: b.osmId,
+                },
+            }));
 
+            const buildingpointsData = {
+                type: 'FeatureCollection',
+                features,
+            };
+            this.setState({ buildingpoints: buildingpointsData });
+            console.log('buildingpointsData', buildingpointsData);
             const updateArea = (e) => {
                 const { handleDrawSelectedData } = this.props;
                 const { points, buildingpoints } = this.state;
@@ -184,6 +203,23 @@ class FloodHistoryMap extends React.Component {
         }
 
         this.map.on('style.load', () => {
+            this.map.addSource('buildingPointSource', {
+                type: 'geojson',
+                data: this.state.buildingpoints,
+            });
+
+            this.map.addLayer({
+                id: 'buildingPoints',
+                type: 'circle',
+                source: 'buildingPointSource',
+                paint: {
+                    'circle-color': '#e3e3e3',
+                    'circle-radius': 7,
+                    'circle-stroke-color': '#444',
+                    'circle-stroke-width': 1,
+                },
+            });
+
             buildings.map((row) => {
                 this.map.setFeatureState(
                     {
@@ -198,10 +234,12 @@ class FloodHistoryMap extends React.Component {
                 // }
                 return null;
             });
-            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
-            this.map.on('click', 'Buildings', (e) => {
-                this.setState({ osmID: e.features[0].properties.osm_id });
-                const searchTerm = e.features[0].properties.osm_id;
+            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#d3d3d3');
+            this.map.on('click', 'buildingPoints', (e) => {
+                console.log(' e.features[0].properties', e);
+                this.setState({ osmID: e.features[0].properties.osmId });
+                const searchTerm = e.features[0].properties.osmId;
                 this.setState({ searchTerm });
                 this.handleBuildingClick(true);
             });
@@ -418,16 +456,12 @@ class FloodHistoryMap extends React.Component {
 
     public showPopupOnBldgs = (coordinates, singularBuldingData, msg, showButton, permission) => {
         // this.map.fire('closeAllPopups');
-        const popupWithData = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
-        const popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true,
-            className: 'popup',
-        });
+        // const popupWithData = new mapboxgl.Popup({
+        //     closeButton: false,
+        //     closeOnClick: true,
+        //     className: 'popup',
+        // });
+
         const content = popupElement(
             singularBuldingData,
             msg,
@@ -438,18 +472,21 @@ class FloodHistoryMap extends React.Component {
 
         this.map.on('closeAllPopups', () => {
             popup.remove();
-            popupWithData.remove();
+            // popupWithData.remove();
         });
 
         this.setState({ cood: coordinates });
+        popup.remove();
+        // popupWithData.remove();
+
         if (Object.keys(singularBuldingData).length > 2) {
-            popup.remove();
-            popupWithData.setLngLat(coordinates)
+            // popup.remove();
+            popup.setLngLat(coordinates)
                 .setDOMContent(
                     content,
                 ).addTo(this.map);
         } else {
-            popupWithData.remove();
+            // popupWithData.remove();
             popup.setLngLat(coordinates)
                 .setDOMContent(
                     content,
@@ -499,11 +536,14 @@ class FloodHistoryMap extends React.Component {
         if (searchId) {
             // looking for
             const { singularBuldingData, buildingdataAddPermission } = this.props;
-            const coordinatesObj = this.props.buildinggeojson
-                .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
+            // const coordinatesObj = this.props.buildinggeojson
+            //     .features.filter(b => Number(searchId) === Math.round(b.properties.osm_id));
+            const coordinatesObj = this.state.buildingpoints
+                .features.filter(b => Number(searchId) === b.properties.osmId);
             let cood = [];
             if (coordinatesObj.length > 0) {
                 cood = coordinatesObj[0].geometry.coordinates;
+                // here
                 const singularBData = getSingularBuildingData(searchId, this.props.buildings);
                 if (Object.keys(singularBData).length > 0) {
                     this.props.setSingularBuilding(true, singularBData);
