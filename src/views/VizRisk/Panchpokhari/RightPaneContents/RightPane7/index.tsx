@@ -581,7 +581,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                     <div className={styles.iconLevel}>
 
                                         <Icon
-                                            name="home"
+                                            name="circle"
                                             className={styles.high}
                                         />
                                         <span className={styles.number}>
@@ -597,7 +597,7 @@ class SlideFivePane extends React.Component<Props, State> {
                                     </span>
                                     <div className={styles.iconLevel}>
                                         <Icon
-                                            name="home"
+                                            name="circle"
                                             className={styles.med}
                                         />
                                         <span className={styles.number}>
@@ -613,12 +613,28 @@ class SlideFivePane extends React.Component<Props, State> {
                                     </span>
                                     <div className={styles.iconLevel}>
                                         <Icon
-                                            name="home"
+                                            name="circle"
                                             className={styles.low}
                                         />
                                         <span className={styles.number}>
                                             {' '}
                                             {buildingVulnerability.low}
+                                            {' '}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={styles.levelContainer}>
+                                    <span>
+                                        No Score
+                                    </span>
+                                    <div className={styles.iconLevel}>
+                                        <Icon
+                                            name="circle"
+                                            className={styles.noscore}
+                                        />
+                                        <span className={styles.number}>
+                                            {' '}
+                                            {buildingVulnerability.noscore}
                                             {' '}
                                         </span>
                                     </div>

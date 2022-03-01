@@ -116,6 +116,7 @@ class FloodHistoryMap extends React.Component {
                 geometry: b.point,
                 properties: {
                     osmId: b.osmId,
+                    vuln: b.vulnerabilityScore || -1,
                 },
             }));
 
@@ -236,6 +237,7 @@ class FloodHistoryMap extends React.Component {
                 return null;
             });
             // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
+            this.map.setPaintProperty('buildingPoints', 'circle-color', buildingColor);
             this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#d3d3d3');
             this.map.on('click', 'buildingPoints', (e) => {
                 console.log(' e.features[0].properties', e);
@@ -252,6 +254,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.setLayoutProperty('Road', 'visibility', 'visible');
+            this.orderLayers('buildingPoints');
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],

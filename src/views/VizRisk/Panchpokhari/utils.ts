@@ -49,22 +49,26 @@ export const getbuildingVul = (d) => {
             const medium = arr.filter(v => v
                 .vulnerabilityScore >= 50 && v.vulnerabilityScore < 60).length;
             const high = arr.filter(v => v.vulnerabilityScore >= 60).length;
+            const noscore = d.length - arr.length;
             return {
                 low,
                 medium,
                 high,
+                noscore,
             };
         }
         return {
             low: '-',
             medium: '-',
             high: '-',
+            noscore: '-',
         };
     }
     return {
         low: '-',
         medium: '-',
         high: '-',
+        noscore: '-',
     };
 };
 

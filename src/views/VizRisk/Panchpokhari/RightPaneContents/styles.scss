@@ -164,21 +164,27 @@ $button-color: rgb(0,170,223);
                     align-items: center;
                     .high{
                         // path: {fill:rgb(197,44,56); }
-                        font-size: 30px;
+                        font-size: 18px;
                         color:#af4042;
                         margin-right: 5px;
                     }
                     .med{
                         // path: {fill:rgb(193,127,90); }
-                        font-size: 30px;
+                        font-size: 18px;
                         margin-right: 5px;
                         color: #c1805a;
                     }
                     .low{
                         // path: {fill: rgb(153,171,182);}
-                        font-size: 30px;
+                        font-size: 18px;
                         margin-right: 5px;
                         color: #afaf40;
+                    }
+                    .noscore{
+                        // path: {fill: rgb(153,171,182);}
+                        font-size: 18px;
+                        margin-right: 5px;
+                        color: #e3e3e3;
                     }
                     .number{
                         font-size: 12px;
