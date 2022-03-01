@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import Switch from 'react-input-switch';
 import { _cs } from '@togglecorp/fujs';
@@ -17,6 +19,7 @@ type toggleValues =
     | 'openspace'
     | 'fireengine'
     | 'helipad'
+    | 'evacuationcenter'
     ;
 
 interface Props {
@@ -33,6 +36,7 @@ interface Props {
         communityspace: boolean;
         fireengine: boolean;
         helipad: boolean;
+        evacuationcenter: boolean;
 
     };
     handleToggleClick: (key: toggleValues, value: boolean) => void;
@@ -52,7 +56,8 @@ const SwitchView = (props: Props) => {
         openspace,
         communityspace,
         fireengine,
-        helipad },
+        helipad,
+        evacuationcenter },
         handleToggleClick,
         handleIconClick,
         disabled } = props;
@@ -245,6 +250,19 @@ const SwitchView = (props: Props) => {
                     }}
                 />
                 <div className={styles.listTitle}> Helipad </div>
+            </div>
+            <div className={styles.listItem}>
+                <Switch
+                    className={styles.switch}
+                    disabled={disabled}
+                    on
+                    off={false}
+                    value={evacuationcenter}
+                    onChange={(value: boolean) => {
+                        handleToggleClick('evacuationcenter', value);
+                    }}
+                />
+                <div className={styles.listTitle}> Evacuation Center </div>
             </div>
             {/* <div className={styles.listItem}>
                 <Switch

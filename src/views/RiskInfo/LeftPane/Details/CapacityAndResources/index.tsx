@@ -192,7 +192,7 @@ const initialActiveLayersIndication = {
     electricity: false,
     sanitation: false,
     watersupply: false,
-    evacuationCentre: false,
+    evacuationcentre: false,
 
 
 };
@@ -2503,7 +2503,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             className={resourceCategory.find(res => res === item.name)
                                                 ? styles.categorySelected : styles.categories}
                                         >
-                                            <div>
+                                            <div style={{ marginTop: '5px' }}>
                                                 <Checkbox
                                                     label="Value"
                                                     value={checked}
@@ -2538,7 +2538,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                         src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
                                                     />
-                                                    <h3>{item.name}</h3>
+                                                    <h3 style={{ fontSize: '16px' }}>{item.name}</h3>
                                                 </div>
 
 
@@ -2562,12 +2562,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         ? (
                                                             <Icon
                                                                 name="dropdown"
-                                                                className={styles.inputIcon}
+                                                                className={styles.inputIconDropdown}
                                                             />
                                                         ) : (
                                                             <Icon
                                                                 name="dropRight"
-                                                                className={styles.inputIcon}
+                                                                className={styles.inputIconDropdown}
                                                             />
                                                         ) : ''}
                                                 </div>
@@ -2589,7 +2589,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                             >
                                                                 <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
+                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
                                                                     {' '}
                                                                     <h4>{data.name}</h4>
                                                                 </label>
@@ -2635,7 +2635,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         <ul key={data.id}>
                                                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                                                 <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
+                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
                                                                     {' '}
                                                                     <h4>{data.name}</h4>
                                                                 </label>

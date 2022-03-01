@@ -423,6 +423,7 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#BCE618',
         },
+
     },
 
     resourcePoint: {

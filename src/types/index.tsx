@@ -221,7 +221,7 @@ export interface LandslideDataGeoJson {
     features: LandslideDataFeature[];
 }
 
-export type ResourceTypeKeys = 'education' | 'health' | 'hotelandrestaurant' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy' | 'openspace' | 'communityspace' | 'helipad';
+export type ResourceTypeKeys = 'education' | 'health' | 'hotelandrestaurant' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy' | 'openspace' | 'communityspace' | 'helipad' | 'evacuationcenter';
 
 export type IncidentAttributeType = 'estimatedLoss' | 'incidentCount' | 'livestockDestroyedCount' | 'peopleDeathCount' | 'peopleInjuredCount' | 'peopleMissingCount' | 'totalInfrastructureDestroyedCount';
 

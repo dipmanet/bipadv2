@@ -1,6 +1,7 @@
 .visualizationIcon{
-  height: 18px;
+  height: 14px;
   fill-opacity: 0.5;
+  transform: rotate(-90deg);
   
 }
 .capacity-and-resources {
@@ -52,7 +53,7 @@
       calc(var(--spacing-medium-alt) - var(--spacing-medium));
     justify-content: flex-end;
     button {
-      font-size: 16px;
+      font-size: 14px;
     }
 
     .heading {
@@ -82,12 +83,21 @@
       width: 100%;
       justify-content: space-between;
       cursor: pointer;
-      
+      .inputIconDropdown{
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 1rem;
+        
+        path {
+          fill: #bdbdbd;
+        }
+      }
       .inputIcon {
         margin-left: 10px;
         margin-right: 10px;
         color: #1b77af;
         font-size: 1rem;
+        height: 28px;
       }
     }
   }
@@ -116,6 +126,15 @@
       width: 100%;
       justify-content: space-between;
       cursor: pointer;
+      .inputIconDropdown{
+        margin-left: 10px;
+        margin-right: 10px;
+        font-size: 1rem;
+       
+        path {
+          fill: #bdbdbd;
+        }
+      }
       .inputIcon {
         margin-left: 10px;
         margin-right: 10px;

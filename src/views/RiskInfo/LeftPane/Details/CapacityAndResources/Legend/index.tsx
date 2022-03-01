@@ -35,10 +35,11 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const CapacityAndResourcesLegend = (props: Props) => {
     const titleContext = useContext(TitleContext);
     // for dynamic legend render
-
+    console.log('here');
     const getActiveLegends = () => {
         const { activeLayersIndication } = props;
-
+        console.log('active legend', legendItems);
+        console.log('active legend indicator', activeLayersIndication);
         const activeLegends = legendItems.filter((item) => {
             if (activeLayersIndication[item.key]) {
                 return item;
@@ -88,7 +89,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
         legendTitle = 'Communityspace Boundary';
     } else legendTitle = 'Openspace Boundary';
 
-    const { resourceIdForLegend, handleDroneImage } = props;
+    const { resourceIdForLegend, handleDroneImage, activeLayersIndication } = props;
 
     return (
         <React.Fragment>

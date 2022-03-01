@@ -3,7 +3,7 @@ import styles from './styles.scss';
 
 type ToggleValues = 'education' | 'health' | 'finance' | 'governance'
     | 'hotelandrestaurant' | 'cultural' | 'industry' | 'communication' | 'openspace' |
-    'communityspace' | 'fireengine' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway';
+    'communityspace' | 'fireengine' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway' | 'evacuationcenter';
 
 interface LegendItems {
     color: string;

@@ -29,6 +29,7 @@ class RiskInfo extends React.PureComponent<Props> {
             communityspace: false,
             fireengine: false,
             helipad: false,
+            evacuationcenter: false,
         },
     }
 
@@ -55,7 +56,9 @@ class RiskInfo extends React.PureComponent<Props> {
             resourceIdForLegend,
             droneImagePending,
         } = this.state;
-
+        console.log('data', activeLayersIndication);
+        console.log('final error', resourceIdForLegend);
+        console.log('Active car', carActive);
         return (
             <>
                 <RiskInfoMap />
