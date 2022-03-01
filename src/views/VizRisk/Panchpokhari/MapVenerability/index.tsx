@@ -205,40 +205,9 @@ class FloodHistoryMap extends React.Component {
         }
 
         this.map.on('style.load', () => {
-            this.map.addSource('buildingPointSource', {
-                type: 'geojson',
-                data: this.state.buildingpoints,
-            });
-
-            this.map.addLayer({
-                id: 'buildingPoints',
-                type: 'circle',
-                source: 'buildingPointSource',
-                paint: {
-                    'circle-color': '#e3e3e3',
-                    'circle-radius': 7,
-                    'circle-stroke-color': '#444',
-                    'circle-stroke-width': 1,
-                },
-            });
-
-            buildings.map((row) => {
-                this.map.setFeatureState(
-                    {
-                        id: row.osmId || 0,
-                        source: 'composite',
-                        sourceLayer: 'ppkrBuildingsWithIDs',
-                    },
-                    {
-                        vuln: row.vulnerabilityScore || -1,
-                    },
-                );
-                // }
-                return null;
-            });
             // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
-            this.map.setPaintProperty('buildingPoints', 'circle-color', buildingColor);
-            this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#d3d3d3');
+
+            // this.map.setPaintProperty('Buildings', 'fill-extrusion-color', '#d3d3d3');
             this.map.on('click', 'buildingPoints', (e) => {
                 console.log(' e.features[0].properties', e);
                 this.setState({ osmID: e.features[0].properties.osmId });
@@ -254,7 +223,7 @@ class FloodHistoryMap extends React.Component {
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.setLayoutProperty('National Park', 'visibility', 'none');
             this.map.setLayoutProperty('Road', 'visibility', 'visible');
-            this.orderLayers('buildingPoints');
+            // this.orderLayers('buildingPoints');
             this.map.addSource('hillshadePachpokhari', {
                 type: 'raster',
                 tiles: [this.getRasterLayer()],
@@ -298,7 +267,21 @@ class FloodHistoryMap extends React.Component {
                 tiles: [getHillShadeLayer('panchpokhari_meteor_seismic_hazard_10')],
                 tileSize: 256,
             });
-
+            this.map.addSource('buildingPointSource', {
+                type: 'geojson',
+                data: this.state.buildingpoints,
+            });
+            this.map.addLayer({
+                id: 'buildingPoints',
+                type: 'circle',
+                source: 'buildingPointSource',
+                paint: {
+                    'circle-color': '#e3e3e3',
+                    'circle-radius': 7,
+                    'circle-stroke-color': '#444',
+                    'circle-stroke-width': 1,
+                },
+            });
             this.map.addLayer(
                 {
                     id: 'jugallseicHazard',
@@ -312,6 +295,21 @@ class FloodHistoryMap extends React.Component {
                     },
                 },
             );
+            this.map.setPaintProperty('buildingPoints', 'circle-color', buildingColor);
+            // buildings.map((row) => {
+            //     this.map.setFeatureState(
+            //         {
+            //             id: row.osmId || 0,
+            //             source: 'composite',
+            //             sourceLayer: 'ppkrBuildingsWithIDs',
+            //         },
+            //         {
+            //             vuln: row.vulnerabilityScore || -1,
+            //         },
+            //     );
+            //     // }
+            //     return null;
+            // });
             this.map.setLayoutProperty('Buildings', 'visibility', 'visible');
             this.map.moveLayer('Buildings');
             this.map.moveLayer('jugallsSuslayer', 'jugallseicHazard');
