@@ -51,7 +51,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.POST,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
-            console.log('posted data', response);
             props.setAdminPage({
                 adminDataMainId: [],
             });
@@ -214,7 +213,6 @@ const AdminForm = (props) => {
                     : '';
                 break;
             case 'confirmPassword':
-                console.log('tetst', e.target.value, formDataState.confirmPassword);
                 if (formDataState.password !== e.target.value) {
                     myerror.confirmPassword = 'Password does not match';
                 } else {

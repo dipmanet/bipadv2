@@ -57,7 +57,6 @@ const HealthForm = (props: Props): JSX.Element => {
 
     useEffect(() => {
         if (Object.keys(healthFormEditData).length > 0) {
-            console.log('edit data', healthFormEditData);
             const newObj = CamelCase(healthFormEditData);
             const editData = { ...newObj, resource_type: 'health' };
             setFormData(editData);
@@ -82,7 +81,6 @@ const HealthForm = (props: Props): JSX.Element => {
     };
     const handleFormData = (e, fN: string) => {
         if (fN === 'ward') {
-            console.log('ward is this', e);
             setFormData({ ...formData, ward: e });
         } else {
             setFormData({ ...formData, [fN]: getVal(fN, e.target.value) });

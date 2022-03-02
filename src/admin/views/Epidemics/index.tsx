@@ -624,8 +624,6 @@ const Epidemics = (props) => {
     const [notApproved, setNotApproved] = useState(false);
     const [verificationMessage, setVerificationMessage] = useState('');
     const [validationError, setvalidationError] = useState(null);
-    const addedSuccessfullyRef = useRef(null);
-    const [visibility, setvisibility] = useState('hidden');
     const [provinceDataIs, setProvinceDataIs] = useState([]);
     const [districtDataIs, setdistrictDataIs] = useState([]);
     const [municipalityDataIs, setmunicipalityDataIs] = useState([]);
@@ -639,10 +637,9 @@ const Epidemics = (props) => {
     const [municipalityCentriodForMap, setmunicipalityCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
     const [wardId, setwardId] = useState(0);
     const [wardCentriodForMap, setwardCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
-    const addedRef = useRef(null);
     const [editLossId, setEditLossId] = useState('');
     const [editLossPeople, setEditLossPeople] = useState('');
-    const [editWardId, setEditWardId] = useState('');
+    const [editWardId, setEditWardId] = useState(0);
 
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);
@@ -806,6 +803,7 @@ const Epidemics = (props) => {
             .filter(item => item.title === String(wardName)).map(item => item.id)[0];
         if (wardName) {
             setwardId(id);
+            setEditWardId(id);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);

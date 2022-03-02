@@ -78,13 +78,41 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             offset: params.offset,
             limit: 100,
             count: true,
-            expand: ['district', 'province'],
+            expand: ['ward', 'municipality', 'district', 'province'],
             ordering: '-last_modified_date',
         }),
         onSuccess: ({ response, props }) => {
             props.setCovidPage({
                 covidGroupData: response.results,
                 covidGroupCount: response.count,
+            });
+        },
+    },
+    covid19IndivisualEdit: {
+        url: ({ params }) => `/covid19-case/${params.id}`,
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            expand: ['ward', 'municipality', 'district', 'province'],
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setCovidPage({
+                covid19IndividualEditData: response,
+            });
+        },
+    },
+    covid19GroupEdit: {
+        url: ({ params }) => `/covid19-quarantineinfo/${params.id}`,
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            expand: ['ward', 'municipality', 'district', 'province'],
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setCovidPage({
+                covid19GroupEditData: response,
             });
         },
     },
@@ -430,26 +458,21 @@ const CovidTable = (props) => {
         covidIndivisualCount,
         covidGroupData,
         covidGroupCount,
+        covid19IndividualEditData,
+        covid19GroupEditData,
     } } = props;
 
     useEffect(() => {
         if (formtoggler === 'Individual Form') {
             props.requests.covid19Indivisual.do();
-        }
-        if (formtoggler === 'Group Form') {
-            props.requests.covid19Group.do();
-        }
-    }, [formtoggler]);
-
-
-    useEffect(() => {
-        if (formtoggler === 'Individual Form') {
             setfilteredRowDatas(covidIndivisualData);
         }
         if (formtoggler === 'Group Form') {
+            props.requests.covid19Group.do();
             setfilteredRowDatas(covidGroupData);
         }
-    }, [covidIndivisualData, covidGroupData, formtoggler]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formtoggler]);
 
     // const navigate = useNavigate();
     function EnhancedTableHead() {
@@ -520,18 +543,33 @@ const CovidTable = (props) => {
         );
     }
     const handleEditForm = (id) => {
-        navigate('/covid19-form');
+        // navigate('/admin/covid-19/add-new-covid-19');
         if (formtoggler === 'Individual Form') {
             if (id) {
+                props.requests.covid19IndivisualEdit.do({ id });
+                navigate('/admin/covid-19/add-new-covid-19');
                 // dispatch(covidDataGetIndividualId(id));
             }
         }
         if (formtoggler === 'Group Form') {
             if (id) {
+                props.requests.covid19GroupEdit.do({ id });
+                navigate('/admin/covid-19/add-new-covid-19');
                 // dispatch(covidDataGetGroupId(id));
             }
         }
     };
+    // useEffect(() => {
+    //     if (Object.keys(covid19IndividualEditData).length > 0) {
+    //         navigate('/admin/covid-19/add-new-covid-19');
+    //     }
+    // }, [covid19IndividualEditData]);
+
+    // useEffect(() => {
+    //     if (Object.keys(covid19GroupEditData).length > 0) {
+    //         navigate('/admin/covid-19/add-new-covid-19');
+    //     }
+    // }, [covid19GroupEditData]);
 
     const Dataforcsv = () => {
         if (formtoggler === 'Individual Form') {
@@ -620,22 +658,22 @@ const CovidTable = (props) => {
                     date = '';
                 }
                 if (item.ward) {
-                    ward = item.ward;
+                    ward = item.ward.title;
                 } else {
                     ward = '';
                 }
                 if (item.municipality) {
-                    municipality = item.municipality;
+                    municipality = item.municipality.title;
                 } else {
                     municipality = '';
                 }
                 if (item.district) {
-                    district = item.district;
+                    district = item.district.title;
                 } else {
                     district = '';
                 }
                 if (item.province) {
-                    province = item.province;
+                    province = item.province.title;
                 } else {
                     province = '';
                 }
@@ -716,21 +754,6 @@ const CovidTable = (props) => {
     const loadingCovid19PutBulkData = 0;
 
 
-    // React.useEffect(() => {
-    //     if (covid19GetAllDataIndividual && covid19GetAllDataIndividual.length > 0) {
-    //         setfilteredRowDatas(covid19GetAllDataIndividual);
-    //     }
-    // }, [covid19GetAllDataIndividual]);
-
-    // React.useEffect(() => {
-    //     if (searchValue) {
-    //         const filter = filteredRowDatas.filter(item => item.province.title.toLowerCase().includes(searchValue));
-    //         setfilteredRowDatas(filter);
-    //     } else {
-    //         setfilteredRowDatas(covid19GetAllDataIndividual);
-    //     }
-    // }, [searchValue]);
-
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof Data,
@@ -740,14 +763,14 @@ const CovidTable = (props) => {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const newSelecteds = filteredRowDatas.map(n => n.id);
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    };
+    // const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     if (event.target.checked) {
+    //         const newSelecteds = filteredRowDatas.map(n => n.id);
+    //         setSelected(newSelecteds);
+    //         return;
+    //     }
+    //     setSelected([]);
+    // };
 
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
         const selectedIndex = selected.indexOf(name);
@@ -777,14 +800,12 @@ const CovidTable = (props) => {
             const maxPages = ((covidIndivisualCount - remainder) / 100 + 1);
             if (newPage <= maxPages) {
                 setOffset(newPage * 100);
-                // dispatch(getAllCovidDataIndividual(newPage * 100));
             }
         } else {
             const remainder = covidGroupCount % 100;
             const maxPages = ((covidGroupCount - remainder) / 100 + 1);
             if (newPage <= maxPages) {
                 setOffset(newPage * 100);
-                // dispatch(getAllCovidDataGroup(newPage * 100));
             }
         }
     };
@@ -826,7 +847,6 @@ const CovidTable = (props) => {
     // }, [formtoggler, userDataMain]);
 
     return (
-
         <>
             {
                 (loadingCovid19GetGroup || loadingCovid19GetIndividual) ? (
@@ -843,7 +863,7 @@ const CovidTable = (props) => {
                     />
                 )
                     : (
-                        <Box sx={{ width: '80vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
+                        <Box sx={{ width: '100%', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}>
                             <div className={styles.credentialSearch}>
 
                                 <DownloadIcon className={styles.downloadIcon} onClick={handleDownload} />
@@ -880,7 +900,6 @@ const CovidTable = (props) => {
                                                 .map((row, index) => {
                                                     const isItemSelected = isSelected(row.province);
                                                     const labelId = `enhanced-table-checkbox-${index}`;
-
                                                     return (
                                                         <TableRow
                                                             hover
@@ -894,11 +913,8 @@ const CovidTable = (props) => {
 
                                                             <TableCell
                                                                 className={styles.setStyleForTableCell}
-
-                                                                component="th"
                                                                 id={labelId}
                                                                 scope="row"
-                                                                // padding="none"
                                                             >
                                                                 {row.province ? row.province.title : '-'}
                                                             </TableCell>
@@ -918,7 +934,7 @@ const CovidTable = (props) => {
                                                                 scope="row"
                                                                 padding="none"
                                                             >
-                                                                {row.municipality ? row.municipality.title : ''}
+                                                                {row.municipality ? row.municipality.title : '-'}
                                                             </TableCell>
                                                             <TableCell
                                                                 className={styles.setStyleForTableCell}
@@ -929,6 +945,7 @@ const CovidTable = (props) => {
                                                             >
                                                                 {row.ward ? row.ward.title : '-'}
                                                             </TableCell>
+
                                                             <TableCell className={styles.setStyleForTableCell} align="right">{row.reportedOn}</TableCell>
                                                             <TableCell className={styles.setStyleForTableCell} align="right">{row.hazradInducer ? row.hazradInducer : 'No Data'}</TableCell>
                                                             {formtoggler === 'Individual Form' && (

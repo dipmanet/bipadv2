@@ -334,7 +334,6 @@ const AdminTable = (props) => {
     const handleEditForm = (id) => {
         settoggleForm(true);
         setLoading(true);
-        console.log('test id', id);
         if (id) {
             props.requests.getUser.do({ id, setLoading });
             // dispatch(adminGetDataId(id));

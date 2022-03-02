@@ -22,6 +22,8 @@ export interface CovidPage {
     covidRegionWiseData: [];
     covid19BulkIndividualData: [];
     covid19BulkGroupData: [];
+    covid19IndividualEditData: {};
+    covid19GroupEditData: {};
 }
 
 export interface CovidState {

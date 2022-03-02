@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-
 import React, { useState } from 'react';
 import Table from 'src/admin/components/CovidTable';
 import MenuCommon from 'src/admin/components/MenuCommon';
@@ -44,7 +43,7 @@ const Covid19Table = (props) => {
                             }
                         </div>
                         {/* <h1 className={styles.generalInfo}>General Information</h1> */}
-                        <button type="button" className={styles.viewDataTable}>View Report Form</button>
+                        {/* <button type="button" className={styles.viewDataTable}>View Report Form</button> */}
                     </div>
                     <div className={styles.shortGeneralInfo}>
                         <img className={styles.ideaIcon} src={Ideaicon} alt="" />
@@ -65,8 +64,6 @@ const Covid19Table = (props) => {
                                     </p>
                                 )
                         }
-
-
                     </div>
                     <div className={styles.infoBar}>
                         <p className={styles.instInfo}>

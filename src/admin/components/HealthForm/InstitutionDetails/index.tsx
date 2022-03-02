@@ -83,7 +83,6 @@ const InstitutionDetails = (props: Props): JSX.Element => {
         const allFields = Object.keys(institutionDetails);
         const fieldsToGiveValidator = ['is_verified', 'is_approved', 'verfication_message'];
         window.scrollTo({ top: 400, left: 0 });
-        console.log('user ', userDataMain);
         if (userDataMain.isSuperuser) {
             setDisableFields([]);
         } else if (

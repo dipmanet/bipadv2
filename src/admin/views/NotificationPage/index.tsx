@@ -123,7 +123,7 @@ const NotificationPage = (props) => {
                 onClose={handleNotClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                hideBackdrop="true"
+                hideBackdrop
             >
                 <Box className={styles.box}>
                     <div className={styles.notificationsSideBar}>

@@ -7,7 +7,7 @@ import NotificationPage from 'src/admin/views/NotificationPage';
 import ProfileIcon from '../../resources/profile.svg';
 import styles from './styles.module.scss';
 
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { createConnectedRequestCoordinator } from '#request';
 import { SetNotificationPageAction } from '#actionCreators';
 import { notificationPageSelector, userSelector } from '#selectors';
 
@@ -21,25 +21,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setNotificationPage: params => dispatch(SetNotificationPageAction(params)),
 });
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
-    getNotification: {
-        url: '/notification/',
-        method: methods.GET,
-        onMount: false,
-        query: () => ({
-            format: 'json',
-            ordering: '-last_modified_date',
-        }),
-        onSuccess: ({ response, props, params }) => {
-            props.setNotificationPage({
-                notificationData: response.results,
-            });
-            // params.setLoading(false);
-        },
-    },
-
-};
-
 const Navbar = (props) => {
     const {
         notificationPage: {
@@ -50,19 +31,11 @@ const Navbar = (props) => {
         userDataMain,
     } = props;
 
-    useEffect(() => {
-        props.requests.getNotification.do();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     const handleNotification = () => {
         if (showNotification) {
-            console.log('notification', showNotification);
             setNotificationPage({ showNotification: false });
-            // dispatch(setNotificationPane(false));
         } else {
             setNotificationPage({ showNotification: true });
-            // dispatch(setNotificationPane(true));
         }
     };
     return (
@@ -102,12 +75,6 @@ const Navbar = (props) => {
                         <img style={{ height: '18.2px', width: '18.2px' }} src={ProfileIcon} alt="" />
                     </div>
                     <div className={styles.loggedInUserName}>{userDataMain.username}</div>
-                    {/* <div className={styles.logoutIcon} onClick={handleLogOut}>
-                    <img src={LogoutIcon} className={styles.logout} alt="" />
-                    <div className={styles.toolTip}>
-                        <span className={styles.toolTipText}>Log Out</span>
-                    </div>
-                </div> */}
                 </div>
             </div>
         </>
@@ -116,8 +83,6 @@ const Navbar = (props) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(
-        createRequestClient(requests)(
-            Navbar,
-        ),
+        Navbar,
     ),
 );

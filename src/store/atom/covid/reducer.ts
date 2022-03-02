@@ -25,6 +25,8 @@ const setCovidPage = (state: Type.CovidState, action: Type.SetCovidPage) => {
         covidRegionWiseData,
         covid19BulkIndividualData,
         covid19BulkGroupData,
+        covid19GroupEditData,
+        covid19IndividualEditData,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -63,6 +65,12 @@ const setCovidPage = (state: Type.CovidState, action: Type.SetCovidPage) => {
         }
         if (covid19BulkGroupData) {
             deferedState.covidPage.covid19BulkGroupData = covid19BulkGroupData;
+        }
+        if (covid19IndividualEditData) {
+            deferedState.covidPage.covid19IndividualEditData = covid19IndividualEditData;
+        }
+        if (covid19GroupEditData) {
+            deferedState.covidPage.covid19GroupEditData = covid19GroupEditData;
         }
     });
     return newState;
