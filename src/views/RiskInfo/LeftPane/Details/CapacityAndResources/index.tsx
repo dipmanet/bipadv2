@@ -1529,10 +1529,17 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleShowInventoryClick = () => {
-        this.setState({
-            showInventoryModal: true,
-            resourceLngLat: undefined,
-        });
+        const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+        if (resourceType === 'communityspace') {
+            this.handleShowCommunitypaceDetails();
+        } else if (resourceType === 'openspace') {
+            this.handleShowOpenspaceDetailsClick();
+        } else {
+            this.setState({
+                showInventoryModal: true,
+                resourceLngLat: undefined,
+            });
+        }
     }
 
     private handleEditResourceFormCloseButtonClick = () => {
@@ -1599,6 +1606,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         communityspaceDeleted?: boolean,
     ) => {
         const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+
         if (resourceType === 'communityspace') {
             this.setState(prevState => ({
                 CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
@@ -2399,6 +2407,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
+
         return (
             <>
                 <Loading pending={pending} />
@@ -4348,7 +4357,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 } */}
 
                 { }
-                {
+                {/* {
                     palikaRedirect.showForm && palikaRedirect.showModal === 'inventory'
                     // && isDefined(inventoryItem)
                     // && isDefined(inventoryItem.id)
@@ -4358,7 +4367,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             closeModal={this.handleInventoryModalClose}
                         />
                     )
-                }
+                } */}
 
                 {/* {showResourceForm && resourceDetails && (
                     <AddResourceForm
