@@ -31,7 +31,7 @@ export default function CIChart(props) {
                     margin={{ left: 15, right: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number">
+                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
                         <Label
                             value="Critical Infrastructures"
                             offset={0}
@@ -41,7 +41,7 @@ export default function CIChart(props) {
                                 fill: 'rgba(255, 255, 255, 0.87)',
                             }}
                         />
-                    <  XAxis     tick={{ fill: '#94bdcf' }}/>
+                    </XAxis>
                     <YAxis
                         type="category"
                         dataKey="name"

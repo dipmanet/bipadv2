@@ -2,11 +2,11 @@
 /* eslint-disable max-len */
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { PostionInitialValues, ScrollTopInitialValues } from '../..';
-import LeftPaneThirdContents from '../../Components/LeftpaneThirdContents';
+import LeftpaneSlide3 from '../../Components/LeftpaneSlide3';
 import Navbuttons from '../../Components/NavButtons/index';
 import styles from './styles.scss';
 
-export interface Props {
+interface Props {
     leftElement: number;
     setLeftElement: React.Dispatch<React.SetStateAction<number>>;
     scrollTopValuesPerPage: ScrollTopInitialValues;
@@ -14,6 +14,8 @@ export interface Props {
     postionsPerPage: PostionInitialValues;
     setPostionsPerPage: React.Dispatch<React.SetStateAction<PostionInitialValues>>;
     onButtonClick: (item: number) => void;
+    handleCIClick: (item: string) => void;
+    clickedCiName: string[];
 }
 
 function LeftPane3(props: Props) {
@@ -25,6 +27,8 @@ function LeftPane3(props: Props) {
         postionsPerPage,
         setPostionsPerPage,
         onButtonClick,
+        handleCIClick,
+        clickedCiName,
     } = props;
 
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -76,8 +80,11 @@ function LeftPane3(props: Props) {
 
     return (
         <>
-            <div ref={articleRef} className={styles.articleDummy}>
-                <LeftPaneThirdContents />
+            <div ref={articleRef} className={styles.mainLeftSlide}>
+                <LeftpaneSlide3
+                    handleCIClick={handleCIClick}
+                    clickedCiName={clickedCiName}
+                />
                 <Navbuttons
                     postionsPerPage={postionsPerPage}
                     leftElement={leftElement}

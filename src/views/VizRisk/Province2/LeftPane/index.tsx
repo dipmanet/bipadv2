@@ -238,7 +238,7 @@ function Leftpane(props: Props) {
         } else {
             setestimatedDataSelection(totalFloodLossData);
         }
-    }, [clickedHazardItem]);
+    }, [clickedHazardItem, totalFloodLossData, totalLandslideLossData]);
 
 
     useEffect(() => {
@@ -257,7 +257,7 @@ function Leftpane(props: Props) {
                 })),
             );
         }
-    }, []);
+    }, [props]);
 
     useEffect(() => {
         if (vulnrerability === 'Human Development Index') {
@@ -268,8 +268,8 @@ function Leftpane(props: Props) {
     }, [vulnrerability]);
 
     useEffect(() => {
-        if (districtIdIs) {
-            vrSideBarRef.current?.scrollTo({ top: 1000, behavior: 'smooth' });
+        if (districtIdIs && vrSideBarRef.current) {
+            vrSideBarRef.current.scrollTo({ top: 1000, behavior: 'smooth' });
         }
     }, [districtIdIs]);
 
@@ -312,7 +312,7 @@ function Leftpane(props: Props) {
             ));
             setclimateChartTitle('Precipitation Reference Period(2036-2065)');
         }
-    }, [tempSelectedData, prepSelectedData, climateDataType]);
+    }, [tempSelectedData, prepSelectedData, climateDataType, climateDataYearWise.tempDataForMapUpto2010, climateDataYearWise.tempDataForMapUpto2045, climateDataYearWise.tempDataForMapUpto2065, climateDataYearWise.prepDataForMapUpto2010, climateDataYearWise.prepDataForMapUpto2045, climateDataYearWise.prepDataForMapUpto2065]);
 
 
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By District'];
@@ -345,7 +345,7 @@ function Leftpane(props: Props) {
                                     <div className={styles.iconTitleDate}>
 									Recorderd Time:
                                         {'  '}
-                                        {realTimeData !== undefined ? realTimeData?.recordedDate.slice(0, 10) : 'Nodata'}
+                                        {realTimeData !== undefined ? (realTimeData && realTimeData.recordedDate.slice(0, 10)) : 'Nodata'}
                                     </div>
                                 </div>
                             </div>

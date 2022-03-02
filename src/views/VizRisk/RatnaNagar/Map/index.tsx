@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+import styles from './styles.scss';
+import './map.css';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -7,7 +9,7 @@ if (TOKEN) {
 }
 
 const Map = () => {
-    const map = useRef<null>(null);
+    const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
     function noop() {}
 
@@ -21,7 +23,7 @@ const Map = () => {
 
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
-            style: 'mapbox://styles/yilab/cky6ydau933qq15o7bmmblnt4',
+            style: 'mapbox://styles/yilab/cl02b42zi00b414qm2i7xqqex',
             minZoom: 2,
             maxZoom: 22,
         });
@@ -36,7 +38,7 @@ const Map = () => {
         };
         return destroyMap;
     }, []);
-    return <div ref={mapContainerRef} className="map-container" />;
+    return <div ref={mapContainerRef} className={styles.mapCSS} />;
 };
 
 export default Map;

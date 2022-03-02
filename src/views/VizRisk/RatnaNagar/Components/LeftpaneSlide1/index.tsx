@@ -8,12 +8,25 @@ import { CartesianGrid,
     XAxis,
     YAxis } from 'recharts';
 
-import styles from '../styles.scss';
+import styles from './styles.scss';
 
-const LeftPaneOneContents = () => (
+const LeftpaneSlide1 = () => (
     <div className={styles.vrSideBar}>
-        <div className={styles.leftTopBar} />
         <h1> Ratnanagar Rural Municipality</h1>
+        <p>
+                Ratnanagar  Municipality is located in Sindhupalchok
+                district of Bagmati province. The rural municipality
+                has 7 wards covering a total area of 592 sq. km and
+                is situated at an elevation of 800 m to 7000m AMSL.
+
+        </p>
+        <p>
+                Ratnanagar  Municipality is located in Sindhupalchok
+                district of Bagmati province. The rural municipality
+                has 7 wards covering a total area of 592 sq. km and
+                is situated at an elevation of 800 m to 7000m AMSL.
+
+        </p>
         <p>
                 Ratnanagar  Municipality is located in Sindhupalchok
                 district of Bagmati province. The rural municipality
@@ -41,7 +54,6 @@ const LeftPaneOneContents = () => (
                         unit={'℃'}
                         axisLine={false}
                         domain={[0, 40]}
-                        padding={{ top: 20 }}
                         tick={{ fill: '#94bdcf' }}
                         tickCount={10}
                         interval="preserveEnd"
@@ -75,7 +87,6 @@ const LeftPaneOneContents = () => (
                         unit={'mm'}
                         axisLine={false}
                         domain={[0, 1150]}
-                        padding={{ top: 20 }}
                         tick={{ fill: '#94bdcf' }}
                         tickCount={10}
                         interval="preserveEnd"
@@ -94,4 +105,4 @@ const LeftPaneOneContents = () => (
 );
 
 
-export default LeftPaneOneContents;
+export default LeftpaneSlide1;

@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { PostionInitialValues, ScrollTopInitialValues } from '../..';
-import LeftPaneTwoContents from '../../Components/LeftpaneTwoContents';
+import LeftpaneSlide2 from '../../Components/LeftpaneSlide2';
 import Navbuttons from '../../Components/NavButtons/index';
 import styles from './styles.scss';
 
@@ -75,8 +75,8 @@ function LeftPane2(props: Props) {
 
     return (
         <>
-            <div ref={articleRef} className={styles.articleDummy}>
-                <LeftPaneTwoContents />
+            <div ref={articleRef} className={styles.mainLeftSlide}>
+                <LeftpaneSlide2 />
                 <Navbuttons
                     postionsPerPage={postionsPerPage}
                     leftElement={leftElement}

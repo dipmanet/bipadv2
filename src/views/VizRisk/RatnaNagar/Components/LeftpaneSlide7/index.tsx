@@ -1,10 +1,9 @@
 import React from 'react';
-import styles from '../styles.scss';
+import styles from './styles.scss';
 
-const LeftPaneThirdContents = () => (
+const LeftpaneSlide7 = () => (
     <div className={styles.vrSideBar}>
-        <div className={styles.leftTopBar} />
-        <h1>Critical Infrastructure</h1>
+        <h1>Sensitivity</h1>
         <p>
                 Ratnanagar  Municipality is located in Sindhupalchok
                 district of Bagmati province. The rural municipality
@@ -31,4 +30,4 @@ const LeftPaneThirdContents = () => (
 );
 
 
-export default LeftPaneThirdContents;
+export default LeftpaneSlide7;

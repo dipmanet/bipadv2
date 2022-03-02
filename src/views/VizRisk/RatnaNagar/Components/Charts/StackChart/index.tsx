@@ -1,0 +1,42 @@
+/* eslint-disable no-tabs */
+/* eslint-disable no-mixed-spaces-and-tabs */
+import React from 'react';
+import { Bar, BarChart, Legend, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import styles from './styles.scss';
+
+interface BarData {
+    'Very High'?: number;
+    High?: number;
+    Medium?: number;
+    Low?: number;
+    'Very Low'?: number;
+}
+
+interface Props{
+    stackBarChartTitle: string;
+    data: BarData[];
+}
+
+const StackChart = (props: Props) => {
+    const { stackBarChartTitle, data } = props;
+    return (
+        <div className={styles.stackChart}>
+            <h2 className={styles.stackTitle}>{stackBarChartTitle}</h2>
+            <ResponsiveContainer height={80} width={'100%'}>
+                <BarChart layout="vertical" data={data} height={80} stackOffset="expand" margin={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                    <XAxis hide type="number" />
+                    <YAxis type="category" dataKey="name" stroke="#FFFFFF" hide />
+                    <Legend iconType="circle" margin={{ top: 0, left: 0, right: 10, bottom: -10 }} align="left" />
+                    <Bar dataKey="Very High" fill="#e75d4f" stackId="a" radius={[4, 0, 0, 4]} />
+                    <Bar dataKey="High" fill="#e79546" stackId="a" />
+                    <Bar dataKey="Medium" fill="#2af5ac" stackId="a" />
+                    <Bar dataKey="Low" fill="#45c4fe" stackId="a" />
+                    <Bar dataKey="Very Low" fill="#457ded" stackId="a" radius={[0, 4, 4, 0]} />
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};
+
+
+export default StackChart;

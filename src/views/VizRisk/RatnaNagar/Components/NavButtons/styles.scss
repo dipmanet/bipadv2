@@ -1,11 +1,11 @@
 .pagination {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     position: fixed;
     bottom: 0;
     width: calc(30% - 60px);
-    padding: 35px 0px;
+    padding: 35px 5px;
     background-color: #0c2432;
     left: 0;
     height: 40px;
@@ -14,50 +14,84 @@
     .numberContainer {
         display: flex;
         justify-content: space-between;
-        width: 50%;
+        width: 70%;
         padding: 2px 5px;
+        overflow-x: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         .button {
             color: white;
             position: relative;
-            width: 35px;
+            min-width: 35px;
             height: 35px;
             border-radius: 50px;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
             outline: none;
             cursor: pointer;
-            border: 0;
-            background-color: #17546c;
+            border: 0.25px solid rgba(255, 255, 255, 0.5);
+            background-color: transparent;
             border-radius: 50%;
+            font-size: 13px;
+            margin: 0 5px;
         }
 
         .buttonFill {
             color: white;
             position: relative;
-            width: 35px;
+            min-width: 35px;
             height: 35px;
             border-radius: 50px;
             transition: all 0.3s ease;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
             outline: none;
             cursor: pointer;
-            border: 0;
-            background-color: blue;
+            border: 0.25px solid white;
+            background-color: #17546c;
+            filter: saturate(100%);
+            font-size: 13px;
+            margin: 0 5px;
+
         }
     }
 
     .previousNextButton {
         cursor: pointer;
+        background-color: transparent;
+        outline: none;
+        border: none;
+
+        .backButton {
+            height: 35px;
+            width: 35px;
+        }
+
     }
 }
 
+.lastPagePagination {
+    @extend .pagination;
+    position: relative;
+    bottom: 120px;
+    width: 32%;
+    left: -60px;
+    margin: auto;
+
+    .numberContainer {
+        display: flex;
+        justify-content: space-between;
+        width: 80%;
+    }
+}
 
 .circleProgress {
     position: absolute;
     stroke: white;
-    left: 0;
-    top: 0;
+    left: -1px;
+    top: -1px;
 }
 
 h3 {

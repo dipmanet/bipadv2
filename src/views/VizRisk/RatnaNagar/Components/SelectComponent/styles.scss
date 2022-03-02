@@ -1,0 +1,18 @@
+.selectComponent {
+    margin: 30px -8px;
+
+    .mainSelect {
+        width: 100%;
+        background-color: #143044;
+        color: white;
+        outline: none;
+        padding: 10px;
+        border: 1px solid #a8fffb;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .mainOptions {
+            cursor: pointer;
+        }
+    }
+}

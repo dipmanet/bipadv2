@@ -867,9 +867,9 @@ export const ProvinceTwo = (props: Props) => {
     const totalFloodLossData = lossDataFlood.map(item => ({
 		   id: item.district.id,
 		   name: item.district.title,
-		   totalPeopleDeath: item.data?.peopleDeathCountSum,
-		   totalInfraDamage: item.data?.infrastructureAffectedCountSum,
-		   totalEstimatedLoss: item.data?.estimatedLoss,
+		   totalPeopleDeath: item.data ? item.data.peopleDeathCountSum : 0,
+		   totalInfraDamage: item.data ? item.data.infrastructureAffectedCountSum : 0,
+		   totalEstimatedLoss: item.data ? item.data.estimatedLoss : 0,
 		 }));
 
 
