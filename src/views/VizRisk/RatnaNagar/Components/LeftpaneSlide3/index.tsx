@@ -36,8 +36,8 @@ const LeftpaneSlide3 = (props: Props) => {
             count: 15,
         },
         {
-            ciName: 'Main',
-            count: 55,
+            ciName: 'Main Education',
+            count: 1,
         },
 
     ];
@@ -70,8 +70,11 @@ const LeftpaneSlide3 = (props: Props) => {
 
 
     const calculateFontSize = (itemCounts: number, totalCounts: number) => {
-        const fontsize = (itemCounts / totalCounts) * 50 + 10;
-        return fontsize;
+        if (itemCounts <= 10) {
+            const fontsize = (itemCounts / totalCounts) * 20 + 5;
+            return fontsize;
+        }
+        return (itemCounts / totalCounts) * 50 + 10;
     };
 
     return (
@@ -123,7 +126,7 @@ const LeftpaneSlide3 = (props: Props) => {
                                         {item.count}
 
                                     </h1>
-                                    <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px` }}>{item.ciName}</p>
+                                    <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px`, textAlign: 'center' }}>{item.ciName}</p>
                                     {
                                         clickedCiName.includes(item.ciName)
 										&& (
