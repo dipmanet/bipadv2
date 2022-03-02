@@ -206,6 +206,24 @@ const Budget = (props: Props) => {
         handlePendingState: handlePending,
     });
 
+    useEffect(() => {
+        if (annualBudgetData.length > 0) {
+            const {
+                totalBudgetNrs,
+                disasterBudgetNrs,
+                otherBudgetNrs,
+            } = annualBudgetData[0];
+            console.log('budget data new', totalBudgetNrs,
+                disasterBudgetNrs,
+                otherBudgetNrs);
+            setBudgetDatapp({
+                totMunBudget: totalBudgetNrs,
+                totDrrBudget: disasterBudgetNrs,
+                additionalDrrBudget: otherBudgetNrs,
+            });
+        }
+    }, [annualBudgetData]);
+
     const handleMunicipalBudget = (budgetVal) => {
         setmunicipalBudget(budgetVal.target.value);
     };
@@ -284,16 +302,16 @@ const Budget = (props: Props) => {
 
                 });
             } else {
-                const {
-                    totalBudgetNrs,
-                    disasterBudgetNrs,
-                    otherBudgetNrs,
-                } = annualBudgetData[0];
-                setBudgetDatapp({
-                    municipalBudget: totalBudgetNrs,
-                    drrFund: disasterBudgetNrs,
-                    additionalFund: otherBudgetNrs,
-                });
+                // const {
+                //     totalBudgetNrs,
+                //     disasterBudgetNrs,
+                //     otherBudgetNrs,
+                // } = annualBudgetData[0];
+                // setBudgetDatapp({
+                //     totMunBudget: totalBudgetNrs,
+                //     totDrrBudget: disasterBudgetNrs,
+                //     additionalDrrBudget: otherBudgetNrs,
+                // });
                 setBudgetId({ id: annualBudgetData[0].id });
                 props.handleNextClick();
                 updateTab();
