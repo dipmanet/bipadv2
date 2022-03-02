@@ -30,6 +30,7 @@ export default class SubHeader extends React.PureComponent<Props> {
             routeToOpenspace,
             handleDeleteModal,
             authenticated,
+            closeModal,
         } = this.props;
         return (
             <div className={styles.subHeader}>
@@ -40,13 +41,15 @@ export default class SubHeader extends React.PureComponent<Props> {
                             className={styles.option}
                             onClick={() => {
                                 onEdit();
+                                closeModal();
                             }}
                             onKeyDown={() => {
                                 onEdit();
+                                closeModal();
                             }}
                         >
                             <Icon icon={Edit} size={15} />
-                        Edit
+                            Edit
                         </div>
                     )}
                     {authenticated && (
@@ -57,7 +60,7 @@ export default class SubHeader extends React.PureComponent<Props> {
                         >
                             {' '}
                             <Icon icon={Delete} size={15} />
-                        Delete
+                            Delete
                         </div>
                     )}
 

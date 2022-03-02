@@ -19,7 +19,7 @@ type toggleValues =
     | 'openspace'
     | 'fireengine'
     | 'helipad'
-    | 'evacuationcenter'
+    | 'evacuationcentre'
     ;
 
 interface Props {
@@ -36,7 +36,7 @@ interface Props {
         communityspace: boolean;
         fireengine: boolean;
         helipad: boolean;
-        evacuationcenter: boolean;
+        evacuationcentre: boolean;
 
     };
     handleToggleClick: (key: toggleValues, value: boolean) => void;
@@ -57,7 +57,7 @@ const SwitchView = (props: Props) => {
         communityspace,
         fireengine,
         helipad,
-        evacuationcenter },
+        evacuationcentre },
         handleToggleClick,
         handleIconClick,
         disabled } = props;
@@ -257,9 +257,9 @@ const SwitchView = (props: Props) => {
                     disabled={disabled}
                     on
                     off={false}
-                    value={evacuationcenter}
+                    value={evacuationcentre}
                     onChange={(value: boolean) => {
-                        handleToggleClick('evacuationcenter', value);
+                        handleToggleClick('evacuationcentre', value);
                     }}
                 />
                 <div className={styles.listTitle}> Evacuation Center </div>

@@ -130,10 +130,11 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
     };
 
     private confirmDelete = () => {
-        const { openspaceDeleteRequest, id } = this.props;
+        const { openspaceDeleteRequest, id, DeletedResourceApiRecall } = this.props;
         openspaceDeleteRequest.do({
             id,
             closeModal: this.props.closeModal,
+            DeletedResourceApiRecall,
         });
     };
 
@@ -179,6 +180,7 @@ class CommunityOpenspaceDetails extends React.PureComponent<Props, State> {
                         title={title}
                         location={catchmentArea}
                         onEdit={this.props.onEdit}
+                        closeModal={closeModal}
                         routeToOpenspace={routeToOpenspace}
                         handleDeleteModal={handleDeleteModal}
                         authenticated={authenticated}

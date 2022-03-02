@@ -545,6 +545,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         onSuccess: ({ params }) => {
             if (params && params.closeModal) {
                 params.closeModal(true);
+                params.DeletedResourceApiRecall();
             }
         },
         onFailure: ({ error, params }) => {
@@ -958,6 +959,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             return { municipality: municipalities.find(p => p.id === geoarea).id };
         }
         return '';
+    }
+
+    private DeletedResourceApiRecall = () => {
+        const { isFilterClicked } = this.context;
+        const { carKeys, requests: { resourceGetRequest }, filters: { faramValues: { region } } } = this.props;
+        resourceGetRequest.do({
+            resourceType: carKeys,
+            region,
+            filterClickCheckCondition: isFilterClicked,
+        });
     }
 
     private handleToggleClick = (key: toggleValues, value: boolean, typeName, filteredSubCategoriesLvl2ResourceType, lvl2UncheckCondition) => {
@@ -2379,7 +2390,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const electricityGeoJson = this.getGeojson(resourceCollection.electricity);
         const sanitationGeoJson = this.getGeojson(resourceCollection.sanitation);
         const waterSupplyGeoJson = this.getGeojson(resourceCollection.watersupply);
-        const evacuationcenterGeoJson = this.getGeojson(resourceCollection.evacuationcentre);
+        const evacuationcentreGeoJson = this.getGeojson(resourceCollection.evacuationcentre);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -2388,7 +2399,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-
         return (
             <>
                 <Loading pending={pending} />
@@ -3800,20 +3810,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     )}
                                 </MapSource>
                             )}
-                            {/** evacuationcenterGeoJson */}
+                            {/** evacuationcentreGeoJson */}
                             {activeLayersIndication.evacuationcentre && (
                                 <>
                                     <MapSource
-                                        sourceKey="resource-symbol-evacuationcenter"
+                                        sourceKey="resource-symbol-evacuationcentre"
                                         sourceOptions={{
                                             type: 'geojson',
                                             cluster: true,
                                             clusterMaxZoom: 10,
                                         }}
-                                        geoJson={evacuationcenterGeoJson}
+                                        geoJson={evacuationcentreGeoJson}
                                     >
                                         <MapLayer
-                                            layerKey="cluster-evacuationcenter"
+                                            layerKey="cluster-evacuationcentre"
                                             onClick={this.handleClusterClick}
                                             layerOptions={{
                                                 type: 'circle',
@@ -3824,7 +3834,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="cluster-count-evacuationcenter"
+                                            layerKey="cluster-count-evacuationcentre"
                                             layerOptions={{
                                                 type: 'symbol',
                                                 filter: ['has', 'point_count'],
@@ -3836,7 +3846,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="resource-symbol-background-evacuationcenter"
+                                            layerKey="resource-symbol-background-evacuationcentre"
                                             onClick={this.handleResourceClick}
                                             onMouserEnter={
                                                 this.handleResourceMouseEnter
@@ -3853,7 +3863,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="-resourece-symbol-icon-evacuationcenter"
+                                            layerKey="-resourece-symbol-icon-evacuationcentre"
                                             layerOptions={{
                                                 type: 'symbol',
                                                 filter: [
@@ -3861,7 +3871,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     ['has', 'point_count'],
                                                 ],
                                                 layout: {
-                                                    'icon-image': 'evacuationcenter',
+                                                    'icon-image': 'evacuationcentre',
                                                     'icon-size': 0.03,
                                                 },
                                             }}
@@ -4397,6 +4407,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             onEdit={this.handleEditClick}
                             routeToOpenspace={this.routeToOpenspace}
                             type={resourceDetails && resourceDetails.resourceType}
+                            DeletedResourceApiRecall={this.DeletedResourceApiRecall}
                         />
                     )
                 }
@@ -4408,6 +4419,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             onEdit={this.handleEditClick}
                             routeToOpenspace={this.routeToOpenspace}
                             openspaceDeleteRequest={openspaceDeleteRequest}
+                            DeletedResourceApiRecall={this.DeletedResourceApiRecall}
                         />
                     )
                 }

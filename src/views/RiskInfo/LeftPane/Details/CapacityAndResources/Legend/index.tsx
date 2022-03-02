@@ -22,7 +22,7 @@ interface Props {
         openspace: boolean;
         communityspace: boolean;
         bridge: boolean;
-        evacuationcenter: boolean;
+        evacuationcentre: boolean;
     };
     resourceIdForLegend: number | null;
 }
@@ -35,11 +35,10 @@ const legendColorSelector = (d: { color: string }) => d.color;
 const CapacityAndResourcesLegend = (props: Props) => {
     const titleContext = useContext(TitleContext);
     // for dynamic legend render
-    console.log('here');
+
     const getActiveLegends = () => {
         const { activeLayersIndication } = props;
-        console.log('active legend', legendItems);
-        console.log('active legend indicator', activeLayersIndication);
+
         const activeLegends = legendItems.filter((item) => {
             if (activeLayersIndication[item.key]) {
                 return item;

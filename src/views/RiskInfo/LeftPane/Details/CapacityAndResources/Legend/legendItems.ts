@@ -3,7 +3,7 @@ import styles from './styles.scss';
 
 type ToggleValues = 'education' | 'health' | 'finance' | 'governance'
     | 'hotelandrestaurant' | 'cultural' | 'industry' | 'communication' | 'openspace' |
-    'communityspace' | 'fireengine' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway' | 'evacuationcenter';
+    'communityspace' | 'firefightingapparatus' | 'helipad' | 'bridge' | 'airway' | 'roadway' | 'waterway' | 'evacuationcentre';
 
 interface LegendItems {
     color: string;
@@ -22,16 +22,16 @@ const capacityAndResourcesLegendItems: LegendItems[] = [
     { color: '#efa8b8', key: 'communication', label: 'Communication', style: styles.symbol },
     { color: '#297eff', key: 'openspace', label: 'Humanitarian Open Spaces', style: styles.symbol },
     { color: '#FEE94E', key: 'communityspace', label: 'Community Spaces', style: styles.symbol },
-    { color: '#F38171', key: 'fireengine', label: 'Fire Engine', style: styles.symbol },
+    { color: '#F38171', key: 'firefightingapparatus', label: 'Fire Engine', style: styles.symbol },
     { color: '#BCE618', key: 'helipad', label: 'Helipad', style: styles.symbol },
     { color: '#505050', key: 'bridge', label: 'Bridge', style: styles.symbol },
     { color: '#F763C6', key: 'airway', label: 'Airway', style: styles.symbol },
-    { color: '#000000', key: 'roadway', label: 'Roadway', style: styles.symbol },
+    { color: '#1698EE', key: 'roadway', label: 'Roadway', style: styles.symbol },
     { color: '#9BD1E9', key: 'waterway', label: 'Waterway', style: styles.symbol },
     { color: '#CA8D4E', key: 'electricity', label: 'Electricity', style: styles.symbol },
     { color: '#2F6209', key: 'sanitation', label: 'Sanitation', style: styles.symbol },
     { color: '#3BC7F8', key: 'watersupply', label: 'Water Supply', style: styles.symbol },
-    { color: '#505050', key: 'evacuationcenter', label: 'Evacuation Center', style: styles.symbol },
+    { color: '#505050', key: 'evacuationcentre', label: 'Evacuation Center', style: styles.symbol },
 ];
 
 export default capacityAndResourcesLegendItems;
