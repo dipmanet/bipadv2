@@ -1,0 +1,30 @@
+.languageButton {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    .nepButton {
+        background-color: #a6a6a6;
+        opacity: 0.67;
+        border: none;
+        color: white;
+        outline: none;
+        font-size: 12px;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        width: 22px;
+        height: 20px;
+        font-weight: 500;
+        filter: saturate(100%);
+    }
+    .engButton {
+      @extend .nepButton;
+        padding-right: 22px;
+    }
+    
+    .selectedLanguage {
+        background-color: #003273;
+        opacity: 1 !important;
+        width: 22px;
+    }
+}
