@@ -92,7 +92,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ params }) => `/covid19-case/${params.id}`,
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => ({
+        query: ({
             format: 'json',
             expand: ['ward', 'municipality', 'district', 'province'],
         }),
@@ -106,7 +106,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ params }) => `/covid19-quarantineinfo/${params.id}`,
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => ({
+        query: ({
             format: 'json',
             expand: ['ward', 'municipality', 'district', 'province'],
         }),
@@ -546,19 +546,24 @@ const CovidTable = (props) => {
         // navigate('/admin/covid-19/add-new-covid-19');
         if (formtoggler === 'Individual Form') {
             if (id) {
+                console.log('testing edit for id', id, props.requests);
                 props.requests.covid19IndivisualEdit.do({ id });
-                navigate('/admin/covid-19/add-new-covid-19');
-                // dispatch(covidDataGetIndividualId(id));
             }
         }
         if (formtoggler === 'Group Form') {
             if (id) {
+                console.log('testing edit for id', id);
                 props.requests.covid19GroupEdit.do({ id });
-                navigate('/admin/covid-19/add-new-covid-19');
-                // dispatch(covidDataGetGroupId(id));
             }
         }
     };
+
+    useEffect(() => {
+        if (Object.keys(covid19IndividualEditData).length > 0 || Object.keys(covid19GroupEditData).length > 0) {
+            navigate('/admin/covid-19/add-new-covid-19');
+        }
+    }, [covid19IndividualEditData, covid19GroupEditData]);
+
     // useEffect(() => {
     //     if (Object.keys(covid19IndividualEditData).length > 0) {
     //         navigate('/admin/covid-19/add-new-covid-19');

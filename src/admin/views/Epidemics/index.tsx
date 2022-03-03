@@ -1302,18 +1302,13 @@ const Epidemics = (props) => {
                                         label="Ward"
                                         onChange={e => setwardName(e.target.value)}
                                     >
-                                        {wards && wards.filter(
-                                            item => item.municipality === municipalityId,
-                                        ).sort().map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.title}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
+                                        {wards && wards.filter(item => item.municipality === municipalityId)
+                                            .map(item => Number(item.title)).sort((a, b) => a - b)
+                                            .map(item => (
+                                                <MenuItem key={item} value={item}>
+                                                    {item}
                                                 </MenuItem>
-                                            ),
-                                        )}
+                                            ))}
                                     </Select>
                                 </FormControl>
                             </div>
@@ -1528,7 +1523,7 @@ const Epidemics = (props) => {
                                 </div>
                             </div>
                             <div className={styles.saveOrAddButtons}>
-                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">Save and New</button>
+                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New' }</button>
                             </div>
                         </div>
                     </div>

@@ -650,6 +650,11 @@ const HealthTable = (props) => {
             setSelected([]);
         }
     };
+    const snakeToCamel = str => str.toLowerCase().replace(/([-_][a-z])/g, group => group
+        .toUpperCase()
+        .replace('-', '')
+        .replace('_', ''));
+
     // Avoid a layout jump when reaching the last page with empty rows.
     return (
 
@@ -751,11 +756,12 @@ const HealthTable = (props) => {
                                                                 />
                                                             </TableCell>
                                                             {
-                                                                Object.keys(row)
-                                                                    .filter(fI => fI !== 'resourceType')
-                                                                    .filter(fI => fI !== 'id')
-                                                                    .filter(fI => fI !== 'titleNe')
+
+                                                                Object.keys(tableTitleRef)
+                                                                    .filter(fI => fI !== 'resource_type')
+                                                                    .filter(fI => fI !== 'title_ne')
                                                                     .filter(fI => fI !== 'description')
+                                                                    .filter(fI => fI !== 'last')
                                                                     .map((val) => {
                                                                         if (val === 'point') {
                                                                             return (
@@ -768,7 +774,7 @@ const HealthTable = (props) => {
                                                                                     padding="none"
                                                                                     key={val}
                                                                                 >
-                                                                                    {`${row[val].coordinates[0].toFixed(4)}, ${row[val].coordinates[1].toFixed(4)}`}
+                                                                                    {`${row[snakeToCamel(val)].coordinates[0].toFixed(4)}, ${row[snakeToCamel(val)].coordinates[1].toFixed(4)}`}
                                                                                 </TableCell>
                                                                             );
                                                                         }
@@ -784,7 +790,7 @@ const HealthTable = (props) => {
                                                                                         padding="none"
                                                                                         key={val + 1}
                                                                                     >
-                                                                                        {`${row[val].municipality.district.province.title}`}
+                                                                                        {`${row[snakeToCamel(val)].municipality.district.province.title}`}
                                                                                     </TableCell>
                                                                                     <TableCell
                                                                                         align={typeof val === 'string' ? 'left' : 'center'}
@@ -795,7 +801,7 @@ const HealthTable = (props) => {
                                                                                         padding="none"
                                                                                         key={val + 2}
                                                                                     >
-                                                                                        {`${row[val].municipality.district.title}`}
+                                                                                        {`${row[snakeToCamel(val)].municipality.district.title}`}
                                                                                     </TableCell>
                                                                                     <TableCell
                                                                                         align={typeof val === 'string' ? 'left' : 'center'}
@@ -806,7 +812,7 @@ const HealthTable = (props) => {
                                                                                         padding="none"
                                                                                         key={val + 3}
                                                                                     >
-                                                                                        {`${row[val].municipality.title}`}
+                                                                                        {`${row[snakeToCamel(val)].municipality.title}`}
                                                                                     </TableCell>
                                                                                     <TableCell
                                                                                         align={typeof val === 'string' ? 'left' : 'center'}
@@ -817,7 +823,7 @@ const HealthTable = (props) => {
                                                                                         padding="none"
                                                                                         key={val + 4}
                                                                                     >
-                                                                                        {`${row[val].title}`}
+                                                                                        {`${row[snakeToCamel(val)].title}`}
                                                                                     </TableCell>
                                                                                 </>
                                                                             );
@@ -833,7 +839,7 @@ const HealthTable = (props) => {
                                                                                     padding="none"
                                                                                     key={val}
                                                                                 >
-                                                                                    {`${row[val].split('T')[0]}`}
+                                                                                    {`${row[snakeToCamel(val)].split('T')[0]}`}
                                                                                 </TableCell>
                                                                             );
                                                                         }
@@ -848,7 +854,7 @@ const HealthTable = (props) => {
                                                                                     padding="none"
                                                                                     key={val}
                                                                                 >
-                                                                                    {row[val] === true ? 'Yes' : 'No'}
+                                                                                    {row[snakeToCamel(val)] === true ? 'Yes' : 'No'}
                                                                                 </TableCell>
                                                                             );
                                                                         }
@@ -862,7 +868,7 @@ const HealthTable = (props) => {
                                                                                 padding="none"
                                                                                 key={val}
                                                                             >
-                                                                                {row[val] === null ? '-' : row[val]
+                                                                                {row[snakeToCamel(val)] === null ? '-' : row[snakeToCamel(val)]
                                                                                 }
                                                                             </TableCell>
                                                                         );

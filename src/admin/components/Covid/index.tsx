@@ -2,8 +2,8 @@
 /* eslint-disable no-tabs */
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
-import React, { createContext, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { createContext, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -11,6 +11,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { DatePicker } from '@mui/lab';
 import Box from '@mui/material/Box';
 // import Loader from 'react-loader';
+import { navigate } from '@reach/router';
 import Modal from 'src/admin/components/Modal';
 import styles from './styles.module.scss';
 import ListSvg from '../../resources/list.svg';
@@ -22,10 +23,136 @@ import Map from '../Mappointpicker/index';
 // import { provinceData, districtData, municipalityData, wardData, covidDataIndividual, covidDataGroup } from '../../Redux/actions';
 // import { RootState } from '../../Redux/store';
 // import { covidDataPutIndividualId, covidDataPutGroupId, covidDataGetClearIndividualId, covidDataGetClearGroupId } from '../../Redux/covidActions/covidActions';
+import { SetCovidPageAction } from '#actionCreators';
+import { covidPageSelector,
+    userSelector,
+    provincesSelector,
+    districtsSelector,
+    municipalitiesSelector,
+    wardsSelector } from '#selectors';
+import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { AppState } from '#types';
+import { propTypes } from '#rsci/MultiSelectInput';
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    covidPage: covidPageSelector(state),
+    userDataMain: userSelector(state),
+    provinces: provincesSelector(state),
+    districts: districtsSelector(state),
+    municipalities: municipalitiesSelector(state),
+    wards: wardsSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setCovidPage: params => dispatch(SetCovidPageAction(params)),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    covid19IndivisualPost: {
+        url: '/covid19-case/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            console.log('added covid individual data');
+            // props.setCovidPage({ lossID: response.id });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setCovidPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                // params.setCovidPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setCovidPage) {
+                // params.setCovidPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+    },
+    covid19GroupPost: {
+        url: '/covid19-quarantineinfo/',
+        method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            console.log('added covid grop data');
+            // props.setEpidemicsPage({ lossID: response.id });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setCovidPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                // params.setEpidemicsPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setCovidPage) {
+                // params.setEpidemicsPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+    },
+    covid19IndividualPatch: {
+        url: ({ params }) => `/covid19-case/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            console.log('updated covid grop data');
+            // props.setEpidemicsPage({ lossID: response.id });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setCovidPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                // params.setEpidemicsPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setCovidPage) {
+                // params.setEpidemicsPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+    },
+    covid19GroupPatch: {
+        url: ({ params }) => `/covid19-quarantineinfo/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            console.log('updated covid grop data');
+            // props.setEpidemicsPage({ lossID: response.id });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setCovidPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                // params.setEpidemicsPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setCovidPage) {
+                // params.setEpidemicsPage({
+                //     lossError: 'Some problem occurred',
+                // });
+            }
+        },
+    },
+};
 
 export const LngLatContext = createContext([]);
 
-const Covid = () => {
+const Covid = (props) => {
     // const { loadingCovid19IndividualId, covid19DataMainIndividualId } = useSelector((state: RootState) => state.covidGetIndividualId);
     // const { userDataMain } = useSelector((state: RootState) => state.user);
     // const { loadingCovid19GroupId, covid19DataMainGroupId } = useSelector((state: RootState) => state.covidGetGroupId);
@@ -57,10 +184,12 @@ const Covid = () => {
     const [visibility, setvisibility] = useState('hidden');
     const [lattitude, setLattitude] = useState('');
     const [longitude, setLongitude] = useState('');
-    const [provinceDataIs, setProvinceDataIs] = useState([]);
-    const [districtDataIs, setdistrictDataIs] = useState([]);
-    const [municipalityDataIs, setmunicipalityDataIs] = useState([]);
-    const [wardDataIs, setwardDataIs] = useState([]);
+
+    // const [provinceDataIs, setProvinceDataIs] = useState([]);
+    // const [districtDataIs, setdistrictDataIs] = useState([]);
+    // const [municipalityDataIs, setmunicipalityDataIs] = useState([]);
+    // const [wardDataIs, setwardDataIs] = useState([]);
+
     const [verificationMessage, setverificationMessage] = useState('');
     const [provinceId, setprovinceId] = useState(0);
     const [provinceCentriodForMap, setprovinceCentriodForMap] = useState<mapboxgl.LngLatLike>([0, 0]);
@@ -114,75 +243,200 @@ const Covid = () => {
 
     const [loading, setLoading] = useState(false);
 
-    // useEffect(() => {
-    //     dispatch(provinceData());
-    // }, [dispatch]);
-
-    // useEffect(() => {
-    //     setuniqueId();
-    //     setuniqueId('');
-    // }, []);
-
-    // useEffect(() => {
-    //     if (covid19DataMainIndividualId && Object.keys(covid19DataMainIndividualId).length > 0) {
-    //         setFormtoggler('Individual Form');
-    //         window.scrollTo(0, 1000);
-    //         if (covid19DataMainIndividualId.approved) {
-    //             setApproved(true);
-    //         } else {
-    //             setNotApproved(true);
-    //         }
-    //         if (covid19DataMainIndividualId.verified) {
-    //             setverified(true);
-    //         } else {
-    //             setNotVerified(true);
-    //         }
-    //         setuniqueId(covid19DataMainIndividualId.id);
-    //         setReportedDate(covid19DataMainIndividualId.reportedOn);
-    //         setLongitude(covid19DataMainIndividualId.point.coordinates[0]);
-    //         setLattitude(covid19DataMainIndividualId.point.coordinates[1]);
-    //         setprovinceName(covid19DataMainIndividualId.province.title);
-    //         setdistrictName(covid19DataMainIndividualId.district.title);
-    //         setmunicipalityName(covid19DataMainIndividualId.municipality.title);
-    //         setwardName(covid19DataMainIndividualId.ward.title);
-    //         setpatientStatus(covid19DataMainIndividualId.currentState);
-    //         setGender(covid19DataMainIndividualId.gender);
-    //         setverificationMessage(covid19DataMainIndividualId.verificationMessage);
-    //         dispatch(covidDataGetClearIndividualId());
-    //     }
-    // }, [dispatch]);
-
-    // useEffect(() => {
-    //     if (covid19DataMainGroupId && Object.keys(covid19DataMainGroupId).length > 0) {
-    //         setFormtoggler('Group Form');
-    //         window.scrollTo(0, 1000);
-    //         if (covid19DataMainGroupId.approved) {
-    //             setApproved(true);
-    //         } else {
-    //             setNotApproved(true);
-    //         }
-    //         if (covid19DataMainGroupId.verified) {
-    //             setverified(true);
-    //         } else {
-    //             setNotVerified(true);
-    //         }
-    //         setuniqueId(covid19DataMainGroupId.id);
-    //         setReportedDate(covid19DataMainIndividualId.reportedOn);
-    //         setprovinceName(covid19DataMainGroupId.province.title);
-    //         setdistrictName(covid19DataMainGroupId.district.title);
-    //         setmunicipalityName(covid19DataMainGroupId.municipality ? covid19DataMainGroupId.municipality.title : '');
-    //         setwardName(covid19DataMainGroupId.ward ? covid19DataMainGroupId.ward.title : '');
-    //         sethazardInducer(covid19DataMainGroupId.hazardInducer);
-    //         settotalMaleInFected(covid19DataMainGroupId.newcasesMale);
-    //         dispatch(covidDataGetClearGroupId());
-    //     }
-    // }, [dispatch]);
-
-
     // const { provincialData, loading } = useSelector((state: RootState) => state.province);
     // const { districtDataMain, loadingDistrict } = useSelector((state: RootState) => state.district);
     // const { municipalityDataMain, loadingMunicipality } = useSelector((state: RootState) => state.municipality);
     // const { wardDataMain, loadingWard } = useSelector((state: RootState) => state.ward);
+    const { userDataMain,
+        provinces,
+        districts,
+        municipalities,
+        wards,
+        covidPage: {
+            covidIndivisualData,
+            covidIndivisualCount,
+            covidGroupData,
+            covidGroupCount,
+            covid19IndividualEditData,
+            covid19GroupEditData,
+        } } = props;
+    // useEffect(() => {
+    //     dispatch(provinceData());
+    // }, [dispatch]);
+
+    useEffect(() => {
+        setuniqueId();
+        setuniqueId('');
+    }, []);
+
+    useEffect(() => {
+        if (userDataMain && userDataMain.profile && userDataMain.profile.province && provinces && provinces.length > 0) {
+            const nameOfProvince = provinces.filter(item => item.id === userDataMain.profile.province).map(item => item.title)[0];
+            setprovinceName(nameOfProvince);
+            const provinceCenter = provinces.filter(item => item.id === userDataMain.profile.province).map(item => item.centroid.coordinates)[0];
+            setinitialProvinceCenter(provinceCenter);
+        }
+        if (userDataMain && userDataMain.profile && userDataMain.profile.district && districts && districts.length > 0) {
+            const nameOfDistrict = districts.filter(item => item.id === userDataMain.profile.district).map(item => item.title)[0];
+            setdistrictName(nameOfDistrict);
+            const districtCenter = districts.filter(item => item.id === userDataMain.profile.district).map(item => item.centroid.coordinates)[0];
+            setinitialDistrictCenter(districtCenter);
+        }
+        if (userDataMain && userDataMain.profile && userDataMain.profile.municipality && municipalities && municipalities.length > 0) {
+            const nameOfMunicipality = municipalities.filter(item => item.id === userDataMain.profile.municipality).map(item => item.title)[0];
+            setmunicipalityName(nameOfMunicipality);
+            const munCenter = municipalities.filter(item => item.id === userDataMain.profile.municipality).map(item => item.centroid.coordinates)[0];
+            setinitialMunCenter(munCenter);
+        }
+        if (userDataMain && userDataMain.profile && userDataMain.profile.ward && wards && wards.length > 0) {
+            const nameOfWard = wards.filter(item => item.id === userDataMain.profile.ward).map(item => item.title)[0];
+            setwardName(nameOfWard);
+        }
+    }, [districts, municipalities, provinces, userDataMain, wards]);
+
+    useEffect(() => {
+        const province = provinces.filter(
+            item => item.title === provinceName,
+        ).map(item => item.id)[0];
+        if (provinceName) {
+            setprovinceId(province);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [provinceName]);
+
+    useEffect(() => {
+        const district = districts.filter(
+            item => item.title === districtName,
+        ).map(item => item.id)[0];
+        if (districtName) {
+            setdistrictId(district);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [districtName]);
+
+    useEffect(() => {
+        const municipality = municipalities.filter(
+            item => item.title === municipalityName,
+        ).map(item => item.id)[0];
+        if (municipalityName) {
+            setmunicipalityId(municipality);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [municipalityName]);
+
+    useEffect(() => {
+        if (provinceId) {
+            const temp = provinces.filter(item => item.id === provinceId)
+                .map(item => item.centroid.coordinates)[0];
+            setprovinceCentriodForMap(temp);
+            console.log('test province centroid', temp);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [provinceId]);
+
+    useEffect(() => {
+        if (districtId) {
+            const districtCentriodForMaps = districts.filter(item => item.id === districtId)
+                .map(item => item.centroid.coordinates)[0];
+            setdistrictCentriodForMap(districtCentriodForMaps);
+            console.log('test district centroid', districtCentriodForMaps);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [districtId]);
+
+    useEffect(() => {
+        if (municipalityId) {
+            const municipalityCentriodForMaps = municipalities.filter(item => item.id === municipalityId)
+                .map(item => item.centroid.coordinates)[0];
+            setmunicipalityCentriodForMap(municipalityCentriodForMaps);
+            console.log('test munici centroid', municipalityCentriodForMaps);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [municipalityId]);
+
+    useEffect(() => {
+        if (wardId) {
+            const wardCentriodForMaps = wards.filter(item => item.id === wardId)
+                .map(item => item.centroid.coordinates)[0];
+            setwardCentriodForMap(wardCentriodForMaps);
+            console.log('test ward centroid', wardCentriodForMaps);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [wardId]);
+
+    useEffect(() => {
+        const id = wards.filter(item => item.municipality === municipalityId)
+            .filter(item => item.title === String(wardName)).map(item => item.id)[0];
+        if (wardName) {
+            setwardId(id);
+            // setEditWardId(id);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [wardName]);
+
+    useEffect(() => {
+        console.log('test reported date', reportedDate);
+    }, [reportedDate]);
+
+    useEffect(() => {
+        if (covid19IndividualEditData && Object.keys(covid19IndividualEditData).length > 0) {
+            setFormtoggler('Individual Form');
+            window.scrollTo(0, 1000);
+            if (covid19IndividualEditData.approved) {
+                setApproved(true);
+            } else {
+                setNotApproved(true);
+            }
+            if (covid19IndividualEditData.verified) {
+                setverified(true);
+            } else {
+                setNotVerified(true);
+            }
+            setuniqueId(covid19IndividualEditData.id);
+            setReportedDate(covid19IndividualEditData.reportedOn);
+            setLongitude(covid19IndividualEditData.point.coordinates[0]);
+            setLattitude(covid19IndividualEditData.point.coordinates[1]);
+            setprovinceName(covid19IndividualEditData.province.title);
+            setdistrictName(covid19IndividualEditData.district.title);
+            setmunicipalityName(covid19IndividualEditData.municipality.title);
+            setwardName(covid19IndividualEditData.ward.title);
+            setpatientStatus(covid19IndividualEditData.currentState);
+            setGender(covid19IndividualEditData.gender);
+            setverificationMessage(covid19IndividualEditData.verificationMessage);
+            props.setCovidPage({ covid19IndividualEditData: {} });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [covid19IndividualEditData]);
+
+    useEffect(() => {
+        if (covid19GroupEditData && Object.keys(covid19GroupEditData).length > 0) {
+            setFormtoggler('Group Form');
+            window.scrollTo(0, 1000);
+            if (covid19GroupEditData.approved) {
+                setApproved(true);
+            } else {
+                setNotApproved(true);
+            }
+            if (covid19GroupEditData.verified) {
+                setverified(true);
+            } else {
+                setNotVerified(true);
+            }
+            setuniqueId(covid19GroupEditData.id);
+            setReportedDate(covid19GroupEditData.reportedOn);
+            setprovinceName(covid19GroupEditData.province.title);
+            setdistrictName(covid19GroupEditData.district.title);
+            setmunicipalityName(covid19GroupEditData.municipality ? covid19GroupEditData.municipality.title : '');
+            setwardName(covid19GroupEditData.ward ? covid19GroupEditData.ward.title : '');
+            sethazardInducer(covid19GroupEditData.hazardInducer);
+            settotalMaleInFected(covid19GroupEditData.newcasesMale);
+            props.setCovidPage({ covid19GroupEditData: {} });
+            // dispatch(covidDataGetClearGroupId());
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [covid19GroupEditData]);
+
+
     // const { loadingCovid19Individual, errorCovidIndividual } = useSelector((state: RootState) => state.covidIndividual);
     // const { errorCovidIndividualPutId } = useSelector((state: RootState) => state.covidPutIndividualId);
 
@@ -194,13 +448,7 @@ const Covid = () => {
     //     }
     // }, [errorCovidIndividual]);
 
-    // useEffect(() => {
-    //     if (!loading) {
-    //         setProvinceDataIs(provincialData);
-    //     }
-    // }, [loading, provincialData]);
-
-    // const getDisabled = (field: string) => fieldsToDisable.includes(field);
+    const getDisabled = (field: string) => fieldsToDisable.includes(field);
 
 
     // console.log('userDataMain is', userDataMain);
@@ -270,157 +518,38 @@ const Covid = () => {
             'verificationMessage',
         ];
 
-        // if (uniqueId) {
-        //     if (userDataMain.isSuperuser) {
-        //         setDisableFields([]);
-        //     } else if (
-        //         userDataMain.profile
-        // 		&& userDataMain.profile.role
-        // 		&& userDataMain.profile.role === 'validator'
-        //     ) {
-        //         if (typeof covid19DataMainIndividualId !== 'array' && covid19DataMainIndividualId && covid19DataMainIndividualId.id) {
-        //             console.log('here we are covid edit');
-        //             setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
-        //         } else {
-        //             console.log('here we are covid not edit');
-        //             setDisableFields(allFields);
-        //         }
-        //     } else if (
-        //         userDataMain.profile
-        // 		&& userDataMain.profile.role
-        // 		&& userDataMain.profile.role === 'user'
-        //     ) {
-        //         setDisableFields(allFields.filter(f => fieldsToGiveValidator.includes(f)));
-        //     } else if (
-        //         userDataMain.profile
-        // 		&& userDataMain.profile.role
-        // 		&& userDataMain.profile.role === 'editor'
-        //     ) {
-        //         setDisableFields([]);
-        //     } else {
-        //         setDisableFields(allFields);
-        //     }
-        // }
-    }, [uniqueId]);
-
-
-    // useEffect(() => {
-    //     if (userDataMain && userDataMain.profile && userDataMain.profile.province && provincialData && provincialData.length > 0) {
-    //         const nameOfProvince = provincialData.filter(item => item.id === userDataMain.profile.province).map(item => item.title)[0];
-    //         setprovinceName(nameOfProvince);
-    //         const provinceCenter = provincialData.filter(item => item.id === userDataMain.profile.province).map(item => item.centroid.coordinates)[0];
-    //         setinitialProvinceCenter(provinceCenter);
-    //     }
-    //     if (userDataMain && userDataMain.profile && userDataMain.profile.district && districtDataMain && districtDataMain.length > 0) {
-    //         const nameOfDistrict = districtDataMain.filter(item => item.id === userDataMain.profile.district).map(item => item.title)[0];
-    //         setdistrictName(nameOfDistrict);
-    //         const districtCenter = districtDataMain.filter(item => item.id === userDataMain.profile.district).map(item => item.centroid.coordinates)[0];
-    //         setinitialDistrictCenter(districtCenter);
-    //     }
-    //     if (userDataMain && userDataMain.profile && userDataMain.profile.municipality && municipalityDataMain && municipalityDataMain.length > 0) {
-    //         const nameOfMunicipality = municipalityDataMain.filter(item => item.id === userDataMain.profile.municipality).map(item => item.title)[0];
-    //         setmunicipalityName(nameOfMunicipality);
-    //         const munCenter = municipalityDataMain.filter(item => item.id === userDataMain.profile.municipality).map(item => item.centroid.coordinates)[0];
-    //         setinitialMunCenter(munCenter);
-    //     }
-    //     if (userDataMain && userDataMain.profile && userDataMain.profile.ward && wardDataMain && wardDataMain.length > 0) {
-    //         const nameOfWard = wardDataMain.filter(item => item.id === userDataMain.profile.ward).map(item => item.title)[0];
-    //         setprovinceName(nameOfWard);
-    //     }
-    // }, [provincialData, districtDataMain, municipalityDataMain, wardDataMain]);
-
-
-    // useEffect(() => {
-    //     const provinceId = provinceDataIs.filter(item => item.title === provinceName).map(item => item.id)[0];
-    //     if (provinceName) {
-    //         dispatch(districtData(provinceId));
-    //         setprovinceId(provinceId);
-    //     }
-    // }, [dispatch, provinceDataIs, provinceName]);
-
-
-    // useEffect(() => {
-    //     if (!loadingDistrict) {
-    //         setdistrictDataIs(districtDataMain);
-    //     }
-    // }, [districtDataMain, loadingDistrict]);
-
-
-    // useEffect(() => {
-    //     const districtId = districtDataIs.filter(item => item.title === districtName).map(item => item.id)[0];
-    //     if (districtName) {
-    //         dispatch(municipalityData(districtId));
-    //         setdistrictId(districtId);
-    //     }
-    // }, [dispatch, districtDataIs, districtName]);
-
-
-    // useEffect(() => {
-    //     if (!loadingMunicipality) {
-    //         setmunicipalityDataIs(municipalityDataMain);
-    //     }
-    // }, [loadingMunicipality, municipalityDataMain]);
-
-
-    // useEffect(() => {
-    //     if (municipalityDataIs && municipalityDataIs.length > 0) {
-    //         const munId = municipalityDataIs.filter(item => item.title === municipalityName).map(item => item.id)[0];
-    //         if (municipalityName) {
-    //             dispatch(wardData(munId));
-    //             setmunicipalityId(munId);
-    //         }
-    //     }
-    // }, [dispatch, municipalityDataIs, municipalityName]);
-
-
-    // useEffect(() => {
-    //     if (!loadingWard) {
-    //         setwardDataIs(wardDataMain);
-    //     }
-    // }, [loadingWard, wardDataMain]);
-
-    // useEffect(() => {
-    //     if (wardDataIs && wardDataIs.length > 0) {
-    //         const wardId = wardDataIs.filter(item => item.title === String(wardName)).map(item => item.id)[0];
-    //         if (wardName) {
-    //             setwardId(wardId);
-    //         }
-    //     }
-    // }, [wardDataIs, wardName]);
-
-
-    // useEffect(() => {
-    //     if (provinceId) {
-    //         const provinceCentriodForMap = provinceDataIs.filter(item => item.id === provinceId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setprovinceCentriodForMap(provinceCentriodForMap);
-    //     }
-    // }, [provinceDataIs, provinceId]);
-
-    // useEffect(() => {
-    //     if (districtId) {
-    //         const districtCentriodForMap = districtDataIs.filter(item => item.id === districtId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setdistrictCentriodForMap(districtCentriodForMap);
-    //     }
-    // }, [districtDataIs, districtId]);
-
-    // useEffect(() => {
-    //     if (municipalityId) {
-    //         const municipalityCentriodForMap = municipalityDataIs.filter(item => item.id === municipalityId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setmunicipalityCentriodForMap(municipalityCentriodForMap);
-    //     }
-    // }, [municipalityDataIs, municipalityId]);
-
-    // useEffect(() => {
-    //     if (wardId) {
-    //         const wardCentriodForMap = wardDataIs.filter(item => item.id === wardId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setwardCentriodForMap(wardCentriodForMap);
-    //     }
-    // }, [wardDataIs, wardId]);
-
+        if (uniqueId) {
+            if (userDataMain.isSuperuser) {
+                setDisableFields([]);
+            } else if (
+                userDataMain.profile && userDataMain.profile.role
+                && userDataMain.profile.role === 'validator'
+            ) {
+                if (covid19IndividualEditData && covid19IndividualEditData.id) {
+                    console.log('here we are covid edit');
+                    setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
+                } else {
+                    console.log('here we are covid not edit');
+                    setDisableFields(allFields);
+                }
+            } else if (
+                userDataMain.profile
+                && userDataMain.profile.role
+                && userDataMain.profile.role === 'user'
+            ) {
+                setDisableFields(allFields.filter(f => fieldsToGiveValidator.includes(f)));
+            } else if (
+                userDataMain.profile
+                && userDataMain.profile.role
+                && userDataMain.profile.role === 'editor'
+            ) {
+                setDisableFields([]);
+            } else {
+                setDisableFields(allFields);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [covid19IndividualEditData]);
 
     const handleVerifiedChange = () => {
         setverified(true);
@@ -448,7 +577,7 @@ const Covid = () => {
                 longitude, lattitude,
             ],
         },
-        // reportedOn : typeof reportedDate === 'object' ? reportedDate.toISOString().slice(0,10): null,
+        reportedOn: reportedDate && new Date(reportedDate).toISOString().slice(0, 10),
         hazardInducer,
         verified,
         verificationMessage,
@@ -460,7 +589,7 @@ const Covid = () => {
     };
 
     const covid19DataSummaryGroup = {
-        // reportedOn : typeof reportedDate === 'object' ? new Date(reportedDate).toISOString().slice(0,10): null,
+        reportedOn: reportedDate && new Date(reportedDate).toISOString().slice(0, 10),
         hazardInducer,
         gender,
         province: provinceId,
@@ -524,20 +653,19 @@ const Covid = () => {
                 }
                 window.scrollTo(0, 500);
             } else {
-                // if (formtoggler === 'Individual Form' && uniqueId) {
-                //     if (userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator') {
-                //         console.log('putting...');
-                //         dispatch(covidDataPutIndividualId(uniqueId, covid19DataSummaryIndividual, true));
-                //     } else {
-                //         dispatch(covidDataPutIndividualId(uniqueId, covid19DataSummaryIndividual, false));
-                //     }
-                //     setUpdated(true);
-                //     setresetMap(true);
-                // } else {
-                //     dispatch(covidDataIndividual(covid19DataSummaryIndividual));
-                //     setAdded(true);
-                //     setresetMap(true);
-                // }
+                if (formtoggler === 'Individual Form' && uniqueId) {
+                    // if (userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator') {
+                    // console.log('putting...');
+                    props.requests.covid19IndividualPatch.do({ id: uniqueId, body: covid19DataSummaryIndividual });
+
+                    setUpdated(true);
+                    setresetMap(true);
+                } else {
+                    props.requests.covid19IndivisualPost.do({ body: covid19DataSummaryIndividual });
+                    // dispatch(covidDataIndividual(covid19DataSummaryIndividual));
+                    setAdded(true);
+                    setresetMap(true);
+                }
                 setReportedDate(null);
                 setvisibility('visible');
                 setLongitude('');
@@ -585,15 +713,17 @@ const Covid = () => {
                 }
                 window.scrollTo(0, 500);
             } else {
-                // if (formtoggler === 'Group Form' && uniqueId) {
-                //     dispatch(covidDataPutGroupId(uniqueId, covid19DataSummaryGroup));
-                //     setresetMap(true);
-                //     setUpdated(true);
-                // } else {
-                //     dispatch(covidDataGroup(covid19DataSummaryGroup));
-                //     setAdded(true);
-                //     setresetMap(true);
-                // }
+                if (formtoggler === 'Group Form' && uniqueId) {
+                    props.requests.covid19GroupPatch.do({ id: uniqueId, body: covid19DataSummaryGroup });
+                    // dispatch(covidDataPutGroupId(uniqueId, covid19DataSummaryGroup));
+                    setresetMap(true);
+                    setUpdated(true);
+                } else {
+                    props.requests.covid19GroupPost.do({ body: covid19DataSummaryGroup });
+                    // dispatch(covidDataGroup(covid19DataSummaryGroup));
+                    setAdded(true);
+                    setresetMap(true);
+                }
                 setvisibility('visible');
                 setLongitude('');
                 setLattitude('');
@@ -649,6 +779,10 @@ const Covid = () => {
         }
     };
 
+    useEffect(() => {
+        console.log('test provinceid', provinceId);
+    }, [provinceId]);
+
     const centriodsForMap = {
         provinceCentriodForMap,
         districtCentriodForMap,
@@ -677,9 +811,10 @@ const Covid = () => {
         setUpdated(false);
         setError(false);
     };
-    console.log('centers are', typeof reportedDate);
 
-
+    const gotoTable = () => {
+        navigate('/admin/covid-19/covid-19-data-table');
+    };
     return (
 
         <>
@@ -715,7 +850,7 @@ const Covid = () => {
                         <div className={styles.mainForm}>
                             <div className={styles.generalInfoAndTableButton}>
                                 <h1 className={styles.generalInfo}>General Information</h1>
-                                <button type="button" className={styles.viewDataTable}>View Data Table</button>
+                                <button type="button" onClick={gotoTable} className={styles.viewDataTable}>View Data Table</button>
                             </div>
                             <div className={styles.shortGeneralInfo}>
                                 <img className={styles.ideaIcon} src={Ideaicon} alt="" />
@@ -751,7 +886,7 @@ const Covid = () => {
                                             onChange={(newValue) => {
                                                 setReportedDate(newValue);
                                             }}
-                                                            // disabled={getDisabled('reportedDate')}
+                                            disabled={getDisabled('reportedDate')}
                                             renderInput={params => <TextField error={dateError} className={styles.materialUiInput} {...params} helperText={dateError ? 'This is required' : ''} />}
                                         />
                                     </LocalizationProvider>
@@ -762,7 +897,7 @@ const Covid = () => {
                                     label="Hazard Inducer"
                                     variant="outlined"
                                     className={styles.hazardInducer}
-                                                    // disabled={getDisabled('hazardInducer')}
+                                    disabled={getDisabled('hazardInducer')}
                                     value={hazardInducer}
                                     onChange={e => sethazardInducer(e.target.value)}
                                 />
@@ -795,10 +930,10 @@ const Covid = () => {
                                             value={provinceName}
                                             label="Select Province"
                                             onChange={e => setprovinceName(e.target.value)}
-                                                            // disabled={getDisabled('provinceName') || (userDataMain.profile && userDataMain.profile.province)}
+                                            disabled={getDisabled('provinceName') || (userDataMain.profile && userDataMain.profile.province)}
                                             required
                                         >
-                                            {provinceDataIs && provinceDataIs.map(item => (
+                                            {provinces.map(item => (
                                                 <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
                                             ))}
 
@@ -811,14 +946,14 @@ const Covid = () => {
                                             error={districtError}
                                                             // className={provinceName === '' && loadingDistrict ? styles.adminLvlSelectionDisabled
                                             //     : styles.adminLvlSelection}
-                                            // disabled={provinceName === '' || getDisabled('districtName') || (userDataMain.profile && userDataMain.profile.district)}
+                                            disabled={provinceName === '' || getDisabled('districtName') || (userDataMain.profile && userDataMain.profile.district)}
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={districtName}
                                             label="Select District"
                                             onChange={e => setdistrictName(e.target.value)}
                                         >
-                                            {districtDataIs && districtDataIs.map(item => (
+                                            {districts.filter(item => item.province === provinceId).map(item => (
                                                 <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
                                             ))}
                                         </Select>
@@ -830,14 +965,14 @@ const Covid = () => {
                                             error={munError}
                                                             // className={districtName === '' || loadingMunicipality ? styles.adminLvlSelectionDisabled
                                             //     : styles.adminLvlSelection}
-                                            // disabled={districtName === '' || getDisabled('municipalityName') || (userDataMain.profile && userDataMain.profile.municipality)}
+                                            disabled={districtName === '' || getDisabled('municipalityName') || (userDataMain.profile && userDataMain.profile.municipality)}
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={municipalityName}
                                             label="Select Municipality"
                                             onChange={e => setmunicipalityName(e.target.value)}
                                         >
-                                            {municipalityDataIs && municipalityDataIs.map(item => (
+                                            {municipalities.filter(item => item.district === districtId).map(item => (
                                                 <MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
                                             ))}
                                         </Select>
@@ -847,7 +982,7 @@ const Covid = () => {
                                         <InputLabel id="demo-simple-select-label">Select Ward</InputLabel>
                                         <Select
                                             error={wardError}
-                                                            // disabled={municipalityName === '' || getDisabled('wardName')}
+                                            disabled={municipalityName === '' || getDisabled('wardName')}
                                             // className={municipalityName === '' || loadingWard ? styles.adminLvlSelectionDisabled
                                             //     : styles.adminLvlSelection}
                                             labelId="demo-simple-select-label"
@@ -856,12 +991,9 @@ const Covid = () => {
                                             label="Select Ward"
                                             onChange={e => setwardName(e.target.value)}
                                         >
-                                            {wardDataIs && wardDataIs.map(item => Number(item.title)).sort((a, b) => a - b).map(item => (
+                                            {wards.filter(item => item.municipality === municipalityId).map(item => Number(item.title)).sort((a, b) => a - b).map(item => (
                                                 <MenuItem key={item} value={item}>{item}</MenuItem>
                                             ))}
-                                            {/* {wardDataIs && wardDataIs.map(item =>
-															<MenuItem key={item.title} value={item.title}>{item.title}</MenuItem>
-														)} */}
                                         </Select>
                                     </FormControl>
                                 </div>
@@ -879,7 +1011,7 @@ const Covid = () => {
                                         label="Local Address(Kindly Specify)"
                                         variant="outlined"
                                         value={LocalAddress}
-                                                        // disabled={getDisabled('LocalAddress')}
+                                        disabled={getDisabled('LocalAddress')}
 
                                         onChange={e => setLocalAddress(e.target.value)}
                                     />
@@ -890,7 +1022,7 @@ const Covid = () => {
                                             error={latError}
                                             type="number"
                                             value={lattitude}
-                                                            // disabled={getDisabled('lattitude')}
+                                            disabled={getDisabled('lattitude')}
 
                                             onChange={e => setLattitude(e.target.value)}
                                             id="outlined-basic"
@@ -901,7 +1033,7 @@ const Covid = () => {
                                             className={styles.materialUiInput}
                                             error={lngError}
                                             type="number"
-                                                            // disabled={getDisabled('longitude')}
+                                            disabled={getDisabled('longitude')}
 
                                             value={longitude}
                                             onChange={e => setLongitude(e.target.value)}
@@ -911,33 +1043,30 @@ const Covid = () => {
 
                                     </div>
                                     <LngLatContext.Provider value={[longitude, setLongitude, lattitude, setLattitude]}>
-                                        {/* {
-                                                            (uniqueId && longitude && longitude)
-															&& (
-															    // <Map
-															    //     // disabled={getDisabled('point')}
-															    //     centriodsForMap={centriodsForMap}
-															    //     resetMap={resetMap}
-															    //     editedCoordinates={{ point: { type: 'Point', coordinates: [longitude, lattitude] } }}
-															    // />
-															)
-
-							                            }
-
-                                                        {
-							                                (!uniqueId && (initialMunCenter.length > 0 || initialDistrictCenter.length > 0 || initialProvinceCenter.length > 0))
-															&& (
-															    // <Map
-															    //     disabled={getDisabled('point')}
-															    //     centriodsForMap={centriodsForMap}
-															    //     resetMap={resetMap}
-															    //     initialProvinceCenter={initialProvinceCenter}
-															    //     initialDistrictCenter={initialDistrictCenter}
-															    //     initialMunCenter={initialMunCenter}
-															    // />
-															)
-
-							                            } */}
+                                        {
+                                            (uniqueId && longitude && longitude)
+                                            && (
+                                                <Map
+                                                    disabled={getDisabled('point')}
+                                                    centriodsForMap={centriodsForMap}
+                                                    resetMap={resetMap}
+                                                    editedCoordinates={{ point: { type: 'Point', coordinates: [longitude, lattitude] } }}
+                                                />
+                                            )
+                                        }
+                                        {
+                                            (!uniqueId && (initialMunCenter.length > 0 || initialDistrictCenter.length > 0 || initialProvinceCenter.length > 0))
+                                            && (
+                                                <Map
+                                                    disabled={getDisabled('point')}
+                                                    centriodsForMap={centriodsForMap}
+                                                    resetMap={resetMap}
+                                                    initialProvinceCenter={initialProvinceCenter}
+                                                    initialDistrictCenter={initialDistrictCenter}
+                                                    initialMunCenter={initialMunCenter}
+                                                />
+                                            )
+                                        }
 
 
                                     </LngLatContext.Provider>
@@ -957,7 +1086,7 @@ const Covid = () => {
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">Patient Status</InputLabel>
                                             <Select
-                                                // disabled={getDisabled('patientStatus')}
+                                                disabled={getDisabled('patientStatus')}
                                                 className={styles.adminLvlSelection}
                                                 labelId="demo-simple-select-dfghjkl"
                                                 id="demo-simple-fghjk"
@@ -975,7 +1104,7 @@ const Covid = () => {
                                         </FormControl>
 
                                         <TextField
-                                            // disabled={getDisabled('age')}
+                                            disabled={getDisabled('age')}
 
                                             className={styles.adminLvlSelection}
                                             type="number"
@@ -989,7 +1118,7 @@ const Covid = () => {
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">Gender</InputLabel>
                                             <Select
-                                                // disabled={getDisabled('gender')}
+                                                disabled={getDisabled('gender')}
 
                                                 className={styles.adminLvlSelection}
                                                 labelId="demo-simple-select-label-random"
@@ -1007,7 +1136,7 @@ const Covid = () => {
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">Disabled</InputLabel>
                                             <Select
-                                                // disabled={getDisabled('condition')}
+                                                disabled={getDisabled('condition')}
 
                                                 className={styles.adminLvlSelection}
                                                 labelId="demo-simple-select-label"
@@ -1041,7 +1170,7 @@ const Covid = () => {
                                             type="number"
                                             value={totalMaleInFected}
                                             onChange={e => settotalMaleInFected(e.target.value)}
-                                                            // disabled={getDisabled('totalMaleInFected')}
+                                            disabled={getDisabled('totalMaleInFected')}
                                             id="outlined-basic"
                                             label="Total Male Infected"
                                         />
@@ -1049,7 +1178,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalFemaleInFected')}
+                                            disabled={getDisabled('totalFemaleInFected')}
 
                                             value={totalFemaleInFected}
                                             onChange={e => settotalFemaleInFected(e.target.value)}
@@ -1062,7 +1191,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalOthersInFected')}
+                                            disabled={getDisabled('totalOthersInFected')}
                                             value={totalOthersInFected}
                                             onChange={e => settotalOthersInFected(e.target.value)}
                                             id="outlined-basic"
@@ -1072,7 +1201,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalDisabledInfected')}
+                                            disabled={getDisabled('totalDisabledInfected')}
 
                                             value={totalDisabledInfected}
                                             onChange={e => settotalDisabledInfected(e.target.value)}
@@ -1085,7 +1214,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalMaleDeath')}
+                                            disabled={getDisabled('totalMaleDeath')}
 
                                             value={totalMaleDeath}
                                             onChange={e => settotalMaleDeath(e.target.value)}
@@ -1096,7 +1225,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalFemaleDeath')}
+                                            disabled={getDisabled('totalFemaleDeath')}
 
                                             value={totalFemaleDeath}
                                             onChange={e => settotalFemaleDeath(e.target.value)}
@@ -1109,7 +1238,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalOthersDeath')}
+                                            disabled={getDisabled('totalOthersDeath')}
 
                                             value={totalOthersDeath}
                                             onChange={e => settotalOthersDeath(e.target.value)}
@@ -1120,7 +1249,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalDisabledDeath')}
+                                            disabled={getDisabled('totalDisabledDeath')}
 
                                             value={totalDisabledDeath}
                                             onChange={e => settotalDisabledDeath(e.target.value)}
@@ -1133,7 +1262,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalMaleRecovered')}
+                                            disabled={getDisabled('totalMaleRecovered')}
 
                                             value={totalMaleRecovered}
                                             onChange={e => settotalMaleRecovered(e.target.value)}
@@ -1144,7 +1273,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalFemaleRecovered')}
+                                            disabled={getDisabled('totalFemaleRecovered')}
 
                                             value={totalFemaleRecovered}
                                             onChange={e => settotalFemaleRecovered(e.target.value)}
@@ -1157,7 +1286,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalOthersRecovered')}
+                                            disabled={getDisabled('totalOthersRecovered')}
 
                                             value={totalOthersRecovered}
                                             onChange={e => settotalOthersRecovered(e.target.value)}
@@ -1168,7 +1297,7 @@ const Covid = () => {
                                         <TextField
                                             className={styles.materialUiInput}
                                             type="number"
-                                                            // disabled={getDisabled('totalDisabledRecovered')}
+                                            disabled={getDisabled('totalDisabledRecovered')}
 
                                             value={totalDisabledRecovered}
                                             onChange={e => settotalDisabledRecovered(e.target.value)}
@@ -1197,7 +1326,7 @@ const Covid = () => {
                                             name="verifiedCheck"
                                             id="verified"
                                             checked={verified}
-                                                            // disabled={getDisabled('verified')}
+                                            disabled={getDisabled('verified')}
                                             onChange={handleVerifiedChange}
                                         />
 
@@ -1212,7 +1341,7 @@ const Covid = () => {
                                             name="verifiedCheck"
                                             id="notVerified"
                                             checked={notVerified}
-                                                            // disabled={getDisabled('notVerified')}
+                                            disabled={getDisabled('notVerified')}
 
                                             onChange={handleNotVerifiedChange}
                                         />
@@ -1226,7 +1355,7 @@ const Covid = () => {
                                         id="outlined-basic"
                                         label="Verification Message"
                                         value={verificationMessage}
-                                                        // disabled={getDisabled('verificationMessage')}
+                                        disabled={getDisabled('verificationMessage')}
 
                                         onChange={e => setverificationMessage(e.target.value)}
                                     />
@@ -1237,7 +1366,7 @@ const Covid = () => {
                                             type="checkbox"
                                             name="verifiedCheck"
                                             id="verified"
-                                            // disabled={getDisabled('approved')}
+                                            disabled={getDisabled('approved')}
 
                                             checked={approved}
                                             onChange={handleApprovedChange}
@@ -1254,7 +1383,7 @@ const Covid = () => {
                                             id="notVerified"
                                             checked={notApproved}
                                             onChange={handleNotApprovedChange}
-                                                            // disabled={getDisabled('notApproved')}
+                                            disabled={getDisabled('notApproved')}
                                         />
                                         <label htmlFor="notVerified">No</label>
                                     </div>
@@ -1273,4 +1402,10 @@ const Covid = () => {
     );
 };
 
-export default Covid;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            Covid,
+        ),
+    ),
+);
