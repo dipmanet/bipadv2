@@ -257,7 +257,7 @@ const FeedbackTwo = (props) => {
 
                             </ModalBody>
                         </Modal>
-                    ) : navigate('/feedback-support/')
+                    ) : navigate('/')
             }
 
         </>

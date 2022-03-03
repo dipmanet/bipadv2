@@ -38,18 +38,19 @@ const requestOptions: {
         onFailure: ({ error, params }) => {
             if (error) {
                 // TODO: handle error
-                params.setFailureResponse(error);
                 console.warn('failure', error);
                 // params.setFaramErrors({
                 //     $internal: ['Some problem occurred'],
                 // });
             }
         },
-        onFatal: ({ params }) => {
-            if (params && params.setFaramErrors) {
-                params.setFaramErrors({
-                    $internal: ['Some problem occurred'],
-                });
+        onFatal: ({ error, params }) => {
+            if (error) {
+                params.setFailureResponse('Please check your internet connection and try again.');
+                params.setLoader(error);
+                // params.setFaramErrors({
+                //     $internal: ['Some problem occurred'],
+                // });
             }
         },
     // extras: { hasFile: true },
@@ -62,7 +63,6 @@ const FeedbackThree = (props) => {
     const [sucessResponse, setSucessResponse] = useState(false);
     const [failureResponse, setFailureResponse] = useState(false);
     const [loader, setloader] = useState(true);
-    const [loaderTimeOut, setLoaderTimeOut] = useState(false);
     const [showHideSubmission, setshowHideSubmission] = useState(false);
 
     const [clicked, setClicked] = useState(false);
@@ -180,6 +180,7 @@ const FeedbackThree = (props) => {
         && !error.phoneNumberError
             ) {
                 setloader(false);
+                setFailureResponse(false);
                 FeedbackPostRequest.do({
                     body: data,
                     setSucessResponse,
@@ -187,10 +188,6 @@ const FeedbackThree = (props) => {
                     setChecked: setchecked,
                     setLoader: setloader,
                 });
-                setTimeout(() => {
-                    setLoaderTimeOut(true);
-                    setloader(true);
-                }, 7000);
             }
         }
     }, [submit, data, error]);
@@ -238,10 +235,6 @@ const FeedbackThree = (props) => {
         }
     }, [sucessResponse]);
 
-
-    useEffect(() => {
-        console.log(sucessResponse);
-    }, [sucessResponse]);
 
     return (
         <>
@@ -441,12 +434,10 @@ const FeedbackThree = (props) => {
 
                                     <div className={!loader ? styles.loader : ''} />
                                     {
-                                        loader && !sucessResponse && loaderTimeOut
+                                        failureResponse
                                             ? (
-
-
                                                 <div className={styles.loaderTimeOut}>
-                                                    <span className={styles.timeOutText}>Please check your internet connection and try again.</span>
+                                                    <span className={styles.timeOutText}>{failureResponse}</span>
 
                                                 </div>
                                             )

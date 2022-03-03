@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/indent */

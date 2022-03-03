@@ -33,7 +33,7 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
     onSuccess: ({ response, params }) => {
       if (params && params.setSuccess) {
         params.setSuccess(true);
-        params.loader(response);
+        params.setloader(response);
       }
     },
     onFailure: ({ error, params }) => {
@@ -48,13 +48,15 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
         });
       }
     },
-    onFatal: ({ params }) => {
-      if (params && params.setFaramErrors) {
-        params.setFaramErrors({
-          $internal: ['Some problem occurred'],
-        });
+    onFatal: ({ error, params }) => {
+      if (error) {
+          params.setFailureResponse('Please check your internet connection and try again.');
+          params.setloader(error);
+          // params.setFaramErrors({
+          //     $internal: ['Some problem occurred'],
+          // });
       }
-    },
+  },
     extras: { hasFile: true },
   },
 };
@@ -65,12 +67,11 @@ const SupportTwo = (props) => {
   const [success, setsucess] = useState(false);
   const [loader, setloader] = useState(true);
   const [response, setresponse] = useState([]);
-  const [backendError, setbackendError] = useState([]);
-  // const [screenShotError, setscreenShotError] = useState(false);
+  const [failureResponse, setFailureResponse] = useState(false);
   const [screenshotMessage, setScreenshotMessage] = useState(false);
   const [closeButton, setCloseButton] = useState(true);
   const [onSubmit, setOnSubmit] = useState(false);
-  const [loaderTimeOut, setLoaderTimeOut] = useState(false);
+
 
   const screenShotRef = useRef(null);
 
@@ -86,11 +87,8 @@ const SupportTwo = (props) => {
 
   useEffect(() => {
     if (response && Object.keys(response).length > 0) {
-      setbackendError(response);
       setloader(true);
       if (Object.keys(response).filter(item => item === 'screenshot')) {
-        // setscreenShotError(true);
-        // setScreenshotMessage());
         Object.values(response).map(i => setScreenshotMessage(i));
       }
     }
@@ -113,10 +111,6 @@ console.log(screenshotMessage);
       } else {
         inputError.screenshotError = '';
       }
-
-      // if (data.screenshot && screenShotRef.current.files[0].size <= 2097152) {
-      //     setscreenShotError(false);
-      // }
       setError(inputError);
   };
 
@@ -167,17 +161,15 @@ if (screenshotMessage || error.screenshotError) {
 
       ) {
       setloader(false);
+      setFailureResponse(false);
       TechnicalSupportPostRequest.do({
         body: data,
         setSuccess: setsucess,
-        loader: setloader,
+        setloader,
         setResponse: setresponse,
+        setFailureResponse,
 
       });
-      setTimeout(() => {
-        setLoaderTimeOut(true);
-        setloader(true);
-    }, 7000);
     }
   }
   }, [data, error, onSubmit]);
@@ -335,20 +327,15 @@ className={styles.tech_support_wrapper}
 
                       <div className={!loader ? styles.loader : ''} />
                       {
-                                        loader && !success && loaderTimeOut
+                                        failureResponse
                                             ? (
-
-
                                                 <div className={styles.loaderTimeOut}>
-                                                    <span className={styles.timeOutText}>
-                                                  Please check your internet connection and try again.
-                                                    </span>
+                                                    <span className={styles.timeOutText}>{failureResponse}</span>
 
                                                 </div>
                                             )
                                             : ''
                                     }
-
 
                       {success
                         && (
