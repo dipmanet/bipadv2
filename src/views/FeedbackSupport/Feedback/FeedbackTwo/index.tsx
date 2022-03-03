@@ -99,9 +99,8 @@ console.log(screenshotMessage);
   const handleSubmit = () => {
     setOnSubmit(true);
       const inputError = { ...error };
-      const validNameRegex = new RegExp(/^(?![ .]+$)[a-zA-Z .]*$/);
-      if (!validNameRegex.test(data.feedback) || data.feedback === '') {
-        inputError.feedbackError = '* Please provide valid input';
+      if (data.feedback === '') {
+        inputError.feedbackError = '* This field cannot be empty';
       } else {
         inputError.feedbackError = '';
       }
@@ -149,28 +148,53 @@ if (screenshotMessage || error.screenshotError) {
 
   useEffect(() => {
     if (onSubmit) {
-    if (data.screenshot
-      && data.feedback
-     && data.fullName
-    && data.designation
-    && data.nameOfTheInstitution
-    && data.email
-    && data.isAnonymous
-      && !error.feedbackError
-      && !error.screenshotError
+      if (!data.isAnonymous) {
+        if (data.screenshot
+          && data.feedback
+          && data.fullName
+          && data.designation
+          && data.nameOfTheInstitution
+          && data.email
+            && !error.feedbackError
+            && !error.screenshotError
 
-      ) {
-      setloader(false);
-      setFailureResponse(false);
-      TechnicalSupportPostRequest.do({
-        body: data,
-        setSuccess: setsucess,
-        setloader,
-        setResponse: setresponse,
-        setFailureResponse,
+            ) {
+            setloader(false);
+            setFailureResponse(false);
+            TechnicalSupportPostRequest.do({
+              body: data,
+              setSuccess: setsucess,
+              setloader,
+              setResponse: setresponse,
+              setFailureResponse,
 
-      });
-    }
+            });
+          }
+       }
+
+       if (data.isAnonymous) {
+        if (data.screenshot
+          && data.feedback
+          && !data.fullName
+          && !data.designation
+          && !data.nameOfTheInstitution
+          && !data.email
+            && !error.feedbackError
+            && !error.screenshotError
+
+            ) {
+            setloader(false);
+            setFailureResponse(false);
+            TechnicalSupportPostRequest.do({
+              body: data,
+              setSuccess: setsucess,
+              setloader,
+              setResponse: setresponse,
+              setFailureResponse,
+
+            });
+          }
+       }
   }
   }, [data, error, onSubmit]);
 

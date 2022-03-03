@@ -28,12 +28,10 @@ const FeedbackTwo = (props) => {
 
     const inputValidation = () => {
         setchecked(true);
-        const invalidMessage = '* Please provide a valid input';
+        const invalidMessage = '* This field cannot be empty';
         const fieldNotSelected = '* Please select a field';
         const newerror = { ...error };
-        const validNameRegex = new RegExp(/^(?![ .]+$)[a-zA-Z .]*$/);
-        if (!validNameRegex.test(data.description)
-                || data.description === '') {
+        if (data.description === '') {
             newerror.descriptionError = invalidMessage;
         } else {
             newerror.descriptionError = '';

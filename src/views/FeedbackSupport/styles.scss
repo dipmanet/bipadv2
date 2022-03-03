@@ -127,14 +127,17 @@
           width: 100%;
         .tech_btn {
           background: transparent;
-          border: 1px solid #ffffff;
           text-transform: uppercase;
-          border-radius: 50px;
-          font-size: 10px;
-          font-style: normal;
           font-weight: 600;
           color: #ffffff;
-          padding: 1.5% 2%;
+          background-color: transparent !important;
+          color: white !important;
+          font-size: 10px;
+          border: 2px solid white !important;
+          filter: saturate(100%) !important;
+          border-radius: 20px;
+          opacity: 0.87 !important;
+          padding: 7px 20px;
   
           &:hover {
             cursor: pointer;
@@ -169,14 +172,17 @@
           width: 100%;
           .feed_btn {
             background: transparent;
-            border: 1px solid #ffffff;
             text-transform: uppercase;
-            border-radius: 50px;
-            font-size: 10px;
-            font-style: normal;
             font-weight: 600;
             color: #ffffff;
-            padding: 1.5% 2%;
+            background-color: transparent !important;
+            color: white !important;
+            font-size: 10px;
+            border: 2px solid white !important;
+            filter: saturate(100%) !important;
+            border-radius: 20px;
+            opacity: 0.87 !important;
+            padding: 7px 20px;
   
             &:hover {
               cursor: pointer;

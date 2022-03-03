@@ -26,6 +26,12 @@ const SupportOne = (props) => {
 
   const [checked, setchecked] = useState(false);
   const [closeButton, setCloseButton] = useState(true);
+  const [inputField, setInputField] = useState({
+    fullName: false,
+    designation: false,
+    nameOfInstitution: false,
+    email: false,
+  });
 
   const formHandler = (e: any) => {
     setData({
@@ -34,12 +40,16 @@ const SupportOne = (props) => {
     });
   };
 
+
 const inputValidation = () => {
   const emailMessage = '* Please provide a valid email address.';
   const invalidMessage = '* Please provide a valid input';
   const newerror = { ...error };
+  const newInputField = { ...inputField };
   const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
   const validNameRegex = new RegExp(/^(?![ .]+$)[a-zA-Z .]*$/);
+
+  if (!data.isAnonymous) {
     if (!validEmailRegex.test(data.email) || data.email === '') {
       newerror.emailError = emailMessage;
     } else {
@@ -65,25 +75,66 @@ const inputValidation = () => {
     } else {
       newerror.nameOfTheInstitutionError = '';
     }
+
+
     setError(newerror);
-    setchecked(true);
+  }
+  setchecked(true);
 };
+
+useEffect(() => {
+if (error) {
+  setchecked(false);
+}
+}, [error]);
 
 
 useEffect(() => {
-if (checked) {
-  if (data.fullName
-    && data.designation
-    && data.nameOfTheInstitution
-    && data.email
-    && data.isAnonymous
-    && !error.fullNameError
-    && !error.designationError
-    && !error.nameOfTheInstitutionError
-    && !error.emailError) {
-      onNextClick();
-}
-}
+  if (data.isAnonymous) {
+    setInputField({ ...inputField,
+      fullName: true,
+      designation: true,
+      nameOfInstitution: true,
+      email: true });
+    setError({ ...error,
+            fullNameError: '',
+            designationError: '',
+            nameOfTheInstitutionError: '',
+            emailError: '' });
+            setData({ ...data,
+          fullName: '',
+          designation: '',
+            nameOfTheInstitution: '',
+            email: '' });
+  }
+  if (!data.isAnonymous) {
+    setInputField({ ...inputField,
+      fullName: false,
+      designation: false,
+      nameOfInstitution: false,
+      email: false });
+  }
+}, [data.isAnonymous]);
+
+
+useEffect(() => {
+if (checked && !data.isAnonymous) {
+       if (data.fullName
+          && data.designation
+          && data.nameOfTheInstitution
+           && data.email
+           && !error.fullNameError
+           && !error.designationError
+           && !error.nameOfTheInstitutionError
+           && !error.emailError) {
+                     onNextClick();
+                  }
+                }
+  if (data.isAnonymous
+    && checked
+    ) {
+    onNextClick();
+  }
 }, [checked, data, error]);
 
   return (
@@ -136,7 +187,7 @@ if (checked) {
                           <input
                             type="text"
                             name="fullName"
-
+                            disabled={inputField.fullName}
                             className={error.fullNameError
                               ? styles.error
                               : styles.fname}
@@ -156,6 +207,7 @@ if (checked) {
                           <input
                             type="text"
                             name="designation"
+                            disabled={inputField.designation}
                             className={error.designationError
                               ? styles.error : styles.designation}
                             placeholder="Designation (eg. IT Officer)"
@@ -177,6 +229,7 @@ if (checked) {
                           <input
                             type="text"
                             name="nameOfTheInstitution"
+                            disabled={inputField.nameOfInstitution}
                             className={error.nameOfTheInstitutionError
                               ? styles.error : styles.insname}
                             placeholder="Name of the Institution"
@@ -199,6 +252,7 @@ if (checked) {
                           <input
                             type="email"
                             name="email"
+                            disabled={inputField.email}
                             placeholder="Official Email"
                             className={error.emailError
                               ? styles.error : styles.email}
@@ -244,7 +298,6 @@ if (checked) {
                       <div className={styles.next_button}>
                         <Button
                           className={styles.next_btn}
-                          disabled={!data.isAnonymous}
                           onClick={inputValidation}
                         >
                           next
