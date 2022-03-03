@@ -31,6 +31,7 @@ import SituationReport from '#components/SituationReportModal';
 import Relief from '#components/ReliefModal';
 import MenuItem from './MenuItem';
 import styles from './styles.scss';
+import FeedbackSupport from '#views/FeedbackSupport';
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
 
@@ -195,8 +196,9 @@ class Navbar extends React.PureComponent<Props, State> {
                     <ModalButton
                         className={styles.reportIncidentButton}
                         title="Feedback & Support"
-                        iconName="aboutUs"
-                        onClick={() => navigate('/feedback-support/')}
+                        iconName="chatBoxes"
+                        modal={<FeedbackSupport />}
+                    // onClick={() => navigate('/feedback-support/')}
                     />
                     <ModalButton
                         className={styles.reportIncidentButton}
