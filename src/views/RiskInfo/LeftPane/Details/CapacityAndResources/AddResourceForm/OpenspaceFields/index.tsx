@@ -321,8 +321,9 @@ class OpenspaceFields extends React.PureComponent<Props, State> {
     }
 
     private handleOpenspacePostSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess, LoadingSuccessHalt } = this.props;
+        const { onAddSuccess, LoadingSuccessHalt, handleClearDataAfterAddition } = this.props;
         LoadingSuccessHalt(false);
+        handleClearDataAfterAddition(resource.resourceType);
         if (onAddSuccess) {
             onAddSuccess(resource);
         }

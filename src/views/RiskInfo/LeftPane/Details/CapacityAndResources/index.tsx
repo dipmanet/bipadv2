@@ -2296,6 +2296,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         ResourceType = resourceType;
     }
 
+    private handleClearDataAfterAddition = (resourcetype) => {
+        const { resourceCollection, PreserveresourceCollection } = this.state;
+        this.setState({
+            resourceCollection: { ...resourceCollection, [resourcetype]: [] },
+        });
+        this.setState({
+            PreserveresourceCollection: { ...PreserveresourceCollection, [resourcetype]: [] },
+        });
+    }
 
     public render() {
         const {
@@ -2407,7 +2416,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-
         return (
             <>
                 <Loading pending={pending} />
@@ -2437,6 +2445,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                 // onEditSuccess={this.handleResourceEdit}
                                 closeModal={this.handleEditResourceFormCloseButtonClick}
                                 updateResourceOnDataAddition={this.updateResourceOnDataAddition}
+                                handleClearDataAfterAddition={this.handleClearDataAfterAddition}
 
 
                             />

@@ -14,6 +14,7 @@ import memoize from 'memoize-one';
 import Faram from '@togglecorp/faram';
 import * as ReachRouter from '@reach/router';
 
+import { parseUrlParams } from '@togglecorp/react-rest-request';
 import LocationInput from '#components/LocationInput';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import Modal from '#rscv/Modal';
@@ -280,6 +281,7 @@ const ExtraFields = ({
     addResourcePending,
     faramValueSetNull,
     handleFaramValidationFailure,
+    handleClearDataAfterAddition,
 
 }: ExtraFieldProps) => {
     switch (title) {
@@ -371,6 +373,7 @@ const ExtraFields = ({
                     addResourcePending={addResourcePending}
                     faramValueSetNull={faramValueSetNull}
                     handleFaramValidationFailure={handleFaramValidationFailure}
+                    handleClearDataAfterAddition={handleClearDataAfterAddition}
                 />
             );
 
@@ -415,6 +418,7 @@ const ExtraFields = ({
                     addResourcePending={addResourcePending}
                     faramValueSetNull={faramValueSetNull}
                     handleFaramValidationFailure={handleFaramValidationFailure}
+                    handleClearDataAfterAddition={handleClearDataAfterAddition}
 
                 />
             );
@@ -773,6 +777,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 addResourcePostRequest,
                 editResourcePutRequest,
             },
+
         } = this.props;
         this.setState({ addResourcePending: true });
         if (isNotDefined(resourceId)) {
@@ -780,6 +785,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 body: values,
                 onSuccess: this.handleAddResourceSuccess,
                 setFaramErrors: this.handleFaramValidationFailure,
+
             });
         } else {
             editResourcePutRequest.do({
@@ -787,19 +793,19 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 body: values,
                 onSuccess: this.handleEditResourceSuccess,
                 setFaramErrors: this.handleFaramValidationFailure,
+
             });
         }
     }
 
 
     private handleAddResourceSuccess = (resource: PageType.Resource) => {
-        const { onAddSuccess, closeModal, faramValues, updateResourceOnDataAddition } = this.props;
+        const { onAddSuccess, closeModal, faramValues, updateResourceOnDataAddition, handleClearDataAfterAddition } = this.props;
 
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
         const ResourceType = resource.resourceType;
-
         updateResourceOnDataAddition(ResourceType);
         this.setState({ addResourcePending: false, faramValues: {} });
         const myDiv = document.getElementById('capacityAndResources');
@@ -808,9 +814,8 @@ class AddResourceForm extends React.PureComponent<Props, State> {
     }
 
     private handleEditResourceSuccess = (resource: PageType.Resource) => {
-        const { onEditSuccess, closeModal, faramValues, updateResourceOnDataAddition } = this.props;
+        const { onEditSuccess, closeModal, faramValues, updateResourceOnDataAddition, handleClearDataAfterAddition } = this.props;
         const { setAddResource } = this.context;
-
         if (onEditSuccess) {
             onEditSuccess(resource.id, resource);
         }
@@ -908,6 +913,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                 }, addResourcePostRequest,
             },
             palikaRedirect,
+            handleClearDataAfterAddition,
         } = this.props;
 
         const {
@@ -1069,6 +1075,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
                                     faramValueSetNull={this.faramValueSetNull}
                                     optionsClassName={styles.optionsClassName}
                                     handleFaramValidationFailure={this.handleFaramValidationFailure}
+                                    handleClearDataAfterAddition={handleClearDataAfterAddition}
                                 />
                                 {((faramValues.resourceType === 'communityspace') || (faramValues.resourceType === 'openspace'))
 
