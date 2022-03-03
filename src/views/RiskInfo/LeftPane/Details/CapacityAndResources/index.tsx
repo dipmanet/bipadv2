@@ -3905,11 +3905,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             </MapTooltip>
                                         )}
                                     </MapSource>
-                                    {resourceInfo && (
-                                        <PolygonBoundaryCommunity
-                                            resourceInfo={resourceInfo}
-                                        />
-                                    )}
+
                                 </>
                             )}
 

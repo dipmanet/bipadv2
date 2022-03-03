@@ -768,8 +768,8 @@ const visualizationKeyValues = [
 
             {
                 label: 'Community Space Area Details(Sq Km)',
-                key: ['totalArea', 'usableArea'],
-                values: ['Total Area', 'Usable Area'],
+                key: ['capacity'],
+                values: ['Capacity of Community Space'],
                 isBoolean: false,
 
             },
@@ -1172,6 +1172,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             });
 
         const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+
         if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
             this.setState({ isValueCalculated: true });
         }
@@ -1322,6 +1323,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
+
         return (
             <Modal className={
                 styles.contactFormModal
