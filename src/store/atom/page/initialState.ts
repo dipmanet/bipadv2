@@ -375,5 +375,8 @@ const state: PageState = {
         epidemicTotalError: {},
         incidentCount: null,
     },
+    language: {
+        language: 'en',
+    },
 };
 export default state;

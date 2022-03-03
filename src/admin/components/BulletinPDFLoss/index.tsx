@@ -17,13 +17,15 @@ import {
 import { connect } from 'react-redux';
 import GovLogo from 'src/admin/resources/govtLogo.svg';
 import NepaliDate from 'src/admin/components/NepaliDate';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
-import { nepaliRef } from '../BulletinForm/formFields';
+import { nepaliRef, provincesRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 import {
     bulletinPageSelector, hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 import IncidentLegend from '#rscz/Legend';
 import HazardsLegend from '#components/HazardsLegend';
@@ -31,6 +33,7 @@ import HazardsLegend from '#components/HazardsLegend';
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
     hazardTypes: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 interface Props {
@@ -38,16 +41,20 @@ interface Props {
 }
 
 
-const labelSelector = (d: LegendItem) => d.label;
+const labelSelector = (d: LegendItem, language: string) => {
+    if (language === 'en') { return d.label; }
+    if (language === 'np') { return d.labelNe; }
+    return null;
+};
 const keySelector = (d: LegendItem) => d.label;
 const classNameSelector = (d: LegendItem) => d.style;
 const colorSelector = (d: LegendItem) => d.color;
 const radiusSelector = (d: LegendItem) => d.radius;
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
-    { label: 'Major (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
-    { label: 'Severe (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
-    { label: 'Catastrophic (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+    { label: 'Minor (0)', labelNe: 'मैनेर (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', labelNe: 'मेजर (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', labelNe: 'सिविएर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', labelNe: 'कटेस्टरोपिह्क (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
 ];
 
 // const filteredHazardTypes = [{
@@ -70,7 +77,7 @@ const BulletinPDF = (props: Props) => {
     const [newHazardGeoJson, setHazardGeoJson] = useState([]);
     const [incidentPoints, setincidentPoints] = useState({});
 
-    const { hazardTypes } = props;
+    const { hazardTypes, language: { language } } = props;
 
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
@@ -83,12 +90,25 @@ const BulletinPDF = (props: Props) => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: gap }}>
                 {
-                    payload.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
-                            <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
-                            <span>{entry.value}</span>
-                        </div>
-                    ))
+                    payload.map((entry, index) => {
+                        console.log('entry.value', entry.value);
+                        return (
+                            <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
+                                <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
+                                <span>
+                                    {
+                                        <Translation>
+                                            {
+                                                t => <span>{t(`${entry.value}`)}</span>
+                                            }
+                                        </Translation>
+
+                                    }
+
+                                </span>
+                            </div>
+                        );
+                    })
                 }
             </div>
         );
@@ -97,7 +117,6 @@ const BulletinPDF = (props: Props) => {
     useEffect(() => {
         if (hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) {
             const getHazardColor = (hazardName) => {
-                console.log('hazar name supplied', hazardName);
                 const h = Object
                     .keys(hazardTypes)
                     .filter(k => hazardTypes[k].titleNe === hazardName);
@@ -184,18 +203,18 @@ const BulletinPDF = (props: Props) => {
 
     useEffect(() => {
         const cD = Object.keys(peopleLoss).map(pL => ({
-            province: nepaliRef[pL],
-            मृत्यु: peopleLoss[pL].death,
-            बेपत्ता: peopleLoss[pL].missing,
-            घाईते: peopleLoss[pL].injured,
+            province: language === 'np' ? nepaliRef[pL] : provincesRef[pL],
+            death: peopleLoss[pL].death,
+            missing: peopleLoss[pL].missing,
+            injured: peopleLoss[pL].injured,
         }));
         setProvWiseChart(cD);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [language]);
 
 
     return (
-        <div className={styles.pdfContainer}>
+        <div className={language === 'np' ? styles.pdfContainer : styles.pdfContainerEnglish}>
             <div className={styles.headerNLoss}>
                 <div className={styles.header}>
                     <div className={styles.subDiv}>
@@ -206,19 +225,40 @@ const BulletinPDF = (props: Props) => {
                         <div className={styles.govTitles}>
                             <ul>
                                 <li>
-                                नेपाल सरकार
+
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Nepal Government')}</span>
+                                        }
+                                    </Translation>
+
                                 </li>
                                 <li>
-                                गृह मन्त्रालय
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Ministry of Home Affairs')}</span>
+                                        }
+                                    </Translation>
+
                                 </li>
                                 <li className={styles.bold}>
-                                राष्ट्रिय बिपद जोखिम न्युनिकरन तथा व्यवस्थापन प्राधिकरण
+                                    <Translation>
+                                        {
+                                            t => <span>{t('ndrrma')}</span>
+                                        }
+                                    </Translation>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div className={styles.reportTitles}>
-                        <h1>दैनिक बिपद बुलेटिन</h1>
+                        <h1>
+                            <Translation>
+                                {
+                                    t => <span>{t('Daily Bipad Bulletin')}</span>
+                                }
+                            </Translation>
+                        </h1>
                         <p>
                             <NepaliDate />
                             {' '}
@@ -228,14 +268,20 @@ const BulletinPDF = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.loss}>
-                    <h2>२४ घण्टा मा बिपदका विवरणहरु </h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Disaster Incidents in last 24 hours')}</span>
+                            }
+                        </Translation>
+                    </h2>
                     {/* <p>१-२ पौष २०७८, बिहान १० बजे सम्म </p> */}
                     <div className={styles.lossIconsRow}>
                         {
                             lossObj.map(l => (
                                 <LossItem
                                     lossIcon={l.logo}
-                                    lossTitle={l.title}
+                                    lossTitle={language === 'np' ? l.title : l.titleEn}
                                     loss={Number(incidentSummary[l.lossKey])}
                                 />
                             ))
@@ -244,7 +290,16 @@ const BulletinPDF = (props: Props) => {
                 </div>
             </div>
             <div className={styles.pratikriyaContainer}>
-                <h2>बिपद्का हाइलाईट</h2>
+                <h2>
+                    {' '}
+                    <Translation>
+                        {
+                            t => <span>{t('Disaster Hilights')}</span>
+                        }
+                    </Translation>
+
+
+                </h2>
                 <div className={styles.pratikriyas}>
                     <ul>
                         {
@@ -257,30 +312,49 @@ const BulletinPDF = (props: Props) => {
             </div>
             <div className={styles.provinceWiseLoss}>
                 <div className={styles.provinceWiseChart}>
-                    <h2>प्रदेश अनुसार मृत्‍यु, बेपत्ता र घाइते संख्या को बर्गिकरण    </h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Province-wise death, missing and injured')}</span>
+                            }
+                        </Translation>
+                    </h2>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                             data={provWiseLossChart}
                             margin={{
                                 top: 20,
                                 right: 0,
-                                left: 0,
+                                left: 15,
                                 bottom: 5,
                             }}
+                            layout="vertical"
                         >
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="province" angle={-45} tickMargin={20} padding={{ right: 20 }} />
-                            <YAxis />
-                            <Tooltip />
+                            <XAxis
+                                type="number"
+                                allowDecimals={false}
+                            />
+                            <YAxis
+                                type="category"
+                                dataKey="province"
+                            />
+                            {/* <Tooltip /> */}
                             <Legend content={renderLegendContent} />
-                            <Bar dataKey="मृत्यु" stackId="a" fill="#D10000" />
-                            <Bar dataKey="बेपत्ता" stackId="a" fill="#E77677" />
-                            <Bar dataKey="घाईते" stackId="a" fill="#FB989A" />
+                            <Bar dataKey="death" stackId="a" fill="#D10000" />
+                            <Bar dataKey="missing" stackId="a" fill="#E77677" />
+                            <Bar dataKey="injured" stackId="a" fill="#FB989A" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
                 <div className={styles.provinceWiseIncidentsMap}>
-                    <h2>प्रकोप अनुसार घटनाको विवरण (२४ घण्टा)</h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Hazard-wise breakdown of incidents (last 24 hours)')}</span>
+                            }
+                        </Translation>
+                    </h2>
                     <IncidentMap
                         hazardWiseLoss={hazardWiseLoss}
                         incidentPoints={incidentPoints}
@@ -288,7 +362,12 @@ const BulletinPDF = (props: Props) => {
                     <div className={styles.pointSizeLegendContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                मृत्‍यु संख्या
+                                <Translation>
+                                    {
+                                        t => <span>{t('Death Count')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <IncidentLegend
@@ -299,11 +378,18 @@ const BulletinPDF = (props: Props) => {
                             emptyComponent={null}
                             itemClassName={styles.legendItem}
                             keySelector={keySelector}
-                            labelSelector={labelSelector}
+                            labelSelector={d => labelSelector(d, language)}
                             symbolClassNameSelector={classNameSelector}
                         />
                         <div className={styles.hazardLegend}>
-                            <div className={styles.legendTitle}>प्रकोप लेजेन्ड</div>
+                            <div className={styles.legendTitle}>
+
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hazard Legend')}</span>
+                                    }
+                                </Translation>
+                            </div>
                             <HazardsLegend
                                 filteredHazardTypes={filteredHazardTypes}
                                 className={styles.legend}

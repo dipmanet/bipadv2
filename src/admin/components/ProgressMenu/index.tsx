@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styles from './styles.module.scss';
 import { Menu } from './utils';
 import Icon from '#rscg/Icon';
+import LanguageToggle from '#components/LanguageToggle';
+import { languageSelector } from '#selectors';
 
 interface MenuItems {
     name: string;
@@ -26,14 +29,19 @@ interface OurState{
     health: {resourceID: number;inventoryData: []};
 }
 
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    language: languageSelector(state),
+});
+
 
 const ProgressMenu = (props: Props): JSX.Element => {
-    const { progress, activeMenu: active, menuKey } = props;
+    const { progress, activeMenu: active, menuKey, language: { language } } = props;
     const [MenuItems, setMenuItems] = useState(Menu[menuKey]);
 
 
     return (
         <div className={styles.progressMenuContainer}>
+            <LanguageToggle />
             {
                 MenuItems.map((menuItem: MenuItems, i: number) => (
                     <div
@@ -51,7 +59,7 @@ const ProgressMenu = (props: Props): JSX.Element => {
                                 className={styles.mainIcon}
                                 alt="icon"
                             />
-                            {menuItem.name}
+                            {language === 'np' ? menuItem.name : menuItem.name_en}
                         </div>
                         <Icon
                             name={'circle'}
@@ -67,4 +75,4 @@ const ProgressMenu = (props: Props): JSX.Element => {
     );
 };
 
-export default ProgressMenu;
+export default connect(mapStateToProps)(ProgressMenu);

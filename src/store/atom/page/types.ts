@@ -11,6 +11,9 @@ interface Centroid {
     coordinates: [number, number];
 }
 type BBox = [number, number, number, number];
+export interface Language {
+    language: string;
+}
 
 export interface Bulletin {
     sitRep: number;
@@ -619,7 +622,7 @@ export interface PageState {
     filters: FiltersElement;
 
     adminLevelList: AdminLevel[];
-
+    language: Language;
     documentCategoryList: DocumentCategory[];
 
     showProvince: boolean;
@@ -678,7 +681,7 @@ export enum PageType {
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
     SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
     SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
-
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
     SET_SHOW_PROVINCE = 'page/SET_SHOW_PROVINCE',
     SET_SHOW_DISTRICT = 'page/SET_SHOW_DISTRICT',
     SET_SHOW_MUNICIPALITY = 'page/SET_SHOW_MUNICIPALITY',
@@ -747,6 +750,10 @@ export enum PageType {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
+}
+
+export interface SetLanguage {
+    language: Language;
 }
 
 export interface SetBulletinData {
@@ -1047,7 +1054,7 @@ export interface SetEpidemicsPage {
 }
 
 export type PageActionTypes = (
-    SetRegion | SetInitialPopupHidden | SetBulletinData |
+    SetLanguage | SetRegion | SetInitialPopupHidden | SetBulletinData |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
     SetDistricts | SetMunicipalities | SetWards |
     SetShowProvince | SetShowDistrict | SetShowMunicipality | SetShowWard |

@@ -9,6 +9,16 @@ export const incidentSummary = {
     cattleLoss: 0,
 };
 
+export const provincesRef = {
+    p1: 'Province 1',
+    p2: 'Madesh',
+    bagmati: 'Bagmati',
+    gandaki: 'Gandaki',
+    lumbini: 'Lumbini',
+    karnali: 'Karnali',
+    sudurpaschim: 'Sudur Paschim',
+};
+
 export const peopleLoss = {
     p1: {
         death: 0,

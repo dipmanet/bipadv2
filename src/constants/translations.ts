@@ -1,5 +1,18 @@
 export const enTranslation = {
     translation: {
+        'Death Count': 'Death Count',
+        'Hazard Legend': 'Hazard Legend',
+        death: 'Death',
+        missing: 'Missing',
+        injured: 'Injured',
+        'Province-wise death, missing and injured': 'Province-wise death, missing and injured',
+        'Hazard-wise breakdown of incidents (last 24 hours)': 'Hazard-wise breakdown of incidents (last 24 hours)',
+        'Disaster Hilights': 'Disaster Hilights',
+        'Nepal Government': 'Nepal Government',
+        'Ministry of Home Affairs': 'Ministry of Home Affairs',
+        ndrrma: 'National Disaster Risk Reduction and Management Authority',
+        'Daily Bipad Bulletin': 'Daily Bipad Bulletin',
+        'Disaster Incidents in last 24 hours': 'Disaster summary of last 24 hours',
         'Data source': 'Data source',
         DateRangeInfo: 'Showing Data From',
         to: 'to',
@@ -166,8 +179,20 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Death Count': 'मृत्‍यु संख्या',
+        'Hazard Legend': 'प्रकोप लेजेन्ड',
+        death: 'मृत्यु',
+        missing: 'बेपत्ता',
+        injured: 'घाईते',
+        'Province-wise death, missing and injured': 'प्रदेश अनुसार मृत्‍यु, बेपत्ता र घाइते संख्या को बर्गिकरण',
+        'Hazard-wise breakdown of incidents (last 24 hours)': 'प्रकोप अनुसार घटनाको विवरण (२४ घण्टा)',
+        'Disaster Hilights': 'बिपद्का हाइलाईट',
+        'Daily Bipad Bulletin': 'दैनिक बिपद बुलेटिन',
+        'Nepal Government': 'नेपाल सरकार',
+        'Ministry of Home Affairs': 'गृह मन्त्रालय',
         'Data source': 'डाटा स्रोत',
         DateRangeInfo: 'देखाइएको डाटा देखी',
+        'Disaster Incidents in last 24 hours': '२४ घण्टा मा बिपदका विवरणहरु',
         to: 'सम्म',
         'Realtime Module': 'रिअलटाईम मोडुल',
         Alerts: 'चेतावनीहरु',
@@ -331,6 +356,7 @@ export const npTranslation = {
         'Pollution (AQI Value)': 'प्रदूषण (AQI)',
         StreamFlow: 'स्ट्रिमफ्लो',
         'Other layers': 'अन्य तहहरू',
+        ndrrma: 'राष्ट्रिय बिपद जोखिम न्युनिकरन तथा व्यवस्थापन प्राधिकरण',
 
     },
 };

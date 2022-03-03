@@ -5,7 +5,12 @@ import * as Type from './types';
 import initialState from './initialState';
 
 import { ModelEnum } from '#types';
+
 // ACTION CREATORS
+export const setLanguageAction = language => ({
+    type: Type.PageType.SET_LANGUAGE,
+    language,
+});
 
 export const setBulletinYearlyDataAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
@@ -1452,11 +1457,23 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
     return newState;
 };
 
+const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
+    const { language } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.language = language;
+    });
+    return newState;
+};
+
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_LANGUAGE:
+            return setLanguageLocal(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
             return setBulletinEditData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN:
