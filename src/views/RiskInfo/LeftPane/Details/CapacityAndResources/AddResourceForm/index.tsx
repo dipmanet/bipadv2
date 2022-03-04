@@ -805,6 +805,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         if (onAddSuccess) {
             onAddSuccess(resource);
         }
+        this.setState({
+            pristine: true,
+        });
         const ResourceType = resource.resourceType;
         updateResourceOnDataAddition(ResourceType);
         this.setState({ addResourcePending: false, faramValues: {} });
@@ -819,6 +822,9 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         if (onEditSuccess) {
             onEditSuccess(resource.id, resource);
         }
+        this.setState({
+            pristine: true,
+        });
         const ResourceType = resource.resourceType;
 
         updateResourceOnDataAddition(ResourceType);
@@ -1118,6 +1124,7 @@ class AddResourceForm extends React.PureComponent<Props, State> {
         );
     }
 }
+AddResourceForm.contextType = RiskInfoLayerContext;
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
     createRequestClient(requests),
