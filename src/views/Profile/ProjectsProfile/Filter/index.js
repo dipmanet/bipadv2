@@ -103,6 +103,7 @@ class ProjectsProfileFilter extends React.PureComponent {
         });
     }
 
+
     render() {
         const {
             className,
@@ -119,8 +120,9 @@ class ProjectsProfileFilter extends React.PureComponent {
             elementsOptions,
             organizationOptions,
             // projectStatusOptions = [],
+            showFilterOnly,
+            getSelectedOption,
         } = this.props;
-
         return (
             <Faram
                 className={_cs(className, styles.filterForm)}
@@ -136,6 +138,7 @@ class ProjectsProfileFilter extends React.PureComponent {
                     options={priorityOptions}
                     keySelector={ndrrsapKeySelector}
                     labelSelector={ndrrsapLabelSelector}
+                    getSelectedOption={getSelectedOption}
                     // autoFocus
                 />
                 <SelectInput
@@ -145,6 +148,8 @@ class ProjectsProfileFilter extends React.PureComponent {
                     options={subPriorityOptions}
                     keySelector={ndrrsapKeySelector}
                     labelSelector={ndrrsapLabelSelector}
+                    getSelectedOption={getSelectedOption}
+
                 />
                 <SelectInput
                     faramElementName="activity"
@@ -153,6 +158,8 @@ class ProjectsProfileFilter extends React.PureComponent {
                     options={activityOptions}
                     keySelector={ndrrsapKeySelector}
                     labelSelector={ndrrsapLabelSelector}
+                    getSelectedOption={getSelectedOption}
+
                 />
                 {/* <MultiSelectInput
                     label="drr cycles"
@@ -168,13 +175,25 @@ class ProjectsProfileFilter extends React.PureComponent {
                     keySelector={elementsKeySelector}
                     labelSelector={elementsLabelSelector}
                 /> */}
-                <MultiSelectInput
+                {!showFilterOnly
+                      && (
+                          <MultiSelectInput
+                              label="organization"
+                              faramElementName="organizations"
+                              options={organizationOptions}
+                              keySelector={organizationKeySelector}
+                              labelSelector={organizationLabelSelector}
+                          />
+                      )
+                }
+                {/* <MultiSelectInput
                     label="organization"
                     faramElementName="organizations"
                     options={organizationOptions}
                     keySelector={organizationKeySelector}
                     labelSelector={organizationLabelSelector}
-                />
+                /> */}
+
             </Faram>
         );
     }

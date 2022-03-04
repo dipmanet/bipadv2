@@ -49,6 +49,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import TextArea from '#rsci/TextArea';
 
 const StepwiseRegionSelectInput = FaramInputElement(NormalStepwiseRegionSelectInput);
 
@@ -105,7 +106,7 @@ interface State {
 const keySelector = (d: PageType.Field) => d.id;
 const labelSelector = (d: PageType.Field) => d.title;
 
-const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     eventTypesGetRequest: {
         url: '/event/',
         method: methods.GET,
@@ -240,10 +241,12 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             fields: {
                 title: [requiredCondition],
                 file: [requiredCondition],
+                description: [],
                 category: [],
                 region: [],
                 event: [],
                 stepwiseRegion: [],
+                publishedBy: [],
                 // province: [],
                 // district: [],
                 // municipality: [],
@@ -291,9 +294,18 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleCloseModal = () => {
+        const { handleEditDeleteButtonClick, closeModal } = this.props;
+        if (handleEditDeleteButtonClick) {
+            handleEditDeleteButtonClick(undefined);
+        }
+        closeModal();
+    }
+
     private handleFaramValidationSuccess = (_: unknown, faramValues: FaramValues) => {
         const {
             requests: { addDocumentPostRequest },
+            handleEditDeleteButtonClick,
         } = this.props;
         const {
             publishedDate,
@@ -307,6 +319,9 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
             ...others,
             publishedDate,
         };
+        if (handleEditDeleteButtonClick) {
+            handleEditDeleteButtonClick(undefined);
+        }
 
         if (stepwiseRegion) {
             switch (stepwiseRegion.adminLevel) {
@@ -363,8 +378,8 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
         return (
             <Modal
                 className={_cs(styles.addDocumentModal, className)}
-                // onClose={closeModal}
-                // closeOnEscape
+            // onClose={closeModal}
+            // closeOnEscape
             >
                 {pending && <LoadingAnimation />}
                 <Faram
@@ -384,7 +399,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             <DangerButton
                                 transparent
                                 iconName="close"
-                                onClick={closeModal}
+                                onClick={closeModal ? this.handleCloseModal : closeModal()}
                                 title="Close Modal"
                             />
                         )}
@@ -396,12 +411,21 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             label="Title"
                             autoFocus
                         />
+                        <TextArea
+                            faramElementName="description"
+                            label="Description"
+                        />
+
                         <SelectInput
                             faramElementName="category"
                             options={categoryList}
                             keySelector={keySelector}
                             labelSelector={labelSelector}
                             label="Category"
+                        />
+                        <TextInput
+                            faramElementName="publishedBy"
+                            label="Published By"
                         />
                         <DateInput
                             faramElementName="publishedDate"
@@ -430,7 +454,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                             <RawFileInput
                                 className={styles.fileInput}
                                 faramElementName="file"
-                                // error={faramErrors.file}
+                            // error={faramErrors.file}
                             >
                                 <Icon name="upload" />
                                 <span className={styles.load}>
@@ -440,7 +464,7 @@ class AddDocumentForm extends React.PureComponent<Props, State> {
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        <DangerButton onClick={closeModal}>
+                        <DangerButton onClick={closeModal ? this.handleCloseModal : closeModal()}>
                             Close
                         </DangerButton>
                         <PrimaryButton

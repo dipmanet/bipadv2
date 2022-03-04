@@ -1,20 +1,39 @@
+/* eslint-disable max-len */
 import React from 'react';
-import { _cs } from '@togglecorp/fujs';
+import { isDefined, _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
+
+import { navigate } from '@reach/router';
 
 import AccentButton from '#rsca/Button/AccentButton';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import Page from '#components/Page';
-import DisasterProfile from './DisasterProfile';
-import ProjectsProfile from './ProjectsProfile';
-import Indicator from './Indicator';
-import Contact from './Contact';
-import Document from './Document';
+
 
 import styles from './styles.scss';
+import {
+    palikaRedirectSelector,
+} from '#selectors';
 
-type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document';
+import {
+    setPalikaRedirectAction,
+} from '#actionCreators';
+import NepDataProfile from './NepDatProfile';
+import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
+import nepDat from '#resources/icons/nepdat.svg';
+
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    palikaRedirect: palikaRedirectSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setPalikaRedirect: params => dispatch(setPalikaRedirectAction(params)),
+});
+
+
+type TabKeys = 'summary' | 'projectsProfile' | 'contact' | 'document' | 'nepDatProfile';
 
 interface Props {
 }
@@ -23,141 +42,142 @@ interface State {
     activeView: TabKeys;
 }
 
-const IndicatorButton = modalize(AccentButton);
 
-export default class Profile extends React.PureComponent<Props, State> {
-    public constructor(props: Props) {
-        super(props);
-
-        this.state = {
-            activeView: 'summary',
-        };
-    }
-
-    private handleSummaryButtonClick = () => {
-        this.setState({ activeView: 'summary' });
-    }
-
-    private handleProjectButtonClick = () => {
-        this.setState({ activeView: 'projectsProfile' });
-    }
-
-    private handleContactButtonClick = () => {
-        this.setState({ activeView: 'contact' });
-    }
-
-    private handleDocumentButtonClick = () => {
-        this.setState({ activeView: 'document' });
-    }
-
+class Profile extends React.PureComponent<Props, State> {
     public render() {
-        const { activeView } = this.state;
-
         return (
-            <Page
-                leftContentContainerClassName={styles.leftContentContainer}
-                hideHazardFilter
-                hideDataRangeFilter
-                leftContent={(
-                    <>
-                        <header className={styles.header}>
-                            <div className={styles.tabs}>
-                                <div
-                                    className={_cs(styles.tab, activeView === 'summary' && styles.active)}
-                                    onClick={this.handleSummaryButtonClick}
-                                    role="presentation"
-                                >
+            <>
+
+                <Page
+
+
+                    hideFilter
+                    hideMap
+
+
+                />
+
+                <div className={styles.profileMainContainer}>
+                    <div className={styles.profileMainDiv}>
+                        <div className={styles.profileHeading}>
+                            <h1>Profile</h1>
+                        </div>
+                        <div className={styles.profileList}>
+                            <div
+                                className={styles.profileListContent}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => navigate('/profile/demography')}
+                                onKeyDown={undefined}
+
+
+                            >
+                                <h1>
+                                    Demographics
+
+                                </h1>
+                                <div style={{ fontSize: '50px' }}>
                                     <Icon
                                         className={styles.visualizationIcon}
                                         name="bars"
                                     />
-                                    <div className={styles.title}>
-                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
-                                        <div className={styles.text}>
-                                            Summary
-                                        </div>
-                                    </div>
                                 </div>
-                                <div
-                                    className={_cs(styles.tab, activeView === 'projectsProfile' && styles.active)}
-                                    role="presentation"
-                                    onClick={this.handleProjectButtonClick}
-                                >
+
+                            </div>
+                            <div
+                                className={styles.profileListContent}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => navigate('/profile/projects')}
+                                onKeyDown={undefined}
+
+
+                            >
+
+
+                                <h1>
+                                    Projects
+
+                                </h1>
+                                <div style={{ fontSize: '50px' }}>
                                     <Icon
                                         className={styles.visualizationIcon}
                                         name="briefcase"
                                     />
-                                    <div className={styles.text}>
-                                        Projects
-                                    </div>
                                 </div>
-                                <div
-                                    className={_cs(styles.tab, activeView === 'contact' && styles.active)}
-                                    onClick={this.handleContactButtonClick}
-                                    role="presentation"
-                                >
+                            </div>
+                            <div
+                                className={styles.profileListContent}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => navigate('/profile/contacts')}
+                                onKeyDown={undefined}
+
+
+                            >
+
+                                <h1>
+                                    Contacts
+
+                                </h1>
+                                <div style={{ fontSize: '50px' }}>
                                     <Icon
                                         className={styles.visualizationIcon}
                                         name="contacts"
                                     />
-                                    <div className={styles.title}>
-                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
-                                        <div className={styles.text}>
-                                            Contacts
-                                        </div>
-                                    </div>
                                 </div>
-                                <div
-                                    className={_cs(styles.tab, activeView === 'document' && styles.active)}
-                                    onClick={this.handleDocumentButtonClick}
-                                    role="presentation"
-                                >
+                            </div>
+                            <div
+                                className={styles.profileListContent}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => navigate('/profile/documents')}
+                                onKeyDown={undefined}
+
+
+                            >
+                                <h1>
+                                    Documents
+
+                                </h1>
+                                <div style={{ fontSize: '50px' }}>
                                     <Icon
                                         className={styles.visualizationIcon}
                                         name="document"
                                     />
-                                    <div className={styles.title}>
-                                        <div className={_cs(styles.icon, styles.incidentIcon)} />
-                                        <div className={styles.text}>
-                                            Document
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                            <div className={styles.actions}>
-                                <IndicatorButton
-                                    transparent
-                                    modal={(
-                                        <Indicator />
-                                    )}
-                                >
-                                    Indicators
-                                </IndicatorButton>
+                            <div
+                                className={styles.profileListContent}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => navigate('/profile/nepDat-profile')}
+                                onKeyDown={undefined}
+
+
+                            >
+                                <h1>
+                                    NEP-DAT Profile
+
+                                </h1>
+                                <div style={{ fontSize: '50px' }}>
+                                    <ScalableVectorGraphics
+                                        className={styles.nepDatIcon}
+                                        src={nepDat}
+                                    // style={{ color: hazardDetail.color || '#4666b0' }}
+                                    />
+
+                                </div>
                             </div>
-                        </header>
-                        {activeView === 'summary' && (
-                            <DisasterProfile
-                                className={styles.view}
-                            />
-                        )}
-                        {activeView === 'projectsProfile' && (
-                            <ProjectsProfile
-                                className={styles.view}
-                            />
-                        )}
-                        {activeView === 'contact' && (
-                            <Contact
-                                className={styles.view}
-                            />
-                        )}
-                        {activeView === 'document' && (
-                            <Document
-                                className={styles.view}
-                            />
-                        )}
-                    </>
-                )}
-            />
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </>
         );
     }
 }
+export default (Profile);

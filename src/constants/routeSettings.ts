@@ -71,6 +71,46 @@ const routeSettings: SomeRoute[] = [
         navbar: true,
     },
     {
+        name: 'demography',
+        title: 'Demography',
+        path: '/profile/demography/',
+        load: () => import('../views/Profile/ProfileModules/Demography'),
+        navbar: false,
+        // iconName: 'lossAndDamange',
+    },
+    {
+        name: 'contacts',
+        title: 'Contact',
+        path: '/profile/contacts/',
+        load: () => import('../views/Profile/ProfileModules/Contacts'),
+        navbar: false,
+        // iconName: 'lossAndDamange',
+    },
+    {
+        name: 'documents',
+        title: 'Documents',
+        path: '/profile/documents/',
+        load: () => import('../views/Profile/ProfileModules/Documents'),
+        navbar: false,
+        // iconName: 'lossAndDamange',
+    },
+    {
+        name: 'projects',
+        title: 'Projects',
+        path: '/profile/projects/',
+        load: () => import('../views/Profile/ProfileModules/Projects'),
+        navbar: false,
+        // iconName: 'lossAndDamange',
+    },
+    {
+        name: 'nepdat-profile',
+        title: 'NepDat Profile',
+        path: '/profile/nepDat-profile',
+        load: () => import('../views/Profile/ProfileModules/NepDatProfile'),
+        navbar: false,
+        // iconName: 'lossAndDamange',
+    },
+    {
         name: 'profile',
         title: 'Profile',
         path: '/profile/',
@@ -78,6 +118,8 @@ const routeSettings: SomeRoute[] = [
         load: () => import('../views/Profile'),
         navbar: true,
     },
+
+
     {
         name: 'riskInfo',
         title: 'Risk Info',

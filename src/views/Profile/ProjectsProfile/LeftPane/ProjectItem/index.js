@@ -21,9 +21,7 @@ const Output = ({
     description,
 }) => (
     <div className={styles.output}>
-        <h3>
-            {description}
-        </h3>
+        <h3>{description}</h3>
         <div className={styles.table}>
             {/* <TextOutput
                 type="table"
@@ -58,8 +56,7 @@ const propTypes = {
     title: PropTypes.string.isRequired,
 };
 
-const defaultProps = {
-};
+const defaultProps = {};
 
 const outputKeySelector = o => o.outputid;
 
@@ -78,27 +75,29 @@ class ProjectItem extends React.PureComponent {
 
     handleProjectClick = () => {
         this.setState({ showModal: true });
-    }
+    };
 
     handleModalClose = () => {
         this.setState({ showModal: false });
-    }
+    };
 
     outputRendererParams = (k, d) => {
-        const {
-            drrCycleMap = {},
-            categoryMap = {},
-        } = this.props;
-        const category = d.category.map(p => (categoryMap[p] || {}).title).join(', ');
-        const drrCycle = d.drrcycle.map(p => (drrCycleMap[p] || {}).title).join(', ');
+        const { drrCycleMap = {}, categoryMap = {} } = this.props;
 
-        return ({
+        const category = d.category
+            .map(p => (categoryMap[p] || {}).title)
+            .join(', ');
+        const drrCycle = d.drrcycle
+            .map(p => (drrCycleMap[p] || {}).title)
+            .join(', ');
+
+        return {
             category,
             drrCycle,
             budget: d.output_budloc,
             budgetUsd: d.output_budusd,
             description: d.output_description,
-        });
+        };
     };
 
     render() {
@@ -117,8 +116,12 @@ class ProjectItem extends React.PureComponent {
             organizationMap = {},
         } = this.props;
 
-        const partnerNames = partner.map(p => (organizationMap[p] || {}).oname).join(', ');
-        const donorNames = donor.map(d => (organizationMap[d] || {}).oname).join(', ');
+        const partnerNames = partner
+            .map(p => (organizationMap[p] || {}).oname)
+            .join(', ');
+        const donorNames = donor
+            .map(d => (organizationMap[d] || {}).oname)
+            .join(', ');
 
         return (
             <React.Fragment>
@@ -126,12 +129,10 @@ class ProjectItem extends React.PureComponent {
                     className={styles.project}
                     onClick={this.handleProjectClick}
                     role="button"
-                    onKeyPress={() => { }}
+                    onKeyPress={() => {}}
                     tabIndex={0}
                 >
-                    <h4 className={styles.heading}>
-                        {title}
-                    </h4>
+                    <h4 className={styles.heading}>{title}</h4>
                     {/* <TextOutput
                         className={styles.budget}
                         label="Budget"
@@ -144,23 +145,13 @@ class ProjectItem extends React.PureComponent {
                         <TextOutput
                             className={styles.startDate}
                             label="Start Date"
-                            value={(
-                                <FormattedDate
-                                    value={start}
-                                    mode="yyyy-MM-dd"
-                                />
-                            )}
+                            value={<FormattedDate value={start} mode="yyyy-MM-dd" />}
                             alwaysVisible
                         />
                         <TextOutput
                             className={styles.endDate}
                             label="End Date"
-                            value={(
-                                <FormattedDate
-                                    value={end}
-                                    mode="yyyy-MM-dd"
-                                />
-                            )}
+                            value={<FormattedDate value={end} mode="yyyy-MM-dd" />}
                             alwaysVisible
                         />
                     </div>
@@ -168,8 +159,8 @@ class ProjectItem extends React.PureComponent {
                 {showModal && (
                     <Modal
                         className={styles.modal}
-                    // closeOnEscape
-                    // closeOnOutsideClick
+            // closeOnEscape
+            // closeOnOutsideClick
                     >
                         <ModalHeader
                             className={styles.modalHeader}
@@ -202,22 +193,12 @@ class ProjectItem extends React.PureComponent {
                                 <TextOutput
                                     type="table"
                                     label="Start Date"
-                                    value={(
-                                        <FormattedDate
-                                            value={start}
-                                            mode="yyyy-MM-dd"
-                                        />
-                                    )}
+                                    value={<FormattedDate value={start} mode="yyyy-MM-dd" />}
                                 />
                                 <TextOutput
                                     type="table"
                                     label="End Date"
-                                    value={(
-                                        <FormattedDate
-                                            value={end}
-                                            mode="yyyy-MM-dd"
-                                        />
-                                    )}
+                                    value={<FormattedDate value={end} mode="yyyy-MM-dd" />}
                                 />
                                 <TextOutput
                                     valueClassName={styles.capitalizeValue}

@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable lines-between-class-members */
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -23,7 +25,7 @@ import {
     transformRegionToFilter,
 } from '#utils/transformations';
 import {
-    filtersSelector,
+    filtersSelector, municipalitiesSelector, regionNameSelector, regionSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -87,6 +89,53 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
         url: '/demographic/',
         method: methods.GET,
         onMount: true,
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                const demographyData = response as MultiResponse<PageType.Incident>;
+                const { onSuccess } = params;
+                onSuccess(demographyData.results);
+            }
+        },
+
+    },
+    lgProfileGetHouseHoldInfo: {
+        url: ({ params }) => `/profile-household/?municipality=${params.municipality}`,
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                const lgProfileData = response as MultiResponse<PageType.Incident>;
+                const { onSuccess } = params;
+                onSuccess(lgProfileData.results);
+            }
+        },
+
+    },
+    lgProfileGetWardLevelData: {
+        url: ({ params }) => `/profile-household/?municipality=${params.municipality}&summary=true&summary_type=agg_lgprofile&aggregate_type=municipality`,
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                const lgProfileWardLevelData = response as MultiResponse<PageType.Incident>;
+                const { onSuccess } = params;
+                onSuccess(lgProfileWardLevelData.results.sort((a, b) => a.ward - b.ward));
+            }
+        },
+
+    },
+    lgProfileGetRequest: {
+        url: ({ params }) => `/profile-household/?summary=${params.summary}&summary_type=${params.summaryType}&province=${params.province}&district=${params.district}&municipality=${params.municipality}`,
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ params, response }) => {
+            if (params && params.onSuccess) {
+                const lgProfileData = response as MultiResponse<PageType.Incident>;
+                const { onSuccess } = params;
+                onSuccess(lgProfileData.results);
+            }
+        },
+
     },
 };
 
@@ -110,17 +159,104 @@ const labelSelector = (d: Tab) => d.label;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     filters: filtersSelector(state),
+    region: regionSelector(state),
+    regionName: regionNameSelector(state),
 });
 
 class DisasterProfile extends React.PureComponent<Props> {
     public static contextType = TitleContext;
 
-    public state = {
-        activeView: 'resources',
-        // activeView: 'demographics',
+    public constructor(props: Props) {
+        super(props);
+        this.state = {
+            activeView: 'resources',
+            demographyData: [],
+            // activeView: 'demographics',
+            lgProfileData: [],
+            pendingLgProfileData: true,
+            houseHoldData: [],
+            lgProfileWardLevelData: [],
+
+        };
+        const {
+            requests: {
+                demographicsGetRequest,
+                lgProfileGetRequest,
+                lgProfileGetHouseHoldInfo,
+                lgProfileGetWardLevelData,
+
+            },
+            region: { adminLevel, geoarea },
+        } = this.props;
+        demographicsGetRequest.setDefaultParams({
+            onSuccess: this.demographicData,
+        });
+        if (adminLevel === 3) {
+            lgProfileGetHouseHoldInfo.setDefaultParams({
+                onSuccess: this.houseHoldData,
+                municipality: geoarea,
+            });
+            lgProfileGetWardLevelData.setDefaultParams({
+                municipality: geoarea,
+                onSuccess: this.wardLevelData,
+            });
+        }
+        lgProfileGetRequest.setDefaultParams({
+            onSuccess: this.lgProfileData,
+            summary: true,
+            summaryType: 'agg_lgprofile',
+            province: adminLevel && adminLevel === 1 ? geoarea : '',
+            district: adminLevel && adminLevel === 2 ? geoarea : '',
+            municipality: adminLevel && adminLevel === 3 ? geoarea : '',
+
+        });
+    }
+    public componentDidUpdate(prevProps) {
+        const { region: { adminLevel, geoarea }, region,
+            requests: {
+
+                lgProfileGetRequest,
+                lgProfileGetHouseHoldInfo,
+
+            } } = this.props;
+        if (prevProps.region !== region) {
+            if (adminLevel === 3) {
+                lgProfileGetHouseHoldInfo.do({
+                    onSuccess: this.houseHoldData,
+                    municipality: geoarea,
+                });
+            }
+            lgProfileGetRequest.do({
+                onSuccess: this.lgProfileData,
+                summary: true,
+                summaryType: 'agg_lgprofile',
+                province: adminLevel && adminLevel === 1 ? geoarea : '',
+                district: adminLevel && adminLevel === 2 ? geoarea : '',
+                municipality: adminLevel && adminLevel === 3 ? geoarea : '',
+
+            });
+        }
     }
 
-
+    private wardLevelData = (data) => {
+        this.setState({
+            lgProfileWardLevelData: data,
+        });
+    }
+    private houseHoldData = (data) => {
+        this.setState({
+            houseHoldData: data,
+        });
+    }
+    private lgProfileData = (data) => {
+        this.setState({
+            lgProfileData: data,
+            pendingLgProfileData: false,
+        });
+    }
+    private demographicData = (data) => {
+        this.setState({ demographyData: data });
+    }
     private views = {
         resources: {
             component: ResourceProfile,
@@ -176,8 +312,14 @@ class DisasterProfile extends React.PureComponent<Props> {
         const {
             className,
             requests,
+            closedVisualization,
+            handleCloseVisualizationOnModalCloseClick,
+            checkPendingCondition,
+            region,
+            regionName,
         } = this.props;
         const { setProfile } = this.context;
+        const { lgProfileData, pendingLgProfileData } = this.state;
 
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
@@ -187,28 +329,36 @@ class DisasterProfile extends React.PureComponent<Props> {
                 return prevProfile;
             });
         }
-        const { activeView } = this.state;
+        const { activeView, demographyData, houseHoldData, lgProfileWardLevelData } = this.state;
+
+
         const pending = isAnyRequestPending(requests);
+        checkPendingCondition(pending);
 
         return (
             <>
-                <Loading pending={pending} />
-                <div className={_cs(styles.profileSummary, className)}>
-                    <SegmentInput
-                        className={styles.summarySelection}
-                        options={tabList}
-                        value={activeView}
-                        onChange={this.handleTabClick}
-                        keySelector={keySelector}
-                        labelSelector={labelSelector}
-                        showLabel={false}
-                        showHintAndError={false}
-                    />
-                    <MultiViewContainer
-                        views={this.views}
-                        active={activeView}
-                    />
-                </div>
+
+                {pending ? <Loading pending={pending} />
+                    : (
+                        <>
+                            {' '}
+                            <Demographics
+                                pending={pending}
+                                data={demographyData}
+                                className={styles.view}
+                                closedVisualization={closedVisualization}
+                                handleCloseVisualizationOnModalCloseClick={handleCloseVisualizationOnModalCloseClick}
+                                checkPendingCondition={checkPendingCondition}
+                                lgProfileData={lgProfileData}
+                                LGProfilehouseHoldData={houseHoldData}
+                                lgProfileWardLevelData={lgProfileWardLevelData}
+                            />
+                        </>
+                    )
+
+                }
+
+
             </>
         );
     }
