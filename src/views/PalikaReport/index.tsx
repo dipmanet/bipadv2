@@ -314,7 +314,7 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
     useEffect(() => {
         // Example POST method implementation:
-        function postData(link = `${process.env.REACT_APP_DOMAIN}${url}`) {
+        function postData(link = `${process.env.REACT_APP_API_SERVER_URL}${url}`) {
             // Default options are marked with *
             fetch(link, {
                 method: 'OPTIONS',
