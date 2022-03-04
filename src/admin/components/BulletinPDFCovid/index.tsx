@@ -16,19 +16,23 @@ import {
 } from 'recharts';
 
 import { nepaliRef } from 'src/admin/components/BulletinForm/formFields';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import LossItem from '../BulletinPDFLoss/LossItem';
 import { covidObj24HRs, covidObj24HRsRow2, covidObjTotal, vaccineStatObj } from './covid';
 import GenderStat from './GenderStat';
 import KhopBanner from './KhopBanner';
+
 import {
     bulletinPageSelector,
     hazardTypesSelector,
+    languageSelector,
 } from '#selectors';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 interface Props {
@@ -49,7 +53,7 @@ const BulletinPDFLoss = (props: Props) => {
         feedback,
     } = props.bulletinData;
 
-
+    const { language: { language } } = props;
     const [provinceWiseTotal, setprovinceWiseTotal] = useState([]);
     const [hazardWiseLossChart, setHazardWiseChart] = useState([]);
     const [genderWiseLossChart, setGenderWiseChart] = useState([]);
@@ -165,10 +169,15 @@ const BulletinPDFLoss = (props: Props) => {
 
     return (
         <div className={styles.covidPDFContainer}>
-
             <div className={styles.container1}>
                 <div className={styles.hazardWiseStats}>
-                    <h2>प्रकोप अनुसार घटना र मृत्‍यु संख्याको बर्गिकरण </h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Hazardwise Breakdown of Incidents and Deaths')}</span>
+                            }
+                        </Translation>
+                    </h2>
                     <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                             layout="vertical"
@@ -198,7 +207,13 @@ const BulletinPDFLoss = (props: Props) => {
                     </ResponsiveContainer>
                 </div>
                 <div className={styles.genderWiseStats}>
-                    <h2>लिङ अनुसार मृत्‍युको बर्गिकरण </h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Genderwise Breakdown of Deaths')}</span>
+                            }
+                        </Translation>
+                    </h2>
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart
                             width={200}
@@ -236,7 +251,15 @@ const BulletinPDFLoss = (props: Props) => {
             </div>
             <div className={styles.container2}>
                 <div className={styles.covid24}>
-                    <h2>२४ घण्टा मा COVID-19 को विवरणहरु </h2>
+
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Hazardwise Breakdown of Incidents and Deaths')}</span>
+                            }
+                        </Translation>
+
+                    </h2>
                     <div className={styles.lossIconsRow}>
                         {
                             covidObj24HRs.map(l => (
@@ -265,7 +288,14 @@ const BulletinPDFLoss = (props: Props) => {
                     </div>
 
                     <div className={styles.khopContainer}>
-                        <h2>खोपको विवरण </h2>
+                        <h2>
+                            <Translation>
+                                {
+                                    t => <span>{t('Vaccine Stats')}</span>
+                                }
+                            </Translation>
+
+                        </h2>
                         <div className={styles.khopRow}>
                             {
                                 vaccineStatObj.map((l, i) => {
@@ -294,7 +324,14 @@ const BulletinPDFLoss = (props: Props) => {
 
                 </div>
                 <div className={styles.covidTotal}>
-                    <h2>हालसम्मको COVID-19 को कुल तथ्याङ्क</h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('COVID-19 Stats till date')}</span>
+                            }
+                        </Translation>
+
+                    </h2>
                     <div className={styles.lossIconsRow}>
                         {
                             covidObjTotal.map(l => (
@@ -307,7 +344,14 @@ const BulletinPDFLoss = (props: Props) => {
                         }
                     </div>
                     <div className={styles.provinceWiseTotal}>
-                        <h2>खोप अनुसार अहिले सम्म को कुल तथ्यांक </h2>
+                        <h2>
+                            <Translation>
+                                {
+                                    t => <span>{t('COVID-19 Stats till date')}</span>
+                                }
+                            </Translation>
+
+                        </h2>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
                                 layout="vertical"

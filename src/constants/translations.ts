@@ -1,5 +1,10 @@
 export const enTranslation = {
     translation: {
+        'Vaccine Stats': 'Vaccine Stats',
+        'COVID-19 Stats till date': 'COVID-19 Stats till date',
+        'COVID-19 Stats for last 24 hours': 'COVID-19 Stats for last 24 hours',
+        'Genderwise Breakdown of Deaths': 'Genderwise Breakdown of Deaths',
+        'Hazardwise Breakdown of Incidents and Deaths': 'Hazardwise Breakdown of Incidents and Death',
         'Death Count': 'Death Count',
         'Hazard Legend': 'Hazard Legend',
         death: 'Death',
@@ -179,6 +184,12 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Vaccine-wise total breakdown': 'खोप अनुसार अहिले सम्म को कुल तथ्यांक',
+        'Vaccine Stats': 'खोपको विवरण',
+        'COVID-19 Stats till date': 'हालसम्मको COVID-19 को कुल तथ्याङ्क',
+        'COVID-19 Stats for last 24 hours': '२४ घण्टा मा COVID-19 को विवरणहरु',
+        'Genderwise Breakdown of Deaths': 'लिङ अनुसार मृत्‍युको बर्गिकरण',
+        'Hazardwise Breakdown of Incidents and Death': 'प्रकोप अनुसार घटना र मृत्‍यु संख्याको बर्गिकरण',
         'Death Count': 'मृत्‍यु संख्या',
         'Hazard Legend': 'प्रकोप लेजेन्ड',
         death: 'मृत्यु',

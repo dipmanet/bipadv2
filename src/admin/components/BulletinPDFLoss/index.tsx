@@ -123,6 +123,14 @@ const BulletinPDF = (props: Props) => {
                 return hazardTypes[h[0]] ? hazardTypes[h[0]].color : '#000000';
             };
 
+            const getHazardTitle = (hazardName) => {
+                const h = Object
+                    .keys(hazardTypes)
+                    .filter(k => hazardTypes[k].titleNe === hazardName);
+                return hazardTypes[h[0]] ? hazardTypes[h[0]].title : '';
+            };
+
+
             const getSeverity = (deaths) => {
                 if (deaths) {
                     if (Number(deaths) === 0) {
@@ -142,6 +150,7 @@ const BulletinPDF = (props: Props) => {
             const obj = Object.keys(hazardWiseLoss).map(hazardName => (
                 {
                     title: hazardName,
+                    titleEn: getHazardTitle(hazardName),
                     color: getHazardColor(hazardName),
                 }
             ));
@@ -153,6 +162,7 @@ const BulletinPDF = (props: Props) => {
             const uniqueAddedHazards = [...new Set(allHazardsAdded)];
             const newhazardLegends = uniqueAddedHazards.map(h => ({
                 title: h,
+                titleEn: getHazardTitle(h),
                 color: getHazardColor(h),
             }));
 
