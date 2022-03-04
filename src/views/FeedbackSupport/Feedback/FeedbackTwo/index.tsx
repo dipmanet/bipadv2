@@ -50,13 +50,13 @@ const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> 
     },
     onFatal: ({ error, params }) => {
       if (error) {
-          params.setFailureResponse('Please check your internet connection and try again.');
-          params.setloader(error);
-          // params.setFaramErrors({
-          //     $internal: ['Some problem occurred'],
-          // });
+        params.setFailureResponse('Please check your internet connection and try again.');
+        params.setloader(error);
+        // params.setFaramErrors({
+        //     $internal: ['Some problem occurred'],
+        // });
       }
-  },
+    },
     extras: { hasFile: true },
   },
 };
@@ -94,23 +94,21 @@ const SupportTwo = (props) => {
     }
   }, [response]);
 
-console.log(screenshotMessage);
-
   const handleSubmit = () => {
     setOnSubmit(true);
-      const inputError = { ...error };
-      if (data.feedback === '') {
-        inputError.feedbackError = '* This field cannot be empty';
-      } else {
-        inputError.feedbackError = '';
-      }
-      if (!data.screenshot) {
-        inputError.screenshotError = '* Please choose a file';
-        setScreenshotMessage(false);
-      } else {
-        inputError.screenshotError = '';
-      }
-      setError(inputError);
+    const inputError = { ...error };
+    if (data.feedback === '') {
+      inputError.feedbackError = '* This field cannot be empty';
+    } else {
+      inputError.feedbackError = '';
+    }
+    if (!data.screenshot) {
+      inputError.screenshotError = '* Please choose a file';
+      setScreenshotMessage(false);
+    } else {
+      inputError.screenshotError = '';
+    }
+    setError(inputError);
   };
 
 
@@ -135,15 +133,11 @@ console.log(screenshotMessage);
       });
     }
   }, [success]);
-
-console.log(data);
-
-
-useEffect(() => {
-if (screenshotMessage || error.screenshotError) {
-  setOnSubmit(false);
-}
-}, [screenshotMessage, error.screenshotError]);
+  useEffect(() => {
+    if (screenshotMessage || error.screenshotError) {
+      setOnSubmit(false);
+    }
+  }, [screenshotMessage, error.screenshotError]);
 
 
   useEffect(() => {
@@ -155,47 +149,47 @@ if (screenshotMessage || error.screenshotError) {
           && data.designation
           && data.nameOfTheInstitution
           && data.email
-            && !error.feedbackError
-            && !error.screenshotError
+          && !error.feedbackError
+          && !error.screenshotError
 
-            ) {
-            setloader(false);
-            setFailureResponse(false);
-            TechnicalSupportPostRequest.do({
-              body: data,
-              setSuccess: setsucess,
-              setloader,
-              setResponse: setresponse,
-              setFailureResponse,
+        ) {
+          setloader(false);
+          setFailureResponse(false);
+          TechnicalSupportPostRequest.do({
+            body: data,
+            setSuccess: setsucess,
+            setloader,
+            setResponse: setresponse,
+            setFailureResponse,
 
-            });
-          }
-       }
+          });
+        }
+      }
 
-       if (data.isAnonymous) {
+      if (data.isAnonymous) {
         if (data.screenshot
           && data.feedback
           && !data.fullName
           && !data.designation
           && !data.nameOfTheInstitution
           && !data.email
-            && !error.feedbackError
-            && !error.screenshotError
+          && !error.feedbackError
+          && !error.screenshotError
 
-            ) {
-            setloader(false);
-            setFailureResponse(false);
-            TechnicalSupportPostRequest.do({
-              body: data,
-              setSuccess: setsucess,
-              setloader,
-              setResponse: setresponse,
-              setFailureResponse,
+        ) {
+          setloader(false);
+          setFailureResponse(false);
+          TechnicalSupportPostRequest.do({
+            body: data,
+            setSuccess: setsucess,
+            setloader,
+            setResponse: setresponse,
+            setFailureResponse,
 
-            });
-          }
-       }
-  }
+          });
+        }
+      }
+    }
   }, [data, error, onSubmit]);
 
   return (
@@ -237,11 +231,11 @@ if (screenshotMessage || error.screenshotError) {
                       </div>
                     </div>
                     <div
-                    className={styles.tech_support_container}
+                      className={styles.tech_support_container}
                     >
                       <div
-className={styles.tech_support_wrapper}
-        style={success ? { display: 'none' } : null}
+                        className={styles.tech_support_wrapper}
+                        style={success ? { display: 'none' } : null}
                       >
                         <div className={styles.tech_support_head}>Leave Feedback</div>
 
@@ -320,10 +314,10 @@ className={styles.tech_support_wrapper}
                             ? styles.info_text_red
                             : styles.info_text}
                           >
-{
-  screenshotMessage || 'Please choose a file less than 2MB.'
+                            {
+                              screenshotMessage || 'Please choose a file less than 2MB.'
 
-}
+                            }
 
 
                           </span>
@@ -351,15 +345,15 @@ className={styles.tech_support_wrapper}
 
                       <div className={!loader ? styles.loader : ''} />
                       {
-                                        failureResponse
-                                            ? (
-                                                <div className={styles.loaderTimeOut}>
-                                                    <span className={styles.timeOutText}>{failureResponse}</span>
+                        failureResponse
+                          ? (
+                            <div className={styles.loaderTimeOut}>
+                              <span className={styles.timeOutText}>{failureResponse}</span>
 
-                                                </div>
-                                            )
-                                            : ''
-                                    }
+                            </div>
+                          )
+                          : ''
+                      }
 
                       {success
                         && (
@@ -367,8 +361,8 @@ className={styles.tech_support_wrapper}
                             <div className={styles.tickWrapper}>
                               <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
                                 <circle className={styles.checkmark__circle} cx="26" cy="26" r="25" fill="none" />
-                                   <path className={styles.checkmark__check} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                               </svg>
+                                <path className={styles.checkmark__check} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                              </svg>
                             </div>
                             <p className={styles.submit_text}>Your form has been submitted</p>
                           </div>
@@ -378,8 +372,8 @@ className={styles.tech_support_wrapper}
 
 
                       <div
-className={styles.back_submit_button}
-        style={success ? { display: 'none' } : null}
+                        className={styles.back_submit_button}
+                        style={success ? { display: 'none' } : null}
                       >
                         <Button className={styles.back_btn} onClick={onPreviousClick}>
                           Back

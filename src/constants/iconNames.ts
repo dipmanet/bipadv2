@@ -94,6 +94,7 @@ const iconNames = {
     info: 'fa  fa-info-circle',
     sortDown: 'fa fa-angle-down',
     sortUp: 'fa fa-angle-up',
+    feedbackIcon: 'fa fa-comments',
 };
 
 export default iconNames;

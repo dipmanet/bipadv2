@@ -196,7 +196,7 @@ class Navbar extends React.PureComponent<Props, State> {
                     <ModalButton
                         className={styles.reportIncidentButton}
                         title="Feedback & Support"
-                        iconName="chatBoxes"
+                        iconName="feedbackIcon"
                         modal={<FeedbackSupport />}
                     // onClick={() => navigate('/feedback-support/')}
                     />

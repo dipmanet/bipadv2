@@ -24,8 +24,8 @@ const FeedbackOne = (props) => {
     const [checked, setChecked] = useState(false);
 
 
-    const { className, onNextClick, onPreviousClick, data,
-        setData, error, setError, closeOnOutsideClick } = props;
+    const { className, onNextClick, data,
+        setData, error, setError } = props;
 
 
     const inputValidation = () => {
@@ -49,7 +49,7 @@ const FeedbackOne = (props) => {
 
         if (data.othersSpecify) {
             if (!validNameRegex.test(data.otherTechSupport)
-        || data.otherTechSupport === '') {
+                || data.otherTechSupport === '') {
                 newerror.otherSpecifyError = invalidMessage;
             } else {
                 newerror.otherSpecifyError = '';
@@ -78,12 +78,11 @@ const FeedbackOne = (props) => {
     useEffect(() => {
         if (checked) {
             if (data.institutionType
-            // && data.typeOfTechSupport
-            && data.priorityLevel
-            && !error.institutionError
-            && !error.techSupportError
-            && !error.priorityLevelError
-            && !error.otherSpecifyError) {
+                && data.priorityLevel
+                && !error.institutionError
+                && !error.techSupportError
+                && !error.priorityLevelError
+                && !error.otherSpecifyError) {
                 onNextClick();
             }
         }
@@ -265,8 +264,10 @@ const FeedbackOne = (props) => {
                                                                 placeholder="Please Specify"
                                                                 name="other_tech_support"
                                                                 value={data.otherTechSupport}
-                                                                onChange={e => setData({ ...data,
-                                                                    otherTechSupport: e.target.value })}
+                                                                onChange={e => setData({
+                                                                    ...data,
+                                                                    otherTechSupport: e.target.value,
+                                                                })}
 
                                                             />
                                                         </div>

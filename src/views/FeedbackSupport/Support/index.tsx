@@ -59,44 +59,43 @@ const Support = () => {
         <>
             {
                 formElementsPosition === 0
-            && (
-                <SupportOne
-                    onNextClick={onNextClick}
-                    onPreviousClick={onPreviousClick}
-                    data={data}
-                    setData={setdata}
-                    error={error}
-                    setError={setError}
-                />
-            )
+                && (
+                    <SupportOne
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        data={data}
+                        setData={setdata}
+                        error={error}
+                        setError={setError}
+                    />
+                )
             }
             {
                 formElementsPosition === 1
-    && (
-        <SupportTwo
-            onNextClick={onNextClick}
-            onPreviousClick={onPreviousClick}
-            data={data}
-            setData={setdata}
-            error={error}
-            setError={setError}
-        />
-    )
+                && (
+                    <SupportTwo
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        data={data}
+                        setData={setdata}
+                        error={error}
+                        setError={setError}
+                    />
+                )
             }
 
             {
                 formElementsPosition === 2
- && (
-     <SupportThree
-
-         onNextClick={onNextClick}
-         onPreviousClick={onPreviousClick}
-         data={data}
-         setData={setdata}
-         error={error}
-         setError={setError}
-     />
- )
+                && (
+                    <SupportThree
+                        onNextClick={onNextClick}
+                        onPreviousClick={onPreviousClick}
+                        data={data}
+                        setData={setdata}
+                        error={error}
+                        setError={setError}
+                    />
+                )
 
             }
 

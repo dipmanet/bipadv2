@@ -53,7 +53,7 @@ const requestOptions: {
                 // });
             }
         },
-    // extras: { hasFile: true },
+        // extras: { hasFile: true },
     },
 };
 
@@ -63,16 +63,13 @@ const FeedbackThree = (props) => {
     const [sucessResponse, setSucessResponse] = useState(false);
     const [failureResponse, setFailureResponse] = useState(false);
     const [loader, setloader] = useState(true);
-    const [showHideSubmission, setshowHideSubmission] = useState(false);
-
     const [clicked, setClicked] = useState(false);
-    const [validInput, setValidInput] = useState(false);
     const [closeButton, setClosedButton] = useState(true);
 
 
     const {
-        requests: { FeedbackPostRequest }, closeOnOutsideClick,
-        className, onNextClick, onPreviousClick, data,
+        requests: { FeedbackPostRequest },
+        className, onPreviousClick, data,
         setData, error, setError,
     } = props;
 
@@ -111,7 +108,7 @@ const FeedbackThree = (props) => {
         }
         if (
             !validNameRegex.test(data.fullName)
-      || data.fullName === ''
+            || data.fullName === ''
         ) {
             newerror.fullNameError = invalidMessage;
         } else {
@@ -144,7 +141,6 @@ const FeedbackThree = (props) => {
         setError(newerror);
     };
 
-
     const mainData = [
         { name: 'Technical Troubleshoot', value: data.technicalTroubleshoot },
         { name: 'Overview of BIPAD Portal', value: data.overviewOfBipadPortal },
@@ -154,7 +150,6 @@ const FeedbackThree = (props) => {
         { name: 'Others (Specify)', value: data.othersSpecify },
 
     ];
-
 
     useEffect(() => {
         const filteredData = mainData.filter(item => item.value === true)
@@ -169,15 +164,15 @@ const FeedbackThree = (props) => {
         if (submit) {
             if (
                 data.fullName
-        && data.designation
-        && data.nameOfTheInstitution
-        && data.email
-        && data.phoneNumber
-        && !error.fullNameError
-        && !error.designationError
-        && !error.nameOfTheInstitutionError
-        && !error.emailError
-        && !error.phoneNumberError
+                && data.designation
+                && data.nameOfTheInstitution
+                && data.email
+                && data.phoneNumber
+                && !error.fullNameError
+                && !error.designationError
+                && !error.nameOfTheInstitutionError
+                && !error.emailError
+                && !error.phoneNumberError
             ) {
                 setloader(false);
                 setFailureResponse(false);
@@ -258,19 +253,19 @@ const FeedbackThree = (props) => {
                                     <div className={styles.feedback_wrapper}>
                                         <div className={styles.feed_head_container}>
                                             <div className={styles.feed_head_wrapper}>
-                        Leave Feedback
+                                                Leave Feedback
                                             </div>
                                         </div>
                                         <div className={styles.feedback_intro}>
-                      To send feedback/comments for the improvement of the BIPAD
-                      portal
+                                            To send feedback/comments for the improvement of the BIPAD
+                                            portal
                                         </div>
                                         <div className={styles.feedback_button}>
                                             <Button
                                                 onClick={() => navigate('/feedback/')}
                                                 className={styles.feed_btn}
                                             >
-                        FEEDBACK FORM
+                                                FEEDBACK FORM
                                             </Button>
                                         </div>
                                     </div>
@@ -282,7 +277,7 @@ const FeedbackThree = (props) => {
                                     >
 
                                         <div className={styles.tech_support_head}>
-                        Please provide the following details
+                                            Please provide the following details
                                         </div>
                                         <div className={styles.tech_support_input}>
                                             <div
@@ -410,8 +405,8 @@ const FeedbackThree = (props) => {
                                                 onChange={(e: any) => setchecked(e.target.checked)}
                                             />
                                             <label htmlFor="verify" className={styles.verify_text}>
-                          I hereby give my consent to store my personal details
-                          in BIPAD portal.
+                                                I hereby give my consent to store my personal details
+                                                in BIPAD portal.
                                             </label>
                                         </div>
 
@@ -420,14 +415,14 @@ const FeedbackThree = (props) => {
                                                 className={styles.back_btn}
                                                 onClick={onPreviousClick}
                                             >
-                          back
+                                                back
                                             </Button>
                                             <Button
                                                 className={styles.submit_btn}
                                                 disabled={!checked}
                                                 onClick={inputValidation}
                                             >
-                          submit
+                                                submit
                                             </Button>
                                         </div>
                                     </div>
@@ -445,17 +440,17 @@ const FeedbackThree = (props) => {
                                     }
 
                                     {sucessResponse
-                        && (
-                            <div className={styles.submit_div}>
-                                <div className={styles.tickWrapper}>
-                                    <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                                        <circle className={styles.checkmark__circle} cx="26" cy="26" r="25" fill="none" />
-                                        <path className={styles.checkmark__check} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                                    </svg>
-                                </div>
-                                <p className={styles.submit_text}>Your form has been submitted</p>
-                            </div>
-                        )
+                                        && (
+                                            <div className={styles.submit_div}>
+                                                <div className={styles.tickWrapper}>
+                                                    <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                                        <circle className={styles.checkmark__circle} cx="26" cy="26" r="25" fill="none" />
+                                                        <path className={styles.checkmark__check} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                                                    </svg>
+                                                </div>
+                                                <p className={styles.submit_text}>Your form has been submitted</p>
+                                            </div>
+                                        )
 
                                     }
                                 </div>
