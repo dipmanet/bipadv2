@@ -199,7 +199,7 @@ const SupportTwo = (props) => {
       {
         closeButton
           ? (
-            <Modal className={_cs(styles.loginModal, className)}>
+            <Modal className={_cs(success ? styles.login_modal_submit : styles.loginModal, className)}>
               <ModalBody className={styles.content}>
                 <DangerButton
                   transparent
@@ -340,10 +340,29 @@ const SupportTwo = (props) => {
                             portal.
                           </label>
                         </div>
+
+                        <div
+                        className={styles.back_submit_button}
+                        >
+                        <Button className={styles.back_btn} onClick={onPreviousClick}>
+                          Back
+                        </Button>
+                        <Button
+                          className={styles.submit_btn}
+                          disabled={!checked}
+                          onClick={handleSubmit}
+                        >
+                          Submit
+                        </Button>
+                      </div>
                       </div>
 
 
-                      <div className={!loader ? styles.loader : ''} />
+                        {
+                     !loader && <div className={styles.loader} />
+                          }
+
+
                       {
                         failureResponse
                           ? (
@@ -352,7 +371,7 @@ const SupportTwo = (props) => {
 
                             </div>
                           )
-                          : ''
+                          : null
                       }
 
                       {success
@@ -371,22 +390,9 @@ const SupportTwo = (props) => {
                       }
 
 
-                      <div
-                        className={styles.back_submit_button}
-                        style={success ? { display: 'none' } : null}
-                      >
-                        <Button className={styles.back_btn} onClick={onPreviousClick}>
-                          Back
-                        </Button>
-                        <Button
-                          className={styles.submit_btn}
-                          disabled={!checked}
-                          onClick={handleSubmit}
-                        >
-                          Submit
-                        </Button>
-                      </div>
                     </div>
+
+
                   </div>
                 </div>
 

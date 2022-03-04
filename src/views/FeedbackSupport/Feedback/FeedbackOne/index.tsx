@@ -210,7 +210,7 @@ if (checked && !data.isAnonymous) {
                             disabled={inputField.designation}
                             className={error.designationError
                               ? styles.error : styles.designation}
-                            placeholder="Designation (eg. IT Officer)"
+                            placeholder="Designation(eg.IT Officer)"
                             value={data.designation}
                             onChange={formHandler}
                             autoComplete="off"

@@ -236,7 +236,7 @@ const FeedbackThree = (props) => {
             {closeButton ? (
 
                 <Modal
-                    className={_cs(styles.loginModal, className)}
+                    className={_cs(sucessResponse ? styles.login_modal_submit : styles.loginModal, className)}
                     closeOnOutsideClick
                 >
                     <ModalBody className={styles.content}>
@@ -314,7 +314,7 @@ const FeedbackThree = (props) => {
                                                     type="text"
                                                     autoComplete="off"
                                                     className={styles.designation}
-                                                    placeholder="Designation (eg. IT Officer)"
+                                                    placeholder="Designation(eg.IT Officer)"
                                                     value={data ? data.designation : ''}
                                                     onChange={formHandler}
                                                 />
@@ -410,7 +410,9 @@ const FeedbackThree = (props) => {
                                             </label>
                                         </div>
 
-                                        <div className={styles.back_submit_button}>
+                                        <div
+                                            className={styles.back_submit_button}
+                                        >
                                             <Button
                                                 className={styles.back_btn}
                                                 onClick={onPreviousClick}
@@ -425,9 +427,11 @@ const FeedbackThree = (props) => {
                                                 submit
                                             </Button>
                                         </div>
-                                    </div>
 
-                                    <div className={!loader ? styles.loader : ''} />
+
+                                    </div>
+                                    { !loader && <div className={styles.loader} /> }
+
                                     {
                                         failureResponse
                                             ? (
@@ -454,7 +458,11 @@ const FeedbackThree = (props) => {
 
                                     }
                                 </div>
+
+
                             </div>
+
+
                         </div>
 
                     </ModalBody>

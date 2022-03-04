@@ -34,6 +34,11 @@
     }
   }
 }
+
+.login_modal_submit{
+  @extend .login-modal;
+  width: auto;
+}
 .container_tech_support {
   width: 100%;
   display: flex;
@@ -53,6 +58,7 @@
         margin-right: auto;
         margin-left: 19.5%;
         margin-top: 17.5%;
+        margin-bottom: 17.5%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -66,7 +72,7 @@
           .feed_head_wrapper {
             margin-left: 1%;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 14px;
             font-style: normal;
             color: #ffffff;
             display: flex;
@@ -262,7 +268,6 @@
           font-weight: 600;
           font-size: 14px;
           width: 100%;
-
         }
         .tech_support_input {
           margin-top: 5px;
@@ -282,11 +287,9 @@
               width: 100%;
               background: #e8e8e8;
               font-size: 12px;
-              word-spacing: -2px;
               font-weight: 400;
               border: none;
               outline: none;
-              padding-left: 10px;
               padding:12px;
               border-radius: 4px;
             }
@@ -303,11 +306,9 @@
               width: 100%;
               background: #e8e8e8;
               font-size: 12px;
-              word-spacing: -2px;
               font-weight: 400;
               border: none;
               outline: 1px solid #c72f21;
-              padding-left: 10px;
               padding:12px;
               border-radius: 4px;
             }
@@ -327,7 +328,6 @@
               color: #8B8B8B;
               font-size: 12px;
               font-weight: 400;
-              padding-left: 10px;
               padding:12px;
               border-radius: 4px;
             }
@@ -339,7 +339,6 @@
               font-weight: 400;
               border: none;
               outline: none;
-              padding-left: 10px;
               padding:12px;
               border-radius: 4px;
 
@@ -380,7 +379,6 @@
               font-weight: 400;
               border: none;
               outline: none;
-              padding-left: 10px;
               padding:12px;
               outline: 1px solid #c72f21;
 
@@ -401,9 +399,7 @@
           display: flex;
           flex-direction: row;
           align-items: center;
-          // height: 7%;
           width: 100%;
-          // margin-top: 2px;
 
           .verify {
             height: 10px;
@@ -419,18 +415,18 @@
             color: #777777;
             font-size: 10px;
             font-weight: 400;
-            line-height: 16px;
             &:hover {
               cursor: pointer;
             }
           }
         }
+        
         .back_submit_button {
           display: flex;
           flex-direction: row;
           justify-content: flex-end;
           margin-top: 5px;
-
+  
           .back_btn {
             padding: 1.6% 0.3% 1.6% 3%;
             color: #0069de;
@@ -444,7 +440,7 @@
             line-height: 12px;
             filter: saturate(100%);
             text-transform: uppercase;
-
+  
             &:hover {
               cursor: pointer;
             }
@@ -474,7 +470,10 @@
             }
           }
         }
+      
       }
+    
+      
     }
   }
 }
