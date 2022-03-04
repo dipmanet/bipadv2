@@ -2,20 +2,17 @@
   display: flex;
   justify-content: center;
   background-color: var(--color-foreground);
-  border-radius: 25px;
   width: 50%;
   margin: 0px;
+  border-radius: 10px !important;
   padding: 0px !important;
-  // max-width: 900px;
-  // height: 45vh;
-  height: 53%;
 
 
   .content {
       display: flex;
-      height: 100%;
       width: 100%;
       padding: 0px;
+      border-radius: 10px !important;
 .closeButton{
   position: absolute;
   top: 10px;
@@ -38,24 +35,20 @@
 }
   .container_tech_support {
     width: 100%;
-    height: 100%;
     display: flex;
    
 
     .wrapper_tech_support {
       width: 100%;
-      height: 100%;
       display: flex;
 
       .feedback_container_first {
         background: linear-gradient(#1769d4, #003a8d);
         width: 42%;
-        height: 100%;
-        border-radius: 2.5% 0% 0% 2.5%;
 
         .feedback_wrapper {
           width: 60%;
-          height: 100%;
+  
           margin-left: 19.5%;
           padding-top: 18.4%;
           display: flex;
@@ -126,29 +119,28 @@
       }
 
       .feedback_container_second {
-        height: 100%;
+
         width: 58%;
         display: flex;
         justify-content: space-evenly;
         flex-direction: column;
         background: #ffffff;
-        border-radius: 0px 2.5% 2.5% 0px;
+        padding-top: 5%;
+        padding-bottom: 5%;
         
 
         .feedback_input_wrapper {
           display: flex;
           flex-direction: column;
           width: 75%;
-          height: 80%;
           margin-left: 14.7%;
-          padding-top: 12px;
           background: #ffffff;
 
           .error_text{
             display: flex;
             justify-content: flex-start;
             width: 100%;
-            font-size: 12px;
+            font-size: 9px;
             font-weight: 400;
             color: #C72F21;
             border: none;

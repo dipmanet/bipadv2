@@ -191,7 +191,7 @@ const FeedbackTwo = (props) => {
                                                                 width: '100%',
                                                                 justifyContent: 'space-between' }}
                                                             >
-                                                                {error.dateError
+                                                                {error
                                                                     ? (
                                                                         <div
                                                                             className={styles.error_text}
@@ -203,7 +203,7 @@ const FeedbackTwo = (props) => {
                                                                     : null}
 
                                                                 {
-                                                                    error.timeError
+                                                                    error
                                                                         ? (
                                                                             <div
                                                                                 className={styles.error_text}

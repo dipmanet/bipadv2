@@ -104,8 +104,8 @@ useEffect(() => {
             setData({ ...data,
           fullName: '',
           designation: '',
-            nameOfTheInstitution: '',
-            email: '' });
+          nameOfTheInstitution: '',
+          email: '' });
   }
   if (!data.isAnonymous) {
     setInputField({ ...inputField,

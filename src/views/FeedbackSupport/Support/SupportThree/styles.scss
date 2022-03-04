@@ -2,22 +2,17 @@
   display: flex;
   justify-content: center;
   background-color: var(--color-foreground);
-  border-radius: 25px;
+  border-radius: 10px !important;
   width: 50%;
   margin: 0px;
   padding: 0px !important;
-  // max-width: 900px;
-  // height: 45vh;
-  height: 45%;
-
-  .header {
-  }
+  // height: 45%;
 
   .content {
     display: flex;
     padding: 0px;
-    height: 100%;
-      width: 100%;
+    width: 100%;
+    border-radius: 10px !important;
     .closeButton {
       position: absolute;
       top: 10px;
@@ -45,19 +40,16 @@
 
   .wrapper_tech_support {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: row;
 
     .feedback_container_first {
       background: linear-gradient(#1769d4, #003a8d);
       width: 41.5%;
-      height: 100%;
-      border-radius: 2.5% 0% 0% 2.5%;
+
 
       .feedback_wrapper {
         width: 60%;
-        height: 50%;
         margin-right: auto;
         margin-left: 19.5%;
         margin-top: 17.5%;
@@ -100,7 +92,7 @@
           justify-content: center;
           align-items: center;
           width: 100%;
-          height: 10%;
+          // height: 10%;
           margin-top: -1%;
 
           .feed_btn {
@@ -125,20 +117,21 @@
     }
 
     .feedback_container_second {
-      height: 100%;
+
       width: 58.5%;
+      padding-top: 5%;
+      padding-bottom: 5%;
       display: flex;
       position: relative;
       justify-content: space-around;
       align-items: center;
       flex-direction: column;
       background: #ffffff;
-      border-radius: 0% 2.5% 2.5% 0%;
 
       .error_text {
         display: flex;
         width: 100%;
-        font-size: 12px;
+        font-size: 9px;
         font-weight: 400;
         color: #c72f21;
         border: none;
@@ -167,19 +160,13 @@
 
 
       .loaderTimeOut{
-        // position: absolute;
-        // top :0;
         display: flex;
         align-items: center;
-        // justify-content: center;
         width: 75%;
         margin-left: auto;
         margin-right: auto;
         margin-top: 3px;
-        // margin-bottom: 5px;
         height: 5%;
-        // background:#e8e8e8;
-        
         font-size: 13px;
         margin-bottom: 20px;
 
@@ -191,27 +178,10 @@
 
       
 
-      .cross_button {
-        display: flex;
-        width: 5%;
-        height: 5%;
-        justify-content: center;
-        margin-left: auto;
-        margin-right: 3%;
-
-        .cross_btn {
-          background: transparent;
-          border: none;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-      }
 
       .submit_div {
         display: flex;
-        height: 100%;
+  
         align-items: center;
         justify-content: center;
         .tickWrapper {
@@ -287,9 +257,6 @@
         display: flex;
         flex-direction: column;
         width: 75%;
-        height: 100%;
-        margin-top: 20px;
-        // justify-content: space-around;
         .tech_support_head {
           color: #4c4c4c;
           font-weight: 600;
@@ -319,7 +286,8 @@
               font-weight: 400;
               border: none;
               outline: none;
-              padding: 15px;
+              padding-left: 10px;
+              padding:12px;
               border-radius: 4px;
             }
           }
@@ -339,7 +307,8 @@
               font-weight: 400;
               border: none;
               outline: 1px solid #c72f21;
-              padding: 15px;
+              padding-left: 10px;
+              padding:12px;
               border-radius: 4px;
             }
           }
@@ -358,7 +327,8 @@
               color: #8B8B8B;
               font-size: 12px;
               font-weight: 400;
-              padding: 15px;
+              padding-left: 10px;
+              padding:12px;
               border-radius: 4px;
             }
 
@@ -369,7 +339,8 @@
               font-weight: 400;
               border: none;
               outline: none;
-              padding: 15px;
+              padding-left: 10px;
+              padding:12px;
               border-radius: 4px;
 
               &::-webkit-outer-spin-button,
@@ -396,7 +367,8 @@
               background: #e8e8e8;
               font-size: 12px;
               font-weight: 400;
-              padding: 15px;
+              padding-left: 10px;
+              padding:12px;
               border-radius: 4px;
             }
 
@@ -408,7 +380,8 @@
               font-weight: 400;
               border: none;
               outline: none;
-              padding: 15px;
+              padding-left: 10px;
+              padding:12px;
               outline: 1px solid #c72f21;
 
               &::-webkit-outer-spin-button,
