@@ -159,6 +159,11 @@ const FeedbackThree = (props) => {
         }
     }, []);
 
+    useEffect(() => {
+        if (error) {
+            setSubmit(false);
+        }
+    }, [error]);
 
     useEffect(() => {
         if (submit) {

@@ -140,6 +140,12 @@ const SupportTwo = (props) => {
   }, [screenshotMessage, error.screenshotError]);
 
 
+useEffect(() => {
+if (error) {
+  setOnSubmit(false);
+}
+}, [error]);
+
   useEffect(() => {
     if (onSubmit) {
       if (!data.isAnonymous) {

@@ -74,6 +74,11 @@ const FeedbackOne = (props) => {
         setError(newerror);
     };
 
+    useEffect(() => {
+        if (error) {
+            setChecked(false);
+        }
+    }, [error]);
 
     useEffect(() => {
         if (checked) {

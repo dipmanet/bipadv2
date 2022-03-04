@@ -69,6 +69,12 @@ const FeedbackTwo = (props) => {
     }, [dateAndTime]);
 
     useEffect(() => {
+        if (error) {
+            setchecked(false);
+        }
+    }, [error]);
+
+    useEffect(() => {
         if (checked) {
             if (data.description
             && data.date
