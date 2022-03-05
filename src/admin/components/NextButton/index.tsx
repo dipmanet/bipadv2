@@ -99,17 +99,15 @@ const NextButton = (props) => {
                     setMenuItems(MenuItemsAll);
                 } else {
                     console.log('not here', Object.keys(healthFormEditData).length);
-                    setMenuItems(MenuItemsAll
-                        .filter(mI => mI.permission.includes(userDataMain.profile.role)));
+                    setMenuItems(MenuItemsAll.filter(mI => mI.permission.includes(userDataMain.profile.role)));
                 }
             } else {
-                setMenuItems(MenuItemsAll
-                    .filter(mI => mI.permission.includes(userDataMain.profile.role)));
+                setMenuItems(MenuItemsAll.filter(mI => mI.permission.includes(userDataMain.profile.role)));
             }
         } else {
             setMenuItems(MenuItemsAll);
         }
-    }, [healthFormEditData, userDataMain.isSuperuser, userDataMain.profile]);
+    }, [healthFormEditData, resourceID, userDataMain.isSuperuser, userDataMain.profile]);
 
 
     const isFile = (input: any): input is File => (
@@ -171,25 +169,25 @@ const NextButton = (props) => {
         if (aM === 'Institution Details') {
             if (formData.title) {
                 setHealthInfrastructurePage({ validationError: null });
+                // dispatch(setValidationError(null));
                 return true;
             }
             setHealthInfrastructurePage({ validationError: 'Field Required: Name of the Health Institution' });
+            // dispatch(setValidationError('Field Required: Name of the Health Institution'));
             return false;
         } if (aM === 'Disaster Management') {
             return true;
         } if (aM === 'Contact') {
             return true;
         } if (aM === 'Location') {
-            console.log('test form datta', formData);
             if (
-                formData.point && formData.point.coordinates[0] && formData.ward
-            ) {
+                formData.point && formData.point.coordinates[0] && formData.ward) {
                 setHealthInfrastructurePage({ validationError: null });
+                // dispatch(setValidationError(null));
                 return true;
             }
-
             setHealthInfrastructurePage({ validationError: 'Field required: Province, District, Municipality, Ward, Lattitude and Longitude' });
-
+            // dispatch(setValidationError('Field required: Province, District, Municipality, Ward, Lattitude and Longitude'));
             return false;
         }
         return true;
@@ -224,20 +222,21 @@ const NextButton = (props) => {
     };
 
     const handleFinishFurther = () => {
-        if (userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator'
-        ) {
+        if (userDataMain.profile && userDataMain.profile.role && userDataMain.profile.role === 'validator') {
             setHealthInfrastructurePage({ resourceID: null });
+            // dispatch(setResourceID(null));
             getActiveMenu('Institution Details');
         }
         // resetForm();
         setHealthInfrastructurePage({ resourceID: null });
-        window.location.reload();
-        // getActiveMenu('Institution Details');
+        // dispatch(setResourceID(null));
+        // window.location.reload();
+        getActiveMenu('Institution Details');
     };
 
     const handleSave = () => {
         setError(null);
-        setHealthInfrastructurePage({ healthFormLoader: true });
+        // dispatch(setHealthFormLoader(true));
         axios
             .post(`${baseUrl}/resource/?meta=true`, getFormData(props.formData), {
                 headers: {
@@ -246,13 +245,16 @@ const NextButton = (props) => {
             }).then((res) => {
                 setSuccess('The data has been saved successfully');
                 setHealthInfrastructurePage({ resourceID: res.data.id });
-                setHealthInfrastructurePage({ healthFormLoadeer: false });
+                // dispatch(setResourceID(res.data.id));
+                // setHealthInfrastructurePage({ healthFormLoader: false });
+                // dispatch(setHealthFormLoader(false));
                 const getCurrentIndex = MenuItems.map(m => m.name).indexOf('Inventories');
                 handleProgress(getCurrentIndex);
             })
             .catch((error) => {
                 if (error.response) {
-                    setHealthInfrastructurePage({ healthFormLoader: false });
+                    // setHealthInfrastructurePage({ healthFormLoader: false });
+                    // dispatch(setHealthFormLoader(false));
 
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
@@ -280,22 +282,26 @@ const NextButton = (props) => {
     };
     const handlePatch = () => {
         setError(null);
-        setHealthInfrastructurePage({ healthFormLoader: true });
+        // setHealthInfrastructurePage({ healthFormLoader: true });
+        // dispatch(setHealthFormLoader(true));
         console.log('data ward', formData);
 
         if (getResourceId()) {
             axios
-                .patch(`${baseUrl}/resource/${getResourceId()}/?meta=true`, getFormData({ is_verified: formData.is_verified, is_approved: formData.is_approved, verification_message: formData.verfication_message, resource_type: formData.resource_type }), {
+                .patch(`${baseUrl}/resource/${getResourceId()}/?meta=true`, getFormData({ is_verified: formData.is_verified, is_approved: formData.is_approved, verfication_message: formData.verfication_message, resource_type: formData.resource_type }), {
                     headers: {
                         Accept: 'application/json',
                     },
                 }).then((res) => {
-                    setHealthInfrastructurePage({ healthFormLoader: false });
+                    // setHealthInfrastructurePage({ healthFormLoader: false });
+                    // dispatch(setHealthFormLoader(false));
                     setHealthInfrastructurePage({ healthFormEditData: {} });
+                    // dispatch(resetEdit());
                     handleFinish();
                 })
                 .catch((error) => {
-                    setHealthInfrastructurePage({ healthFormLoader: false });
+                    // setHealthInfrastructurePage({ healthFormLoader: false });
+                    // dispatch(setHealthFormLoader(false));
 
                     if (error.response) {
                         // The request was made and the server responded with a status code
@@ -327,7 +333,8 @@ const NextButton = (props) => {
     };
     const handleEdit = () => {
         setError(null);
-        setHealthInfrastructurePage({ healthFormLoader: true });
+        // setHealthInfrastructurePage({ healthFormLoader: true });
+        // dispatch(setHealthFormLoader(true));
         let patchObj = {};
 
         if (typeof formData.picture === 'object') {
@@ -350,17 +357,20 @@ const NextButton = (props) => {
                     Accept: 'application/json',
                 },
             }).then((res) => {
-                setHealthInfrastructurePage({ healthFormLoader: false });
+                // setHealthInfrastructurePage({ healthFormLoader: false });
+                // dispatch(setHealthFormLoader(false));
                 // who message and go to inventories
                 setSuccess('The data has been updated successfully');
                 // update progress
                 const getCurrentIndex = MenuItems.map(m => m.name).indexOf('Inventories');
                 handleProgress(getCurrentIndex);
                 setHealthInfrastructurePage({ healthFormEditData: {} });
+                // dispatch(resetEdit());
                 setUpdate(true);
             })
             .catch((error) => {
-                setHealthInfrastructurePage({ healthFormLoader: false });
+                // setHealthInfrastructurePage({ healthFormLoader: false });
+                // dispatch(setHealthFormLoader(false));
 
                 if (error.response) {
                     // The request was made and the server responded with a status code
@@ -402,7 +412,9 @@ const NextButton = (props) => {
     const getBtnLabel = (aM) => {
         if (!resourceID) {
             if (
-                (Object.keys(userDataMain).length === 0) || (!userDataMain.isSuperuser && userDataMain.profile && !userDataMain.profile.role)
+                (Object.keys(userDataMain).length === 0)
+                || (!userDataMain.isSuperuser && userDataMain.profile && !userDataMain.profile.role)
+
             ) {
                 if (aM === 'Inventories') {
                     return 'Close';
@@ -468,7 +480,10 @@ const NextButton = (props) => {
     const returnHandleFunction = (aM) => {
         if (!resourceID) {
             if (
-                (Object.keys(userDataMain).length === 0) || (!userDataMain.isSuperuser && userDataMain.profile && !userDataMain.profile.role)
+                (Object.keys(userDataMain).length === 0) || (
+                    !userDataMain.isSuperuser
+                    && userDataMain.profile
+                    && !userDataMain.profile.role)
             ) {
                 if (aM === 'Inventories') {
                     return handleNavigate;
@@ -511,7 +526,9 @@ const NextButton = (props) => {
             }
             if (aM === 'Inventories') {
                 if (
-                    userDataMain.profile.role === 'validator' || userDataMain.profile.role === 'editor' || userDataMain.isSuperuser
+                    userDataMain.profile.role === 'validator'
+                    || userDataMain.profile.role === 'editor'
+                    || userDataMain.isSuperuser
                 ) {
                     return handleNext;
                 }
@@ -519,7 +536,9 @@ const NextButton = (props) => {
             }
             if (aM === 'Picture') {
                 if (
-                    userDataMain.profile.role === 'editor' || userDataMain.profile.role === 'user' || userDataMain.isSuperuser
+                    userDataMain.profile.role === 'editor'
+                    || userDataMain.profile.role === 'user'
+                    || userDataMain.isSuperuser
                 ) {
                     return handleEdit;
                 }
@@ -532,7 +551,8 @@ const NextButton = (props) => {
     const handleUpdateSuccess = () => {
         // go to inventory
         getActiveMenu('Inventories');
-        setUpdate(false);
+
+        // setUpdate(false);
         // navigate('/health-table');
     };
 
@@ -544,7 +564,8 @@ const NextButton = (props) => {
 
     const getPrevDisabled = () => {
         if (
-            activeMenu === 'Institution Details' || activeMenu === 'Inventories'
+            activeMenu === 'Institution Details'
+            || activeMenu === 'Inventories'
         ) {
             return true;
         }
@@ -554,40 +575,46 @@ const NextButton = (props) => {
     return (
         <>
             {
-                errorNew && <p className={styles.error}>{errorNew}</p>
+                errorNew
+            && <p className={styles.error}>{errorNew}</p>
             }
             {
-                success && (
-                    <Modal
-                        open={openModal}
-                        title={'Thank you. Your data has been saved sucessfully'}
-                        description={'Please enter Inventory data, if any'}
-                        handleClose={handleClose}
-                    />
-                )
+                success
+            && (
+                <Modal
+                    open={openModal}
+                    title={'Thank you. Your data has been saved sucessfully'}
+                    description={'Please enter Inventory data, if any'}
+                    handleClose={handleClose}
+                />
+            )
             }
             {
-                finish && (
-                    <Modal
-                        open={openFinishModal}
-                        title={'Thank you!'}
-                        description={
-                            (Object.keys(userDataMain).length > 0 && userDataMain.profile && userDataMain.profile.role === 'validator')
-                                ? ''
-                                : 'You can now enter new record'}
-                        handleClose={handleFinishFurther}
-                    />
-                )
+                finish
+            && (
+                <Modal
+                    open={openFinishModal}
+                    title={'Thank you!'}
+                    description={
+                        (Object.keys(userDataMain).length > 0
+                        && userDataMain.profile
+                        && userDataMain.profile.role === 'validator')
+                            ? ''
+                            : 'You can now enter new record'}
+                    handleClose={handleFinishFurther}
+                />
+            )
             }
             {
-                update && (
-                    <Modal
-                        open={update}
-                        title={'Thank you!'}
-                        description={'Your record has been updated'}
-                        handleClose={handleUpdateSuccess}
-                    />
-                )
+                update
+            && (
+                <Modal
+                    open={update}
+                    title={'Thank you!'}
+                    description={'Your record has been updated'}
+                    handleClose={handleUpdateSuccess}
+                />
+            )
             }
             <div className={styles.nextContainer}>
                 <button

@@ -365,7 +365,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormGroup>
                                 {
                                     Object.keys(instDetail['Services available']
-                                        .ref).slice(0, 3).map((item: string) => (
+                                        .ref).map((item: string) => (
                                             <FormControlLabel
                                                 control={(
                                                     <Checkbox
@@ -381,7 +381,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                 }
                             </FormGroup>
                         </FormControl>
-                        <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                        {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                             <FormGroup>
                                 {
                                 Object.keys(instDetail['Services available'].ref).slice(-3).map((item: string) => (
@@ -399,7 +399,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     ))
                                     }
                             </FormGroup>
-                        </FormControl>
+                        </FormControl> */}
                     </Box>
                     {
                     formData.has_safe_motherhood
@@ -410,7 +410,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['Services available (if yes)'].ref).slice(0, 4).map((item: string) => (
+                                    Object.keys(instDetail['Services available (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -426,7 +426,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Services available (if yes)'].ref).slice(-3).map((item: string) => (
@@ -444,7 +444,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     ))
                     }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </>
                     )
@@ -480,7 +480,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['Family Planning (if yes)'].ref).slice(0, 3).map((item: string) => (
+                                    Object.keys(instDetail['Family Planning (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -496,7 +496,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Family Planning (if yes)'].ref).slice(-2).map((item: string) => (
@@ -514,7 +514,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         ))
                                         }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </div>
                 </>
@@ -545,7 +545,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['OPD (if yes)'].ref).slice(0, 3).map((item: string) => (
+                                    Object.keys(instDetail['OPD (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -561,7 +561,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['OPD (if yes)'].ref).slice(-2).map((item: string) => (
@@ -579,7 +579,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         ))
                                         }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </div>
                 </>
@@ -595,23 +595,6 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         value={formData.has_treatement_of_tb ? 'Yes' : 'No'}
                         label="Treatment of Tuberculosis"
                         onChange={e => handleFormData(e, 'has_treatement_of_tb')}
-                        style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-                        disableUnderline
-                    >
-                        <MenuItem value={'Yes'}>Yes</MenuItem>
-                        <MenuItem value={'No'}>No</MenuItem>
-                    </Select>
-                </FormControl>
-
-                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                    <InputLabel id="has_treatement_of_mdr_tb-Input">Treatment of Multi-drug resistance (MDR) tuberculosis</InputLabel>
-                    <Select
-                        disabled={getDisabled('has_treatement_of_mdr_tb')}
-                        labelId="has_treatement_of_mdr_tb-Label"
-                        id="has_treatement_of_mdr_tbID"
-                        value={formData.has_treatement_of_mdr_tb ? 'Yes' : 'No'}
-                        label="Treatment of Tuberculosis"
-                        onChange={e => handleFormData(e, 'has_treatement_of_mdr_tb')}
                         style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
                         disableUnderline
                     >
@@ -732,7 +715,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['Laboratory Service (if yes)'].ref).slice(0, 3).map((item: string) => (
+                                    Object.keys(instDetail['Laboratory Service (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -748,7 +731,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Laboratory Service (if yes)'].ref).slice(-2).map((item: string) => (
@@ -766,7 +749,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         ))
                                         }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </div>
                 </>
@@ -885,7 +868,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['Radiology (if yes)'].ref).slice(0, 3).map((item: string) => (
+                                    Object.keys(instDetail['Radiology (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -901,7 +884,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Radiology (if yes)'].ref).slice(-2).map((item: string) => (
@@ -919,7 +902,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     ))
                                     }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </div>
                 </>
@@ -952,7 +935,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['Surgical Service (if yes)'].ref).slice(0, 3).map((item: string) => (
+                                    Object.keys(instDetail['Surgical Service (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -968,7 +951,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                         }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Surgical Service (if yes)'].ref).slice(-2).map((item: string) => (
@@ -986,7 +969,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     ))
                                     }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </div>
                 </>
@@ -1018,7 +1001,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                             <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
-                                    Object.keys(instDetail['Specialized Service (if yes)'].ref).slice(0, 3).map((item: string) => (
+                                    Object.keys(instDetail['Specialized Service (if yes)'].ref).map((item: string) => (
                                         <FormControlLabel
                                             control={(
                                                 <Checkbox
@@ -1034,7 +1017,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                      }
                                 </FormGroup>
                             </FormControl>
-                            <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                            {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                                 <FormGroup>
                                     {
                                     Object.keys(instDetail['Specialized Service (if yes)'].ref).slice(-2).map((item: string) => (
@@ -1052,7 +1035,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     ))
                                     }
                                 </FormGroup>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                     </div>
                 </>
@@ -1303,7 +1286,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                             <FormGroup>
                                 {
-                                Object.keys(instDetail['Listed for free treatment Bipanna'].ref).slice(0, 5).map((item: string) => (
+                                Object.keys(instDetail['Listed for free treatment Bipanna'].ref).map((item: string) => (
                                     <FormControlLabel
                                         control={(
                                             <Checkbox
@@ -1319,7 +1302,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     }
                             </FormGroup>
                         </FormControl>
-                        <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
+                        {/* <FormControl style={{ margin: '15px 0' }} sx={{ m: 1 }} component="fieldset" variant="standard">
                             <FormGroup>
                                 {
                                 Object.keys(instDetail['Listed for free treatment Bipanna'].ref).slice(-5).map((item: string) => (
@@ -1337,7 +1320,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                                     ))
                                     }
                             </FormGroup>
-                        </FormControl>
+                        </FormControl> */}
                     </Box>
                 </div>
                 <h2>Number of Employees</h2>
@@ -1525,7 +1508,6 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
                             label="Date of Validity"
-                            disableFuture
                             value={formData.date_of_validity}
                             onChange={(e: Date) => handleDate(e, 'date_of_validity')}
                             disabled={getDisabled('date_of_validity')}

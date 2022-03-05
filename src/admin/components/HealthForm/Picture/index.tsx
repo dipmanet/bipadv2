@@ -86,7 +86,8 @@ const Picture = (props: Props): JSX.Element => {
         } else {
             setDisableFields(allFields);
         }
-    }, [userDataMain.isSuperuser, userDataMain.profile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const showPic = () => {
         const file = document.getElementById('file').files[0];
@@ -118,7 +119,8 @@ const Picture = (props: Props): JSX.Element => {
             setpicLink(formData.picture);
             handleFile(null, 'picture');
         }
-    }, [formData.picture, handleFile, resourceID]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>

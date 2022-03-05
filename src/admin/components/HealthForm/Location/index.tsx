@@ -61,30 +61,34 @@ const Location = (props) => {
     const [districtName, setdistrictName] = useState('');
     const [municipalityName, setmunicipalityName] = useState('');
     const [wardName, setwardName] = useState('');
+
     const [LocalAddress, setLocalAddress] = useState('');
     const [verified, setverified] = useState(false);
     const [approved, setApproved] = useState(false);
     const addedSuccessfullyRef = useRef(null);
     const [visibility, setvisibility] = useState('hidden');
+
     const [lattitude, setLattitude] = useState('');
     const [longitude, setLongitude] = useState('');
+
     const [provinceDataIs, setProvinceDataIs] = useState([]);
     const [districtDataIs, setdistrictDataIs] = useState([]);
     const [municipalityDataIs, setmunicipalityDataIs] = useState([]);
     const [wardDataIs, setwardDataIs] = useState([]);
+
     const [provinceId, setprovinceId] = useState(0);
+    const [districtId, setdistrictId] = useState(0);
+    const [municipalityId, setmunicipalityId] = useState(0);
+    const [wardId, setwardId] = useState(0);
+
     const [provinceCentriodForMap, setprovinceCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
     const [initialProvinceCenter, setinitialProvinceCenter] = useState([]);
     const [initialDistrictCenter, setinitialDistrictCenter] = useState([]);
     const [initialMunCenter, setinitialMunCenter] = useState([]);
-    const [districtId, setdistrictId] = useState(0);
     const [districtCentriodForMap, setdistrictCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
-    const [municipalityId, setmunicipalityId] = useState(0);
     const [municipalityCentriodForMap, setmunicipalityCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
-    const [wardId, setwardId] = useState(0);
     const [wardCentriodForMap, setwardCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
 
-    const dispatch = useDispatch();
     const handleViewTableBtn = () => {
         navigate('/health-table');
     };
@@ -135,7 +139,7 @@ const Location = (props) => {
         }
         if (userDataMain && userDataMain.profile && userDataMain.profile.ward && wardDataMain && wardDataMain.length > 0) {
             const nameOfWard = wardDataMain.filter(item => item.id === userDataMain.profile.ward).map(item => item.title)[0];
-            setprovinceName(nameOfWard);
+            setwardName(nameOfWard);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userDataMain]);
@@ -145,32 +149,35 @@ const Location = (props) => {
     //     dispatch(provinceData());
     // }, [dispatch, provinceData]);
 
-    // useEffect(() => {
-    //     if (resourceID) {
-    //         setmunicipalityName((formData.ward && formData.ward.municipality) ? formData.ward.municipality.title : '');
-    //         setwardName(formData.ward ? formData.ward.title : '');
-    //         if (formData.point && formData.point.coordinates && formData.point.coordinates[0]) {
-    //             setLongitude(formData.point.coordinates[0]);
-    //         }
-    //         if (formData.point && formData.point.coordinates && formData.point.coordinates[1]) {
-    //             setLattitude(formData.point.coordinates[1]);
-    //         }
-    //     }
-    // }, [formData.point, formData.ward, resourceID]);
+    useEffect(() => {
+        if (resourceID) {
+            setprovinceName((formData.ward && formData.ward.municipality.district.province) ? formData.ward.municipality.district.province.title : '');
+            setdistrictName((formData.ward && formData.ward.municipality.district) ? formData.ward.municipality.district.title : '');
+            setmunicipalityName((formData.ward && formData.ward.municipality) ? formData.ward.municipality.title : '');
+            setwardName(formData.ward ? formData.ward.title : '');
+            if (formData.point && formData.point.coordinates && formData.point.coordinates[0]) {
+                setLongitude(formData.point.coordinates[0]);
+            }
+            if (formData.point && formData.point.coordinates && formData.point.coordinates[1]) {
+                setLattitude(formData.point.coordinates[1]);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resourceID]);
 
 
-    // useEffect(() => {
-    //     if (Object.keys(healthFormEditData).length > 0) {
-    //         setLattitude(healthFormEditData.point.coordinates[1]);
-    //         setLongitude(healthFormEditData.point.coordinates[0]);
-    //     }
-    // }, [healthFormEditData]);
+    useEffect(() => {
+        if (Object.keys(healthFormEditData).length > 0) {
+            setLattitude(healthFormEditData.point.coordinates[1]);
+            setLongitude(healthFormEditData.point.coordinates[0]);
+        }
+    }, [healthFormEditData]);
 
-    // useEffect(() => {
-    //     if (visibility === 'visible') {
-    //         addedSuccessfullyRef.current.style.visibility = visibility;
-    //     }
-    // }, [visibility]);
+    useEffect(() => {
+        if (visibility === 'visible') {
+            addedSuccessfullyRef.current.style.visibility = visibility;
+        }
+    }, [visibility]);
 
     useEffect(() => {
         setProvinceDataIs(provinceData);
@@ -217,53 +224,53 @@ const Location = (props) => {
     useEffect(() => {
         // console.log('wardName', wardName);
 
-        const ward = wardDataIs.filter(item => item.title === String(wardName)).map(item => item.id)[0];
+        const ward = wardDataIs.filter(item => item.municipality === municipalityId)
+            .filter(item => item.title === String(wardName)).map(item => item.id)[0];
         console.log('test ward', ward, wardName);
         if (wardName) {
             setwardId(ward);
             // console.log('ward id', wardId);
-            // handleFormData(ward, 'ward');
+            handleFormData(ward, 'ward');
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
+
+
+    useEffect(() => {
+        if (provinceId) {
+            const provinceCentriodForMaps = provinceDataIs.filter(item => item.id === provinceId)
+                .map(item => item.centroid.coordinates)[0];
+            setprovinceCentriodForMap(provinceCentriodForMaps);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [provinceId]);
+
+    useEffect(() => {
+        if (districtId) {
+            const districtCentriodForMaps = districtDataIs.filter(item => item.id === districtId)
+                .map(item => item.centroid.coordinates)[0];
+            setdistrictCentriodForMap(districtCentriodForMaps);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [districtId]);
+
+    useEffect(() => {
+        if (municipalityId) {
+            const municipalityCentriodForMaps = municipalityDataIs.filter(item => item.id === municipalityId)
+                .map(item => item.centroid.coordinates)[0];
+            setmunicipalityCentriodForMap(municipalityCentriodForMaps);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [municipalityId]);
+
     useEffect(() => {
         if (wardId) {
-            handleFormData(wardId, 'ward');
+            const wardCentriodForMaps = wardDataIs.filter(item => item.id === wardId)
+                .map(item => item.centroid.coordinates)[0];
+            setwardCentriodForMap(wardCentriodForMaps);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardId]);
-
-    // useEffect(() => {
-    //     if (provinceId) {
-    //         const provinceCentriodForMap = provinceDataIs.filter(item => item.id === provinceId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setprovinceCentriodForMap(provinceCentriodForMap);
-    //     }
-    // }, [provinceDataIs, provinceId]);
-
-    // useEffect(() => {
-    //     if (districtId) {
-    //         const districtCentriodForMap = districtDataIs.filter(item => item.id === districtId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setdistrictCentriodForMap(districtCentriodForMap);
-    //     }
-    // }, [districtDataIs, districtId]);
-
-    // useEffect(() => {
-    //     if (municipalityId) {
-    //         const municipalityCentriodForMap = municipalityDataIs.filter(item => item.id === municipalityId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setmunicipalityCentriodForMap(municipalityCentriodForMap);
-    //     }
-    // }, [municipalityDataIs, municipalityId]);
-
-    // useEffect(() => {
-    //     if (wardId) {
-    //         const wardCentriodForMap = wardDataIs.filter(item => item.id === wardId)
-    //             .map(item => item.centroid.coordinates)[0];
-    //         setwardCentriodForMap(wardCentriodForMap);
-    //     }
-    // }, [wardDataIs, wardId]);
 
 
     const centriodsForMap = {

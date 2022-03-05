@@ -19,11 +19,46 @@ import FormGroup from '@mui/material/FormGroup';
 import { FormControl } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 // import { getInventoryItem } from '../../../../Redux/actions';
 import styles from './styles.module.scss';
 
+
+import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import {
+    healthInfrastructurePageSelector,
+    userSelector,
+} from '#selectors';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    healthInfrastructurePage: healthInfrastructurePageSelector(state),
+    userDataMain: userSelector(state),
+});
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+});
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    getInventoryData: {
+        url: '/inventory/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            resource: `${params.resource}`,
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                inventoryData: response.results,
+            });
+        },
+    },
+};
+
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
+
 interface Props {
     currentEditData: Record<string, unknown>;
     handleClose: () => void;
@@ -71,7 +106,7 @@ const EditModal = (props: Props) => {
                     Accept: 'application/json',
                 },
             }).then((res) => {
-                // dispatch(getInventoryItem(resourceID));
+                props.requests.getInventoryData.do({ resource: resourceID });
                 handleClose();
             })
             .catch((error) => {
@@ -187,4 +222,10 @@ const EditModal = (props: Props) => {
     );
 };
 
-export default EditModal;
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            EditModal,
+        ),
+    ),
+);

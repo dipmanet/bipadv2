@@ -613,6 +613,7 @@ export const disasterMgmt = {
     'Does the facility have a disaster focal point person?': '',
     'Name of disaster focal point person': '',
     'Phone number of disaster focal point person': '',
+    'Email of disaster focal point person': '',
     'Does the facility have open space?': '',
     'If yes, Area of open space.': '',
     'Has medicine storage space?': null,

@@ -37,10 +37,13 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/inventory/',
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => ({
-            format: 'json',
-            resouce: params.resource,
-        }),
+        query: ({ params }) => {
+            console.log('test params', params);
+            return ({
+                format: 'json',
+                resouce: params.resource,
+            });
+        },
         onSuccess: ({ response, props }) => {
             props.setHealthInfrastructurePage({
                 inventoryData: response.results,
@@ -64,7 +67,8 @@ const HealthForm = (props: Props): JSX.Element => {
             props.requests.inventory.do({ resource: healthFormEditData.id });
             setHealthInfrastructurePage({ healthFormEditData: {} });
         }
-    }, [healthFormEditData, props.requests.inventory, setHealthInfrastructurePage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [healthFormEditData]);
 
 
     const getVal = (fN, e: string) => {

@@ -233,37 +233,56 @@ const DisasterManagement = (props: Props): JSX.Element => {
                 </FormControl>
                 {
                     formData.has_focal_person && (
-                        <div className={styles.row1}>
-                            <div className={styles.col1}>
-                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                    <TextField
-                                        disabled={getDisabled('focal_person_name')}
-                                        id="focal_person_nameID"
-                                        label="Name of disaster focal point person"
-                                        variant="filled"
-                                        value={formData.focal_person_name}
-                                        onChange={e => handleFormData(e, 'focal_person_name')}
-                                        InputProps={{ disableUnderline: true }}
-                                        style={{ border: '1px solid #d5d5d5' }}
-                                    />
-                                </FormControl>
-                            </div>
-                            <div className={styles.col1}>
-                                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                                    <TextField
-                                        disabled={getDisabled('focal_person_phone_number')}
-                                        id="focal_person_phone_numberID"
-                                        label="Phone number of disaster focal point person"
-                                        variant="filled"
-                                        value={formData.focal_person_phone_number}
-                                        onChange={e => handleFormData(e, 'focal_person_phone_number')}
-                                        InputProps={{ disableUnderline: true }}
-                                        style={{ border: '1px solid #d5d5d5' }}
-                                    />
-                                </FormControl>
+                        <>
+                            <div className={styles.row1}>
+                                <div className={styles.col1}>
+                                    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                        <TextField
+                                            disabled={getDisabled('focal_person_name')}
+                                            id="focal_person_nameID"
+                                            label="Name of disaster focal point person"
+                                            variant="filled"
+                                            value={formData.focal_person_name}
+                                            onChange={e => handleFormData(e, 'focal_person_name')}
+                                            InputProps={{ disableUnderline: true }}
+                                            style={{ border: '1px solid #d5d5d5' }}
+                                        />
+                                    </FormControl>
+                                </div>
+                                <div className={styles.col1}>
+                                    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                        <TextField
+                                            disabled={getDisabled('focal_person_phone_number')}
+                                            id="focal_person_phone_numberID"
+                                            label="Phone number of disaster focal point person"
+                                            variant="filled"
+                                            value={formData.focal_person_phone_number}
+                                            onChange={e => handleFormData(e, 'focal_person_phone_number')}
+                                            InputProps={{ disableUnderline: true }}
+                                            style={{ border: '1px solid #d5d5d5' }}
+                                        />
+                                    </FormControl>
 
+                                </div>
                             </div>
-                        </div>
+                            {/* <div className={styles.row1}>
+                                <div className={styles.col1}>
+                                    <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                                        <TextField
+                                            disabled={getDisabled('focal_person_phone_number')}
+                                            id="focal_person_phone_numberID"
+                                            label="Phone number of disaster focal point person"
+                                            variant="filled"
+                                            value={formData.focal_person_phone_number}
+                                            onChange={e => handleFormData(e, 'focal_person_phone_number')}
+                                            InputProps={{ disableUnderline: true }}
+                                            style={{ border: '1px solid #d5d5d5' }}
+                                        />
+                                    </FormControl>
+
+                                </div>
+                            </div> */}
+                        </>
                     )
                 }
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>

@@ -77,6 +77,21 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             });
         },
     },
+
+    formDataForEdit: {
+        url: ({ params }) => `/resource/${params.resourceID}/`,
+        method: methods.GET,
+        onMount: false,
+        query: ({
+            format: 'json',
+            expand: ['ward', 'ward.municipality', 'ward.municipality.district', 'ward.municipality.district.province'],
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                healthFormEditData: response,
+            });
+        },
+    },
 };
 
 interface Data {
@@ -228,9 +243,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
     numSelected: number;
     selected: [];
-    dispatch: Dispatch;
-    deleteHealthTable: ActionCreator;
-    formDataForEdit: ActionCreator;
+    // dispatch: Dispatch;
+    // deleteHealthTable: ActionCreator;
+    // formDataForEdit: ActionCreator;
     userDataMain: Record<string|undefined>;
     healthFormEditData: Record<string|undefined>;
 }
@@ -244,8 +259,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         console.log('...delete');
     };
     const handleEdit = () => {
-        dispatch(formDataForEdit(selected[0]));
-        navigate('/health-form');
+        formDataForEdit.do({ resourceID: selected[0] });
     };
 
 
@@ -327,6 +341,12 @@ const HealthTable = (props) => {
         },
         userDataMain,
     } = props;
+
+    useEffect(() => {
+        if (Object.keys(healthFormEditData).length > 0) {
+            navigate('/admin/health-infrastructure/add-new-health-infrastructure');
+        }
+    }, [healthFormEditData]);
 
     useEffect(() => {
         props.requests.resource.do();
@@ -703,7 +723,7 @@ const HealthTable = (props) => {
                                     numSelected={selected.length}
                                     // dispatch={dispatch}
                                     // deleteHealthTable={deleteHealthTable}
-                                    // formDataForEdit={formDataForEdit}
+                                    formDataForEdit={props.requests.formDataForEdit}
                                     userDataMain={userDataMain}
                                     healthFormEditData={healthFormEditData}
                                 />
@@ -778,42 +798,54 @@ const HealthTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
+                                                                        if (val === 'province') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val + 1}
+                                                                                >
+                                                                                    {`${row.ward.municipality.district.province.title}`}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
+                                                                        if (val === 'district') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val + 2}
+                                                                                >
+                                                                                    {`${row.ward.municipality.district.title}`}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
+                                                                        if (val === 'municipality') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align={typeof val === 'string' ? 'left' : 'center'}
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val + 3}
+                                                                                >
+                                                                                    {`${row.ward.municipality.title}`}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
                                                                         if (val === 'ward') {
                                                                             return (
                                                                                 <>
-                                                                                    <TableCell
-                                                                                        align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                        className={styles.setStyleForTableCell}
-                                                                                        component="th"
-                                                                                        id={labelId}
-                                                                                        scope="row"
-                                                                                        padding="none"
-                                                                                        key={val + 1}
-                                                                                    >
-                                                                                        {`${row[snakeToCamel(val)].municipality.district.province.title}`}
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                        className={styles.setStyleForTableCell}
-                                                                                        component="th"
-                                                                                        id={labelId}
-                                                                                        scope="row"
-                                                                                        padding="none"
-                                                                                        key={val + 2}
-                                                                                    >
-                                                                                        {`${row[snakeToCamel(val)].municipality.district.title}`}
-                                                                                    </TableCell>
-                                                                                    <TableCell
-                                                                                        align={typeof val === 'string' ? 'left' : 'center'}
-                                                                                        className={styles.setStyleForTableCell}
-                                                                                        component="th"
-                                                                                        id={labelId}
-                                                                                        scope="row"
-                                                                                        padding="none"
-                                                                                        key={val + 3}
-                                                                                    >
-                                                                                        {`${row[snakeToCamel(val)].municipality.title}`}
-                                                                                    </TableCell>
                                                                                     <TableCell
                                                                                         align={typeof val === 'string' ? 'left' : 'center'}
                                                                                         className={styles.setStyleForTableCell}
@@ -843,7 +875,7 @@ const HealthTable = (props) => {
                                                                                 </TableCell>
                                                                             );
                                                                         }
-                                                                        if (typeof row[val] === 'boolean') {
+                                                                        if (typeof row[snakeToCamel(val)] === 'boolean') {
                                                                             return (
                                                                                 <TableCell
                                                                                     align="center"
@@ -860,7 +892,7 @@ const HealthTable = (props) => {
                                                                         }
                                                                         return (
                                                                             <TableCell
-                                                                                align={typeof row[val] === 'string' ? 'left' : 'center'}
+                                                                                align={typeof row[snakeToCamel(val)] === 'string' ? 'left' : 'center'}
                                                                                 className={styles.setStyleForTableCell}
                                                                                 component="th"
                                                                                 id={labelId}

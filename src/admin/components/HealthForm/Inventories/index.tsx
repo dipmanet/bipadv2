@@ -31,6 +31,7 @@ import {
     healthInfrastructurePageSelector,
     userSelector,
 } from '#selectors';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     healthInfrastructurePage: healthInfrastructurePageSelector(state),
@@ -40,6 +41,36 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
 });
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    getInventoryData: {
+        url: '/inventory/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+            resource: `${params.resource}`,
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                inventoryData: response.results,
+            });
+        },
+    },
+    getInventoryItem: {
+        url: '/inventory-item/',
+        method: methods.GET,
+        onMount: false,
+        query: ({ params }) => ({
+            format: 'json',
+        }),
+        onSuccess: ({ response, props }) => {
+            props.setHealthInfrastructurePage({
+                inventoryItem: response.results,
+            });
+        },
+    },
+};
 
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
 type EventTarget = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -165,13 +196,19 @@ const Inventories = (props: Props): JSX.Element => {
         }
     };
 
+    useEffect(() => {
+        if (resourceID) {
+            props.requests.getInventoryItem.do();
+            props.requests.getInventoryData.do({ resource: resourceID });
+            console.log('getting inventory item after if there is resourceid', resourceID);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [resourceID]);
+
     // useEffect(() => {
-    //     if (resourceID) {
-    //         dispatch(getInventoryItem(resourceID));
-    //     }
-    // }, [dispatch, resourceID]);
-
-
+    //     props.requests.getInventoryData.do({ resource: resourceID });
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
     const handleInvAdd = () => {
         // setInv([...invData, { [fN]: e.target.value }]);
         const postData = { itemId: 1, quantity, description: inventory, resource: resourceID };
@@ -181,6 +218,7 @@ const Inventories = (props: Props): JSX.Element => {
                     Accept: 'application/json',
                 },
             }).then((res) => {
+                props.requests.getInventoryData.do({ resource: resourceID });
                 // dispatch(getInventoryItem(resourceID));
             })
             .catch((error) => {
@@ -224,22 +262,29 @@ const Inventories = (props: Props): JSX.Element => {
 
     useEffect(() => {
         window.scrollTo({ top: 400, left: 0 });
+        console.log('getting inventory item onload');
         axios.get(`${baseUrl}/inventory-item/`).then(
             (data) => {
-                setHealthInfrastructurePage({ inventoryItem: data });
+                setHealthInfrastructurePage({ inventoryItem: data.results });
             },
         );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // useEffect(() => {
-    //     if (inventoryItem) {
-    //         const uV = inventoryItem.map(item => item.unit);
-    //         const temp = [...Array.from(new Set(uV))];
-    //         setUnits(temp);
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (inventoryItem) {
+            const uV = inventoryItem.map(item => item.unit);
+            const temp = [...Array.from(new Set(uV))];
+            setUnits(temp);
+        }
+    }, [inventoryItem]);
+    useEffect(() => {
+        if (resourceID) {
+            props.requests.getInventoryData.do({ resource: resourceID });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleTableClick = () => {
         console.log('fds');
@@ -439,8 +484,10 @@ const Inventories = (props: Props): JSX.Element => {
     );
 };
 
-// export default InstitutionDetails;
-
 export default connect(mapStateToProps, mapDispatchToProps)(
-    Inventories,
+    createConnectedRequestCoordinator<ReduxProps>()(
+        createRequestClient(requests)(
+            Inventories,
+        ),
+    ),
 );

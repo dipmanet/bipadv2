@@ -34,10 +34,10 @@ const HealthDataStr = (): JSX.Element => {
 
             <div className={styles.dataContainer}>
                 <h2 className={styles.mainHeading}>
-Health Infrastructure Data Structure
+                    Health Infrastructure Data Structure
                 </h2>
                 <h3 className={styles.subHeading}>
-Add new Health Infrastructure data
+                    Add new Health Infrastructure data
                 </h3>
                 <div className={styles.tableMenuContainer}>
                     <ProgressMenu

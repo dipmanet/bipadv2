@@ -24,6 +24,7 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         healthOverviewTableData,
         healthOverviewChartData,
         uploadData,
+        inventoryItem,
     } } = action;
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
@@ -35,6 +36,9 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         }
         if (resourceID) {
             deferedState.healthInfrastructurePage.resourceID = resourceID;
+        }
+        if (resourceID === null) {
+            deferedState.healthInfrastructurePage.resourceID = null;
         }
         if (healthFormLoader) {
             deferedState.healthInfrastructurePage.healthFormLoader = healthFormLoader;
@@ -59,6 +63,9 @@ const setHealthInfrastructurePage = (state: Type.HealthInfrastructureState, acti
         }
         if (uploadData) {
             deferedState.healthInfrastructurePage.uploadData = uploadData;
+        }
+        if (inventoryItem) {
+            deferedState.healthInfrastructurePage.inventoryItem = inventoryItem;
         }
     });
     return newState;
