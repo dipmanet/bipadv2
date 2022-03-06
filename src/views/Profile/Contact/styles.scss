@@ -1,13 +1,8 @@
 
-@media only screen and (min-width: 2000px) {
+@media only screen and (min-width: 2160px) {
   .column {
-    
     margin-left: 12px !important;
     margin-right: 12px !important;
- 
-  
-   
-    
   }
 }
 
@@ -225,6 +220,9 @@
     .image {
       height: 50px;
       border-radius: 25px;
+      width: 50px;
+      object-fit: cover;
+
     }
   }
   .row:after {
