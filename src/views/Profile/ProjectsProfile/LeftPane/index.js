@@ -269,7 +269,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
 
       splittedData.length
         ? splittedData.map((item, i) => (
-          <div key={i} style={{ display: 'flex', width: '100%', height: '220px', marginBottom: '40px' }}>
+          <div key={i} style={{ display: 'flex', width: '100%', height: '220px', marginBottom: '60px' }}>
 
             <div
               className={i > mainColumnIndex ? clickedColumn === 'col1' ? _cs(styles.extraMargin) : styles.normalMargin : styles.normalMargin}
@@ -291,16 +291,42 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                         onClick={() => handleClick(data.id, 'col1', i)}
                         onKeyDown={undefined}
                       >
-                        <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
+                        <div
+                          className="col1"
+                          style={{
+                            padding: '10px',
+                            maxHeight: '130px',
+                            justifyContent: 'space-between',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: '7',
+                            minHeight: '130px',
 
-                          <h4 style={{ wordBreak: 'break-word' }}>{data.ptitle}</h4>
+                          }}
+                        >
+
+                          <h4 style={{ wordBreak: 'break-word' }} title={data.ptitle}>{data.ptitle}</h4>
 
 
                         </div>
                         <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
                           <div style={{ display: 'flex' }}>
                             <div style={{ fontWeight: 'bold' }}>Organization:</div>
-                            <div style={{ marginLeft: '2px' }}>
+                            <div
+                              style={{
+                                marginLeft: '2px',
+                                maxHeight: '35px',
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: '2',
+                                minHeight: '35px',
+                              }}
+                              title={data.oname}
+                            >
                               {data.oname}
                             </div>
                           </div>
@@ -358,16 +384,42 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                         onClick={() => handleClick(data.id, 'col2', i)}
                         onKeyDown={undefined}
                       >
-                        <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
+                        <div
+                          className="col1"
+                          style={{
+                            padding: '10px',
+                            maxHeight: '130px',
+                            justifyContent: 'space-between',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: '7',
+                            minHeight: '130px',
 
-                          <h4 style={{ wordBreak: 'break-word' }}>{data.ptitle}</h4>
+                          }}
+                        >
+
+                          <h4 style={{ wordBreak: 'break-word' }} title={data.ptitle}>{data.ptitle}</h4>
 
 
                         </div>
                         <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
                           <div style={{ display: 'flex' }}>
                             <div style={{ fontWeight: 'bold' }}>Organization:</div>
-                            <div style={{ marginLeft: '2px' }}>
+                            <div
+                              style={{
+                                marginLeft: '2px',
+                                maxHeight: '35px',
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: '2',
+                                minHeight: '35px',
+                              }}
+                              title={data.oname}
+                            >
                               {data.oname}
                             </div>
                           </div>
@@ -423,16 +475,41 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                         onClick={() => handleClick(data.id, 'col3', i)}
                         onKeyDown={undefined}
                       >
-                        <div className="col1" style={{ display: 'flex', padding: '10px', minHeight: '120px', justifyContent: 'space-between' }}>
+                        <div
+                          className="col1"
+                          style={{
+                            padding: '10px',
+                            maxHeight: '130px',
+                            justifyContent: 'space-between',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: '7',
+                            minHeight: '130px',
+                          }}
+                        >
 
-                          <h4 style={{ wordBreak: 'break-word' }}>{data.ptitle}</h4>
+                          <h4 style={{ wordBreak: 'break-word' }} title={data.ptitle}>{data.ptitle}</h4>
 
 
                         </div>
                         <div className="col1" style={{ borderTop: '1px solid #e1e1e1', minHeight: '90px', padding: '10px' }}>
                           <div style={{ display: 'flex' }}>
                             <div style={{ fontWeight: 'bold' }}>Organization: </div>
-                            <div style={{ marginLeft: '2px' }}>
+                            <div
+                              style={{
+                                marginLeft: '2px',
+                                maxHeight: '35px',
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                                display: '-webkit-box',
+                                WebkitBoxOrient: 'vertical',
+                                WebkitLineClamp: '2',
+                                minHeight: '35px',
+                              }}
+                              title={data.oname}
+                            >
                               {data.oname}
                             </div>
                           </div>
