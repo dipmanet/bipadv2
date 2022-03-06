@@ -209,6 +209,20 @@ const Contact = (props: Props): JSX.Element => {
 
                     </div>
                 </div>
+                <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
+                    <TextField
+                        disabled={getDisabled('remarks_on_opening_hours')}
+                        id="remarks"
+                        label="Remarks on opening hours"
+                        variant="filled"
+                        value={formData.phone_number}
+                        onChange={e => handleFormData(e, 'remarks_on_opening_hours')}
+                        InputProps={{
+                            disableUnderline: true,
+                        }}
+                        style={{ border: '1px solid #d5d5d5' }}
+                    />
+                </FormControl>
 
                 {
                     validationError && <p style={{ color: 'red' }}>{validationError}</p>

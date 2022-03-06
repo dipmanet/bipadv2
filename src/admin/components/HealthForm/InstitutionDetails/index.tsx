@@ -282,7 +282,7 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         }
                     </Select>
                 </FormControl>
-
+                {/*
                 <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                     <TextField
                         id="bed_countId"
@@ -297,62 +297,64 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         disabled={getDisabled('bed_count')}
                         style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
                     />
-                </FormControl>
+                </FormControl> */}
 
 
                 <div className={styles.row1}>
                     <div className={styles.col1}>
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                            <InputLabel id="Hospital-Bed-Input">Hospital Bed</InputLabel>
-                            <Select
+                            <TextField
                                 disabled={getDisabled('hospital_bed_count')}
                                 labelId="Hospital BedLabel"
                                 id="Hospital-Bed"
                                 value={formData.hospital_bed_count}
-                                label="Hospital Bed"
                                 onChange={e => handleFormData(e, 'hospital_bed_count')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-                                disableUnderline
-                            >
-                                <MenuItem value={'Sanctioned'}>Sanctioned</MenuItem>
-                                <MenuItem value={'Functional'}>Functional</MenuItem>
-                            </Select>
+                                label="Hospital Bed Count"
+                                variant="filled"
+                                InputProps={{
+                            disableUnderline: true,
+                            inputMode: 'numeric',
+                        }}
+                            />
                         </FormControl>
                     </div>
                     <div className={styles.col1}>
+
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                            <InputLabel id="icu_bed_count_input">ICU Bed</InputLabel>
-                            <Select
+
+                            <TextField
                                 disabled={getDisabled('icu_bed_count')}
-                                labelId="icu_bed_countlabel"
+                                label="ICU Bed Count"
+                                variant="filled"
                                 id="icu_bed_count"
                                 value={formData.icu_bed_count}
-                                label="ICU Bed"
                                 onChange={e => handleFormData(e, 'icu_bed_count')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-                                disableUnderline
-                            >
-                                <MenuItem value={'Sanctioned'}>Sanctioned</MenuItem>
-                                <MenuItem value={'Functional'}>Functional</MenuItem>
-                            </Select>
+                                InputProps={{
+                            disableUnderline: true,
+                            inputMode: 'numeric',
+                        }}
+                            />
+
                         </FormControl>
                     </div>
                     <div className={styles.col1}>
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
-                            <InputLabel id="Ventilator-Bed-Input">Ventilator Bed</InputLabel>
-                            <Select
+                            <TextField
                                 disabled={getDisabled('ventilator_bed_count')}
                                 labelId="Ventilator-Bed-Label"
                                 id="Ventilator-Bed_ID"
                                 value={formData.ventilator_bed_count}
-                                label="Hospital Bed"
                                 onChange={e => handleFormData(e, 'ventilator_bed_count')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
-                                disableUnderline
-                            >
-                                <MenuItem value={'Sanctioned'}>Sanctioned</MenuItem>
-                                <MenuItem value={'Functional'}>Functional</MenuItem>
-                            </Select>
+                                label="Ventilator Bed Count"
+                                variant="filled"
+                                InputProps={{
+                            disableUnderline: true,
+                            inputMode: 'numeric',
+                        }}
+                            />
                         </FormControl>
                     </div>
                 </div>

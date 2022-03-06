@@ -154,7 +154,9 @@ const NextButton = (props) => {
     const handlePrevious = () => {
         setError(null);
         const getCurrentIndex = MenuItems.map(m => m.name).indexOf(activeMenu);
+        console.log('handle previous', getCurrentIndex);
         if (getCurrentIndex > 0) {
+            handleProgress(getCurrentIndex - 1);
             getActiveMenu(MenuItems.map(m => m.name)[getCurrentIndex - 1]);
         }
     };
@@ -621,7 +623,7 @@ const NextButton = (props) => {
                     type="button"
                     onClick={handlePrevious}
                     className={getPrevDisabled() ? styles.prevDisabled : styles.prevBtn}
-                    disabled={getPrevDisabled}
+                    // disabled={getPrevDisabled}
                 >
             Previous
                 </button>
