@@ -1,3 +1,17 @@
+
+@media only screen and (min-width: 2000px) {
+  .column {
+    
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+ 
+  
+   
+    
+  }
+}
+
+
 .left {
   display: flex;
   flex-direction: column;
@@ -124,13 +138,13 @@
   }
   .column {
     float: left;
-    width: 32%;
+    width: 31%;
     padding: 10px;
     padding-left: 0px;
     padding-right: 0px;
     // height: 300px; /* Should be removed. Only for demonstration */
     border: 1px solid #e1e1e1;
-    margin-left: 5px;
+    margin-left: 10px;
     margin-right: 5px;
     margin-bottom: 20px;
     padding-bottom: 0px;
@@ -203,7 +217,7 @@
     // margin-left: 10px;
     // margin-right: 10px;
     padding-left: 10px;
-    // padding-right: 10px;
+    padding-right: 10px;
     width: 100%;
     .icon {
       height: 15px;

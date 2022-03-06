@@ -293,21 +293,27 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                       >
                         <div
                           className="col1"
-                          style={{
-                            padding: '10px',
-                            maxHeight: '130px',
-                            justifyContent: 'space-between',
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: '7',
-                            minHeight: '130px',
 
-                          }}
                         >
 
-                          <h4 style={{ wordBreak: 'break-word' }} title={data.ptitle}>{data.ptitle}</h4>
+                          <h4
+                            style={{
+                              wordBreak: 'break-word',
+                              padding: '10px',
+                              maxHeight: '130px',
+                              justifyContent: 'space-between',
+                              textOverflow: 'ellipsis',
+                              overflow: 'hidden',
+                              display: '-webkit-box',
+                              WebkitBoxOrient: 'vertical',
+                              WebkitLineClamp: '7',
+                              minHeight: '130px',
+                            }}
+                            title={data.ptitle}
+                          >
+                            {data.ptitle}
+
+                          </h4>
 
 
                         </div>
@@ -386,21 +392,27 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                       >
                         <div
                           className="col1"
-                          style={{
-                            padding: '10px',
-                            maxHeight: '130px',
-                            justifyContent: 'space-between',
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: '7',
-                            minHeight: '130px',
 
-                          }}
                         >
 
-                          <h4 style={{ wordBreak: 'break-word' }} title={data.ptitle}>{data.ptitle}</h4>
+                          <h4
+                            style={{
+                              wordBreak: 'break-word',
+                              padding: '10px',
+                              maxHeight: '130px',
+                              justifyContent: 'space-between',
+                              textOverflow: 'ellipsis',
+                              overflow: 'hidden',
+                              display: '-webkit-box',
+                              WebkitBoxOrient: 'vertical',
+                              WebkitLineClamp: '7',
+                              minHeight: '130px',
+                            }}
+                            title={data.ptitle}
+                          >
+                            {data.ptitle}
+
+                          </h4>
 
 
                         </div>
@@ -477,20 +489,28 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                       >
                         <div
                           className="col1"
-                          style={{
-                            padding: '10px',
-                            maxHeight: '130px',
-                            justifyContent: 'space-between',
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: '7',
-                            minHeight: '130px',
-                          }}
+
                         >
 
-                          <h4 style={{ wordBreak: 'break-word' }} title={data.ptitle}>{data.ptitle}</h4>
+                          <h4
+                            style={{
+                              wordBreak: 'break-word',
+                              padding: '10px',
+                              maxHeight: '130px',
+                              justifyContent: 'space-between',
+                              textOverflow: 'ellipsis',
+                              overflow: 'hidden',
+                              display: '-webkit-box',
+                              WebkitBoxOrient: 'vertical',
+                              WebkitLineClamp: '7',
+                              minHeight: '130px',
+                            }}
+
+                            title={data.ptitle}
+                          >
+                            {data.ptitle}
+
+                          </h4>
 
 
                         </div>
