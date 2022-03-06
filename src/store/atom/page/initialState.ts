@@ -1,3 +1,5 @@
+import { number, string } from 'prop-types';
+import { setRealTimeEarthquakeList } from './reducer';
 import { PageState } from './types';
 
 // const maptilerAccessToken = process.env.REACT_APP_MAPTILER_ACCESS_TOKEN;
@@ -29,6 +31,45 @@ const state: PageState = {
         },
     },
 
+    daEarthquakeFilter: {
+        region: {},
+        dataDateRange: {
+            rangeInDays: 183,
+            startDate: undefined,
+            endDate: undefined,
+        },
+        magnitude: [],
+    },
+
+    daPollutionFilter: {
+        station: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRainFilter: {
+        station: {},
+        basin: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
+    daRiverFilter: {
+        station: {},
+        basin: {},
+        dataDateRange: {
+            rangeInDays: 7,
+            startDate: undefined,
+            endDate: undefined,
+        },
+    },
+
     adminLevelList: [
         {
             id: 0,
@@ -52,7 +93,9 @@ const state: PageState = {
     districts: [],
     municipalities: [],
     wards: [],
-
+    pollutionStations: [],
+    rainStations: [],
+    riverStations: [],
     documentCategoryList: [],
 
     selectedMapStyle: 'mapbox://styles/adityakhatri/cjuck3jrk1gyt1fprrcz8z4f0',
@@ -61,46 +104,107 @@ const state: PageState = {
         {
             id: 1,
             title: 'education',
+            label: 'Education',
         },
         {
             id: 2,
             title: 'health',
+            label: 'Health',
         },
         {
             id: 3,
             title: 'finance',
+            label: 'Banking & Finance',
         },
         {
             id: 4,
             title: 'governance',
+            label: 'Governance',
         },
         {
             id: 5,
-            title: 'tourism',
+            title: 'hotelandrestaurant',
+            label: 'Hotel & Restaurant',
         },
         {
             id: 6,
             title: 'cultural',
+            label: 'Culture',
         },
         {
             id: 7,
             title: 'industry',
+            label: 'Industry',
         },
         {
             id: 8,
             title: 'communication',
+            label: 'Communication',
         },
         {
             id: 9,
-            title: 'openspace',
+            title: 'helipad',
+            label: 'Helipad',
         },
         {
             id: 10,
-            title: 'communityspace',
+            title: 'bridge',
+            label: 'Bridge',
         },
         {
             id: 11,
-            title: 'helipad',
+            title: 'electricity',
+            label: 'Electricity',
+        },
+        {
+            id: 12,
+            title: 'sanitation',
+            label: 'Sanitation',
+        },
+        {
+            id: 13,
+            title: 'watersupply',
+            label: 'Water Supply',
+        },
+        {
+            id: 14,
+            title: 'airway',
+            label: 'Airway',
+        },
+        {
+            id: 15,
+            title: 'waterway',
+            label: 'Waterway',
+        },
+        {
+            id: 16,
+            title: 'roadway',
+            label: 'Roadway',
+        },
+        // {
+        //     id: 17,
+        //     title: 'fireengine',
+        //     label: 'Fire Engine ',
+        // },
+        {
+            id: 21,
+            title: 'firefightingapparatus',
+            label: 'Firefighting apparatus ',
+        },
+        {
+            id: 18,
+            title: 'evacuationcentre',
+            label: 'Evacuation Center',
+        },
+        {
+            id: 19,
+            title: 'openspace',
+            label: 'Humanitarian Open Space',
+        },
+        {
+            id: 20,
+            title: 'communityspace',
+            label: 'Community Space',
         },
     ],
     carKeys: [],
@@ -161,6 +265,22 @@ const state: PageState = {
             faramErrors: {},
             pristine: true,
         },
+        duration: 24,
+    },
+
+    dataArchivePage: {
+        dataArchiveRainList: [],
+        dataArchiveRiverList: [],
+        dataArchiveEarthquakeList: [],
+        // dataArchiveFireList: [],
+        dataArchivePollutionList: [],
+        filters: {
+            faramValues: {
+                realtimeSources: [3, 2],
+            },
+            faramErrors: {},
+            pristine: true,
+        },
     },
 
     lossAndDamagePage: {
@@ -197,6 +317,87 @@ const state: PageState = {
             faramErrors: {},
             pristine: true,
         },
+    },
+    generalData: {
+        reportTitle: '',
+        fiscalYear: '',
+        mayor: '',
+        cao: '',
+        focalPerson: '',
+        formationDate: '',
+        committeeMembers: 0,
+        localMembers: [],
+    },
+    budgetData: {
+        totMunBudget: 0,
+        totDrrBudget: 0,
+        additionalDrrBudget: 0,
+    },
+    budgetActivityData: {
+        name: '',
+        fundSource: '',
+        budgetCode: '',
+        projStatus: '',
+        allocatedBudget: '',
+        actualExp: '',
+        remarks: '',
+        priorityArea: '',
+        action: '',
+        activity: '',
+        areaofImplementation: '',
+        fundingType: '',
+        organisationName: '',
+        projcompletionDate: '',
+        projstartDate: '',
+    },
+    programAndPolicyData: {
+        pointOne: '',
+        pointTwo: '',
+        pointThree: '',
+    },
+    budgetId: {
+        id: '',
+    },
+    palikaRedirect: {
+        showForm: false,
+        redirectTo: -1,
+    },
+    palikaLanguage: {
+        language: 'en',
+    },
+    drrmOrg: {
+        data: [],
+    },
+    drrmInventory: {
+        data: [],
+    },
+    drrmCritical: {
+        data: [],
+    },
+    drrmContacts: {
+        data: [],
+    },
+    drrmRegion: {
+        data: {},
+    },
+    drrmProgress: -1,
+
+
+    ibfPage: {
+        demo: 1,
+        stations: {},
+        stationDetail: {},
+        selectedStation: {},
+        calendarData: [],
+        returnPeriod: 0,
+        leadTime: 0,
+        overallFloodHazard: [],
+        filter: { district: '', municipality: '', ward: '' },
+        householdJson: [],
+        showHouseHold: 0,
+        selectedIndicator: '',
+        householdDistrictAverage: {},
+        selectedLegend: '',
     },
     bulletinEditData: {},
     bulletinPage: {
@@ -374,6 +575,7 @@ const state: PageState = {
         epidemicTotalData: [],
         epidemicTotalError: {},
         incidentCount: null,
+        uploadData: [],
     },
     language: {
         language: 'en',

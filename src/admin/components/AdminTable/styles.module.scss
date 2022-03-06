@@ -1,0 +1,85 @@
+$Fira: 'Fira Sans', sans-serif;
+$inputBackground : #F7F7F7;
+$boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
+
+.setStyleForHead{
+	font-size:16px ;
+	color: #303030 !important;
+	font-family: $Fira !important;
+}
+.setStyleForTableCell{
+	color: #3E3E3E !important;
+	font-family: $Fira !important;
+	font-size: 14px;
+	font-weight: 500 !important;
+	line-height: 24px !important;
+	// font-weight: bold !important;
+	.curdOptions{
+		cursor: pointer;
+		height: 18px;
+		margin: 5px;
+	}
+
+}
+
+.credentialSearch{
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid rgb(202, 202, 202);
+	border-left: 1px solid rgb(228, 228, 228);
+	border-right: 1px solid rgb(228, 228, 228);
+	margin-top: 25px;
+	img{
+		padding-left: 25px;
+	}
+	.downloadIcon{
+		cursor: pointer;
+		height: 30px;
+		width: 30px;
+		margin-left: 15px;
+		&:hover{
+			background-color: rgb(224, 224, 224);
+			border-radius: 50%;
+			padding: 5px;
+		}
+	}
+	.credentialSearchBar{
+		width: 70%;
+		padding: 15px 10px;
+		font-size: 20px;
+		border:none;
+		outline: none;
+		font-style: $Fira;
+
+	}
+}
+.adminForm{
+	top: 3%;
+	left: 26%;
+	// width: calc(100% - 65px);
+	height: 100vh;
+	overflow-y: scroll;
+}
+
+.saveOrAddButtons{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 35px;
+	.submitButtons{
+		color: white;
+		background-color: #003572;
+		border: none;
+		outline: none;
+		font-size: 16px;
+		padding: 8px 25px;
+		border-radius: 3px;
+		font-family: $Fira;
+		cursor: pointer;
+		&:hover{
+			background-color: #0a58b1;
+		}
+
+	}
+}

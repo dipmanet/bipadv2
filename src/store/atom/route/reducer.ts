@@ -58,6 +58,7 @@ function setRouteParams(state: Type.RouteState, action: Type.SetRouteAction) {
     return newState;
 }
 
+
 function clearRouteState(state: Type.RouteState, action: Type.ClearRouteAction) {
     return {
         ...state,

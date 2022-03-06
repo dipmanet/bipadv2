@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './styles.scss';
+import styles from '../styles.scss';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
 import {
@@ -145,7 +145,7 @@ class Details extends React.PureComponent<Props, State> {
         } = this.state;
 
         const {
-            openspaceId,
+            openspaceId, LoadingSuccessHalt,
         } = this.props;
         const formdata = new FormData();
         formdata.append('openSpace', JSON.stringify(openspaceId));
@@ -159,20 +159,24 @@ class Details extends React.PureComponent<Props, State> {
             body: formdata,
             // credentials: 'same origin'
         };
+        LoadingSuccessHalt(true);
         fetch(`${process.env.REACT_APP_API_SERVER_URL}/openspace-detail/${objectId}/`, requestOptions)
             .then((res) => {
                 if (res.status === 200) {
                     this.props.handleTabClick('suggestedUses');
+                    LoadingSuccessHalt(false);
                 } else {
                     this.setState({
                         openspacePostError: true,
                     });
+                    LoadingSuccessHalt(false);
                 }
             })
             .catch(() => {
                 this.setState({
                     openspacePostError: true,
                 });
+                LoadingSuccessHalt(false);
             });
     }
 
@@ -192,7 +196,7 @@ class Details extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const { resourceId } = this.props;
+        const { resourceId, addResourcePending, LoadingSuccessHalt } = this.props;
         const { objectId,
             openspacePostError,
             geoserverUrl,
@@ -287,11 +291,11 @@ class Details extends React.PureComponent<Props, State> {
                 }
 
                 <div className={styles.stepButtons}>
-                    <PrimaryButton
+                    {/* <PrimaryButton
                         disabled
                     >
                         Back
-                    </PrimaryButton>
+                    </PrimaryButton> */}
                     <PrimaryButton
                         // type="submit"
                         onClick={() => this.submitDetails()}

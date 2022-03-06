@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
-// import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import EpidemicTable from 'src/admin/components/EpidemicsTable';
 import Navbar from 'src/admin/components/Navbar';
 import MenuCommon from 'src/admin/components/MenuCommon';
 import Footer from 'src/admin/components/Footer';
 import styles from './styles.module.scss';
+import Ideaicon from '../../resources/ideaicon.svg';
+import Page from '#components/Page';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 import { SetEpidemicsPageAction } from '#actionCreators';
 import { epidemicsPageSelector } from '#selectors';
-// import { getIncidentData } from '../../Redux/actions';
-import Ideaicon from '../../resources/ideaicon.svg';
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
-import Page from '#components/Page';
 
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -24,7 +22,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     incidents: {
-        url: '/incident/?expand=loss.peoples,wards,wards.municipality,wards.municipality.district,wards.municipality.district.province,',
+        url: '/incident/',
         method: methods.GET,
         onMount: false,
         query: params => ({
@@ -33,6 +31,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             offset: params.offset,
             limit: 100,
             count: true,
+            expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district', 'wards.municipality.district.province'],
             ordering: '-id',
         }),
         onSuccess: ({ response, props }) => {
@@ -46,17 +45,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 const EpidemmicDataTable = (props) => {
     const { epidemmicsPage: { incidentData, incidentCount } } = props;
-    // const { incidentData } = useSelector(state => state.epidemic);
-    // const dispatch = useDispatch();
+
 
     useEffect(() => {
         props.requests.incidents.do({ offset: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // React.useEffect(() => {
-    //     dispatch(getIncidentData());
-    // }, [dispatch]);
 
     return (
         <>
@@ -71,15 +65,15 @@ const EpidemmicDataTable = (props) => {
                             <div className={styles.mainContent}>
                                 <div className={styles.formDataContainer}>
                                     <h2 className={styles.mainHeading}>
-Epidemic Data Table
+                                        Epidemic Data Table
                                     </h2>
                                     <div className={styles.shortGeneralInfo}>
                                         <img className={styles.ideaIcon} src={Ideaicon} alt="" />
                                         <p className={styles.ideaPara}>
-The table below gives the details of epidemic
-cases reported by the institution with
-disaggregated data by gender and disability.
-The table is downloadable and data can be edited as well.
+                                            The table below gives the details of epidemic
+                                            cases reported by the institution with
+                                            disaggregated data by gender and disability. The
+                                            table is downloadable and data can be edited as well.
                                         </p>
                                     </div>
                                     { incidentData.length > 0 && <EpidemicTable />}
@@ -101,4 +95,3 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         ),
     ),
 );
-// export default EpidemmicDataTable;

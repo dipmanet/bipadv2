@@ -202,7 +202,6 @@ interface EnhancedTableToolbarProps {
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const { numSelected, selected, dispatch, epidemicFormEdit, incidentEditData } = props;
-    // const navigate = useNavigate();
 
     // const { incidentEditData } = useSelector((state: RootState) => state.epidemic);
 
@@ -231,7 +230,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 }),
             }}
         >
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <>
                     <Tooltip title="Edit">
 
@@ -242,12 +241,6 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                         </IconButton>
                     </Tooltip>
                 </>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
             )}
         </Toolbar>
     );
@@ -288,7 +281,6 @@ const EpidemmicTable = (props) => {
                     totalInjuredFemale: row.loss && row.loss.peopleInjuredFemaleCount,
                     totalInjuredOther: row.loss && row.loss.peopleInjuredOtherCount,
                     totalInjuredDisabled: row.loss && row.loss.peopleInjuredDisabledCount,
-
 
                     totalDeadMale: row.loss && row.loss.peopleDeathMaleCount,
                     totalDeadFemale: row.loss && row.loss.peopleDeathFemaleCount,
@@ -631,8 +623,6 @@ const EpidemmicTable = (props) => {
         </>
     );
 };
-
-// export default EpidemmicTable;
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator<ReduxProps>()(

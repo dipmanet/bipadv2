@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 import React, { useEffect, useRef, useState } from 'react';
@@ -39,6 +40,7 @@ import {
     provincesSelector,
     wardsSelector,
     epidemicsPageSelector,
+    userSelector,
 } from '#selectors';
 import { SetEpidemicsPageAction } from '#actionCreators';
 
@@ -51,6 +53,7 @@ const mapStateToProps = (state, props) => ({
     municipalities: municipalitiesSelector(state),
     wards: wardsSelector(state),
     epidemmicsPage: epidemicsPageSelector(state),
+    user: userSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -106,9 +109,81 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    incidentUpdate: {
+        url: ({ params }) => `/incident/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Incident Updated' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    incidentPatch: {
+        url: ({ params }) => `/incident/${params.id}/`,
+        method: methods.PATCH,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Incident verified' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    incidentError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossDeadMale: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadMaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -154,9 +229,57 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossDeadFemaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossDeadOther: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossDeadOtherUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -202,9 +325,57 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossDeadDisabledUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossInjuredMale: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredMaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -250,6 +421,30 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossInjuredFemaleUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossInjuredOther: {
         url: '/loss-people/',
         method: methods.POST,
@@ -274,9 +469,57 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
     },
+    lossInjuredOtherUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
     lossInjuredDisabled: {
         url: '/loss-people/',
         method: methods.POST,
+        body: ({ params }) => params && params.body,
+        onSuccess: ({ response, props }) => {
+            props.setEpidemicsPage({ successMessage: 'Loss people added' });
+        },
+        onFailure: ({ error, params }) => {
+            if (params && params.setEpidemicsPage) {
+                // TODO: handle error
+                console.warn('failure', error);
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+        onFatal: ({ params }) => {
+            if (params && params.setEpidemicsPage) {
+                params.setEpidemicsPage({
+                    lossPeopleError: 'Some problem occurred',
+                });
+            }
+        },
+    },
+    lossInjuredDisabledUpdate: {
+        url: ({ params }) => `/loss-people/${params.id}/`,
+        method: methods.PUT,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
             props.setEpidemicsPage({ successMessage: 'Loss people added' });
@@ -381,8 +624,6 @@ const Epidemics = (props) => {
     const [notApproved, setNotApproved] = useState(false);
     const [verificationMessage, setVerificationMessage] = useState('');
     const [validationError, setvalidationError] = useState(null);
-    const addedSuccessfullyRef = useRef(null);
-    const [visibility, setvisibility] = useState('hidden');
     const [provinceDataIs, setProvinceDataIs] = useState([]);
     const [districtDataIs, setdistrictDataIs] = useState([]);
     const [municipalityDataIs, setmunicipalityDataIs] = useState([]);
@@ -396,10 +637,9 @@ const Epidemics = (props) => {
     const [municipalityCentriodForMap, setmunicipalityCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
     const [wardId, setwardId] = useState(0);
     const [wardCentriodForMap, setwardCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
-    const addedRef = useRef(null);
     const [editLossId, setEditLossId] = useState('');
     const [editLossPeople, setEditLossPeople] = useState('');
-    const [editWardId, setEditWardId] = useState('');
+    const [editWardId, setEditWardId] = useState(0);
 
     const [added, setAdded] = useState(false);
     const [updated, setUpdated] = useState(false);
@@ -436,7 +676,41 @@ const Epidemics = (props) => {
             incidentUpdateError,
             lossError,
             incidentEditData,
-        } } = props;
+        },
+    user,
+    provinces,
+    districts,
+    municipalities,
+    wards } = props;
+
+    useEffect(() => {
+        if (user && user.profile && user.profile.province && provinces && provinces.length > 0) {
+            const nameOfProvince = provinces.filter(item => item.id === user.profile.province).map(item => item.title)[0];
+            setprovinceName(nameOfProvince);
+            const provinceCenter = provinces.filter(item => item.id === user.profile.province).map(item => item.centroid.coordinates)[0];
+            setinitialProvinceCenter(provinceCenter);
+        }
+        if (user && user.profile && user.profile.district && districts && districts.length > 0) {
+            const nameOfDistrict = districts.filter(item => item.id === user.profile.district).map(item => item.title)[0];
+            setdistrictName(nameOfDistrict);
+            const districtCenter = districts.filter(item => item.id === user.profile.district).map(item => item.centroid.coordinates)[0];
+            setinitialDistrictCenter(districtCenter);
+        }
+        if (user && user.profile && user.profile.municipality && municipalities && municipalities.length > 0) {
+            const nameOfMunicipality = municipalities.filter(item => item.id === user.profile.municipality).map(item => item.title)[0];
+            setmunicipalityName(nameOfMunicipality);
+            const munCenter = municipalities.filter(item => item.id === user.profile.municipality).map(item => item.centroid.coordinates)[0];
+            setinitialMunCenter(munCenter);
+        }
+        if (user && user.profile && user.profile.ward && wards && wards.length > 0) {
+            const nameOfWard = wards.filter(item => item.id === user.profile.ward).map(item => item.title)[0];
+            setwardName(nameOfWard);
+        }
+    }, [districts, municipalities, provinces, user, wards]);
+
+    useEffect(() => {
+        console.log('test', initialProvinceCenter);
+    }, [initialProvinceCenter]);
 
     const clearData = () => {
         setuniqueId('');
@@ -485,14 +759,6 @@ const Epidemics = (props) => {
         setLongitude,
     };
 
-    const {
-        provinces,
-        districts,
-        municipalities,
-        wards,
-    } = props;
-
-
     useEffect(() => {
         const province = provinces.filter(
             item => item.title === provinceName,
@@ -537,6 +803,7 @@ const Epidemics = (props) => {
             .filter(item => item.title === String(wardName)).map(item => item.id)[0];
         if (wardName) {
             setwardId(id);
+            setEditWardId(id);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
@@ -562,7 +829,7 @@ const Epidemics = (props) => {
         setAdded(false);
         setUpdated(false);
         setError(false);
-        navigate('/admin/epidemics-table');
+        navigate('/admin/epidemics/epidemics-data-table');
     };
     const handleAddedSuccess = () => {
         setAdded(false);
@@ -576,7 +843,7 @@ const Epidemics = (props) => {
         setError(false);
     };
     const handleTableButton = () => {
-        navigate('/admin/epidemics-table');
+        navigate('/admin/epidemics/epidemics-data-table');
     };
 
     useEffect(() => {
@@ -722,8 +989,19 @@ const Epidemics = (props) => {
                     coordinates: [longitude, lattitude],
                 },
                 wards: [editWardId] };
-
-            // dispatch(incidentUpdateData(uniqueId, data, true));
+            if (user
+                    && user.profile
+                    && user.profile.role === 'validator'
+            ) {
+                const verify = {
+                    verified,
+                    approved,
+                    verification_message: verificationMessage,
+                };
+                props.requests.incidentPatch.do({ id: uniqueId, body: verify });
+            } else {
+                props.requests.incidentUpdate.do({ id: uniqueId, body: data });
+            }
 
 
             const obj = {
@@ -740,34 +1018,42 @@ const Epidemics = (props) => {
             const deadMale = { ...deadMaleInitial,
                 loss: editLossId,
                 count: deadFormMale };
+            props.requests.lossDeadMaleUpdate.do({ id: obj.deadMale, body: deadMale });
             // dispatch(lossPeopleUpdateData(obj.deadMale, deadMale));
             const deadFemale = { ...deadFemaleInitial,
                 loss: editLossId,
                 count: deadFormFemale };
+            props.requests.lossDeadFemaleUpdate.do({ id: obj.deadFemale, body: deadFemale });
             // dispatch(lossPeopleUpdateData(obj.deadFemale, deadFemale));
             const deadOther = { ...deadOtherInitial,
                 loss: editLossId,
                 count: deadFormOther };
+            props.requests.lossDeadOtherUpdate.do({ id: obj.deadOther, body: deadOther });
             // dispatch(lossPeopleUpdateData(obj.deadOther, deadOther));
             const deadDisabled = { ...deadDisabledInitial,
                 loss: editLossId,
                 count: deadFormDisabled };
+            props.requests.lossDeadDisabledUpdate.do({ id: obj.deadDisabled, body: deadDisabled });
             // dispatch(lossPeopleUpdateData(obj.deadDisabled, deadDisabled));
             const injuredMale = { ...injuredMaleInitial,
                 loss: editLossId,
                 count: injuredFormMale };
+            props.requests.lossInjuredMaleUpdate.do({ id: obj.injuredMale, body: injuredMale });
             // dispatch(lossPeopleUpdateData(obj.injuredMale, injuredMale));
             const injuredFemale = { ...injuredFemaleInitial,
                 loss: editLossId,
                 count: injuredFormFemale };
+            props.requests.lossInjuredFemaleUpdate.do({ id: obj.injuredFemale, body: injuredFemale });
             // dispatch(lossPeopleUpdateData(obj.injuredFemale, injuredFemale));
             const injuredOther = { ...injuredOtherInitial,
                 loss: editLossId,
                 count: injuredFormOther };
+            props.requests.lossInjuredOtherUpdate.do({ id: obj.injuredOther, body: injuredOther });
             // dispatch(lossPeopleUpdateData(obj.injuredOther, injuredOther));
             const injuredDisabled = { ...injuredDisabledInitial,
                 loss: editLossId,
                 count: injuredFormDisabled };
+            props.requests.lossInjuredDisabledUpdate.do({ id: obj.injuredDisabled, body: injuredDisabled });
             // dispatch(lossPeopleUpdateData(obj.injuredDisabled, injuredDisabled));
             if (lossPeopleError || incidentError || lossError || incidentUpdateError) {
                 setError(true);
@@ -1016,18 +1302,13 @@ const Epidemics = (props) => {
                                         label="Ward"
                                         onChange={e => setwardName(e.target.value)}
                                     >
-                                        {wards && wards.filter(
-                                            item => item.municipality === municipalityId,
-                                        ).sort().map(
-                                            item => (
-                                                <MenuItem
-                                                    key={item.title}
-                                                    value={item.title}
-                                                >
-                                                    {item.title}
+                                        {wards && wards.filter(item => item.municipality === municipalityId)
+                                            .map(item => Number(item.title)).sort((a, b) => a - b)
+                                            .map(item => (
+                                                <MenuItem key={item} value={item}>
+                                                    {item}
                                                 </MenuItem>
-                                            ),
-                                        )}
+                                            ))}
                                     </Select>
                                 </FormControl>
                             </div>
@@ -1242,7 +1523,7 @@ const Epidemics = (props) => {
                                 </div>
                             </div>
                             <div className={styles.saveOrAddButtons}>
-                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">Save and New</button>
+                                <button className={styles.submitButtons} onClick={handleEpidemicFormSubmit} type="submit">{uniqueId ? 'Update' : 'Save and New' }</button>
                             </div>
                         </div>
                     </div>

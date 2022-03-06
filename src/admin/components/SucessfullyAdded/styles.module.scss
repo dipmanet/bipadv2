@@ -1,0 +1,40 @@
+$Fira: 'Fira Sans', sans-serif;
+
+.successFullyAdded{
+	position: absolute;
+	top: 40%;
+	left: 40%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 15%;
+	height: 15%;
+	margin: auto;
+	z-index: 5;
+	background-color: #003572;
+	border-radius: 5px;
+
+	.successfulAdd{
+		color: white;
+		font-family: $Fira;
+		font-size: 18px;
+	
+	}
+	.okHandler{
+		color:#003572 ;
+		background-color: #ffffff;
+		border: none;
+		outline: none;
+		font-size: 16px;
+		padding: 2px 15px;
+		border-radius: 3px;
+		font-family: $Fira;
+		cursor: pointer;
+		&:hover{
+			color: white;
+			background-color: #0a58b1;
+		}
+
+	}
+}

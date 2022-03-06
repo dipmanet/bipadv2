@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-education">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="education" clip-path="url(#clip-education)">
+    <path id="Icon_material-school" data-name="Icon material-school" d="M7.318,19.307v5.818L17.5,30.682l10.182-5.556V19.307L17.5,24.863ZM17.5,4.5l-16,8.727,16,8.727,13.091-7.142V24.863H33.5V13.227Z" transform="translate(-1.5 -1.591)" fill="#0070ab"/>
+    <path id="Path_628" data-name="Path 628" d="M23.276,14.678h5.706" transform="translate(-3.276 10.322)" fill="#3590f3"/>
+  </g>
+</svg>
