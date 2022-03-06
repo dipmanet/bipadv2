@@ -8,9 +8,11 @@ export interface AdminPage {
     errorAdminId: string;
     loadingAdminPutUser: boolean;
 }
+export type AdminMenu = [];
 
 export interface AdminState {
     adminPage: AdminPage;
+    adminMenu: AdminMenu;
 }
 
 
@@ -19,6 +21,7 @@ export interface AdminState {
 // eslint-disable-next-line import/prefer-default-export
 export enum PageType {
     SET_ADMIN_PAGE = 'page/ADMIN/ADMIN_PAGE',
+    SET_ADMIN_MENU = 'page/ADMIN/ADMIN_MENU',
 }
 
 // ACTION CREATOR INTERFACE
@@ -28,6 +31,11 @@ export interface SetAdminPage {
     adminPage: AdminPage;
 }
 
+export interface SetAdminMenu {
+    type: typeof PageType.SET_ADMIN_MENU;
+    adminPage: AdminMenu;
+}
+
 export type PageActionTypes = (
-    SetAdminPage
+    SetAdminPage | SetAdminMenu
 );

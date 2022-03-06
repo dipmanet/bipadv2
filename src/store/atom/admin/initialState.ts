@@ -11,5 +11,6 @@ const state: AdminState = {
         errorAdminId: '',
         loadingAdminPutUser: false,
     },
+    adminMenu: [],
 };
 export default state;

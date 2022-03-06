@@ -8,8 +8,8 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
-import { userSelector } from '#selectors';
-
+import { userSelector, adminMenuSelector } from '#selectors';
+import { SetAdminMenuAction } from '#actionCreators';
 
 interface Props {
     currentPage?: MenuItem;
@@ -35,14 +35,19 @@ interface MenuItem {
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     user: userSelector(state),
+    adminMenu: adminMenuSelector(state),
+});
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setAdminMenu: params => dispatch(SetAdminMenuAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     getMenu: {
         url: '/adminportal-menu/',
         method: methods.GET,
-        onMount: true,
-        onSuccess: ({ response, params: { setMenu, setAllMenu } }) => {
+        onMount: false,
+        onSuccess: ({ response, params: { setMenu, setAllMenu }, props: { setAdminMenu } }) => {
+            setAdminMenu(response.results);
             setMenu(response.results);
             setAllMenu(response.results);
         },
@@ -50,7 +55,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
 };
 
 const MenuCommon = (props: Props) => {
-    const { layout, requests: { getMenu } } = props;
+    const { layout, requests: { getMenu }, setAdminMenu, adminMenu } = props;
     const [Menu, setMenu] = useState<MenuItem[] | undefined>([]);
     const [AllMenu, setAllMenu] = useState<[] | undefined>([]);
     const [active, setActive] = useState<number | undefined>(undefined);
@@ -68,6 +73,17 @@ const MenuCommon = (props: Props) => {
         }
     };
 
+    useEffect(() => {
+        if (adminMenu.length === 0) {
+            console.log('getting menu...');
+            getMenu.do();
+            setAdminMenu();
+        } else {
+            setAllMenu(adminMenu);
+            setMenu(adminMenu);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         if (AllMenu) {
@@ -131,7 +147,7 @@ const MenuCommon = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     createConnectedRequestCoordinator()(
         createRequestClient(requests)(
             MenuCommon,

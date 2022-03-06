@@ -8,6 +8,10 @@ export const SetAdminPageAction = adminPage => ({
     type: Type.PageType.SET_ADMIN_PAGE,
     adminPage,
 });
+export const SetAdminMenuAction = adminMenu => ({
+    type: Type.PageType.SET_ADMIN_MENU,
+    adminMenu,
+});
 
 const setAdminPage = (state: Type.AdminState, action: Type.SetAdminPage) => {
     const { adminPage: {
@@ -34,11 +38,24 @@ const setAdminPage = (state: Type.AdminState, action: Type.SetAdminPage) => {
     return newState;
 };
 
+const setAdminMenu = (state: Type.AdminState, action: Type.SetAdminMenu) => {
+    const {
+        adminMenu,
+    } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.adminMenu = adminMenu;
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.AdminState {
     switch (action.type) {
+        case Type.PageType.SET_ADMIN_MENU:
+            return setAdminMenu(state, action);
         case Type.PageType.SET_ADMIN_PAGE:
             return setAdminPage(state, action);
         default:
