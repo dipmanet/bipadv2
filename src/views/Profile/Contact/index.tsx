@@ -940,6 +940,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                                         className={styles.image}
                                         src={item.image}
                                         alt="profile"
+                                        loading="lazy"
                                     />
                                     <div className={styles.contactNameDetails}>
                                         <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
@@ -995,6 +996,7 @@ class ContactPage extends React.PureComponent<Props, State> {
                                         className={styles.image}
                                         src={item.image}
                                         alt="profile"
+                                        loading="lazy"
                                     />
                                     <div className={styles.contactNameDetails}>
                                         <span style={{ fontWeight: 'bold' }}>{item.name.toUpperCase()}</span>
