@@ -140,7 +140,7 @@ class HazardSelectionInput extends React.PureComponent {
                         labelSelector={hazardTypeLabelSelector}
                         iconSelector={hazardTypeIconSelector}
                         label="Natural"
-                        options={withoutFire}
+                        options={groupedHazardTypes.natural}
                         value={groupedValues.natural}
                         onChange={this.handleNaturalInputChange}
                     />
