@@ -8,7 +8,6 @@ interface Props {
 
 const PolygonBoundaryCommunity = (resourceInfo: Props) => {
     const appContext = useContext(MapChildContext);
-
     return <Polygon appContext={appContext} resourceInfo={resourceInfo} />;
 };
 

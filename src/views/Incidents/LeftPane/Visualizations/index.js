@@ -125,7 +125,7 @@ export default class Visualizations extends React.PureComponent {
         const hazardSummary = this.getHazardSummary(incidentList);
         const lifeLossSummary = this.getLifeLossSummary(incidentList);
         // const eventSummary = this.getEventSummary(incidentList);
-        console.log('lifeLossSummary', lifeLossSummary);
+
 
         return (
             <div className={styles.visualizations}>
@@ -166,7 +166,7 @@ export default class Visualizations extends React.PureComponent {
                                     dataKey="value"
 
                                 >
-                                    { hazardSummary.map(hazard => (
+                                    {hazardSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}
@@ -244,7 +244,7 @@ export default class Visualizations extends React.PureComponent {
                                     dataKey="deathCount"
 
                                 >
-                                    { lifeLossSummary.map(hazard => (
+                                    {lifeLossSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}

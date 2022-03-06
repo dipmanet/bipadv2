@@ -22,7 +22,7 @@ interface Props {
         openspace: boolean;
         communityspace: boolean;
         bridge: boolean;
-        evacuationcenter: boolean;
+        evacuationcentre: boolean;
     };
     resourceIdForLegend: number | null;
 }
@@ -88,7 +88,7 @@ const CapacityAndResourcesLegend = (props: Props) => {
         legendTitle = 'Communityspace Boundary';
     } else legendTitle = 'Openspace Boundary';
 
-    const { resourceIdForLegend, handleDroneImage } = props;
+    const { resourceIdForLegend, handleDroneImage, activeLayersIndication } = props;
 
     return (
         <React.Fragment>
