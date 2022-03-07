@@ -1,7 +1,7 @@
 .login-modal {
   display: flex;
   justify-content: center;
-  background-color: var(--color-foreground);
+  // background-color: var(--color-foreground);
   border-radius: 10px !important;
   width: 50%;
   margin: 0px;
@@ -97,7 +97,6 @@
               margin-left: 1%;
               text-transform: uppercase;
               font-weight: 600;
-              color: #ffffff;
               background-color: transparent !important;
               color: white !important;
               font-size: 10px;
@@ -194,6 +193,8 @@
               border: none;
               padding: 3% 2.5% 18.5% 2.5%;
               outline: none;
+              filter: saturate(100%) !important;
+              opacity: 1 !important;
             }
           }
           .tech_support_date_time {

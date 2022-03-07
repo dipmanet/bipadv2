@@ -37,7 +37,7 @@
 
 .login_modal_submit{
   @extend .login-modal;
-  width: auto;
+  width: 40%;
 }
 .container_tech_support {
   width: 100%;
@@ -323,7 +323,6 @@
             .country_code {
               width: 15%;
               display: flex;
-              justify-content: center;
               background: #e8e8e8;
               color: #8B8B8B;
               font-size: 12px;
