@@ -803,7 +803,7 @@ class ContactPage extends React.PureComponent<Props, State> {
             <div style={{ overflow: 'auto', padding: '20px', paddingTop: '0px' }}>
                 <table className={styles.contacts}>
                     <thead>
-                        <tr style={{ position: 'sticky', top: '0' }}>
+                        <tr style={{ position: 'sticky', top: '0', zIndex: '1' }}>
                             <th>
                                 S/N
 
