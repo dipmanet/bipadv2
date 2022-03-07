@@ -1500,10 +1500,10 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                                                 ))}
                                                 {!pendingAPICall && (resourceCollection[resourceType]).length === 0
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available</h2>
+                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
                                                     : ''}
                                                 {allDataNullConditionCheck
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available</h2>
+                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
                                                     : ''}
                                             </div>
                                         )}
