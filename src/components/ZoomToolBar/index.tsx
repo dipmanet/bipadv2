@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
 import PlusIcon from './icons/plus.svg';
@@ -9,7 +9,6 @@ import NavigationIcon from './icons/navigation.svg';
 import SearchIcon from './icons/search.svg';
 import ReloadIcon from './icons/reset.svg';
 import FullScreenIcon from './icons/fullscreen.svg';
-import MapShapeEditor from '#re-map/MapShapeEditor';
 
 interface OwnProps {
     className?: string;
@@ -27,8 +26,6 @@ interface OwnProps {
     drawToZoom: () => void;
     fullScreenMap: () => void;
     currentLocation: () => void;
-    leftContainerWidth: number;
-
 }
 
 
@@ -49,13 +46,18 @@ const ZoomToolBar = (props: OwnProps) => {
         drawToZoom,
         fullScreenMap,
         currentLocation,
-        leftContainerWidth,
         handleToggle,
         checkLatLngState,
+        lattitudeRef,
+
     } = props;
 
-
-    console.log('zoomtoolbar', leftContainerWidth);
+    const handleEnterFunction = (event) => {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            goToLocation();
+        }
+    };
 
 
     return (
@@ -64,9 +66,7 @@ const ZoomToolBar = (props: OwnProps) => {
                 !hideMap && (
                 <>
                     <div
-                        style={{ left: (`${toggleLeftPaneButtonStretched ? leftContainerWidth + 130 : 130}px`) }}
-                        className={!toggleLeftPaneButtonStretched
-                            ? styles.zoomToolBarShrink : styles.zoomToolBar}
+                        className={styles.zoomToolBar}
                     >
                         <div className={styles.zoomSection}>
                             <button
@@ -129,16 +129,7 @@ const ZoomToolBar = (props: OwnProps) => {
                                 <img className={styles.svgIcon} src={DrawIcon} alt="" />
                             </button>
                         </div> */}
-                        <div className={checkLatLngState ? styles.latLngSection : styles.latLngSectionHide}>
-                            <input
-                                className={_cs(styles.latLngInputField, className)}
-                                type="number"
-                                name=""
-                                id=""
-                                placeholder="Longitude"
-                                value={longitude}
-                                onChange={e => setLongitude(e.target.value)}
-                            />
+                        <div className={!checkLatLngState ? styles.latLngSectionHide : styles.latLngSection}>
                             <input
                                 className={_cs(styles.latLngInputField, className)}
                                 type="number"
@@ -147,6 +138,17 @@ const ZoomToolBar = (props: OwnProps) => {
                                 placeholder="Lattitude"
                                 value={lattitude}
                                 onChange={e => setLattitude(e.target.value)}
+                                ref={lattitudeRef}
+                            />
+                            <input
+                                className={_cs(styles.latLngInputField, className)}
+                                type="number"
+                                name=""
+                                id=""
+                                placeholder="Longitude"
+                                value={longitude}
+                                onChange={e => setLongitude(e.target.value)}
+                                onKeyUp={e => handleEnterFunction(e)}
                             />
                             <button
                                 type="submit"

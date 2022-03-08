@@ -318,6 +318,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     public constructor(props: Props) {
         super(props);
+        this.lattitudeRef = React.createRef();
         this.mapContainerRef = React.createRef();
         this.geoLocationRef = React.createRef();
         this.drawRef = React.createRef();
@@ -785,8 +786,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private fullScreenMap = () => {
-        console.log('fullscreen map');
-
         if (this.mapContainerRef.current) {
             const mainapp = this.mapContainerRef.current.getContainer();
             mainapp.requestFullscreen();
@@ -809,6 +808,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private handleToggle = () => {
+        if (this.lattitudeRef.current) {
+            this.lattitudeRef.current.focus();
+        }
         if (this.state.checkLatLngState) {
             this.setState({ checkLatLngState: false });
         } else {
@@ -985,6 +987,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const lattiudeData = (val: number) => {
             this.setState({ lattitude: val });
         };
+        console.log('active route name is', activeRouteName);
 
 	    return (
             <PageContext.Provider value={pageProps}>
@@ -1013,11 +1016,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
 	                                }}
                                     // debug
 
-                                    geoLocationRef={this.geoLocationRef}
                                     scaleControlShown
                                     scaleControlPosition="bottom-right"
                                     navControlShown
                                     navControlPosition="bottom-right"
+                                    geoLocationRef={this.geoLocationRef}
                                     rectangleBoundingBox={rectangleBoundingBox}
                                     mapContainerRefMultiplexer={this.mapContainerRef}
                                     drawRef={this.drawRef}
@@ -1110,6 +1113,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 <ZoomToolBar
                                                     fullScreenMap={this.fullScreenMap}
                                                     resetLocation={resetLocation}
+                                                    lattitudeRef={this.lattitudeRef}
                                                     longitude={this.state.longitude}
                                                     lattitude={this.state.lattitude}
                                                     setLongitude={longitudeData}

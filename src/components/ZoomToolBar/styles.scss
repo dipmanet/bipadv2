@@ -1,5 +1,6 @@
 .zoomToolBar {
     position: absolute;
+    left: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -312,8 +313,9 @@
 
     .latLngSection {
         position: relative;
-        right: 151px;
+        // right: 151px;
         top: 35px;
+        left: -151px;
         display: flex;
         visibility: visible;
         justify-content: center;
@@ -323,7 +325,7 @@
         border-radius: 3px;
         margin: 0px 3px;
         opacity: 1;
-        transition: all 0.5s ease-in;
+        transition: all 0.3s linear;
         z-index: 1;
 
         .latLngInputField {
@@ -410,11 +412,10 @@
 
 
     .latLngSectionHide {
-        visibility: hidden;
         @extend .latLngSection;
+        left: -1500px;
         opacity: 0;
-        transition: all 0.5s linear;
-
+        transition: all 0.3s linear;
     }
 
     // .relooadScreenSection {
@@ -492,48 +493,3 @@
     // }
 
 }
-
-.zoomToolBarShrink {
-    @extend .zoomToolBar;
-    left: 135px;
-}
-
-// @media only screen and (max-width:1700px) {
-//     .zoomToolBar {
-//         left: 705px;
-//     }
-
-//     .zoomToolBarShrink {
-//         left: 135px;
-//     }
-// }
-
-// @media only screen and (max-width:1600px) {
-//     .zoomToolBar {
-//         left: 680px;
-//     }
-
-//     .zoomToolBarShrink {
-//         left: 135px;
-//     }
-// }
-
-// @media only screen and (max-width:1500px) {
-//     .zoomToolBar {
-//         left: 640px;
-//     }
-
-//     .zoomToolBarShrink {
-//         left: 135px;
-//     }
-// }
-
-// @media only screen and (max-width:1400px) {
-//     .zoomToolBar {
-//         left: 615px;
-//     }
-
-//     .zoomToolBarShrink {
-//         left: 135px;
-//     }
-// }
