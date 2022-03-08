@@ -1,3 +1,7 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-tabs */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 import Loadable from 'react-loadable';
@@ -11,15 +15,18 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import { bbox, point, buffer } from '@turf/turf';
+import DrawRectangle from 'mapbox-gl-draw-rectangle-mode';
+import MapboxDraw from '@mapbox/mapbox-gl-draw';
+import mapboxgl from 'mapbox-gl';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
 import { getLayerName } from '#re-map/utils';
 import Icon from '#rscg/Icon';
-
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
 import DangerButton from '#rsca/Button/DangerButton';
+import { MapChildContext } from '#re-map/context';
 
 import { AppState } from '#store/types';
 import {
@@ -76,6 +83,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import ZoomToolBar from '#components/ZoomToolBar';
 
 
 function reloadPage() {
@@ -305,9 +313,14 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 class Multiplexer extends React.PureComponent<Props, State> {
+    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+    static contextType = MapChildContext
+
     public constructor(props: Props) {
         super(props);
-
+        this.mapContainerRef = React.createRef();
+        this.geoLocationRef = React.createRef();
+        this.drawRef = React.createRef();
         this.state = {
             leftContent: undefined,
             rightContent: undefined,
@@ -329,7 +342,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
             toggleLeftPaneButtonStretched: true,
             extraFilterName: '',
             isFilterClicked: false,
-
+            longitude: '',
+            lattitude: '',
+            checkLatLngState: false,
+            rectangleBoundingBox: [],
+            geoLocationStatus: false,
         };
     }
 
@@ -739,114 +756,244 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    private getRegionDetails = (
+        selectedRegion: RegionValueElement,
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+    ) => {
+        if (!selectedRegion || !selectedRegion.adminLevel) {
+            return 'National';
+        }
+
+        const adminLevels: {
+            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
+        } = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regionList = adminLevels[selectedRegion.adminLevel];
+        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+
+        if (currentRegion) {
+            return currentRegion;
+        }
+
+        return 'Unknown';
+    }
+
+    private fullScreenMap = () => {
+        console.log('fullscreen map');
+
+        if (this.mapContainerRef.current) {
+            const mainapp = this.mapContainerRef.current.getContainer();
+            mainapp.requestFullscreen();
+        }
+    };
+
+    private goToLocation = () => {
+        if (this.mapContainerRef.current) {
+            if (this.state.longitude && this.state.lattitude) {
+                this.mapContainerRef.current.flyTo({
+                    speed: 1,
+                    center: {
+                        lat: this.state.lattitude,
+                        lng: this.state.longitude,
+                    },
+                    zoom: 12,
+                });
+            }
+        }
+    }
+
+    private handleToggle = () => {
+        if (this.state.checkLatLngState) {
+            this.setState({ checkLatLngState: false });
+        } else {
+            this.setState({ checkLatLngState: true });
+        }
+    };
+
+    private drawToZoom = () => {
+        if (this.drawRef.current) {
+            this.drawRef.current.changeMode('draw_rectangle');
+        }
+        if (this.mapContainerRef.current && this.drawRef.current.getMode() === 'draw_rectangle') {
+            this.mapContainerRef.current.on('draw.create', (event) => {
+                const firstBbox = event.features[0].geometry.coordinates[0][0];
+                const secondBbox = event.features[0].geometry.coordinates[0][2];
+                this.setState({ rectangleBoundingBox: [firstBbox, secondBbox] });
+            });
+        }
+    }
+
+    private currentLocation = () => {
+        if (this.geoLocationRef.current) {
+            this.geoLocationRef.current.trigger();
+        }
+        // setGeoLocationStatus(true);
+    };
+
     public render() {
-        const {
-            mapStyle,
-            filters,
-            provinces,
-            districts,
-            municipalities,
-            // hazardList,
-        } = this.props;
+	    const {
+	        mapStyle,
+	        filters,
+	        provinces,
+	        districts,
+	        municipalities,
+	        // hazardList,
+	    } = this.props;
 
-        const {
-            leftContent,
-            leftContentContainerClassName,
-            rightContent,
-            rightContentContainerClassName,
-            mainContent,
-            mainContentContainerClassName,
-            filterContent,
-            filterContentContainerClassName,
-            hideMap,
-            hideFilter,
-            hideLocationFilter,
-            hideDataRangeFilter,
-            hideHazardFilter,
-            activeRouteDetails,
-            activeLayers,
-            leftContainerHidden,
-            mapDownloadPending,
-            mapDataOnClick,
-            tooltipClicked,
-            mapClickedResponse,
-            tooltipLatlng,
-            LoadingTooltip,
-            landslidePolygonImagemap,
-            handlelandslidePolygonChoroplethMapData,
-            landslidePolygonChoroplethMapData,
-            climateChangeSelectedDistrict,
-            addResource,
-            toggleLeftPaneButtonStretched,
-            extraFilterName,
-            isFilterClicked,
-        } = this.state;
+	    const {
+	        leftContent,
+	        leftContentContainerClassName,
+	        rightContent,
+	        rightContentContainerClassName,
+	        mainContent,
+	        mainContentContainerClassName,
+	        filterContent,
+	        filterContentContainerClassName,
+	        hideMap,
+	        hideFilter,
+	        hideLocationFilter,
+	        hideDataRangeFilter,
+	        hideHazardFilter,
+	        activeRouteDetails,
+	        activeLayers,
+	        leftContainerHidden,
+	        mapDownloadPending,
+	        mapDataOnClick,
+	        tooltipClicked,
+	        mapClickedResponse,
+	        tooltipLatlng,
+	        LoadingTooltip,
+	        landslidePolygonImagemap,
+	        handlelandslidePolygonChoroplethMapData,
+	        landslidePolygonChoroplethMapData,
+	        climateChangeSelectedDistrict,
+	        addResource,
+	        toggleLeftPaneButtonStretched,
+	        extraFilterName,
+	        isFilterClicked,
+            longitude,
+            checkLatLngState,
+            rectangleBoundingBox,
+	    } = this.state;
 
 
-        const pageProps = {
-            setLeftContent: this.setLeftContent,
-            setRightContent: this.setRightContent,
-            setFilterContent: this.setFilterContent,
-            setActiveRouteDetails: this.setActiveRouteDetails,
-            setMainContent: this.setMainContent,
-            activeRouteDetails,
-            hideMap: this.hideMap,
-            showMap: this.showMap,
-            showFilter: this.showFilter,
-            hideFilter: this.hideFilter,
-            showLocationFilter: this.showLocationFilter,
-            hideLocationFilter: this.hideLocationFilter,
-            showHazardFilter: this.showHazardFilter,
-            hideHazardFilter: this.hideHazardFilter,
-            showDataRangeFilter: this.showDataRangeFilter,
-            hideDataRangeFilter: this.hideDataRangeFilter,
-            extraFilterName: this.extraFilterName,
+	    const pageProps = {
+	        setLeftContent: this.setLeftContent,
+	        setRightContent: this.setRightContent,
+	        setFilterContent: this.setFilterContent,
+	        setActiveRouteDetails: this.setActiveRouteDetails,
+	        setMainContent: this.setMainContent,
+	        activeRouteDetails,
+	        hideMap: this.hideMap,
+	        showMap: this.showMap,
+	        showFilter: this.showFilter,
+	        hideFilter: this.hideFilter,
+	        showLocationFilter: this.showLocationFilter,
+	        hideLocationFilter: this.hideLocationFilter,
+	        showHazardFilter: this.showHazardFilter,
+	        hideHazardFilter: this.hideHazardFilter,
+	        showDataRangeFilter: this.showDataRangeFilter,
+	        hideDataRangeFilter: this.hideDataRangeFilter,
+	        extraFilterName: this.extraFilterName,
 
-        };
+	    };
 
-        const riskInfoLayerProps = {
-            addLayer: this.addLayer,
-            removeLayer: this.removeLayer,
-            addLayers: this.addLayers,
-            removeLayers: this.removeLayers,
-            setLayers: this.setLayers,
-            activeLayers,
-            mapDataOnClick,
-            tooltipClicked,
-            closeTooltip: this.closeTooltip,
-            mapClickedResponse,
-            tooltipLatlng,
-            LoadingTooltip,
-            landslidePolygonImagemap,
-            handleLandslidePolygonImageMap: this.handleLandslidePolygonImageMap,
-            handlelandslidePolygonChoroplethMapData: this.handlelandslidePolygonChoroplethMapData,
-            landslidePolygonChoroplethMapData,
-            climateChangeSelectedDistrict,
-            setClimateChangeSelectedDistrict: this.setClimateChangeSelectedDistrict,
-            FilterClickedStatus: this.FilterClickedStatus,
-            isFilterClicked,
-            addResource,
-            setAddResource: this.setAddResource,
+	    const riskInfoLayerProps = {
+	        addLayer: this.addLayer,
+	        removeLayer: this.removeLayer,
+	        addLayers: this.addLayers,
+	        removeLayers: this.removeLayers,
+	        setLayers: this.setLayers,
+	        activeLayers,
+	        mapDataOnClick,
+	        tooltipClicked,
+	        closeTooltip: this.closeTooltip,
+	        mapClickedResponse,
+	        tooltipLatlng,
+	        LoadingTooltip,
+	        landslidePolygonImagemap,
+	        handleLandslidePolygonImageMap: this.handleLandslidePolygonImageMap,
+	        handlelandslidePolygonChoroplethMapData: this.handlelandslidePolygonChoroplethMapData,
+	        landslidePolygonChoroplethMapData,
+	        climateChangeSelectedDistrict,
+	        setClimateChangeSelectedDistrict: this.setClimateChangeSelectedDistrict,
+	        FilterClickedStatus: this.FilterClickedStatus,
+	        isFilterClicked,
+	        addResource,
+	        setAddResource: this.setAddResource,
 
-        };
+	    };
 
-        const regionName = this.getRegionName(
+	    const regionName = this.getRegionName(
+	        filters.region,
+	        provinces,
+	        districts,
+	        municipalities,
+	    );
+	    const orderedLayers = this.getLayerOrder(activeLayers);
+	    const hideFilters = false;
+	    const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        const detailsOfLoggedAdmin = this.getRegionDetails(
             filters.region,
-            provinces,
-            districts,
-            municipalities,
+	        provinces,
+	        districts,
+	        municipalities,
         );
-        const orderedLayers = this.getLayerOrder(activeLayers);
-        const hideFilters = false;
-        const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        return (
+
+        const resetLocation = () => {
+            if (this.mapContainerRef.current) {
+                // centriod of nepal
+                if (detailsOfLoggedAdmin
+				   && !detailsOfLoggedAdmin.province && !detailsOfLoggedAdmin.district) {
+                    this.mapContainerRef.current.flyTo({
+                        speed: 1,
+                        center: [84.2676, 28.5465],
+                        zoom: 6.6,
+
+                    });
+                }
+                // checking province
+                if (detailsOfLoggedAdmin
+				   && detailsOfLoggedAdmin.centroid) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
+                }
+                // checking district
+                if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
+                }
+                // checking municipality
+                if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province
+					 && detailsOfLoggedAdmin.district) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
+                }
+            }
+            this.setState({ checkLatLngState: false, longitude: '', lattitude: '' });
+            // this.setState({ longitude: '' });
+            // this.setState({ lattitude: '' });
+        };
+
+        const longitudeData = (val: number) => {
+            this.setState({ longitude: val });
+        };
+
+        const lattiudeData = (val: number) => {
+            this.setState({ lattitude: val });
+        };
+
+	    return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>
                     <div className={_cs(
-                        styles.multiplexer,
-                        leftContainerHidden && styles.leftContainerHidden,
-                        mapDownloadPending && styles.downloadingMap,
-                    )}
+	                    styles.multiplexer,
+	                    leftContainerHidden && styles.leftContainerHidden,
+	                    mapDownloadPending && styles.downloadingMap,
+	                )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
@@ -856,27 +1003,30 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     clickHandler={this.clickHandler}
                                     handleMapClicked={this.handleMapClicked}
                                     mapOptions={{
-                                        logoPosition: 'top-left',
-                                        minZoom: 5,
-                                        // makes initial map center to Nepal
-                                        center: {
-                                            lng: 85.300140,
-                                            lat: 27.700769,
-                                        },
-                                    }}
+	                                    logoPosition: 'top-left',
+	                                    minZoom: 5,
+	                                    // makes initial map center to Nepal
+	                                    center: {
+	                                        lng: 85.300140,
+	                                        lat: 27.700769,
+	                                    },
+	                                }}
                                     // debug
 
+                                    geoLocationRef={this.geoLocationRef}
                                     scaleControlShown
                                     scaleControlPosition="bottom-right"
-
                                     navControlShown
                                     navControlPosition="bottom-right"
+                                    rectangleBoundingBox={rectangleBoundingBox}
+                                    mapContainerRefMultiplexer={this.mapContainerRef}
+                                    drawRef={this.drawRef}
                                 >
                                     {leftContent && (
                                         <aside className={_cs(
-                                            activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects' ? styles.halfPageLeftPane : styles.left,
-                                            leftContainerHidden && styles.hidden,
-                                        )}
+	                                        activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects' ? styles.halfPageLeftPane : styles.left,
+	                                        leftContainerHidden && styles.hidden,
+	                                    )}
                                         >
                                             <AppBrand
                                                 className={styles.brand}
@@ -884,45 +1034,45 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             />
                                             <div
                                                 className={_cs(
-                                                    styles.leftContentContainer,
-                                                    leftContentContainerClassName,
-                                                )}
+	                                                styles.leftContentContainer,
+	                                                leftContentContainerClassName,
+	                                            )}
                                             >
                                                 {leftContent}
                                             </div>
                                         </aside>
-                                    )}
+	                                )}
                                     {leftContent && (
                                         <div
                                             role="presentation"
                                             className={activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects' ? toggleLeftPaneButtonStretched
-                                                ? styles.toggleLeftContainerVisibilityButtonHalfPageLeftPane
-                                                : styles.toggleLeftPaneButtonCompresed
-                                                : styles.toggleLeftContainerVisibilityButton}
+	                                            ? styles.toggleLeftContainerVisibilityButtonHalfPageLeftPane
+	                                            : styles.toggleLeftPaneButtonCompresed
+	                                            : styles.toggleLeftContainerVisibilityButton}
                                             onClick={
-                                                this.handleToggleLeftContainerVisibilityButtonClick
-                                            }
+	                                            this.handleToggleLeftContainerVisibilityButtonClick
+	                                        }
                                         >
                                             <Icon
                                                 name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
                                             />
                                         </div>
-                                    )}
+	                                )}
                                     <main className={styles.main}>
                                         {mainContent && (
                                             <div className={_cs(
-                                                styles.mainContentContainer,
-                                                mainContentContainerClassName,
-                                            )}
+	                                            styles.mainContentContainer,
+	                                            mainContentContainerClassName,
+	                                        )}
                                             >
                                                 {mainContent}
                                             </div>
-                                        )}
+	                                    )}
                                         <MapContainer
                                             className={_cs(
-                                                styles.map,
-                                                hideMap && styles.hidden,
-                                            )}
+	                                            styles.map,
+	                                            hideMap && styles.hidden,
+	                                        )}
                                         />
                                         {/* hazardList.map((item) => {
                                         if (!item.icon) {
@@ -939,10 +1089,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     }) */}
                                         {!hideMap && (
                                             <div className={activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects'
-                                                ? !toggleLeftPaneButtonStretched
-                                                    ? styles.mapActionsCompressed
-                                                    : styles.mapActions
-                                                : styles.mapActions}
+	                                            ? !toggleLeftPaneButtonStretched
+	                                                ? styles.mapActionsCompressed
+	                                                : styles.mapActions
+	                                            : styles.mapActions}
                                             >
                                                 <MapDownloadButton
                                                     className={styles.mapDownloadButton}
@@ -950,28 +1100,41 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     title="Download current map"
                                                     iconName="download"
                                                     onPendingStateChange={
-                                                        this.handleMapDownloadStateChange
-                                                    }
+	                                                    this.handleMapDownloadStateChange
+	                                                }
                                                 />
                                                 <LayerSwitch
                                                     className={styles.layerSwitch}
                                                 />
                                                 <LayerToggle />
+                                                <ZoomToolBar
+                                                    fullScreenMap={this.fullScreenMap}
+                                                    resetLocation={resetLocation}
+                                                    longitude={this.state.longitude}
+                                                    lattitude={this.state.lattitude}
+                                                    setLongitude={longitudeData}
+                                                    setLattitude={lattiudeData}
+                                                    goToLocation={this.goToLocation}
+                                                    drawToZoom={this.drawToZoom}
+                                                    checkLatLngState={checkLatLngState}
+                                                    handleToggle={this.handleToggle}
+                                                    currentLocation={this.currentLocation}
+                                                />
                                             </div>
-                                        )}
+	                                    )}
                                     </main>
                                     {(rightContent || !hideFilters) && (
                                         <aside className={styles.right}>
                                             {rightContent && (
                                                 <div
                                                     className={_cs(
-                                                        styles.rightContentContainer,
-                                                        rightContentContainerClassName,
-                                                    )}
+	                                                    styles.rightContentContainer,
+	                                                    rightContentContainerClassName,
+	                                                )}
                                                 >
                                                     {rightContent}
                                                 </div>
-                                            )}
+	                                        )}
                                             {!hideFilter && (
                                                 <Filters
                                                     className={styles.filters}
@@ -981,12 +1144,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     extraContent={filterContent}
                                                     FilterClickedStatus={this.FilterClickedStatus}
                                                     extraContentContainerClassName={
-                                                        filterContentContainerClassName
-                                                    }
+	                                                    filterContentContainerClassName
+	                                                }
                                                 />
-                                            )}
+	                                        )}
                                         </aside>
-                                    )}
+	                                )}
                                     {this.renderRoutes()}
                                     <MapOrder ordering={orderedLayers} />
                                 </Map>
@@ -996,7 +1159,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     </div>
                 </TitleContextProvider>
             </PageContext.Provider>
-        );
+	    );
     }
 }
 
