@@ -984,7 +984,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const queryStringParams = window.location.href.split('#/')[1];
 
-        const polygonDrawAccessableRoutes = ['vulnerability', 'capacity-and-resources'];
+        const polygonDrawAccessableRoutes = ['vulnerability'];
 
         console.log(queryStringParams);
 
