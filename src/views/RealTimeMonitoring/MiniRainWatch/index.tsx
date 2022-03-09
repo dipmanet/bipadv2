@@ -293,7 +293,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                         data={realTimeRain}
                         headers={rainHeader}
                         keySelector={rainWatchKeySelector}
-                        onBodyHover={(id: number) => onHazardHover(id)}
+                        onBodyHover={(id: number) => onHazardHover(id, 'real-time-rain-points')}
                         onBodyHoverOut={() => onHazardHover()}
                         defaultSort={defaultSort}
                     />

@@ -293,16 +293,18 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         this.state = {
             activeView: 'rainwatch',
             hoveredHazardId: undefined,
+            source: undefined,
         };
     }
 
-    private getHazardMapHoverAttributes = (hoveredHazardId: number | undefined) => {
+    private getHazardMapHoverAttributes = (hoveredHazardId: number | undefined, source: string) => {
         if (!hoveredHazardId) {
             return emptyHazardHoverAttributeList;
         }
 
         return [{
             id: hoveredHazardId,
+            source,
             value: true,
         }];
     }
@@ -706,8 +708,8 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
         this.setState({ activeView: 'fire' });
     }
 
-    private onHazardHover = (hoveredHazardId: number) => {
-        this.setState({ hoveredHazardId });
+    private onHazardHover = (hoveredHazardId: number, source: string) => {
+        this.setState({ hoveredHazardId, source });
     }
 
     public render() {
@@ -748,9 +750,11 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
         const {
             hoveredHazardId,
+            source,
         } = this.state;
 
-        const hazardMapHoverAttributes = this.getHazardMapHoverAttributes(hoveredHazardId);
+        const hazardMapHoverAttributes = this.getHazardMapHoverAttributes(hoveredHazardId, source);
+
         /*
         TO fix the state issues between RealTimeFilters and LeftPane
         Sets activeView to the selected Filter if only one filter is selected
