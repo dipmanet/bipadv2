@@ -267,6 +267,7 @@ const MapDownloadButton = (props: Props) => {
                 const legendContainerClassName = 'map-legend-container';
                 const legend = document.getElementsByClassName(legendContainerClassName);
                 const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
+                const navigation = document.getElementsByClassName('mapboxgl-ctrl-group')[0];
 
                 const today = new Date();
                 let title = `${pageTitle} for ${regionName}`;
@@ -309,7 +310,22 @@ const MapDownloadButton = (props: Props) => {
 
                     allPromises.push(scalePromise);
                 }
+                if (navigation) {
+                    const navigationCanvas = html2canvas(navigation as HTMLElement);
 
+                    const navigationPromise = new Promise((resolve) => {
+                        navigationCanvas.then((c) => {
+                            context.drawImage(
+                                c,
+                                mapCanvas.width - c.width - 6,
+                                mapCanvas.height - c.height - 25,
+                            );
+                            resolve();
+                        });
+                    });
+
+                    allPromises.push(navigationPromise);
+                }
                 if (legend) {
                     const legendPromise = new Promise((resolve) => {
                         const promises = Array.from(legend).map((legendElement) => {
