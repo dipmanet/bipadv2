@@ -15,8 +15,6 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import { bbox, point, buffer } from '@turf/turf';
-import DrawRectangle from 'mapbox-gl-draw-rectangle-mode';
-import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import mapboxgl from 'mapbox-gl';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
@@ -26,8 +24,6 @@ import Icon from '#rscg/Icon';
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
 import DangerButton from '#rsca/Button/DangerButton';
-import { MapChildContext } from '#re-map/context';
-
 import { AppState } from '#store/types';
 import {
     RouteDetailElement,
@@ -84,7 +80,6 @@ import {
     methods,
 } from '#request';
 import ZoomToolBar from '#components/ZoomToolBar';
-
 
 function reloadPage() {
     window.location.reload(false);
@@ -181,6 +176,11 @@ interface State {
     activeRouteDetails: RouteDetailElement | undefined;
     activeLayers: Layer[];
     mapDownloadPending: boolean;
+    checkLatLngState: boolean;
+    longitude: string | number;
+    lattitude: string | number;
+    rectangleBoundingBox: [any, any];
+    drawRefState: boolean;
 }
 
 interface BoundingClientRect {
@@ -313,15 +313,8 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
 };
 class Multiplexer extends React.PureComponent<Props, State> {
-    // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-    static contextType = MapChildContext
-
     public constructor(props: Props) {
         super(props);
-        this.lattitudeRef = React.createRef();
-        this.mapContainerRef = React.createRef();
-        this.geoLocationRef = React.createRef();
-        this.drawRef = React.createRef();
         this.state = {
             leftContent: undefined,
             rightContent: undefined,
@@ -347,7 +340,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             lattitude: '',
             checkLatLngState: false,
             rectangleBoundingBox: [],
-            geoLocationStatus: false,
+            drawRefState: false,
         };
     }
 
@@ -423,6 +416,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
         return null;
     }
+
+    private lattitudeRef = React.createRef<HTMLInputElement>();
+
+    private mapContainerRef = React.createRef<mapboxgl.Map>();
+
+    private geoLocationRef = React.createRef<mapboxgl.GeolocateControl>();
 
     private setFilterFromUrl = (
         provinces: Province[],
@@ -819,16 +818,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
     };
 
     private drawToZoom = () => {
-        if (this.drawRef.current) {
-            this.drawRef.current.changeMode('draw_rectangle');
-        }
-        if (this.mapContainerRef.current && this.drawRef.current.getMode() === 'draw_rectangle') {
-            this.mapContainerRef.current.on('draw.create', (event) => {
-                const firstBbox = event.features[0].geometry.coordinates[0][0];
-                const secondBbox = event.features[0].geometry.coordinates[0][2];
-                this.setState({ rectangleBoundingBox: [firstBbox, secondBbox] });
-            });
-        }
+        this.setState({ drawRefState: true });
+    }
+
+
+    private resetDrawState =() => {
+        this.setState({ drawRefState: false });
     }
 
     private currentLocation = () => {
@@ -882,6 +877,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             longitude,
             checkLatLngState,
             rectangleBoundingBox,
+            drawRefState,
 	    } = this.state;
 
 
@@ -976,8 +972,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 }
             }
             this.setState({ checkLatLngState: false, longitude: '', lattitude: '' });
-            // this.setState({ longitude: '' });
-            // this.setState({ lattitude: '' });
         };
 
         const longitudeData = (val: number) => {
@@ -987,7 +981,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const lattiudeData = (val: number) => {
             this.setState({ lattitude: val });
         };
-        console.log('active route name is', activeRouteName);
+
+        const queryStringParams = window.location.href.split('#/')[1];
+
+        const polygonDrawAccessableRoutes = ['vulnerability', 'capacity-and-resources'];
+
+        console.log(queryStringParams);
+
 
 	    return (
             <PageContext.Provider value={pageProps}>
@@ -1023,7 +1023,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     geoLocationRef={this.geoLocationRef}
                                     rectangleBoundingBox={rectangleBoundingBox}
                                     mapContainerRefMultiplexer={this.mapContainerRef}
-                                    drawRef={this.drawRef}
+                                    drawRefState={this.state.drawRefState}
+                                    resetDrawState={this.resetDrawState}
+                                    queryStringParams={queryStringParams}
+                                    polygonDrawAccessableRoutes={polygonDrawAccessableRoutes}
                                 >
                                     {leftContent && (
                                         <aside className={_cs(
