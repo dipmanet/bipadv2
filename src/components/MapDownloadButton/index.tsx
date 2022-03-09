@@ -1,6 +1,8 @@
 import React, { useContext, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
+import JsPDF from 'jspdf';
+import { saveChart } from '#utils/common';
 
 import Button from '#rsca/Button';
 import { MapChildContext } from '#re-map/context';
@@ -8,7 +10,6 @@ import { MapChildContext } from '#re-map/context';
 import PageContext from '#components/PageContext';
 import { TitleContext } from '#components/TitleContext';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-
 
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -267,7 +268,8 @@ const MapDownloadButton = (props: Props) => {
                 const legendContainerClassName = 'map-legend-container';
                 const legend = document.getElementsByClassName(legendContainerClassName);
                 const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
-                const navigation = document.getElementsByClassName('mapboxgl-ctrl-group')[0];
+                const navigation = document.getElementsByClassName('mapboxgl-ctrl-compass')[0];
+                navigation.getElementsByTagName('span')[0].style.backgroundSize = '50px';
 
                 const today = new Date();
                 let title = `${pageTitle} for ${regionName}`;
@@ -317,8 +319,12 @@ const MapDownloadButton = (props: Props) => {
                         navigationCanvas.then((c) => {
                             context.drawImage(
                                 c,
-                                mapCanvas.width - c.width - 6,
-                                mapCanvas.height - c.height - 25,
+                                mapCanvas.width - c.width - 10,
+                                // mapCanvas.height - c.height - 50,
+                                // indexMap.height,
+                                // indexMapHeight - 70,
+                                // indexMapHeight - indexMapHeight + 20,
+                                20,
                             );
                             resolve();
                         });
@@ -373,12 +379,40 @@ const MapDownloadButton = (props: Props) => {
             realtimeFilters,
         ],
     );
+    const handleSaveClick = (classname) => {
+        if (classname === 'mapboxgl-canvas') {
+            const divToDisplay = document.getElementsByClassName('mapboxgl-canvas');
+            const pdf = new JsPDF('p', 'mm', 'a4');
+            html2canvas(divToDisplay).then((canvas) => {
+                const divImage = canvas.toDataURL('image/png');
+                const imgWidth = 210;
+                const pageHeight = 297;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                heightLeft -= pageHeight;
 
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                pdf.save('Report.pdf');
+            });
+        } else {
+            saveChart(classname, classname);
+        }
+
+        // saveChart("hazardSeverity", "hazardSeverity");
+    };
     return (
         <Button
             disabled={disabled || !mapContext || !mapContext.map}
             pending={pending || pendingFromProps}
             onClick={handleExport}
+            // onClick={handleSaveClick('mapboxgl-canvas')}
             {...otherProps}
         />
     );
