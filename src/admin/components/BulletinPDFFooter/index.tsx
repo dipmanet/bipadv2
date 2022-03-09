@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import Temperatures from 'src/admin/components/BulletinForm/Temperatures';
 // import tempMin from 'src/admin/resources/tempMin.png';
 // import tempMax from 'src/admin/resources/tempMax.png';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
-
 import {
     bulletinPageSelector,
 } from '#selectors';
@@ -29,7 +29,12 @@ const BulletinPDFFooter = (props) => {
     return (
         <div className={styles.footerContainer}>
             <div className={styles.dailySummary}>
-                <h2>दैनिक बर्षा र तापक्रम को सारांश</h2>
+                <Translation>
+                    {
+                        t => <h2>{t('Daily Temperature and Rain Summary')}</h2>
+                    }
+                </Translation>
+
                 <p>{dailySummary}</p>
             </div>
             {/*
@@ -49,18 +54,74 @@ const BulletinPDFFooter = (props) => {
             />
 
             <p>
-                <strong>अनुसूची १: </strong>
-घटनाको पूर्ण विवरण हरु
+                <strong>
+                    <Translation>
+                        {
+                            t => <span>{t('Annex')}</span>
+                        }
+                    </Translation>
+                    1
+                    :
+                    {' '}
+
+                </strong>
+                <Translation>
+                    {
+                        t => <span>{t('Complete details of the incidents')}</span>
+                    }
+                </Translation>
+
                 {' '}
             </p>
 
             <div className={styles.footer}>
-                <h2>दैनिक बुलेटिन सम्भन्धी थप जानकारी का लागि</h2>
+                <h2>
+                    {' '}
+                    <Translation>
+                        {
+                            t => <span>{t('For additional info')}</span>
+                        }
+                    </Translation>
+
+                </h2>
                 <hr className={styles.horLine} />
-                <p>राष्ट्रिय बिपद जोखिम न्युनिकरन तथा व्यवस्थापना प्राधिकरण</p>
-                <p>पोस्ट बक्स नम्बर: २१३२१३ </p>
-                <p>फोन:  +९७७-१-४४९३८४७, +९७७-१-४४३९४८५ </p>
-                <p>ई-मेल : info@bipad.gov.np</p>
+                <p>
+                    <Translation>
+                        {
+                            t => <span>{t('National Disaster Risk Reduction and Management Authority')}</span>
+                        }
+                    </Translation>
+
+                </p>
+                <p>
+                    <Translation>
+                        {
+                            t => <span>{t('GPO Box Number')}</span>
+                        }
+                    </Translation>
+                    :
+                    २१३२१३
+                    {' '}
+
+                </p>
+                <p>
+                    <Translation>
+                        {
+                            t => <span>{t('Phone')}</span>
+                        }
+                    </Translation>
+                    :  +९७७-१-४४९३८४७, +९७७-१-४४३९४८५
+                    {' '}
+
+                </p>
+                <p>
+                    <Translation>
+                        {
+                            t => <span>{t('Email')}</span>
+                        }
+                    </Translation>
+                    : info@bipad.gov.np
+                </p>
             </div>
 
         </div>

@@ -18,6 +18,11 @@ export const provincesRef = {
     karnali: 'Karnali',
     sudurpaschim: 'Sudur Paschim',
 };
+export const provincesTitleRef = {
+    'कुल संक्रमित संख्या': 'Total Affected',
+    'कुल सक्रिय संक्रमित संख्या': 'Total Active',
+    'कुल मृत्‍यु संख्या': 'Total Deaths',
+};
 
 export const peopleLoss = {
     p1: {
