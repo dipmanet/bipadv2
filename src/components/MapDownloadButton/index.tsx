@@ -269,6 +269,7 @@ const MapDownloadButton = (props: Props) => {
                 const legend = document.getElementsByClassName(legendContainerClassName);
                 const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
                 const navigation = document.getElementsByClassName('mapboxgl-ctrl-compass')[0];
+                document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '50px';
                 navigation.getElementsByTagName('span')[0].style.backgroundSize = '50px';
 
                 const today = new Date();
