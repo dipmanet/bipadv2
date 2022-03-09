@@ -914,22 +914,16 @@ class Demographics extends React.PureComponent<Props> {
         const LGProfileAgriculturePractice = LGProfileAgriculturePracticeData(lgProfileData, summationLGProfileAgriculturePractice);
         const filteredLGProfileAgriculturePractice = LGProfileAgriculturePractice.filter(i => i.value !== 0);
         const summationLGProfileAgricultureProduct = summationLGProfileAgricultureProductData(lgProfileData);
-
         const LGProfileAgricultureProduct = LGProfileAgricultureProductData(lgProfileData, summationLGProfileAgricultureProduct);
         const filteredLGProfileAgricultureProduct = LGProfileAgricultureProduct.filter(i => i.value !== 0);
-
-
         const summationLGProfileBuildingType = summationLGProfileBuildingTypeData(lgProfileData);
-
-
         const LGProfileBuildingType = LGProfileBuildingTypeData(lgProfileData, summationLGProfileBuildingType);
         const filteredLGProfileBuildingType = LGProfileBuildingType.filter(i => i.value !== 0);
-
         const summationLGProfileBuildingFoundation = summationLGProfileBuildingFoundationData(lgProfileData);
-
         const LGProfileBuildingFoundation = LGProfileBuildingFoundationData(lgProfileData, summationLGProfileBuildingFoundation);
         const filteredLGProfileBuildingFoundation = LGProfileBuildingFoundation.filter(i => i.value !== 0);
-
+        const disablestats = houseHoldInformation && JSON.parse(houseHoldInformation.disabilityStat);
+        const totalDisableCount = disablestats && disablestats.length ? disablestats.reduce((total, currentValue) => total + currentValue.totalPeople || 0, 0) : '-';
 
         return (
             <>
@@ -2765,12 +2759,12 @@ class Demographics extends React.PureComponent<Props> {
                                                                 <tr>
                                                                     <td>Above 60 years old</td>
 
-                                                                    <td><b>{houseHoldInformation.peopleAboveSixty}</b></td>
+                                                                    <td><b>{houseHoldInformation.peopleAboveSixty || '-'}</b></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Pregnant Women</td>
 
-                                                                    <td><b>{houseHoldInformation.totalPregnantAndLactatingWomen}</b></td>
+                                                                    <td><b>{houseHoldInformation.totalPregnantAndLactatingWomen || '-'}</b></td>
                                                                 </tr>
                                                                 {/* <tr>
                                                                     <td>Lactating Mother</td>
@@ -2780,12 +2774,12 @@ class Demographics extends React.PureComponent<Props> {
                                                                 <tr>
                                                                     <td>People With Disability</td>
 
-                                                                    <td><b>22</b></td>
+                                                                    <td><b>{totalDisableCount}</b></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Children Below 5 Years old</td>
 
-                                                                    <td><b>{houseHoldInformation.peopleBelowFive}</b></td>
+                                                                    <td><b>{houseHoldInformation.peopleBelowFive || '-'}</b></td>
                                                                 </tr>
 
                                                             </table>

@@ -99,7 +99,7 @@ const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = 
 
     },
     lgProfileGetHouseHoldInfo: {
-        url: ({ params }) => `/profile-household/?municipality=${params.municipality}`,
+        url: ({ params }) => `/profile-household/?municipality=${params.municipality}&expand=disability_stat`,
         method: methods.GET,
         onMount: true,
         onSuccess: ({ params, response }) => {

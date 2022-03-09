@@ -842,7 +842,10 @@ class ContactPage extends React.PureComponent<Props, State> {
                                     {this.SortButton('committee')}
                                 </div>
                             </th>
-                            <th>Action</th>
+                            <Cloak hiddenIf={p => !p.add_contact}>
+                                <th>Action</th>
+                            </Cloak>
+
                         </tr>
                     </thead>
                     <tbody>
