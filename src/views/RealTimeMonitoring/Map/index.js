@@ -782,11 +782,13 @@ class RealTimeMap extends React.PureComponent {
                                     layout: mapStyles.riverPoint.layout,
                                     // paint: mapStyles.riverPoint.paint,
                                     paint: mapStyles.riverPoint.textDim,
+                                    // ? mapStyles.riverPoint.textDim
+                                    // : mapStyles.riverPoint.text,
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
                             />
-                            <MapLayer
+                            {/* <MapLayer
                                 layerKey="real-time-river-symbol"
                                 layerOptions={{
                                     type: 'symbol',
@@ -795,7 +797,7 @@ class RealTimeMap extends React.PureComponent {
                                         'icon-size': 0.2,
                                     },
                                 }}
-                            />
+                            /> */}
                             <MapLayer
                                 layerKey="real-time-river-text"
                                 layerOptions={{
