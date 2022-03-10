@@ -419,7 +419,7 @@ class Filters extends React.PureComponent<Props, State> {
         setProjectFilters({
             faramValues: {},
         });
-
+        this.setState({ disableSubmitButton: false });
         if (authState.authenticated) {
             if (user.profile.municipality) {
                 const region = { adminLevel: 3, geoarea: user.profile.municipality };
