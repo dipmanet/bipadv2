@@ -20,10 +20,13 @@ const defaultProps = {
 };
 
 const legendLabelSelector = (d, language) => {
-    if (language === 'en') {
+    if (language && language === 'en') {
         return d.titleEn;
     }
-    return d.title;
+    if (language && language === 'np') {
+        return d.titleNe;
+    }
+    return d.titleEn;
 };
 const legendColorSelector = d => d.color;
 const legendKeySelector = d => d.title;
