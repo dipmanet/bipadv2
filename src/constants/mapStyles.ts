@@ -704,7 +704,7 @@ export default {
                 ['==', ['feature-state', 'dataSource'], 'real-time-river-points'],
             ],
             1,
-            0.2,
+            0.9,
             ],
         },
         paint: {
