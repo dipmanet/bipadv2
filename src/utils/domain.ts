@@ -481,6 +481,7 @@ export const earthquakeToGeojson = (realTimeEarthquakeList: RealTimeEarthquake[]
                 },
                 properties: {
                     earthquakeId: earthquake.id,
+                    source: 'real-time-earthquake-points',
                     address: earthquake.address,
                     description: earthquake.description,
                     eventOn: earthquake.eventOn,
@@ -507,6 +508,7 @@ export const riverToGeojson = (realTimeRiverList: RealTimeRiver[]) => {
                 properties: {
                     riverId: river.id,
                     title: river.title,
+                    source: 'real-time-river-points',
                     description: river.description,
                     basin: river.basin,
                     status: river.status,
@@ -562,7 +564,7 @@ export const fireToGeojson = (realTimeFireList: RealTimeFire[]) => {
                 },
                 properties: {
                     fireId: fire.id,
-                    source: 'fire',
+                    source: 'real-time-fire-points',
                     brightness: fire.brightness,
                     confidence: fire.confidence,
                     eventOn: fire.eventOn,
@@ -589,6 +591,7 @@ export const pollutionToGeojson = (realTimePollutionList: RealTimePollution[]) =
                 },
                 properties: {
                     ...pollution,
+                    source: 'real-time-pollution-points',
                     aqi: Math.round(pollution.aqi),
                 },
             })),
