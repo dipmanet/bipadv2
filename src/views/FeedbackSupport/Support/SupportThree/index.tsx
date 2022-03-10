@@ -6,8 +6,7 @@
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState, useRef } from 'react';
-import { navigate } from '@reach/router';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Button from 'src/vendor/react-store/v2/Action/Button';
 import { _cs } from '@togglecorp/fujs';
@@ -64,13 +63,10 @@ const FeedbackThree = (props) => {
     const [failureResponse, setFailureResponse] = useState(false);
     const [loader, setloader] = useState(true);
     const [clicked, setClicked] = useState(false);
-    const [closeButton, setClosedButton] = useState(true);
-
-
     const {
         requests: { FeedbackPostRequest },
         className, onPreviousClick, data,
-        setData, error, setError,
+        setData, error, setError, setPosition, closeModal,
     } = props;
 
 
@@ -238,217 +234,214 @@ const FeedbackThree = (props) => {
 
     return (
         <>
-            {closeButton ? (
-
-                <Modal
-                    className={_cs(sucessResponse ? styles.login_modal_submit : styles.loginModal, className)}
-                    closeOnOutsideClick
-                >
-                    <ModalBody className={styles.content}>
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={() => setClosedButton(false)}
-                            title="Close Modal"
-                            className={styles.closeButton}
-                        />
-                        <div className={styles.container_tech_support}>
-                            <div className={styles.wrapper_tech_support}>
-                                <div className={styles.feedback_container_first}>
-                                    <div className={styles.feedback_wrapper}>
-                                        <div className={styles.feed_head_container}>
-                                            <div className={styles.feed_head_wrapper}>
+            <Modal
+                className={_cs(sucessResponse ? styles.login_modal_submit : styles.loginModal, className)}
+            >
+                <ModalBody className={styles.content}>
+                    <DangerButton
+                        transparent
+                        iconName="close"
+                        onClick={() => closeModal()}
+                        title="Close Modal"
+                        className={styles.closeButton}
+                    />
+                    <div className={styles.container_tech_support}>
+                        <div className={styles.wrapper_tech_support}>
+                            <div className={styles.feedback_container_first}>
+                                <div className={styles.feedback_wrapper}>
+                                    <div className={styles.feed_head_container}>
+                                        <div className={styles.feed_head_wrapper}>
                                                 Leave Feedback
-                                            </div>
                                         </div>
-                                        <div className={styles.feedback_intro}>
+                                    </div>
+                                    <div className={styles.feedback_intro}>
                                             To send feedback/comments for the improvement of the BIPAD
                                             portal
-                                        </div>
-                                        <div className={styles.feedback_button}>
-                                            <Button
-                                                onClick={() => navigate('/feedback/')}
-                                                className={styles.feed_btn}
-                                            >
+                                    </div>
+                                    <div className={styles.feedback_button}>
+                                        <Button
+                                            onClick={() => setPosition(1)}
+                                            className={styles.feed_btn}
+                                        >
                                                 FEEDBACK FORM
-                                            </Button>
-                                        </div>
+                                        </Button>
                                     </div>
                                 </div>
-                                <div className={styles.feedback_container_second}>
-                                    <div
-                                        className={styles.tech_support_wrapper}
-                                        style={sucessResponse ? { display: 'none' } : null}
-                                    >
+                            </div>
+                            <div className={styles.feedback_container_second}>
+                                <div
+                                    className={styles.tech_support_wrapper}
+                                    style={sucessResponse ? { display: 'none' } : null}
+                                >
 
-                                        <div className={styles.tech_support_head}>
+                                    <div className={styles.tech_support_head}>
                                             Please provide the following details
-                                        </div>
-                                        <div className={styles.tech_support_input}>
-                                            <div
-                                                className={
-                                                    error.fullNameError
-                                                        ? styles.input_error
-                                                        : styles.input
-                                                }
-                                            >
-                                                <input
-                                                    name="fullName"
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    className={styles.fname}
-                                                    placeholder="Full Name"
-                                                    value={data ? data.fullName : ''}
-                                                    onChange={formHandler}
-                                                />
-                                            </div>
-                                            {error.fullNameError && (
-                                                <div className={styles.error_text}>
-                                                    {error.fullNameError}
-                                                </div>
-                                            )}
-                                            <div
-                                                className={
-                                                    error.designationError
-                                                        ? styles.input_error
-                                                        : styles.input
-                                                }
-                                            >
-                                                <input
-                                                    name="designation"
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    className={styles.designation}
-                                                    placeholder="Designation(eg.IT Officer)"
-                                                    value={data ? data.designation : ''}
-                                                    onChange={formHandler}
-                                                />
-                                            </div>
-                                            {error.designationError && (
-                                                <div className={styles.error_text}>
-                                                    {error.designationError}
-                                                </div>
-                                            )}
-                                            {' '}
-                                            <div
-                                                className={
-                                                    error.nameOfTheInstitutionError
-                                                        ? styles.input_error
-                                                        : styles.input
-                                                }
-                                            >
-                                                <input
-                                                    name="nameOfTheInstitution"
-                                                    type="text"
-                                                    autoComplete="off"
-                                                    className={styles.insname}
-                                                    placeholder="Name of the Institution"
-                                                    value={
-                                                        data ? data.nameOfTheInstitution : ''
-                                                    }
-                                                    onChange={formHandler}
-                                                />
-                                            </div>
-                                            {error.nameOfTheInstitutionError && (
-                                                <div className={styles.error_text}>
-                                                    {error.nameOfTheInstitutionError}
-                                                </div>
-                                            )}
-                                            <div
-                                                className={
-                                                    error.phoneNumberError
-                                                        ? styles.input_number_error
-                                                        : styles.input_number
-                                                }
-                                            >
-                                                <span className={styles.country_code}>+977</span>
-
-                                                <input
-                                                    name="phoneNumber"
-                                                    type="number"
-                                                    className={styles.phone_no}
-                                                    id="phone-no"
-                                                    autoComplete="off"
-                                                    value={data ? data.phoneNumber : ''}
-                                                    onChange={phoneNumberHandler}
-                                                    placeholder="Phone No"
-                                                />
-                                            </div>
-                                            {error.phoneNumberError && (
-                                                <div className={styles.error_text}>
-                                                    {error.phoneNumberError}
-                                                </div>
-                                            )}
-                                            <div
-                                                className={
-                                                    error.emailError ? styles.input_error : styles.input
-                                                }
-                                            >
-                                                <input
-                                                    name="email"
-                                                    type="email"
-                                                    autoComplete="off"
-                                                    placeholder="Official Email"
-                                                    className={styles.email}
-                                                    value={data ? data.email : ''}
-                                                    onChange={formHandler}
-                                                />
-                                            </div>
-                                            {error.emailError && (
-                                                <div className={styles.error_text}>
-                                                    {error.emailError}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className={styles.checkbox_items}>
+                                    </div>
+                                    <div className={styles.tech_support_input}>
+                                        <div
+                                            className={
+                                                error.fullNameError
+                                                    ? styles.input_error
+                                                    : styles.input
+                                            }
+                                        >
                                             <input
-                                                type="checkbox"
-                                                id="verify"
-                                                className={styles.verify}
-                                                name="verify"
-                                                onChange={(e: any) => setchecked(e.target.checked)}
+                                                name="fullName"
+                                                type="text"
+                                                autoComplete="off"
+                                                className={styles.fname}
+                                                placeholder="Full Name"
+                                                value={data ? data.fullName : ''}
+                                                onChange={formHandler}
                                             />
-                                            <label htmlFor="verify" className={styles.verify_text}>
+                                        </div>
+                                        {error.fullNameError && (
+                                            <div className={styles.error_text}>
+                                                {error.fullNameError}
+                                            </div>
+                                        )}
+                                        <div
+                                            className={
+                                                error.designationError
+                                                    ? styles.input_error
+                                                    : styles.input
+                                            }
+                                        >
+                                            <input
+                                                name="designation"
+                                                type="text"
+                                                autoComplete="off"
+                                                className={styles.designation}
+                                                placeholder="Designation(eg.IT Officer)"
+                                                value={data ? data.designation : ''}
+                                                onChange={formHandler}
+                                            />
+                                        </div>
+                                        {error.designationError && (
+                                            <div className={styles.error_text}>
+                                                {error.designationError}
+                                            </div>
+                                        )}
+                                        {' '}
+                                        <div
+                                            className={
+                                                error.nameOfTheInstitutionError
+                                                    ? styles.input_error
+                                                    : styles.input
+                                            }
+                                        >
+                                            <input
+                                                name="nameOfTheInstitution"
+                                                type="text"
+                                                autoComplete="off"
+                                                className={styles.insname}
+                                                placeholder="Name of the Institution"
+                                                value={
+                                                    data ? data.nameOfTheInstitution : ''
+                                                }
+                                                onChange={formHandler}
+                                            />
+                                        </div>
+                                        {error.nameOfTheInstitutionError && (
+                                            <div className={styles.error_text}>
+                                                {error.nameOfTheInstitutionError}
+                                            </div>
+                                        )}
+                                        <div
+                                            className={
+                                                error.phoneNumberError
+                                                    ? styles.input_number_error
+                                                    : styles.input_number
+                                            }
+                                        >
+                                            <span className={styles.country_code}>+977</span>
+
+                                            <input
+                                                name="phoneNumber"
+                                                type="number"
+                                                className={styles.phone_no}
+                                                id="phone-no"
+                                                autoComplete="off"
+                                                value={data ? data.phoneNumber : ''}
+                                                onChange={phoneNumberHandler}
+                                                placeholder="Phone No"
+                                            />
+                                        </div>
+                                        {error.phoneNumberError && (
+                                            <div className={styles.error_text}>
+                                                {error.phoneNumberError}
+                                            </div>
+                                        )}
+                                        <div
+                                            className={
+                                                error.emailError ? styles.input_error : styles.input
+                                            }
+                                        >
+                                            <input
+                                                name="email"
+                                                type="email"
+                                                autoComplete="off"
+                                                placeholder="Official Email"
+                                                className={styles.email}
+                                                value={data ? data.email : ''}
+                                                onChange={formHandler}
+                                            />
+                                        </div>
+                                        {error.emailError && (
+                                            <div className={styles.error_text}>
+                                                {error.emailError}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className={styles.checkbox_items}>
+                                        <input
+                                            type="checkbox"
+                                            id="verify"
+                                            className={styles.verify}
+                                            name="verify"
+                                            onChange={(e: any) => setchecked(e.target.checked)}
+                                        />
+                                        <label htmlFor="verify" className={styles.verify_text}>
                                                 I hereby give my consent to store my personal details
                                                 in BIPAD portal.
-                                            </label>
-                                        </div>
-
-                                        <div
-                                            className={styles.back_submit_button}
-                                        >
-                                            <Button
-                                                className={styles.back_btn}
-                                                onClick={onPreviousClick}
-                                            >
-                                                back
-                                            </Button>
-                                            <Button
-                                                className={styles.submit_btn}
-                                                disabled={!checked}
-                                                onClick={inputValidation}
-                                            >
-                                                submit
-                                            </Button>
-                                        </div>
-
-
+                                        </label>
                                     </div>
-                                    { !loader && <div className={styles.loader} /> }
 
-                                    {
-                                        failureResponse
-                                            ? (
-                                                <div className={styles.loaderTimeOut}>
-                                                    <span className={styles.timeOutText}>{failureResponse}</span>
+                                    <div
+                                        className={styles.back_submit_button}
+                                    >
+                                        <Button
+                                            className={styles.back_btn}
+                                            onClick={onPreviousClick}
+                                        >
+                                                back
+                                        </Button>
+                                        <Button
+                                            className={styles.submit_btn}
+                                            disabled={!checked}
+                                            onClick={inputValidation}
+                                        >
+                                                submit
+                                        </Button>
+                                    </div>
 
-                                                </div>
-                                            )
-                                            : ''
-                                    }
 
-                                    {sucessResponse
+                                </div>
+                                { !loader && <div className={styles.loader} /> }
+
+                                {
+                                    failureResponse
+                                        ? (
+                                            <div className={styles.loaderTimeOut}>
+                                                <span className={styles.timeOutText}>{failureResponse}</span>
+
+                                            </div>
+                                        )
+                                        : ''
+                                }
+
+                                {sucessResponse
                                         && (
                                             <div className={styles.submit_div}>
                                                 <div className={styles.tickWrapper}>
@@ -461,20 +454,17 @@ const FeedbackThree = (props) => {
                                             </div>
                                         )
 
-                                    }
-                                </div>
-
-
+                                }
                             </div>
 
 
                         </div>
 
-                    </ModalBody>
-                </Modal>
-            ) : (
-                navigate('/')
-            )}
+
+                    </div>
+
+                </ModalBody>
+            </Modal>
         </>
     );
 };

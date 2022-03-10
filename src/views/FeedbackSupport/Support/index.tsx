@@ -4,8 +4,9 @@ import SupportOne from './SupportOne';
 import SupportTwo from './SupportTwo';
 import SupportThree from './SupportThree';
 
-const Support = () => {
+const Support = (props) => {
     const [formElementsPosition, setformElementsPosition] = useState(0);
+    const { setPosition, closeModal } = props;
     const [data, setdata] = useState({
         institutionType: '',
         typeOfTechSupport: null,
@@ -67,6 +68,8 @@ const Support = () => {
                         setData={setdata}
                         error={error}
                         setError={setError}
+                        setPosition={setPosition}
+                        closeModal={closeModal}
                     />
                 )
             }
@@ -80,6 +83,8 @@ const Support = () => {
                         setData={setdata}
                         error={error}
                         setError={setError}
+                        setPosition={setPosition}
+                        closeModal={closeModal}
                     />
                 )
             }
@@ -94,6 +99,8 @@ const Support = () => {
                         setData={setdata}
                         error={error}
                         setError={setError}
+                        setPosition={setPosition}
+                        closeModal={closeModal}
                     />
                 )
 

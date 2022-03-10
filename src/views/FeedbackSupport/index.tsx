@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-lone-blocks */
 /* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 /* eslint-disable react/no-unescaped-entities */
@@ -11,9 +13,13 @@ import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
 import DangerButton from '#rsca/Button/DangerButton';
+import Feedback from './Feedback';
+import Support from './Support';
 
-const FeedbackSupport = ({ className, closeModal }) => (
-    <>
+const FeedbackSupport = ({ className, closeModal }) => {
+    const [formElementsPosition, setformElementsPosition] = useState(null);
+
+    const HomePage = () => (
         <Modal
             className={_cs(styles.loginModal, className)}
             closeOnOutsideClick
@@ -65,8 +71,7 @@ const FeedbackSupport = ({ className, closeModal }) => (
                                     <Button
                                         className={styles.tech_btn}
                                         onClick={() => {
-                                    closeModal();
-                                    navigate('/support/');
+                                            setformElementsPosition(0);
                                 }}
                                     >
                                 TECHNICAL SUPPORT REQUEST FORM
@@ -85,8 +90,7 @@ const FeedbackSupport = ({ className, closeModal }) => (
                                     <Button
                                         className={styles.feed_btn}
                                         onClick={() => {
-                                    closeModal();
-                                    navigate('/feedback/');
+                                            setformElementsPosition(1);
                                 }
                                 }
                                     >
@@ -103,7 +107,33 @@ const FeedbackSupport = ({ className, closeModal }) => (
             </ModalBody>
         </Modal>
 
+        );
+
+
+return (
+    <>
+        {formElementsPosition === 0
+        && (
+        <Support
+            setPosition={setformElementsPosition}
+            closeModal={closeModal}
+        />
+) }
+        {
+        formElementsPosition === 1
+        && (
+        <Feedback
+            setPosition={setformElementsPosition}
+            closeModal={closeModal}
+        />
+)
+        }
+
+        {
+                formElementsPosition === null && <HomePage />
+            }
 
     </>
 );
+                            };
 export default FeedbackSupport;

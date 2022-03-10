@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import FeedbackOne from './FeedbackOne';
 import FeedbackTwo from './FeedbackTwo';
 
-const Feedback = () => {
+const Feedback = (props) => {
     const [formElementsPosition, setformElementsPosition] = useState(0);
-
+    const { setPosition, closeModal } = props;
     const inputDatas = {
         fullName: '',
         designation: '',
@@ -49,6 +49,8 @@ const Feedback = () => {
                     setData={setdata}
                     error={error}
                     setError={setError}
+                    setPosition={setPosition}
+                    closeModal={closeModal}
                 />
             )
             }
@@ -62,6 +64,8 @@ const Feedback = () => {
             setData={setdata}
             error={error}
             setError={setError}
+            setPosition={setPosition}
+            closeModal={closeModal}
         />
     )
             }

@@ -97,20 +97,6 @@ const routeSettings: SomeRoute[] = [
         iconName: 'chatBoxes',
     },
     {
-        name: 'feedback&support',
-        title: 'Feedback',
-        path: '/feedback/',
-        load: () => import('../views/FeedbackSupport/Feedback'),
-        navbar: false,
-    },
-    {
-        name: 'feedback&support',
-        title: 'Support',
-        path: '/support/',
-        load: () => import('../views/FeedbackSupport/Support'),
-        navbar: false,
-    },
-    {
         name: 'fourHundredThree',
         title: '403',
         path: '/403/',

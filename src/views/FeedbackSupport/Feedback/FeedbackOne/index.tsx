@@ -13,7 +13,6 @@
 /* eslint-disable @typescript-eslint/indent */
 import React, { useEffect, useState } from 'react';
 import Button from 'src/vendor/react-store/v2/Action/Button';
-import { navigate } from '@reach/router';
 import { _cs } from '@togglecorp/fujs';
 import Modal from '#rscv/Modal';
 import ModalBody from '#rscv/Modal/Body';
@@ -22,10 +21,8 @@ import DangerButton from '#rsca/Button/DangerButton';
 
 const SupportOne = (props) => {
   const { className, onNextClick, data,
-    setData, error, setError } = props;
-
+    setData, error, setError, setPosition, closeModal } = props;
   const [checked, setchecked] = useState(false);
-  const [closeButton, setCloseButton] = useState(true);
   const [inputField, setInputField] = useState({
     fullName: false,
     designation: false,
@@ -140,17 +137,12 @@ if (checked && !data.isAnonymous) {
   return (
 
     <>
-      {closeButton
-
-
-        ? (
           <Modal className={_cs(styles.loginModal, className)}>
-
             <ModalBody className={styles.content}>
               <DangerButton
                 transparent
                 iconName="close"
-                onClick={() => setCloseButton(false)}
+                onClick={() => closeModal()}
                 title="Close Modal"
                 className={styles.closeButton}
               />
@@ -169,7 +161,7 @@ if (checked && !data.isAnonymous) {
                       <div className={styles.feedback_button}>
                         <Button
                           className={styles.feedback_btn}
-                          onClick={() => navigate('/support/')}
+                          onClick={() => setPosition(0)}
                         >
                           TECHNICAL SUPPORT REQUEST FORM
                         </Button>
@@ -308,12 +300,8 @@ if (checked && !data.isAnonymous) {
                   </div>
                 </div>
               </div>
-
             </ModalBody>
           </Modal>
-        )
-        : navigate('/')
-      }
     </>
   );
 };

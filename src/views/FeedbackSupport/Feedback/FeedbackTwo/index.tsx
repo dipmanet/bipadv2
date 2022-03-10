@@ -14,7 +14,6 @@
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useRef, useState } from 'react';
 import Button from 'src/vendor/react-store/v2/Action/Button';
-import { navigate } from '@reach/router';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
@@ -69,15 +68,12 @@ const SupportTwo = (props) => {
   const [response, setresponse] = useState([]);
   const [failureResponse, setFailureResponse] = useState(false);
   const [screenshotMessage, setScreenshotMessage] = useState(false);
-  const [closeButton, setCloseButton] = useState(true);
   const [onSubmit, setOnSubmit] = useState(false);
-
-
   const screenShotRef = useRef(null);
 
   const { requests: { TechnicalSupportPostRequest },
     className, onPreviousClick, data,
-    setData, error, setError } = props;
+    setData, error, setError, setPosition, closeModal } = props;
 
 
   const fileHandler = (e: any) => {
@@ -202,15 +198,12 @@ if (error) {
 
     <>
 
-      {
-        closeButton
-          ? (
             <Modal className={_cs(success ? styles.login_modal_submit : styles.loginModal, className)}>
               <ModalBody className={styles.content}>
                 <DangerButton
                   transparent
                   iconName="close"
-                  onClick={() => setCloseButton(false)}
+                  onClick={() => closeModal()}
                   title="Close Modal"
                   className={styles.closeButton}
                 />
@@ -229,7 +222,7 @@ if (error) {
                         <div className={styles.feedback_button}>
                           <Button
                             className={styles.feedback_btn}
-                            onClick={() => navigate('/support/')}
+                            onClick={() => setPosition(0)}
                           >
                             TECHNICAL SUPPORT REQUEST FORM
                           </Button>
@@ -404,11 +397,6 @@ if (error) {
 
               </ModalBody>
             </Modal>
-          )
-          : navigate('/')
-      }
-
-
     </>
   );
 };
