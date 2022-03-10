@@ -246,6 +246,7 @@ class Filters extends React.PureComponent<Props, State> {
         },
         subdomainLoc: {},
         locRecv: false,
+        disableSubmitButton: false,
     };
 
     public componentDidMount() {
@@ -514,18 +515,25 @@ class Filters extends React.PureComponent<Props, State> {
 
     private handleFaramChange = (faramValues: FiltersElement) => {
         this.setState({ faramValues });
+        this.setState({ disableSubmitButton: false });
     }
 
     private handleSubmitClick = () => {
         const { setFilters, carKeys, FilterClickedStatus } = this.props;
-        const { faramValues } = this.state;
+        const { faramValues, disableSubmitButton } = this.state;
         const { filters: propFilters } = this.props;
         FilterClickedStatus(true);
-        if (faramValues) {
+        if (!disableSubmitButton) {
+            this.setState({ disableSubmitButton: true });
             setFilters({ filters: faramValues });
-        } else {
-            setFilters({ filters: propFilters });
+            // if (faramValues) {
+            //     setFilters({ filters: faramValues });
+            // }
+            // else {
+            //     setFilters({ filters: propFilters });
+            // }
         }
+
         const { activeRouteDetails } = this.context;
 
         /** This API is already called in capacity and resource module */
