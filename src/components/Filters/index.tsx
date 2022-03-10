@@ -596,7 +596,7 @@ class Filters extends React.PureComponent<Props, State> {
             projectFilters,
         } = this.props;
 
-        const { faramValues: fv } = this.state;
+        const { faramValues: fv, disableSubmitButton } = this.state;
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
