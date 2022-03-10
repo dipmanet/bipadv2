@@ -781,9 +781,7 @@ class RealTimeMap extends React.PureComponent {
                                     type: 'symbol',
                                     layout: mapStyles.riverPoint.layout,
                                     // paint: mapStyles.riverPoint.paint,
-                                    paint: isHovered
-                                        ? mapStyles.riverPoint.textDim
-                                        : mapStyles.riverPoint.text,
+                                    paint: mapStyles.riverPoint.textDim,
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
@@ -833,9 +831,7 @@ class RealTimeMap extends React.PureComponent {
                                     type: 'circle',
                                     property: 'earthquakeId',
                                     // paint: mapStyles.earthquakePoint.fill,
-                                    paint: isHovered
-                                        ? mapStyles.earthquakePoint.circleDim
-                                        : mapStyles.earthquakePoint.circle,
+                                    paint: mapStyles.earthquakePoint.circleDim,
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
@@ -889,9 +885,7 @@ class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     // paint: mapStyles.firePoint.paint,
-                                    paint: isHovered
-                                        ? mapStyles.firePoint.circleDim
-                                        : mapStyles.firePoint.circle,
+                                    paint: mapStyles.firePoint.circleDim,
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
