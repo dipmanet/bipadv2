@@ -181,6 +181,7 @@ interface State {
     lattitude: string | number;
     rectangleBoundingBox: [any, any];
     drawRefState: boolean;
+    geoLocationStatus: boolean;
 }
 
 interface BoundingClientRect {
@@ -341,6 +342,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             checkLatLngState: false,
             rectangleBoundingBox: [],
             drawRefState: false,
+            geoLocationStatus: false,
         };
     }
 
@@ -387,6 +389,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
+
+        // if (this.state.geoLocationStatus) {
+        //     // eslint-disable-next-line react/no-did-update-set-state
+        //     this.setState({ geoLocationStatus: false });
+        // }
     }
 
     private handlemapClickedResponse = (data) => {
@@ -829,8 +836,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private currentLocation = () => {
         if (this.geoLocationRef.current) {
             this.geoLocationRef.current.trigger();
+
+
+            if (this.state.geoLocationStatus) {
+                this.setState({ geoLocationStatus: false });
+            } else {
+                this.setState({ geoLocationStatus: true });
+            }
         }
-        // setGeoLocationStatus(true);
     };
 
     public render() {
@@ -945,10 +958,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         );
 
         const resetLocation = () => {
+            if (this.state.geoLocationStatus && this.geoLocationRef.current) {
+                this.geoLocationRef.current.trigger();
+            }
+            this.setState({ geoLocationStatus: false });
             if (this.mapContainerRef.current) {
                 // centriod of nepal
                 if (detailsOfLoggedAdmin
-				   && !detailsOfLoggedAdmin.province && !detailsOfLoggedAdmin.district) {
+            	   && !detailsOfLoggedAdmin.province && !detailsOfLoggedAdmin.district) {
                     this.mapContainerRef.current.flyTo({
                         speed: 1,
                         center: [84.2676, 28.5465],
@@ -958,7 +975,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 }
                 // checking province
                 if (detailsOfLoggedAdmin
-				   && detailsOfLoggedAdmin.centroid) {
+            	   && detailsOfLoggedAdmin.centroid) {
                     this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
                 }
                 // checking district
@@ -967,10 +984,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
                 }
                 // checking municipality
                 if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province
-					 && detailsOfLoggedAdmin.district) {
+            		 && detailsOfLoggedAdmin.district) {
                     this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
                 }
             }
+
             this.setState({ checkLatLngState: false, longitude: '', lattitude: '' });
         };
 
@@ -986,7 +1004,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-        console.log(queryStringParams);
+        console.log('status', this.state.geoLocationStatus);
 
 
 	    return (
