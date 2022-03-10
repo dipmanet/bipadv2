@@ -211,11 +211,12 @@ const Organisation: React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         if (fetchedData.length > 0 && chartData.length === 0) {
-            const chartDataArr = [...new Set(fetchedData.map(org => org.operatorType))];
+            const chartDataArr = [...new Set(fetchedData.map(org => org.operatorType || org.otherOperatorType))];
             console.log('gfetched data org:', fetchedData);
+            console.log('chart Arr', chartDataArr);
             setChartData(chartDataArr.map(item => ({
                 name: item,
-                Total: fetchedData.filter(organisation => organisation.operatorType === item).length,
+                Total: fetchedData.filter(organisation => organisation.operatorType === item || organisation.otherOperatorType === item).length,
             })));
 
             const chkArr = Array.from(Array(fetchedData.length).keys());
@@ -443,7 +444,7 @@ const Organisation: React.FC<Props> = (props: Props) => {
                         fill="rgb(0,164,109)"
                         // barCategoryGap={30}
                         barCategoryGap={80}
-                        label={{ position: 'insideRight', fill: '#fff', fontSize: '10px' }}
+                        label={{ position: 'top', fill: '#444', fontSize: '10px' }}
                         tick={{ fill: 'rgb(200,200,200)' }}
                         cx={90}
                         cy={105}

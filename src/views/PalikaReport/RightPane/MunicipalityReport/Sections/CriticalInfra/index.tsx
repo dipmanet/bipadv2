@@ -212,6 +212,7 @@ const CriticalInfra = (props: Props) => {
             setFilteredData(fetchedData);
         }
         if (fetchedData.length > 0 && chartData.length === 0) {
+            console.log('fetchedData res', fetchedData);
             setChartData(
                 [
 
@@ -238,7 +239,7 @@ const CriticalInfra = (props: Props) => {
                     {
                         name: 'Hotels or Restaurants',
                         nameNp: 'होटल वा रेस्टुरेन्ट',
-                        Total: fetchedData.filter(item => item.resourceType === 'tourism').length,
+                        Total: fetchedData.filter(item => item.resourceType === 'hotelandrestaurant').length,
                     },
                     {
                         name: 'Government Buildings',

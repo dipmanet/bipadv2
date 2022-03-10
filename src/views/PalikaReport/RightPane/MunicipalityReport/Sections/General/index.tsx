@@ -169,7 +169,6 @@ const General = (props: Props) => {
     //     fiscalYear: fy,
     //     formationDate: fd,
     //     committeeMembers: cm,
-
     // } = generalData;
 
 
@@ -219,6 +218,7 @@ const General = (props: Props) => {
     }
 
     const handleSelectChange = (fiscal: any) => {
+        console.log('fiscal.target.value', fiscal.target.value);
         setfiscalYear(fiscal.target.value);
         const title = fiscalYearList
             .filter(data => Number(data.id) === Number(fiscal.target.value));

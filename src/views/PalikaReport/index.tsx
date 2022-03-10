@@ -105,6 +105,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
 
 };
 let finalArr = [];
+const domain = process.env.REACT_APP_API_SERVER_URL;
 
 const PalikaReport: React.FC<Props> = (props: Props) => {
     const [showModal, setshowModal] = useState(true);
@@ -314,28 +315,28 @@ const PalikaReport: React.FC<Props> = (props: Props) => {
     };
     useEffect(() => {
         // Example POST method implementation:
-        function postData(link = `${process.env.REACT_APP_API_SERVER_URL}${url}`) {
-            // Default options are marked with *
-            fetch(link, {
-                method: 'OPTIONS',
-                mode: 'cors',
-                cache: 'no-cache',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                redirect: 'follow',
-                referrerPolicy: 'no-referrer',
+        // function postData(link = `${domain}${url}`) {
+        // Default options are marked with *
+        fetch(`${domain}${url}`, {
+            method: 'OPTIONS',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+        })
+            .then((res) => {
+                const headerData = res.json();
+                headerData.then(resp => setTableHeader(resp.actions.GET));
             })
-                .then((res) => {
-                    const headerData = res.json();
-                    headerData.then(resp => setTableHeader(resp.actions.GET));
-                })
-                .catch((err) => {
-                });
-        }
+            .catch((err) => {
+            });
+        // }
 
-        postData();
+        // postData();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url]);

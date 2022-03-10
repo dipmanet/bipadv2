@@ -1742,7 +1742,7 @@ const BudgetActivity = (props: Props) => {
                            <div className={styles.legend}>
                                <div className={styles.activitiesAmt}>
                                    <span className={styles.light}>
-                                       Total no. of activities
+                                       <Gt section={Translations.TotalActvities} />
                                        {' '}
                                    </span>
                                    <span className={styles.biggerNum}>
@@ -1830,14 +1830,13 @@ const BudgetActivity = (props: Props) => {
 
 
                           <ul>
-                              <li>
+                              {/* <li>
                                   <span className={styles.darkerText}>
                                       <Gt section={Translations.MonitoringAct} />
                                   </span>
-                              </li>
+                              </li> */}
                               <li>
-                                  <span className={styles.smallerText}>
-                                      <Gt section={Translations.DisasterRiskStrategic} />
+                                  <span className={styles.darkerText}>
                                       <Gt section={Translations.DisasterRiskStrategic} />
                                   </span>
                               </li>

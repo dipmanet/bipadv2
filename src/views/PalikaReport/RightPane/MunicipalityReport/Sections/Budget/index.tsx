@@ -124,7 +124,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props, params }) => {
             params.budgetId(response);
-            params.callGetApi(response);
+            // params.callGetApi(response);
         },
         onFailure: ({ error, params }) => {
             console.log('params:', params);
@@ -249,12 +249,8 @@ const Budget = (props: Props) => {
         }
     };
 
-    const handleBudgetId = (response) => {
-        setBudgetId({ id: response.id });
-        setEditBudget(false);
-    };
 
-    const handleCallGetApi = (response) => {
+    const handleCallGetApi = () => {
         BudgetGetRequest.do({
             fiscalYear: generalData.fiscalYear,
             district,
@@ -266,6 +262,14 @@ const Budget = (props: Props) => {
 
         });
         props.handleNextClick();
+    };
+
+
+    const handleBudgetId = (response) => {
+        console.log('budget id response', response);
+        setBudgetId({ id: response.id });
+        handleCallGetApi();
+        setEditBudget(false);
     };
 
     const handleCallUpdateApi = (response) => {
@@ -727,7 +731,9 @@ const Budget = (props: Props) => {
                                             </h2>
                                         </li>
                                         <li>
-                                            <span className={styles.light}>Municipal Budget</span>
+                                            <span className={styles.light}>
+                                                <Gt section={Translations.MunBudget} />
+                                            </span>
                                         </li>
                                     </ul>
                                     <ul>
@@ -735,6 +741,7 @@ const Budget = (props: Props) => {
                                             {/* <span > */}
                                             {(Number(drrFund) / Number(municipalBudget) * 100).toFixed(0)}
                                             {'%'}
+                                            <Gt section={Translations.approx} />
                                             {' '}
                                             <Gt section={Translations.OfMunBudget} />
 
