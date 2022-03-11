@@ -823,7 +823,7 @@ export default {
                 ['==', ['feature-state', 'dataSource'], 'real-time-fire-points'],
             ],
             1,
-            0.1,
+            0.6,
             ],
         },
     },
