@@ -107,17 +107,17 @@ const ZoomToolBar = (props: OwnProps) => {
                             </button>
                             <button
                                 type="submit"
-                                className={_cs(styles.reloadIcon, className)}
-                                onClick={resetLocation}
-                            >
-                                <img className={styles.svgIcon} src={ReloadIcon} alt="" />
-                            </button>
-                            <button
-                                type="submit"
                                 className={_cs(styles.fullScreenIcon, className)}
                                 onClick={fullScreenMap}
                             >
                                 <img className={styles.svgIcon} src={FullScreenIcon} alt="" />
+                            </button>
+                            <button
+                                type="submit"
+                                className={_cs(styles.reloadIcon, className)}
+                                onClick={resetLocation}
+                            >
+                                <img style={{ height: '17px' }} className={styles.svgIcon} src={ReloadIcon} alt="" />
                             </button>
                         </div>
                         {/* <div className={styles.locationSection}>
