@@ -749,7 +749,7 @@ export default {
             'text-field': ['get', 'waterLevel'],
             'text-allow-overlap': false,
             'text-size': 9,
-            'text-anchor': 'top',
+            'text-anchor': 'center',
             'symbol-sort-key': ['-', ['get', 'waterLevel']],
         },
         paint: {
