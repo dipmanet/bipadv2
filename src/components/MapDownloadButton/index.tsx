@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React, { useContext, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
@@ -27,6 +28,8 @@ import {
     regionSelector,
     filtersSelector,
     realTimeFiltersSelector,
+    layersSelector,
+    layerGroupSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
@@ -73,6 +76,9 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     provinces: provincesSelector(state),
     filters: filtersSelector(state),
     realtimeFilters: realTimeFiltersSelector(state),
+    layers: layersSelector(state),
+    layerGroups: layerGroupSelector(state),
+
 });
 
 interface GeoPoint {
@@ -142,7 +148,9 @@ const MapDownloadButton = (props: Props) => {
         filters: { hazard, dataDateRange },
         realtimeFilters,
         onPendingStateChange,
-
+        activeLayers,
+        layers,
+        layerGroups,
         ...otherProps
     } = props;
 
@@ -159,7 +167,15 @@ const MapDownloadButton = (props: Props) => {
             onPendingStateChange(isPending);
         }
     }, [setPending, onPendingStateChange]);
-
+    const filteredLayer = layers && activeLayers
+        && layers.filter(item => item.layername
+            === activeLayers.layername).filter(data => data.title === activeLayers.title);
+    const filteredLayerGroup = filteredLayer && filteredLayer.length
+        && layerGroups.filter(i => i.id === filteredLayer[0].group);
+    const publicationDate = filteredLayerGroup && filteredLayerGroup.length
+        && filteredLayerGroup[0].metadata && filteredLayerGroup[0].metadata.value
+        && filteredLayerGroup[0].metadata.value.general
+        && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
     const handleExport = useCallback(
         () => {
             if (!mapContext || !mapContext.map) {
@@ -287,14 +303,19 @@ const MapDownloadButton = (props: Props) => {
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
                 source = specificSource || '';
-
                 drawText(context, largeFont, title, 12, 24, '#000', '#fff');
                 drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
 
                 if (source) {
                     drawText(context, smallFont, `Source: ${source}`, 12, 68, '#000', '#fff');
                 }
-
+                if (publicationDate) {
+                    if (source) {
+                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, 12, 82, '#000', '#fff');
+                    } else {
+                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, 12, 68, '#000', '#fff');
+                    }
+                }
                 const allPromises = [];
 
                 if (scale) {
@@ -320,12 +341,12 @@ const MapDownloadButton = (props: Props) => {
                         navigationCanvas.then((c) => {
                             context.drawImage(
                                 c,
-                                mapCanvas.width - c.width - 10,
-                                // mapCanvas.height - c.height - 50,
+                                mapCanvas.width - c.width - 6,
+                                mapCanvas.height - c.height - 22,
                                 // indexMap.height,
                                 // indexMapHeight - 70,
                                 // indexMapHeight - indexMapHeight + 20,
-                                20,
+                                // 20,
                             );
                             resolve();
                         });
@@ -363,6 +384,8 @@ const MapDownloadButton = (props: Props) => {
                         link.href = URL.createObjectURL(blob);
                         link.click();
                         setDownloadPending(false);
+                        document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '29px';
+                        navigation.getElementsByTagName('span')[0].style.backgroundSize = 'auto';
                     }, 'image/png');
                 });
             };

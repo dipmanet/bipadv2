@@ -597,7 +597,8 @@ export const profileContactListSelector = createSelector(
 
 // risk info page
 export const carKeysSelector = ({ page }: AppState) => page.carKeys;
-
+export const layersSelector = ({ page }: AppState) => page.layers;
+export const layerGroupSelector = ({ page }: AppState) => page.layerGroups;
 // palika report
 export const generalDataSelector = ({ page }: AppState) => page.generalData;
 export const budgetDataSelector = ({ page }: AppState) => page.budgetData;

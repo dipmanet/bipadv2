@@ -76,6 +76,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import DownloadButtonOption from './DownloadButtonOption';
 
 
 function reloadPage() {
@@ -952,6 +953,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     onPendingStateChange={
                                                         this.handleMapDownloadStateChange
                                                     }
+                                                    activeLayers={activeLayers[activeLayers.length - 1]}
+                                                />
+                                                <DownloadButtonOption
+                                                    className={styles.layerSwitch}
                                                 />
                                                 <LayerSwitch
                                                     className={styles.layerSwitch}
