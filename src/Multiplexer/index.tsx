@@ -182,6 +182,7 @@ interface State {
     rectangleBoundingBox: [any, any];
     drawRefState: boolean;
     geoLocationStatus: boolean;
+    currentMarkers: [];
 }
 
 interface BoundingClientRect {
@@ -343,6 +344,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
             rectangleBoundingBox: [],
             drawRefState: false,
             geoLocationStatus: false,
+            currentMarkers: [],
+            markerStatus: false,
         };
     }
 
@@ -429,6 +432,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private mapContainerRef = React.createRef<mapboxgl.Map>();
 
     private geoLocationRef = React.createRef<mapboxgl.GeolocateControl>();
+
+    private markerRef = React.createRef<mapboxgl.Marker>()
 
     private setFilterFromUrl = (
         provinces: Province[],
@@ -798,7 +803,17 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     };
 
+    private markersArray = (marker: any) => {
+        this.setState(prevState => prevState.currentMarkers.push(marker));
+    };
+
     private goToLocation = () => {
+        if (this.state.markerStatus) {
+            this.setState({ markerStatus: false });
+        } else {
+            this.setState({ markerStatus: true });
+        }
+
         if (this.mapContainerRef.current) {
             if (this.state.longitude && this.state.lattitude) {
                 this.mapContainerRef.current.flyTo({
@@ -810,13 +825,79 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     zoom: 12,
                 });
             }
+            const marker = new mapboxgl.Marker()
+                .setLngLat([this.state.longitude, this.state.lattitude])
+                .setPopup(
+                    new mapboxgl.Popup({ offset: 25 }) // add popups
+                        .setHTML(
+                            `<h3 style=padding:25px 50px;>Lattitude : ${this.state.lattitude}, Longitude : ${this.state.longitude}</h3>`,
+                        ),
+                )
+                .addTo(this.mapContainerRef.current);
+            this.markerRef.current = marker;
+
+            this.markersArray(marker);
+
+            if (this.state.currentMarkers !== null) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                    this.state.currentMarkers[i].remove();
+                }
+            }
         }
     }
+
+
+    private mapOnClick = (event: mapboxgl.EventData) => {
+        if (!this.state.checkLatLngState) return;
+
+        const coordinates = event.lngLat;
+
+        if (this.state.currentMarkers.length > 0) {
+            // eslint-disable-next-line no-plusplus
+            for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                this.state.currentMarkers[i].remove();
+            }
+        }
+
+        const marker = new mapboxgl.Marker();
+        this.setState({ longitude: coordinates.lng });
+        this.setState({ lattitude: coordinates.lat });
+        marker.setLngLat(coordinates).addTo(this.mapContainerRef.current);
+
+        if (this.mapContainerRef.current) {
+            this.mapContainerRef.current.flyTo({
+                center: {
+                    lng: coordinates.lng,
+                    lat: coordinates.lat,
+                },
+                zoom: 8,
+            });
+        }
+        this.markersArray(marker);
+    }
+
 
     private handleToggle = () => {
         if (this.lattitudeRef.current) {
             this.lattitudeRef.current.focus();
         }
+
+        if (!this.state.checkLatLngState && this.mapContainerRef.current) {
+            this.mapContainerRef.current.on('click', event => this.mapOnClick(event));
+        }
+
+        if (this.state.checkLatLngState && this.mapContainerRef.current) {
+            this.mapContainerRef.current.off('click', event => this.mapOnClick(event));
+
+            if (this.state.currentMarkers.length > 0) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                    this.state.currentMarkers[i].remove();
+                }
+            }
+        }
+
         if (this.state.checkLatLngState) {
             this.setState({ checkLatLngState: false });
         } else {
@@ -891,6 +972,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             checkLatLngState,
             rectangleBoundingBox,
             drawRefState,
+            currentMarkers,
 	    } = this.state;
 
 
@@ -961,6 +1043,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
             if (this.state.geoLocationStatus && this.geoLocationRef.current) {
                 this.geoLocationRef.current.trigger();
             }
+            if (currentMarkers !== null) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = currentMarkers.length - 1; i >= 0; i--) {
+				  currentMarkers[i].remove();
+                }
+            }
             this.setState({ geoLocationStatus: false });
             if (this.mapContainerRef.current) {
                 // centriod of nepal
@@ -1003,9 +1091,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const queryStringParams = window.location.href.split('#/')[1];
 
         const polygonDrawAccessableRoutes = ['vulnerability'];
-
-        console.log('status', this.state.geoLocationStatus);
-
 
 	    return (
             <PageContext.Provider value={pageProps}>
