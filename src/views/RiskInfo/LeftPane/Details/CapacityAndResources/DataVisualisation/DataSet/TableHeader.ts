@@ -1781,7 +1781,7 @@ export const resourceHeader = [
         ],
     },
     {
-        resourceType: 'fireengine',
+        resourceType: 'firefightingapparatus',
         data: [
             {
                 key: 'title',

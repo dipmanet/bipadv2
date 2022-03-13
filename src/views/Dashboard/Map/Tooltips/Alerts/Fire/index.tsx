@@ -40,7 +40,7 @@ const FireTooltip = (
     const { fields:
         { title: headerTitle,
             land_cover: landCover,
-            brightness } } = referenceData || nullData;
+            brightness, confidence } } = referenceData || nullData;
     const date = createdDate.split('T')[0];
     const time = createdDate.split('T')[1].split('+')[0];
     const timeOnly = time.split(':').slice(0, 2).join(':');
@@ -63,10 +63,14 @@ const FireTooltip = (
                     <div className={styles.title}>Brightness:</div>
                     <div className={styles.value}>{brightness || 'N/A'}</div>
                 </div>
+                <div className={styles.brightness}>
+                    <div className={styles.title}>Confidence:</div>
+                    <div className={styles.value}>{confidence || 'N/A'}</div>
+                </div>
                 <div className={styles.source}>
                     <div className={styles.title}>SOURCE:</div>
                     <a
-                        href="https://www.icimod.org/"
+                        href="http://110.44.114.238//NepalForestFire"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}
