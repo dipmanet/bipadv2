@@ -911,7 +911,11 @@ class Multiplexer extends React.PureComponent<Props, State> {
     };
 
     private drawToZoom = () => {
-        this.setState({ drawRefState: true });
+        if (this.state.drawRefState) {
+            this.setState({ drawRefState: false });
+        } else {
+            this.setState({ drawRefState: true });
+        }
     }
 
 

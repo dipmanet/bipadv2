@@ -1,8 +1,7 @@
 /* eslint-disable max-len */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import styles from './styles.scss';
-import PlusIcon from './icons/plus.svg';
 import DrawIcon from './icons/bbox.svg';
 import GlobeIcon from './icons/latlng.svg';
 import NavigationIcon from './icons/navigation.svg';
@@ -26,24 +25,22 @@ interface OwnProps {
     drawToZoom: () => void;
     fullScreenMap: () => void;
     currentLocation: () => void;
+    handleToggle: () => void;
+    checkLatLngState: boolean;
+    lattitudeRef: any;
 }
 
 
 const ZoomToolBar = (props: OwnProps) => {
-    const bboxRef = useRef<HTMLButtonElement>();
     const {
         className,
-        // onPlusZoomCLick,
-        // onMinusZoomCLick,
         goToLocation,
         lattitude,
         longitude,
         setLongitude,
         setLattitude,
         resetLocation,
-        // activeRouteName,
         hideMap,
-        toggleLeftPaneButtonStretched,
         drawToZoom,
         fullScreenMap,
         currentLocation,
@@ -71,28 +68,12 @@ const ZoomToolBar = (props: OwnProps) => {
                     >
                         <div className={styles.zoomSection}>
                             <button
-                                ref={bboxRef}
                                 type="submit"
                                 className={_cs(styles.bboxDrawBtn, className)}
                                 onClick={drawToZoom}
                             >
                                 <img className={styles.svgIcon} src={DrawIcon} alt="" />
                             </button>
-
-                            {/* <button
-                                type="submit"
-                                className={_cs(styles.zoomInBtn, className)}
-                                onClick={onPlusZoomCLick}
-                            >
-                                <img src={PlusIcon} alt="" />
-                            </button>
-                            <button
-                                type="submit"
-                                className={_cs(styles.zoomOutBtn, className)}
-                                onClick={onMinusZoomCLick}
-                            >
-                                <img className={styles.svgIcon} src={MinusIcon} alt="" />
-                            </button> */}
                             <button
                                 type="submit"
                                 className={_cs(styles.navigationBtn, className)}
@@ -122,15 +103,6 @@ const ZoomToolBar = (props: OwnProps) => {
                                 <img style={{ height: '17px' }} className={styles.svgIcon} src={ReloadIcon} alt="" />
                             </button>
                         </div>
-                        {/* <div className={styles.locationSection}>
-                            <button
-                                type="submit"
-                                className={_cs(styles.bboxDrawBtn, className)}
-                                onClick={drawToZoom}
-                            >
-                                <img className={styles.svgIcon} src={DrawIcon} alt="" />
-                            </button>
-                        </div> */}
                         <div className={!checkLatLngState ? styles.latLngSectionHide : styles.latLngSection}>
                             <input
                                 className={_cs(styles.latLngInputField, className)}
@@ -160,23 +132,6 @@ const ZoomToolBar = (props: OwnProps) => {
                                 <img className={styles.svgIcon} src={SearchIcon} alt="" />
                             </button>
                         </div>
-                        {/* <div className={styles.relooadScreenSection}>
-                            <button
-                                type="submit"
-                                className={_cs(styles.reloadIcon, className)}
-                                onClick={resetLocation}
-                            >
-                                <img className={styles.svgIcon} src={ReloadIcon} alt="" />
-                            </button>
-                            <button
-                                type="submit"
-                                className={_cs(styles.fullScreenIcon, className)}
-                                onClick={fullScreenMap}
-                            >
-                                <img className={styles.svgIcon} src={FullScreenIcon} alt="" />
-                            </button>
-
-                        </div> */}
                     </div>
                 </>
                 )
