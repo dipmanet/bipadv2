@@ -73,7 +73,9 @@ const monthsEn = {
 };
 
 const a = new Date();
-const b = a.toLocaleString();
+const yesterday = new Date(a);
+yesterday.setDate(yesterday.getDate() - 1);
+const b = yesterday.toLocaleString();
 const ourDate = b.split(',')[0].split('/');
 const dateString = `${ourDate[2]}-${ourDate[0]}-${ourDate[1]}`;
 const bsDate = adToBs(dateString);
@@ -84,6 +86,18 @@ const day = bsDate.split('-')[2];
 const today = new Date();
 const baisakh1 = bsToAd(`${year}-01-01`);
 const DEFAULT_END_DATE = today;
+
+
+const aT = new Date();
+const bT = aT.toLocaleString();
+const ourDateT = bT.split(',')[0].split('/');
+const dateStringT = `${ourDateT[2]}-${ourDateT[0]}-${ourDateT[1]}`;
+const bsDateT = adToBs(dateStringT);
+const yearT = bsDateT.split('-')[0];
+const monthToday = months[Number(bsDateT.split('-')[1])];
+const monthEnToday = monthsEn[Number(bsDateT.split('-')[1])];
+const dayT = bsDateT.split('-')[2];
+
 
 const labelSelector = (d: LegendItem, language: string) => {
     if (language === 'en') { return d.label; }
@@ -342,18 +356,19 @@ const BulletinPDF = (props: Props) => {
                     <h2>
                         {
                             language === 'np'
-                                ? `${month} ${day} बिहान 10:00 बजेदेखी बेलुका 10:00 सम्म`
-                                : `From ${day} ${monthEn} 10:00 am to 10:00 am today`
+                                ? `${month} ${day} बिहान 10:00 बजेदेखी ${monthToday} ${dayT} बिहान 10:00 बजे सम्म`
+                                : `Disaster Incidents from ${day} ${monthEn} 10:00 am to ${dayT} ${monthEnToday} 10:00 am`
                         }
 
+
                     </h2>
-                    <h2>
+                    {/* <h2>
                         <Translation>
                             {
                                 t => <span>{t('Disaster Incidents in last 24 hours')}</span>
                             }
                         </Translation>
-                    </h2>
+                    </h2> */}
                     {/* <p>१-२ पौष २०७८, बिहान १० बजे सम्म </p> */}
                     <div className={styles.lossIconsRow}>
                         {
@@ -398,7 +413,7 @@ const BulletinPDF = (props: Props) => {
                             }
                         </Translation>
                     </h2>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="95%" height="100%">
                         <BarChart
                             data={provWiseLossChart}
                             margin={{

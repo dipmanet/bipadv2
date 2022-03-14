@@ -149,7 +149,7 @@ const Bulletin = (props: Props) => {
                             <Input
                                 type="number"
                                 value={sitRep}
-                            // onChange={e => handleSitRep(e.target.value)}
+                                onChange={e => handleSitRep(e.target.value)}
                                 className={styles.select}
                                 disableUnderline
                                 inputProps={{

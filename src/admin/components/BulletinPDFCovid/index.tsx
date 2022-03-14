@@ -439,19 +439,19 @@ const BulletinPDFLoss = (props: Props) => {
                         <h2>
                             <Translation>
                                 {
-                                    t => <span>{t('COVID-19 Stats till date')}</span>
+                                    t => <span>{t('Province-wise death, missing and injured')}</span>
                                 }
                             </Translation>
 
                         </h2>
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="90%" height="100%">
                             <BarChart
                                 layout="vertical"
                                 data={provinceWiseTotal}
                                 margin={{
                                     top: 20,
                                     right: 10,
-                                    left: 0,
+                                    left: 20,
                                     bottom: 5,
                                 }}
                             >

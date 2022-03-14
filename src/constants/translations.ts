@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        incident: 'Incidents',
         'Add New Hazard': 'Add New Hazard',
         'Daily Disaster Bulletin': 'Daily Disaster Bulletin',
         'COVID-19 Bulletin': 'COVID-19 Bulletin',
@@ -226,6 +227,7 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        incident: 'घटना',
         'Add New Hazard': 'नयाँ प्रकोप थप्नुहोस्',
         'Daily Disaster Bulletin': 'दैनिक बिपद् बुलेटिन',
         'COVID-19 Bulletin': 'COVID-19 बुलेटिन',
