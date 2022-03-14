@@ -35,7 +35,7 @@
             }
 
             &:before {
-                content: 'Draw square and zoom into that position';
+                content: 'Draw box to zoom into an area';
                 visibility: hidden;
                 opacity: 0;
                 width: 250px;
@@ -74,7 +74,7 @@
             }
 
             &:before {
-                content: 'Click to search';
+                content: 'Click to search by lattitude and longitude';
                 visibility: hidden;
                 opacity: 0;
                 width: 150px;
@@ -173,7 +173,7 @@
 
 
             &::before {
-                content: 'Click to locate your current area.';
+                content: 'Click to locate your current area';
                 visibility: hidden;
                 opacity: 0;
                 width: 140px;
@@ -208,10 +208,10 @@
 
 
             &::before {
-                content: 'Reset map';
+                content: 'Reset the zoom of map to orginal view';
                 visibility: hidden;
                 opacity: 0;
-                width: 100px;
+                width: 250px;
                 background-color: black;
                 color: #fff;
                 text-align: center;
@@ -240,10 +240,10 @@
             cursor: pointer;
 
             &::before {
-                content: 'Fullscreen';
+                content: 'Click to view map in fullscreen';
                 visibility: hidden;
                 opacity: 0;
-                width: 100px;
+                width: 200px;
                 background-color: black;
                 color: #fff;
                 text-align: center;
@@ -390,7 +390,7 @@
 
 
             &::before {
-                content: 'Please add a value in Longitude and Lattitude fields';
+                content: 'Please add a value in Lattitude and Longitude fields';
                 visibility: hidden;
                 opacity: 0;
                 width: 200px;

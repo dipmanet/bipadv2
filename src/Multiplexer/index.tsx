@@ -183,6 +183,8 @@ interface State {
     drawRefState: boolean;
     geoLocationStatus: boolean;
     currentMarkers: [];
+    markerStatus: false;
+
 }
 
 interface BoundingClientRect {
@@ -834,6 +836,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         ),
                 )
                 .addTo(this.mapContainerRef.current);
+
             this.markerRef.current = marker;
 
             this.markersArray(marker);
@@ -863,17 +866,19 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const marker = new mapboxgl.Marker();
         this.setState({ longitude: coordinates.lng });
         this.setState({ lattitude: coordinates.lat });
-        marker.setLngLat(coordinates).addTo(this.mapContainerRef.current);
-
         if (this.mapContainerRef.current) {
-            this.mapContainerRef.current.flyTo({
-                center: {
-                    lng: coordinates.lng,
-                    lat: coordinates.lat,
-                },
-                zoom: 8,
-            });
+            marker.setLngLat(coordinates).addTo(this.mapContainerRef.current);
         }
+
+        // if (this.mapContainerRef.current) {
+        //     this.mapContainerRef.current.flyTo({
+        //         center: {
+        //             lng: coordinates.lng,
+        //             lat: coordinates.lat,
+        //         },
+        //         zoom: 8,
+        //     });
+        // }
         this.markersArray(marker);
     }
 

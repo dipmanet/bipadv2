@@ -30,6 +30,7 @@ interface OwnProps {
 
 
 const ZoomToolBar = (props: OwnProps) => {
+    const bboxRef = useRef<HTMLButtonElement>();
     const {
         className,
         // onPlusZoomCLick,
@@ -52,7 +53,7 @@ const ZoomToolBar = (props: OwnProps) => {
 
     } = props;
 
-    const handleEnterFunction = (event) => {
+    const handleEnterFunction = (event: any) => {
         if (event.keyCode === 13) {
             event.preventDefault();
             goToLocation();
@@ -70,6 +71,7 @@ const ZoomToolBar = (props: OwnProps) => {
                     >
                         <div className={styles.zoomSection}>
                             <button
+                                ref={bboxRef}
                                 type="submit"
                                 className={_cs(styles.bboxDrawBtn, className)}
                                 onClick={drawToZoom}
