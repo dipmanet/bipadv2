@@ -629,7 +629,7 @@ const setDashboardHazardTypes = (state: Type.PageState, action: Type.SetDashboar
                 type: hazardType.type === 'natural' ? 'natural' : 'artificial',
             };
         }
-        if (hazardType.title.toUpperCase() === 'FIRE') {
+        if (hazardType.title.toUpperCase() === 'FOREST FIRE') {
             return {
                 ...hazardType,
                 type: hazardType.type === 'natural' ? 'natural' : 'artificial',

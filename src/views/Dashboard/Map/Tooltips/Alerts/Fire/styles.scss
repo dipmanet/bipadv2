@@ -37,9 +37,15 @@
     .title {
       font-weight: bold;
       }
+
   }   
       .source {
         padding: var(--spacing-small) var(--spacing-medium-alt);
+      
+      .disclaimer {
+        font-size: 10px;
+        color: #716465;
+      }
 
       .title {
         font-weight: bold;
