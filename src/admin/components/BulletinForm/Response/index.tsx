@@ -222,7 +222,7 @@ const Response = (props: Props) => {
                                         <th>
                                             <Translation>
                                                 {
-                                                    t => <span>{t('Total')}</span>
+                                                    t => <span>{t('Response')}</span>
                                                 }
                                             </Translation>
 

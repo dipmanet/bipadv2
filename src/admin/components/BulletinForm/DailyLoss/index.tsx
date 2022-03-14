@@ -155,7 +155,7 @@ const Bulletin = (props: Props) => {
                                 inputProps={{
                                     disableUnderline: true,
                                 }}
-                                disabled
+                                // disabled
                                 style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
                             />
                         </FormControl>
