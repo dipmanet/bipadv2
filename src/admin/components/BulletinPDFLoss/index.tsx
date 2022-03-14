@@ -375,7 +375,7 @@ const BulletinPDF = (props: Props) => {
                             lossObj.map(l => (
                                 <LossItem
                                     lossIcon={l.logo}
-                                    lossTitle={l.title}
+                                    lossTitle={language === 'np' ? l.title : l.titleEn}
                                     loss={Number(incidentSummary[l.lossKey])}
                                 />
                             ))
