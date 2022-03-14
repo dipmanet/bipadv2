@@ -1,5 +1,8 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { Loader } from 'semantic-ui-react';
 import Leftpane1 from './Leftpanes/Leftpane1/index';
 import Leftpane2 from './Leftpanes/Leftpane2/index';
 import Leftpane3 from './Leftpanes/Leftpane3/index';
@@ -13,6 +16,16 @@ import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
 import LeftTopBar from './Components/LeftTopBar';
+import {
+    ClientAttributes,
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    methods,
+} from '#request';
+import * as PageTypes from '#store/atom/page/types';
+
+const mapStateToProps = (state: any) => {};
+const mapDispatchToProps = (state: any) => {};
 
 export interface ScrollTopInitialValues{
     page1ScrolltopValue: number;
@@ -40,7 +53,37 @@ export interface PostionInitialValues{
     page10PositionValue: number;
 }
 
-export default function Ratnanagar() {
+interface Params {
+    municipalityId: number;
+    setcIData: any;
+}
+interface OwnProps {}
+interface Params{}
+interface ReduxProps{}
+
+
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+
+    cIGetRequest: {
+        url: '/resource/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            municipality: params && params.municipalityId,
+            limit: -1,
+        }),
+        onSuccess: ({ params, response }) => {
+            interface Response { results: PageTypes.Incident[] }
+            const { results: cI = [] } = response as Response;
+            if (params) {
+                params.setcIData(cI);
+            }
+        },
+        onMount: false,
+    },
+
+};
+
+const Ratnanagar = (props: any) => {
     const scrollTopPageInitialValues = {
         page1ScrolltopValue: 0,
         page2ScrolltopValue: 0,
@@ -67,11 +110,38 @@ export default function Ratnanagar() {
         page10PositionValue: 1,
     };
 
-
+    const [pending, setpending] = useState<boolean>(true);
     const [leftElement, setLeftElement] = useState<number>(0);
     const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
     const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
     const [clickedCiName, setclickedCiName] = useState<string[]>([]);
+
+    // state for requested data
+    const [cIData, setcIData] = useState([]);
+
+
+    const { requests: {
+        cIGetRequest,
+    } } = props;
+
+    const municipalityId = 35007;
+
+
+    useEffect(() => {
+        cIGetRequest.setDefaultParams({
+            setcIData,
+            municipalityId,
+        });
+        cIGetRequest.do();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (cIData.length > 0) {
+            setpending(false);
+        }
+    }, [cIData]);
+
     const onButtonClick = (item: number) => {
         setLeftElement(item);
     };
@@ -83,134 +153,170 @@ export default function Ratnanagar() {
             setclickedCiName(prevState => prevState.filter(ciItem => ciItem !== ciName));
         }
     };
-    console.log('left', scrollTopValuesPerPage, postionsPerPage);
 
-    console.log('clicked ci name is', clickedCiName);
+    const geoJsonCI = {
+        type: 'FeatureCollection',
+        features: cIData.map(item => ({
+            type: 'Feature',
+            id: item.id,
+            geometry: item.point,
+            properties: {
+                Name: item.title,
+                layer: item.resourceType,
+                Type: item.resourceType,
+            },
+        })),
+    };
 
     return (
         <>
+
             {
-                leftElement < 9 && (
-                    <>
-                        <Map />
-                        <LeftTopBar />
-                    </>
-
+                pending ? (
+                    <div className={styles.loaderInfo}>
+                        <Loader color="#fff" className={styles.loader} />
+                        <p className={styles.loaderText}>
+                        Loading Data...
+                        </p>
+                    </div>
                 )
-            }
-            {leftElement === 0 && (
-                <Leftpane1
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 1 && (
-                <Leftpane2
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 2 && (
-                <Leftpane3
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                    clickedCiName={clickedCiName}
-                    handleCIClick={handleCIClick}
-                />
-            )}
-            {leftElement === 3 && (
-                <Leftpane4
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
+                    : (
+                        <>
+                            {
+                                leftElement < 9 && (
+                                <>
+                                    <Map
+                                        CIData={geoJsonCI}
+                                    />
+                                    <LeftTopBar />
+                                </>
 
-                />
-            )}
-            {leftElement === 4 && (
-                <Leftpane5
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 5 && (
-                <Leftpane6
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 6 && (
-                <Leftpane7
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 7 && (
-                <Leftpane8
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 8 && (
-                <Leftpane9
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
-            {leftElement === 9 && (
-                <Leftpane10
-                    leftElement={leftElement}
-                    setLeftElement={setLeftElement}
-                    scrollTopValuesPerPage={scrollTopValuesPerPage}
-                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-                    postionsPerPage={postionsPerPage}
-                    setPostionsPerPage={setPostionsPerPage}
-                    onButtonClick={onButtonClick}
-                />
-            )}
+                                )
+                            }
+                            {leftElement === 0 && (
+                                <Leftpane1
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 1 && (
+                                <Leftpane2
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 2 && (
+                                <Leftpane3
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                    clickedCiName={clickedCiName}
+                                    handleCIClick={handleCIClick}
+                                />
+                            )}
+                            {leftElement === 3 && (
+                                <Leftpane4
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+
+                                />
+                            )}
+                            {leftElement === 4 && (
+                                <Leftpane5
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 5 && (
+                                <Leftpane6
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 6 && (
+                                <Leftpane7
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 7 && (
+                                <Leftpane8
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 8 && (
+                                <Leftpane9
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                            {leftElement === 9 && (
+                                <Leftpane10
+                                    leftElement={leftElement}
+                                    setLeftElement={setLeftElement}
+                                    scrollTopValuesPerPage={scrollTopValuesPerPage}
+                                    setScrollTopValuesPerPage={setScrollTopValuesPerPage}
+                                    postionsPerPage={postionsPerPage}
+                                    setPostionsPerPage={setPostionsPerPage}
+                                    onButtonClick={onButtonClick}
+                                />
+                            )}
+                        </>
+                    )
+            }
+
         </>
     );
-}
+};
+
+
+export default compose(
+    // connect(mapStateToProps, mapDispatchToProps),
+    createConnectedRequestCoordinator<ReduxProps>(),
+    createRequestClient(requests),
+)(Ratnanagar);
