@@ -362,6 +362,30 @@ export const ProvinceTwo = (props: Props) => {
     const [earthquakeRisk, setearthquakeRisk] = useState('');
     const [earthquakeData, setearthquakeData] = useState([]);
 
+
+    useEffect(() => {
+        if (pending) {
+            if (cI.length > 0 && htmlData.length > 0
+				&& jsonData.length > 0 && alerts.length > 0
+				&& contactData.length > 0 && tempData.length > 0
+				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0
+				&& earthquakeData.length > 0) {
+                setpending(false);
+            }
+        }
+    }, [cI,
+        pending,
+        htmlData,
+        jsonData,
+        alerts,
+        contactData,
+        tempData,
+        lossDataFlood,
+        lossDataLandslide,
+        demographicData,
+        earthquakeData]);
+
+
     const municipalityInfo = provinces.filter(item => item.id === 2);
     const bbox = municipalityInfo.map(item => item.bbox)[0];
     const lng = municipalityInfo.map(item => item.centroid.coordinates[0])[0];
@@ -820,21 +844,6 @@ export const ProvinceTwo = (props: Props) => {
         climateDataRequest.do();
     }, [realTimeDataStationName]);
 
-
-    useEffect(() => {
-        if (pending) {
-            setTimeout(() => {
-                setpending(false);
-            }, 45000);
-            if (cI.length > 0 && htmlData.length > 0
-				&& jsonData.length > 0 && alerts.length > 0
-				&& contactData.length > 0 && tempData.length > 0
-				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0
-				&& earthquakeData.length > 0) {
-                setpending(false);
-            }
-        }
-    }, [cI, htmlData, jsonData, alerts, contactData, tempData, pending]);
 
     const validAlerts = alerts.filter(item => item.referenceType !== null);
     const alertsName = [...new Set(validAlerts.map(item => item.referenceType))];

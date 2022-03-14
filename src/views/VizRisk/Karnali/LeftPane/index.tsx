@@ -258,8 +258,8 @@ function Leftpane(props) {
     }, [vulnrerability]);
 
     useEffect(() => {
-        if (districtIdIs) {
-            vrSideBarRef.current?.scrollTo({ top: 1000, behavior: 'smooth' });
+        if (districtIdIs && vrSideBarRef.current) {
+            vrSideBarRef.current.scrollTo({ top: 1000, behavior: 'smooth' });
         }
     }, [districtIdIs]);
 
@@ -732,9 +732,9 @@ RISK
                 {leftElement === 1 && (
                     <>
 					        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
-                            {clickedHazardItem === 'Flood Hazard' ? 'Estimated Loss due to Flood'
+					            {clickedHazardItem === 'Flood Hazard' ? 'Estimated Loss due to Flood'
 							 : 'Estimated Loss due to Landslide'}
-                        </h2>
+					        </h2>
                         <EstimatedLossChart estimatedLossData={estimatedDataSelection} clickedHazardItem={clickedHazardItem} />
                         <VRLegendHazard>
                             <h4

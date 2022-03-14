@@ -312,7 +312,8 @@ function Leftpane(props: Props) {
             ));
             setclimateChartTitle('Precipitation Reference Period(2036-2065)');
         }
-    }, [tempSelectedData, prepSelectedData, climateDataType, climateDataYearWise.tempDataForMapUpto2010, climateDataYearWise.tempDataForMapUpto2045, climateDataYearWise.tempDataForMapUpto2065, climateDataYearWise.prepDataForMapUpto2010, climateDataYearWise.prepDataForMapUpto2045, climateDataYearWise.prepDataForMapUpto2065]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tempSelectedData, prepSelectedData, climateDataType]);
 
 
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By District'];

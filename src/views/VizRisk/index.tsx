@@ -251,7 +251,8 @@ const VizRiskMainPage = (props: Props) => {
 		 || (munThemeId === 109 && <Jugal />)
 		 || (munThemeId === 110 && <Panchpokhari />)
 		 || ((munThemeId === 300 && provinceId === 2) && <ProvinceTwo />)
-		 || ((munThemeId === 300 && provinceId === 6) && <Ratnanagar />)
+		 || ((munThemeId === 300 && provinceId === 6) && <Karnali />)
+		 || ((munThemeId === 301) && <Ratnanagar />)
 		 )
                                         }
                                     </div>

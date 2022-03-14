@@ -362,6 +362,29 @@ export const Karnali = (props: Props) => {
     const [earthquakeRisk, setearthquakeRisk] = useState('');
     const [earthquakeData, setearthquakeData] = useState([]);
 
+    useEffect(() => {
+        if (pending) {
+            if (cI.length > 0 && htmlData.length > 0
+				&& jsonData.length > 0 && alerts.length > 0
+				&& contactData.length > 0 && tempData.length > 0
+				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0
+				&& earthquakeData.length > 0) {
+                setpending(false);
+            }
+        }
+    }, [
+        pending,
+        cI,
+        htmlData,
+        jsonData,
+        alerts,
+        contactData,
+        tempData,
+        lossDataFlood,
+        lossDataLandslide,
+        demographicData,
+        earthquakeData,
+    ]);
 
     const municipalityInfo = provinces.filter(item => item.id === 6);
     const bbox = municipalityInfo.map(item => item.bbox)[0];
@@ -818,20 +841,6 @@ export const Karnali = (props: Props) => {
     }, [realTimeDataStationName]);
 
 
-    useEffect(() => {
-        if (pending) {
-            setTimeout(() => {
-                setpending(false);
-            }, 45000);
-            if (cI.length > 0 && htmlData.length > 0
-				&& jsonData.length > 0 && alerts.length > 0
-				&& contactData.length > 0 && tempData.length > 0
-				&& lossDataFlood.length > 0 && lossDataLandslide.length > 0 && demographicData.length > 0) {
-                setpending(false);
-            }
-        }
-    }, [cI, htmlData, jsonData, alerts, contactData, tempData, pending]);
-
     const validAlerts = alerts.filter(item => item.referenceType !== null);
     const alertsName = [...new Set(validAlerts.map(item => item.referenceType))];
 
@@ -863,9 +872,9 @@ export const Karnali = (props: Props) => {
     const totalFloodLossData = lossDataFlood.map(item => ({
 		   id: item.district.id,
 		   name: item.district.title,
-		   totalPeopleDeath: item.data?.peopleDeathCountSum,
-		   totalInfraDamage: item.data?.infrastructureAffectedCountSum,
-		   totalEstimatedLoss: isNaN(item.data?.estimatedLoss) ? 0 : item.data?.estimatedLoss,
+		   totalPeopleDeath: item.data && item.data.peopleDeathCountSum,
+		   totalInfraDamage: item.data && item.data.infrastructureAffectedCountSum,
+		   totalEstimatedLoss: isNaN(item.data && item.data.estimatedLoss) ? 0 : item.data && item.data.estimatedLoss,
 		 }));
 
 
