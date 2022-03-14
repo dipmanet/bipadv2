@@ -45,6 +45,7 @@ import {
     hazardTypesSelector,
     regionsSelector,
     bulletinEditDataSelector,
+    languageSelector,
 } from '#selectors';
 import { setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
     setEventListAction } from '#actionCreators';
@@ -101,6 +102,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     regions: regionsSelector(state),
     filters: filtersSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
+    language: languageSelector(state),
 });
 
 
@@ -228,6 +230,7 @@ const Bulletin = (props: Props) => {
             sitRepQuery,
         },
         hazardTypes,
+        language: { language },
     } = props;
 
 
@@ -417,6 +420,7 @@ const Bulletin = (props: Props) => {
                     hazardWiseLoss: hazardWiseLossData,
                     genderWiseLoss: genderWiseLossData,
                     sitRep,
+                    hilight,
                 });
             }
             if (progress === 1) {
@@ -560,17 +564,32 @@ const Bulletin = (props: Props) => {
             });
             const newhazardData = {};
             const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
-            const hD = uniqueHazards.map((h) => {
-                newhazardData[hazardTypes[h].titleNe] = {
-                    deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
-                    incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
-                    missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount || 0,
-                    injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount || 0,
-                    coordinates: [0, 0],
+            if (language === 'np') {
+                const hD = uniqueHazards.map((h) => {
+                    newhazardData[hazardTypes[h].titleNe] = {
+                        deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
+                        incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
+                        missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount || 0,
+                        injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount || 0,
+                        coordinates: [0, 0],
 
-                };
-                return null;
-            });
+                    };
+                    return null;
+                });
+            } else {
+                const hD = uniqueHazards.map((h) => {
+                    newhazardData[hazardTypes[h].title] = {
+                        deaths: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleDeathCount,
+                        incidents: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).count,
+                        missing: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleMissingCount || 0,
+                        injured: calculateSummaryHazard(lossData.filter(l => l.hazard === h)).peopleInjuredCount || 0,
+                        coordinates: [0, 0],
+
+                    };
+                    return null;
+                });
+            }
+
 
             // const hD = lossData.map((h) => {
             //     newhazardData[h.id] = {
@@ -587,7 +606,7 @@ const Bulletin = (props: Props) => {
             setHazardwise(newhazardData);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lossData]);
+    }, [lossData, language]);
 
 
     useEffect(() => {
@@ -607,6 +626,10 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [covidNational]);
+
+    useEffect(() => {
+        console.log('hazardWise data form', hazardWiseLossData);
+    }, [hazardWiseLossData]);
 
     useEffect(() => {
         if (covidQuaratine.length > 0) {

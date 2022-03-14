@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import produce from 'immer';
+import { Translation } from 'react-i18next';
 
 import memoize from 'memoize-one';
 import {
@@ -31,6 +32,7 @@ import {
     hazardTypesSelector,
     regionsSelector,
     bulletinEditDataSelector,
+    languageSelector,
 } from '#selectors';
 import { setBulletinYearlyDataAction } from '#actionCreators';
 import styles from './styles.scss';
@@ -75,6 +77,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     regions: regionsSelector(state),
     filters: filtersSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
+    language: languageSelector(state),
 });
 
 const months = {
@@ -88,8 +91,22 @@ const months = {
     8: 'मंसिर',
     9: 'पुष',
     10: 'माघ',
-    11: 'फाल्गुन',
-    12: 'चैत्,',
+    11: 'फाल्गुण',
+    12: 'चैत्',
+};
+const monthsEn = {
+    1: 'Baisakh',
+    2: 'Jestha',
+    3: 'Ashadh',
+    4: 'Shrawan',
+    5: 'Bhadra',
+    6: 'Ashwin',
+    7: 'Kartik',
+    8: 'Mangsir',
+    9: 'Poush',
+    10: 'Magh',
+    11: 'Falgun',
+    12: 'Chaitra',
 };
 
 const a = new Date();
@@ -99,6 +116,7 @@ const dateString = `${ourDate[2]}-${ourDate[0]}-${ourDate[1]}`;
 const bsDate = adToBs(dateString);
 const year = bsDate.split('-')[0];
 const month = months[Number(bsDate.split('-')[1])];
+const monthEn = monthsEn[Number(bsDate.split('-')[1])];
 const day = bsDate.split('-')[2];
 const today = new Date();
 const baisakh1 = bsToAd(`${year}-01-01`);
@@ -139,7 +157,7 @@ const YearlyData = (props: Props) => {
     const [summaryData, setSummaryData] = useState();
     const [lossData, setLossData] = useState([]);
     const [cumulative, setCumulative] = useState([]);
-    const { requests: { incidentsGetRequest }, hazardTypes, setBulletinYearlyData } = props;
+    const { requests: { incidentsGetRequest }, hazardTypes, setBulletinYearlyData, language: { language } } = props;
     incidentsGetRequest.setDefaultParams({ setLossData });
 
     const calculateSummary = (data) => {
@@ -182,16 +200,29 @@ const YearlyData = (props: Props) => {
             console.log('lossData', lossData);
             const hD = uniqueHazards.map((h) => {
                 const summaryCalc = calculateSummaryHazard(lossData.filter(l => l.hazard === h));
-                newhazardData[hazardTypes[h].titleNe] = {
-                    deaths: summaryCalc.peopleDeathCount || 0,
-                    incidents: summaryCalc.count || 0,
-                    missing: summaryCalc.peopleMissingCount || 0,
-                    injured: summaryCalc.peopleInjuredCount || 0,
-                    coordinates: [0, 0],
-                    estimatedLoss: summaryCalc.estimatedLoss || 0,
-                    familiesAffected: summaryCalc.familyAffectedCount || 0,
+                if (language === 'np') {
+                    newhazardData[hazardTypes[h].titleNe] = {
+                        deaths: summaryCalc.peopleDeathCount || 0,
+                        incidents: summaryCalc.count || 0,
+                        missing: summaryCalc.peopleMissingCount || 0,
+                        injured: summaryCalc.peopleInjuredCount || 0,
+                        coordinates: [0, 0],
+                        estimatedLoss: summaryCalc.estimatedLoss || 0,
+                        familiesAffected: summaryCalc.familyAffectedCount || 0,
 
-                };
+                    };
+                } else {
+                    newhazardData[hazardTypes[h].title] = {
+                        deaths: summaryCalc.peopleDeathCount || 0,
+                        incidents: summaryCalc.count || 0,
+                        missing: summaryCalc.peopleMissingCount || 0,
+                        injured: summaryCalc.peopleInjuredCount || 0,
+                        coordinates: [0, 0],
+                        estimatedLoss: summaryCalc.estimatedLoss || 0,
+                        familiesAffected: summaryCalc.familyAffectedCount || 0,
+
+                    };
+                }
                 return null;
             });
             setBulletinYearlyData({ yearlyData: newhazardData });
@@ -207,28 +238,44 @@ const YearlyData = (props: Props) => {
                         estimatedLoss: acc.estimatedLoss + Number(cur.estimatedLoss || 0),
                         familiesAffected: acc.familiesAffected + Number(cur.familiesAffected || 0),
                     }));
-                console.log('cumulative', cumulativeData);
                 setCumulative(cumulativeData);
             }
             setSummaryData(newhazardData);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lossData]);
+    }, [lossData, language]);
 
     return (
         <>
             <Loading pending={incidentsGetRequest.pending} />
             <div className={styles.pratikriyas}>
-                <h3>
-                    {
-                        `${year} बैशाख १ देखि `
-                    }
+                {
+                    language === 'np'
+                        ? (
+                            <h3>
+                                {
+                                    `${year} बैशाख १ देखि `
+                                }
 
-                    {
-                        `${month} ${day} गते सम्मका विपद्का प्रमुख घटनाहरुको विवरण`
-                    }
+                                {
+                                    `${month} ${day} गते सम्मका विपद्का प्रमुख घटनाहरुको विवरण`
+                                }
 
-                </h3>
+                            </h3>
+                        )
+                        : (
+                            <h3>
+                                {
+                                    `Disaster incidents form Baisakh 1, ${year} to`
+                                }
+
+                                {
+                                    ` ${monthEn} ${day} ${year}`
+                                }
+
+                            </h3>
+                        )
+                }
                 {
                     summaryData && Object.keys(summaryData).length > 0
                 && cumulative && Object.keys(cumulative).length > 0
@@ -237,25 +284,55 @@ const YearlyData = (props: Props) => {
                     <tr>
 
                         <th>
-                        घटना
+                            <Translation>
+                                {
+                                    t => <span>{t('Hazard')}</span>
+                                }
+                            </Translation>
                         </th>
                         <th>
-                        घटना
+                            <Translation>
+                                {
+                                    t => <span>{t('No. of Incidents')}</span>
+                                }
+                            </Translation>
+
                         </th>
                         <th>
-                        म्रितक
+                            <Translation>
+                                {
+                                    t => <span>{t('death')}</span>
+                                }
+                            </Translation>
                         </th>
                         <th>
-                        बेपता
+                            <Translation>
+                                {
+                                    t => <span>{t('missing')}</span>
+                                }
+                            </Translation>
                         </th>
                         <th>
-                        घाइते
+                            <Translation>
+                                {
+                                    t => <span>{t('injured')}</span>
+                                }
+                            </Translation>
                         </th>
                         <th>
-                        प्रभावित पररिार
+                            <Translation>
+                                {
+                                    t => <span>{t('Families Affected')}</span>
+                                }
+                            </Translation>
+
                         </th>
                         <th>
-                        अिमुानित
+                            <Translation>
+                                {
+                                    t => <span>{t('Estimated loss (NPR)')}</span>
+                                }
+                            </Translation>
                         </th>
                     </tr>
                     {
@@ -304,7 +381,13 @@ const YearlyData = (props: Props) => {
                     }
                     <tr className={styles.lastRow}>
 
-                        <td>जम्मा</td>
+                        <td>
+                            <Translation>
+                                {
+                                    t => <span>{t('Total')}</span>
+                                }
+                            </Translation>
+                        </td>
                         <td>
                             {
                                 cumulative.incidents.toLocaleString()

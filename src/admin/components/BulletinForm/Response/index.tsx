@@ -8,7 +8,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { districtsSelector, incidentListSelectorIP, hazardTypesSelector } from '#selectors';
+import { Translation } from 'react-i18next';
+import { _cs } from '@togglecorp/fujs';
+import { districtsSelector, incidentListSelectorIP, hazardTypesSelector, languageSelector } from '#selectors';
 import styles from './styles.scss';
 
 interface Props {
@@ -18,7 +20,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     districts: districtsSelector(state),
     incidentList: incidentListSelectorIP(state),
     hazardTypes: hazardTypesSelector(state),
-
+    language: languageSelector(state),
 
 });
 const Response = (props: Props) => {
@@ -32,6 +34,7 @@ const Response = (props: Props) => {
         annex,
         incidentList,
         hazardTypes,
+        language: { language },
     } = props;
 
 
@@ -59,14 +62,40 @@ const Response = (props: Props) => {
         setRemarks(null);
     };
 
+    const getHazard = (h) => {
+        const filtered = Object.values(hazardTypes).filter(item => item.titleNe === h || item.titleEn === h);
+        if (filtered.length > 0 && language === 'np') {
+            return filtered[0].titleNe;
+        }
+        if (filtered.length > 0 && language === 'en') {
+            return filtered[0].title;
+        }
+        return '-';
+    };
+
+    const getDistrict = (d) => {
+        const filtered = districts.filter(item => item.title_ne === d || item.title_en === d);
+        if (filtered.length > 0 && language === 'np') {
+            return filtered[0].title_ne;
+        }
+        if (filtered.length > 0 && language === 'en') {
+            return filtered[0].title_en;
+        }
+        return '-';
+    };
+
+
     useEffect(() => {
         if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
             const temp = {};
             incidentList.map((item) => {
-                const hazard = hazardTypes[item.hazard].titleNe;
+                const hazardNp = hazardTypes[item.hazard].titleNe;
+                const hazardEn = hazardTypes[item.hazard].title;
                 temp[item.id] = {
-                    hazard,
-                    district: item.wards[0] && item.wards[0].municipality.district.titleNe,
+                    hazardNp,
+                    hazardEn,
+                    districtNp: item.wards[0] && item.wards[0].municipality.district.titleNe,
+                    districtEn: item.wards[0] && item.wards[0].municipality.district.title,
                     description: '',
                     deaths: item.loss.peopleDeathCount || 0,
                     missing: item.loss.peopleMissingCount || 0,
@@ -84,6 +113,7 @@ const Response = (props: Props) => {
 
     useEffect(() => {
         if (feedback && Object.keys(feedback).length > 0) {
+            console.log('feedback', feedback);
             const getIncidents = () => Object.keys(feedback).length;
             const getDistricts = () => {
                 const aD = Object.keys(feedback)
@@ -104,12 +134,27 @@ const Response = (props: Props) => {
             setCumulative({ ...cumulativeData, ...other });
         }
     }, [feedback]);
+
     return (
         <>
-            <div className={annex ? styles.formContainerAnnex : styles.formContainer}>
+            <div className={_cs(
+                (annex ? styles.formContainerAnnex : styles.formContainer),
+                (language === 'np' ? styles.formContainerNepali : styles.formContainerEnglish),
+            )
+            }
+            >
                 {
                     !annex
-                    && <h2>प्रतिकार्य</h2>
+                    && (
+                        <h2>
+                            <Translation>
+                                {
+                                    t => <span>{t('Response')}</span>
+                                }
+                            </Translation>
+
+                        </h2>
+                    )
                 }
                 {
                     <div className={styles.pratikriyas}>
@@ -120,28 +165,67 @@ const Response = (props: Props) => {
                                 <table className={styles.responseTable}>
                                     <tr>
                                         <th>
-                                        S.N
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('S.N')}</span>
+                                                }
+                                            </Translation>
                                         </th>
                                         <th>
-                                        घटना
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Incidents')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                         <th>
-                                        जिल्ला
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('District')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                         <th>
-                                        म्रितक
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('death')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                         <th>
-                                        बेपता
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('missing')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                         <th>
-                                        घाइते
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('injured')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                         <th>
-                                        घटना विवरण
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Incident Details')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                         <th>
-                                        प्रतिकार्य
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Total')}</span>
+                                                }
+                                            </Translation>
+
                                         </th>
                                     </tr>
                                     {
@@ -151,10 +235,10 @@ const Response = (props: Props) => {
                                                     {i + 1}
                                                 </td>
                                                 <td>
-                                                    {feedback[hwL].hazard}
+                                                    {getHazard(feedback[hwL].hazard) }
                                                 </td>
                                                 <td>
-                                                    {feedback[hwL].district}
+                                                    {getDistrict(feedback[hwL].district)}
                                                 </td>
 
                                                 <td>
@@ -179,12 +263,19 @@ const Response = (props: Props) => {
                                                                 ? feedback[hwL].description || ''
                                                                 : (
                                                                     <div className={styles.inputContainer}>
-                                                                        <textarea
-                                                                            placeholder="घटना विवरण"
-                                                                            onChange={e => handleSubFieldChange(e.target.value, hwL, 'description')}
-                                                                            value={feedback[hwL].description || ''}
-                                                                            rows={5}
-                                                                        />
+                                                                        <Translation>
+                                                                            {
+                                                                                t => (
+                                                                                    <textarea
+                                                                                        placeholder={t('Incident Details')}
+                                                                                        onChange={e => handleSubFieldChange(e.target.value, hwL, 'description')}
+                                                                                        value={feedback[hwL].description || ''}
+                                                                                        rows={5}
+                                                                                    />
+                                                                                )
+                                                                            }
+                                                                        </Translation>
+
                                                                     </div>
                                                                 )
                                                         }
@@ -197,12 +288,21 @@ const Response = (props: Props) => {
                                                                 ? feedback[hwL].response || ''
                                                                 : (
                                                                     <div className={styles.inputContainer}>
-                                                                        <textarea
-                                                                            placeholder="प्रतिकार्य"
-                                                                            onChange={e => handleSubFieldChange(e.target.value, hwL, 'response')}
-                                                                            value={feedback[hwL].response || ''}
-                                                                            rows={5}
-                                                                        />
+                                                                        <Translation>
+                                                                            {
+                                                                                t => (
+                                                                                    <textarea
+                                                                                        placeholder={t('Response')}
+                                                                                        onChange={e => handleSubFieldChange(e.target.value, hwL, 'response')}
+                                                                                        value={feedback[hwL].response || ''}
+                                                                                        rows={5}
+                                                                                    />
+                                                                                )
+
+                                                                            }
+                                                                        </Translation>
+
+
                                                                     </div>
                                                                 )
                                                         }
@@ -212,7 +312,14 @@ const Response = (props: Props) => {
                                         ))
                                     }
                                     <tr className={styles.lastRow}>
-                                        <td>जम्मा</td>
+                                        <td>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Total')}</span>
+                                                }
+                                            </Translation>
+
+                                        </td>
                                         <td>{cumulative.incidents}</td>
                                         <td>{cumulative.district}</td>
                                         <td>{cumulative.deaths}</td>

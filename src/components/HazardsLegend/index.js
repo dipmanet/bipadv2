@@ -19,15 +19,7 @@ const defaultProps = {
     filteredHazardTypes: undefined,
 };
 
-const legendLabelSelector = (d, language) => {
-    if (language && language === 'en') {
-        return d.titleEn;
-    }
-    if (language && language === 'np') {
-        return d.titleNe;
-    }
-    return d.titleEn;
-};
+const legendLabelSelector = d => d.title;
 const legendColorSelector = d => d.color;
 const legendKeySelector = d => d.title;
 
@@ -41,7 +33,6 @@ class HazardsLegend extends React.PureComponent {
             className,
             hazardTypes,
             filteredHazardTypes,
-            language: { language },
             ...otherProps
         } = this.props;
 
@@ -52,7 +43,7 @@ class HazardsLegend extends React.PureComponent {
                 className={className}
                 data={hazardItems}
                 keySelector={legendKeySelector}
-                labelSelector={d => legendLabelSelector(d, language)}
+                labelSelector={legendLabelSelector}
                 colorSelector={legendColorSelector}
                 emptyComponent={null}
                 {...otherProps}

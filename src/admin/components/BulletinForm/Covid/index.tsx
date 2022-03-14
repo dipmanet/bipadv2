@@ -1,17 +1,22 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import produce from 'immer';
+import { Translation } from 'react-i18next';
+import { languageSelector } from '#selectors';
+
 import {
     incidentSummary,
     peopleLoss,
     hazardWiseLoss,
     genderWiseLoss,
     nepaliRef,
+    englishRef,
     covid24hrsStat,
     covidTotalStat,
     vaccineStat,
@@ -23,6 +28,9 @@ import FileUploader from '#components/NewLoginModal/FileUploader';
 interface Props {
 
 }
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    language: languageSelector(state),
+});
 
 const Bulletin = (props: Props) => {
     const {
@@ -34,21 +42,35 @@ const Bulletin = (props: Props) => {
         handleCovid24hrStat,
         handleVaccineStat,
         handleprovincewiseTotal,
+        language: { language },
     } = props;
 
 
     return (
         <>
             <div className={styles.formContainer}>
-                <h2>COVID-19 बुलेटिन</h2>
-                <h3>२४ घण्टामा COVID-19 को विवरण</h3>
+
+                <Translation>
+                    {
+                        t => <h2>{t('COVID-19 Bulletin')}</h2>
+                    }
+                </Translation>
+                <Translation>
+                    {
+                        t => <h3>{t('COVID-19 details of the last 24 hrs')}</h3>
+                    }
+                </Translation>
                 <div className={styles.formSubContainer}>
                     { Object.keys(covid24hrsStat).map((field, idx) => (
 
                         <div className={idx > 0 ? styles.formItemHalf : styles.formItem}>
                             <FormControl fullWidth>
                                 <InputLabel>
-                                    {nepaliRef[field]}
+                                    {language === 'np'
+                                        ? nepaliRef[field]
+                                        : englishRef[field]
+                                    }
+
                                 </InputLabel>
                                 <Input
                                     type="number"
@@ -65,14 +87,21 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                <h3>हालसम्मको कुल तथ्याङ्क</h3>
+                <Translation>
+                    {
+                        t => <h3>{t('Stats till date')}</h3>
+                    }
+                </Translation>
                 <div className={styles.formSubContainer}>
                     { Object.keys(covidTotalStat).map((field, idx) => (
 
                         <div className={styles.formItemHalf}>
                             <FormControl fullWidth>
                                 <InputLabel>
-                                    {nepaliRef[field]}
+                                    {language === 'np'
+                                        ? nepaliRef[field]
+                                        : englishRef[field]
+                                    }
                                 </InputLabel>
                                 <Input
                                     type="number"
@@ -89,14 +118,21 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                <h3>खोपको विवरण </h3>
+                <Translation>
+                    {
+                        t => <h3>{t('Vaccine Stats')}</h3>
+                    }
+                </Translation>
                 <div className={styles.formSubContainer}>
                     { Object.keys(vaccineStat).map((field, idx) => (
 
                         <div className={styles.formItemHalf}>
                             <FormControl fullWidth>
                                 <InputLabel>
-                                    {nepaliRef[field]}
+                                    {language === 'np'
+                                        ? nepaliRef[field]
+                                        : englishRef[field]
+                                    }
                                 </InputLabel>
                                 <Input
                                     type="number"
@@ -113,7 +149,11 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                <h3>प्रदेश अनुसार हालसम्मको कुल तथ्याङ्क</h3>
+                <Translation>
+                    {
+                        t => <h3>{t('Provincewise stats till date')}</h3>
+                    }
+                </Translation>
                 <div className={styles.formSubContainer}>
                     { Object.keys(covidProvinceWiseTotal).map(field => (
                         <>
@@ -122,7 +162,10 @@ const Bulletin = (props: Props) => {
                                 <div className={styles.formItemThird}>
                                     <FormControl fullWidth>
                                         <InputLabel>
-                                            {nepaliRef[subField]}
+                                            {language === 'np'
+                                                ? nepaliRef[subField]
+                                                : englishRef[subField]
+                                            }
                                         </InputLabel>
                                         <Input
                                             type="number"
@@ -150,4 +193,4 @@ const Bulletin = (props: Props) => {
     );
 };
 
-export default Bulletin;
+export default connect(mapStateToProps)(Bulletin);
