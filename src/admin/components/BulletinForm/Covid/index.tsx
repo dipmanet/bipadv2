@@ -157,7 +157,14 @@ const Bulletin = (props: Props) => {
                 <div className={styles.formSubContainer}>
                     { Object.keys(covidProvinceWiseTotal).map(field => (
                         <>
-                            <h3>{nepaliRef[field]}</h3>
+                            <h3>
+                                {' '}
+                                {language === 'np'
+                                    ? nepaliRef[field]
+                                    : englishRef[field]
+                                }
+
+                            </h3>
                             { Object.keys(covidProvinceWiseTotal[field]).map(subField => (
                                 <div className={styles.formItemThird}>
                                     <FormControl fullWidth>

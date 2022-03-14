@@ -93,12 +93,15 @@ const BulletinPDFLoss = (props: Props) => {
 
     useEffect(() => {
         const getDeathCount = (arr, f) => {
-            const filteredArr = arr.filter(item => item.hazard === f);
-            console.log('filtered deathcount arr', filteredArr);
+            const fnepali = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0].titleNe;
+            const filteredArr = arr.filter((a) => {
+                if (a.hazardEn) {
+                    return a.hazardNp === fnepali;
+                }
+                return a.hazard === fnepali;
+            });
             if (filteredArr && filteredArr.length > 0) {
                 const deathObj = filteredArr.reduce((a, b) => ({ deaths: a.deaths + Number(b.deaths) })).deaths;
-
-                console.log('death obj', deathObj);
                 return deathObj;
             }
             return 0;
@@ -115,27 +118,38 @@ const BulletinPDFLoss = (props: Props) => {
             return '-';
         };
 
-        const newAddedHazardArr = Object.keys(feedback).map(f => feedback[f]);
-        let uniqueFieldArr = [];
-        if (language === 'np') {
-            uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
-        } else {
-            uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
-        }
-        const uniqueFieldHazard = Object.keys(hazardWiseLoss);
-        const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr])];
+        const getIncidentCount = (arr, f) => {
+            // first check if there is hazard field with nepali version of f
 
-        console.log('feedback,uniqueFieldArr, uniqueFieldHazard, uniqueField', feedback, uniqueFieldArr,
-            uniqueFieldHazard,
-            uniqueField);
-        const newAddedHazard = uniqueField.filter(i => i).map(f => ({
-            // hazard: language === 'np' ? f : getHazardEn(f),
-            hazard: getHazard(f),
-            incident: newAddedHazardArr.filter(item => item.hazard === f).length,
+            const fnepali = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0].titleNe;
+
+            const fil = arr.filter((a) => {
+                if (a.hazardEn) {
+                    return a.hazardNp === fnepali;
+                }
+                return a.hazard === fnepali;
+            });
+            return fil.length;
+        };
+        // get feedback object and get its values in an array and extract unique hazard fields
+        const newAddedHazardArr = Object.values(feedback);
+        const uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
+
+        // get unique hazard fields of the added hazard object
+        const uniqueFieldHazard = Object.keys(hazardWiseLoss);
+
+        // final combined unique hazard fields and convert all fields into same language
+        const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr].map(j => getHazard(j)))];
+
+        console.log('newAddedHazardArr', newAddedHazardArr);
+        console.log('feedback obj', feedback);
+        const hazardsChartObj = uniqueField.filter(i => !!i).map(f => ({
+            hazard: f,
+            incident: getIncidentCount(newAddedHazardArr, f),
             death: Number(getDeathCount(newAddedHazardArr, f)),
         }));
-        console.log('newAddedHazard', newAddedHazard);
-        setHazardWiseChart(newAddedHazard);
+
+        setHazardWiseChart(hazardsChartObj);
         const pieChart = [
             {
                 name: language === 'np' ? 'पुरुष' : 'Male',

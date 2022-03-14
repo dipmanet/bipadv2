@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import GovLogo from 'src/admin/resources/govtLogo.svg';
 import NepaliDate from 'src/admin/components/NepaliDate';
 import { Translation } from 'react-i18next';
+import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
@@ -41,6 +42,48 @@ interface Props {
 
 }
 
+const months = {
+    1: 'बैशाख',
+    2: 'जेठ',
+    3: 'असार',
+    4: 'श्रावण',
+    5: 'भदौ',
+    6: 'आश्विन',
+    7: 'कार्तिक',
+    8: 'मंसिर',
+    9: 'पुष',
+    10: 'माघ',
+    11: 'फाल्गुन',
+    12: 'चैत्,',
+};
+
+const monthsEn = {
+    1: 'Baisakh',
+    2: 'Jestha',
+    3: 'Ashadh',
+    4: 'Shrawan',
+    5: 'Bhadra',
+    6: 'Ashwin',
+    7: 'Kartik',
+    8: 'Mangsir',
+    9: 'Poush',
+    10: 'Magh',
+    11: 'Falgun',
+    12: 'Chaitra',
+};
+
+const a = new Date();
+const b = a.toLocaleString();
+const ourDate = b.split(',')[0].split('/');
+const dateString = `${ourDate[2]}-${ourDate[0]}-${ourDate[1]}`;
+const bsDate = adToBs(dateString);
+const year = bsDate.split('-')[0];
+const month = months[Number(bsDate.split('-')[1])];
+const monthEn = monthsEn[Number(bsDate.split('-')[1])];
+const day = bsDate.split('-')[2];
+const today = new Date();
+const baisakh1 = bsToAd(`${year}-01-01`);
+const DEFAULT_END_DATE = today;
 
 const labelSelector = (d: LegendItem, language: string) => {
     if (language === 'en') { return d.label; }
@@ -134,8 +177,9 @@ const BulletinPDF = (props: Props) => {
         const getHazardTitle = (hazardName) => {
             const h = Object
                 .keys(hazardTypes)
-                .filter(k => hazardTypes[k].titleNe === hazardName);
-            return hazardTypes[h[0]] ? hazardTypes[h[0]].title : '';
+                .filter(k => hazardTypes[k].titleNe === hazardName || hazardTypes[k].title === hazardName);
+
+            return language === 'np' ? hazardTypes[h[0]].titleNe : hazardTypes[h[0]].title;
         };
 
         const getSeverity = (deaths) => {
@@ -159,7 +203,7 @@ const BulletinPDF = (props: Props) => {
         if (Object.keys(hazardWiseLoss).length > 0) {
             obj = Object.keys(hazardWiseLoss).map(hazardName => (
                 {
-                    title: language === 'np' ? hazardName : getHazardTitle(hazardName),
+                    title: getHazardTitle(hazardName),
                     // titleEn: getHazardTitle(hazardName),
                     color: getHazardColor(hazardName),
                 }
@@ -173,7 +217,7 @@ const BulletinPDF = (props: Props) => {
                 .map(item => item.hazard);
             const uniqueAddedHazards = [...new Set(allHazardsAdded)];
             newhazardLegends = uniqueAddedHazards.map(h => ({
-                title: language === 'np' ? h : getHazardTitle(h),
+                title: getHazardTitle(h),
                 // titleEn: getHazardTitle(h),
                 color: getHazardColor(h),
             }));
@@ -183,6 +227,7 @@ const BulletinPDF = (props: Props) => {
         } else if (newhazardLegends.length > 0 && Object.keys(obj).length === 0) {
             setHazardLegends([...newhazardLegends]);
         }
+        console.log('newhazardLegends', newhazardLegends);
 
         const features = [];
         Object.keys(hazardWiseLoss).map((h) => {
@@ -225,7 +270,7 @@ const BulletinPDF = (props: Props) => {
         });
         // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [feedback, hazardWiseLoss]);
+    }, [feedback, hazardWiseLoss, language]);
 
     useEffect(() => {
         const cD = Object.keys(peopleLoss).map(pL => ({
@@ -294,6 +339,14 @@ const BulletinPDF = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.loss}>
+                    <h2>
+                        {
+                            language === 'np'
+                                ? `${month} ${day} बिहान 10:00 बजेदेखी बेलुका 10:00 सम्म`
+                                : `From ${day} ${monthEn} 10:00 am to 10:00 am today`
+                        }
+
+                    </h2>
                     <h2>
                         <Translation>
                             {

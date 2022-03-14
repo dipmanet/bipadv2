@@ -94,8 +94,8 @@ const Response = (props: Props) => {
                 temp[item.id] = {
                     hazardNp,
                     hazardEn,
-                    districtNp: item.wards[0] && item.wards[0].municipality.district.titleNe,
-                    districtEn: item.wards[0] && item.wards[0].municipality.district.title,
+                    hazard: hazardNp,
+                    district: language === 'np' ? item.wards[0] && item.wards[0].municipality.district.titleNe : item.wards[0] && item.wards[0].municipality.district.title,
                     description: '',
                     deaths: item.loss.peopleDeathCount || 0,
                     missing: item.loss.peopleMissingCount || 0,
@@ -109,7 +109,7 @@ const Response = (props: Props) => {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [incidentList, hazardTypes]);
+    }, [incidentList, hazardTypes, language]);
 
     useEffect(() => {
         if (feedback && Object.keys(feedback).length > 0) {
