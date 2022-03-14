@@ -6,7 +6,17 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Placeholder from 'src/admin/resources/placeholder.png';
 import { useDropzone } from 'react-dropzone';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import {
+    bulletinPageSelector, languageSelector,
+} from '#selectors';
 import styles from './styles.scss';
+
+const mapStateToProps = state => ({
+    bulletinData: bulletinPageSelector(state),
+    language: languageSelector(state),
+});
 
 interface Props {
 
@@ -78,7 +88,13 @@ const TemperaturesMin = (props: Props) => {
 
                 <div className={styles.subContainer}>
 
-                    <h3>दैनिक न्युनतम तापक्रम</h3>
+                    <h3>
+                        <Translation>
+                            {
+                                t => <p>{t('Daily Min Temperature')}</p>
+                            }
+                        </Translation>
+                    </h3>
                     <div id="pictureContainerMin" className={styles.picture}>
                         {
                             picFromEdit
@@ -114,4 +130,4 @@ const TemperaturesMin = (props: Props) => {
     );
 };
 
-export default TemperaturesMin;
+export default connect(mapStateToProps)(TemperaturesMin);

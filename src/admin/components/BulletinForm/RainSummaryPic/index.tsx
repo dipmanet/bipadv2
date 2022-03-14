@@ -5,6 +5,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Placeholder from 'src/admin/resources/placeholder.png';
+import { Translation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import styles from './styles.scss';
 
@@ -77,7 +78,16 @@ const TemperaturesMin = (props: Props) => {
 
                 <div className={hideForm ? styles.subContainerReport : styles.subContainer}>
 
-                    {!hideForm && <h3>दैनिक बर्षा को नक्सा</h3>}
+                    {!hideForm
+                      && (
+                          <Translation>
+                              {
+                                  t => <h3>{t('Picture of Daily Rainfall Map')}</h3>
+                              }
+                          </Translation>
+                      )
+
+                    }
                     <div id="pictureContainerRain" className={styles.picture}>
                         {
                             picFromEdit

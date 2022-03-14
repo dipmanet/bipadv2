@@ -173,3 +173,8 @@ padding: 10mm;
     }
 }
 }
+
+.covidPDFContainerEnglish{
+    @extend .covidPDFContainer;
+    font-family: 'Fira Sans' !important;
+}

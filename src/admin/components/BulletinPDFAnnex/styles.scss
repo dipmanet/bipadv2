@@ -66,4 +66,9 @@
         
     }
     }
+
+    .footerPDFContainerEnglish{
+        @extend .footerPDFContainer;
+        font-family: 'Fira Sans' !important; 
+    }
     

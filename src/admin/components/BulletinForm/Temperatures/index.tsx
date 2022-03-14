@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import FileUploader from 'src/admin/components/FileUploader';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -8,7 +9,17 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import TemperatureMax from 'src/admin/components/BulletinForm/TemperaturesMax';
 import TemperatureMin from 'src/admin/components/BulletinForm/TemperaturesMin';
 import RainSummaryPic from 'src/admin/components/BulletinForm/RainSummaryPic';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
+import {
+    bulletinPageSelector, languageSelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    bulletinData: bulletinPageSelector(state),
+    language: languageSelector(state),
+});
+
 
 interface Props {
 
@@ -36,7 +47,13 @@ const Bulletin = (props: Props) => {
         <div className={styles.formContainer}>
             {
                 !hideForm
-                    && <p>Drag drop temperature files here, or click to select files</p>
+                    && (
+                        <Translation>
+                            {
+                                t => <p>{t('Please click on the image to select files')}</p>
+                            }
+                        </Translation>
+                    )
             }
             {
                 !hideForm
@@ -45,7 +62,11 @@ const Bulletin = (props: Props) => {
                     <div className={styles.formItemDailySummary}>
                         <FormControl fullWidth>
                             <InputLabel>
-                                {'दैनिक बर्षा को सारांश'}
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Temperature and Rain Summary')}</span>
+                                    }
+                                </Translation>
                             </InputLabel>
                             {' '}
                             <Input
@@ -90,8 +111,13 @@ const Bulletin = (props: Props) => {
 
                     <div className={styles.formItemfooter}>
                         <FormControl fullWidth>
+
                             <InputLabel>
-                                {'दैनिक अधिकतम तापक्रम नक्सा वर्णन'}
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Max Temperature Map Description')}</span>
+                                    }
+                                </Translation>
                             </InputLabel>
                             {' '}
                             <Input
@@ -123,7 +149,11 @@ const Bulletin = (props: Props) => {
                     <div className={styles.formItemfooter}>
                         <FormControl fullWidth>
                             <InputLabel>
-                                {'दैनिक न्युनतम तापक्रम नक्सा वर्णन'}
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Min Temperature Map Description')}</span>
+                                    }
+                                </Translation>
                             </InputLabel>
                             {' '}
                             <Input
@@ -149,4 +179,4 @@ const Bulletin = (props: Props) => {
     );
 };
 
-export default Bulletin;
+export default connect(mapStateToProps)(Bulletin);

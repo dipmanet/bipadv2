@@ -92,33 +92,49 @@ const BulletinPDFLoss = (props: Props) => {
     };
 
     useEffect(() => {
-        const getHazardEn = (hazardNep) => {
-            const hazardTypesArr = Object.values(hazardTypes)
-                .filter(item => item.titleNe === hazardNep);
-            if (hazardTypesArr.length > 0) {
-                return hazardTypesArr[0].title;
+        const getDeathCount = (arr, f) => {
+            const filteredArr = arr.filter(item => item.hazard === f);
+            console.log('filtered deathcount arr', filteredArr);
+            if (filteredArr && filteredArr.length > 0) {
+                const deathObj = filteredArr.reduce((a, b) => ({ deaths: a.deaths + Number(b.deaths) })).deaths;
+
+                console.log('death obj', deathObj);
+                return deathObj;
             }
-            return '';
+            return 0;
         };
 
-        const hcD = Object.keys(hazardWiseLoss).map(h => (
-            {
-                hazard: h,
-                incident: hazardWiseLoss[h].incidents,
-                death: hazardWiseLoss[h].deaths,
+        const getHazard = (h) => {
+            const filtered = Object.values(hazardTypes).filter(item => item.titleNe === h || item.titleEn === h);
+            if (filtered.length > 0 && language === 'np') {
+                return filtered[0].titleNe;
             }
-        ));
-        const newAddedHazardArr = Object.keys(feedback).map(f => feedback[f]);
+            if (filtered.length > 0 && language === 'en') {
+                return filtered[0].title;
+            }
+            return '-';
+        };
 
-        const uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
+        const newAddedHazardArr = Object.keys(feedback).map(f => feedback[f]);
+        let uniqueFieldArr = [];
+        if (language === 'np') {
+            uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
+        } else {
+            uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
+        }
         const uniqueFieldHazard = Object.keys(hazardWiseLoss);
         const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr])];
-        const newAddedHazard = uniqueField.map(f => ({
-            hazard: language === 'np' ? f : getHazardEn(f),
-            incident: newAddedHazardArr.filter(item => item.hazard === f).length,
-            death: newAddedHazardArr.filter(item => item.hazard === f).reduce((a, b) => ({ deaths: Number(a.deaths) + Number(b.deaths) })).deaths,
-        }));
 
+        console.log('feedback,uniqueFieldArr, uniqueFieldHazard, uniqueField', feedback, uniqueFieldArr,
+            uniqueFieldHazard,
+            uniqueField);
+        const newAddedHazard = uniqueField.filter(i => i).map(f => ({
+            // hazard: language === 'np' ? f : getHazardEn(f),
+            hazard: getHazard(f),
+            incident: newAddedHazardArr.filter(item => item.hazard === f).length,
+            death: Number(getDeathCount(newAddedHazardArr, f)),
+        }));
+        console.log('newAddedHazard', newAddedHazard);
         setHazardWiseChart(newAddedHazard);
         const pieChart = [
             {
@@ -195,9 +211,12 @@ const BulletinPDFLoss = (props: Props) => {
         return number.toLocaleString();
     };
 
+    useEffect(() => {
+        console.log('hazardWiseLossChart', hazardWiseLossChart);
+    }, [hazardWiseLossChart]);
 
     return (
-        <div className={styles.covidPDFContainer}>
+        <div className={language === 'np' ? styles.covidPDFContainer : styles.covidPDFContainerEnglish}>
             <div className={styles.container1}>
                 <div className={styles.hazardWiseStats}>
                     <h2>
@@ -230,8 +249,8 @@ const BulletinPDFLoss = (props: Props) => {
 
                             <Tooltip />
                             <Legend content={e => renderLegendContent(e, 'vertical')} />
-                            <Bar dataKey="Death" fill="#D10000" barSize={7} />
-                            <Bar dataKey="Incident" fill="#D4A367" barSize={7} />
+                            <Bar dataKey="death" fill="#D10000" barSize={7} />
+                            <Bar dataKey="incident" fill="#D4A367" barSize={7} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

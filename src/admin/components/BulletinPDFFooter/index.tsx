@@ -6,12 +6,12 @@ import Temperatures from 'src/admin/components/BulletinForm/Temperatures';
 import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import {
-    bulletinPageSelector,
+    bulletinPageSelector, languageSelector,
 } from '#selectors';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
-
+    language: languageSelector(state),
 });
 
 
@@ -26,8 +26,10 @@ const BulletinPDFFooter = (props) => {
         minTempFooter,
     } = props.bulletinData;
 
+    const { language: { language } } = props;
+
     return (
-        <div className={styles.footerContainer}>
+        <div className={language === 'np' ? styles.footerContainer : styles.footerContainerEnglish}>
             <div className={styles.dailySummary}>
                 <Translation>
                     {
@@ -100,7 +102,7 @@ const BulletinPDFFooter = (props) => {
                         }
                     </Translation>
                     :
-                    २१३२१३
+                    213213
                     {' '}
 
                 </p>
@@ -110,7 +112,7 @@ const BulletinPDFFooter = (props) => {
                             t => <span>{t('Phone')}</span>
                         }
                     </Translation>
-                    :  +९७७-१-४४९३८४७, +९७७-१-४४३९४८५
+                    :  +977-1-4493847, +977-1-4439485
                     {' '}
 
                 </p>

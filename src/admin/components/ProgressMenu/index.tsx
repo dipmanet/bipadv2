@@ -161,7 +161,10 @@ const ProgressMenu = (props: Props): JSX.Element => {
                                 className={styles.mainIcon}
                                 alt=""
                             />
-                            {menuItem.name}
+                            {language === 'np'
+                                ? menuItem.name
+                                : menuItem.name_en
+                            }
                         </div>
                         <Icon
                             name="circle"
