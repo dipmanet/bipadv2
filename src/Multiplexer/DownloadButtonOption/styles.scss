@@ -1,3 +1,44 @@
 .layer-switch {
     font-size: var(--font-size-large);
 }
+.mainContainer{
+    width: 280px;
+    background-color: white;
+    padding: 10px;
+    .heading{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #F2F2F2;
+        h3{
+            text-align: center;
+        }
+    }
+    .buttonOptions{
+        padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      .dropdown{
+          display: flex;
+          flex-direction: column;
+          select{
+              background-color: #E8E8E8;
+              border: none;
+              height: 30px;
+              &:focus-visible{
+                  outline: none;
+              }
+          }
+      }
+      .downloadButton{
+          margin-top: 5px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+          &:hover {
+            color:#E45163 !important ;
+            border: 1px solid #E45163 !important;
+        }
+          
+      }
+    }
+    
+}
