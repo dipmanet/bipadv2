@@ -7,6 +7,7 @@ import { CartesianGrid,
     Tooltip,
     XAxis,
     YAxis } from 'recharts';
+import PopupOnMapClick from '../PopupOnMapClick';
 
 import styles from './styles.scss';
 

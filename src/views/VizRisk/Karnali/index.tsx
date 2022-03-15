@@ -886,6 +886,7 @@ export const Karnali = (props: Props) => {
 		   totalEstimatedLoss: isNaN(item.data.estimatedLoss) ? 0 : item.data.estimatedLoss,
 		 }));
 
+    console.log('contact geojson is', contactGeoJson);
 
     return (
         <>

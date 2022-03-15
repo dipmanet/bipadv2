@@ -1,0 +1,17 @@
+.loaderInfo {
+    position: fixed;
+    top: 50%;
+    left: 46%;
+
+    // border: 1px solid red;
+    .loader {
+        background-color: white;
+    }
+
+    .loaderText {
+        color: white;
+        position: relative;
+        top: 40px !important;
+        left: 3px;
+    }
+}

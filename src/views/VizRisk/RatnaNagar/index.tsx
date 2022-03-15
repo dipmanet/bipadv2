@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Loader } from 'semantic-ui-react';
+import Loader from 'react-loader';
 import Leftpane1 from './Leftpanes/Leftpane1/index';
 import Leftpane2 from './Leftpanes/Leftpane2/index';
 import Leftpane3 from './Leftpanes/Leftpane3/index';
@@ -184,12 +184,12 @@ const Ratnanagar = (props: any) => {
                         <>
                             {
                                 leftElement < 9 && (
-                                <>
-                                    <Map
-                                        CIData={geoJsonCI}
-                                    />
-                                    <LeftTopBar />
-                                </>
+                                    <>
+                                        <Map
+                                            CIData={geoJsonCI}
+                                        />
+                                        <LeftTopBar />
+                                    </>
 
                                 )
                             }

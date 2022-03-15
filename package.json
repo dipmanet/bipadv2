@@ -187,6 +187,7 @@
         "localforage-observable": "^1.4.0",
         "lodash": "^4.17.21",
         "mapbox-gl": "^1.6.0",
+        "mapbox-gl-draw-rectangle-mode": "^1.0.4",
         "memoize-one": "^5.0.5",
         "node-sass": "4.14.1",
         "pbf": "^3.2.1",

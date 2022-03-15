@@ -187,7 +187,7 @@ button {
 
 :global {
     .mapboxgl-ctrl-top-left {
-        top: 36px!important;
+        top: 36px !important;
     }
 
     .mapboxgl-ctrl-bottom-right {
@@ -203,6 +203,7 @@ button {
             padding: 0;
 
             .mapboxgl-popup-close-button {
+                z-index: 99999;
                 padding: var(--spacing-extra-small) var(--spacing-medium);
                 font-size: var(--font-size-super-large);
             }
@@ -210,7 +211,7 @@ button {
     }
 
     .mapboxgl-ctrl-logo {
-        display: none!important;
+        display: none !important;
     }
 
     .mapbox-improve-map {
@@ -234,4 +235,3 @@ button {
         font-size: var(--font-size-extra-small-alt);
     }
 }
-
