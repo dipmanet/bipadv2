@@ -1,9 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
-import { _cs } from '@togglecorp/fujs';
+import {
+    _cs,
+} from '@togglecorp/fujs';
 
 import Faram from '@togglecorp/faram';
 import ReduxContext from '#components/ReduxContext';
@@ -27,6 +30,7 @@ import OSMIcon from '#resources/images/osm.png';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import SelectInput from '#rsci/SelectInput';
+
 
 const mapStyles = [
     {
@@ -81,6 +85,10 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 customType: '',
             },
             faramErrors: {},
+            showCustomSetting: false,
+            showPageType: 'true',
+            selectedPageType: '',
+            selectedFileFormat: '',
         };
     }
 
@@ -125,8 +133,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
     public render() {
         const { className } = this.props;
-        const { faramValues, faramErrors } = this.state;
+        const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType, selectedFileFormat } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
+        console.log('showPageType', typeof showPageType);
         return (
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}
@@ -144,26 +153,149 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                         >
                             Download with default settings
                         </Button>
-                        <Button
-                            className={styles.downloadButton}
-                        >
-                            Download with custom settings
-                        </Button>
-                        <div>
-                            <form className={styles.dropdown}>
-                                <label htmlFor="Custom">
-                                    Custom:
-                                </label>
-                                <select name="custom" id="custom">
-                                    <option value="volvo">Page Type</option>
-                                    <option value="saab">Resolution Type</option>
+                        {
+                            showCustomSetting ? '' : (
+                                <Button
+                                    className={styles.downloadButton}
+                                    onClick={() => this.setState({ showCustomSetting: true })}
+                                >
+                                    Download with custom settings
+                                </Button>
+                            )
+                        }
+                        {
+                            showCustomSetting
+                                ? (
+                                    <>
+                                        <div>
+                                            <form className={styles.dropdown}>
+                                                <label htmlFor="Custom">
+                                                    Custom:
+                                                </label>
+                                                <select name="custom" id="custom" onClick={e => this.setState({ showPageType: e.target.value })}>
+                                                    <option value>Page Type</option>
+                                                    <option value={false}>Resolution Type</option>
 
-                                </select>
+                                                </select>
 
 
-                            </form>
+                                            </form>
 
-                        </div>
+                                        </div>
+                                        {showPageType === 'true' ? (
+                                            <div>
+                                                <form className={styles.pageType}>
+                                                    <label htmlFor="Custom">
+                                                        Select Page Type :
+                                                    </label>
+                                                    <div>
+                                                        <Button
+                                                            className={_cs(selectedPageType === 'A3' ? (styles.active) : (styles.pageSizeButton))}
+                                                            onClick={() => this.setState({ selectedPageType: 'A3' })}
+                                                        >
+                                                            A3
+                                                        </Button>
+                                                        <Button
+                                                            className={_cs(selectedPageType === 'A4' ? (styles.active) : (styles.pageSizeButton))}
+                                                            onClick={() => this.setState({ selectedPageType: 'A4' })}
+                                                        >
+                                                            A4
+                                                        </Button>
+                                                        <Button
+                                                            className={_cs(selectedPageType === 'B4' ? (styles.active) : (styles.pageSizeButton))}
+                                                            onClick={() => this.setState({ selectedPageType: 'B4' })}
+                                                        >
+                                                            B4
+                                                        </Button>
+                                                        <Button
+                                                            className={_cs(selectedPageType === 'B5' ? (styles.active) : (styles.pageSizeButton))}
+                                                            onClick={() => this.setState({ selectedPageType: 'B5' })}
+                                                        >
+                                                            B5
+                                                        </Button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <form className={styles.pageType}>
+                                                    <label htmlFor="Custom">
+                                                        Resolution :
+                                                    </label>
+
+                                                    <div>
+                                                        <input type="number" id="vehicle1" style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }} />
+                                                        X
+                                                        <input type="number" id="vehicle1" style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }} />
+
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        )
+
+                                        }
+
+
+                                        <div>
+                                            <form className={styles.pageType}>
+                                                <label htmlFor="Custom">
+                                                    File format :
+                                                </label>
+                                                <div>
+                                                    <Button
+                                                        className={_cs(selectedFileFormat === 'PNG' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                        onClick={() => this.setState({ selectedFileFormat: 'PNG' })}
+
+                                                    >
+                                                        PNG
+                                                    </Button>
+                                                    <Button
+                                                        className={_cs(selectedFileFormat === 'JPG' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                        onClick={() => this.setState({ selectedFileFormat: 'JPG' })}
+
+                                                    >
+                                                        JPG
+                                                    </Button>
+                                                    <Button
+                                                        className={_cs(selectedFileFormat === 'PDF' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                        onClick={() => this.setState({ selectedFileFormat: 'PDF' })}
+                                                    >
+                                                        PDF
+                                                    </Button>
+
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <div>
+                                            <form className={styles.grid}>
+
+                                                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
+                                                <label htmlFor="vehicle1"> Show Grid</label>
+
+
+                                            </form>
+                                        </div>
+                                        <div className={styles.footerButton}>
+                                            <Button
+                                                className={styles.fileFormatButton}
+                                            >
+                                                Download
+                                            </Button>
+                                            <Button
+                                                className={styles.fileFormatButton}
+                                                onClick={() => this.setState({ showCustomSetting: false, selectedFileFormat: '', selectedPageType: '' })}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </div>
+                                    </>
+                                ) : ''
+
+                        }
+
                     </div>
 
 
