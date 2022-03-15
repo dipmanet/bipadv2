@@ -1722,9 +1722,10 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 return obj;
             });
         }
+        const dataDisplayFromHighestValue = calculatedValueData.sort((a, b) => b.value - a.value);
 
 
-        return calculatedValueData;
+        return dataDisplayFromHighestValue;
     }
 
     private HighValuePercentageCalculation = (value) => {
@@ -1738,8 +1739,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
 
             const highValuePercentage = totalSum === 0 ? 0 : ((highValueObject.value / totalSum) * 100).toFixed(2);
-            console.log('total sum', totalSum);
-            console.log('highest value', highValueObject.value);
+
             const subCategoryName = labelName[i].label;
             const { visualizationKey, visualizationWordStart, visualizationWordEnd } = labelName[i];
             const displayingValueinVisualization = visualizationKey === 'total' ? totalSum : highValueObject.value;
@@ -1799,8 +1799,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             .filter(item => item.resourceType === resourceType)[0].chartDataType;
 
         const HighValuePercentageCalculation = this.HighValuePercentageCalculation(GraphVisualizationData);
-        console.log('highest value', HighValuePercentageCalculation);
-        console.log('Graph visualization data', GraphVisualizationData);
+
         const { visualizationHeading } = visualizationKeyValues
             .filter(item => item.resourceType === resourceType)[0];
 
