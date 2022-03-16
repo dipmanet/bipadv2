@@ -183,10 +183,9 @@ interface State {
     drawRefState: boolean;
     geoLocationStatus: boolean;
     currentMarkers: [];
-    markerStatus: false;
-    currentZoomLevel: number;
-    currentCenter: mapboxgl.LngLat;
+    markerStatus: boolean;
     checkFullScreenStatus: boolean;
+    currentBounds: mapboxgl.LngLatBounds;
 
 }
 
@@ -351,8 +350,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
             geoLocationStatus: false,
             currentMarkers: [],
             markerStatus: false,
-            currentZoomLevel: 5,
-            currentCenter: { lng: 0, lat: 0 },
             checkFullScreenStatus: false,
         };
     }
@@ -804,21 +801,16 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (this.mapContainerRef.current) {
             const mainapp = this.mapContainerRef.current.getContainer();
 
-            this.setState({ currentZoomLevel: this.mapContainerRef.current.getZoom(),
-                currentCenter: this.mapContainerRef.current.getCenter() });
+            this.setState({ currentBounds: this.mapContainerRef.current.getBounds() });
 
             mainapp.requestFullscreen();
         }
 
         const resetFunc = setTimeout(() => {
             if (this.mapContainerRef.current) {
-                this.mapContainerRef.current.flyTo({
-
-                    center: this.state.currentCenter,
-                    zoom: this.state.currentZoomLevel,
-                });
+                this.mapContainerRef.current.fitBounds(this.state.currentBounds);
             }
-        }, 300);
+        }, 700); // triggered after 700ms
 
         return () => clearTimeout(resetFunc);
     };
@@ -945,6 +937,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     };
 
+    private fullScreenOffFunc = () => {
+        if (this.state.checkFullScreenStatus) {
+            this.setState({ checkFullScreenStatus: false });
+        }
+    }
+
     public render() {
 	    const {
 	        mapStyle,
@@ -991,8 +989,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             rectangleBoundingBox,
             drawRefState,
             currentMarkers,
-            currentZoomLevel,
-            currentCenter,
+            currentBounds,
             checkFullScreenStatus,
 	    } = this.state;
 
@@ -1119,14 +1116,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
-
-        if (this.mapContainerRef.current && currentCenter) {
-            this.mapContainerRef.current.flyTo({
-        	  center: currentCenter,
-        	  zoom: currentZoomLevel,
-            });
-        }
-
 	    return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>
@@ -1140,7 +1129,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
                                     mapStyle={mapStyle}
-
                                     clickHandler={this.clickHandler}
                                     handleMapClicked={this.handleMapClicked}
                                     mapOptions={{
@@ -1152,8 +1140,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
 	                                        lat: 27.700769,
 	                                    },
 	                                }}
-                                    // debug
-
                                     scaleControlShown
                                     scaleControlPosition="bottom-right"
                                     navControlShown
@@ -1161,10 +1147,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     geoLocationRef={this.geoLocationRef}
                                     rectangleBoundingBox={rectangleBoundingBox}
                                     mapContainerRefMultiplexer={this.mapContainerRef}
-                                    drawRefState={this.state.drawRefState}
+                                    drawRefState={drawRefState}
                                     resetDrawState={this.resetDrawState}
                                     queryStringParams={queryStringParams}
                                     polygonDrawAccessableRoutes={polygonDrawAccessableRoutes}
+                                    checkFullScreenStatus={checkFullScreenStatus}
+                                    currentBounds={currentBounds}
+                                    fullScreenOffFunc={this.fullScreenOffFunc}
                                 >
                                     {leftContent && (
                                         <aside className={_cs(
