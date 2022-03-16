@@ -184,6 +184,9 @@ interface State {
     geoLocationStatus: boolean;
     currentMarkers: [];
     markerStatus: false;
+    currentZoomLevel: number;
+    currentCenter: mapboxgl.LngLat;
+    checkFullScreenStatus: boolean;
 
 }
 
@@ -348,6 +351,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             geoLocationStatus: false,
             currentMarkers: [],
             markerStatus: false,
+            currentZoomLevel: 5,
+            currentCenter: { lng: 0, lat: 0 },
+            checkFullScreenStatus: false,
         };
     }
 
@@ -394,11 +400,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
-
-        // if (this.state.geoLocationStatus) {
-        //     // eslint-disable-next-line react/no-did-update-set-state
-        //     this.setState({ geoLocationStatus: false });
-        // }
     }
 
     private handlemapClickedResponse = (data) => {
@@ -799,10 +800,27 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private fullScreenMap = () => {
+        this.setState({ checkFullScreenStatus: true });
         if (this.mapContainerRef.current) {
             const mainapp = this.mapContainerRef.current.getContainer();
+
+            this.setState({ currentZoomLevel: this.mapContainerRef.current.getZoom(),
+                currentCenter: this.mapContainerRef.current.getCenter() });
+
             mainapp.requestFullscreen();
         }
+
+        const resetFunc = setTimeout(() => {
+            if (this.mapContainerRef.current) {
+                this.mapContainerRef.current.flyTo({
+
+                    center: this.state.currentCenter,
+                    zoom: this.state.currentZoomLevel,
+                });
+            }
+        }, 300);
+
+        return () => clearTimeout(resetFunc);
     };
 
     private markersArray = (marker: any) => {
@@ -870,15 +888,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
             marker.setLngLat(coordinates).addTo(this.mapContainerRef.current);
         }
 
-        // if (this.mapContainerRef.current) {
-        //     this.mapContainerRef.current.flyTo({
-        //         center: {
-        //             lng: coordinates.lng,
-        //             lat: coordinates.lat,
-        //         },
-        //         zoom: 8,
-        //     });
-        // }
         this.markersArray(marker);
     }
 
@@ -982,6 +991,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
             rectangleBoundingBox,
             drawRefState,
             currentMarkers,
+            currentZoomLevel,
+            currentCenter,
+            checkFullScreenStatus,
 	    } = this.state;
 
 
@@ -1058,31 +1070,37 @@ class Multiplexer extends React.PureComponent<Props, State> {
 				  currentMarkers[i].remove();
                 }
             }
+
             this.setState({ geoLocationStatus: false });
             if (this.mapContainerRef.current) {
                 // centriod of nepal
                 if (detailsOfLoggedAdmin
             	   && !detailsOfLoggedAdmin.province && !detailsOfLoggedAdmin.district) {
-                    this.mapContainerRef.current.flyTo({
-                        speed: 1,
-                        center: [84.2676, 28.5465],
-                        zoom: 6.6,
-
-                    });
+                    this.mapContainerRef.current.fitBounds([
+                        [80.05858661752784, 26.347836996368667],
+                        [88.20166918432409, 30.44702867091792]], {
+							 padding: 24,
+						 });
                 }
                 // checking province
                 if (detailsOfLoggedAdmin
             	   && detailsOfLoggedAdmin.centroid) {
-                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
                 }
                 // checking district
                 if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province) {
-                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
                 }
                 // checking municipality
                 if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province
             		 && detailsOfLoggedAdmin.district) {
-                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox);
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
                 }
             }
 
@@ -1100,6 +1118,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const queryStringParams = window.location.href.split('#/')[1];
 
         const polygonDrawAccessableRoutes = ['vulnerability'];
+
+
+        if (this.mapContainerRef.current && currentCenter) {
+            this.mapContainerRef.current.flyTo({
+        	  center: currentCenter,
+        	  zoom: currentZoomLevel,
+            });
+        }
 
 	    return (
             <PageContext.Provider value={pageProps}>
