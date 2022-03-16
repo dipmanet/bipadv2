@@ -30,6 +30,7 @@ import OSMIcon from '#resources/images/osm.png';
 import Button from '#rsca/Button';
 import styles from './styles.scss';
 import SelectInput from '#rsci/SelectInput';
+import MapDownloadButton from '#components/MapDownloadButton';
 
 
 const mapStyles = [
@@ -132,7 +133,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        const { className } = this.props;
+        const { className, onPendingStateChange, activeLayers } = this.props;
         const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType, selectedFileFormat } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
         console.log('showPageType', typeof showPageType);
@@ -141,18 +142,29 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 className={_cs(styles.layerSwitch, className)}
                 iconName="download"
                 hideDropdownIcon
-                tooltip="Download current map"
+                tooltip="Download Map"
             >
                 <div className={styles.mainContainer}>
                     <div className={styles.heading}>
                         <h3>Download</h3>
                     </div>
                     <div className={styles.buttonOptions}>
-                        <Button
+                        {/* <Button
                             className={styles.downloadButton}
                         >
                             Download with default settings
-                        </Button>
+                        </Button> */}
+                        <MapDownloadButton
+                            // className={styles.mapDownloadButton}
+                            className={styles.downloadButton}
+                            // transparent
+                            title="Download current map"
+                            // iconName="download"
+                            onPendingStateChange={
+                                onPendingStateChange
+                            }
+                            activeLayers={activeLayers}
+                        />
                         {
                             showCustomSetting ? '' : (
                                 <Button

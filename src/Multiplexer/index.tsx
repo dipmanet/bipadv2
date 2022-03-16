@@ -945,7 +945,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     : styles.mapActions
                                                 : styles.mapActions}
                                             >
-                                                <MapDownloadButton
+                                                {/* <MapDownloadButton
                                                     className={styles.mapDownloadButton}
                                                     transparent
                                                     title="Download current map"
@@ -953,10 +953,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     onPendingStateChange={
                                                         this.handleMapDownloadStateChange
                                                     }
-                                                    activeLayers={activeLayers[activeLayers.length - 1]}
-                                                />
+                                                // activeLayers={activeLayers[activeLayers.length - 1]}
+                                                /> */}
                                                 <DownloadButtonOption
                                                     className={styles.layerSwitch}
+                                                    onPendingStateChange={
+                                                        this.handleMapDownloadStateChange
+                                                    }
+                                                    activeLayers={activeLayers[activeLayers.length - 1]}
+
                                                 />
                                                 <LayerSwitch
                                                     className={styles.layerSwitch}

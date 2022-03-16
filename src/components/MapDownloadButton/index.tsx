@@ -438,7 +438,9 @@ const MapDownloadButton = (props: Props) => {
             onClick={handleExport}
             // onClick={handleSaveClick('mapboxgl-canvas')}
             {...otherProps}
-        />
+        >
+            Download with default settings
+        </Button>
     );
 };
 
