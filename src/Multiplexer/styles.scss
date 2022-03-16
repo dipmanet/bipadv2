@@ -206,9 +206,14 @@ button {
       }
 
       .map {
+   
         flex-grow: 1;
         background-color: transparent;
-
+        // position: absolute;
+        // top:0;
+        // flex-grow: unset;
+        // height :calc(5000px * 1.2549019607843) !important;
+        // width :calc(5000px * 1.2549019607843) !important;
         &.hidden {
           visibility: hidden;
           z-index: -1;

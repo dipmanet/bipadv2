@@ -151,6 +151,7 @@ const MapDownloadButton = (props: Props) => {
         activeLayers,
         layers,
         layerGroups,
+        resolution,
         ...otherProps
     } = props;
 
@@ -217,6 +218,21 @@ const MapDownloadButton = (props: Props) => {
                     regionName = municipality.title;
                 }
             }
+            let myElements = document.getElementById('realMap123');
+            console.log('my element', myElements);
+            const width = '5000px';
+            const height = '5000px';
+            const finalHeight = `${5000 * 1.2549019607843}px`;
+            const finalWidth = `${5000 * 1.2549019607843}px`;
+
+
+            // myElements.style.height = finalHeight;
+            // myElements.style.width = finalWidth;
+            // myElements.style.position = 'absolute';
+            // myElements.style.top = '0';
+            // myElements.style.backgroundColor = 'transparent';
+            // myElements.style.flexGrow = 'unset';
+
 
             let source = '';
             // previous source logic

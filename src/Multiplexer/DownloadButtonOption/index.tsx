@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -10,7 +12,7 @@ import {
 
 import Faram from '@togglecorp/faram';
 import ReduxContext from '#components/ReduxContext';
-
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import osmLibertyStyle from '#mapStyles/style';
 import osmStyle from '#mapStyles/rasterStyle';
 
@@ -19,7 +21,7 @@ import ListView from '#rscv/List/ListView';
 
 import { setMapStyleAction } from '#actionCreators';
 import { mapStyleSelector } from '#selectors';
-
+import { MapChildContext } from '#re-map/context';
 import LayerButton from './LayerButton';
 // Icons
 import OutLineIcon from '#resources/images/outline.png';
@@ -90,6 +92,10 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             showPageType: 'true',
             selectedPageType: '',
             selectedFileFormat: '',
+            resolution: {
+                height: null,
+                width: null,
+            },
         };
     }
 
@@ -132,11 +138,50 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleChangeResolution = (e) => {
+        const { resolution } = this.state;
+        console.log('e is', e.target.value);
+        console.log('e name', e.target.name);
+        this.setState({
+            resolution: {
+                ...resolution,
+                [e.target.name]: e.target.value,
+            },
+
+        });
+    }
+
+    private handlepreview = () => {
+        const { map } = this.context;
+        const finalHeight = `${300 * 1.2549019607843}px`;
+        const finalWidth = `${300 * 1.2549019607843}px`;
+
+        const myElements = document.getElementById('realMap123');
+        myElements.style.setProperty('height', finalHeight, 'important');
+        myElements.style.setProperty('width', finalWidth, 'important');
+        myElements.style.setProperty('position', 'absolute', 'important');
+        myElements.style.setProperty('top', '0', 'important');
+        myElements.style.setProperty('background-color', 'transparent', 'important');
+        myElements.style.setProperty('flex-grow', 'unset', 'important');
+        // myElements.style.height = finalHeight;
+        // myElements.style.width = finalWidth;
+        // myElements.style.position = 'absolute';
+        // myElements.style.top = '0';
+        // myElements.style.backgroundColor = 'transparent';
+        // myElements.style.flexGrow = 'unset';
+        if (map) {
+            const mapContainer = map.getContainer();
+            console.log('map container', mapContainer);
+            mapContainer.requestFullscreen();
+        }
+    }
+
     public render() {
         const { className, onPendingStateChange, activeLayers } = this.props;
-        const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType, selectedFileFormat } = this.state;
+
+        const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType, selectedFileFormat, resolution: { height, width }, resolution } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
-        console.log('showPageType', typeof showPageType);
+
         return (
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}
@@ -164,6 +209,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                 onPendingStateChange
                             }
                             activeLayers={activeLayers}
+                            resolution={resolution}
                         />
                         {
                             showCustomSetting ? '' : (
@@ -237,9 +283,23 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                     </label>
 
                                                     <div>
-                                                        <input type="number" id="vehicle1" style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }} />
+                                                        <input
+                                                            type="number"
+                                                            name="height"
+                                                            id="vehicle1"
+                                                            value={height}
+                                                            style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
+                                                            onChange={e => this.handleChangeResolution(e)}
+                                                        />
                                                         X
-                                                        <input type="number" id="vehicle1" style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }} />
+                                                        <input
+                                                            type="number"
+                                                            name="width"
+                                                            id="vehicle1"
+                                                            value={width}
+                                                            style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
+                                                            onChange={e => this.handleChangeResolution(e)}
+                                                        />
 
                                                     </div>
                                                 </form>
@@ -293,8 +353,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                         <div className={styles.footerButton}>
                                             <Button
                                                 className={styles.fileFormatButton}
+                                                onClick={this.handlepreview}
                                             >
-                                                Download
+                                                Preview & Download
                                             </Button>
                                             <Button
                                                 className={styles.fileFormatButton}
@@ -323,6 +384,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         );
     }
 }
-LayerSwitch.contextType = ReduxContext;
+LayerSwitch.contextType = MapChildContext;
 
 export default connect(mapAppStateToComponentProps, mapDispatchToProps)(LayerSwitch);
