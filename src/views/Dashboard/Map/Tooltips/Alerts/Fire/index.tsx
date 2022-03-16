@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
+import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
 
@@ -79,9 +80,13 @@ const FireTooltip = (
                     </a>
                 </div>
                 <div className={styles.source}>
-                    <div className={styles.title}>DISCLAIMER:</div>
+
                     <div className={styles.disclaimer}>
-                        Forest fires are detected by a satellite-based forest fire detection
+                        <Icon
+                            className={styles.infoIcon}
+                            name="info"
+                        />
+                         Forest fires are detected by a satellite-based forest fire detection
                         and monitoring system from Moderate Resolution Imaging Spectroradiometer
                         (MODIS) sensors. It provides location information on active fires present
                         during the satellite’s twice-daily overpasses. The confidence level,
