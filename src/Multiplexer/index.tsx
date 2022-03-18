@@ -798,6 +798,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
     private fullScreenMap = () => {
         this.setState({ checkFullScreenStatus: true });
+
         if (this.mapContainerRef.current) {
             const mainapp = this.mapContainerRef.current.getContainer();
 
@@ -807,8 +808,29 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
 
         const resetFunc = setTimeout(() => {
+            // if (this.mapContainerRef.current) {
+            //     const nepalBbox = [[80.05858661752784, 26.347836996368667],
+            //         [88.20166918432409, 30.44702867091792]];
+
+            //     const currentBbox = this.mapContainerRef.current.getBounds();
+            //     console.log('current bbox is', currentBbox);
+
+            //     let status = false;
+            //     // eslint-disable-next-line no-plusplus
+            //     for (let i = 0; i < nepalBbox.length; i++) {
+            //         // eslint-disable-next-line no-plusplus
+            //         for (let j = 0; j < nepalBbox.length; j++) {
+            //             if (nepalBbox[i][j] === currentBbox[i][j]) {
+            //                 status = true;
+            //             }
+            //         }
+            //     }
+            //     if (status) {
+            //         return;
+            //     }
+            // }
             if (this.mapContainerRef.current) {
-                this.mapContainerRef.current.fitBounds(this.state.currentBounds);
+                this.mapContainerRef.current.fitBounds(this.state.currentBounds, { padding: -235, duration: 1000 });
             }
         }, 700); // triggered after 700ms
 
@@ -925,6 +947,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private currentLocation = () => {
+        const dotElement = document.querySelector('.mapboxgl-user-location-dot');
+        if (dotElement) {
+            dotElement.style.display = 'unset';
+        }
         if (this.geoLocationRef.current) {
             this.geoLocationRef.current.trigger();
 
@@ -1058,9 +1084,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         );
 
         const resetLocation = () => {
-            if (this.state.geoLocationStatus && this.geoLocationRef.current) {
-                this.geoLocationRef.current.trigger();
+            // if (this.state.geoLocationStatus && this.geoLocationRef.current) {
+            const dotElement = document.querySelector('.mapboxgl-user-location-dot');
+            if (dotElement) {
+                dotElement.style.display = 'none';
             }
+            // }
             if (currentMarkers !== null) {
                 // eslint-disable-next-line no-plusplus
                 for (let i = currentMarkers.length - 1; i >= 0; i--) {
