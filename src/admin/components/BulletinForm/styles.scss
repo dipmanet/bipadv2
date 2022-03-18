@@ -1,4 +1,20 @@
 $boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("/src/resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    }
+    .formContainerNepali{
+       
+        input{
+            font-family: 'Kalimati Regular' !important;
+        }
+    }
+    .formContainerEnglish{
+      
+        nput{
+            font-family: 'Fira Sans' !important;
+        }
+    }
 .mainSection{
     padding: 20px 30px;
     display: flex;

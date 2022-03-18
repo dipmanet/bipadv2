@@ -15,12 +15,14 @@ export const lossObj = [
         logo: IncidentIcon,
         title: nepaliRef.numberOfIncidents,
         titleEn: 'Incidents',
+        colors: '#C00600',
     },
     {
         lossKey: 'numberOfDeath',
         logo: DeathIcon,
         title: nepaliRef.numberOfDeath,
         titleEn: 'Deaths',
+        colors: '#FA0B00',
 
     },
     {
@@ -28,6 +30,7 @@ export const lossObj = [
         logo: MissingIcon,
         title: nepaliRef.numberOfMissing,
         titleEn: 'Missing',
+        colors: '#FCC000',
 
 
     },
@@ -36,6 +39,7 @@ export const lossObj = [
         logo: InjuredIcon,
         title: nepaliRef.numberOfInjured,
         titleEn: 'Injured',
+        colors: '#7030A0',
 
 
     },
@@ -44,6 +48,7 @@ export const lossObj = [
         logo: LossIcon,
         title: nepaliRef.estimatedLoss,
         titleEn: 'Estimated Loss',
+        colors: '#538235',
 
     },
     {
@@ -51,6 +56,7 @@ export const lossObj = [
         logo: InfraIcon,
         title: nepaliRef.roadBlock,
         titleEn: 'Road Block',
+        colors: '#7F7F7F',
 
     },
     {
@@ -58,5 +64,6 @@ export const lossObj = [
         logo: LivestockIcon,
         title: nepaliRef.cattleLoss,
         titleEn: 'Cattle Loss',
+        colors: '#4472C4',
     },
 ];

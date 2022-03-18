@@ -1,6 +1,6 @@
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import memoize from 'memoize-one';
@@ -24,6 +24,7 @@ import {
     wardsMapSelector,
     userSelector,
     mapStyleSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -89,6 +90,7 @@ const mapStateToProps = state => ({
     wardsMap: wardsMapSelector(state),
     user: userSelector(state),
     mapStyle: mapStyleSelector(state),
+    language: languageSelector(state),
 
 });
 
@@ -148,10 +150,11 @@ const IncidentMap = (props) => {
 
     const getPointFeatureCollection = memoize(incidentPointToGeojson);
     const pointFeatureCollection = getPointFeatureCollection(incidentList, hazards);
-
+    const { language: { language } } = props;
 
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
+
 
         const Map = new mapboxgl.Map({
             container: mapContainer,
@@ -170,7 +173,11 @@ const IncidentMap = (props) => {
         Map.on('style.load', () => {
             Map.addSource('nepal', {
                 type: 'vector',
-                url: 'mapbox://yilab.25pvy15o',
+                url: process.env.REACT_APP_MAP_SOURCE_NEPAL,
+            });
+            Map.addSource('nepal-centroid', {
+                type: 'vector',
+                url: process.env.REACT_APP_MAP_SOURCE_NEPAL_CENTROID,
             });
             Map.addLayer({
                 id: 'province-line',
@@ -183,23 +190,23 @@ const IncidentMap = (props) => {
                 paint: {
                     'line-color': '#000000',
                     'line-width': 1,
-				  },
+                },
             });
             Map.addLayer({
                 id: 'province-name',
-                source: 'nepal',
-                'source-layer': 'provincegeo',
+                source: 'nepal-centroid',
+                'source-layer': 'provincecentroidgeo',
                 type: 'symbol',
                 layout: {
                     visibility: 'visible',
-				  'text-field': ['get', 'title_en'],
-				  'text-anchor': 'center',
-				  'text-size': 12,
+                    'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
+                    'text-anchor': 'center',
+                    'text-size': 9,
                 },
                 paint: {
-				  'text-color': 'black',
+                    'text-color': 'black',
                 },
-			  });
+            });
 
             Map.addLayer({
                 id: 'district-line',
@@ -212,23 +219,23 @@ const IncidentMap = (props) => {
                 paint: {
                     'line-color': '#000000',
                     'line-width': 1,
-				  },
+                },
             });
             Map.addLayer({
                 id: 'district-name',
-                source: 'nepal',
-                'source-layer': 'districtgeo',
+                source: 'nepal-centroid',
+                'source-layer': 'districtcentroidgeo',
                 type: 'symbol',
                 layout: {
                     visibility: 'none',
-				  'text-field': ['get', 'title_en'],
-				  'text-anchor': 'center',
-				  'text-size': 11,
+                    'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
+                    'text-anchor': 'center',
+                    'text-size': 9,
                 },
                 paint: {
-				  'text-color': 'black',
+                    'text-color': 'black',
                 },
-			  });
+            });
             Map.addLayer({
                 id: 'municipality-line',
                 source: 'nepal',
@@ -240,24 +247,24 @@ const IncidentMap = (props) => {
                 paint: {
                     'line-color': '#000000',
                     'line-width': 0.8,
-				  },
+                },
             });
             Map.addLayer({
                 id: 'municipality-name',
-                source: 'nepal',
-                'source-layer': 'municipalitygeo',
+                source: 'nepal-centroid',
+                'source-layer': 'municipalitycentroidgeo',
                 type: 'symbol',
                 layout: {
                     visibility: 'none',
-				  'text-field': ['get', 'title_en'],
-				  'text-anchor': 'center',
-				  'text-size': 11,
+                    'text-field': ['get', language === 'np' ? 'title_ne' : 'title_en'],
+                    'text-anchor': 'center',
+                    'text-size': 9,
 
                 },
                 paint: {
-				  'text-color': 'black',
+                    'text-color': 'black',
                 },
-			  });
+            });
             Map.addLayer({
                 id: 'ward-line',
                 source: 'nepal',
@@ -269,22 +276,22 @@ const IncidentMap = (props) => {
                 paint: {
                     'line-color': '#000000',
                     'line-width': 1,
-				  },
+                },
             });
             Map.addLayer({
                 id: 'ward-name',
-                source: 'nepal',
-                'source-layer': 'wardgeo',
+                source: 'nepal-centroid',
+                'source-layer': 'wardcentroidgeo',
                 type: 'symbol',
                 layout: {
                     visibility: 'none',
-				  'text-field': ['get', 'title'],
-				  'text-anchor': 'center',
+                    'text-field': ['get', 'title'],
+                    'text-anchor': 'center',
                 },
                 paint: {
-				  'text-color': 'black',
+                    'text-color': 'black',
                 },
-			  });
+            });
             Map.addSource('incidents-bulletin', {
                 type: 'geojson',
                 data: pointFeatureCollection,
@@ -298,7 +305,7 @@ const IncidentMap = (props) => {
                         'circle-color': ['get', 'hazardColor'],
                         'circle-stroke-width': 1.2,
                         'circle-stroke-color': '#000000',
-                        'circle-radius': 8,
+                        'circle-radius': 9,
                     },
                 },
             );
@@ -320,7 +327,7 @@ const IncidentMap = (props) => {
                 },
             );
         });
-    }, [incidentPoints, pointFeatureCollection]);
+    }, [incidentPoints, language, pointFeatureCollection, props]);
     // const filteredHazardTypes = getIncidentHazardTypesList(sanitizedIncidentList);
     // const sanitizedIncidentList = getSanitizedIncidents(
     //     incidentList,

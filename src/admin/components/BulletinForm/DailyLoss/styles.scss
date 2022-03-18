@@ -93,6 +93,21 @@
         background-color: #f3f3f3;
         height: 65px;
         width: 100%;
+        .datePickerForm{
+            width: 100%;
+            .datePick{
+                input{
+                    width: 100%;
+                    border: none;
+                    background: transparent;
+                    outline: none;
+                   
+                }
+                
+                }
+        }
+            
+        
         }
     .formItemHalf{
        @extend .formItem;

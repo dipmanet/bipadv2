@@ -13,7 +13,7 @@ interface Props {
 
 
 const LossItem = (props: Props) => {
-    const { lossIcon, lossTitle, loss, language: { language } } = props;
+    const { lossIcon, lossTitle, loss, language: { language }, colors } = props;
     const getUnit = (n) => {
         if (language === 'np') {
             if (Number(n) > 10000000) {

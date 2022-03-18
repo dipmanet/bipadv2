@@ -283,7 +283,7 @@ const BulletinPDF = (props: Props) => {
             features,
         });
         // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [feedback, hazardWiseLoss, language]);
 
     useEffect(() => {
@@ -294,7 +294,7 @@ const BulletinPDF = (props: Props) => {
             injured: peopleLoss[pL].injured,
         }));
         setProvWiseChart(cD);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [language]);
 
 
@@ -326,7 +326,7 @@ const BulletinPDF = (props: Props) => {
                                     </Translation>
 
                                 </li>
-                                <li className={styles.bold}>
+                                <li>
                                     <Translation>
                                         {
                                             t => <span>{t('ndrrma')}</span>
@@ -344,16 +344,20 @@ const BulletinPDF = (props: Props) => {
                                 }
                             </Translation>
                         </h1>
-                        <p>
+                        <p style={{ marginTop: '5px', marginBottom: '5px' }}>
                             <NepaliDate />
                             {' '}
-                            | SitRep #
+                            |
+                            {' '}
+                            {language === 'np' ? 'बुलेटिन नं' : 'Bulletin No.'}
+                            {' '}
+                            #
                             {sitRep || 0}
                         </p>
                     </div>
                 </div>
                 <div className={styles.loss}>
-                    <h2>
+                    <h2 style={{ marginBottom: '10px', fontSize: '16px' }}>
                         {
                             language === 'np'
                                 ? `${month} ${day} बिहान 10:00 बजेदेखी ${monthToday} ${dayT} बिहान 10:00 बजे सम्म`
@@ -375,6 +379,7 @@ const BulletinPDF = (props: Props) => {
                             lossObj.map(l => (
                                 <LossItem
                                     lossIcon={l.logo}
+                                    colors={l.colors}
                                     lossTitle={language === 'np' ? l.title : l.titleEn}
                                     loss={Number(incidentSummary[l.lossKey])}
                                 />

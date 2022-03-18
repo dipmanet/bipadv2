@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-bracket-spacing */
 /* eslint-disable max-len */
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
@@ -8,6 +11,7 @@ import {
     listToGroupList,
     isDefined,
     listToMap,
+    _cs,
 } from '@togglecorp/fujs';
 import DailyLoss from './DailyLoss';
 import Covid from './Covid';
@@ -47,8 +51,10 @@ import {
     bulletinEditDataSelector,
     languageSelector,
 } from '#selectors';
-import { setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
-    setEventListAction } from '#actionCreators';
+import {
+    setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
+    setEventListAction,
+} from '#actionCreators';
 import styles from './styles.scss';
 import { Menu } from '../ProgressMenu/utils';
 
@@ -106,33 +112,38 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 });
 
 
-const today = new Date();
-const yesterday = new Date(today);
+const selectDateForQuery = (today) => {
+    // const today = new Date();
+    const yesterday = new Date(today);
 
-yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setDate(yesterday.getDate() - 1);
 
-const DEFAULT_START_DATE = yesterday;
-const DEFAULT_END_DATE = today;
+    const DEFAULT_START_DATE = yesterday;
+    const DEFAULT_END_DATE = today;
 
 
-const requestQuery = ({
-    params: {
-        // startDate = DEFAULT_START_DATE.toISOString(),
-        // endDate = DEFAULT_END_DATE.toISOString(),
-        startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
-        endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
-    } = {},
-}) => ({
-    expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'],
-    limit: -1,
-    incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
-    incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-    ordering: '-incident_on',
-    // lnd: true,
-});
+    const requestQuery = ({
+        params: {
+            // startDate = DEFAULT_START_DATE.toISOString(),
+            // endDate = DEFAULT_END_DATE.toISOString(),
+            startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
+            endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
+        } = {},
+    }) => ({
+        expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'],
+        limit: -1,
+        incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
+        incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
+        ordering: '-incident_on',
+        // lnd: true,
+    });
+    return requestQuery;
+};
+
+const todayDate = new Date();
 const requestQueryCovidNational = ({
     params: {
-        startDate = `${today.toISOString().split('T')[0]}`,
+        startDate = `${todayDate.toISOString().split('T')[0]}`,
     } = {},
 }) => ({
     limit: -1,
@@ -140,7 +151,7 @@ const requestQueryCovidNational = ({
 });
 const requestQueryCovidQuarantine = ({
     params: {
-        startDate = `${today.toISOString().split('T')[0]}`,
+        startDate = `${todayDate.toISOString().split('T')[0]}`,
     } = {},
 }) => ({
     limit: -1,
@@ -153,7 +164,13 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     incidentsGetRequest: {
         url: '/incident/',
         method: methods.GET,
-        query: requestQuery,
+        query: ({ params }) => ({
+            expand: params.expand,
+            limit: params.limit,
+            incident_on__lt: params.incident_on__lt,
+            incident_on__gt: params.incident_on__gt,
+            ordering: params.ordering,
+        }),
         onMount: true,
         onSuccess: ({ response, params, props: { setIncidentList } }) => {
             setIncidentList({ incidentList: response.results });
@@ -216,6 +233,7 @@ const Bulletin = (props: Props) => {
     const [activeProgressMenu, setActive] = useState(0);
     const [progress, setProgress] = useState(0);
     const [sitRep, setSitRep] = useState(0);
+    const [selectedDate, setSelectedate] = useState();
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -238,10 +256,61 @@ const Bulletin = (props: Props) => {
     const [covidNational, setCovidNational] = useState([]);
     const [covidQuaratine, setCovidQurantine] = useState([]);
 
-    incidentsGetRequest.setDefaultParams({ setLossData });
+
     covidNationalInfo.setDefaultParams({ setCovidNational });
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
+
+
+    useEffect(() => {
+        console.log('Enter Wait', selectedDate);
+        if (selectedDate) {
+            const today = selectedDate;
+            const yesterday = new Date(today);
+
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            const DEFAULT_START_DATE = yesterday;
+            const DEFAULT_END_DATE = today;
+            const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`;
+            const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`;
+            const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
+            const limit = -1;
+            const incident_on__lt = endDate; // eslint-disable-line @typescript-eslint/camelcase
+            const incident_on__gt = startDate; // eslint-disable-line @typescript-eslint/camelcase
+            const ordering = '-incident_on';
+
+            // const requestQuery = ({
+            //     params: {
+            //         // startDate = DEFAULT_START_DATE.toISOString(),
+            //         // endDate = DEFAULT_END_DATE.toISOString(),
+            //         startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
+            //         endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
+            //     } = {},
+            // }) => ({
+            //     expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'],
+            //     limit: -1,
+            //     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
+            //     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
+            //     ordering: '-incident_on',
+            //     // lnd: true,
+            // });
+
+
+            console.log('Enter', selectedDate);
+            const test = selectDateForQuery(selectedDate);
+            console.log('data function', test);
+            incidentsGetRequest.do({
+                expand,
+                limit,
+                incident_on__lt,
+                incident_on__gt,
+                ordering,
+                setLossData,
+            });
+        }
+    }, [selectedDate]);
+
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
@@ -261,7 +330,7 @@ const Bulletin = (props: Props) => {
             covidQuarantine.do();
             sitRepQuery.do();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulletinEditData]);
 
 
@@ -497,7 +566,9 @@ const Bulletin = (props: Props) => {
 
         return stat;
     };
-
+    const recordSelectedDate = (date) => {
+        setSelectedate(date);
+    };
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
@@ -605,7 +676,7 @@ const Bulletin = (props: Props) => {
 
             setHazardwise(newhazardData);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData, language]);
 
 
@@ -711,6 +782,7 @@ const Bulletin = (props: Props) => {
             handleSameHazardAdd={handleSameHazardAdd}
             addedHazardFields={addedHazardFields}
             handleSameHazardChange={handleSameHazardChange}
+            recordSelectedDate={recordSelectedDate}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}
@@ -751,7 +823,8 @@ const Bulletin = (props: Props) => {
             hazardWiseLossData={hazardWiseLossData}
             handleSubFieldChange={handleSubFieldChange}
             bulletinData={
-                { incidentSummary: incidentData,
+                {
+                    incidentSummary: incidentData,
                     peopleLoss: peopleLossData,
                     hazardWiseLoss: hazardWiseLossData,
                     genderWiseLoss: genderWiseLossData,
@@ -763,7 +836,8 @@ const Bulletin = (props: Props) => {
                     tempMax: maxTemp,
                     tempMin: minTemp,
                     dailySummary,
-                    sitrep: sitRep }
+                    sitrep: sitRep,
+                }
             }
         />,
     ];
@@ -771,7 +845,7 @@ const Bulletin = (props: Props) => {
 
     return (
 
-        <div className={styles.mainSection}>
+        <div className={_cs(styles.mainSection, language === 'np' ? styles.formContainerNepali : styles.formContainerEnglish)}>
             <div className={styles.leftMenuSection}>
                 <ProgressMenu
                     menuKey="bulletinProgressMenu"
@@ -791,7 +865,7 @@ const Bulletin = (props: Props) => {
                                 onClick={handlePrevBtn}
                                 className={styles.prevBtn}
                             >
-                        Previous
+                                Previous
                             </button>
 
                             <button
@@ -799,7 +873,7 @@ const Bulletin = (props: Props) => {
                                 onClick={handleNextBtn}
                                 className={progress !== 4 ? styles.nextBtn : styles.disabledBtn}
                             >
-                        Next
+                                Next
                             </button>
                         </div>
                     )
