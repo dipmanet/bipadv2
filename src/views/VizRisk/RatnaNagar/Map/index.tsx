@@ -1,6 +1,6 @@
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import styles from './styles.scss';
@@ -19,12 +19,12 @@ if (TOKEN) {
     mapboxgl.accessToken = TOKEN;
 }
 
+let clickedId: string | number | undefined;
 const Map = (props: any) => {
     const { CIData } = props;
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
-    const [clickedId, setclickedId] = useState<string | number | undefined>();
     function noop() {}
 
     const images = [
@@ -245,22 +245,22 @@ const Map = (props: any) => {
                 // clusterRadius: 50,
             });
 
-            multihazardMap.addLayer(
-                {
-                    id: 'contacts-layer',
-                    type: 'circle',
-                    source: 'contactInfo',
-                    filter: ['has', 'point_count'],
-                    paint: {
-                        'circle-color': ['get', 'color'],
-                        'circle-stroke-width': 1.2,
-                        'circle-stroke-color': '#000000',
-                    },
-                    layout: {
-                        visibility: 'visible',
-                    },
-                },
-            );
+            // multihazardMap.addLayer(
+            //     {
+            //         id: 'contacts-layer',
+            //         type: 'circle',
+            //         source: 'contactInfo',
+            //         filter: ['has', 'point_count'],
+            //         paint: {
+            //             'circle-color': ['get', 'color'],
+            //             'circle-stroke-width': 1.2,
+            //             'circle-stroke-color': '#000000',
+            //         },
+            //         layout: {
+            //             visibility: 'visible',
+            //         },
+            //     },
+            // );
             // multihazardMap.addLayer({
             //     id: 'contacts-cluster-count',
             //     type: 'symbol',
@@ -313,8 +313,7 @@ const Map = (props: any) => {
                         { clicked: false },
                     );
                 }
-                setclickedId(e.features[0].id);
-
+                clickedId = e.features[0].id;
                 multihazardMap.setFeatureState(
                     { id: clickedId,
                         source: 'contactInfo' },
@@ -332,16 +331,6 @@ const Map = (props: any) => {
                     .setDOMContent(popupNode)
                     .addTo(multihazardMap);
             });
-
-            // multihazardMap.on('click', (e) => {
-            //     if (!clickedId) {
-            //         multihazardMap.setFeatureState(
-            //             { id: clickedId,
-            //                 source: 'contactInfo' },
-            //             { clicked: false },
-            //         );
-            //     }
-            // });
         });
 
         const destroyMap = () => {
