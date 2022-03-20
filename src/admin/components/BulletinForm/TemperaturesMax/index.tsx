@@ -2,7 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import Placeholder from 'src/admin/resources/placeholder.png';
 import { useDropzone } from 'react-dropzone';
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import {
+    bulletinPageSelector, languageSelector,
+} from '#selectors';
 import styles from './styles.scss';
+
+const mapStateToProps = state => ({
+    bulletinData: bulletinPageSelector(state),
+    language: languageSelector(state),
+});
 
 interface Props {
 
@@ -70,8 +80,13 @@ const TemperatureMax = (props: Props) => {
                 <input {...getInputProps()} />
 
                 <div className={styles.subContainer}>
-
-                    <h3>दैनिक अधिकतम तापक्रम</h3>
+                    <h3>
+                        <Translation>
+                            {
+                                t => <p>{t('Daily Max Temperature')}</p>
+                            }
+                        </Translation>
+                    </h3>
                     <div id="pictureContainerMax" className={styles.picture}>
                         {
                             picFromEdit
@@ -106,4 +121,4 @@ const TemperatureMax = (props: Props) => {
     );
 };
 
-export default TemperatureMax;
+export default connect(mapStateToProps)(TemperatureMax);

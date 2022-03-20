@@ -11,17 +11,17 @@ export const covidObj24HRs = [
     {
         lossKey: 'affected',
         logo: AffectedIcon,
-        title: nepaliRef.affected,
+        title: 'Total Affected',
     },
     {
         lossKey: 'deaths',
         logo: DeathIcon,
-        title: nepaliRef.deaths,
+        title: 'Total Deaths',
     },
     {
         lossKey: 'recovered',
         logo: RecoveredIcon,
-        title: nepaliRef.recovered,
+        title: 'Total Recovered',
 
     },
 ];
@@ -31,34 +31,34 @@ export const covidObjTotal = [
     {
         lossKey: 'totalAffected',
         logo: AffectedIcon,
-        title: nepaliRef.totalAffected,
+        title: 'Total Affected',
     },
     {
         lossKey: 'totalActive',
         logo: ActiveIcon,
-        title: nepaliRef.totalActive,
+        title: 'Total Active',
     },
     {
         lossKey: 'totalRecovered',
         logo: RecoveredIcon,
-        title: nepaliRef.totalRecovered,
+        title: 'Total Recovered',
 
     },
     {
         lossKey: 'totalDeaths',
         logo: DeathIcon,
-        title: nepaliRef.totalDeaths,
+        title: 'Total Deaths',
 
     },
 ];
 
 export const vaccineStatObj = [
     {
-        title: 'पहिलो मात्रा खोप लगएको संख्या',
+        title: 'First Dosage Count',
         khopKey: 'firstDosage',
     },
     {
-        title: 'दोस्रो मात्रा खोप लगएको संख्या',
+        title: 'Second Dosage Count',
         khopKey: 'secondDosage',
     },
 ];
@@ -68,11 +68,11 @@ export const covidObj24HRsRow2 = [
     {
         lossKey: 'femaleAffected',
         logo: FemaleIcon,
-        title: nepaliRef.female,
+        title: 'Female',
     },
     {
         lossKey: 'maleAffected',
         logo: MaleIcon,
-        title: nepaliRef.male,
+        title: 'Male',
     },
 ];

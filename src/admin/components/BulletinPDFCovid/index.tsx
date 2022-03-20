@@ -15,7 +15,7 @@ import {
     Cell,
 } from 'recharts';
 
-import { nepaliRef } from 'src/admin/components/BulletinForm/formFields';
+import { nepaliRef, provincesRef, provincesTitleRef } from 'src/admin/components/BulletinForm/formFields';
 import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 import LossItem from '../BulletinPDFLoss/LossItem';
@@ -53,7 +53,7 @@ const BulletinPDFLoss = (props: Props) => {
         feedback,
     } = props.bulletinData;
 
-    const { language: { language } } = props;
+    const { language: { language }, hazardTypes } = props;
     const [provinceWiseTotal, setprovinceWiseTotal] = useState([]);
     const [hazardWiseLossChart, setHazardWiseChart] = useState([]);
     const [genderWiseLossChart, setGenderWiseChart] = useState([]);
@@ -73,7 +73,17 @@ const BulletinPDFLoss = (props: Props) => {
                         // eslint-disable-next-line react/no-array-index-key
                         <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
                             <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
-                            <span>{entry.value}</span>
+                            <span>
+                                {
+                                    <Translation>
+                                        {
+                                            t => <span>{t(`${entry.value}`)}</span>
+                                        }
+                                    </Translation>
+
+                                }
+
+                            </span>
                         </div>
                     ))
                 }
@@ -82,42 +92,81 @@ const BulletinPDFLoss = (props: Props) => {
     };
 
     useEffect(() => {
-        const hcD = Object.keys(hazardWiseLoss).map(h => (
-            {
-                hazard: h,
-                घटना: hazardWiseLoss[h].incidents,
-                मृत्यु: hazardWiseLoss[h].deaths,
+        const getDeathCount = (arr, f) => {
+            const fnepali = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0].titleNe;
+            const filteredArr = arr.filter((a) => {
+                if (a.hazardEn) {
+                    return a.hazardNp === fnepali;
+                }
+                return a.hazard === fnepali;
+            });
+            if (filteredArr && filteredArr.length > 0) {
+                const deathObj = filteredArr.reduce((a, b) => ({ deaths: a.deaths + Number(b.deaths) })).deaths;
+                return deathObj;
             }
-        ));
-        const newAddedHazardArr = Object.keys(feedback).map(f => feedback[f]);
+            return 0;
+        };
 
+        const getHazard = (h) => {
+            const filtered = Object.values(hazardTypes).filter(item => item.titleNe === h || item.titleEn === h);
+            if (filtered.length > 0 && language === 'np') {
+                return filtered[0].titleNe;
+            }
+            if (filtered.length > 0 && language === 'en') {
+                return filtered[0].title;
+            }
+            return '-';
+        };
+
+        const getIncidentCount = (arr, f) => {
+            // first check if there is hazard field with nepali version of f
+
+            const fnepali = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0].titleNe;
+
+            const fil = arr.filter((a) => {
+                if (a.hazardEn) {
+                    return a.hazardNp === fnepali;
+                }
+                return a.hazard === fnepali;
+            });
+            return fil.length;
+        };
+        // get feedback object and get its values in an array and extract unique hazard fields
+        const newAddedHazardArr = Object.values(feedback);
         const uniqueFieldArr = [...new Set(newAddedHazardArr.map(n => n.hazard))];
+
+        // get unique hazard fields of the added hazard object
         const uniqueFieldHazard = Object.keys(hazardWiseLoss);
-        const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr])];
-        const newAddedHazard = uniqueField.map(f => ({
+
+        // final combined unique hazard fields and convert all fields into same language
+        const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr].map(j => getHazard(j)))];
+
+        console.log('newAddedHazardArr', newAddedHazardArr);
+        console.log('feedback obj', feedback);
+        const hazardsChartObj = uniqueField.filter(i => !!i).map(f => ({
             hazard: f,
-            घटना: newAddedHazardArr.filter(item => item.hazard === f).length,
-            मृत्यु: newAddedHazardArr.filter(item => item.hazard === f).reduce((a, b) => ({ deaths: Number(a.deaths) + Number(b.deaths) })).deaths,
+            incident: getIncidentCount(newAddedHazardArr, f),
+            death: Number(getDeathCount(newAddedHazardArr, f)),
         }));
 
-        setHazardWiseChart(newAddedHazard);
+        setHazardWiseChart(hazardsChartObj);
         const pieChart = [
             {
-                name: 'पुरुष',
+                name: language === 'np' ? 'पुरुष' : 'Male',
                 value: Number(genderWiseLoss.male),
             },
             {
-                name: 'महिला',
+                name: language === 'np' ? 'महिला' : 'Female',
                 value: Number(genderWiseLoss.female),
             },
             {
-                name: 'पहिचान नभएको ',
+                name: language === 'np' ? 'पहिचान नभएको' : 'Unknown',
                 value: Number(genderWiseLoss.unknown),
             },
         ];
         setGenderWiseChart(pieChart);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [language]);
 
 
     const renderLegendPie = (p, layout) => {
@@ -147,28 +196,41 @@ const BulletinPDFLoss = (props: Props) => {
 
     useEffect(() => {
         const cD = Object.keys(covidProvinceWiseTotal).map(c => ({
-            province: nepaliRef[c],
-            'कुल संक्रमित संन्ख्या': covidProvinceWiseTotal[c].totalAffected,
-            'कुल सक्रिय संक्रमित संन्ख्या': covidProvinceWiseTotal[c].totalActive,
-            'कुल मृत्‍यु संन्ख्या': covidProvinceWiseTotal[c].totalDeaths,
+            province: language === 'np' ? nepaliRef[c] : provincesRef[c],
+            [language === 'np' ? 'कुल संक्रमित संन्ख्या' : 'Total Affected']: covidProvinceWiseTotal[c].totalAffected,
+            [language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active']: covidProvinceWiseTotal[c].totalActive,
+            [language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths']: covidProvinceWiseTotal[c].totalDeaths,
         }));
         setprovinceWiseTotal(cD);
-    }, [covidProvinceWiseTotal]);
+    }, [covidProvinceWiseTotal, language]);
 
-    const DataFormater = (number) => {
-        if (number > 10000000) {
-            return `${(number / 10000000).toLocaleString()}करोड`;
-        } if (number > 1000000) {
-            return `${(number / 100000).toLocaleString()}लाख`;
-        } if (number > 1000) {
-            return `${(number / 1000).toLocaleString()}हजार`;
+    const DataFormater = (number, lang) => {
+        if (lang === 'np') {
+            if (number > 10000000) {
+                return `${(number / 10000000).toLocaleString()}करोड`;
+            } if (number > 1000000) {
+                return `${(number / 100000).toLocaleString()}लाख`;
+            } if (number > 1000) {
+                return `${(number / 1000).toLocaleString()}हजार`;
+            }
+        } else {
+            if (number > 1000000000) {
+                return `${(number / 1000000).toLocaleString()}B`;
+            } if (number > 1000000) {
+                return `${(number / 100000).toLocaleString()}M`;
+            } if (number > 1000) {
+                return `${(number / 1000).toLocaleString()}K`;
+            }
         }
         return number.toLocaleString();
     };
 
+    useEffect(() => {
+        console.log('hazardWiseLossChart', hazardWiseLossChart);
+    }, [hazardWiseLossChart]);
 
     return (
-        <div className={styles.covidPDFContainer}>
+        <div className={language === 'np' ? styles.covidPDFContainer : styles.covidPDFContainerEnglish}>
             <div className={styles.container1}>
                 <div className={styles.hazardWiseStats}>
                     <h2>
@@ -192,7 +254,7 @@ const BulletinPDFLoss = (props: Props) => {
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
                             <XAxis
                                 type="number"
-                                tickFormatter={DataFormater}
+                                tickFormatter={e => DataFormater(e, language)}
                             />
                             <YAxis
                                 type="category"
@@ -201,8 +263,8 @@ const BulletinPDFLoss = (props: Props) => {
 
                             <Tooltip />
                             <Legend content={e => renderLegendContent(e, 'vertical')} />
-                            <Bar dataKey="मृत्यु" fill="#D10000" barSize={7} />
-                            <Bar dataKey="घटना" fill="#D4A367" barSize={7} />
+                            <Bar dataKey="death" fill="#D10000" barSize={7} />
+                            <Bar dataKey="incident" fill="#D4A367" barSize={7} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -255,19 +317,27 @@ const BulletinPDFLoss = (props: Props) => {
                     <h2>
                         <Translation>
                             {
-                                t => <span>{t('Hazardwise Breakdown of Incidents and Deaths')}</span>
+                                t => <span>{t('COVID-19 Stats for last 24 hours')}</span>
                             }
                         </Translation>
 
                     </h2>
                     <div className={styles.lossIconsRow}>
                         {
+
                             covidObj24HRs.map(l => (
-                                <LossItem
-                                    lossIcon={l.logo}
-                                    lossTitle={l.title}
-                                    loss={Number(covid24hrsStat[l.lossKey]).toLocaleString()}
-                                />
+                                <Translation>
+                                    {
+                                        t => (
+                                            <LossItem
+                                                lossIcon={l.logo}
+                                                lossTitle={t(`${l.title}`)}
+                                                loss={Number(covid24hrsStat[l.lossKey]).toLocaleString()}
+                                            />
+                                        )
+                                    }
+                                </Translation>
+
                             ))
                         }
                     </div>
@@ -301,21 +371,36 @@ const BulletinPDFLoss = (props: Props) => {
                                 vaccineStatObj.map((l, i) => {
                                     if (i === 0) {
                                         return (
-                                            <KhopBanner
-                                                value={Number(vaccineStat[l.khopKey]).toLocaleString()}
-                                                title={l.title}
-                                                percentage={null}
-                                            />
+                                            <Translation>
+                                                {
+                                                    t => (
+                                                        <KhopBanner
+                                                            value={Number(vaccineStat[l.khopKey]).toLocaleString()}
+                                                            title={t(`${l.title}`)}
+                                                            percentage={null}
+                                                        />
+                                                    )
+                                                }
+                                            </Translation>
+
+
                                         );
                                     }
                                     return (
-                                        <KhopBanner
-                                            value={Number(vaccineStat[l.khopKey]).toLocaleString()}
-                                            title={l.title}
-                                            percentage={
-                                                (Math.round((vaccineStat.secondDosage / vaccineStat.firstDosage) * 100))
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <KhopBanner
+                                                        value={Number(vaccineStat[l.khopKey]).toLocaleString()}
+                                                        title={t(`${l.title}`)}
+                                                        percentage={
+                                                            (Math.round((vaccineStat.secondDosage / vaccineStat.firstDosage) * 100))
+                                                        }
+                                                    />
+                                                )
                                             }
-                                        />
+                                        </Translation>
+
                                     );
                                 })
                             }
@@ -335,11 +420,18 @@ const BulletinPDFLoss = (props: Props) => {
                     <div className={styles.lossIconsRow}>
                         {
                             covidObjTotal.map(l => (
-                                <LossItem
-                                    lossIcon={l.logo}
-                                    lossTitle={l.title}
-                                    loss={Number(covidTotalStat[l.lossKey]).toLocaleString()}
-                                />
+                                <Translation>
+                                    {
+                                        t => (
+                                            <LossItem
+                                                lossIcon={l.logo}
+                                                lossTitle={t(`${l.title}`)}
+                                                loss={Number(covidTotalStat[l.lossKey]).toLocaleString()}
+                                            />
+                                        )
+                                    }
+                                </Translation>
+
                             ))
                         }
                     </div>
@@ -347,19 +439,19 @@ const BulletinPDFLoss = (props: Props) => {
                         <h2>
                             <Translation>
                                 {
-                                    t => <span>{t('COVID-19 Stats till date')}</span>
+                                    t => <span>{t('Province-wise death, missing and injured')}</span>
                                 }
                             </Translation>
 
                         </h2>
-                        <ResponsiveContainer width="100%" height="100%">
+                        <ResponsiveContainer width="90%" height="100%">
                             <BarChart
                                 layout="vertical"
                                 data={provinceWiseTotal}
                                 margin={{
                                     top: 20,
                                     right: 10,
-                                    left: 0,
+                                    left: 20,
                                     bottom: 5,
                                 }}
                             >
@@ -367,7 +459,7 @@ const BulletinPDFLoss = (props: Props) => {
                                 <XAxis
                                     type="number"
                                     // tickFormatter={tick => tick.toLocaleString()}
-                                    tickFormatter={DataFormater}
+                                    tickFormatter={e => DataFormater(e, language)}
                                     tick={{ fontSize: 10, width: 250 }}
                                     // unit={'लाख'}
                                 />
@@ -378,9 +470,26 @@ const BulletinPDFLoss = (props: Props) => {
                                 />
 
                                 {/* <Tooltip /> */}
-                                <Bar stackId={'a'} dataKey="कुल संक्रमित संन्ख्या" fill="#A6B2DE" barSize={12} />
-                                <Bar stackId={'a'} dataKey="कुल सक्रिय संक्रमित संन्ख्या" fill="#3F69C8" barSize={12} />
-                                <Bar stackId={'a'} dataKey="कुल मृत्‍यु संन्ख्या" fill="#3457A6" barSize={12} />
+                                <Bar
+                                    stackId={'a'}
+                                    dataKey={
+                                        language === 'np' ? 'कुल संक्रमित संन्ख्या' : 'Total Affected'}
+                                    fill="#A6B2DE"
+                                    barSize={12}
+                                />
+                                <Bar
+                                    stackId={'a'}
+                                    dataKey={language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active'}
+                                    fill="#3F69C8"
+                                    barSize={12}
+                                />
+                                <Bar
+
+                                    stackId={'a'}
+                                    dataKey={language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths'}
+                                    fill="#3457A6"
+                                    barSize={12}
+                                />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -402,10 +511,17 @@ const BulletinPDFLoss = (props: Props) => {
                                 {
                                     Object.keys(covidProvinceWiseTotal.p1).map((pwT, i) => (
                                         <tr>
-                                            <td>
-                                                {bullets[i]}
-                                                {nepaliRef[pwT]}
-                                            </td>
+                                            <Translation>
+                                                {
+                                                    t => (
+                                                        <td>
+                                                            {bullets[i]}
+                                                            {t(`${pwT}`)}
+                                                        </td>
+                                                    )
+                                                }
+                                            </Translation>
+
                                             {
                                                 Object.keys(covidProvinceWiseTotal)
                                                     .map(prov => (

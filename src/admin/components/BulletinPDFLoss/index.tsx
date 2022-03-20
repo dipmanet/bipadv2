@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 
@@ -18,6 +19,7 @@ import { connect } from 'react-redux';
 import GovLogo from 'src/admin/resources/govtLogo.svg';
 import NepaliDate from 'src/admin/components/NepaliDate';
 import { Translation } from 'react-i18next';
+import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
@@ -40,6 +42,62 @@ interface Props {
 
 }
 
+const months = {
+    1: 'बैशाख',
+    2: 'जेठ',
+    3: 'असार',
+    4: 'श्रावण',
+    5: 'भदौ',
+    6: 'आश्विन',
+    7: 'कार्तिक',
+    8: 'मंसिर',
+    9: 'पुष',
+    10: 'माघ',
+    11: 'फाल्गुन',
+    12: 'चैत्,',
+};
+
+const monthsEn = {
+    1: 'Baisakh',
+    2: 'Jestha',
+    3: 'Ashadh',
+    4: 'Shrawan',
+    5: 'Bhadra',
+    6: 'Ashwin',
+    7: 'Kartik',
+    8: 'Mangsir',
+    9: 'Poush',
+    10: 'Magh',
+    11: 'Falgun',
+    12: 'Chaitra',
+};
+
+const a = new Date();
+const yesterday = new Date(a);
+yesterday.setDate(yesterday.getDate() - 1);
+const b = yesterday.toLocaleString();
+const ourDate = b.split(',')[0].split('/');
+const dateString = `${ourDate[2]}-${ourDate[0]}-${ourDate[1]}`;
+const bsDate = adToBs(dateString);
+const year = bsDate.split('-')[0];
+const month = months[Number(bsDate.split('-')[1])];
+const monthEn = monthsEn[Number(bsDate.split('-')[1])];
+const day = bsDate.split('-')[2];
+const today = new Date();
+const baisakh1 = bsToAd(`${year}-01-01`);
+const DEFAULT_END_DATE = today;
+
+
+const aT = new Date();
+const bT = aT.toLocaleString();
+const ourDateT = bT.split(',')[0].split('/');
+const dateStringT = `${ourDateT[2]}-${ourDateT[0]}-${ourDateT[1]}`;
+const bsDateT = adToBs(dateStringT);
+const yearT = bsDateT.split('-')[0];
+const monthToday = months[Number(bsDateT.split('-')[1])];
+const monthEnToday = monthsEn[Number(bsDateT.split('-')[1])];
+const dayT = bsDateT.split('-')[2];
+
 
 const labelSelector = (d: LegendItem, language: string) => {
     if (language === 'en') { return d.label; }
@@ -51,10 +109,10 @@ const classNameSelector = (d: LegendItem) => d.style;
 const colorSelector = (d: LegendItem) => d.color;
 const radiusSelector = (d: LegendItem) => d.radius;
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', labelNe: 'मैनेर (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
-    { label: 'Major (<10)', labelNe: 'मेजर (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
-    { label: 'Severe (<100)', labelNe: 'सिविएर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
-    { label: 'Catastrophic (>100)', labelNe: 'कटेस्टरोपिह्क (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+    { label: 'Minor (0)', labelNe: 'सामान्य (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', labelNe: 'मुख्य (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', labelNe: 'गम्भिर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
 ];
 
 // const filteredHazardTypes = [{
@@ -115,101 +173,118 @@ const BulletinPDF = (props: Props) => {
     };
 
     useEffect(() => {
-        if (hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) {
-            const getHazardColor = (hazardName) => {
+        console.log('hazardWiseLoss loss', hazardWiseLoss);
+        // if ((hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) || (feedback && Object.keys(feedback) > 0)) {
+        const getHazardColor = (hazardName) => {
+            if (language === 'np') {
                 const h = Object
                     .keys(hazardTypes)
-                    .filter(k => hazardTypes[k].titleNe === hazardName);
+                    .filter(k => hazardTypes[k].titleNe === hazardName || hazardTypes[k].title === hazardName);
                 return hazardTypes[h[0]] ? hazardTypes[h[0]].color : '#000000';
-            };
+            }
+            const h = Object
+                .keys(hazardTypes)
+                .filter(k => hazardTypes[k].title === hazardName || hazardTypes[k].titleNe === hazardName);
+            return hazardTypes[h[0]] ? hazardTypes[h[0]].color : '#000000';
+        };
 
-            const getHazardTitle = (hazardName) => {
-                const h = Object
-                    .keys(hazardTypes)
-                    .filter(k => hazardTypes[k].titleNe === hazardName);
-                return hazardTypes[h[0]] ? hazardTypes[h[0]].title : '';
-            };
+        const getHazardTitle = (hazardName) => {
+            const h = Object
+                .keys(hazardTypes)
+                .filter(k => hazardTypes[k].titleNe === hazardName || hazardTypes[k].title === hazardName);
 
+            return language === 'np' ? hazardTypes[h[0]].titleNe : hazardTypes[h[0]].title;
+        };
 
-            const getSeverity = (deaths) => {
-                if (deaths) {
-                    if (Number(deaths) === 0) {
-                        return 8;
-                    }
-                    if (Number(deaths) < 10) {
-                        return 11;
-                    } if (Number(deaths) >= 10 && Number(deaths) < 100) {
-                        return 15;
-                    } if (Number(deaths) >= 100) {
-                        return 20;
-                    }
+        const getSeverity = (deaths) => {
+            if (deaths) {
+                if (Number(deaths) === 0) {
+                    return 8;
                 }
-                return 8;
-            };
+                if (Number(deaths) < 10) {
+                    return 11;
+                } if (Number(deaths) >= 10 && Number(deaths) < 100) {
+                    return 15;
+                } if (Number(deaths) >= 100) {
+                    return 20;
+                }
+            }
+            return 8;
+        };
 
-            const obj = Object.keys(hazardWiseLoss).map(hazardName => (
+        let obj = {};
+        let newhazardLegends = [];
+        if (Object.keys(hazardWiseLoss).length > 0) {
+            obj = Object.keys(hazardWiseLoss).map(hazardName => (
                 {
-                    title: hazardName,
-                    titleEn: getHazardTitle(hazardName),
+                    title: getHazardTitle(hazardName),
+                    // titleEn: getHazardTitle(hazardName),
                     color: getHazardColor(hazardName),
                 }
             ));
+        }
 
+        if (Object.keys(feedback).length > 0) {
             const allHazardsAdded = Object.keys(feedback)
                 .map(item => feedback[item])
                 .filter(item => item.coordinates)
                 .map(item => item.hazard);
             const uniqueAddedHazards = [...new Set(allHazardsAdded)];
-            const newhazardLegends = uniqueAddedHazards.map(h => ({
-                title: h,
-                titleEn: getHazardTitle(h),
+            newhazardLegends = uniqueAddedHazards.map(h => ({
+                title: getHazardTitle(h),
+                // titleEn: getHazardTitle(h),
                 color: getHazardColor(h),
             }));
-
+        }
+        if (Object.keys(obj).length > 0 && newhazardLegends.length > 0) {
             setHazardLegends([...obj, ...newhazardLegends]);
+        } else if (newhazardLegends.length > 0 && Object.keys(obj).length === 0) {
+            setHazardLegends([...newhazardLegends]);
+        }
+        console.log('newhazardLegends', newhazardLegends);
 
-            const features = [];
-            Object.keys(hazardWiseLoss).map((h) => {
-                if (Object.keys(hazardWiseLoss[h]).length > 2) {
-                    // setHazardGeoJson([...newHazardGeoJson,
-                    features.push({
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: hazardWiseLoss[h].coordinates },
-                        properties: {
-                            hazardColor: getHazardColor(h),
-                            severityScale: getSeverity(hazardWiseLoss[h].deaths),
-                        },
+        const features = [];
+        Object.keys(hazardWiseLoss).map((h) => {
+            if (Object.keys(hazardWiseLoss[h]).length > 2) {
+                // setHazardGeoJson([...newHazardGeoJson,
+                features.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: hazardWiseLoss[h].coordinates },
+                    properties: {
+                        hazardColor: getHazardColor(h),
+                        severityScale: getSeverity(hazardWiseLoss[h].deaths),
+                    },
                     // }]);
-                    });
-                }
+                });
+            }
+            return null;
+        });
+
+        Object.keys(feedback)
+            .map(item => feedback[item])
+            .filter(item => item.coordinates)
+            .map((f) => {
+                features.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: f.coordinates },
+                    properties: {
+                        hazardColor: getHazardColor(f.hazard),
+                        severityScale: getSeverity(f.deaths),
+                    },
+                });
+
                 return null;
             });
 
-            Object.keys(feedback)
-                .map(item => feedback[item])
-                .filter(item => item.coordinates)
-                .map((f) => {
-                    features.push({
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: f.coordinates },
-                        properties: {
-                            hazardColor: getHazardColor(f.hazard),
-                            severityScale: getSeverity(f.deaths),
-                        },
-                    });
 
-                    return null;
-                });
-
-
-            console.log('features', features);
-            setincidentPoints({
-                type: 'FeatureCollection',
-                features,
-            });
-        }
+        console.log('features', features);
+        setincidentPoints({
+            type: 'FeatureCollection',
+            features,
+        });
+        // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [feedback, hazardWiseLoss]);
+    }, [feedback, hazardWiseLoss, language]);
 
     useEffect(() => {
         const cD = Object.keys(peopleLoss).map(pL => ({
@@ -279,12 +354,21 @@ const BulletinPDF = (props: Props) => {
                 </div>
                 <div className={styles.loss}>
                     <h2>
+                        {
+                            language === 'np'
+                                ? `${month} ${day} बिहान 10:00 बजेदेखी ${monthToday} ${dayT} बिहान 10:00 बजे सम्म`
+                                : `Disaster Incidents from ${day} ${monthEn} 10:00 am to ${dayT} ${monthEnToday} 10:00 am`
+                        }
+
+
+                    </h2>
+                    {/* <h2>
                         <Translation>
                             {
                                 t => <span>{t('Disaster Incidents in last 24 hours')}</span>
                             }
                         </Translation>
-                    </h2>
+                    </h2> */}
                     {/* <p>१-२ पौष २०७८, बिहान १० बजे सम्म </p> */}
                     <div className={styles.lossIconsRow}>
                         {
@@ -329,7 +413,7 @@ const BulletinPDF = (props: Props) => {
                             }
                         </Translation>
                     </h2>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="95%" height="100%">
                         <BarChart
                             data={provWiseLossChart}
                             margin={{

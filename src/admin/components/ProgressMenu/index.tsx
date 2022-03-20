@@ -119,7 +119,7 @@ const ProgressMenu = (props: Props): JSX.Element => {
     const { progress, activeMenu: active, menuKey, language: { language } } = props;
     // const { resourceID, healthFormEditData } = useSelector((state: OurState) => state.health);
     // const { userDataMain } = useSelector((state: RootState) => state.user);
-    const [MenuItems, setMenuItems] = useState(MenuItemsAll);
+    const [MenuItems, setMenuItems] = useState(Menu.bulletinProgressMenu);
 
     // useEffect(() => {
     //     if (userDataMain.isSuperuser) {
@@ -161,7 +161,10 @@ const ProgressMenu = (props: Props): JSX.Element => {
                                 className={styles.mainIcon}
                                 alt=""
                             />
-                            {language === 'np' ? menuItem.name : menuItem.name_en}
+                            {language === 'np'
+                                ? menuItem.name
+                                : menuItem.name_en
+                            }
                         </div>
                         <Icon
                             name="circle"

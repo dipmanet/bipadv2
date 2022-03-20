@@ -29,7 +29,6 @@ const defaultProps = {
 //     return d.title;
 // };
 const legendLabelSelector = d => d.title;
-
 const legendColorSelector = d => d.color;
 const legendKeySelector = d => d.title;
 

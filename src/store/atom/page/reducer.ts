@@ -1796,6 +1796,7 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
         deferedState.bulletinPage.sitRep = bulletinData.sitRep;
+        deferedState.bulletinPage.hilight = bulletinData.hilight;
     });
 
     return newState;

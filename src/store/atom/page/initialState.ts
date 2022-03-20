@@ -402,6 +402,7 @@ const state: PageState = {
     bulletinEditData: {},
     bulletinPage: {
         sitRep: 123,
+        hilight: '',
         incidentSummary: {
             numberOfIncidents: 1,
             numberOfDeath: 5,

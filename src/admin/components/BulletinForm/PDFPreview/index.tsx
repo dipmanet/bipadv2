@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
 import React, { useEffect, useState } from 'react';
@@ -17,6 +18,7 @@ import styles from './styles.scss';
 import {
     userSelector,
     bulletinEditDataSelector,
+    languageSelector,
 } from '#selectors';
 import {
     setBulletinEditDataAction,
@@ -33,6 +35,7 @@ import Document from '#views/Profile/Document';
 const mapStateToProps = state => ({
     user: userSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
+    language: languageSelector(state),
 
 });
 
@@ -62,6 +65,18 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             params.doc.save('Bulletin.pdf');
         },
     },
+    getSitRep: {
+        url: '/bipad-bulletin/',
+        method: methods.GET,
+        // query: requestQuery,
+        onMount: true,
+        onSuccess: ({ response, params }) => {
+            if (response && response.results.length > 0) {
+                params.setSitRepArr(response.results.map(j => j.sitrep));
+                params.setAllBulletinData(response.results);
+            }
+        },
+    },
 };
 
 const PDFPreview = (props) => {
@@ -69,12 +84,34 @@ const PDFPreview = (props) => {
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
     const [ward, setWard] = useState(null);
+    const [sitRepArr, setSitRepArr] = useState([]);
+    const [allBulletinData, setAllBulletinData] = useState([]);
     const [pending, setPending] = useState(false);
 
     const {
-        bulletinData,
+        bulletinData: {
+            sitrep,
+            incidentSummary,
+            peopleLoss,
+            hazardWiseLoss,
+            genderWiseLoss,
+            covid24hrsStat,
+            covidTotalStat,
+            vaccineStat,
+            covidProvinceWiseTotal,
+            minTempFooter,
+            yearlyData,
+            tempMin,
+            tempMax,
+            maxTempFooter,
+            // feedback,
+            pdfFile,
+            dailySummary,
+            rainSummaryPic,
+            hilight,
+        },
         user,
-        requests: { bulletinPostRequest },
+        requests: { bulletinPostRequest, getSitRep },
         bulletinEditData,
         setBulletinEditData,
         handlePrevBtn,
@@ -83,7 +120,14 @@ const PDFPreview = (props) => {
         deleteFeedbackChange,
         hazardWiseLossData,
         handleSubFieldChange,
+        language,
     } = props;
+
+    getSitRep.setDefaultParams({
+        setSitRepArr,
+        setAllBulletinData,
+    });
+
 
     const isFile = (input: any): input is File => (
         'File' in window && input instanceof File
@@ -128,16 +172,122 @@ const PDFPreview = (props) => {
         );
         return formDataNew;
     };
-    const savePDf = (pdfFile, doc) => {
-        axios
-            .post(`${baseUrl}/bipad-bulletin/`, getFormData({
-                ...bulletinData,
+
+    const getPostData = (file) => {
+        if (language === 'np') {
+            return getFormData({
+                sitrep,
+                incidentSummary,
+                peopleLoss,
+                hazardWiseLoss,
+                genderWiseLoss,
+                covidTwentyfourHrsStat: covid24hrsStat || {},
+                covidTotalStat,
+                vaccineStat,
+                covidProvinceWiseTotal,
                 province,
                 district,
+                yearlyData,
                 municipality,
                 ward,
-                pdfFile,
-            }), {
+                pdfFile: file,
+                temp_min_ne: tempMin,
+                temp_min_footer_ne: minTempFooter,
+                temp_max_ne: tempMax,
+                temp_max_footer_ne: maxTempFooter,
+                feedback_ne: feedback,
+                pdf_file_ne: pdfFile,
+                daily_summary_ne: dailySummary,
+                rain_summary_picture_ne: rainSummaryPic,
+                highlight_ne: hilight,
+            });
+        }
+        return getFormData({
+            sitrep,
+            incidentSummary,
+            peopleLoss,
+            hazardWiseLoss,
+            genderWiseLoss,
+            covidTwentyfourHrsStat: covid24hrsStat || {},
+            covidTotalStat,
+            vaccineStat,
+            covidProvinceWiseTotal,
+            minTempFooter,
+            province,
+            district,
+            yearlyData,
+            municipality,
+            ward,
+            tempMin,
+            tempMax,
+            maxTempFooter,
+            feedback,
+            pdfFile: file,
+            dailySummary,
+            rainSummaryPic,
+            hilight,
+        });
+    };
+
+    const getPatchData = (file) => {
+        if (language === 'np') {
+            return getFormData({
+                sitrep,
+                incidentSummary,
+                peopleLoss,
+                hazardWiseLoss,
+                genderWiseLoss,
+                covidTwentyfourHrsStat: covid24hrsStat || {},
+                covidTotalStat,
+                vaccineStat,
+                covidProvinceWiseTotal,
+                province,
+                district,
+                yearlyData,
+                municipality,
+                ward,
+                pdfFile: file,
+                temp_min_ne: tempMin,
+                temp_min_footer_ne: minTempFooter,
+                temp_max_ne: tempMax,
+                temp_max_footer_ne: maxTempFooter,
+                feedback_ne: feedback,
+                pdf_file_ne: pdfFile,
+                daily_summary_ne: dailySummary,
+                rain_summary_picture_ne: rainSummaryPic,
+                highlight_ne: hilight,
+            });
+        }
+        return getFormData({
+            sitrep,
+            incidentSummary,
+            peopleLoss,
+            hazardWiseLoss,
+            genderWiseLoss,
+            covidTwentyfourHrsStat: covid24hrsStat || {},
+            covidTotalStat,
+            vaccineStat,
+            covidProvinceWiseTotal,
+            minTempFooter,
+            province,
+            district,
+            yearlyData,
+            municipality,
+            ward,
+            tempMin,
+            tempMax,
+            maxTempFooter,
+            feedback,
+            pdfFile: file,
+            dailySummary,
+            rainSummaryPic,
+            hilight,
+        });
+    };
+
+    const savePDf = (file, doc) => {
+        axios
+            .post(`${baseUrl}/bipad-bulletin/`, getPostData(file), {
                 headers: {
                     Accept: 'application/json',
                 },
@@ -150,16 +300,10 @@ const PDFPreview = (props) => {
                 setPending(false);
             });
     };
-    const updatePDF = (pdfFile, doc) => {
+
+    const updatePDF = (file, doc, id) => {
         axios
-            .patch(`${baseUrl}/bipad-bulletin/${bulletinEditData.id}/`, getFormData({
-                ...bulletinData,
-                province,
-                district,
-                municipality,
-                ward,
-                pdfFile,
-            }), {
+            .patch(`${baseUrl}/bipad-bulletin/${id}/`, getPatchData(file), {
                 headers: {
                     Accept: 'application/json',
                 },
@@ -200,6 +344,13 @@ const PDFPreview = (props) => {
             }
         }
     }, [user]);
+    const getIdFromSitrep = (sR) => {
+        const filtered = allBulletinData.filter(j => j.sitrep === sR);
+        if (filtered.length > 0) {
+            return filtered[0].id;
+        }
+        return 0;
+    };
 
     const handleDownload = async (reportType: string) => {
         let pageNumber = 0;
@@ -271,11 +422,23 @@ const PDFPreview = (props) => {
         }
 
         const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
-        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            updatePDF(bulletin, doc);
-        } else {
-            savePDf(bulletin, doc);
+
+        if (sitrep) {
+            // if the sitrep is in DB
+            if (sitRepArr.includes(sitrep)) {
+                // do patch
+                const id = getIdFromSitrep(sitrep);
+                updatePDF(bulletin, doc, id);
+            } else {
+                // do post
+                savePDf(bulletin, doc);
+            }
         }
+        // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+        //     updatePDF(bulletin, doc);
+        // } else {
+        //     savePDf(bulletin, doc);
+        // }
     };
 
     return (
