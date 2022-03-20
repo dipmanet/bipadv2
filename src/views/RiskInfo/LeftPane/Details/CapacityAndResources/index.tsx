@@ -2290,7 +2290,28 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleVisualization = (boolean, checkedCategory, resourceType, level, lvl2catName, typeName) => {
+        const { region, wards } = this.props;
+        const { resourceCollection } = this.state;
+
+        let WardData = [];
+        if (region.adminLevel === 3) {
+            WardData = wards.filter(i => i.municipality === region.geoarea).map(d => d.id);
+        } else if (region.adminLevel === 2) {
+            WardData = wards.filter(i => i.district === region.geoarea).map(d => d.id);
+        } else if (region.adminLevel === 1) {
+            WardData = wards.filter(i => i.province === region.geoarea).map(d => d.id);
+        } else {
+            WardData = wards.map(d => d.id);
+        }
+        console.log('wardData', WardData);
+        // const filteredResourceCollection = resourceCollection[resourceType].filter(data => data.ward.includes(WardData));
+        const filteredResourceCollection = resourceCollection[resourceType];
+        console.log('filteredResourceCollection', filteredResourceCollection);
+        console.log('Wards', wards);
+        console.log('reason', region);
         this.setState({ openVisualization: boolean });
+        console.log('checked category', checkedCategory);
+        console.log('resource TYpe', resourceType);
         this.handleMainCategoryCheckBox(checkedCategory, resourceType, level, lvl2catName, typeName, boolean);
 
         ResourceType = resourceType;
@@ -2416,6 +2437,8 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
+        console.log('resource collection', resourceCollection);
+        console.log('This reason', region);
         return (
             <>
                 <Loading pending={pending} />
