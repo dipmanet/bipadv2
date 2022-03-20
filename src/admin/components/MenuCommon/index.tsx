@@ -124,7 +124,7 @@ const MenuCommon = (props: Props) => {
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {
-                Menu && Menu.filter(item => item.isEnabled && item.isPublic)
+                Menu && Menu.filter(item => item.isEnabled)
                     .map((menuItem: MenuItem, i: number) => (
                         <div
                             key={menuItem.id}
