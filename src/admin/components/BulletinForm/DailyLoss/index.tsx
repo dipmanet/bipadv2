@@ -14,6 +14,7 @@ import { Translation } from 'react-i18next';
 
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import 'nepali-datepicker-reactjs/dist/index.css';
+import { ADToBS, BSToAD } from 'bikram-sambat-js';
 import {
     hazardTypesSelector,
     provincesSelector,
@@ -181,8 +182,8 @@ const Bulletin = (props: Props) => {
                             <NepaliDatePicker
                                 inputClassName="form-control"
                                 className={styles.datePick}
-                                value={date}
-                                onChange={(value: string) => setDate(value)}
+                                value={ADToBS(date)}
+                                onChange={(value: string) => setDate(BSToAD(value))}
                                 options={{ calenderLocale: language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                             />
                         </form>
@@ -218,7 +219,7 @@ const Bulletin = (props: Props) => {
                     <div className={styles.formItem}>
                         <FormControl fullWidth>
                             <InputLabel>
-                                {language === 'np' ? 'हिलाईट...' : 'Hilight...'}
+                                {language === 'np' ? 'हाइलाईट...' : 'Hilight...'}
                             </InputLabel>
                             <Input
                                 type="text"
