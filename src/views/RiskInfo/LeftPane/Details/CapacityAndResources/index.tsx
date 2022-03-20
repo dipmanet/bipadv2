@@ -109,6 +109,7 @@ import evacuationCentre from '#resources/icons/newCapResEvacuationcenter.svg';
 import airway from '#resources/icons/airway.svg';
 import roadway from '#resources/icons/roadway.svg';
 import waterway from '#resources/icons/waterway.svg';
+import visualization from '#resources/icons/visualization.svg';
 import helipad from '#resources/icons/heli.svg';
 import Checkbox from './Checkbox/index';
 import CapacityResourceTable from './CapacityResourceTable';
@@ -191,7 +192,7 @@ const initialActiveLayersIndication = {
     electricity: false,
     sanitation: false,
     watersupply: false,
-    evacuationCentre: false,
+    evacuationcentre: false,
 
 
 };
@@ -544,6 +545,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
         onSuccess: ({ params }) => {
             if (params && params.closeModal) {
                 params.closeModal(true);
+                params.DeletedResourceApiRecall();
             }
         },
         onFailure: ({ error, params }) => {
@@ -959,6 +961,16 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         return '';
     }
 
+    private DeletedResourceApiRecall = () => {
+        const { isFilterClicked } = this.context;
+        const { carKeys, requests: { resourceGetRequest }, filters: { faramValues: { region } } } = this.props;
+        resourceGetRequest.do({
+            resourceType: carKeys,
+            region,
+            filterClickCheckCondition: isFilterClicked,
+        });
+    }
+
     private handleToggleClick = (key: toggleValues, value: boolean, typeName, filteredSubCategoriesLvl2ResourceType, lvl2UncheckCondition) => {
         const { activeLayersIndication, resourceCollection, categoryLevel, selectedCategoryName, subCategoryCheckboxChecked } = this.state;
         const temp = filteredSubCategoriesLvl2ResourceType || key ? { ...activeLayersIndication } : { ...initialActiveLayersIndication };
@@ -1307,7 +1319,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
     private handleResourceClick = (feature: unknown, lngLat: [number, number]) => {
         const { properties: { id, title, description, ward, resourceType, point } } = feature;
-
         const { coordinates } = JSON.parse(point);
         const { map } = this.context;
 
@@ -1518,10 +1529,17 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     }
 
     private handleShowInventoryClick = () => {
-        this.setState({
-            showInventoryModal: true,
-            resourceLngLat: undefined,
-        });
+        const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+        if (resourceType === 'communityspace') {
+            this.handleShowCommunitypaceDetails();
+        } else if (resourceType === 'openspace') {
+            this.handleShowOpenspaceDetailsClick();
+        } else {
+            this.setState({
+                showInventoryModal: true,
+                resourceLngLat: undefined,
+            });
+        }
     }
 
     private handleEditResourceFormCloseButtonClick = () => {
@@ -1564,9 +1582,18 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     };
 
     private handleShowOpenspaceDetailsClick = (openspaceDeleted?: boolean) => {
-        this.setState(prevState => ({
-            singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
-        }));
+        const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+        if (resourceType === 'openspace') {
+            this.setState(prevState => ({
+                singleOpenspaceDetailsModal: !prevState.singleOpenspaceDetailsModal,
+            }));
+        } else {
+            this.setState({
+                showInventoryModal: !showInventoryModal,
+                resourceLngLat: undefined,
+            });
+        }
+
         if (openspaceDeleted) {
             this.setState({
                 resourceLngLat: undefined,
@@ -1578,13 +1605,25 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleShowCommunitypaceDetails = (
         communityspaceDeleted?: boolean,
     ) => {
-        this.setState(prevState => ({
-            CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
-        }));
+        const { resourceInfo: { resourceType }, showInventoryModal } = this.state;
+
+        if (resourceType === 'communityspace') {
+            this.setState(prevState => ({
+                CommunitySpaceDetailsModal: !prevState.CommunitySpaceDetailsModal,
+            }));
+        } else {
+            this.setState({
+                showInventoryModal: !showInventoryModal,
+                resourceLngLat: undefined,
+            });
+        }
+
+
         if (communityspaceDeleted) {
             this.setState({
                 resourceLngLat: undefined,
                 resourceInfo: undefined,
+
             });
         }
     };
@@ -2257,6 +2296,15 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         ResourceType = resourceType;
     }
 
+    private handleClearDataAfterAddition = (resourcetype) => {
+        const { resourceCollection, PreserveresourceCollection } = this.state;
+        this.setState({
+            resourceCollection: { ...resourceCollection, [resourcetype]: [] },
+        });
+        this.setState({
+            PreserveresourceCollection: { ...PreserveresourceCollection, [resourcetype]: [] },
+        });
+    }
 
     public render() {
         const {
@@ -2359,7 +2407,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const electricityGeoJson = this.getGeojson(resourceCollection.electricity);
         const sanitationGeoJson = this.getGeojson(resourceCollection.sanitation);
         const waterSupplyGeoJson = this.getGeojson(resourceCollection.watersupply);
-        const evacuationcenterGeoJson = this.getGeojson(resourceCollection.evacuationcentre);
+        const evacuationcentreGeoJson = this.getGeojson(resourceCollection.evacuationcentre);
         const tooltipOptions = {
             closeOnClick: true,
             closeButton: false,
@@ -2397,6 +2445,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                 // onEditSuccess={this.handleResourceEdit}
                                 closeModal={this.handleEditResourceFormCloseButtonClick}
                                 updateResourceOnDataAddition={this.updateResourceOnDataAddition}
+                                handleClearDataAfterAddition={this.handleClearDataAfterAddition}
 
 
                             />
@@ -2482,7 +2531,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             className={resourceCategory.find(res => res === item.name)
                                                 ? styles.categorySelected : styles.categories}
                                         >
-                                            <div>
+                                            <div style={{ marginTop: '5px' }}>
                                                 <Checkbox
                                                     label="Value"
                                                     value={checked}
@@ -2517,16 +2566,22 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                         src={sidepanelLogo.filter(i => i.name === item.name)[0].image}
                                                     />
-                                                    <h3>{item.name}</h3>
+                                                    <h3 style={{ fontSize: '16px' }}>{item.name}</h3>
                                                 </div>
 
 
                                                 <div style={{ display: 'flex', alignItems: 'center', marginRight: (item.Category || item.subCategory.length) ? '0px' : '26px' }}>
                                                     {item.level === 1 ? (
                                                         <button type="button" style={{ border: 'none', background: 'none', cursor: 'pointer' }} onClick={() => this.handleVisualization(true, item.name, item.resourceType, item.level, item.name, item.typeName)}>
-                                                            <Icon
+                                                            {/* <Icon
                                                                 name="table"
                                                                 className={styles.inputIcon}
+                                                            /> */}
+                                                            <ScalableVectorGraphics
+                                                                className={styles.visualizationIcon}
+
+
+                                                                src={visualization}
                                                             />
 
                                                         </button>
@@ -2535,12 +2590,12 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         ? (
                                                             <Icon
                                                                 name="dropdown"
-                                                                className={styles.inputIcon}
+                                                                className={styles.inputIconDropdown}
                                                             />
                                                         ) : (
                                                             <Icon
                                                                 name="dropRight"
-                                                                className={styles.inputIcon}
+                                                                className={styles.inputIconDropdown}
                                                             />
                                                         ) : ''}
                                                 </div>
@@ -2562,7 +2617,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
 
                                                             >
                                                                 <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!mainCategoryCheckboxChecked.find(datas => datas === data.name)} onChange={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name, '')} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
+                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleMainCategoryCheckBox(data.name, data.resourceType, 2, item.name)}>
                                                                     {' '}
                                                                     <h4>{data.name}</h4>
                                                                 </label>
@@ -2608,7 +2663,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                         <ul key={data.id}>
                                                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                                                 <input type="checkbox" name="name" style={{ height: '1rem', width: '1rem', marginRight: '10px', cursor: 'pointer' }} checked={!!subCategoryCheckboxChecked.find(i => i === data.id)} onChange={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)} />
-                                                                <label htmlFor="name" style={{ cursor: 'pointer' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
+                                                                <label htmlFor="name" style={{ cursor: 'pointer', fontSize: '14px' }} onClick={disableCheckbox ? '' : () => this.handleSubCategoryCheckbox(data.id, item.name, item.resourceType)}>
                                                                     {' '}
                                                                     <h4>{data.name}</h4>
                                                                 </label>
@@ -3773,20 +3828,20 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                     )}
                                 </MapSource>
                             )}
-                            {/** evacuationcenterGeoJson */}
+                            {/** evacuationcentreGeoJson */}
                             {activeLayersIndication.evacuationcentre && (
                                 <>
                                     <MapSource
-                                        sourceKey="resource-symbol-evacuationcenter"
+                                        sourceKey="resource-symbol-evacuationcentre"
                                         sourceOptions={{
                                             type: 'geojson',
                                             cluster: true,
                                             clusterMaxZoom: 10,
                                         }}
-                                        geoJson={evacuationcenterGeoJson}
+                                        geoJson={evacuationcentreGeoJson}
                                     >
                                         <MapLayer
-                                            layerKey="cluster-evacuationcenter"
+                                            layerKey="cluster-evacuationcentre"
                                             onClick={this.handleClusterClick}
                                             layerOptions={{
                                                 type: 'circle',
@@ -3797,7 +3852,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="cluster-count-evacuationcenter"
+                                            layerKey="cluster-count-evacuationcentre"
                                             layerOptions={{
                                                 type: 'symbol',
                                                 filter: ['has', 'point_count'],
@@ -3809,7 +3864,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="resource-symbol-background-evacuationcenter"
+                                            layerKey="resource-symbol-background-evacuationcentre"
                                             onClick={this.handleResourceClick}
                                             onMouserEnter={
                                                 this.handleResourceMouseEnter
@@ -3826,7 +3881,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                             }}
                                         />
                                         <MapLayer
-                                            layerKey="-resourece-symbol-icon-evacuationcenter"
+                                            layerKey="-resourece-symbol-icon-evacuationcentre"
                                             layerOptions={{
                                                 type: 'symbol',
                                                 filter: [
@@ -3834,7 +3889,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                     ['has', 'point_count'],
                                                 ],
                                                 layout: {
-                                                    'icon-image': 'evacuationcenter',
+                                                    'icon-image': 'evacuationcentre',
                                                     'icon-size': 0.03,
                                                 },
                                             }}
@@ -3847,28 +3902,19 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                                 onHide={this.handleTooltipClose}
                                             >
                                                 <ResourceTooltip
-                                                    // FIXME:hide tooltip edit if there is no permission
+                                                    // FIXME: hide tooltip edit if there is no permission
                                                     isLoggedInUser={isLoggedInUser}
                                                     {...resourceInfo}
                                                     {...resourceDetails}
-                                                    onEditClick={
-                                                        this.handleEditClick
-                                                    }
-                                                    onShowInventoryClick={
-                                                        () => this.handleShowCommunitypaceDetails()
-                                                    }
-                                                    authenticated={authenticated}
+                                                    onEditClick={this.handleEditClick}
                                                     wardsRef={wardsRef}
+                                                    onShowInventoryClick={this.handleShowInventoryClick}
                                                     filterPermissionGranted={filterPermissionGranted}
                                                 />
                                             </MapTooltip>
                                         )}
                                     </MapSource>
-                                    {resourceInfo && (
-                                        <PolygonBoundaryCommunity
-                                            resourceInfo={resourceInfo}
-                                        />
-                                    )}
+
                                 </>
                             )}
 
@@ -4316,7 +4362,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 } */}
 
                 { }
-                {
+                {/* {
                     palikaRedirect.showForm && palikaRedirect.showModal === 'inventory'
                     // && isDefined(inventoryItem)
                     // && isDefined(inventoryItem.id)
@@ -4326,7 +4372,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             closeModal={this.handleInventoryModalClose}
                         />
                     )
-                }
+                } */}
 
                 {/* {showResourceForm && resourceDetails && (
                     <AddResourceForm
@@ -4375,6 +4421,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             onEdit={this.handleEditClick}
                             routeToOpenspace={this.routeToOpenspace}
                             type={resourceDetails && resourceDetails.resourceType}
+                            DeletedResourceApiRecall={this.DeletedResourceApiRecall}
                         />
                     )
                 }
@@ -4386,6 +4433,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                             onEdit={this.handleEditClick}
                             routeToOpenspace={this.routeToOpenspace}
                             openspaceDeleteRequest={openspaceDeleteRequest}
+                            DeletedResourceApiRecall={this.DeletedResourceApiRecall}
                         />
                     )
                 }

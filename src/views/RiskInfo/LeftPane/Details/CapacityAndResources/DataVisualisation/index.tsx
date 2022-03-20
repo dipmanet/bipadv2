@@ -768,8 +768,8 @@ const visualizationKeyValues = [
 
             {
                 label: 'Community Space Area Details(Sq Km)',
-                key: ['totalArea', 'usableArea'],
-                values: ['Total Area', 'Usable Area'],
+                key: ['capacity'],
+                values: ['Capacity of Community Space'],
                 isBoolean: false,
 
             },
@@ -1118,6 +1118,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             GraphVisualizationData: [],
             isValueCalculated: false,
             isDataSetClicked: false,
+            allDataNullConditionCheck: false,
 
         };
     }
@@ -1170,8 +1171,16 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                     datakey.isBoolean, datakey.values);
                 return datam;
             });
-
+        let nullDataCheck = null;
         const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+        nullDataCheck = calculatedSum || null;
+
+        if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
+            this.setState({
+                isValueCalculated: true,
+                allDataNullConditionCheck: true,
+            });
+        }
         if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
             this.setState({ isValueCalculated: true });
         }
@@ -1288,7 +1297,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     public render() {
         const { closeVisualization, checkedCategory,
             resourceType, level, lvl2catName, typeName, resourceCollection, selectedCategoryName, wards, provinces, districts, municipalities, pendingAPICall } = this.props;
-        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData } = this.state;
+        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
 
 
         const labelName = visualizationKeyValues
@@ -1322,6 +1331,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
+
         return (
             <Modal className={
                 styles.contactFormModal
@@ -1371,8 +1381,12 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                         <DangerButton
                                             transparent
                                             iconName="close"
-                                            onClick={() => closeVisualization(false,
-                                                checkedCategory, resourceType, level, lvl2catName, typeName)}
+                                            onClick={() => {
+                                                this.setState({ allDataNullConditionCheck: false });
+                                                closeVisualization(false,
+                                                    checkedCategory, resourceType, level, lvl2catName, typeName);
+                                            }
+                                            }
                                             title="Close Modal"
                                             className={styles.closeButton}
                                         />
@@ -1486,7 +1500,10 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                                                 ))}
                                                 {!pendingAPICall && (resourceCollection[resourceType]).length === 0
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available</h2>
+                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                    : ''}
+                                                {allDataNullConditionCheck
+                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
                                                     : ''}
                                             </div>
                                         )}

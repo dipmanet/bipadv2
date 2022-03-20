@@ -348,11 +348,11 @@ export default {
         },
         bridge: {
             ...resourceClusterInitial,
-            'circle-color': '#505050',
+            'circle-color': '#AAB2AD',
         },
         evacuationcentre: {
             ...resourceClusterInitial,
-            'circle-color': '#505050',
+            'circle-color': '#F47267',
         },
         sanitation: {
             ...resourceClusterInitial,
@@ -423,6 +423,7 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#BCE618',
         },
+
     },
 
     resourcePoint: {
@@ -444,11 +445,11 @@ export default {
         },
         bridge: {
             ...resourcePointInitial,
-            'circle-color': '#505050',
+            'circle-color': '#AAB2AD',
         },
         evacuationcentre: {
             ...resourcePointInitial,
-            'circle-color': '#505050',
+            'circle-color': '#F47267',
         },
         airway: {
             ...resourcePointInitial,

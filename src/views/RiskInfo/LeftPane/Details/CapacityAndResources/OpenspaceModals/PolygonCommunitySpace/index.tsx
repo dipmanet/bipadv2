@@ -99,7 +99,7 @@ class Polygon extends React.PureComponent<Props, State> {
             && response.results[0].polygons
             && response.results[0].polygons.coordinates
             && response.results[0].polygons.coordinates[0];
-
+        const points = JSON.parse(this.props.resourceInfo.resourceInfo.point);
         if (polygonsCoordinates) {
             map.addSource('community-sorce', {
                 type: 'geojson',
@@ -124,6 +124,7 @@ class Polygon extends React.PureComponent<Props, State> {
             });
             map.flyTo({
                 zoom: 16,
+                center: points.coordinates,
 
             });
         }

@@ -10,12 +10,13 @@ import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
 import RegionSelectInput from './RegionSelectInput';
 import NumberInput from '#rsci/NumberInput';
+import LocationInput from '#components/LocationInput';
 
 interface PropsFromState {
     authState: AuthState;
 }
 
-type ReduxProps = PropsFromState ;
+type ReduxProps = PropsFromState;
 
 
 interface Props {
@@ -103,9 +104,15 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
                 />
             )
         } */}
+        <LocationInput
+            // className={styles.locationInput}
+            faramElementName="location"
+            classCategory={styles.locationInputOpenSpace}
+            category={'capacityResource'}
+        />
         {resourceId === undefined
 
-&& <span>Please make sure to complete all the steps while filling the form.</span>}
+            && <span>Please make sure to complete all the steps while filling the form.</span>}
         <div className={styles.stepButtons}>
             {/* <PrimaryButton
                 type="submit"
@@ -119,7 +126,7 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
             <PrimaryButton
                 onClick={() => postBasicInfo()}
             >
-         Save and Continue
+                Save and Continue
             </PrimaryButton>
 
 
