@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+/* eslint-disable no-tabs */
+/* eslint-disable no-mixed-spaces-and-tabs */
+import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import styles from './styles.scss';
@@ -22,6 +24,7 @@ const Map = (props: any) => {
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
+    const [clickedId, setclickedId] = useState<string | number | undefined>();
     function noop() {}
 
     const images = [
@@ -279,7 +282,12 @@ const Map = (props: any) => {
                 // filter: ['!', ['has', 'point_count']],
                 paint: {
                     'circle-color': ['get', 'color'],
-                    'circle-radius': 6,
+                    'circle-radius': [
+					    'case',
+					    ['boolean', ['feature-state', 'clicked'], false],
+					    9,
+					    6,
+                    ],
                     'circle-stroke-width': 1,
                     'circle-stroke-color': '#fff',
                 },
@@ -289,20 +297,51 @@ const Map = (props: any) => {
             });
 
             multihazardMap.on('click', 'contacts-unclustered-point', (e) => {
-                const coordinates = e.features[0].geometry.coordinates.slice();
+                const { lngLat } = e;
+                const coordinates = [lngLat.lng, lngLat.lat];
 
                 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                 }
                 const popupNode = document.createElement('div');
+
+
+                if (clickedId) {
+                    multihazardMap.setFeatureState(
+                        { id: clickedId,
+                            source: 'contactInfo' },
+                        { clicked: false },
+                    );
+                }
+                setclickedId(e.features[0].id);
+
+                multihazardMap.setFeatureState(
+                    { id: clickedId,
+                        source: 'contactInfo' },
+                    { clicked: true },
+                );
+
                 ReactDOM.render(
                     <PopupOnMapClick mainType={'Hazard'} />, popupNode,
                 );
+
+                console.log('features', e.features);
+
                 new mapboxgl.Popup()
                     .setLngLat(coordinates)
                     .setDOMContent(popupNode)
                     .addTo(multihazardMap);
             });
+
+            // multihazardMap.on('click', (e) => {
+            //     if (!clickedId) {
+            //         multihazardMap.setFeatureState(
+            //             { id: clickedId,
+            //                 source: 'contactInfo' },
+            //             { clicked: false },
+            //         );
+            //     }
+            // });
         });
 
         const destroyMap = () => {

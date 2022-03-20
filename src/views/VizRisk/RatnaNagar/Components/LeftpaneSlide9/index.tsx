@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
 import React from 'react';
+import SankeyChart from '../Charts/SankeyChart';
 import styles from './styles.scss';
 
 const LeftpaneSlide9 = () => {
@@ -72,6 +73,7 @@ const LeftpaneSlide9 = () => {
                 is situated at an elevation of 800 m to 7000m AMSL.
 
             </p>
+            <SankeyChart />
         </div>
     );
 };
