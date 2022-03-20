@@ -830,7 +830,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             //     }
             // }
             if (this.mapContainerRef.current) {
-                this.mapContainerRef.current.fitBounds(this.state.currentBounds, { padding: -235, duration: 1000 });
+                this.mapContainerRef.current.fitBounds(this.state.currentBounds, { duration: 1000 });
             }
         }, 700); // triggered after 700ms
 
