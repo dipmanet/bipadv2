@@ -405,7 +405,7 @@ const HealthTable = (props) => {
                     item.type,
                     item.serviceType,
                     item.operationalStatus,
-                    item.bedCount,
+                    Number(item.hospitalBed) + Number(item.icuBed) + Number(item.ventilatorBed),
                     item.hospitalBed,
                     item.icuBed,
                     item.ventilatorBed,
@@ -872,6 +872,21 @@ const HealthTable = (props) => {
                                                                                     key={val}
                                                                                 >
                                                                                     {`${row[snakeToCamel(val)].split('T')[0]}`}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
+                                                                        if (val === 'bed_count') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align="center"
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {`${Number(row.hospitalBed) + Number(row.icuBed) + Number(row.ventilatorBed)}`}
                                                                                 </TableCell>
                                                                             );
                                                                         }

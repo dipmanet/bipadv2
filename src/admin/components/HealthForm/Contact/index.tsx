@@ -215,7 +215,7 @@ const Contact = (props: Props): JSX.Element => {
                         id="remarks"
                         label="Remarks on opening hours"
                         variant="filled"
-                        value={formData.phone_number}
+                        value={formData.remarks_on_opening_hours}
                         onChange={e => handleFormData(e, 'remarks_on_opening_hours')}
                         InputProps={{
                             disableUnderline: true,

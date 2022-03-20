@@ -304,11 +304,11 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     <div className={styles.col1}>
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                             <TextField
-                                disabled={getDisabled('hospital_bed_count')}
+                                disabled={getDisabled('hospital_bed')}
                                 labelId="Hospital BedLabel"
                                 id="Hospital-Bed"
-                                value={formData.hospital_bed_count}
-                                onChange={e => handleFormData(e, 'hospital_bed_count')}
+                                value={formData.hospital_bed}
+                                onChange={e => handleFormData(e, 'hospital_bed')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
                                 label="Hospital Bed Count"
                                 variant="filled"
@@ -324,12 +324,12 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
 
                             <TextField
-                                disabled={getDisabled('icu_bed_count')}
+                                disabled={getDisabled('icu_bed')}
                                 label="ICU Bed Count"
                                 variant="filled"
-                                id="icu_bed_count"
-                                value={formData.icu_bed_count}
-                                onChange={e => handleFormData(e, 'icu_bed_count')}
+                                id="icu_bed"
+                                value={formData.icu_bed}
+                                onChange={e => handleFormData(e, 'icu_bed')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
                                 InputProps={{
                             disableUnderline: true,
@@ -342,11 +342,11 @@ const InstitutionDetails = (props: Props): JSX.Element => {
                     <div className={styles.col1}>
                         <FormControl style={{ margin: '15px 0' }} variant="filled" fullWidth>
                             <TextField
-                                disabled={getDisabled('ventilator_bed_count')}
+                                disabled={getDisabled('ventilator_bed')}
                                 labelId="Ventilator-Bed-Label"
                                 id="Ventilator-Bed_ID"
-                                value={formData.ventilator_bed_count}
-                                onChange={e => handleFormData(e, 'ventilator_bed_count')}
+                                value={formData.ventilator_bed}
+                                onChange={e => handleFormData(e, 'ventilator_bed')}
                                 style={{ border: '1px solid #d5d5d5', borderRadius: '3px' }}
                                 label="Ventilator Bed Count"
                                 variant="filled"
