@@ -13,6 +13,7 @@ import Fireengine from '#resources/icons/Fireengine.png';
 import Heli from '#resources/icons/Heli.png';
 import { getGeoJSONPH } from '#views/VizRisk/Butwal/utils';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
+import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -21,10 +22,11 @@ if (TOKEN) {
 
 let clickedId: string | number | undefined;
 const Map = (props: any) => {
-    const { CIData } = props;
+    const { CIData, leftElement, ciNameList, setciNameList } = props;
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
+    const layersRef = useRef(null);
     function noop() {}
 
     const images = [
@@ -92,9 +94,6 @@ const Map = (props: any) => {
         })),
     };
 
-    console.log('dummy geojson is', dummyGeojson);
-
-
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -121,7 +120,7 @@ const Map = (props: any) => {
             const ciCategory: any = [...new Set(CIData.features.map(
                 item => item.properties.Type,
             ))];
-
+            setciNameList(ciCategory);
             const popup = new mapboxgl.Popup({
                 closeButton: false,
                 closeOnClick: false,
@@ -323,9 +322,6 @@ const Map = (props: any) => {
                 ReactDOM.render(
                     <PopupOnMapClick mainType={'Hazard'} />, popupNode,
                 );
-
-                console.log('features', e.features);
-
                 new mapboxgl.Popup()
                     .setLngLat(coordinates)
                     .setDOMContent(popupNode)
@@ -333,13 +329,20 @@ const Map = (props: any) => {
             });
         });
 
+
         const destroyMap = () => {
             multihazardMap.remove();
         };
         return destroyMap;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    return <div ref={mapContainerRef} className={styles.mapCSS} />;
+
+
+    return (
+        <div ref={mapContainerRef} className={styles.mapCSS}>
+            <RangeStatusLegend />
+        </div>
+    );
 };
 
 export default Map;

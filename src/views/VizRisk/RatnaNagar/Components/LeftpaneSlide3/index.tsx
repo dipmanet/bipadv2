@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
 /* eslint-disable react/jsx-indent-props */
@@ -5,44 +6,22 @@
 import React from 'react';
 import styles from './styles.scss';
 import TempIcon from '#resources/icons/Temp.svg';
+import { findOcc } from '../../utils';
 
 
 interface Props {
     handleCIClick: (item: string) => void;
     clickedCiName: string[];
+    cIData: any;
 }
 
 const LeftpaneSlide3 = (props: Props) => {
-    const { handleCIClick, clickedCiName } = props;
-    const ciData = [
-        {
-            ciName: 'Nothing',
-            count: 25,
-        },
-        {
-            ciName: 'Education',
-            count: 50,
-        },
-        {
-            ciName: 'Health',
-            count: 28,
-        },
-        {
-            ciName: 'Bridge',
-            count: 150,
-        },
-        {
-            ciName: 'Some',
-            count: 15,
-        },
-        {
-            ciName: 'Main Education',
-            count: 1,
-        },
+    const { handleCIClick, clickedCiName, cIData } = props;
 
-    ];
 
-    const totalCI = ciData.map(item => item.count).reduce((a, b) => a + b);
+    const mainCIData = findOcc(cIData, 'resourceType');
+
+    const totalCI = mainCIData.map(item => item.occurence).reduce((a, b) => a + b);
 
     const calculateBubbleWidthHeight = (itemCounts: number, totalCounts: number) => {
         if (itemCounts <= 25) {
@@ -77,6 +56,8 @@ const LeftpaneSlide3 = (props: Props) => {
         return (itemCounts / totalCounts) * 50 + 10;
     };
 
+    console.log('ciData', findOcc(cIData, 'resourceType'));
+
     return (
         <div className={styles.vrSideBar}>
             {' '}
@@ -105,7 +86,7 @@ const LeftpaneSlide3 = (props: Props) => {
 
             <div className={styles.bubbleChart}>
                 {
-				  ciData.sort((a, b) => b.count - a.count).map(
+				  mainCIData.sort((a, b) => b.count - a.count).map(
 					  item => (
                             <button
                                 type="submit"

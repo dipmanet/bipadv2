@@ -3,7 +3,6 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import { Item } from 'semantic-ui-react';
-import { Hotel } from '@material-ui/icons';
 import styles from './styles.scss';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import Education from '#resources/icons/icon_set_school.svg';
@@ -16,12 +15,13 @@ import Trade from '#resources/icons/trade.svg';
 import Water from '#resources/icons/WATERVR.svg';
 import Bridge from '#resources/icons/bridge copy.svg';
 import Communication from '#resources/icons/communication.svg';
-import Road from '#resources/icons/Road-barrier.svg';
-import Sanitation from '#resources/icons/Sanitation.svg';
+import Sanitation from '../../../Common/Icons/sanitationviz.svg';
+import Hotel from '../../../Common/Icons/hotelci.svg';
 import Industry from '#resources/icons/IndustryVR.svg';
 import Icon from '#rscg/Icon';
 import Fireengine from '../../../Common/Icons/Fireengine.svg';
 import Heli from '../../../Common/Icons/Heli.svg';
+import Road from '../../../Common/Icons/road2.svg';
 import Waterway from '#resources/icons/Spring-water.svg';
 import style from '#mapStyles/rasterStyle';
 
@@ -104,6 +104,7 @@ SHOW ALL
                                                 src={
 					     (item === 'education' && Education)
 					     || (item === 'governance' && Governance)
+					     || (item === 'hotelandrestaurant' && Hotel)
 					     || (item === 'health' && Health)
 					     || (item === 'cultural' && Culture)
 					     || (item === 'finance' && Bank)
@@ -115,7 +116,7 @@ SHOW ALL
 						 || (item === 'sanitation' && Sanitation)
 						 || (item === 'industry' && Industry)
 						 || (item === 'communityspace' && Communication)
-						 || (item === 'hotelandrestaurant' && Heli)
+						 || (item === 'helipad' && Heli)
 						 || (item === 'roadway' && Road)
 						 || (item === 'firefightingapparatus' && Fireengine)
 						 || (item === 'waterway' && Waterway)

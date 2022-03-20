@@ -16,6 +16,7 @@ interface Props {
     onButtonClick: (item: number) => void;
     handleCIClick: (item: string) => void;
     clickedCiName: string[];
+    cIData: any;
 }
 
 function LeftPane3(props: Props) {
@@ -29,6 +30,7 @@ function LeftPane3(props: Props) {
         onButtonClick,
         handleCIClick,
         clickedCiName,
+        cIData,
     } = props;
 
     const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -84,6 +86,7 @@ function LeftPane3(props: Props) {
                 <LeftpaneSlide3
                     handleCIClick={handleCIClick}
                     clickedCiName={clickedCiName}
+                    cIData={cIData}
                 />
                 <Navbuttons
                     postionsPerPage={postionsPerPage}

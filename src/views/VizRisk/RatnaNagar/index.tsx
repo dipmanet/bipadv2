@@ -115,6 +115,7 @@ const Ratnanagar = (props: any) => {
     const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
     const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
     const [clickedCiName, setclickedCiName] = useState<string[]>([]);
+    const [ciNameList, setciNameList] = useState<string|null>(null);
 
     // state for requested data
     const [cIData, setcIData] = useState([]);
@@ -186,7 +187,10 @@ const Ratnanagar = (props: any) => {
                                 leftElement < 9 && (
                                     <>
                                         <Map
+                                            leftElement={leftElement}
                                             CIData={geoJsonCI}
+                                            ciNameList={ciNameList}
+                                            setciNameList={setciNameList}
                                         />
                                         <LeftTopBar />
                                     </>
@@ -226,6 +230,7 @@ const Ratnanagar = (props: any) => {
                                     onButtonClick={onButtonClick}
                                     clickedCiName={clickedCiName}
                                     handleCIClick={handleCIClick}
+                                    cIData={cIData}
                                 />
                             )}
                             {leftElement === 3 && (
