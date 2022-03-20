@@ -1,11 +1,25 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import FileUploader from 'src/admin/components/FileUploader';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Placeholder from 'src/admin/resources/placeholder.png';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import TemperatureMax from 'src/admin/components/BulletinForm/TemperaturesMax';
+import TemperatureMin from 'src/admin/components/BulletinForm/TemperaturesMin';
+import RainSummaryPic from 'src/admin/components/BulletinForm/RainSummaryPic';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
+import {
+    bulletinPageSelector, languageSelector,
+} from '#selectors';
+
+const mapStateToProps = state => ({
+    bulletinData: bulletinPageSelector(state),
+    language: languageSelector(state),
+});
+
 
 interface Props {
 
@@ -20,173 +34,149 @@ const Bulletin = (props: Props) => {
         hideForm,
         handleDailySummary,
         dailySummary,
+        title,
+        rainSummaryPic,
+        handleRainSummaryPic,
+        handleFooterMax,
+        handleFooterMin,
+        maxTempFooter,
+        minTempFooter,
     } = props;
-    const [picFromEdit, setPicFromEdit] = useState(false);
-    const [picLink, setpicLink] = useState(false);
-
-
-    const showPicMax = (file) => {
-        // const file = document.getElementById('file').files[0];
-        const reader = new FileReader();
-        // eslint-disable-next-line func-names
-        reader.onload = function (e) {
-            const image = document.createElement('img');
-            const picNode = document.getElementById('pictureContainerMax');
-            image.src = e.target.result;
-            if (picNode.firstChild) {
-                picNode.removeChild(picNode.lastChild);
-            }
-            document.getElementById('pictureContainerMax').appendChild(image);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const showPicMin = (file) => {
-        // const file = document.getElementById('file').files[0];
-        const reader = new FileReader();
-        // eslint-disable-next-line func-names
-        reader.onload = function (e) {
-            const image = document.createElement('img');
-            const picNode = document.getElementById('pictureContainerMin');
-            image.src = e.target.result;
-            if (picNode.firstChild) {
-                picNode.removeChild(picNode.lastChild);
-            }
-            document.getElementById('pictureContainerMin').appendChild(image);
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleMaxTempInput = (file: File) => {
-        handleMaxTemp(file);
-        // if (resourceID) {
-        //     setPicFromEdit(false);
-        // }
-        showPicMax(file);
-    };
-    const handleMinTempInput = (file: File) => {
-        handleMinTemp(file);
-        // if (resourceID) {
-        //     setPicFromEdit(false);
-        // }
-        showPicMin(file);
-    };
-    useEffect(() => {
-        window.scrollTo({ top: 400, left: 0 });
-        // if (resourceID) {
-        //     setPicFromEdit(true);
-        //     setpicLink(formData.picture);
-        //     handleFile(null, 'picture');
-        // }
-
-        if (minTemp && typeof minTemp !== 'string') {
-            showPicMin(minTemp);
-        }
-        if (maxTemp && typeof maxTemp !== 'string') {
-            showPicMax(maxTemp);
-        }
-    }, [maxTemp, minTemp]);
 
     return (
         <div className={styles.formContainer}>
+            {
+                !hideForm
+                    && (
+                        <Translation>
+                            {
+                                t => <p>{t('Please click on the image to select files')}</p>
+                            }
+                        </Translation>
+                    )
+            }
+            {
+                !hideForm
+                && (
 
-            <div className={styles.pictureContainer}>
-                <div className={styles.subContainer}>
-                    <h3>दैनिक अधिकतम तापक्रम</h3>
-                    <div id="pictureContainerMax" className={styles.picture}>
-                        {
-                            picFromEdit
-                        && (
-                        <>
-                            <img src={picLink} alt="temperature" />
-                        </>
-                        )
-                        }
-                        {
-                            !picFromEdit && !maxTemp
-                        && (
-                        <>
-                            <img className={styles.placeholder} src={Placeholder} alt="temperature" />
-                        </>
-                        )
-                        }
-                    </div>
-                </div>
-                <div className={styles.subContainer}>
+                    <div className={styles.formItemDailySummary}>
+                        <FormControl fullWidth>
+                            <InputLabel>
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Temperature and Rain Summary')}</span>
+                                    }
+                                </Translation>
+                            </InputLabel>
+                            {' '}
+                            <Input
+                                type="text"
+                                value={dailySummary}
+                                onChange={e => handleDailySummary(e)}
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                            {/* <TextareaAutosize
+                                aria-label="minimum height"
+                                value={dailySummary}
+                                onChange={e => handleDailySummary(e)}
+                                minRows={8}
+                                placeholder=""
+                                style={{ border: '1px solid #cecccc', borderRadius: '3px', padding: '0 10px' }}
+                            /> */}
+                        </FormControl>
 
-                    <h3>दैनिक न्युनतम तापक्रम</h3>
-                    <div id="pictureContainerMin" className={styles.picture}>
-                        {
-                            picFromEdit
-                        && (
-                        <>
-                            <img src={picLink} alt="temperature" />
-                        </>
-                        )
-                        }
-                        {
-                            !picFromEdit && !minTemp
-                        && (
-                        <>
-                            <img className={styles.placeholder} src={Placeholder} alt="temperature" />
-                        </>
-                        )
-                        }
+
                     </div>
-                </div>
+                )}
+            <RainSummaryPic
+                rainSummaryPic={rainSummaryPic}
+                handleRainSummaryPic={handleRainSummaryPic}
+                hideForm={hideForm}
+            />
+            <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
+                <TemperatureMax
+                    maxTemp={maxTemp}
+                    handleMaxTemp={handleMaxTemp}
+                    hideForm={hideForm}
+                    maxTempFooter={maxTempFooter}
+                />
+                {
+                    !hideForm
+                && (
+
+                    <div className={styles.formItemfooter}>
+                        <FormControl fullWidth>
+
+                            <InputLabel>
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Max Temperature Map Description')}</span>
+                                    }
+                                </Translation>
+                            </InputLabel>
+                            {' '}
+                            <Input
+                                type="text"
+                                value={maxTempFooter}
+                                onChange={e => handleFooterMax(e)}
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                        </FormControl>
+
+
+                    </div>
+                )}
+                <TemperatureMin
+                    minTemp={minTemp}
+                    handleMinTemp={handleMinTemp}
+                    hideForm={hideForm}
+                    minTempFooter={minTempFooter}
+                />
+                {
+                    !hideForm
+                && (
+
+                    <div className={styles.formItemfooter}>
+                        <FormControl fullWidth>
+                            <InputLabel>
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Min Temperature Map Description')}</span>
+                                    }
+                                </Translation>
+                            </InputLabel>
+                            {' '}
+                            <Input
+                                type="text"
+                                value={minTempFooter}
+                                onChange={e => handleFooterMin(e)}
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                        </FormControl>
+
+
+                    </div>
+                )}
             </div>
 
 
-            {
-                !hideForm
-            && (
-            <>
-                <div className={styles.rowTitle1}>
-                    <h2>
-                    तस्विर अपलोड गर्नुहोस्
-                    </h2>
-                </div>
-                <h3>दैनिक अधिकतम तापक्रम</h3>
-                <div className={styles.containerForm}>
-
-                    <FileUploader
-                        onFileSelectSuccess={handleMaxTempInput}
-                    />
-                </div>
-                <h3>दैनिक न्युनतम तापक्रम</h3>
-                <div className={styles.containerForm}>
-
-                    <FileUploader
-                        onFileSelectSuccess={handleMinTempInput}
-                    />
-                </div>
-                <div className={styles.formItem}>
-
-                    <FormControl fullWidth>
-                        <InputLabel>
-                            {'दैनिक बर्षा को सारांश'}
-                        </InputLabel>
-                        <Input
-                            type="text"
-                            value={dailySummary}
-                            onChange={e => handleDailySummary(e)}
-                            className={styles.select}
-                            disableUnderline
-                            inputProps={{
-                                disableUnderline: true,
-                            }}
-                            style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                        />
-                    </FormControl>
-                </div>
-
-            </>
-            )
-            }
         </div>
-
-
     );
 };
 
-export default Bulletin;
+export default connect(mapStateToProps)(Bulletin);

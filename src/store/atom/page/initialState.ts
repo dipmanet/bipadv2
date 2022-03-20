@@ -402,6 +402,7 @@ const state: PageState = {
     bulletinEditData: {},
     bulletinPage: {
         sitRep: 123,
+        hilight: '',
         incidentSummary: {
             numberOfIncidents: 1,
             numberOfDeath: 5,
@@ -531,10 +532,14 @@ const state: PageState = {
         },
         tempMin: 'http://bipaddev.yilab.org.np/media/bulletin/min/sdN1tB.webp',
         tempMax: 'http://bipaddev.yilab.org.np/media/bulletin/max/sdN1tB.webp',
+        rainSummaryPic: null,
+        maxTempFooter: null,
+        minTempFooter: null,
         dailySummary: '',
         feedback: [],
         province: 3,
         district: 27,
+        yearlyData: {},
         municipality: 27006,
         ward: null,
     },
@@ -572,6 +577,9 @@ const state: PageState = {
         epidemicTotalError: {},
         incidentCount: null,
         uploadData: [],
+    },
+    language: {
+        language: 'en',
     },
 };
 export default state;

@@ -7,7 +7,15 @@ import initialState from './initialState';
 import { ModelEnum } from '#types';
 
 // ACTION CREATORS
+export const setLanguageAction = language => ({
+    type: Type.PageType.SET_LANGUAGE,
+    language,
+});
 
+export const setBulletinYearlyDataAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
+    bulletinData,
+});
 // IBF
 export const setIbfPageAction = ibfPage => ({
     type: Type.PageType.SET_IBF_PAGE,
@@ -1046,20 +1054,6 @@ function unique<T, W>(
     return newArr;
 }
 
-export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
-    const {
-        resourceList,
-    } = action;
-
-    const newState = produce(state, (deferedState) => {
-        /* eslint-disable no-param-reassign */
-        // FIXME: unique value must be sent from server later
-        deferedState.responsePage.resourceList = unique(resourceList, w => w, w => w.title);
-        /* eslint-enable no-param-reassign */
-    });
-
-    return newState;
-};
 
 export const setInventoryCategoryListAction = (
     state: Type.PageState,
@@ -1802,6 +1796,7 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
         deferedState.bulletinPage.sitRep = bulletinData.sitRep;
+        deferedState.bulletinPage.hilight = bulletinData.hilight;
     });
 
     return newState;
@@ -1856,6 +1851,25 @@ export const setBulletinDataTemperature = (
         deferedState.bulletinPage.tempMin = bulletinData.tempMin;
         deferedState.bulletinPage.tempMax = bulletinData.tempMax;
         deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
+        deferedState.bulletinPage.rainSummaryPic = bulletinData.rainSummaryPic;
+        deferedState.bulletinPage.maxTempFooter = bulletinData.maxTempFooter;
+        deferedState.bulletinPage.minTempFooter = bulletinData.minTempFooter;
+    });
+
+    return newState;
+};
+
+export const setBulletinYearlyData = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.yearlyData = bulletinData.yearlyData;
     });
 
     return newState;
@@ -2016,11 +2030,38 @@ const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) 
     return newState;
 };
 
+const setLanguageLocal = (state: Type.PageState, action: Type.SetLanguage) => {
+    const { language } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.language = language;
+    });
+    return newState;
+};
+
+export const setResourceList = (state: Type.PageState, action: Type.SetResourceList) => {
+    const {
+        resourceList,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        // FIXME: unique value must be sent from server later
+        deferedState.responsePage.resourceList = unique(resourceList, w => w, w => w.title);
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_LANGUAGE:
+            return setLanguageLocal(state, action);
         case Type.PageType.SET_DRRM_PROGRESS:
             return setDrrmProgress(state, action);
         case Type.PageType.SET_DRRM_REGION:
@@ -2053,6 +2094,8 @@ export default function routeReducer(
             return setBulletinEditData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN:
             return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA:
+            return setBulletinYearlyData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
             return setBulletinCovid(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:

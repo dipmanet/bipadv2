@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Legend from '#rscz/Legend';
 
 import {
-    hazardTypesSelector,
+    hazardTypesSelector, languageSelector,
 } from '#selectors';
 
 const propTypes = {
@@ -19,9 +19,18 @@ const defaultProps = {
     filteredHazardTypes: undefined,
 };
 
-const legendKeySelector = d => d.title;
-const legendColorSelector = d => d.color;
+// const legendLabelSelector = (d, language) => {
+//     if (language && language.language === 'en') {
+//         return d.titleEn;
+//     }
+//     if (language && language.language === 'np') {
+//         return d.titleNe;
+//     }
+//     return d.title;
+// };
 const legendLabelSelector = d => d.title;
+const legendColorSelector = d => d.color;
+const legendKeySelector = d => d.title;
 
 class HazardsLegend extends React.PureComponent {
     static propTypes = propTypes
@@ -33,6 +42,7 @@ class HazardsLegend extends React.PureComponent {
             className,
             hazardTypes,
             filteredHazardTypes,
+            language,
             ...otherProps
         } = this.props;
 
@@ -54,6 +64,7 @@ class HazardsLegend extends React.PureComponent {
 
 const mapStateToProps = state => ({
     hazardTypes: hazardTypesSelector(state),
+    language: languageSelector(state),
 });
 
 export default connect(mapStateToProps)(HazardsLegend);

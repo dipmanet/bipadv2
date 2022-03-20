@@ -1,5 +1,7 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
+
 
 const KhopBanner = (props) => {
     const { value, title, percentage } = props;
@@ -9,14 +11,33 @@ const KhopBanner = (props) => {
                 <h2>{value}</h2>
                 {percentage
                     ? (
-                        <p className={styles.small}>
-                            {`पहिलो मात्रा को ${percentage} %`}
-                            {' '}
-                        </p>
+                        <Translation>
+                            {
+                                t => (
+                                    <p className={styles.small}>
+                                        {t('Percentage of 1st Dosage')}
+                                        {''}
+                                        {`${percentage} %`}
+
+                                    </p>
+                                )
+                            }
+                        </Translation>
+
                     ) : (<p>{' '}</p>)
                 }
             </div>
-            <p>{title}</p>
+            <p>
+                <Translation>
+                    {
+                        t => (
+                            <span>
+                                {t(`${title}`)}
+                            </span>
+                        )
+                    }
+                </Translation>
+            </p>
         </div>
     );
 };

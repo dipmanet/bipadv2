@@ -66,31 +66,15 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
 
 type Order = 'asc' | 'desc';
 
-function getComparator<Key extends keyof any>(
-    order: Order,
-    orderBy: Key,
-): (
-        a: { [key in Key]: number | string },
-        b: { [key in Key]: number | string },
-    ) => number {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
+const stableSort = (tData: DashboardTable[], order: Order, orderBy: keyof DashboardTable) => tData.sort((a, b) => {
+    if (order === 'desc') {
+        return descendingComparator(a, b, orderBy);
+    } if (order === 'asc') {
+        return -descendingComparator(a, b, orderBy);
+    }
+    return 0;
+});
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-    const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) {
-            return order;
-        }
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map(el => el[0]);
-}
 
 interface HeadCell {
     disablePadding: boolean;
@@ -134,7 +118,7 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { onSelectAllClick, order, orderBy,
+    const { order, orderBy,
         numSelected, rowCount, onRequestSort, inventoryItem, headCells } = props;
     const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => onRequestSort(event, property);
     return (
@@ -143,7 +127,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
                 {headCells.map(headCell => (
                     <TableCell
-                        align="left"
+                        align="center"
                         key={headCell.id}
 						// align={headCell.numeric ? 'right' : 'left'}
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -259,7 +243,8 @@ const BulletinTable = (props) => {
                 temp[`Hazard${i + 1} (${kys}) Incidents`] = `Hazard${i + 1} (${kys}) Incidents`;
                 return null;
             });
-            const finalObj = { ...tableTitleRef, ...temp, action: 'Actions' };
+            // const finalObj = { ...tableTitleRef, ...temp, action: 'Actions' };
+            const finalObj = { ...tableTitleRef, action: 'Actions' };
             setFinalObj(finalObj);
             const headCellsData = Object.keys(finalObj)
                 .map((invD: string) => ({
@@ -326,38 +311,7 @@ const BulletinTable = (props) => {
         setSelected(newSelected);
     };
 
-
-    // const handleChangePage = (event: unknown, newPage: number) => {
-    //     setPage(newPage);
-    //     setLoader(true);
-    //     const remainder = healthDataCount % 100;
-    //     const max_pages = ((healthDataCount - remainder) / 100 + 1);
-    //     if (newPage <= max_pages) {
-    //         dispatch(getHealthTable(newPage * 100));
-    //     }
-    // };
-
-    // const onRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // 	setRowsPerPage(parseInt(event.target.value, 10));
-    // 	setPage(0);
-    // };
-
-    // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setDense(event.target.checked);
-    // };
     const isSelected = (id: string) => selected.indexOf(id) !== -1;
-
-    const handleCheck = (e, id) => {
-        if (e.target.checked) {
-            // setSelected([...selected,id]);
-            setSelected([id]);
-        } else {
-            // const temp = [...selected].filter(item=>item !== id);
-            setSelected([]);
-        }
-    };
-    // Avoid a layout jump when reaching the last page with empty rows.
-
 
     return (
         <>
@@ -376,7 +330,7 @@ const BulletinTable = (props) => {
                 )
                     : (
                         <Box
-                            sx={{ width: '88vw', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}
+                            sx={{ width: '100%', boxShadow: '0px 2px 5px rgba(151, 149, 148, 0.25);' }}
                         >
                             <div className={styles.credentialSearch}>
 
@@ -399,6 +353,7 @@ const BulletinTable = (props) => {
                                     selected={selected}
                                     numSelected={selected.length}
                                     // healthFormEditData={healthFormEditData}
+                                    onRequestSort={handleRequestSort}
                                 />
                                 <TableContainer
                                     sx={{ maxHeight: 800 }}
@@ -426,8 +381,9 @@ const BulletinTable = (props) => {
 
                                         <TableBody>
                                             {
-
-                                                filteredRowDatas.map((row, index) => {
+                                                filteredRowDatas
+                                                && stableSort(filteredRowDatas, order, orderBy)
+                                                .map((row, index) => {
                                                     const isItemSelected = isSelected(row.id);
                                                     const labelId = `enhanced-table-checkbox-${index}`;
                                                     return (
@@ -443,637 +399,637 @@ const BulletinTable = (props) => {
                                                             <>
             {
                tableTitle && Object.keys(tableTitle).map((k) => {
-                    if (k === 'numberOfIncidents') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
-                                key={'numberOfIncidents'}
->
-                                {row.incidentSummary.numberOfIncidents}
-                            </TableCell>
-                        );
-                    } if (k === 'numberOfDeath') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
-                                key={'numberOfDeath'}
->
-                                {row.incidentSummary.numberOfDeath}
-                            </TableCell>
-                        );
-                    } if (k === 'numberOfMissing') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
-                                key={'numberOfMissing'}
->
-                                {row.incidentSummary.numberOfMissing}
-                            </TableCell>
-                        );
-                    } if (k === 'numberOfInjured') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
-                                key={'numberOfInjured'}
->
-                                {row.incidentSummary.numberOfInjured}
-                            </TableCell>
-                        );
-                    } if (k === 'estimatedLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.incidentSummary.estimatedLoss}
-                            </TableCell>
-                        );
-                    } if (k === 'roadBlock') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
-                                key={'roadBlock'}
->
-                                {row.incidentSummary.roadBlock}
-                            </TableCell>
-                        );
-                    } if (k === 'cattleLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.incidentSummary.cattleLoss}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p1DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.p1.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p1MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.p1.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p1InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.p1.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p2DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.p2.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p2MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.p2.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p2InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.p2.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p3DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.bagmati.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p3MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.bagmati.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p3InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.bagmati.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p4DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.gandaki.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p4MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.gandaki.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p4InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.gandaki.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p5DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.lumbini.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p5MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.lumbini.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p5InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.lumbini.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p6DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.karnali.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p6MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.karnali.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p6InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.karnali.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p7DeathLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.sudurpaschim.death}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p7MissingLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.sudurpaschim.missing}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'p7InjuredLoss') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.peopleLoss.sudurpaschim.injured}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'deathMale') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.genderWiseLoss.male}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'deathFemale') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.genderWiseLoss.female}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'deathOther') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.genderWiseLoss.unknown}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidAffectedDaily') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTwentyfourHrsStat.affected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidfemaleAffectedDaily') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTwentyfourHrsStat.femaleAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidmaleAffectedDaily') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTwentyfourHrsStat.maleAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'coviddeathsDaily') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTwentyfourHrsStat.deaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidrecoveredDaily') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTwentyfourHrsStat.recovered}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTotalStat.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTotalStat.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'totalRecovered') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTotalStat.totalRecovered}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidTotalStat.totalDeaths}
-                            </TableCell>
-                        );
-                    }
+//                     if (k === 'numberOfIncidents') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+//                                 key={'numberOfIncidents'}
+// >
+//                                 {row.incidentSummary.numberOfIncidents}
+//                             </TableCell>
+//                         );
+//                     } if (k === 'numberOfDeath') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+//                                 key={'numberOfDeath'}
+// >
+//                                 {row.incidentSummary.numberOfDeath}
+//                             </TableCell>
+//                         );
+//                     } if (k === 'numberOfMissing') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+//                                 key={'numberOfMissing'}
+// >
+//                                 {row.incidentSummary.numberOfMissing}
+//                             </TableCell>
+//                         );
+//                     } if (k === 'numberOfInjured') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+//                                 key={'numberOfInjured'}
+// >
+//                                 {row.incidentSummary.numberOfInjured}
+//                             </TableCell>
+//                         );
+//                     } if (k === 'estimatedLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.incidentSummary.estimatedLoss}
+//                             </TableCell>
+//                         );
+//                     } if (k === 'roadBlock') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+//                                 key={'roadBlock'}
+// >
+//                                 {row.incidentSummary.roadBlock}
+//                             </TableCell>
+//                         );
+//                     } if (k === 'cattleLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.incidentSummary.cattleLoss}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p1DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.p1.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p1MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.p1.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p1InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.p1.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p2DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.p2.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p2MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.p2.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p2InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.p2.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p3DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.bagmati.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p3MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.bagmati.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p3InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.bagmati.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p4DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.gandaki.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p4MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.gandaki.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p4InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.gandaki.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p5DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.lumbini.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p5MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.lumbini.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p5InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.lumbini.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p6DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.karnali.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p6MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.karnali.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p6InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.karnali.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p7DeathLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.sudurpaschim.death}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p7MissingLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.sudurpaschim.missing}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'p7InjuredLoss') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.peopleLoss.sudurpaschim.injured}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'deathMale') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.genderWiseLoss.male}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'deathFemale') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.genderWiseLoss.female}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'deathOther') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.genderWiseLoss.unknown}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidAffectedDaily') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTwentyfourHrsStat.affected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidfemaleAffectedDaily') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTwentyfourHrsStat.femaleAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidmaleAffectedDaily') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTwentyfourHrsStat.maleAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'coviddeathsDaily') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTwentyfourHrsStat.deaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidrecoveredDaily') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTwentyfourHrsStat.recovered}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTotalStat.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTotalStat.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'totalRecovered') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTotalStat.totalRecovered}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidTotalStat.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
 
-                    if (k === 'firstDosage') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.vaccineStat.firstDosage}
-                            </TableCell>
-                        );
-                    }
+//                     if (k === 'firstDosage') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.vaccineStat.firstDosage}
+//                             </TableCell>
+//                         );
+//                     }
 
-                    if (k === 'secondDosage') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.vaccineStat.secondDosage}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp1totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.p1.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp1totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.p1.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp1totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.p1.totalDeaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp2totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.p2.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp2totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.p2.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp2totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.p2.totalDeaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp3totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.bagmati.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp3totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.bagmati.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp3totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.bagmati.totalDeaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp4totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.gandaki.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp4totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.gandaki.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp4totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.gandaki.totalDeaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp5totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.lumbini.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp5totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.lumbini.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp5totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.lumbini.totalDeaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp6totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.karnali.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp6totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.karnali.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp6totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.karnali.totalDeaths}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp7totalAffected') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.sudurpaschim.totalAffected}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp7totalActive') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.sudurpaschim.totalActive}
-                            </TableCell>
-                        );
-                    }
-                    if (k === 'covidp7totalDeaths') {
-                        return (
-                            <TableCell
-                                align="center"
-                                padding="normal"
->
-                                {row.covidProvinceWiseTotal.sudurpaschim.totalDeaths}
-                            </TableCell>
-                        );
-                    }
+//                     if (k === 'secondDosage') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.vaccineStat.secondDosage}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp1totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.p1.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp1totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.p1.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp1totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.p1.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp2totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.p2.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp2totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.p2.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp2totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.p2.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp3totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.bagmati.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp3totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.bagmati.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp3totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.bagmati.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp4totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.gandaki.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp4totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.gandaki.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp4totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.gandaki.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp5totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.lumbini.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp5totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.lumbini.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp5totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.lumbini.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp6totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.karnali.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp6totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.karnali.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp6totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.karnali.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp7totalAffected') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.sudurpaschim.totalAffected}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp7totalActive') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.sudurpaschim.totalActive}
+//                             </TableCell>
+//                         );
+//                     }
+//                     if (k === 'covidp7totalDeaths') {
+//                         return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+// >
+//                                 {row.covidProvinceWiseTotal.sudurpaschim.totalDeaths}
+//                             </TableCell>
+//                         );
+//                     }
 
                     if (k === 'pdfFile') {
                         return (
@@ -1093,23 +1049,33 @@ const BulletinTable = (props) => {
                                 {row[k].split('T')[0]}
                             </TableCell>
                         );
-                    } if (k.includes('Hazard') && row.hazardWiseLoss) {
-                        const haz = k.substring(
-                            k.indexOf('(') + 1,
-                            k.lastIndexOf(')'),
-                        );
-                        const ici = k.split(')')[1].toLowerCase().trim();
-
-                            return (
+                    } if (k === 'createdOn') {
+                        return (
                             <TableCell
                                 align="center"
                                 padding="normal"
-
-                                                        >
-                            { row.hazardWiseLoss[haz] ? row.hazardWiseLoss[haz][ici] : '-'}
+                            >
+                                {row[k].split('T')[0]}
                             </TableCell>
-);
+                        );
                     }
+//                     if (k.includes('Hazard') && row.hazardWiseLoss) {
+//                         const haz = k.substring(
+//                             k.indexOf('(') + 1,
+//                             k.lastIndexOf(')'),
+//                         );
+//                         const ici = k.split(')')[1].toLowerCase().trim();
+
+//                             return (
+//                             <TableCell
+//                                 align="center"
+//                                 padding="normal"
+
+//                                                         >
+//                             { row.hazardWiseLoss[haz] ? row.hazardWiseLoss[haz][ici] : '-'}
+//                             </TableCell>
+// );
+//                     }
 
                     if (k === 'action') {
                         return (

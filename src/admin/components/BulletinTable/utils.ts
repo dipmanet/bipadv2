@@ -176,7 +176,7 @@ export const nepaliRef = {
 };
 
 
-export const tableTitleRef = {
+export const tableTitleRefOld = {
     sitrep: 'Sit Rep',
     province: 'Province',
     district: 'District',
@@ -249,4 +249,10 @@ export const tableTitleRef = {
     covidp7totalActive: 'Sudurpaschim Covid Active',
     covidp7totalDeaths: 'Sudurpaschim Covid Death',
     // action: 'Actions',
+};
+export const tableTitleRef = {
+    sitrep: 'Sit Rep',
+    createdOn: 'Created on',
+    modifiedOn: 'Modified on',
+    pdfFile: 'Bulletin PDF',
 };

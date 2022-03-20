@@ -1,5 +1,9 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Menu } from './utils';
+import LanguageToggle from '#components/LanguageToggle';
+import { languageSelector } from '#selectors';
 
 import Icon from '#rscg/Icon';
 // import { useSelector } from 'react-redux';
@@ -35,6 +39,10 @@ interface OurState{
     invItemError: Record<string, unknown>;
     health: {resourceID: number;inventoryData: []};
 }
+
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    language: languageSelector(state),
+});
 
 const MenuItemsAll = [
     {
@@ -108,10 +116,10 @@ const validatorMenu = [
 
 ];
 const ProgressMenu = (props: Props): JSX.Element => {
-    const { progress, getActiveMenu, activeMenu: active } = props;
+    const { progress, activeMenu: active, menuKey, language: { language } } = props;
     // const { resourceID, healthFormEditData } = useSelector((state: OurState) => state.health);
     // const { userDataMain } = useSelector((state: RootState) => state.user);
-    const [MenuItems, setMenuItems] = useState(MenuItemsAll);
+    const [MenuItems, setMenuItems] = useState(Menu.bulletinProgressMenu);
 
     // useEffect(() => {
     //     if (userDataMain.isSuperuser) {
@@ -132,15 +140,10 @@ const ProgressMenu = (props: Props): JSX.Element => {
     //     }
     // }, [resourceID, userDataMain.isSuperuser, userDataMain.profile]);
 
-    const handleClick = (menuName: string) => {
-        getActiveMenu(menuName);
-        // } else {
-        // if(resourceID || healthFormEditData.length > 0){
-        // getActiveMenu(i);
-    };
 
     return (
         <div className={styles.progressMenuContainer}>
+            <LanguageToggle />
             {
                 MenuItems.map((menuItem: MenuItems, i: number) => (
                     <div
@@ -158,7 +161,10 @@ const ProgressMenu = (props: Props): JSX.Element => {
                                 className={styles.mainIcon}
                                 alt=""
                             />
-                            {menuItem.name}
+                            {language === 'np'
+                                ? menuItem.name
+                                : menuItem.name_en
+                            }
                         </div>
                         <Icon
                             name="circle"
@@ -175,4 +181,4 @@ const ProgressMenu = (props: Props): JSX.Element => {
     );
 };
 
-export default ProgressMenu;
+export default connect(mapStateToProps)(ProgressMenu);

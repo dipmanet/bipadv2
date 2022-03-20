@@ -14,6 +14,68 @@
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0;
+    .inputContainer {
+        display: flex;
+        border-radius: 4px;
+        background-color: transparent;
+        justify-content: flex-start;
+        align-items: center;
+        // margin: 10px 0 18px 0;
+        margin: 10px 0 18px 0;
+        width: 80%;
+        input::-webkit-input-placeholder {
+            font-size: 10px;
+            vertical-align: middle !important;
+            line-height: 25px !important;
+        }
+
+        .snstepwiseRegionSelectInput {
+            border: none !important;
+        }
+
+        .snprovinceinput {
+            // outline: 1px solid red !important;
+            // padding: 5px 0 !important;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+
+        // // .sndistinput{
+        // //     margin:20px !important;
+        // // }
+        // .snmunipinput{
+        //     width: 200px;
+        //     background-color: red;
+
+        // }
+
+        input {
+            border: none !important;
+            outline: none !important;
+            padding: 8px 7px;
+            margin-left: 0;
+            background: transparent;
+            width: 20vw !important;
+            background-color: rgb(232, 232, 232);
+            border-radius: 4px !important;
+            // outline: 1px solid white !important;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input::placeholder {
+            font-size: 12px;
+        }
+
+        .inputIcon {
+            color: rgb(152, 152, 152);
+        }
+    }
+
     .btnContainer{
         width: 100%;
         display: flex;

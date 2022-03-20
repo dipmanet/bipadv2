@@ -11,150 +11,170 @@ border: 1px solid #cecccc;
 background-color: white;
 position: relative;
 padding: 10mm;
-display: flex;
-.covid24{
-    padding: 5mm 10mm;
-    width: 90mm;
-    h2{
-        color: #4C4C4C;
-        margin-bottom: 20px;
-        font-size: 16px;
-    }
-    p{
-        color: white;
-        font-size: 11px;
-    }
-    .lossIconsRow{
-        display: flex;
-        justify-content: flex-start;
-        li{
-            font-size: 14px !important;
+// display: flex;
+// flex-direction: column;
+.container1{
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    height: 80mm;
+    .hazardWiseStats{
+        width: 80mm;
+        height: 80mm;
+        position: absolute;
+        // bottom: 15mm;
+        left: 0mm;
+        h2{
+            font-size: 4mm;
+            margin-bottom: 2mm;
+            position: relative;
+            left: 0mm;
         }
     }
-    .middle{
-        border-left: 1px dotted rgb(3, 102, 160);
-        height: 10mm;
-        position: relative;
-        bottom: 18px;
-        left: 5px;
-    }
-    .genderRow{
-        display: flex;
-        justify-content: space-between;
-        padding-top: 15px;
-        margin-top: 15px;
-        border-left: 1px dotted rgb(3, 102, 160);
-        border-bottom: 1px dotted rgb(3, 102, 160);
-        width: 50mm;
-        position: relative;
-        bottom: 32px;
-        left: 5px;
-        li{
-            font-size: 14px !important;
+    .genderWiseStats{
+        width: 90mm;
+        height: 70mm;
+        position: absolute;
+        right:0;
+        // border: 1px solid red;
+        h2{
+            font-size: 4mm;
+            margin-bottom: 2mm;
+            position: relative;
+            right: 3mm;
         }
     }
-    .khopContainer{
+}
+
+.container2{
+    display: flex;
+    position: absolute;
+    top: 105mm;
+    // border: 1px solid red;
+    .covid24{
+        padding: 5mm 0;
+        width: 87mm;
+        // border: 1px solid red;
         h2{
             color: #4C4C4C;
+            margin-bottom: 20px;
             font-size: 16px;
-
         }
-        .khopRow{
-            // height: 40mm;
+        p{
+            color: white;
+            font-size: 11px;
+        }
+        .lossIconsRow{
             display: flex;
             justify-content: space-between;
-            h2{
-                color: white;
+            li{
+                font-size: 14px !important;
             }
         }
-    }
-
-}
-.covidTotal{
-    width: 100mm;
-    height: 100mm;
-    padding: 10mm 0 10mm 10mm;
-    position: relative;
-    bottom: 19px;
-    h2{
-        color: #4C4C4C;
-        margin-bottom: 20px;
-        font-size: 16px;
-    }
-    div{
-        display: flex;
-        li{
-            font-size: 14px !important;
-        }
-    }
-
-    .provinceWiseTotal{
-        display: flex;
-        flex-direction: column !important;
-        height: 80mm;
-        width: 100mm;
-        position: relative;
-        right: 10mm;
-      
-        h2{
-            left: 10mm;
-            margin-top: 10mm;
+        .middle{
+            border-left: 1px dotted rgb(3, 102, 160);
+            height: 10mm;
             position: relative;
-            font-size: 16px;
-
+            bottom: 18px;
+            left: 5px;
         }
-    }
-    .provTable{
-        border-collapse: collapse;
-        position: relative;
-        right: 50mm;
-        td,th{
-            white-space: nowrap;
-            text-align: center;
-            border: 1px solid rgb(190, 188, 188);
-            padding: 4px;
-            font-size: 10px;
-        }
-
-        tr:first-child th:first-child{
-            border: none;
-        }
-        td:first-child{
+        .genderRow{
             display: flex;
-            align-items: center;
-           text-align: left;
+            justify-content: space-between;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-left: 1px dotted rgb(3, 102, 160);
+            border-bottom: 1px dotted rgb(3, 102, 160);
+            width: 50mm;
+            position: relative;
+            bottom: 32px;
+            left: 5px;
+            li{
+                font-size: 14px !important;
+            }
         }
-        
+        .khopContainer{
+            h2{
+                color: #4C4C4C;
+                font-size: 16px;
+    
+            }
+            .khopRow{
+                // height: 40mm;
+                width: 75mm;
+                display: flex;
+                justify-content: space-between;
+                h2{
+                    color: white;
+                }
+            }
+        }
+    
     }
-    .pratikriyaContainer{
-        width: 190mm;
-        position: absolute;
-        // bottom: 70mm;
-        right: 10mm;
-        display: flex;
-        margin-top: 20mm;
-        flex-direction: column;
+    
+    .covidTotal{
+        width: 100mm;
+        height: 100mm;
+        padding: 10mm 0 10mm 10mm;
+        position: relative;
+        bottom: 19px;
         h2{
-            margin-left: 10mm;
+            color: #4C4C4C;
+            margin-bottom: 20px;
             font-size: 16px;
         }
-        .pratikriyas{
-            background-color: #EAEBEC;
-            padding: 2mm 10mm;
-            margin-top: 5mm;
-            margin-left: 10mm;
-            // height: 80mm;
-            ul{
-                display: flex;
-                flex-wrap: wrap;
-                padding-left: 0;
-            }
-            ul li{
-                width: calc(48% - 4mm);
-                margin: 2mm;
-                font-size: 14px;
+        div{
+            display: flex;
+            li{
+                font-size: 14px !important;
             }
         }
+       
+        .provinceWiseTotal{
+            display: flex;
+            flex-direction: column !important;
+            height: 85mm;
+            width: 100mm;
+            position: relative;
+            right: 5mm;
+          
+            h2{
+                left: 10mm;
+                margin-top: 10mm;
+                position: relative;
+                font-size: 16px;
+    
+            }
+        }
+        .provTable{
+            border-collapse: collapse;
+            position: relative;
+            right: 50mm;
+            top: 2mm;
+            td,th{
+                white-space: nowrap;
+                text-align: center;
+                border: 1px solid rgb(190, 188, 188);
+                padding: 4px;
+                font-size: 10px;
+            }
+    
+            tr:first-child th:first-child{
+                border: none;
+            }
+            td:first-child{
+                display: flex;
+                align-items: center;
+               text-align: left;
+            }
+            
+        }
+      
     }
 }
+}
+
+.covidPDFContainerEnglish{
+    @extend .covidPDFContainer;
+    font-family: 'Fira Sans' !important;
 }

@@ -10,7 +10,12 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
 import { bbox, point, buffer } from '@turf/turf';
+import { enTranslation, npTranslation } from '#constants/translations';
+
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
@@ -28,6 +33,7 @@ import {
     RegionValueElement,
     Layer,
     FiltersElement,
+    Language,
 } from '#types';
 
 import {
@@ -57,12 +63,14 @@ import {
     municipalitiesSelector,
     provincesSelector,
     filtersSelector,
+    languageSelector,
     // hazardTypeListSelector,
 } from '#selectors';
 import {
     setInitialPopupHiddenAction,
     setRegionAction,
     setFiltersAction,
+    setLanguageAction,
 } from '#actionCreators';
 
 import authRoute from '#components/authRoute';
@@ -216,6 +224,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     provinces: provincesSelector(state),
+    language: languageSelector(state),
     // hazardList: hazardTypeListSelector(state),
 });
 
@@ -223,6 +232,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setInitialPopupHidden: params => dispatch(setInitialPopupHiddenAction(params)),
     setRegion: params => dispatch(setRegionAction(params)),
     setFilters: params => dispatch(setFiltersAction(params)),
+    setLanguage: params => dispatch(setLanguageAction(params)),
 });
 
 const getMatchingRegion = (
@@ -349,6 +359,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (!pending) {
             this.setFilterFromUrl(provinces, districts, municipalities, filters, setFilters, user);
         }
+        i18n.use(initReactI18next).init({
+            lng: 'en',
+            debug: false,
+            fallbackLng: 'en',
+            resources: {
+                en: enTranslation,
+                np: npTranslation,
+            },
+        });
     }
 
     public UNSAFE_componentWillReceiveProps(nextProps: Props) {
@@ -372,10 +391,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(prevProps) {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
+        const { language: { language } } = this.props;
+        if (prevProps.language !== language) {
+            i18n.changeLanguage(language);
+        }
     }
 
     private handlemapClickedResponse = (data) => {

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 
@@ -17,39 +18,101 @@ import {
 import { connect } from 'react-redux';
 import GovLogo from 'src/admin/resources/govtLogo.svg';
 import NepaliDate from 'src/admin/components/NepaliDate';
+import { Translation } from 'react-i18next';
+import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
 import styles from './styles.scss';
 import { lossObj } from './loss';
 import LossItem from './LossItem';
-import { nepaliRef } from '../BulletinForm/formFields';
+import { nepaliRef, provincesRef } from '../BulletinForm/formFields';
 import IncidentMap from './IncidentMap/index';
 import {
-    bulletinPageSelector,
-    hazardTypesSelector,
+    bulletinPageSelector, hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 import IncidentLegend from '#rscz/Legend';
 import HazardsLegend from '#components/HazardsLegend';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
-    hazardTypes: hazardTypesSelector(state),
+    hazardTypes: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 interface Props {
 
 }
 
-const COLORS_CHART = ['#DC4325', '#EC7F56', '#D6C3AF'];
+const months = {
+    1: 'बैशाख',
+    2: 'जेठ',
+    3: 'असार',
+    4: 'श्रावण',
+    5: 'भदौ',
+    6: 'आश्विन',
+    7: 'कार्तिक',
+    8: 'मंसिर',
+    9: 'पुष',
+    10: 'माघ',
+    11: 'फाल्गुन',
+    12: 'चैत्,',
+};
 
-const labelSelector = (d: LegendItem) => d.label;
+const monthsEn = {
+    1: 'Baisakh',
+    2: 'Jestha',
+    3: 'Ashadh',
+    4: 'Shrawan',
+    5: 'Bhadra',
+    6: 'Ashwin',
+    7: 'Kartik',
+    8: 'Mangsir',
+    9: 'Poush',
+    10: 'Magh',
+    11: 'Falgun',
+    12: 'Chaitra',
+};
+
+const a = new Date();
+const yesterday = new Date(a);
+yesterday.setDate(yesterday.getDate() - 1);
+const b = yesterday.toLocaleString();
+const ourDate = b.split(',')[0].split('/');
+const dateString = `${ourDate[2]}-${ourDate[0]}-${ourDate[1]}`;
+const bsDate = adToBs(dateString);
+const year = bsDate.split('-')[0];
+const month = months[Number(bsDate.split('-')[1])];
+const monthEn = monthsEn[Number(bsDate.split('-')[1])];
+const day = bsDate.split('-')[2];
+const today = new Date();
+const baisakh1 = bsToAd(`${year}-01-01`);
+const DEFAULT_END_DATE = today;
+
+
+const aT = new Date();
+const bT = aT.toLocaleString();
+const ourDateT = bT.split(',')[0].split('/');
+const dateStringT = `${ourDateT[2]}-${ourDateT[0]}-${ourDateT[1]}`;
+const bsDateT = adToBs(dateStringT);
+const yearT = bsDateT.split('-')[0];
+const monthToday = months[Number(bsDateT.split('-')[1])];
+const monthEnToday = monthsEn[Number(bsDateT.split('-')[1])];
+const dayT = bsDateT.split('-')[2];
+
+
+const labelSelector = (d: LegendItem, language: string) => {
+    if (language === 'en') { return d.label; }
+    if (language === 'np') { return d.labelNe; }
+    return null;
+};
 const keySelector = (d: LegendItem) => d.label;
 const classNameSelector = (d: LegendItem) => d.style;
 const colorSelector = (d: LegendItem) => d.color;
 const radiusSelector = (d: LegendItem) => d.radius;
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
-    { label: 'Major (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
-    { label: 'Severe (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
-    { label: 'Catastrophic (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+    { label: 'Minor (0)', labelNe: 'सामान्य (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Major (<10)', labelNe: 'मुख्य (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
+    { label: 'Severe (<100)', labelNe: 'गम्भिर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
+    { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
 ];
 
 // const filteredHazardTypes = [{
@@ -61,62 +124,18 @@ const BulletinPDF = (props: Props) => {
     const {
         sitRep,
         incidentSummary,
-        hazardWiseLoss,
-        genderWiseLoss,
         peopleLoss,
-
+        hilight,
+        hazardWiseLoss,
+        feedback,
     } = props.bulletinData;
 
-    const { hazardTypes } = props;
-
     const [provWiseLossChart, setProvWiseChart] = useState([]);
-    const [hazardWiseLossChart, setHazardWiseChart] = useState([]);
-    const [genderWiseLossChart, setGenderWiseChart] = useState([]);
     const [filteredHazardTypes, setHazardLegends] = useState([]);
     const [newHazardGeoJson, setHazardGeoJson] = useState([]);
     const [incidentPoints, setincidentPoints] = useState({});
 
-
-    useEffect(() => {
-        if (hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) {
-            const getHazardColor = (hazardName) => {
-                const h = Object
-                    .keys(hazardTypes)
-                    .filter(k => hazardTypes[k].titleNe === hazardName);
-                return hazardTypes[h[0]].color;
-            };
-            const obj = Object.keys(hazardWiseLoss).map(hazardName => (
-                {
-                    title: hazardName,
-                    color: getHazardColor(hazardName),
-                }
-            ));
-            console.log('obj', obj);
-            setHazardLegends(obj);
-            const features = [];
-            Object.keys(hazardWiseLoss).map((h) => {
-                if (Object.keys(hazardWiseLoss[h]).length > 2) {
-                    // setHazardGeoJson([...newHazardGeoJson,
-                    features.push({
-                        type: 'Feature',
-                        geometry: { type: 'Point', coordinates: [hazardWiseLoss[h].longitude, hazardWiseLoss[h].latitude] },
-                        properties: {
-                            hazardColor: getHazardColor(h),
-                            severity: 'Minor',
-                        },
-                    // }]);
-                    });
-                }
-                return null;
-            });
-
-            console.log('features', features);
-            setincidentPoints({
-                type: 'FeatureCollection',
-                features,
-            });
-        }
-    }, [hazardTypes, hazardWiseLoss, newHazardGeoJson]);
+    const { hazardTypes, language: { language } } = props;
 
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
@@ -129,72 +148,158 @@ const BulletinPDF = (props: Props) => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: gap }}>
                 {
-                    payload.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
-                            <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
-                            <span>{entry.value}</span>
-                        </div>
-                    ))
-                }
-            </div>
-        );
-    };
-    const renderLegendPie = (p, layout) => {
-        const { payload } = p;
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', width: '100%', height: '50mm', paddingTop: '20px' }}>
-                {
-                    payload.map((entry, index) => (
-                        <div key={index} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginRight: '20px' }}>
-                            <div style={{ width: '30px', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '30px', color: '#fff', borderRadius: '50%', marginRight: '4px', backgroundColor: `${entry.color}` }}>
-                                {entry.payload.value}
+                    payload.map((entry, index) => {
+                        console.log('entry.value', entry.value);
+                        return (
+                            <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
+                                <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
+                                <span>
+                                    {
+                                        <Translation>
+                                            {
+                                                t => <span>{t(`${entry.value}`)}</span>
+                                            }
+                                        </Translation>
+
+                                    }
+
+                                </span>
                             </div>
-                            <span>{entry.value}</span>
-                        </div>
-                    ))
+                        );
+                    })
                 }
             </div>
         );
     };
+
+    useEffect(() => {
+        console.log('hazardWiseLoss loss', hazardWiseLoss);
+        // if ((hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) || (feedback && Object.keys(feedback) > 0)) {
+        const getHazardColor = (hazardName) => {
+            if (language === 'np') {
+                const h = Object
+                    .keys(hazardTypes)
+                    .filter(k => hazardTypes[k].titleNe === hazardName || hazardTypes[k].title === hazardName);
+                return hazardTypes[h[0]] ? hazardTypes[h[0]].color : '#000000';
+            }
+            const h = Object
+                .keys(hazardTypes)
+                .filter(k => hazardTypes[k].title === hazardName || hazardTypes[k].titleNe === hazardName);
+            return hazardTypes[h[0]] ? hazardTypes[h[0]].color : '#000000';
+        };
+
+        const getHazardTitle = (hazardName) => {
+            const h = Object
+                .keys(hazardTypes)
+                .filter(k => hazardTypes[k].titleNe === hazardName || hazardTypes[k].title === hazardName);
+
+            return language === 'np' ? hazardTypes[h[0]].titleNe : hazardTypes[h[0]].title;
+        };
+
+        const getSeverity = (deaths) => {
+            if (deaths) {
+                if (Number(deaths) === 0) {
+                    return 8;
+                }
+                if (Number(deaths) < 10) {
+                    return 11;
+                } if (Number(deaths) >= 10 && Number(deaths) < 100) {
+                    return 15;
+                } if (Number(deaths) >= 100) {
+                    return 20;
+                }
+            }
+            return 8;
+        };
+
+        let obj = {};
+        let newhazardLegends = [];
+        if (Object.keys(hazardWiseLoss).length > 0) {
+            obj = Object.keys(hazardWiseLoss).map(hazardName => (
+                {
+                    title: getHazardTitle(hazardName),
+                    // titleEn: getHazardTitle(hazardName),
+                    color: getHazardColor(hazardName),
+                }
+            ));
+        }
+
+        if (Object.keys(feedback).length > 0) {
+            const allHazardsAdded = Object.keys(feedback)
+                .map(item => feedback[item])
+                .filter(item => item.coordinates)
+                .map(item => item.hazard);
+            const uniqueAddedHazards = [...new Set(allHazardsAdded)];
+            newhazardLegends = uniqueAddedHazards.map(h => ({
+                title: getHazardTitle(h),
+                // titleEn: getHazardTitle(h),
+                color: getHazardColor(h),
+            }));
+        }
+        if (Object.keys(obj).length > 0 && newhazardLegends.length > 0) {
+            setHazardLegends([...obj, ...newhazardLegends]);
+        } else if (newhazardLegends.length > 0 && Object.keys(obj).length === 0) {
+            setHazardLegends([...newhazardLegends]);
+        }
+        console.log('newhazardLegends', newhazardLegends);
+
+        const features = [];
+        Object.keys(hazardWiseLoss).map((h) => {
+            if (Object.keys(hazardWiseLoss[h]).length > 2) {
+                // setHazardGeoJson([...newHazardGeoJson,
+                features.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: hazardWiseLoss[h].coordinates },
+                    properties: {
+                        hazardColor: getHazardColor(h),
+                        severityScale: getSeverity(hazardWiseLoss[h].deaths),
+                    },
+                    // }]);
+                });
+            }
+            return null;
+        });
+
+        Object.keys(feedback)
+            .map(item => feedback[item])
+            .filter(item => item.coordinates)
+            .map((f) => {
+                features.push({
+                    type: 'Feature',
+                    geometry: { type: 'Point', coordinates: f.coordinates },
+                    properties: {
+                        hazardColor: getHazardColor(f.hazard),
+                        severityScale: getSeverity(f.deaths),
+                    },
+                });
+
+                return null;
+            });
+
+
+        console.log('features', features);
+        setincidentPoints({
+            type: 'FeatureCollection',
+            features,
+        });
+        // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [feedback, hazardWiseLoss, language]);
+
     useEffect(() => {
         const cD = Object.keys(peopleLoss).map(pL => ({
-            province: nepaliRef[pL],
-            मृत्यु: peopleLoss[pL].death,
-            बेपत्ता: peopleLoss[pL].missing,
-            घाईते: peopleLoss[pL].injured,
+            province: language === 'np' ? nepaliRef[pL] : provincesRef[pL],
+            death: peopleLoss[pL].death,
+            missing: peopleLoss[pL].missing,
+            injured: peopleLoss[pL].injured,
         }));
         setProvWiseChart(cD);
-        const hcD = Object.keys(hazardWiseLoss).map(h => (
-            {
-                hazard: h,
-                घटना: hazardWiseLoss[h].incidents,
-                मृत्यु: hazardWiseLoss[h].deaths,
-            }
-        ));
-        setHazardWiseChart(hcD);
-        const pieChart = [
-            {
-                name: 'पुरुष',
-                value: Number(genderWiseLoss.male),
-            },
-            {
-                name: 'महिला',
-                value: Number(genderWiseLoss.female),
-            },
-            {
-                name: 'पहिचान नभएको ',
-                value: Number(genderWiseLoss.unknown),
-            },
-        ];
-        setGenderWiseChart(pieChart);
-
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [language]);
 
 
     return (
-        <div className={styles.pdfContainer}>
+        <div className={language === 'np' ? styles.pdfContainer : styles.pdfContainerEnglish}>
             <div className={styles.headerNLoss}>
                 <div className={styles.header}>
                     <div className={styles.subDiv}>
@@ -205,19 +310,40 @@ const BulletinPDF = (props: Props) => {
                         <div className={styles.govTitles}>
                             <ul>
                                 <li>
-                                नेपाल सरकार
+
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Nepal Government')}</span>
+                                        }
+                                    </Translation>
+
                                 </li>
                                 <li>
-                                गृह मन्त्रालय
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Ministry of Home Affairs')}</span>
+                                        }
+                                    </Translation>
+
                                 </li>
                                 <li className={styles.bold}>
-                                राष्ट्रिय बिपद जोखिम न्युनिकरन तथा व्यवस्थापन प्राधिकरण
+                                    <Translation>
+                                        {
+                                            t => <span>{t('ndrrma')}</span>
+                                        }
+                                    </Translation>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div className={styles.reportTitles}>
-                        <h1>दैनिक बिपद बुलेटिन</h1>
+                        <h1>
+                            <Translation>
+                                {
+                                    t => <span>{t('Daily Bipad Bulletin')}</span>
+                                }
+                            </Translation>
+                        </h1>
                         <p>
                             <NepaliDate />
                             {' '}
@@ -227,47 +353,102 @@ const BulletinPDF = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.loss}>
-                    <h2>२४ घण्टा मा बिपदका विवरणहरु </h2>
+                    <h2>
+                        {
+                            language === 'np'
+                                ? `${month} ${day} बिहान 10:00 बजेदेखी ${monthToday} ${dayT} बिहान 10:00 बजे सम्म`
+                                : `Disaster Incidents from ${day} ${monthEn} 10:00 am to ${dayT} ${monthEnToday} 10:00 am`
+                        }
+
+
+                    </h2>
+                    {/* <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Disaster Incidents in last 24 hours')}</span>
+                            }
+                        </Translation>
+                    </h2> */}
                     {/* <p>१-२ पौष २०७८, बिहान १० बजे सम्म </p> */}
                     <div className={styles.lossIconsRow}>
                         {
                             lossObj.map(l => (
                                 <LossItem
                                     lossIcon={l.logo}
-                                    lossTitle={l.title}
-                                    loss={Number(incidentSummary[l.lossKey]).toLocaleString()}
+                                    lossTitle={language === 'np' ? l.title : l.titleEn}
+                                    loss={Number(incidentSummary[l.lossKey])}
                                 />
                             ))
                         }
                     </div>
                 </div>
             </div>
+            <div className={styles.pratikriyaContainer}>
+                <h2>
+                    {' '}
+                    <Translation>
+                        {
+                            t => <span>{t('Disaster Hilights')}</span>
+                        }
+                    </Translation>
+
+
+                </h2>
+                <div className={styles.pratikriyas}>
+                    <ul>
+                        {
+                            <li>
+                                {hilight}
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
             <div className={styles.provinceWiseLoss}>
                 <div className={styles.provinceWiseChart}>
-                    <h2>प्रदेश अनुसार मृत्‍यु, बेपत्ता र घाइते संख्या को बर्गिकरण    </h2>
-                    <ResponsiveContainer width="100%" height="100%">
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Province-wise death, missing and injured')}</span>
+                            }
+                        </Translation>
+                    </h2>
+                    <ResponsiveContainer width="95%" height="100%">
                         <BarChart
                             data={provWiseLossChart}
                             margin={{
                                 top: 20,
                                 right: 0,
-                                left: 0,
+                                left: 15,
                                 bottom: 5,
                             }}
+                            layout="vertical"
                         >
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="province" angle={-45} tickMargin={20} padding={{ right: 20 }} />
-                            <YAxis />
-                            <Tooltip />
+                            <XAxis
+                                type="number"
+                                allowDecimals={false}
+                            />
+                            <YAxis
+                                type="category"
+                                dataKey="province"
+                            />
+                            {/* <Tooltip /> */}
                             <Legend content={renderLegendContent} />
-                            <Bar dataKey="मृत्यु" stackId="a" fill="#D10000" />
-                            <Bar dataKey="बेपत्ता" stackId="a" fill="#E77677" />
-                            <Bar dataKey="घाईते" stackId="a" fill="#FB989A" />
+                            <Bar dataKey="death" stackId="a" fill="#D10000" />
+                            <Bar dataKey="missing" stackId="a" fill="#E77677" />
+                            <Bar dataKey="injured" stackId="a" fill="#FB989A" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
                 <div className={styles.provinceWiseIncidentsMap}>
-                    <h2>प्रकोप अनुसार घटनाको विवरण (२४ घण्टा)</h2>
+                    <h2>
+                        <Translation>
+                            {
+                                t => <span>{t('Hazard-wise breakdown of incidents (last 24 hours)')}</span>
+                            }
+                        </Translation>
+                    </h2>
                     <IncidentMap
                         hazardWiseLoss={hazardWiseLoss}
                         incidentPoints={incidentPoints}
@@ -275,7 +456,12 @@ const BulletinPDF = (props: Props) => {
                     <div className={styles.pointSizeLegendContainer}>
                         <header className={styles.header}>
                             <h4 className={styles.heading}>
-                                मृत्‍यु संख्या
+                                <Translation>
+                                    {
+                                        t => <span>{t('Death Count')}</span>
+                                    }
+                                </Translation>
+
                             </h4>
                         </header>
                         <IncidentLegend
@@ -286,11 +472,18 @@ const BulletinPDF = (props: Props) => {
                             emptyComponent={null}
                             itemClassName={styles.legendItem}
                             keySelector={keySelector}
-                            labelSelector={labelSelector}
+                            labelSelector={d => labelSelector(d, language)}
                             symbolClassNameSelector={classNameSelector}
                         />
                         <div className={styles.hazardLegend}>
-                            <div className={styles.legendTitle}>प्रकोप लेजेन्ड</div>
+                            <div className={styles.legendTitle}>
+
+                                <Translation>
+                                    {
+                                        t => <span>{t('Hazard Legend')}</span>
+                                    }
+                                </Translation>
+                            </div>
                             <HazardsLegend
                                 filteredHazardTypes={filteredHazardTypes}
                                 className={styles.legend}
@@ -299,63 +492,6 @@ const BulletinPDF = (props: Props) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className={styles.hazardWiseStats}>
-                <h2>प्रकोप अनुसार घटना र मृत्‍यु संख्याको बर्गिकरण </h2>
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                        layout="vertical"
-                        data={hazardWiseLossChart}
-                        margin={{
-                            top: 20,
-                            right: 0,
-                            left: 15,
-                            bottom: 5,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis type="number" />
-                        <YAxis
-                            type="category"
-                            dataKey="hazard"
-                        />
-
-                        <Tooltip />
-                        <Legend content={e => renderLegendContent(e, 'vertical')} />
-                        <Bar dataKey="मृत्यु" fill="#D10000" barSize={7} />
-                        <Bar dataKey="घटना" fill="#D4A367" barSize={7} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
-            <div className={styles.genderWiseStats}>
-                <h2>लिङ अनुसार मृत्‍युको बर्गिकरण </h2>
-                <ResponsiveContainer width="100%" height="100%">
-                    <PieChart
-                        width={200}
-                        height={150}
-                        margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
-                    >
-                        <Pie
-                            data={genderWiseLossChart}
-                            innerRadius={40}
-                            outerRadius={60}
-                            fill="#8884d8"
-                            paddingAngle={0}
-                            dataKey="value"
-                            stroke="none"
-                            label
-                            startAngle={90}
-                            endAngle={450}
-                        >
-                            {
-                                genderWiseLossChart.map((entry, index) => <Cell label key={`cell-${entry.name}`} fill={COLORS_CHART[index % COLORS_CHART.length]} />)
-                            }
-                        </Pie>
-                        <Tooltip />
-                        <Legend layout="vertical" align="right" content={renderLegendPie} />
-                    </PieChart>
-
-                </ResponsiveContainer>
             </div>
         </div>
     );

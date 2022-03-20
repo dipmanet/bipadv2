@@ -315,7 +315,7 @@ const IncidentMap = (props) => {
                         'circle-color': ['get', 'hazardColor'],
                         'circle-stroke-width': 1.2,
                         'circle-stroke-color': '#000000',
-                        'circle-radius': 8,
+                        'circle-radius': ['get', 'severityScale'],
                     },
                 },
             );

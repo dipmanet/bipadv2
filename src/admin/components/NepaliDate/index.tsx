@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { adToBs, bsToAd, calculateAge } from '@sbmdkl/nepali-date-converter';
+import {
+    languageSelector,
+} from '#selectors';
 
-const months = {
+const monthsInitial = {
     1: 'बैशाख',
     2: 'जेठ',
     3: 'असार',
@@ -13,11 +17,38 @@ const months = {
     9: 'पुष',
     10: 'माघ',
     11: 'फाल्गुन',
-    12: 'चैत्,',
+    12: 'चैत्',
+};
+const monthsEnInitial = {
+    1: 'Baisakh',
+    2: 'Jestha',
+    3: 'Ashad',
+    4: 'Shrawan',
+    5: 'Bhadau',
+    6: 'Ashwin',
+    7: 'Kartik',
+    8: 'Mangshir',
+    9: 'Poush',
+    10: 'Magh',
+    11: 'Falgun',
+    12: 'Chaitra,',
 };
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
-const NepaliDate = () => {
+
+const NepaliDate = (props) => {
+    const { language: { language } } = props;
+    const [months, setMonth] = useState(monthsEnInitial);
+    useEffect(() => {
+        if (language === 'en') {
+            setMonth(monthsEnInitial);
+        } else {
+            setMonth(monthsInitial);
+        }
+    }, [language]);
     const a = new Date();
     const b = a.toLocaleString();
     const ourDate = b.split(',')[0].split('/');
@@ -33,4 +64,4 @@ const NepaliDate = () => {
     );
 };
 
-export default NepaliDate;
+export default connect(mapStateToProps)(NepaliDate);

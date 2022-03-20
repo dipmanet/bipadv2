@@ -1,0 +1,25 @@
+.responseTable{
+    border-collapse: collapse;
+    position: relative;
+    td,th{
+        height: 20px;
+        border: 1px solid rgb(107, 106, 106);
+        padding: 2px 8px;
+        text-align: left;
+    }
+    td{
+        font-size: 12px;
+    }
+    th{
+        font-size: 14px;
+        padding: 8px 10px !important;
+    }
+    .lastRow{
+        background: #c5c5c5;
+        color: black;
+        font-size: 16px !important;
+    }
+    width: 100%;
+    position: relative;
+   
+}

@@ -1,55 +1,45 @@
 .formContainer{
     width: 100%;
-    padding: 40px;
+    // padding: 5px;
     // margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
     background-color: white;
-    .containerForm{
-        // box-shadow: $boxShadow;
-        padding: 15px 40px 30px 0px;
-        overflow: visible;
-        h2{
-            // font-family: $Fira;
-            font-size: 18px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        p{
-            // font-family: $Fira;
-            color: #3e3e3e;
-        }
-        .row1{
-        margin: 0;
-        display: flex;
-        justify-content: space-between;
-            .col1{
-                width: 48.5%;
-                // margin: 0 5px;
-            }
-        }
+    p{
+        padding-left: 10px;
+        // padding-top: 30px;
     }
-    .pictureContainer{
-        display: flex;
-        justify-content: center;
-        .subContainer{
-            // border: 1px solid red;
-            width:50%;
-            .picture{
-                overflow-x: scroll;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                
-                // border: 1px solid red;
-                .placeholder{
-                    width: 60% !important;
-                }
-                img{
-                    width: 95%;
-                    border: 1px solid #f5f5f5;
-                }
-            }
-        }
+  .picContainer{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: calc(100% - 60px);
+      padding: 30px;
+    // margin: 0 auto;
+      cursor: pointer;
+      img{
+          width: 95mm ;
+          border: 1px solid #b8b7b7;
+      }
+      .formItemfooter{
+          @extend .formItemDailySummary;
+          position: relative;
+          width: 95mm !important;
+          right: 30px !important;
+      }
+  }
+  .picContainerReport{
+    @extend .picContainer;
+    padding: 0 !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    flex-direction: row;
+    justify-content: space-between;
+    // flex-direction: column;
+    img{
+        width: 92mm;
     }
+  }
     ::-webkit-scrollbar {
         display: none;
     }  
@@ -67,17 +57,20 @@ h3{
     font-weight: 400;
 }
 
-.formItem{
+.formItemDailySummary{
+    max-width: calc(100% - 60px);
+    margin-left: 30px;
+    cursor: pointer;
     border: 1px solid #cecccc;
     border-radius: 3px;
     padding: 0 0 10px 10px;
     margin-top: 12px;
+    justify-content: space-between;
     display: flex !important;
     align-items: center;
-    // bottom: 10px;
     background-color: #f3f3f3;
     height: 65px;
     width: 100%;
-    }
+}
 
 }

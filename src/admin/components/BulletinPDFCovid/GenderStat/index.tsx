@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 
 const GenderStat = (props) => {
@@ -12,7 +13,15 @@ const GenderStat = (props) => {
                 <div className={styles.goloBatch}>
                     {value}
                 </div>
-                {title}
+                <Translation>
+                    {
+                        t => (
+                            <span>
+                                {t(`${title}`)}
+                            </span>
+                        )
+                    }
+                </Translation>
             </div>
         </div>
     );

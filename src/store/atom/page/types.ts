@@ -25,6 +25,9 @@ interface Centroid {
     coordinates: [number, number];
 }
 type BBox = [number, number, number, number];
+export interface Language {
+    language: string;
+}
 
 type DrrmProgress = number;
 
@@ -195,6 +198,8 @@ export interface Bulletin {
         deaths: number;
         recovered: number;
     };
+    yearlyData: object;
+
     covidTotalStat: {
         totalAffected: number;
         totalActive: number;
@@ -751,7 +756,7 @@ export interface PageState {
     daRiverFilter: DARiverFiltersElement;
 
     adminLevelList: AdminLevel[];
-
+    language: Language;
     documentCategoryList: DocumentCategory[];
 
     showProvince: boolean;
@@ -906,7 +911,7 @@ export enum PageType {
     SET_DOCUMENT_CATEGORY_LIST = 'page/SET_DOCUMENT_CATEGORY_LIST',
     SET_COUNTRY_LIST = 'page/SET_COUNTRY_LIST',
     SET_AGRICULTURE_LOSS_TYPE_LIST = 'page/SET_AGRICULTURE_LOSS_TYPE_LIST',
-
+    SET_LANGUAGE = 'page/SET_LANGUAGE',
     SET_SHOW_PROVINCE = 'page/SET_SHOW_PROVINCE',
     SET_SHOW_DISTRICT = 'page/SET_SHOW_DISTRICT',
     SET_SHOW_MUNICIPALITY = 'page/SET_SHOW_MUNICIPALITY',
@@ -981,7 +986,7 @@ export enum PageType {
     ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
     ADMIN__PORTAL_BULLETIN_EDIT_DATA = 'page/ADMIN__PORTAL_BULLETIN_EDIT_DATA',
-
+    ADMIN__PORTAL_BULLETIN_YEARLYDATA='page/ADMIN__PORTAL_BULLETIN_YEARLYDATA',
     // Epidemics
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
@@ -991,6 +996,10 @@ export enum PageType {
 export interface SetFilters {
     type: typeof PageType.SET_FILTERS;
     filters: FiltersElement;
+}
+
+export interface SetLanguage {
+    language: Language;
 }
 
 export interface SetBulletinData {
@@ -1005,6 +1014,10 @@ export interface SetBulletinEditData {
 
 export interface SetBulletinDataCovid {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_COVID;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinYearlyData {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA;
     bulletinData: Bulletin;
 }
 export interface SetBulletinDataFeedback {
@@ -1417,6 +1430,7 @@ export interface SetEpidemicsPage {
 }
 
 export type PageActionTypes = (
+    SetLanguage | SetRegion | SetInitialPopupHidden | SetBulletinData |
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
     SetGeneralData| SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
@@ -1434,6 +1448,7 @@ export type PageActionTypes = (
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
     SetDocumentCategoryList | SetCountryList | SetAgricultureLossTypeList | SetEnumOptionsType |
+    SetDashboardHazardType | SetBulletinDataCovid | SetBulletinYearlyData |
     SetDataArchivePollutionList | SetDataArchiveEarthquakeList | SetDashboardHazardType |
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
     SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |

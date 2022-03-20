@@ -1,5 +1,11 @@
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("/src/resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+    }
+
 .footerContainer{
-    width: 210mm;
+font-family: "Kalimati Regular"!important;
+width: 210mm;
 height: 297mm;
 margin: 0 auto;
 border: 1px solid #cecccc;
@@ -8,10 +14,10 @@ position: relative;
 padding: 10mm;
     .dailySummary{
         h2{
-            font-size: 16px;
+            font-size: 18px;
         }
         p{
-            font-size: 12px;
+            font-size: 15px;
         }
     }
     .temperaturePics{
@@ -41,4 +47,10 @@ padding: 10mm;
         }
 
     }
+}
+
+.footerContainerEnglish{
+    @extend .footerContainer;
+    font-family: "Fira-Sans" !important;
+
 }
