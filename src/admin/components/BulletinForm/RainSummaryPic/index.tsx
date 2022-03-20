@@ -57,7 +57,7 @@ const TemperaturesMin = (props: Props) => {
             };
             reader.readAsDataURL(acceptedFiles[0]);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [acceptedFiles]);
 
     const handleMinTempInput = (file: File) => {
@@ -79,38 +79,38 @@ const TemperaturesMin = (props: Props) => {
                 <div className={hideForm ? styles.subContainerReport : styles.subContainer}>
 
                     {!hideForm
-                      && (
-                          <Translation>
-                              {
-                                  t => <h3>{t('Picture of Daily Rainfall Map')}</h3>
-                              }
-                          </Translation>
-                      )
+                        && (
+                            <Translation>
+                                {
+                                    t => <h3>{t('Picture of Daily Rainfall Map')}</h3>
+                                }
+                            </Translation>
+                        )
 
                     }
                     <div id="pictureContainerRain" className={styles.picture}>
                         {
                             picFromEdit
                             && (
-                            <>
-                                <img
-                                    src={picLink}
-                                    alt="temperature"
-                                />
-                            </>
+                                <>
+                                    <img
+                                        src={picLink}
+                                        alt="temperature"
+                                    />
+                                </>
                             )
                         }
                         {
                             !picFromEdit && !rainSummaryPic
                             && (
-                            <>
-                                <img
-                                    src={Placeholder}
-                                    alt="temperature"
-                                    title="Click to select picture"
-                                    className={styles.placeholder}
-                                />
-                            </>
+                                <>
+                                    <img
+                                        src={Placeholder}
+                                        alt="temperature"
+                                        title="Click to select picture"
+                                        className={styles.placeholder}
+                                    />
+                                </>
                             )
                         }
                     </div>

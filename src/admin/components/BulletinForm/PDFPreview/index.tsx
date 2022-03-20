@@ -109,6 +109,8 @@ const PDFPreview = (props) => {
             dailySummary,
             rainSummaryPic,
             hilight,
+            rainSummaryFooter,
+            bulletinDate,
         },
         user,
         requests: { bulletinPostRequest, getSitRep },
@@ -200,6 +202,8 @@ const PDFPreview = (props) => {
                 daily_summary_ne: dailySummary,
                 rain_summary_picture_ne: rainSummaryPic,
                 highlight_ne: hilight,
+                rainSummaryPictureFooterNe: rainSummaryFooter,
+                bulletinDate,
             });
         }
         return getFormData({
@@ -226,6 +230,8 @@ const PDFPreview = (props) => {
             dailySummary,
             rainSummaryPic,
             hilight,
+            rainSummaryPictureFooter: rainSummaryFooter,
+            bulletinDate,
         });
     };
 
@@ -256,6 +262,9 @@ const PDFPreview = (props) => {
                 daily_summary_ne: dailySummary,
                 rain_summary_picture_ne: rainSummaryPic,
                 highlight_ne: hilight,
+                rainSummaryPictureFooterNe: rainSummaryFooter,
+                bulletinDate,
+
             });
         }
         return getFormData({
@@ -282,6 +291,8 @@ const PDFPreview = (props) => {
             dailySummary,
             rainSummaryPic,
             hilight,
+            rainSummaryPictureFooter: rainSummaryFooter,
+            bulletinDate,
         });
     };
 

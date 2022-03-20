@@ -121,7 +121,7 @@ const selectDateForQuery = (today) => {
     const DEFAULT_START_DATE = yesterday;
     const DEFAULT_END_DATE = today;
 
-
+    console.log('dateed');
     const requestQuery = ({
         params: {
             // startDate = DEFAULT_START_DATE.toISOString(),
@@ -234,6 +234,8 @@ const Bulletin = (props: Props) => {
     const [progress, setProgress] = useState(0);
     const [sitRep, setSitRep] = useState(0);
     const [selectedDate, setSelectedate] = useState();
+    const [rainSummaryFooter, setRainSummaryFooter] = useState('');
+    const [bulletinDate, setBulletinDate] = useState();
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -279,7 +281,7 @@ const Bulletin = (props: Props) => {
             const incident_on__lt = endDate; // eslint-disable-line @typescript-eslint/camelcase
             const incident_on__gt = startDate; // eslint-disable-line @typescript-eslint/camelcase
             const ordering = '-incident_on';
-
+            setBulletinDate(startDate);
             // const requestQuery = ({
             //     params: {
             //         // startDate = DEFAULT_START_DATE.toISOString(),
@@ -472,7 +474,9 @@ const Bulletin = (props: Props) => {
         const n = [...feedback];
         setFeedback(n.filter((item, i) => i !== idx));
     };
-
+    const handleRainSummaryFooter = (e) => {
+        setRainSummaryFooter(e.target.value);
+    };
     const handlePrevBtn = () => {
         if (progress > 0) {
             setProgress(progress - 1);
@@ -814,6 +818,8 @@ const Bulletin = (props: Props) => {
             minTempFooter={minTempFooter}
             handleFooterMax={handleFooterMax}
             handleFooterMin={handleFooterMin}
+            handleRainSummaryFooter={handleRainSummaryFooter}
+            rainSummaryFooter={rainSummaryFooter}
         />,
         <PDFPreview
             handlePrevBtn={handlePrevBtn}
@@ -837,6 +843,10 @@ const Bulletin = (props: Props) => {
                     tempMin: minTemp,
                     dailySummary,
                     sitrep: sitRep,
+                    rainSummaryFooter,
+                    bulletinDate,
+
+
                 }
             }
         />,

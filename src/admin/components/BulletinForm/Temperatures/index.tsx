@@ -41,19 +41,21 @@ const Bulletin = (props: Props) => {
         handleFooterMin,
         maxTempFooter,
         minTempFooter,
+        rainSummaryFooter,
+        handleRainSummaryFooter,
     } = props;
 
     return (
         <div className={styles.formContainer}>
             {
                 !hideForm
-                    && (
-                        <Translation>
-                            {
-                                t => <p>{t('Please click on the image to select files')}</p>
-                            }
-                        </Translation>
-                    )
+                && (
+                    <Translation>
+                        {
+                            t => <p>{t('Please click on the image to select files')}</p>
+                        }
+                    </Translation>
+                )
             }
             {
                 !hideForm
@@ -93,11 +95,43 @@ const Bulletin = (props: Props) => {
 
                     </div>
                 )}
+
             <RainSummaryPic
                 rainSummaryPic={rainSummaryPic}
                 handleRainSummaryPic={handleRainSummaryPic}
                 hideForm={hideForm}
             />
+            {
+                !hideForm
+                && (
+
+                    <div className={styles.formItemfooter}>
+                        <FormControl fullWidth>
+
+                            <InputLabel>
+                                <Translation>
+                                    {
+                                        t => <span>{t('Daily Rainfall Map Description')}</span>
+                                    }
+                                </Translation>
+                            </InputLabel>
+                            {' '}
+                            <Input
+                                type="text"
+                                value={rainSummaryFooter}
+                                onChange={e => handleRainSummaryFooter(e)}
+                                className={styles.select}
+                                disableUnderline
+                                inputProps={{
+                                    disableUnderline: true,
+                                }}
+                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                            />
+                        </FormControl>
+
+
+                    </div>
+                )}
             <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
                 <TemperatureMax
                     maxTemp={maxTemp}
@@ -107,35 +141,35 @@ const Bulletin = (props: Props) => {
                 />
                 {
                     !hideForm
-                && (
+                    && (
 
-                    <div className={styles.formItemfooter}>
-                        <FormControl fullWidth>
+                        <div className={styles.formItemfooter}>
+                            <FormControl fullWidth>
 
-                            <InputLabel>
-                                <Translation>
-                                    {
-                                        t => <span>{t('Daily Max Temperature Map Description')}</span>
-                                    }
-                                </Translation>
-                            </InputLabel>
-                            {' '}
-                            <Input
-                                type="text"
-                                value={maxTempFooter}
-                                onChange={e => handleFooterMax(e)}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
+                                <InputLabel>
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Daily Max Temperature Map Description')}</span>
+                                        }
+                                    </Translation>
+                                </InputLabel>
+                                {' '}
+                                <Input
+                                    type="text"
+                                    value={maxTempFooter}
+                                    onChange={e => handleFooterMax(e)}
+                                    className={styles.select}
+                                    disableUnderline
+                                    inputProps={{
+                                        disableUnderline: true,
+                                    }}
+                                    style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                                />
+                            </FormControl>
 
 
-                    </div>
-                )}
+                        </div>
+                    )}
                 <TemperatureMin
                     minTemp={minTemp}
                     handleMinTemp={handleMinTemp}
@@ -144,34 +178,34 @@ const Bulletin = (props: Props) => {
                 />
                 {
                     !hideForm
-                && (
+                    && (
 
-                    <div className={styles.formItemfooter}>
-                        <FormControl fullWidth>
-                            <InputLabel>
-                                <Translation>
-                                    {
-                                        t => <span>{t('Daily Min Temperature Map Description')}</span>
-                                    }
-                                </Translation>
-                            </InputLabel>
-                            {' '}
-                            <Input
-                                type="text"
-                                value={minTempFooter}
-                                onChange={e => handleFooterMin(e)}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
+                        <div className={styles.formItemfooter}>
+                            <FormControl fullWidth>
+                                <InputLabel>
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Daily Min Temperature Map Description')}</span>
+                                        }
+                                    </Translation>
+                                </InputLabel>
+                                {' '}
+                                <Input
+                                    type="text"
+                                    value={minTempFooter}
+                                    onChange={e => handleFooterMin(e)}
+                                    className={styles.select}
+                                    disableUnderline
+                                    inputProps={{
+                                        disableUnderline: true,
+                                    }}
+                                    style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                                />
+                            </FormControl>
 
 
-                    </div>
-                )}
+                        </div>
+                    )}
             </div>
 
 
