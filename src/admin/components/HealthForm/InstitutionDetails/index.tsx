@@ -69,15 +69,11 @@ const InstitutionDetails = (props: Props): JSX.Element => {
     const [fieldsToDisable, setDisableFields] = useState([]);
     // const navigate = useNavigate();
     const handleViewTableBtn = () => {
-        navigate('/health-table');
+        navigate('health-infrastructure-data-table');
     };
 
 
     const getDisabled = (field: string) => fieldsToDisable.includes(field);
-
-    useEffect(() => {
-        console.log('validationError', validationError);
-    }, [validationError]);
 
     useEffect(() => {
         const allFields = Object.keys(institutionDetails);

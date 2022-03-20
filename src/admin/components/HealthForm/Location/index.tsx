@@ -90,7 +90,7 @@ const Location = (props) => {
     const [wardCentriodForMap, setwardCentriodForMap] = useState<mapboxgl.LngLatLike>(null);
 
     const handleViewTableBtn = () => {
-        navigate('/health-table');
+        navigate('health-infrastructure-data-table');
     };
 
     const getDisabled = () => {
@@ -189,9 +189,7 @@ const Location = (props) => {
 
     useEffect(() => {
         const province = provinceDataIs.filter(item => item.title === provinceName).map(item => item.id)[0];
-        console.log('test', province, provinceName);
         if (provinceName) {
-            // dispatch(districtData(provinceId));
             setprovinceId(province);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -200,9 +198,7 @@ const Location = (props) => {
 
     useEffect(() => {
         const district = districtDataIs.filter(item => item.title === districtName).map(item => item.id)[0];
-        console.log('test district', district, districtName);
         if (districtName) {
-            // dispatch(municipalityData(districtId));
             setdistrictId(district);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,11 +206,8 @@ const Location = (props) => {
 
 
     useEffect(() => {
-        // console.log('municipalityName', municipalityName);
         const munId = municipalityDataIs.filter(item => item.title === municipalityName).map(item => item.id)[0];
-        console.log('test muni', munId, municipalityName);
         if (municipalityName) {
-            // dispatch(wardData(munId));
             setmunicipalityId(munId);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -222,14 +215,10 @@ const Location = (props) => {
 
 
     useEffect(() => {
-        // console.log('wardName', wardName);
-
         const ward = wardDataIs.filter(item => item.municipality === municipalityId)
             .filter(item => item.title === String(wardName)).map(item => item.id)[0];
-        console.log('test ward', ward, wardName);
         if (wardName) {
             setwardId(ward);
-            // console.log('ward id', wardId);
             handleFormData(ward, 'ward');
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps

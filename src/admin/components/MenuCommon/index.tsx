@@ -101,10 +101,8 @@ const MenuCommon = (props: Props) => {
                     currentPageSlug.current = menuSlug.split('/')[1];
                 }
                 const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
-                console.log('test', childMenu);
                 if (childMenu) {
                     const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
-                    console.log('childM', childM);
                     if (childM) {
                         // eslint-disable-next-line max-len
                         const activeIndex = childM.map(cM => cM.slug).indexOf(currentPageSlug.current);

@@ -61,7 +61,7 @@ const Contact = (props: Props): JSX.Element => {
     } = props;
 
     const handleViewTableBtn = () => {
-        navigate('/health-table');
+        navigate('health-infrastructure-data-table');
     };
     useEffect(() => {
         window.scrollTo({ top: 400, left: 0 });

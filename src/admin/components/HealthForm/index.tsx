@@ -37,13 +37,10 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/inventory/',
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => {
-            console.log('test params', params);
-            return ({
-                format: 'json',
-                resouce: params.resource,
-            });
-        },
+        query: ({ params }) => ({
+            format: 'json',
+            resouce: params.resource,
+        }),
         onSuccess: ({ response, props }) => {
             props.setHealthInfrastructurePage({
                 inventoryData: response.results,

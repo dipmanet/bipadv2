@@ -57,7 +57,7 @@ const Verification = (props: Props): JSX.Element => {
     } = props;
 
     const handleViewTableBtn = () => {
-        navigate('/health-table');
+        navigate('health-infrastructure-data-table');
     };
     // const { userDataMain } = useSelector((state: RootState) => state.user);
     const [fieldsToDisable, setDisableFields] = useState([]);

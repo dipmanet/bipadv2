@@ -11,6 +11,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { navigate } from '@reach/router';
 // import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -200,7 +201,6 @@ const Inventories = (props: Props): JSX.Element => {
         if (resourceID) {
             props.requests.getInventoryItem.do();
             props.requests.getInventoryData.do({ resource: resourceID });
-            console.log('getting inventory item after if there is resourceid', resourceID);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resourceID]);
@@ -262,7 +262,6 @@ const Inventories = (props: Props): JSX.Element => {
 
     useEffect(() => {
         window.scrollTo({ top: 400, left: 0 });
-        console.log('getting inventory item onload');
         axios.get(`${baseUrl}/inventory-item/`).then(
             (data) => {
                 setHealthInfrastructurePage({ inventoryItem: data.results });
@@ -287,7 +286,7 @@ const Inventories = (props: Props): JSX.Element => {
     }, []);
 
     const handleTableClick = () => {
-        console.log('fds');
+        navigate('health-infrastructure-data-table');
     };
 
     const getEditRowData = (data) => {
