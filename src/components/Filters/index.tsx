@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import Redux, { compose } from 'redux';
@@ -301,6 +302,14 @@ class Filters extends React.PureComponent<Props, State> {
         }
     }
 
+    public componentDidUpdate(prevProps, prevState) {
+        const { setFilters, filters } = this.props;
+        const { faramValues } = this.state;
+        if (prevProps.filters !== filters) {
+            this.setState({ faramValues: filters });
+        }
+    }
+
     public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         const {
             provinces,
@@ -420,6 +429,7 @@ class Filters extends React.PureComponent<Props, State> {
             faramValues: {},
         });
         this.setState({ disableSubmitButton: false });
+        console.log('user', user);
         if (authState.authenticated) {
             if (user.profile.municipality) {
                 const region = { adminLevel: 3, geoarea: user.profile.municipality };
@@ -464,20 +474,23 @@ class Filters extends React.PureComponent<Props, State> {
                 setFilters({ filters: tempF });
                 this.setState({ faramValues: tempF, activeView: undefined });
             } else {
+                const region = {};
+                const tempF = {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region,
+                };
+                console.log('Entering', tempF);
                 this.setState({
                     activeView: undefined,
-                    faramValues: {
-                        dataDateRange: {
-                            rangeInDays: 7,
-                            startDate: undefined,
-                            endDate: undefined,
-                        },
-                        hazard: [],
-                        region: {},
-                    },
+                    faramValues: tempF,
                 });
 
-                setFilters({ filters: this.state.faramValues });
+                setFilters({ filters: tempF });
             }
         } else if (Object.keys(subdomainLoc).length > 0) {
             const tempF = {
@@ -628,7 +641,7 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
+        console.log('faram values:fv', fv);
         return (
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
