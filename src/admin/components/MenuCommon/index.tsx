@@ -74,14 +74,17 @@ const MenuCommon = (props: Props) => {
     };
 
     useEffect(() => {
-        if (adminMenu.length === 0) {
-            console.log('getting menu...');
-            getMenu.do();
-            setAdminMenu();
-        } else {
-            setAllMenu(adminMenu);
-            setMenu(adminMenu);
-        }
+        setAdminMenu(adminMenu);
+        setMenu(adminMenu);
+        setAllMenu(adminMenu);
+        // if (adminMenu.length === 0) {
+        //     console.log('getting menu...');
+        //     getMenu.do();
+        //     setAdminMenu();
+        // } else {
+        //     setAllMenu(adminMenu);
+        //     setMenu(adminMenu);
+        // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
