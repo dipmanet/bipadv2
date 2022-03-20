@@ -1,0 +1,28 @@
+.mainStatusLegendContainer {
+    position: absolute;
+    width: 140px;
+    bottom: 100px;
+    right: 40px;
+    padding: 5px 15px;
+    z-index: 999;
+    background-color: #0e141d99;
+
+    .statusSection {
+        display: flex;
+        align-items: center;
+
+        .statusColor {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+        }
+
+        .statusname {
+            padding: 5px 15px;
+            margin: 0;
+            color: white;
+            font-size: 13px;
+            text-align: left;
+        }
+    }
+}

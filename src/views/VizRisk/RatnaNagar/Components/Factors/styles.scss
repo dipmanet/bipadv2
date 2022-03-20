@@ -1,0 +1,40 @@
+.factorContainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #143044;
+    margin: 30px -8px;
+
+
+    .content {
+        margin: 0px 8px;
+        font-size: 22px;
+    }
+
+    .score {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        width: 15%;
+        background-color: #1bc386;
+
+        .mainScore {
+            font-size: 30px;
+            position: relative;
+            top: 5px;
+            margin: 0px;
+            padding: 0px
+        }
+
+        .status {
+            font-size: 15px;
+            position: relative;
+            bottom: 5px;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}

@@ -1,7 +1,7 @@
 export default {
     layers: [
         ['land'],
-        ['roadlines', 'contour', 'hillshadelayer', 'grassland', 'sand', 'watercover', 'shrub', 'forests', 'residential', 'quarry', 'landuseshrub', 'park', 'construction', 'farmland'],
+        ['sand', 'watercover', 'forests', 'residential', 'landuseshrub', 'farmland'],
         ['ward-fill-local'],
         ['watercover', 'waterbody'],
     ],

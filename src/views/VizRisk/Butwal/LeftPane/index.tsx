@@ -212,7 +212,6 @@ function Leftpane(props) {
         clickedItem,
         incidentFilterYear,
     ]);
-    console.log('nonZero Arr is ', nonZeroArr, chartData);
 
     const getDescription = () => {
         const { clickedItem } = props;
@@ -268,7 +267,6 @@ function Leftpane(props) {
 
     const currentAverageTemp = (tempInString) => {
         const numb = tempInString.match(/\d/g);
-        console.log('sep', numb);
 
         if (numb.length === 2) {
             const firstNum = parseInt(numb[0], 10);

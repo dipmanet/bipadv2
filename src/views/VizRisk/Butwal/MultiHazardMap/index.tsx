@@ -633,8 +633,6 @@ const MultiHazardMap = (props: Props) => {
             value: Number(item.title),
         }));
 
-        console.log('mapping data is', mapping);
-
         const multihazardMap = new mapboxgl.Map({
             container: mapContainer,
             style: mapboxStyle,
@@ -1456,6 +1454,12 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             }
+            map.current.easeTo({
+                pitch: 37,
+                zoom: 11.7,
+                duration: 1200,
+                // center: [lng, lat],
+            });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ciCategoryCritical, rightElement, legendElement, layers, exposureElementsArr, clickedArr, floodLayer, hazardLegendClickedArr]);
@@ -1523,8 +1527,15 @@ const MultiHazardMap = (props: Props) => {
                 map.current.on('draw.delete', resetArea);
                 map.current.on('draw.create', updateArea);
                 map.current.on('draw.update', updateArea);
+                map.current.easeTo({
+                    pitch: 37,
+                    zoom: 11.7,
+                    duration: 1200,
+                    // center: [lng, lat],
+                });
             }
         }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rightElement]);
 

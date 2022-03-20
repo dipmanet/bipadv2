@@ -1,36 +1,66 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import {
     Label,
     Bar,
     BarChart,
     CartesianGrid,
-    Cell,
-    Legend,
-    Line,
-    LineChart,
     ResponsiveContainer,
     LabelList,
     Tooltip,
     XAxis,
     YAxis,
 } from 'recharts';
+import { parseStringToNumber } from '../Functions';
 import styles from '../LeftPane/styles.scss';
 
-export default function EstimatedLossChart(props) {
-    const { estimatedLossData } = props;
+export default function EstimatedLossChart({ estimatedLossData, clickedHazardItem }) {
+    const convertToInternationalCurrencySystem = labelValue => (
+        Math.abs(Number(labelValue)) >= 1.0e+9
+
+            ? `${(Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2)}B`
+        // Six Zeroes for Millions
+            : Math.abs(Number(labelValue)) >= 1.0e+6
+
+                ? `${(Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2)}M`
+            // Three Zeroes for Thousands
+                : Math.abs(Number(labelValue)) >= 1.0e+3
+
+                    ? `${(Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2)}K`
+
+                    : Math.abs(Number(labelValue)));
 
 
-    const buildingToolTip = ({ active, payload, label }) => {
+    const customToolTip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
                 <div className={styles.customTooltip}>
                     <h2>{payload[0].payload.name}</h2>
-                    <p>{`Count: ${payload[0].payload.count}`}</p>
+                    <p>{`Total Loss: ${convertToInternationalCurrencySystem(payload[0].payload.totalEstimatedLoss)}`}</p>
                 </div>
             );
         }
 
         return null;
+    };
+
+
+    const customLableList = (props) => {
+        const { x, y, width, value } = props;
+        const radius = -12;
+        return (
+            <g>
+                <text
+                    x={x + width + 2}
+                    y={y - radius}
+                    fill="white"
+                    textAnchor="right"
+                    dominantBaseline="right"
+                >
+                    {convertToInternationalCurrencySystem(value)}
+                </text>
+            </g>
+        );
     };
     return (
         <div>
@@ -47,7 +77,13 @@ export default function EstimatedLossChart(props) {
                     margin={{ left: 15, right: 45, bottom: 25 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
-                    <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                    <XAxis
+                        type="number"
+                        tick={{ fill: '#94bdcf' }}
+                        tickFormatter={tick => convertToInternationalCurrencySystem(tick)}
+                        domain={[1, 'dataMax']}
+                        scale={clickedHazardItem === 'Flood Hazard' ? 'log' : 'linear'}
+                    >
                         <Label
                             value="Estimated Loss"
                             offset={-10}
@@ -67,7 +103,7 @@ export default function EstimatedLossChart(props) {
 
                     />
                     {/* <Legend /> */}
-                    <Tooltip cursor={{ fill: '#1c333f' }} />
+                    <Tooltip cursor={{ fill: '#1c333f' }} content={customToolTip} />
                     <Bar
                         dataKey="totalEstimatedLoss"
                         fill="green"
@@ -75,7 +111,7 @@ export default function EstimatedLossChart(props) {
                         tick={{ fill: '#94bdcf' }}
                         radius={[0, 5, 5, 0]}
                     >
-                        <LabelList dataKey="value" position="right" />
+                        <LabelList dataKey="totalEstimatedLoss" position="right" content={customLableList} />
 
                     </Bar>
                 </BarChart>

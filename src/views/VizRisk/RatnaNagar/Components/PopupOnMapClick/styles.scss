@@ -1,0 +1,46 @@
+.popupOnMapClick {
+    width: 240px;
+    border: 1px solid rgb(102, 102, 161);
+    border-radius: 3px;
+
+    .titleType {
+        font-size: 17px;
+        font-weight: bold;
+        border-radius: 3px 3px 0px 0px;
+        background-color: #202e42;
+        padding: 5px;
+        color: white;
+    }
+
+    .mainContents {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #18202b;
+        border-bottom: 1px solid grey;
+        height: 30px;
+        padding: 5px 10px;
+
+        .mainTitle {
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            color: white
+        }
+
+        .mainStatus {
+            font-size: 11px;
+            margin: 0;
+            padding: 0;
+            color: white;
+        }
+
+    }
+
+    .dummyBlankSpace {
+        @extend .mainContents;
+        border: none;
+        border-radius: 0px 0px 3px 3px;
+        height: 45px
+    }
+}

@@ -1,14 +1,8 @@
-/* eslint-disable react/jsx-closing-tag-location */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/no-danger */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable linebreak-style */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-shadow */
-/* eslint-disable no-undef */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
 import React, { useEffect, useRef, useState } from 'react';
@@ -27,10 +21,7 @@ import {
     Line,
     LabelList,
 } from 'recharts';
-// import NavButtons from '#views/VizRisk/Common/NavButtons';
 import Hexagon from 'react-hexagon';
-
-
 import CriticalInfraLegends from '../Legends/CriticalInfraLegends';
 import NavButtons from '../Components/NavButtons';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
@@ -44,33 +35,97 @@ import { renderLegendPopulaion,
     populationCustomTooltip,
     renderLegend,
     landCoverCustomTooltip,
-    parseStringToNumber, cITooltip, customLableList } from '../Functions/index';
+    parseStringToNumber, cITooltip, customLableList, currentAverageTemp } from '../Functions/index';
 import TempChart from '../Charts/TempChart';
 import LandCoverChart from '../Charts/LandCoverChart';
 import PopulationChart from '../Charts/PopulationChart';
-import LandCoverLegends from '../Legends/LandCoverLegends/index';
 import DemographicsPopInfo from '../Components/DemographicsPopInfo';
 import VRLegendHazard from '../Components/VRLegendHazard/index';
 import VRLegendFatality from '../Components/VRLegendFatality';
 import VRLegendTemp from '../Components/VRLegendTemp';
 import VRLegendPre from '../Components/VRLegendPre';
 import DRRCountBox from '../Components/DRRCountBox/index';
-import BuildingChart from '../Charts/Buildingchart';
+import AlertsChart from '../Charts/AlertsChart';
 import AlertsLegend from '../Legends/AlertLegends';
 import { hdiData, hpiData } from '../Data/vulnerabilityData';
 import CIChart from '../Charts/CIChart';
 import EstimatedLossChart from '../Charts/EstimatedLossChart';
 import FloodHistoryLegends from '../Legends/FloodHazardLegends';
+import LandCoverLegends from '../Legends/LandCoverLegends';
 
 
 interface State {
     showInfo: boolean;
 }
 
-interface Props {}
-interface ComponentProps {}
+interface RealTimeDataTypes {
+	recordedDate: string;
+	currentTemp: string;
+	minimumTemp: string;
+	maximumTemp: string;
+	rainfall: string;
+}
 
-function Leftpane(props) {
+interface Props {
+	introHtml: string;
+	handleLegendClicked: (item: string) => void;
+	totalFloodLossData: any;
+	totalLandslideLossData: any;
+	handleNext: any;
+	handlePrev: any;
+	disableNavLeftBtn: any;
+	disableNavRightBtn: any;
+	pagenumber: number;
+	totalPages: number;
+	pending: boolean;
+	leftElement: number;
+	legendElement: string;
+	clickedFatalityInfraDamage: any;
+	handleFatalityInfraLayer: (item: string, i: number) => void;
+	tempData: any;
+	tempChartData: any;
+	landCoverData: any;
+	setfloodLayer: any;
+	hazardLegendClickedArr: [];
+	populationData: [];
+	criticalElement: any;
+	handleCriticalInfra: () => void;
+	alertsChartData: [];
+	clickedArr: [];
+	clickedHazardItem: any;
+	handleMultipleHazardLayerDamageLoss: any;
+	handleMultipleHazardLayer: any;
+	exposureElementArr: number[];
+	active: any;
+	setActivePage: any;
+	realTimeData: RealTimeDataTypes;
+	page1Legend1InroHtml: string;
+	page1Legend2InroHtml: string;
+	page1Legend3InroHtml: string;
+	legentItemDisabled: boolean;
+	CIState: any;
+	climateLineChartData: [];
+	tempSelectedData: any;
+	handleClimateTemp: (item: string) => void;
+	prepSelectedData: any;
+	handleClimatePrep: (item: string) => void;
+	climateDataType: any;
+	climateDataYearWise: any;
+	districtIdIs: any;
+	vulnrerability: any;
+	setVulnerability: any;
+	cI: any;
+
+}
+interface HdiDataType {
+    id: number;
+    provinceName: string;
+    value: number;
+}
+
+type HdiData = HdiDataType[]
+
+function Leftpane(props: Props) {
     const {
         introHtml,
         handleLegendClicked,
@@ -119,15 +174,16 @@ function Leftpane(props) {
         districtIdIs,
         vulnrerability,
         setVulnerability,
-
+        handleEarthQuakeRisk,
+        earthquakeRisk,
+        contactData,
     } = props;
 
-    const [chartData, setchartData] = useState([]);
     const [cIChartData, setcIChartData] = useState([]);
     const [cITypeName, setcITypeName] = useState([]);
     const [climateBarChartData, setclimateBarChartData] = useState([]);
     const [climateChartTitle, setclimateChartTitle] = useState('');
-    const [vulChartData, setvulChartData] = useState([]);
+    const [vulChartData, setvulChartData] = useState<HdiData>([]);
     const [estimatedDataSelection, setestimatedDataSelection] = useState([]);
     const vrSideBarRef = useRef<HTMLDivElement>(null);
 
@@ -182,7 +238,7 @@ function Leftpane(props) {
         } else {
             setestimatedDataSelection(totalFloodLossData);
         }
-    }, [clickedHazardItem]);
+    }, [clickedHazardItem, totalFloodLossData, totalLandslideLossData]);
 
 
     useEffect(() => {
@@ -190,18 +246,18 @@ function Leftpane(props) {
             cI,
         } = props;
         if (cI) {
-            const categoriesCriticalArr = [
-                ...new Set(cI.map(item => item.resourceType)),
+            const categoriesCriticalArr: any = [
+                ...new Set(cI.map((item: any) => item.resourceType)),
             ];
             setcITypeName(categoriesCriticalArr);
             setcIChartData(
-                categoriesCriticalArr.map(item => ({
+                categoriesCriticalArr.map((item: any) => ({
                     name: item.charAt(0).toUpperCase() + item.slice(1),
-                    value: cI.filter(ci => ci.resourceType === item).length,
+                    value: cI.filter((ci: any) => ci.resourceType === item).length,
                 })),
             );
         }
-    }, []);
+    }, [props]);
 
     useEffect(() => {
         if (vulnrerability === 'Human Development Index') {
@@ -212,67 +268,52 @@ function Leftpane(props) {
     }, [vulnrerability]);
 
     useEffect(() => {
-        if (districtIdIs) {
-            vrSideBarRef.current?.scrollTo({ top: 1000, behavior: 'smooth' });
+        if (districtIdIs && vrSideBarRef.current) {
+            vrSideBarRef.current.scrollTo({ top: 1000, behavior: 'smooth' });
         }
     }, [districtIdIs]);
 
 
     useEffect(() => {
         if (tempSelectedData === 'temp2010' && climateDataType === 'Temperature') {
-            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2010.map(
+                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
+            ));
             setclimateChartTitle('Temperature Reference Period(1981-2010)');
         }
 
         if (tempSelectedData === 'temp2045' && climateDataType === 'Temperature') {
-            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2045.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2045.map(
+                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
+            ));
             setclimateChartTitle('Temperature Reference Period(2016-2045)');
         }
         if (tempSelectedData === 'temp2065' && climateDataType === 'Temperature') {
-            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2065.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateBarChartData(climateDataYearWise.tempDataForMapUpto2065.map(
+                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
+            ));
             setclimateChartTitle('Temperature Reference Period(2036-2065)');
         }
         if (prepSelectedData === 'prep2010' && climateDataType === 'Precipitation') {
-            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2010.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2010.map(
+                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
+            ));
             setclimateChartTitle('Precipitation Reference Period(1981-2010)');
         }
         if (prepSelectedData === 'prep2045' && climateDataType === 'Precipitation') {
-            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2045.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2045.map(
+                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
+            ));
             setclimateChartTitle('Precipitation Reference Period(2016-2045)');
         }
         if (prepSelectedData === 'prep2065' && climateDataType === 'Precipitation') {
-            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2065.map(item => ({ value: item.value, name: districtIdToName(item.id) })));
+            setclimateBarChartData(climateDataYearWise.prepDataForMapUpto2065.map(
+                (item: any) => ({ value: item.value, name: districtIdToName(item.id) }),
+            ));
             setclimateChartTitle('Precipitation Reference Period(2036-2065)');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tempSelectedData, prepSelectedData, climateDataType]);
-
-
-    const currentAverageTemp = (tempInString: string) => {
-        let numb;
-        if (tempInString) {
-            numb = tempInString.match(/\d/g);
-        }
-
-        if (numb && numb.length === 2) {
-            const firstNum = parseInt(numb[0], 10);
-            const secondNum = parseInt(numb[1], 10);
-            return (firstNum + secondNum) / 2;
-        }
-        if (numb && numb.length === 3) {
-            const firstNum = parseInt(numb[0], 10);
-            const secondNum = numb[1];
-            const thirdNum = numb[2];
-            return (firstNum + parseInt((secondNum + thirdNum), 10)) / 2;
-        }
-        if (numb && numb.length === 4) {
-            const firstNum = numb[0];
-            const secondNum = numb[1];
-            const thirdNum = numb[2];
-            const fourthNum = numb[3];
-            return (parseInt((firstNum + secondNum), 10) + parseInt((thirdNum + fourthNum), 10)) / 2;
-        }
-        return '';
-    };
 
 
     const firstpageLegendItems = ['Adminstrative Map', 'Landcover', 'Population By District'];
@@ -305,7 +346,7 @@ function Leftpane(props) {
                                     <div className={styles.iconTitleDate}>
 									Recorderd Time:
                                         {'  '}
-                                        {realTimeData !== undefined ? realTimeData.recordedDate.slice(0, 10) : 'Nodata'}
+                                        {realTimeData !== undefined ? (realTimeData && realTimeData.recordedDate.slice(0, 10)) : 'Nodata'}
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +420,8 @@ mm
                                 <div className={styles.descriptionCotainer}>
                                     <div className={styles.iconTitle}>
                                         {' '}
-                                        { tempData && parseStringToNumber(tempData.filter(rainfall => rainfall.rainfall).map(item => item.rainfall)[0])}
+                                        { tempData && parseStringToNumber(tempData.filter((rainfall: any) => rainfall.rainfall)
+                                            .map((item: any) => item.rainfall)[0])}
                                         {' '}
 mm
                                     </div>
@@ -431,6 +473,7 @@ mm
                             landCoverCustomTooltip={landCoverCustomTooltip}
 
                         />
+                        <LandCoverLegends />
                     </>
                 )}
                 {leftElement === 0 && legendElement === 'Population By District' && (
@@ -500,7 +543,7 @@ mm
 && (
     <>
 	    <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{"Alert's Count"}</h2>
-        <BuildingChart buildingsChartData={alertsChartData} />
+        <AlertsChart buildingsChartData={alertsChartData} />
         <AlertsLegend />
     </>
 )
@@ -508,7 +551,11 @@ mm
                 {leftElement === 3
 && (
     <>
-        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>{vulnrerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</h2>
+        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
+            {vulnrerability === 'Human Development Index'
+		 ? 'Human Development Index' : 'Human Poverty Index'}
+
+        </h2>
         <CIChart buildingsChartData={vulChartData} vulnrerability={vulnrerability} />
     </>
 )
@@ -578,7 +625,7 @@ HAZARDS
                                                         : styles.legendBtn3
                                                 }
                                                 onClick={() => handleMultipleHazardLayer(item, i)}
-                                                disabled={legentItemDisabled}
+                                                disabled={legentItemDisabled || disableNavRightBtn}
                                             >
                                                 <Hexagon
                                                     style={{
@@ -590,6 +637,7 @@ HAZARDS
                                                             : 'transparent',
                                                     }}
                                                     className={styles.educationHexagon3}
+                                                    disabled={disableNavRightBtn}
                                                 />
                                                 {item}
                                             </button>
@@ -619,8 +667,8 @@ RISK
                 <button
                     key={item}
                     type="button"
-                    className={clickedFatalityInfraDamage === item ? styles.legendBtnSelected3 : styles.legendBtn3}
-                    onClick={() => handleFatalityInfraLayer(item, i)}
+                    className={earthquakeRisk === item ? styles.legendBtnSelected3 : styles.legendBtn3}
+                    onClick={() => handleEarthQuakeRisk(item)}
                     disabled={legentItemDisabled}
                 >
                     <Hexagon
@@ -628,7 +676,7 @@ RISK
                             innerHeight: 80,
                             stroke: '#FFFFFF',
                             strokeWidth: 30,
-                            fill: clickedFatalityInfraDamage === item ? 'white' : 'transparent',
+                            fill: earthquakeRisk === item ? 'white' : 'transparent',
                         }}
                         className={styles.educationHexagon3}
                     />
@@ -672,13 +720,13 @@ RISK
                                 height={1000}
                                 data={cIChartData}
                                 layout="vertical"
-                                margin={{ left: 15, right: 45, bottom: 25 }}
+                                margin={{ left: 25, right: 45, bottom: 25 }}
                             >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis type="number" tick={{ fill: '#94bdcf' }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke={'#436578'} />
+                                <XAxis type="number" tick={{ fill: '#94bdcf' }} domain={[0, 'dataMax+1000']} scale={'sqrt'}>
                                     <Label
                                         value="Critical Infrastructures"
-                                        offset={0}
+                                        offset={-10}
                                         position="insideBottom"
                                         style={{
                                             textAnchor: 'middle',
@@ -701,18 +749,22 @@ RISK
                                     barSize={15}
                                     tick={{ fill: '#94bdcf' }}
                                     radius={[0, 15, 15, 0]}
-                                />
+                                >
+									 <LabelList dataKey="value" position="right" content={customLableList} />
+                                </Bar>
                             </BarChart>
                         </ResponsiveContainer>
                     </>
                 ) }
                 {leftElement === 1 && (
                     <>
-					        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
+                        <h2 style={{ fontSize: '18px', marginBottom: '15px' }}>
                             {clickedHazardItem === 'Flood Hazard' ? 'Estimated Loss due to Flood'
 							 : 'Estimated Loss due to Landslide'}
+                            {' '}
+
                         </h2>
-                        <EstimatedLossChart estimatedLossData={estimatedDataSelection} />
+                        <EstimatedLossChart estimatedLossData={estimatedDataSelection} clickedHazardItem={clickedHazardItem} />
                         <VRLegendHazard>
                             <h4
                                 className={styles.hazardElementHeaderStyle}
@@ -979,7 +1031,7 @@ RISK
                                             style={{ textAnchor: 'middle' }}
                                         />
                                     </YAxis>
-                                    <Tooltip />
+                                    <Tooltip labelFormatter={value => `Year: ${value}`} />
                                     <Legend
                                         verticalAlign="top"
                                         wrapperStyle={{
@@ -1008,7 +1060,7 @@ RISK
                     </>
                 )}
 
-                {leftElement === 7 && <DRRCountBox />}
+                {leftElement === 7 && <DRRCountBox contactData={contactData} />}
                 <div className={styles.leftBottomBar}>
                     <NavButtons
                         handleNext={handleNext}
