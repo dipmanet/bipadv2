@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useRef } from 'react';
@@ -22,7 +23,7 @@ if (TOKEN) {
 
 let clickedId: string | number | undefined;
 const Map = (props: any) => {
-    const { CIData, leftElement, ciNameList, setciNameList } = props;
+    const { CIData, leftElement, ciNameList, setciNameList, clickedCiName, unClickedCIName } = props;
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -236,6 +237,8 @@ const Map = (props: any) => {
                 return null;
             });
 
+            // Hazard ,exposure dummy data
+
             multihazardMap.addSource('contactInfo', {
                 type: 'geojson',
                 data: dummyGeojson,
@@ -243,36 +246,6 @@ const Map = (props: any) => {
                 // clusterMaxZoom: 14,
                 // clusterRadius: 50,
             });
-
-            // multihazardMap.addLayer(
-            //     {
-            //         id: 'contacts-layer',
-            //         type: 'circle',
-            //         source: 'contactInfo',
-            //         filter: ['has', 'point_count'],
-            //         paint: {
-            //             'circle-color': ['get', 'color'],
-            //             'circle-stroke-width': 1.2,
-            //             'circle-stroke-color': '#000000',
-            //         },
-            //         layout: {
-            //             visibility: 'visible',
-            //         },
-            //     },
-            // );
-            // multihazardMap.addLayer({
-            //     id: 'contacts-cluster-count',
-            //     type: 'symbol',
-            //     source: 'contactInfo',
-            //     filter: ['has', 'point_count'],
-            //     layout: {
-            //         'text-field': '{point_count_abbreviated}',
-            //         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-            //         'text-size': 12,
-            //         visibility: 'visible',
-            //     },
-            // });
-
 
             multihazardMap.addLayer({
                 id: 'contacts-unclustered-point',
@@ -291,7 +264,7 @@ const Map = (props: any) => {
                     'circle-stroke-color': '#fff',
                 },
                 layout: {
-                    visibility: 'visible',
+                    visibility: 'none',
                 },
             });
 
@@ -337,9 +310,57 @@ const Map = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    console.log('leftElemnt in map is', leftElement, ciNameList);
+
+
+    useEffect(() => {
+        if (leftElement === 2) {
+    	 clickedCiName.map((layerName: string) => {
+    		 if (map.current) {
+    			 map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'visible');
+    			 map.current.moveLayer(`clusters-${layerName}`);
+
+    			 map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'visible');
+    			 map.current.moveLayer(`clusters-count-${layerName}`);
+
+    			 map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'visible');
+    			 map.current.moveLayer(`unclustered-point-${layerName}`);
+    		 }
+    		 return null;
+            });
+            unClickedCIName.map((layerName: string) => {
+    		 if (map.current) {
+    			 map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
+    			 map.current.moveLayer(`clusters-${layerName}`);
+
+    			 map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
+    			 map.current.moveLayer(`clusters-count-${layerName}`);
+
+    			 map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
+    			 map.current.moveLayer(`unclustered-point-${layerName}`);
+    		 }
+    		 return null;
+            });
+        } else {
+            ciNameList.map((layerName: string) => {
+                if (map.current) {
+                    map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
+                    map.current.moveLayer(`clusters-${layerName}`);
+
+                    map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
+                    map.current.moveLayer(`clusters-count-${layerName}`);
+
+                    map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
+                    map.current.moveLayer(`unclustered-point-${layerName}`);
+                }
+                return null;
+    	   });
+        }
+    }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
+
 
     return (
-        <div ref={mapContainerRef} className={styles.mapCSS}>
+        <div ref={mapContainerRef} className={leftElement === 9 ? styles.mapCSSNone : styles.mapCSS}>
             <RangeStatusLegend />
         </div>
     );

@@ -21,7 +21,7 @@ const LeftpaneSlide3 = (props: Props) => {
 
     const mainCIData = findOcc(cIData, 'resourceType');
 
-    const totalCI = mainCIData.map(item => item.occurence).reduce((a, b) => a + b);
+    const totalCI = mainCIData.map(item => item.count).reduce((a, b) => a + b);
 
     const calculateBubbleWidthHeight = (itemCounts: number, totalCounts: number) => {
         if (itemCounts <= 25) {
@@ -50,6 +50,22 @@ const LeftpaneSlide3 = (props: Props) => {
 
     const calculateFontSize = (itemCounts: number, totalCounts: number) => {
         if (itemCounts <= 10) {
+            const fontsize = (itemCounts / totalCounts) * 20 + 5;
+            return fontsize;
+        }
+        if (itemCounts > 25 && itemCounts <= 50) {
+            const fontsize = (itemCounts / totalCounts) * 20 + 5;
+            return fontsize;
+        }
+        if (itemCounts > 50 && itemCounts <= 75) {
+            const fontsize = (itemCounts / totalCounts) * 20 + 5;
+            return fontsize;
+        }
+        if (itemCounts > 75 && itemCounts <= 100) {
+            const fontsize = (itemCounts / totalCounts) * 20 + 5;
+            return fontsize;
+        }
+        if (itemCounts > 100 && itemCounts <= 150) {
             const fontsize = (itemCounts / totalCounts) * 20 + 5;
             return fontsize;
         }
@@ -86,17 +102,17 @@ const LeftpaneSlide3 = (props: Props) => {
 
             <div className={styles.bubbleChart}>
                 {
-				  mainCIData.sort((a, b) => b.count - a.count).map(
+				 mainCIData.length > 0 && mainCIData.sort((a, b) => b.count - a.count).map(
 					  item => (
                             <button
                                 type="submit"
-                                key={item.count}
+                                key={item.resourceType}
                                 style={
                                     { height: `${calculateBubbleWidthHeight(item.count, totalCI)}px`,
                                         width: `${calculateBubbleWidthHeight(item.count, totalCI)}px` }
                                 }
-                                onClick={() => handleCIClick(item.ciName)}
-                                className={clickedCiName.includes(item.ciName)
+                                onClick={() => handleCIClick(item.resourceType)}
+                                className={clickedCiName.includes(item.resourceType)
 									 ? styles.tickBubbles : styles.bubbles}
                             >
                                 <div className={styles.bubbleContents}>
@@ -107,9 +123,9 @@ const LeftpaneSlide3 = (props: Props) => {
                                         {item.count}
 
                                     </h1>
-                                    <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px`, textAlign: 'center' }}>{item.ciName}</p>
+                                    <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px`, textAlign: 'center' }}>{item.resourceType}</p>
                                     {
-                                        clickedCiName.includes(item.ciName)
+                                        clickedCiName.includes(item.resourceType)
 										&& (
 										    <img
 										        style={{ height: ` ${calculateBubbleWidthHeight(item.count, totalCI) - item.count * 1.5}%` }}

@@ -115,7 +115,8 @@ const Ratnanagar = (props: any) => {
     const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
     const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
     const [clickedCiName, setclickedCiName] = useState<string[]>([]);
-    const [ciNameList, setciNameList] = useState<string|null>(null);
+    const [ciNameList, setciNameList] = useState<string[]>([]);
+    const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
 
     // state for requested data
     const [cIData, setcIData] = useState([]);
@@ -149,9 +150,11 @@ const Ratnanagar = (props: any) => {
 
     const handleCIClick = (ciName: string) => {
         setclickedCiName(prevState => [...prevState, ciName]);
+        setunClickedCIName(prevState => prevState.filter(ciItem => ciItem !== ciName));
 
         if (clickedCiName.includes(ciName)) {
             setclickedCiName(prevState => prevState.filter(ciItem => ciItem !== ciName));
+            setunClickedCIName(prevState => [...new Set([...prevState, ciName])]);
         }
     };
 
@@ -169,6 +172,9 @@ const Ratnanagar = (props: any) => {
         })),
     };
 
+    console.log('unclicked item is', unClickedCIName);
+
+
     return (
         <>
 
@@ -184,13 +190,15 @@ const Ratnanagar = (props: any) => {
                     : (
                         <>
                             {
-                                leftElement < 9 && (
+                                leftElement < 10 && (
                                     <>
                                         <Map
                                             leftElement={leftElement}
                                             CIData={geoJsonCI}
+                                            clickedCiName={clickedCiName}
                                             ciNameList={ciNameList}
                                             setciNameList={setciNameList}
+                                            unClickedCIName={unClickedCIName}
                                         />
                                         <LeftTopBar />
                                     </>
