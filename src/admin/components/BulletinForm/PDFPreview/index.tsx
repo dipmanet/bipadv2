@@ -456,14 +456,14 @@ const PDFPreview = (props) => {
         <div className={styles.pdfContainer}>
             <div id="page1" className="page">
 
-                <BulletinPDFLoss />
+                <BulletinPDFLoss bulletinDate={bulletinDate} />
             </div>
             <div id="page2" className="page">
 
                 <BulletinPDFCovid />
             </div>
             <div id="page3" className="page">
-                <BulletinPDFFooter />
+                <BulletinPDFFooter rainSummaryFooter={rainSummaryFooter} />
 
             </div>
             <div id="page4" className="page">

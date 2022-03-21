@@ -44,7 +44,8 @@ const Bulletin = (props: Props) => {
         rainSummaryFooter,
         handleRainSummaryFooter,
     } = props;
-
+    console.log('max temp footer', maxTempFooter);
+    console.log('rain footer', rainSummaryFooter);
     return (
         <div className={styles.formContainer}>
             {

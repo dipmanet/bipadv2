@@ -63,7 +63,7 @@ const TemperatureMax = (props: Props) => {
             };
             reader.readAsDataURL(acceptedFiles[0]);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [acceptedFiles]);
 
 
@@ -91,18 +91,18 @@ const TemperatureMax = (props: Props) => {
                         {
                             picFromEdit
                             && (
-                            <>
-                                <img src={picLink} alt="temperature" />
-                            </>
+                                <>
+                                    <img src={picLink} alt="temperature" />
+                                </>
                             )
                         }
                         {
                             !picFromEdit && !maxTemp
                             && (
-                            <>
-                                <img className={styles.placeholder} src={Placeholder} alt="temperature" />
+                                <>
+                                    <img className={styles.placeholder} src={Placeholder} alt="temperature" />
 
-                            </>
+                                </>
                             )
                         }
                     </div>

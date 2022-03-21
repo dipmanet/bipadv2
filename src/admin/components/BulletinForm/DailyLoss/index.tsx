@@ -75,6 +75,7 @@ const Bulletin = (props: Props) => {
         handleSameHazardChange,
         recordSelectedDate,
         language: { language },
+        handleBulletinDate,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -144,6 +145,7 @@ const Bulletin = (props: Props) => {
         if (date) {
             const selectedDate = new Date(date);
             recordSelectedDate(selectedDate);
+            handleBulletinDate(date);
         } else {
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
@@ -155,7 +157,9 @@ const Bulletin = (props: Props) => {
 
             const selectedDate = new Date(finalDate);
             recordSelectedDate(selectedDate);
+            console.log('final date', finalDate);
             setDate(finalDate);
+            handleBulletinDate(finalDate);
         }
     }, [date]);
     console.log('what is final date', date);

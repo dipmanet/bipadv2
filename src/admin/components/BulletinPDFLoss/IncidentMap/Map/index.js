@@ -150,6 +150,7 @@ const IncidentMap = (props) => {
 
     const getPointFeatureCollection = memoize(incidentPointToGeojson);
     const pointFeatureCollection = getPointFeatureCollection(incidentList, hazards);
+    console.log('pointFeatureCollection', pointFeatureCollection);
     const { language: { language } } = props;
 
     useEffect(() => {
@@ -164,6 +165,8 @@ const IncidentMap = (props) => {
             minZoom: 2,
             maxZoom: 22,
             preserveDrawingBuffer: true,
+            interactive: false,
+
         });
         // mapRef.current = Map;
 
@@ -305,7 +308,7 @@ const IncidentMap = (props) => {
                         'circle-color': ['get', 'hazardColor'],
                         'circle-stroke-width': 1.2,
                         'circle-stroke-color': '#000000',
-                        'circle-radius': 9,
+                        'circle-radius': ['get', 'bulletinSeverityRadius'],
                     },
                 },
             );

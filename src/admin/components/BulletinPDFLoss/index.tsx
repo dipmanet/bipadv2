@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
@@ -72,32 +73,6 @@ const monthsEn = {
     12: 'Chaitra',
 };
 
-const a = new Date();
-const yesterday = new Date(a);
-yesterday.setDate(yesterday.getDate() - 1);
-const b = yesterday.toLocaleString();
-const ourDate = b.split(',')[0].split('/');
-const dateString = `${ourDate[2]}-${ourDate[0]}-${ourDate[1]}`;
-const bsDate = adToBs(dateString);
-const year = bsDate.split('-')[0];
-const month = months[Number(bsDate.split('-')[1])];
-const monthEn = monthsEn[Number(bsDate.split('-')[1])];
-const day = bsDate.split('-')[2];
-const today = new Date();
-const baisakh1 = bsToAd(`${year}-01-01`);
-const DEFAULT_END_DATE = today;
-
-
-const aT = new Date();
-const bT = aT.toLocaleString();
-const ourDateT = bT.split(',')[0].split('/');
-const dateStringT = `${ourDateT[2]}-${ourDateT[0]}-${ourDateT[1]}`;
-const bsDateT = adToBs(dateStringT);
-const yearT = bsDateT.split('-')[0];
-const monthToday = months[Number(bsDateT.split('-')[1])];
-const monthEnToday = monthsEn[Number(bsDateT.split('-')[1])];
-const dayT = bsDateT.split('-')[2];
-
 
 const labelSelector = (d: LegendItem, language: string) => {
     if (language === 'en') { return d.label; }
@@ -109,10 +84,10 @@ const classNameSelector = (d: LegendItem) => d.style;
 const colorSelector = (d: LegendItem) => d.color;
 const radiusSelector = (d: LegendItem) => d.radius;
 const incidentPointSizeData: LegendItem[] = [
-    { label: 'Minor (0)', labelNe: 'सामान्य (0)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
-    { label: 'Major (<10)', labelNe: 'मुख्य (<10)', style: styles.symbol, color: '#a3a3a3', radius: 11 },
-    { label: 'Severe (<100)', labelNe: 'गम्भिर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 15 },
-    { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 20 },
+    { label: 'Minor (0)', labelNe: 'सामान्य (0)', style: styles.symbol, color: '#a3a3a3', radius: 4 },
+    { label: 'Major (<10)', labelNe: 'मुख्य (<10)', style: styles.symbol, color: '#a3a3a3', radius: 6 },
+    { label: 'Severe (<100)', labelNe: 'गम्भिर (<100)', style: styles.symbol, color: '#a3a3a3', radius: 8 },
+    { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 10 },
 ];
 
 // const filteredHazardTypes = [{
@@ -128,7 +103,9 @@ const BulletinPDF = (props: Props) => {
         hilight,
         hazardWiseLoss,
         feedback,
+
     } = props.bulletinData;
+    const { bulletinDate } = props;
 
     const [provWiseLossChart, setProvWiseChart] = useState([]);
     const [filteredHazardTypes, setHazardLegends] = useState([]);
@@ -136,6 +113,46 @@ const BulletinPDF = (props: Props) => {
     const [incidentPoints, setincidentPoints] = useState({});
 
     const { hazardTypes, language: { language } } = props;
+
+    const a = new Date(bulletinDate);
+    // const b = yesterday.toLocaleString();
+    // const ourDate = b.split(',')[0].split('/');
+    const dd = String(a.getDate()).padStart(2, '0');
+    const mm = String(a.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy = a.getFullYear();
+    const dateString = `${yyyy}-${mm}-${dd}`;
+    const bsDate = adToBs(dateString);
+    const year = bsDate.split('-')[0];
+    const month = months[Number(bsDate.split('-')[1])];
+    const monthEn = monthsEn[Number(bsDate.split('-')[1])];
+    const day = bsDate.split('-')[2];
+
+    const yesterday = new Date(a);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dd_yesterday = String(yesterday.getDate()).padStart(2, '0');
+    const mm_yesterday = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0!
+    const yyyy_yesterday = yesterday.getFullYear();
+    const dateString_yesterday = `${yyyy_yesterday}-${mm_yesterday}-${dd_yesterday}`;
+    const bsDate_yesterday = adToBs(dateString_yesterday);
+    const year_yesterday = bsDate_yesterday.split('-')[0];
+    const month_yesterday = months[Number(bsDate_yesterday.split('-')[1])];
+    const monthEn_yesterday = monthsEn[Number(bsDate_yesterday.split('-')[1])];
+    const day_yesterday = bsDate_yesterday.split('-')[2];
+    // const today = new Date();
+    // const baisakh1 = bsToAd(`${year}-01-01`);
+    // const DEFAULT_END_DATE = today;
+
+
+    // const aT = new Date();
+    // const bT = aT.toLocaleString();
+    // const ourDateT = bT.split(',')[0].split('/');
+    // const dateStringT = `${ourDateT[2]}-${ourDateT[0]}-${ourDateT[1]}`;
+    // const bsDateT = adToBs(dateStringT);
+    // const yearT = bsDateT.split('-')[0];
+    // const monthToday = months[Number(bsDateT.split('-')[1])];
+    // const monthEnToday = monthsEn[Number(bsDateT.split('-')[1])];
+    // const dayT = bsDateT.split('-')[2];
+
 
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
@@ -345,7 +362,7 @@ const BulletinPDF = (props: Props) => {
                             </Translation>
                         </h1>
                         <p style={{ marginTop: '5px', marginBottom: '5px' }}>
-                            <NepaliDate />
+                            {language === 'np' ? `${day} ${month} ${year}` : `${day} ${monthEn} ${year}`}
                             {' '}
                             |
                             {' '}
@@ -360,8 +377,8 @@ const BulletinPDF = (props: Props) => {
                     <h2 style={{ marginBottom: '10px', fontSize: '16px' }}>
                         {
                             language === 'np'
-                                ? `${month} ${day} बिहान 10:00 बजेदेखी ${monthToday} ${dayT} बिहान 10:00 बजे सम्म`
-                                : `Disaster Incidents from ${day} ${monthEn} 10:00 am to ${dayT} ${monthEnToday} 10:00 am`
+                                ? `${month_yesterday} ${day_yesterday} बिहान 10:00 बजेदेखी ${month} ${day} बिहान 10:00 बजे सम्म`
+                                : `Disaster Incidents from ${day_yesterday} ${monthEn_yesterday} 10:00 am to ${day} ${monthEn} 10:00 am`
                         }
 
 
@@ -411,7 +428,7 @@ const BulletinPDF = (props: Props) => {
             </div>
             <div className={styles.provinceWiseLoss}>
                 <div className={styles.provinceWiseChart}>
-                    <h2>
+                    <h2 style={{ paddingLeft: '20px' }}>
                         <Translation>
                             {
                                 t => <span>{t('Province-wise death, missing and injured')}</span>

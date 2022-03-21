@@ -235,7 +235,8 @@ const Bulletin = (props: Props) => {
     const [sitRep, setSitRep] = useState(0);
     const [selectedDate, setSelectedate] = useState();
     const [rainSummaryFooter, setRainSummaryFooter] = useState('');
-    const [bulletinDate, setBulletinDate] = useState();
+    // const [bulletinDate, setBulletinDate] = useState();
+    const [date, setDate] = useState();
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -281,7 +282,7 @@ const Bulletin = (props: Props) => {
             const incident_on__lt = endDate; // eslint-disable-line @typescript-eslint/camelcase
             const incident_on__gt = startDate; // eslint-disable-line @typescript-eslint/camelcase
             const ordering = '-incident_on';
-            setBulletinDate(startDate);
+
             // const requestQuery = ({
             //     params: {
             //         // startDate = DEFAULT_START_DATE.toISOString(),
@@ -510,6 +511,7 @@ const Bulletin = (props: Props) => {
                 });
             }
             if (progress === 3) {
+                console.log('rainSummaryFooter', rainSummaryFooter);
                 setBulletinTemperature({
                     tempMin: minTemp,
                     tempMax: maxTemp,
@@ -517,6 +519,7 @@ const Bulletin = (props: Props) => {
                     rainSummaryPic,
                     maxTempFooter,
                     minTempFooter,
+                    rainSummaryFooter,
                 });
             }
             setProgress(progress + 1);
@@ -539,7 +542,9 @@ const Bulletin = (props: Props) => {
 
         return stat;
     };
-
+    const handleBulletinDate = (bulletinDate) => {
+        setDate(bulletinDate);
+    };
     const calculateSummaryProvince = (data) => {
         const stat = lossMetricsProvince.reduce((acc, { key }) => ({
             ...acc,
@@ -570,8 +575,8 @@ const Bulletin = (props: Props) => {
 
         return stat;
     };
-    const recordSelectedDate = (date) => {
-        setSelectedate(date);
+    const recordSelectedDate = (dat) => {
+        setSelectedate(dat);
     };
 
     // eslint-disable-next-line consistent-return
@@ -787,6 +792,7 @@ const Bulletin = (props: Props) => {
             addedHazardFields={addedHazardFields}
             handleSameHazardChange={handleSameHazardChange}
             recordSelectedDate={recordSelectedDate}
+            handleBulletinDate={handleBulletinDate}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}
@@ -844,7 +850,7 @@ const Bulletin = (props: Props) => {
                     dailySummary,
                     sitrep: sitRep,
                     rainSummaryFooter,
-                    bulletinDate,
+                    bulletinDate: date,
 
 
                 }

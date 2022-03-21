@@ -535,6 +535,7 @@ const state: PageState = {
         rainSummaryPic: null,
         maxTempFooter: null,
         minTempFooter: null,
+        rainSummaryFooter: null,
         dailySummary: '',
         feedback: [],
         province: 3,
