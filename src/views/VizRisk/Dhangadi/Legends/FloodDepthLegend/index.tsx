@@ -3,7 +3,7 @@ import styles from './styles.scss';
 
 const FloodHistoryLegends = () => (
     <>
-        <h2>Flood depth (in meters)</h2>
+        <h2 className={styles.floodDepth2}>Flood depth (in meters)</h2>
         <div className={styles.floodDepthContainer}>
             <div className={styles.floodDepth}>
                 <div className={styles.floodIndicator1}>

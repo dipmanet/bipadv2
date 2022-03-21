@@ -14,12 +14,16 @@ interface Props {
     clickedCiName: string[];
     cIData: any;
 }
+interface MainCIData{
+    count: number;
+    resourceType: string;
+}
 
 const LeftpaneSlide3 = (props: Props) => {
     const { handleCIClick, clickedCiName, cIData } = props;
 
 
-    const mainCIData = findOcc(cIData, 'resourceType');
+    const mainCIData: MainCIData[] = findOcc(cIData, 'resourceType');
 
     const totalCI = mainCIData.map(item => item.count).reduce((a, b) => a + b);
 
@@ -123,12 +127,18 @@ const LeftpaneSlide3 = (props: Props) => {
                                         {item.count}
 
                                     </h1>
-                                    <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px`, textAlign: 'center' }}>{item.resourceType}</p>
+                                    <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px`,
+                                        textAlign: 'center' }}
+                                    >
+                                        {item.resourceType}
+
+                                    </p>
                                     {
                                         clickedCiName.includes(item.resourceType)
 										&& (
 										    <img
-										        style={{ height: ` ${calculateBubbleWidthHeight(item.count, totalCI) - item.count * 1.5}%` }}
+										        style={{ height:
+											  `${calculateBubbleWidthHeight(item.count, totalCI) - item.count * 1.5}%` }}
 										        className={styles.tickIcon}
 										        src={TempIcon}
 										        alt=""
@@ -137,7 +147,6 @@ const LeftpaneSlide3 = (props: Props) => {
                                     }
 
                                 </div>
-
                             </button>
 					  ),
                     )

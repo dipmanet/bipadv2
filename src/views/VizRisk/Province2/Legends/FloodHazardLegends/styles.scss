@@ -1,10 +1,10 @@
-.legendContainer{
-    background: rgba( 19, 32, 55, 1 );
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 12.0px );
-    -webkit-backdrop-filter: blur( 12.0px );
+.legendContainer {
+    background: rgba(19, 32, 55, 1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(12.0px);
+    -webkit-backdrop-filter: blur(12.0px);
     border-radius: 5px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    border: 1px solid rgba(255, 255, 255, 0.18);
     // padding: 10px;
     // border: 1px solid red;
     height: 240px;
@@ -13,18 +13,20 @@
     bottom: 52px;
     left: calc(100% - 428px);
     z-index: 1000;
-    h2{
+
+    h2 {
         margin-top: 10px;
         opacity: 0.67;
         font-size: 10px;
-		margin-top: 10px;
-		margin-bottom: 6px;
-		opacity: 0.67;
-		font-size: 10px;
-		text-align: start;
-		margin-left: 5px;
+        margin-top: 10px;
+        margin-bottom: 6px;
+        opacity: 0.67;
+        font-size: 10px;
+        text-align: start;
+        margin-left: 5px;
     }
-    .toggleFlood{
+
+    .toggleFlood {
         background: transparent;
         border: none;
         display: flex;
@@ -32,75 +34,79 @@
         color: white;
         opacity: 0.87;
         text-transform: uppercase;
-        .chevrontoggle{
+
+        .chevrontoggle {
             font-size: 12px;
         }
     }
-    .floodMainContainer{
-        display: block;
-            .floodItemContainer{
-                margin: 0;
-                // height: fit-content;
-                .legendBtn{
-                    cursor: pointer;
-                    background-color: transparent;
-                    font-size: 11px;
-                    border: none;
-                    color: white;
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: 5px;
-                    opacity: 0.67;
-                    .educationHexagon{
-                        width: 12px;
-                        margin: 0 4px 0 5px;
-                    }
-                    .exposedIcons{
-                        margin-right: 10px;
-                        color: rgb(70, 70, 70);
-                        font-size: 12px;
-                    }
-                    .exposedIconsClicked{
-                        margin-right: 10px;
-                        color: rgb(255, 72, 17);
-                        font-size: 12px;
-                    }
-                }
-                .legendBtnSelected{
-                    cursor: pointer;
-                    background-color: transparent;
-                    font-size: 11px;
-                    border: none;
-                    color: white;
-                    color: #036ef0;
-                    filter: saturate(100%);
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: 5px;
-                    .educationHexagon{
-                        width: 12px;
-                        margin: 0 4px 0 5px;
 
-                    }
-                    .exposedIcons{
-                        margin-right: 10px;
-                        color: rgb(70, 70, 70);
-                        font-size: 12px;
-                    }
-                    .exposedIconsClicked{
-                        margin-right: 10px;
-                        color: rgb(255, 72, 17);
-                        font-size: 12px;
-                    }
+    .floodMainContainer {
+        display: block;
+
+        .floodItemContainer {
+            margin: 0;
+
+            // height: fit-content;
+            .legendBtn {
+                cursor: pointer;
+                background-color: transparent;
+                font-size: 11px;
+                border: none;
+                color: white;
+                display: flex;
+                align-items: center;
+                margin-bottom: 5px;
+                opacity: 0.67;
+
+                .educationHexagon {
+                    width: 12px;
+                    margin: 0 4px 0 5px;
                 }
-           
+
+                .exposedIcons {
+                    margin-right: 10px;
+                    color: rgb(70, 70, 70);
+                    font-size: 12px;
+                }
+
+                .exposedIconsClicked {
+                    margin-right: 10px;
+                    color: rgb(255, 72, 17);
+                    font-size: 12px;
+                }
             }
+
+            .legendBtnSelected {
+                cursor: pointer;
+                background-color: transparent;
+                font-size: 11px;
+                border: none;
+                color: white;
+                color: #036ef0;
+                filter: saturate(100%);
+                display: flex;
+                align-items: center;
+                margin-bottom: 5px;
+
+                .educationHexagon {
+                    width: 12px;
+                    margin: 0 4px 0 5px;
+
+                }
+
+                .exposedIcons {
+                    margin-right: 10px;
+                    color: rgb(70, 70, 70);
+                    font-size: 12px;
+                }
+
+                .exposedIconsClicked {
+                    margin-right: 10px;
+                    color: rgb(255, 72, 17);
+                    font-size: 12px;
+                }
+            }
+
+        }
     }
 }
-
-
-    
-
-
-
-

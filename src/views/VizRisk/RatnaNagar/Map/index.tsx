@@ -359,6 +359,14 @@ const Map = (props: any) => {
     }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
 
 
+    // useEffect(() => {
+    //   if (leftElement === 3) {
+    // 	  	 if (map.current) {
+    // 			 map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'visible');
+    //   }
+    // }, [third])
+
+
     return (
         <div ref={mapContainerRef} className={leftElement === 9 ? styles.mapCSSNone : styles.mapCSS}>
             <RangeStatusLegend />

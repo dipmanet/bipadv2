@@ -65,11 +65,11 @@ const SankeyChart = (props: Props) => {
         <div className={styles.mainBarChart}>
             <h3 className={styles.barTitle}>{barTitle}</h3>
             <ResponsiveContainer
-                height={300}
+                height={150}
             >
                 <Sankey
                     width={200}
-                    height={200}
+                    height={150}
                     data={data0}
                     // node={<MyCustomNode />}
                     // nodePadding={50}
