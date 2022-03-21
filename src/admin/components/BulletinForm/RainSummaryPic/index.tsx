@@ -18,6 +18,7 @@ const TemperaturesMin = (props: Props) => {
         rainSummaryPic,
         handleRainSummaryPic,
         hideForm,
+        rainSummaryFooter,
     } = props;
 
     const [picFromEdit, setPicFromEdit] = useState(false);
@@ -76,7 +77,7 @@ const TemperaturesMin = (props: Props) => {
             <div {...getRootProps({ className: 'dropzone' })}>
                 <input {...getInputProps()} />
 
-                <div className={hideForm ? styles.subContainerReport : styles.subContainer}>
+                <div className={hideForm ? styles.subContainerReport : styles.subContainer} style={{ marginLeft: '0px' }}>
 
                     {!hideForm
                         && (
@@ -114,6 +115,13 @@ const TemperaturesMin = (props: Props) => {
                             )
                         }
                     </div>
+                    {hideForm && rainSummaryFooter
+                        && (
+                            <p className={styles.footerText}>
+                                {rainSummaryFooter}
+                            </p>
+                        )
+                    }
                 </div>
             </div>
         </div>

@@ -95,43 +95,45 @@ const Bulletin = (props: Props) => {
 
                     </div>
                 )}
+            <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
+                <RainSummaryPic
+                    rainSummaryPic={rainSummaryPic}
+                    handleRainSummaryPic={handleRainSummaryPic}
+                    hideForm={hideForm}
+                    rainSummaryFooter={rainSummaryFooter}
+                />
+                {
+                    !hideForm
+                    && (
 
-            <RainSummaryPic
-                rainSummaryPic={rainSummaryPic}
-                handleRainSummaryPic={handleRainSummaryPic}
-                hideForm={hideForm}
-            />
-            {
-                !hideForm
-                && (
+                        <div className={styles.formItemfooter}>
+                            <FormControl fullWidth>
 
-                    <div className={styles.formItemfooter}>
-                        <FormControl fullWidth>
-
-                            <InputLabel>
-                                <Translation>
-                                    {
-                                        t => <span>{t('Daily Rainfall Map Description')}</span>
-                                    }
-                                </Translation>
-                            </InputLabel>
-                            {' '}
-                            <Input
-                                type="text"
-                                value={rainSummaryFooter}
-                                onChange={e => handleRainSummaryFooter(e)}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                            />
-                        </FormControl>
+                                <InputLabel>
+                                    <Translation>
+                                        {
+                                            t => <span>{t('Daily Rainfall Map Description')}</span>
+                                        }
+                                    </Translation>
+                                </InputLabel>
+                                {' '}
+                                <Input
+                                    type="text"
+                                    value={rainSummaryFooter}
+                                    onChange={e => handleRainSummaryFooter(e)}
+                                    className={styles.select}
+                                    disableUnderline
+                                    inputProps={{
+                                        disableUnderline: true,
+                                    }}
+                                    style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
+                                />
+                            </FormControl>
 
 
-                    </div>
-                )}
+                        </div>
+                    )}
+            </div>
             <div className={!hideForm ? styles.picContainer : styles.picContainerReport}>
                 <TemperatureMax
                     maxTemp={maxTemp}
