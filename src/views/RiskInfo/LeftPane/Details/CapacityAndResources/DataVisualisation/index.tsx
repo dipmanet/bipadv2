@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-useless-concat */
 /* eslint-disable prefer-spread */
 /* eslint-disable max-len */
@@ -365,7 +366,7 @@ const visualizationKeyValues = [
             {
                 label: 'Education Institutions',
                 key: 'type',
-                values: ['Pre Primary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
+                values: ['Preprimary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
@@ -1606,30 +1607,31 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     public async componentDidMount(prevProps, prevState) {
         const { resourceCollection, resourceType, pendingAPICall } = this.props;
         const { isValueCalculated } = this.state;
+        if (!pendingAPICall) {
+            const resourceDataList = resourceCollection[resourceType];
 
-        const resourceDataList = resourceCollection[resourceType];
-
-        this.setState({
-            selectedResourceData: resourceDataList,
-        });
-        const GraphVisualizationData = await visualizationKeyValues
-            .filter(item => item.resourceType === resourceType)[0].chartDataType
-            .map((datakey) => {
-                const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-                    datakey.isBoolean, datakey.values, datakey.showFalseValue);
-                return datam;
+            this.setState({
+                selectedResourceData: resourceDataList,
             });
-        const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+            const GraphVisualizationData = await visualizationKeyValues
+                .filter(item => item.resourceType === resourceType)[0].chartDataType
+                .map((datakey) => {
+                    const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
+                        datakey.isBoolean, datakey.values, datakey.showFalseValue);
+                    return datam;
+                });
+            const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
 
-        if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
-            this.setState({ isValueCalculated: true });
-        }
-        if (calculatedSum > 0) {
-            this.setState({ isValueCalculated: true });
-        }
-        if (prevState) {
-            if (prevState.isValueCalculated !== isValueCalculated) {
-                this.setState({ GraphVisualizationData });
+            if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
+                this.setState({ isValueCalculated: true });
+            }
+            if (calculatedSum > 0) {
+                this.setState({ isValueCalculated: true });
+            }
+            if (prevState) {
+                if (prevState.isValueCalculated !== isValueCalculated) {
+                    this.setState({ GraphVisualizationData });
+                }
             }
         }
     }
@@ -1637,38 +1639,39 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     public async componentDidUpdate(prevProps, prevState) {
         const { resourceCollection, resourceType, pendingAPICall } = this.props;
         const { isValueCalculated } = this.state;
+        if (!pendingAPICall) {
+            const resourceDataList = resourceCollection[resourceType];
 
-        const resourceDataList = resourceCollection[resourceType];
-
-        this.setState({
-            selectedResourceData: resourceDataList,
-        });
-
-        const GraphVisualizationData = await visualizationKeyValues
-            .filter(item => item.resourceType === resourceType)[0].chartDataType
-            .map((datakey) => {
-                const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
-                    datakey.isBoolean, datakey.values, datakey.showFalseValue);
-                return datam;
-            });
-        let nullDataCheck = null;
-        const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
-        nullDataCheck = calculatedSum || null;
-
-        if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
             this.setState({
-                isValueCalculated: true,
-                allDataNullConditionCheck: true,
+                selectedResourceData: resourceDataList,
             });
-        }
-        if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
-            this.setState({ isValueCalculated: true });
-        }
-        if ((calculatedSum > 0)) {
-            this.setState({ isValueCalculated: true });
-        }
-        if (prevState.isValueCalculated !== isValueCalculated) {
-            this.setState({ GraphVisualizationData });
+
+            const GraphVisualizationData = await visualizationKeyValues
+                .filter(item => item.resourceType === resourceType)[0].chartDataType
+                .map((datakey) => {
+                    const datam = this.getResourceDataForVisualization(resourceType, datakey.key,
+                        datakey.isBoolean, datakey.values, datakey.showFalseValue);
+                    return datam;
+                });
+            let nullDataCheck = null;
+            const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+            nullDataCheck = calculatedSum || null;
+
+            if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
+                this.setState({
+                    isValueCalculated: true,
+                    allDataNullConditionCheck: true,
+                });
+            }
+            if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
+                this.setState({ isValueCalculated: true });
+            }
+            if ((calculatedSum > 0)) {
+                this.setState({ isValueCalculated: true });
+            }
+            if (prevState.isValueCalculated !== isValueCalculated) {
+                this.setState({ GraphVisualizationData });
+            }
         }
     }
 
@@ -1791,7 +1794,9 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
     public render() {
         const { closeVisualization, checkedCategory,
-            resourceType, level, lvl2catName, typeName, resourceCollection, selectedCategoryName, wards, provinces, districts, municipalities, pendingAPICall } = this.props;
+            resourceType, level, lvl2catName, typeName,
+            resourceCollection, selectedCategoryName,
+            wards, provinces, districts, municipalities, pendingAPICall, ErrorData } = this.props;
         const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
 
 
@@ -1827,7 +1832,8 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
-
+        console.log('What resource collection', resourceCollection);
+        console.log('Graph visualization data', GraphVisualizationData);
         return (
             <Modal className={
                 styles.contactFormModal
@@ -1846,147 +1852,147 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                     )}
                 /> */}
                 <ModalBody className={styles.modalBody}>
-                    {
-                        isValueCalculated
-                            ? (
-                                <div>
-                                    <div className={styles.header}>
-                                        <div className={styles.headingCategories}>
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                onKeyDown={undefined}
-                                                className={!isDataSetClicked ? styles.visualization : ''}
-                                                onClick={() => this.setState({ isDataSetClicked: false })}
-                                            >
-                                                <h2>VISUALIZATION</h2>
-                                            </div>
-                                            <div
-                                                style={{ marginLeft: '30px' }}
-                                                role="button"
-                                                tabIndex={0}
-                                                className={isDataSetClicked ? styles.visualization : ''}
-                                                onKeyDown={undefined}
-                                                onClick={() => this.setState({ isDataSetClicked: true })}
-                                            >
-                                                <h2>DATASET</h2>
-                                            </div>
 
+                    {!pendingAPICall && isValueCalculated
+                        ? (
+                            <div>
+                                <div className={styles.header}>
+                                    <div className={styles.headingCategories}>
+                                        <div
+                                            role="button"
+                                            tabIndex={0}
+                                            onKeyDown={undefined}
+                                            className={!isDataSetClicked ? styles.visualization : ''}
+                                            onClick={() => this.setState({ isDataSetClicked: false })}
+                                        >
+                                            <h2>VISUALIZATION</h2>
+                                        </div>
+                                        <div
+                                            style={{ marginLeft: '30px' }}
+                                            role="button"
+                                            tabIndex={0}
+                                            className={isDataSetClicked ? styles.visualization : ''}
+                                            onKeyDown={undefined}
+                                            onClick={() => this.setState({ isDataSetClicked: true })}
+                                        >
+                                            <h2>DATASET</h2>
                                         </div>
 
-                                        <DangerButton
-                                            transparent
-                                            iconName="close"
-                                            onClick={() => {
-                                                this.setState({ allDataNullConditionCheck: false });
-                                                closeVisualization(false,
-                                                    checkedCategory, resourceType, level, lvl2catName, typeName);
-                                            }
-                                            }
-                                            title="Close Modal"
-                                            className={styles.closeButton}
+                                    </div>
+
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={() => {
+                                            this.setState({ allDataNullConditionCheck: false });
+                                            closeVisualization(false,
+                                                checkedCategory, resourceType, level, lvl2catName, typeName);
+                                        }
+                                        }
+                                        title="Close Modal"
+                                        className={styles.closeButton}
+                                    />
+                                    {' '}
+
+                                </div>
+                                <div className={styles.categoryName}>
+                                    <div className={styles.categoryLogo}>
+                                        <ScalableVectorGraphics
+                                            className={styles.categoryLogoIcon}
+
+                                            src={selectedImage}
                                         />
-                                        {' '}
-
+                                        <h3>{visualizationHeading}</h3>
                                     </div>
-                                    <div className={styles.categoryName}>
-                                        <div className={styles.categoryLogo}>
-                                            <ScalableVectorGraphics
-                                                className={styles.categoryLogoIcon}
+                                    {/* <div
+                                            style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                                            role="button"
+                                            tabIndex={0}
+                                        // eslint-disable-next-line max-len
+                                            onClick={() => this.handleSaveClick('overallDownload')}
+                                            onKeyDown={undefined}
 
-                                                src={selectedImage}
+
+                                        >
+                                            <h4>DOWNLOAD</h4>
+                                            {' '}
+                                            <Button
+                                                title="Download Chart"
+                                                className={styles.chartDownload}
+                                                transparent
+                                                // onClick={() => this.handleSaveClick('overallDownload')}
+                                                iconName="download"
                                             />
-                                            <h3>{visualizationHeading}</h3>
-                                        </div>
-                                        {/* <div
-                    style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                    role="button"
-                    tabIndex={0}
-                // eslint-disable-next-line max-len
-                    onClick={() => this.handleSaveClick('overallDownload')}
-                    onKeyDown={undefined}
+
+                                        </div> */}
+                                </div>
+                                {ErrorData ? <h2 style={{ textAlign: 'center' }}>{ErrorData}</h2> : isDataSetClicked
+                                    ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
+                                    : (
+                                        <div id="overallDownload">
+                                            {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
+                                                HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
+                                                    : (
+                                                        <div key={item.label}>
+                                                            <div className={styles.barChartSection}>
+
+                                                                <div className={styles.percentageValue}>
+                                                                    {/* <h1>Education Institution</h1> */}
+                                                                    <h1>
+                                                                        {HighValuePercentageCalculation[i].displayingValueinVisualization}
+
+                                                                    </h1>
+
+                                                                    <span>
+
+                                                                        {HighValuePercentageCalculation[i].displayVisualizationWord}
+                                                                    </span>
+
+                                                                </div>
 
 
-                >
-                    <h4>DOWNLOAD</h4>
-                    {' '}
-                    <Button
-                        title="Download Chart"
-                        className={styles.chartDownload}
-                        transparent
-                        // onClick={() => this.handleSaveClick('overallDownload')}
-                        iconName="download"
-                    />
+                                                                <div style={{ flex: '4' }} key={item.label}>
 
-                </div> */}
-                                    </div>
-                                    {isDataSetClicked
-                                        ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
-                                        : (
-                                            <div id="overallDownload">
-                                                {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
-                                                    HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
-                                                        : (
-                                                            <div key={item.label}>
-                                                                <div className={styles.barChartSection}>
+                                                                    <div className={styles.graphicalVisualization}>
 
-                                                                    <div className={styles.percentageValue}>
-                                                                        {/* <h1>Education Institution</h1> */}
-                                                                        <h1>
-                                                                            {HighValuePercentageCalculation[i].displayingValueinVisualization}
-
-                                                                        </h1>
-
-                                                                        <span>
-
-                                                                            {HighValuePercentageCalculation[i].displayVisualizationWord}
-                                                                        </span>
-
-                                                                    </div>
-
-
-                                                                    <div style={{ flex: '4' }} key={item.label}>
-
-                                                                        <div className={styles.graphicalVisualization}>
-
-                                                                            {/* <div style={{ display: 'flex',
+                                                                        {/* <div style={{ display: 'flex',
                                                                             justifyContent: 'flex-end',
                                                                     fontSize: '25px' }}
                                                                 /> */}
-                                                                            <div id={labelName[i].label}>
-                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                    <h3>{labelName[i].label}</h3>
-                                                                                    <Button
-                                                                                        title="Download Chart"
-                                                                                        className={styles.chartDownload}
-                                                                                        transparent
-                                                                                        onClick={() => this.handleSaveClick(labelName[i].label)}
-                                                                                        iconName="download"
-                                                                                    />
-                                                                                </div>
-                                                                                <BarChartVisualization item={item} />
+                                                                        <div id={labelName[i].label}>
+                                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                <h3>{labelName[i].label}</h3>
+                                                                                <Button
+                                                                                    title="Download Chart"
+                                                                                    className={styles.chartDownload}
+                                                                                    transparent
+                                                                                    onClick={() => this.handleSaveClick(labelName[i].label)}
+                                                                                    iconName="download"
+                                                                                />
                                                                             </div>
-
+                                                                            <BarChartVisualization item={item} />
                                                                         </div>
 
                                                                     </div>
 
-
                                                                 </div>
-                                                            </div>
-                                                        )
 
-                                                ))}
-                                                {!pendingAPICall && (resourceCollection[resourceType]).length === 0
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                    : ''}
-                                                {allDataNullConditionCheck
-                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                    : ''}
-                                            </div>
-                                        )}
-                                </div>
-                            ) : <LoadingAnimation className={styles.loader} />
+
+                                                            </div>
+                                                        </div>
+                                                    )
+
+                                            ))}
+                                            {!pendingAPICall && (resourceCollection[resourceType]).length === 0
+                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                : ''}
+                                            {allDataNullConditionCheck
+                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                : ''}
+                                        </div>
+                                    )}
+                            </div>
+                        ) : <LoadingAnimation className={styles.loader} />
 
                     }
 

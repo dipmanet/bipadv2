@@ -507,6 +507,11 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 }
             }
         },
+        onFailure: ({ error, params }) => {
+            if (params && params.ErrorData) {
+                params.ErrorData(error);
+            }
+        },
     },
     resourceDetailGetRequest: {
         url: ({ params }) => {
@@ -780,6 +785,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 evacuationcentre: [],
 
             },
+            ErrorData: '',
             activeLayersIndication: { ...initialActiveLayersIndication },
             palikaRedirectState: false,
             isLoggedInUser: false,
@@ -794,6 +800,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                 setIndividualResourceList: this.setIndividualResourceList,
                 getRegionDetails: this.getRegionDetails,
                 region,
+                ErrorData: this.handleErrorData,
                 // filterClickCheckCondition: isFilterClicked,
             },
         );
@@ -875,6 +882,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         region,
                         resourceType: carKeys,
                         filterClickCheckCondition: isFilterClicked,
+                        handleErrorData: this.handleErrorData,
                     },
                 );
             }
@@ -936,6 +944,10 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         handleActiveLayerIndication(initialActiveLayersIndication);
     }
 
+    public handleErrorData = () => {
+        this.setState({ ErrorData: 'Error in Network Connection' });
+    }
+
     public getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         const {
             provinces,
@@ -968,6 +980,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             resourceType: carKeys,
             region,
             filterClickCheckCondition: isFilterClicked,
+            handleErrorData: this.handleErrorData,
         });
     }
 
@@ -1019,6 +1032,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
                     filterClickCheckCondition: isFilterClicked,
+                    handleErrorData: this.handleErrorData,
                 });
             }
         } else if (temp[key] && resourceCollection[key].length === 0) {
@@ -1039,6 +1053,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     resourceType: newArr,
                     region: this.props.filters.faramValues.region,
                     filterClickCheckCondition: isFilterClicked,
+                    handleErrorData: this.handleErrorData,
                 });
             }
         } else return null;
@@ -1392,6 +1407,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             this.props.requests.resourceGetRequest.do({
                 resourceType: layerKey,
                 filterClickCheckCondition: isFilterClicked,
+                handleErrorData: this.handleErrorData,
             });
         }
     }
@@ -2292,26 +2308,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
     private handleVisualization = (boolean, checkedCategory, resourceType, level, lvl2catName, typeName) => {
         const { region, wards } = this.props;
         const { resourceCollection } = this.state;
-
-        let WardData = [];
-        if (region.adminLevel === 3) {
-            WardData = wards.filter(i => i.municipality === region.geoarea).map(d => d.id);
-        } else if (region.adminLevel === 2) {
-            WardData = wards.filter(i => i.district === region.geoarea).map(d => d.id);
-        } else if (region.adminLevel === 1) {
-            WardData = wards.filter(i => i.province === region.geoarea).map(d => d.id);
-        } else {
-            WardData = wards.map(d => d.id);
-        }
-        console.log('wardData', WardData);
-        // const filteredResourceCollection = resourceCollection[resourceType].filter(data => data.ward.includes(WardData));
-        const filteredResourceCollection = resourceCollection[resourceType];
-        console.log('filteredResourceCollection', filteredResourceCollection);
-        console.log('Wards', wards);
-        console.log('reason', region);
         this.setState({ openVisualization: boolean });
-        console.log('checked category', checkedCategory);
-        console.log('resource TYpe', resourceType);
         this.handleMainCategoryCheckBox(checkedCategory, resourceType, level, lvl2catName, typeName, boolean);
 
         ResourceType = resourceType;
@@ -2377,7 +2374,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
             categoryLevel,
             lvl2catName,
             disableCheckbox,
-
+            ErrorData,
 
         } = this.state;
 
@@ -2437,8 +2434,9 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-        console.log('resource collection', resourceCollection);
+        console.log('resource collection updated', resourceCollection);
         console.log('This reason', region);
+        console.log('pending', pending);
         return (
             <>
                 <Loading pending={pending} />
@@ -2453,6 +2451,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                         typeName={lvl2TypeName}
                         selectedCategoryName={selectedCategoryName}
                         pendingAPICall={pending}
+                        ErrorData={ErrorData}
 
 
                     />
