@@ -364,13 +364,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Education Institution',
         chartDataType: [
             {
-                label: 'Education Institutions',
+                label: 'Education Institution Types',
                 key: 'type',
                 values: ['Preprimary', 'Basic Education', 'High School', 'College', 'University', 'Traditional Education', 'Library', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of education institutions',
+                visualizationWordStart: 'Number of Education Institutions',
                 visualizationWordEnd: '',
 
 
@@ -382,19 +382,19 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Education institutions are ',
-                visualizationWordEnd: ' run',
+                visualizationWordStart: 'Education Institutions are ',
+                visualizationWordEnd: ' Run',
             },
+
             {
-                label: 'Open Space ',
-                key: 'hasOpenSpace',
-                values: ['Open Space '],
+                label: 'Education Institution With',
+                key: ['hasOpenSpace', 'hasEvacuationRoute', 'hasHealthCenterPsychoCounseling'],
+                values: ['Open space', 'Evacuation route available', 'Health center and/or psycho-counseling'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Educational institutions with ',
-                visualizationWordEnd: 'available',
-
+                visualizationWordStart: '',
+                visualizationWordEnd: ' are Available ',
 
             },
             {
@@ -404,18 +404,18 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
@@ -426,17 +426,17 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of students ',
+                visualizationWordStart: 'Number of Students ',
                 visualizationWordEnd: '',
             },
             {
-                label: 'Students with Disability',
+                label: 'Differently-abled Students',
                 key: ['noOfDifferentlyAbledMaleStudents', 'noOfDifferentlyAbledFemaleStudents', 'noOfDifferentlyAbledOtherStudents'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled students ',
+                visualizationWordStart: 'Differently-abled Students ',
                 visualizationWordEnd: '',
 
             },
@@ -448,13 +448,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Banking and Finance Institution',
         chartDataType: [
             {
-                label: 'Banking & Financial Institutions',
+                label: 'Banking & Financial Institution Types',
                 key: 'type',
                 values: ['Commercial', 'Micro Credit Development', 'Finance', 'Development Bank', 'Cooperative', 'Money Exchange', 'ATM'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of banking and financial institutions ',
+                visualizationWordStart: 'Number of Banking and Financial Institutions ',
                 visualizationWordEnd: '',
 
 
@@ -466,8 +466,8 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Banking and Financial institutions are ',
-                visualizationWordEnd: ' run',
+                visualizationWordStart: 'Banking and Financial Institutions are ',
+                visualizationWordEnd: ' Run',
 
 
             },
@@ -488,19 +488,19 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
@@ -513,13 +513,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Communication Institution',
         chartDataType: [
             {
-                label: 'communication Institutions Types',
+                label: 'Communication Facility Types',
                 key: 'type',
                 values: ['FM Radio', 'TV Station', 'Newspapers', 'Phone Service', 'Cable', 'Online Media', 'Internet Service Provider'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of communication facilities ',
+                visualizationWordStart: 'Number of Communication Facilities ',
                 visualizationWordEnd: '',
 
 
@@ -531,8 +531,8 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Communication facilities are ',
-                visualizationWordEnd: ' run',
+                visualizationWordStart: 'Communication Facilities are ',
+                visualizationWordEnd: ' Run',
 
 
             },
@@ -544,30 +544,30 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
             {
                 label: 'Disaster Management',
                 key: 'hasEvacuationRoute',
-                values: ['Evacuation route available '],
+                values: ['Evacuation route'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Institution have evacuation route ',
+                visualizationWordStart: 'Institution have Evacuation Route ',
                 visualizationWordEnd: '',
 
             },
@@ -586,7 +586,7 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of governance institutions ',
+                visualizationWordStart: 'Number of Governance Institutions ',
                 visualizationWordEnd: '',
 
 
@@ -599,7 +599,7 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Institutions are ',
-                visualizationWordEnd: ' run',
+                visualizationWordEnd: ' Run',
             },
             // {
             //     label: 'Helipad ',
@@ -626,30 +626,30 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Governance institutions with ',
+                label: 'Governance Institutions with ',
                 key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute', 'hasDisasterMgmtUnit'],
-                values: ['Helipad Available', 'Open Space Available', 'Evacuation Route Available', 'Disaster Management Unit Available'],
+                values: ['Helipad', 'Open space', 'Evacuation route', 'Have disaster management unit'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Governance institutions with ',
+                visualizationWordStart: 'Governance Institutions with ',
                 visualizationWordEnd: ' available',
 
             },
@@ -662,13 +662,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Hotel & Restaurant',
         chartDataType: [
             {
-                label: 'Hotel & Restaurant Types',
+                label: 'Hospitality',
                 key: 'type',
                 values: ['Hotel', 'Restaurant', 'Lodge', 'Resort', 'Homestay'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of hotel and restaurants ',
+                visualizationWordStart: 'Number of Hotel and Restaurants ',
                 visualizationWordEnd: '',
             },
 
@@ -679,24 +679,24 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Hotel and Restaurants with',
+                label: 'Hotel and Restaurants With',
                 key: ['noOfRoom', 'noOfBed'],
                 values: ['Rooms Available', 'Beds Available'],
                 isBoolean: false,
@@ -715,24 +715,24 @@ const visualizationKeyValues = [
         visualizationHeading: 'Cultural Sites',
         chartDataType: [
             {
-                label: 'Religions',
+                label: 'Cultural Site Types',
                 key: 'religion',
                 values: ['Hindu', 'Islam', 'Christian', 'Buddhist', 'Kirat', 'Sikhism', 'Judaism', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of cultural sites ',
+                visualizationWordStart: 'Number of Cultural Sites ',
                 visualizationWordEnd: '',
             },
             {
-                label: 'Cultural site with ',
+                label: 'Cultural Site With ',
                 key: ['hasOpenSpace', 'drinkingWater', 'toilet', 'hasWashFacility', 'hasSleepingFacility', 'hasElectricity'],
-                values: ['Open Space', 'Drinking Water Available', 'Toilet Available', 'Wash Facility Available', 'Sleeping Facility Available', 'Electricity Facility Available'],
+                values: ['Open Space', 'Drinking Water', 'Toilet', 'WASH facilities', 'Sleeping facilities', 'Electricity facilities'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Cultural sites with ',
-                visualizationWordEnd: ' available',
+                visualizationWordStart: 'Cultural Sites with ',
+                visualizationWordEnd: ' Available',
 
             },
 
@@ -794,7 +794,7 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of industries ',
+                visualizationWordStart: 'Number of Industries ',
                 visualizationWordEnd: '',
             },
             {
@@ -805,7 +805,7 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Industries are ',
-                visualizationWordEnd: ' run',
+                visualizationWordEnd: ' Run',
             },
             {
                 label: 'Number of Employees',
@@ -814,30 +814,30 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
             {
                 label: 'Industries with  ',
                 key: 'hasEvacuationRoute',
-                values: ['Evacuation route available '],
+                values: ['Evacuation route'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Industries have evacuation route ',
+                visualizationWordStart: 'Industries have Evacuation Route ',
                 visualizationWordEnd: '',
 
             },
@@ -856,7 +856,7 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of bridges ',
+                visualizationWordStart: 'Number of Bridges ',
                 visualizationWordEnd: '',
             },
 
@@ -874,19 +874,19 @@ const visualizationKeyValues = [
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of Motorable bridges ',
+                visualizationWordStart: 'Number of Motorable Bridges ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Condition ',
+                label: 'Condition of the Bridge',
                 key: 'condition',
                 values: ['Good ', 'Bad'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Bridges in ',
-                visualizationWordEnd: ' condition',
+                visualizationWordEnd: ' Condition',
 
             },
 
@@ -898,7 +898,7 @@ const visualizationKeyValues = [
         visualizationHeading: 'Electricity',
         chartDataType: [
             {
-                label: 'Electricity Components',
+                label: 'Hydropower/Components',
                 key: 'components',
                 values: ['Hydropower', 'Substation', 'Dam', 'Transmission Pole', 'Other'],
                 isBoolean: false,
@@ -907,6 +907,17 @@ const visualizationKeyValues = [
                 visualizationWordStart: '',
                 visualizationWordEnd: '',
             },
+            {
+                label: 'Status',
+                key: 'status',
+                values: ['Operational ', 'Under construction', 'Survey'],
+                isBoolean: false,
+                showFalseValue: false,
+                visualizationKey: 'highestValue',
+                visualizationWordStart: 'Hydropower/Components are ',
+                visualizationWordEnd: '',
+
+            },
         ],
     },
     {
@@ -914,13 +925,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Sanitation Service',
         chartDataType: [
             {
-                label: 'Type of Sanitation Infrastructures',
+                label: 'Sanitation Infrastructure Types',
                 key: 'type',
                 values: ['Landfill', 'Dumping Site', 'Public Toilet'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of sanitation infrastructures',
+                visualizationWordStart: 'Number of Sanitation Infrastructures',
                 visualizationWordEnd: '',
             },
             {
@@ -931,7 +942,7 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
-                visualizationWordEnd: ' are permanent',
+                visualizationWordEnd: ' are Permanent',
             },
             {
                 label: 'Public Toilets',
@@ -940,7 +951,7 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Public toilets available',
+                visualizationWordStart: 'Public Toilets Available',
                 visualizationWordEnd: '',
 
             },
@@ -990,23 +1001,23 @@ const visualizationKeyValues = [
 
             // },
             {
-                label: 'Number of community spaces',
+                label: 'Number of Community Spaces',
                 key: 'resourceType',
                 values: ['communityspace'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of community spaces',
+                visualizationWordStart: 'Number of Community Spaces',
                 visualizationWordEnd: '',
             },
             {
-                label: 'Community Space with ',
+                label: 'Community Space With',
                 key: ['usedAsHelipad', 'isDrinkingWaterAvailable', 'isToiletAvailable'],
-                values: ['Emergency Landing', 'Drinking water facility available', 'Toilet available'],
+                values: ['Emergency Landing', 'Drinking water facility', 'Toilet'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Community space with ',
+                visualizationWordStart: 'Community Space with ',
                 visualizationWordEnd: '',
             },
 
@@ -1025,7 +1036,7 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of water supply infrastructures',
+                visualizationWordStart: 'Number of Water Supply Infrastructures',
                 visualizationWordEnd: '',
             },
             {
@@ -1035,8 +1046,8 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Water supply infrastructures are ',
-                visualizationWordEnd: ' run',
+                visualizationWordStart: 'Water supply Infrastructures are ',
+                visualizationWordEnd: ' Run',
             },
             {
                 label: 'Number of Employees',
@@ -1045,19 +1056,19 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees',
+                visualizationWordStart: 'Number of Employees',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees',
+                visualizationWordStart: 'Differently-abled Employees',
                 visualizationWordEnd: '',
 
             },
@@ -1068,7 +1079,7 @@ const visualizationKeyValues = [
                 isBoolean: true,
                 showFalseValue: true,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Water supply infrastructures are ',
+                visualizationWordStart: 'Water supply Infrastructures are ',
                 visualizationWordEnd: '',
             },
             // {
@@ -1094,13 +1105,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Roadways',
         chartDataType: [
             {
-                label: 'Types of Vehicles',
+                label: 'Vehicle Types',
                 key: 'kindOfVehicle',
                 values: ['Bus', 'Micro', 'Van', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of vehicles',
+                visualizationWordStart: 'Number of Vehicles',
                 visualizationWordEnd: '',
             },
             {
@@ -1110,18 +1121,18 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees',
+                visualizationWordStart: 'Number of Employees',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees',
+                visualizationWordStart: 'Differently-abled Employees',
                 visualizationWordEnd: '',
             },
         ],
@@ -1131,7 +1142,7 @@ const visualizationKeyValues = [
         visualizationHeading: 'Helipad',
         chartDataType: [
             {
-                label: 'Helipad Ownership',
+                label: 'Helipad',
                 key: 'ownership',
                 values: ['Civil Aviation Authority of Nepal', 'Nepal Army', 'Nepal Police', 'Armed Police Force', 'Other'],
                 isBoolean: false,
@@ -1148,13 +1159,13 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Helipads have ',
-                visualizationWordEnd: ' surface',
+                visualizationWordEnd: ' Surface',
             },
 
             {
                 label: 'Helipad with ',
                 key: ['hasRoadAccess', 'storageFacilityAvailable', 'internetFacilityAvailable', 'windDirectionIndicatorAvailable', 'heliMarkerAvailable', 'nightLightingAvailable'],
-                values: ['Road Access', 'Storage facility available', 'Internet service is available', 'Wind Direction Indicator Available', 'Heli Marker Available', 'Night Lighting Available'],
+                values: ['Road access', 'Storage facility', 'Internet service', 'Wind direction indicator', 'Heli marker', 'Night lighting'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
@@ -1217,13 +1228,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Waterway',
         chartDataType: [
             {
-                label: 'Types of waterways',
+                label: 'Waterway Types',
                 key: 'type',
                 values: ['General Boat', 'Electrical Boat', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of waterways ',
+                visualizationWordStart: 'Number of Waterways ',
                 visualizationWordEnd: '',
             },
             {
@@ -1233,19 +1244,19 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled employees ',
                 visualizationWordEnd: '',
 
             },
@@ -1257,7 +1268,7 @@ const visualizationKeyValues = [
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: 'Waterways in ',
-                visualizationWordEnd: ' condition ',
+                visualizationWordEnd: ' Condition ',
             },
 
         ],
@@ -1267,13 +1278,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Airway',
         chartDataType: [
             {
-                label: 'Types of airways',
+                label: 'Airway Types',
                 key: 'type',
                 values: ['National', 'International'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of airways ',
+                visualizationWordStart: 'Number of Airways ',
                 visualizationWordEnd: '',
             },
             {
@@ -1283,25 +1294,25 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
             {
                 label: 'Airways with  ',
                 key: ['hasEvacuationRoute', 'hasHumanitarianStagingArea'],
-                values: ['Evacuation route available ', 'Humanitarian staging area'],
+                values: ['Evacuation route', 'Humanitarian staging area'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
@@ -1332,13 +1343,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Fire Fighting Apparatus',
         chartDataType: [
             {
-                label: 'Type of Fire Fighting Apparatus',
+                label: 'Fire Fighting Apparatus Types',
                 key: 'type',
                 values: ['Fire Engine', 'Fire Bike', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of fire fighting apparatus ',
+                visualizationWordStart: 'Number of Fire Fighting Apparatus ',
                 visualizationWordEnd: '',
             },
             {
@@ -1348,7 +1359,7 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Fire fighting apparatus are ',
+                visualizationWordStart: 'Fire Fighting Apparatus are ',
                 visualizationWordEnd: '',
             },
             {
@@ -1358,8 +1369,8 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Fire fighting apparatus are ',
-                visualizationWordEnd: ' run',
+                visualizationWordStart: 'Fire Fighting Apparatus are ',
+                visualizationWordEnd: ' Run',
             },
 
 
@@ -1370,13 +1381,13 @@ const visualizationKeyValues = [
         visualizationHeading: 'Evacuation Center',
         chartDataType: [
             {
-                label: 'Government Institution Types',
+                label: 'Evacuation Centers',
                 key: 'operatedBy',
                 values: ['Government', 'INGO', 'NGO', 'CSO'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of evacuation centers ',
+                visualizationWordStart: 'Number of Evacuation Centers ',
                 visualizationWordEnd: '',
 
 
@@ -1388,31 +1399,31 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Evacuation centers are ',
+                visualizationWordStart: 'Evacuation Centers are ',
                 visualizationWordEnd: '',
 
 
             },
             {
-                label: 'Capacity of evacuation center',
+                label: 'Capacity of Evacuation Center',
                 key: ['capacity'],
                 values: ['Capacity'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Maximum capacity  ',
+                visualizationWordStart: 'Maximum Capacity  ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Evacuation center with  ',
+                label: 'Evacuation Center With  ',
                 key: ['hasEvacuationRoute', 'hasDrinkingWater', 'hasToilet', 'hasHandWashingFacility', 'hasFoodPreparationFacility', 'hasSleepingFacility'],
-                values: ['Evacuation Route', 'Drinking Water Facility', 'Toilet Facility', 'Wash Facility', 'Food Preparation Facility', 'Sleeping Facility'],
+                values: ['Evacuation Route', 'Drinking Water', 'Toilet', 'Wash Facility', 'Food Preparation Facility', 'Sleeping Facility'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
-                visualizationWordEnd: ' are available ',
+                visualizationWordEnd: ' are Available ',
 
             },
 
@@ -1455,7 +1466,7 @@ const visualizationKeyValues = [
         chartDataType: [
 
             {
-                label: 'Health Institutions Types',
+                label: 'Health Infrastructure Types',
                 key: 'type',
                 values: ['Specialized Hospital', 'Center Hospital', 'Teaching Hospital',
                     'Regional Hospital', 'Sub Regional Hospital', 'Zonal Hospital',
@@ -1469,30 +1480,43 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of health infrastructures ',
+                visualizationWordStart: 'Number of Health Infrastructures ',
                 visualizationWordEnd: '',
             },
 
+            // {
+            //     label: 'Services Available',
+            //     key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
+            //         'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
+            //         'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
+            //         'hasLaboratoryService', 'hasVolunteerCounselingTest', 'hasPmtct', 'hasAntiRetroViralTreatment', 'hasDental',
+            //         'hasInPatient', 'hasRadiology'],
+            //     values: ['Child Immunization', 'TD Vaccination', 'IMNCI',
+            //         'Growth Monitoring', 'Safe Motherhood', 'Family Planning', 'OPD', 'Treatment of Tuberculosis',
+            //         'Treatment of MDR tuberculosis', 'Treatment of Leprosy',
+            //         'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
+            //         'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
+            //         'Dental', 'Inpatient', 'Radiology'],
+            //     isBoolean: false,
+            //     showFalseValue: false,
+            //     visualizationKey: 'highestValue',
+            //     visualizationWordStart: '',
+            //     visualizationWordEnd: ' Available',
+
+            // },
             {
                 label: 'Services Available',
-                key: ['hasChildImmunization', 'hasTdVaccination', 'hasImnci', 'hasGrowthMonitoring', 'hasSafeMotherhood',
-                    'familyPlanning', 'hasOpd', 'hasTreatementOfTb', 'hasTreatementOfMdrTb', 'hasTreatementOfLeprosy',
-                    'hasTreatementOfMalaria', 'hasTreatementOfKalaazar', 'hasTreatementOfJapaneseEncephalitis',
-                    'hasLaboratoryService', 'hasVolunteerCounselingTest', 'hasPmtct', 'hasAntiRetroViralTreatment', 'hasDental',
-                    'hasInPatient', 'hasRadiology'],
-                values: ['Child Immunization', 'TD Vaccination', 'IMNCI',
-                    'Growth Monitoring', 'Safe Motherhood', 'Family Planning', 'OPD', 'Treatment of Tuberculosis',
-                    'Treatment of MDR tuberculosis', 'Treatment of Leprosy',
-                    'Treatment of Malaria', 'Treatment of Kala-azar', 'Treatment of Japanese Encephalitis', 'Laboratory Service',
-                    'VCT for HIV/AIDS', 'PMTCT', 'Anti-retro Viral Treatment',
-                    'Dental', 'Inpatient', 'Radiology'],
-                isBoolean: false,
+                key: ['hasAmbulanceService', 'hasPharmacy', 'hasCovidClinicService', 'hasEmergencyServices', 'hasOperatingTheatre', 'hasBloodDonation'],
+                values: ['Ambulance service', 'Pharmacy', 'COVID clinic service', 'Emergency service', 'Operating theatre', 'Blood donation'],
+                isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
                 visualizationWordStart: '',
-                visualizationWordEnd: ' available',
+                visualizationWordEnd: ' Available',
 
             },
+
+
             // {
             //     label: 'Surgical Service',
             //     key: ['hasCaesarianSection', 'hasGastrointestinal', 'hasTraumaSurgery', 'hasCardiacSurgery',
@@ -1509,13 +1533,13 @@ const visualizationKeyValues = [
 
             // },
             {
-                label: 'Bed Capacity',
+                label: 'Bed Count',
                 key: ['hospitalBedCount', 'icuBedCount', 'ventilatorBedCount'],
                 values: ['Hospital Bed', 'ICU Bed', 'Ventilator Bed'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of beds ',
+                visualizationWordStart: 'Number of Beds ',
                 visualizationWordEnd: '',
 
             },
@@ -1540,30 +1564,30 @@ const visualizationKeyValues = [
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Number of employees ',
+                visualizationWordStart: 'Number of Employees ',
                 visualizationWordEnd: '',
 
             },
 
             {
-                label: 'Employees with Disability',
+                label: 'Differently-abled Employees',
                 key: ['noOfDifferentlyAbledMaleEmployees', 'noOfDifferentlyAbledFemaleEmployees', 'noOfDifferentlyAbledOtherEmployees'],
                 values: ['Male', 'Female', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'total',
-                visualizationWordStart: 'Differently abled employees ',
+                visualizationWordStart: 'Differently-abled Employees ',
                 visualizationWordEnd: '',
 
             },
             {
-                label: 'Health infrastructures with ',
+                label: 'Health Infrastructures with ',
                 key: ['hasHelipad', 'hasOpenSpace', 'hasEvacuationRoute'],
-                values: ['Helipad Available', 'Open Space Available', 'Evacuation Route Available'],
+                values: ['Helipad', 'Open space', 'Evacuation route'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
-                visualizationWordStart: 'Health infrastructures with ',
+                visualizationWordStart: 'Health Infrastructures with ',
                 visualizationWordEnd: ' available',
 
             },
@@ -1620,7 +1644,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                         datakey.isBoolean, datakey.values, datakey.showFalseValue);
                     return datam;
                 });
-            const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+            const calculatedSum = await GraphVisualizationData[0].reduce((acc, curValue) => acc + (curValue.value ? curValue.value : 0), 0);
 
             if (!pendingAPICall && (resourceCollection[resourceType]).length === 0) {
                 this.setState({ isValueCalculated: true });
@@ -1654,7 +1678,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                     return datam;
                 });
             let nullDataCheck = null;
-            const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + curValue.value || 0, 0);
+            const calculatedSum = GraphVisualizationData[0].reduce((acc, curValue) => acc + (curValue.value ? curValue.value : 0), 0);
             nullDataCheck = calculatedSum || null;
 
             if (!pendingAPICall && (resourceCollection[resourceType]).length !== 0 && nullDataCheck === null) {
@@ -1681,6 +1705,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         let calculatedValueData;
         let filterDataForCalculation;
         let filterDataForFalseValue;
+        console.log('key', key);
         if (typeof key === 'string') {
             filteredResourceChartDataType = visualizationKeyValues
                 .filter(item => item.resourceType === resourceType)[0].chartDataType
@@ -1704,6 +1729,9 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         }
         if (typeof key === 'object') {
             filteredResourceChartDataType = key;
+            const test = selectedResourceData.map(item => item.noOfDifferentlyAbledMaleStudents);
+            console.log('What is data', selectedResourceData);
+            console.log('Final test ', test);
             calculatedValueData = filteredResourceChartDataType.map((item, i) => {
                 // const isOtherItemDefined = filteredResourceChartDataType[filteredResourceChartDataType.length - 1];
 
@@ -1716,7 +1744,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                 // console.log('filterDataForStringValue', filterDataForStringValue);
                 filterDataForCalculation = selectedResourceData
-                    .reduce((acc, curValue) => acc + curValue[item] || 0, 0);
+                    .reduce((acc, curValue) => acc + (curValue[item] ? curValue[item] : 0), 0);
                 const obj = {};
                 obj.label = label[i];
                 obj.value = filterDataForCalculation;
@@ -1738,7 +1766,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         const HighestValue = value.map((item, i) => {
             const highValueObject = item.reduce((a, b) => (a.value > b.value ? a : b));
 
-            const totalSum = item.reduce((a, b) => a + b.value || 0, 0);
+            const totalSum = item.reduce((a, b) => a + (b.value ? b.value : 0), 0);
 
 
             const highValuePercentage = totalSum === 0 ? 0 : ((highValueObject.value / totalSum) * 100).toFixed(2);
@@ -1834,6 +1862,8 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         });
         console.log('What resource collection', resourceCollection);
         console.log('Graph visualization data', GraphVisualizationData);
+        console.log('resource type', resourceType);
+        console.log('allDataNullConditionCheck', allDataNullConditionCheck);
         return (
             <Modal className={
                 styles.contactFormModal
@@ -1986,9 +2016,9 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                             {!pendingAPICall && (resourceCollection[resourceType]).length === 0
                                                 ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
                                                 : ''}
-                                            {allDataNullConditionCheck
+                                            {/* {allDataNullConditionCheck
                                                 ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                : ''}
+                                                : ''} */}
                                         </div>
                                     )}
                             </div>
