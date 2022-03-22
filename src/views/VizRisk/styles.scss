@@ -1,46 +1,51 @@
-.mapboxgl-ctrl-group .mapboxgl-ctrl{
+.mapboxgl-ctrl-group .mapboxgl-ctrl {
     position: relative !important;
     top: 500px !important;
     border: 1px solid red !important;
 }
 
-.mainVzContainer{
-	position: fixed;
-	top: 0;
-	right: 0;
-	left: 0;
-	bottom: 0;
-    width:100vw ;
+.mainVzContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
     background: #193341;
-    height:100%;
-	overflow-y: scroll;
-	overflow-x: hidden !important;
-    .vizrisknmenupagecontainer{
-        .vizrisknmenupage{
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+
+    .vizrisknmenupagecontainer {
+        .vizrisknmenupage {
             // position: relative;
             padding: 40px 0 0px 200px;
+
             // border: 1px solid white;
-            .menuTitle{
+            .menuTitle {
                 color: rgb(175, 220, 241);
             }
-            .menuItems{
+
+            .menuItems {
                 color: rgb(175, 220, 241);
-    
+
             }
-			.themeName {
-		visibility:hidden;
-			}
-            .vizriskmunicipalityName{
+
+            .themeName {
+                visibility: hidden;
+            }
+
+            .vizriskmunicipalityName {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
-				
+
             }
-			
+
         }
     }
-    
-    .navBtnsContainer{
+
+    .navBtnsContainer {
         display: flex;
         position: relative;
         // height: 5px;
@@ -52,89 +57,98 @@
         z-index: 202;
         width: 100%;
 
-        .nextPrevBtnContainer{
+        .nextPrevBtnContainer {
             position: relative;
             right: 80px;
             top: 20px;
             width: 50px;
             height: 50px;
             background-color: transparent;
-            
-            .nextPrevBtn{
+
+            .nextPrevBtn {
                 color: white;
                 font-size: 12px;
             }
-            .prevBtnDisable{
-                color:  rgb(88, 193, 241);
+
+            .prevBtnDisable {
+                color: rgb(88, 193, 241);
                 font-size: 12px;
             }
         }
-        .hamburgerBtnContainer{
+
+        .hamburgerBtnContainer {
             position: absolute;
             display: flex;
-            justify-content: flex-start;   
-            background-color:rgb(12,36,50);
+            justify-content: flex-start;
+            background-color: rgb(12, 36, 50);
 
             // right: 50%;        
-			left: 20px;
+            left: 10px;
             // bottom: 0px !important;
-            top: 0px !important;
+            top: 10px !important;
 
             width: calc(30% - 80px);
-            .hamburgerBtn{
+
+            .hamburgerBtn {
                 color: white;
                 display: flex;
                 align-items: center;
-                filter:saturate(100%);
-                .hamburgerBtnIcon{
-                font-size: 30px;  
-                color: rgb(175, 220, 241);
+                filter: saturate(100%);
+
+                .hamburgerBtnIcon {
+                    font-size: 30px;
+                    color: rgb(175, 220, 241);
                 }
-                .strong{
+
+                .strong {
                     color: rgb(175, 220, 241);
                     // opacity: 0.87;
                     display: none;
                 }
-            
+
             }
-            
-            
+
+
         }
-        .hamburgerBtnContainerOther{
+
+        .hamburgerBtnContainerOther {
             position: absolute;
             width: 100%;
             display: flex;
-            justify-content: flex-end;   
-            top: 10px; 
-            .hamburgerBtn{
+            justify-content: flex-end;
+            top: 10px;
+            left: 0px;
+
+            .hamburgerBtn {
                 color: white;
                 display: flex;
-               align-items: center;
+                align-items: center;
                 padding: 0;
-               filter:saturate(100%);
-                .hamburgerBtnIcon{
-                font-size: 30px;  
-                color: rgb(175, 220, 241);
+                filter: saturate(100%);
+
+                .hamburgerBtnIcon {
+                    font-size: 30px;
+                    color: rgb(175, 220, 241);
                 }
-                .strong{
+
+                .strong {
                     color: rgb(175, 220, 241);
                     // opacity: 0.87;
                     display: none;
                 }
-            
+
             }
-            
-            
+
+
         }
-        .hamburgerBtnContMenu{
+
+        .hamburgerBtnContMenu {
             @extend .hamburgerBtnContainer;
-			top: 20px;
+            top: 20px;
             right: 95%;
         }
 
-  
+
     }
-    
+
 }
-
-

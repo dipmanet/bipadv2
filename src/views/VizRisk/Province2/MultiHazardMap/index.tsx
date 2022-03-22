@@ -1,36 +1,28 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable max-len */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-tabs */
-/* eslint-disable no-else-return */
-/* eslint-disable max-len */
+
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
 import * as geojson from 'geojson';
-import * as turf from '@turf/turf';
-import { bound, isDefined, isInteger, listToMap, _cs } from '@togglecorp/fujs';
-import Loader from 'react-loader';
-import { number } from 'prop-types';
+import { listToMap, _cs } from '@togglecorp/fujs';
 import { mapSources } from '#constants';
 import * as PageTypes from '#store/atom/page/types';
 import {
     getFloodRasterLayer,
     getCommonRasterLayer,
     getGeoJSONPH,
-    drawStyles,
-    getTitleFromLatLng,
     buildingColor,
-    getSingularBuildingData,
-    getOSMidFromHouseId,
-    getHouseId,
 } from './utils';
 import { AppState } from '#store/types';
 
 import FloodDepthLegend from '#views/VizRisk/Common/Legends/FloodDepthLegend';
 import { getDistrictFilter } from '#utils/domain';
 import styles from './styles.scss';
-import HealthIcon from '#resources/icons/Health-facility.svg';
 import Education from '#resources/icons/Educationcopy.png';
 import Finance from '#resources/icons/bank.png';
 import Health from '#resources/icons/healthcopy.png';
@@ -38,16 +30,9 @@ import Governance from '#resources/icons/governance.png';
 import Culture from '#resources/icons/culture.png';
 import Fireengine from '#resources/icons/Fireengine.png';
 import Heli from '#resources/icons/Heli.png';
-
-
-import { getgeoJsonLayer, getHillShadeLayer } from '../utils';
-import { getColor, parseStringToNumber } from '../Functions';
-
+import { getgeoJsonLayer } from '../utils';
+import { AlertTooltip, generatePaint, generatePaintByQuantile, generatePaintQuantile, parseStringToNumber } from '../Functions';
 import { districtsSelector } from '../../../../store/atom/page/selector';
-import RainTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Rain';
-import RiverTooltip from '#views/Dashboard/Map/Tooltips/Alerts/River';
-import PollutionTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Pollution';
-import FireTooltip from '../../../Dashboard/Map/Tooltips/Alerts/Fire/index';
 import { hdiData, hpiData } from '../Data/vulnerabilityData';
 import LandSlideSusLegend from '../Legends/LandSlideSusLegend';
 
@@ -202,7 +187,6 @@ const MultiHazardMap = (props: Props) => {
             semicPages,
             floodHazardPages,
             susceptibiltyPages,
-            // floodHazardLayers,
             buildingSourceLayerName,
         },
         demographicsData,
@@ -254,6 +238,8 @@ const MultiHazardMap = (props: Props) => {
         totalLandslideLossData,
         clickedHazardItem,
         clickedFatalityInfraDamage,
+        earthquakeData,
+        earthquakeRisk,
     } = props;
 
 
@@ -271,40 +257,6 @@ const MultiHazardMap = (props: Props) => {
 
     const newDemoColorArray = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
 
-
-    function EarthquakeTooltip(title: any, description: any, createdDate: any, referenceData: any) {
-        throw new Error('Function not implemented.');
-    }
-
-    const AlertTooltip = ({ title, description, referenceType, referenceData, createdDate }) => {
-        if (referenceType && referenceType === 'rain') {
-            return RainTooltip(title, description, createdDate, referenceData);
-        }
-        if (referenceType && referenceType === 'river') {
-            return RiverTooltip(title, description, createdDate, referenceData);
-        }
-        if (title.toUpperCase().includes('EARTH') && referenceData) {
-            return EarthquakeTooltip(title, description, createdDate, referenceData);
-        }
-        if (referenceType && referenceType === 'fire') {
-            return FireTooltip(title, description, createdDate, referenceData);
-        }
-        if (referenceType && referenceType === 'pollution') {
-            return PollutionTooltip(title, description, createdDate, referenceData);
-        }
-        if (title) {
-            return (
-                <div className={styles.alertTooltip}>
-                    <h3 className={styles.heading}>
-                        {title}
-                    </h3>
-                    <div className={styles.description}>
-                        { description }
-                    </div>
-                </div>
-            );
-        } return null;
-    };
 
     const handleFloodChange = (e, mapType) => {
         const opacity = e.target.value;
@@ -328,51 +280,6 @@ const MultiHazardMap = (props: Props) => {
             }
         }
     };
-
-    const generatePaintByQuantile = (
-        colorDomain: string[],
-        minValue: number,
-        maxValue: number,
-        categoryData: number[],
-        parts: number,
-    ) => {
-        const range = maxValue - minValue;
-        const gap = range / colorDomain.length;
-
-        const data = categoryData;
-        const divider = Math.ceil(data.length / parts);
-        data.sort((a, b) => a - b);
-        const dividedSpecificData = new Array(Math.ceil(data.length / divider))
-            .fill()
-            .map(_ => data.splice(0, divider));
-
-        const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
-
-        const intervals: number[] = [];
-        nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
-            ? Math.max(...d) + 1 : Math.max(...d)));
-
-        /* Quantile Division ends */
-
-        const countBasedIntervals = intervals;
-        const colors: (string | number)[] = [];
-
-        colorDomain.forEach((color, i) => {
-            const val = +(minValue + (i + 1) * gap).toFixed(1);
-            // NOTE: avoid duplicates
-            if (colors.length > 0 && colors[colors.length - 1] === val) {
-                return;
-            }
-            colors.push(color);
-            colors.push(val);
-        });
-
-
-        if (colors.length !== 0) {
-            return colors;
-        }
-        return null;
-    };
     const generateColor = (maxValue, minValue, colorMapping) => {
         const newColor = [];
         const { length } = colorMapping;
@@ -385,35 +292,6 @@ const MultiHazardMap = (props: Props) => {
         return newColor;
     };
 
-    const generatePaint = color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            ...color,
-        ],
-        'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            0.8,
-            1,
-        ],
-    });
-    const generatePaintQuantile = color => ({
-        'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['feature-state', 'value'],
-            0,
-            ...color.slice(0, -1),
-        ],
-        'fill-opacity': [
-            'case',
-            ['boolean', ['feature-state', 'hover'], false],
-            0.8,
-            1,
-        ],
-    });
 
     const colorGrade = [
         '#ffe5d4',
@@ -436,9 +314,6 @@ const MultiHazardMap = (props: Props) => {
         '#94c475',
         '#31ad5c',
     ];
-
-    const tempDataAccordingToYear = ['temp2010', 'temp2045', 'temp2065'];
-    const prepDataAccordingToYear = ['prep2010', 'prep2045', 'prep2065'];
 
     const tempColors: string[] = [
         '#31a354',
@@ -489,8 +364,10 @@ const MultiHazardMap = (props: Props) => {
         return yearWiseData;
     };
 
-
-    const totalPopulationByWard = demographicsData.map(item => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }));
+    const tempDataAccordingToYear = ['temp2010', 'temp2045', 'temp2065'];
+    const prepDataAccordingToYear = ['prep2010', 'prep2045', 'prep2065'];
+    const totalPopulationByWard = demographicsData.map(item => (
+        { ward: item.name, totalpop: item.MalePop + item.FemalePop }));
     const arrayValue = totalPopulationByWard.map(item => item.totalpop);
     const maxPop = Math.max(...arrayValue);
     const minPop = Math.min(...arrayValue);
@@ -499,9 +376,11 @@ const MultiHazardMap = (props: Props) => {
     const colorForDemographics = generateColor(maxPop, minPop, newDemoColorArray);
     const colorForTemp = generateColor(26, 24, tempColors);
     const colorForPrep = generateColor(1800, 1500, rainColors);
+    const colorForEarthquake = generateColor(2.18, 1.48, colorGrade);
 
     const colorForhdi = ['#c73c32', 0.386, '#c73c32', 0.4, '#e9bf8c', '#e9bf8c'];
-    const colorForhpi = generatePaintByQuantile([...vulColors].reverse(), 36.4, 46.4, hpiData.map(item => item.value), 7);
+    const colorForhpi = generatePaintByQuantile([...vulColors]
+        .reverse(), 36.4, 46.4, hpiData.map(item => item.value), 7);
 
 
     const totalPeopleDeathFlood = totalFloodLossData.map(item => item.totalPeopleDeath);
@@ -509,15 +388,28 @@ const MultiHazardMap = (props: Props) => {
     const totalPeopleDeathLandslide = totalLandslideLossData.map(item => item.totalPeopleDeath);
     const totalInfraDamageLandslide = totalLandslideLossData.map(item => item.totalInfraDamage);
 
-    const damageLossArray = ['totalPeopleDeathFlood', 'totalInfraDamageFlood', 'totalPeopleDeathLandslide', 'totalInfraDamageLandslide'];
-    const damageLossDataArray = [totalFloodLossData, totalFloodLossData, totalLandslideLossData, totalLandslideLossData];
+    const damageLossArray = [
+        'totalPeopleDeathFlood',
+        'totalInfraDamageFlood',
+        'totalPeopleDeathLandslide',
+        'totalInfraDamageLandslide',
+    ];
+    const damageLossDataArray = [totalFloodLossData, totalFloodLossData,
+        totalLandslideLossData, totalLandslideLossData];
 
-    const color1 = generateColor(Math.max(...totalPeopleDeathFlood), Math.min(...totalPeopleDeathFlood), colorGrade);
-    const color2 = generateColor(Math.max(...totalInfraDamageFlood), Math.min(...totalInfraDamageFlood), colorGrade);
-    const color3 = generateColor(Math.max(...totalPeopleDeathLandslide), Math.min(...totalPeopleDeathLandslide), colorGrade);
-    const color4 = generateColor(Math.max(...totalInfraDamageLandslide), Math.min(...totalInfraDamageLandslide), colorGrade);
+    const color1 = generateColor(Math.max(...totalPeopleDeathFlood),
+        Math.min(...totalPeopleDeathFlood), colorGrade);
+    const color2 = generateColor(Math.max(...totalInfraDamageFlood),
+        Math.min(...totalInfraDamageFlood), colorGrade);
+
+    const color3 = generateColor(Math.max(...totalPeopleDeathLandslide),
+        Math.min(...totalPeopleDeathLandslide), colorGrade);
+    const color4 = generateColor(Math.max(...totalInfraDamageLandslide),
+        Math.min(...totalInfraDamageLandslide), colorGrade);
 
     const allDamageColors = [color1, color2, color3, color4];
+
+    const earthquakeRiskScoreArray = earthquakeData.map((item: any) => ({ value: item.data.riskScore, districtId: item.district }));
 
 
     const images = [
@@ -539,6 +431,7 @@ const MultiHazardMap = (props: Props) => {
     ];
 
     useEffect(() => {
+        disableNavBtns('both');
         if (UNSUPPORTED_BROWSER) {
             console.error('No Mapboxgl support.');
             return noop;
@@ -572,7 +465,6 @@ const MultiHazardMap = (props: Props) => {
 
         multihazardMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-        disableNavBtns('both');
         const syncWait = (ms) => {
             const end = Date.now() + ms;
             while (Date.now() < end) break;
@@ -594,7 +486,7 @@ const MultiHazardMap = (props: Props) => {
 
 
         multihazardMap.on('style.load', () => {
-            // -------------------------------------------------SLIDE-1----------------------------------------------
+            // -------------------------------------------------SLIDE-1-------------------------
             multihazardMap.addSource('vizrisk-fills', {
                 type: 'vector',
                 url: mapSources.nepal.url,
@@ -684,13 +576,12 @@ const MultiHazardMap = (props: Props) => {
                             { hover: false },
 
                         );
-                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                     }
                     hoveredWardId = null;
                 });
             }
 
-            // -------------------------------------------------------------SLIDE-2----------------------------------------------------
+            // -----------------------------------------SLIDE-2----------------------
             damageLossArray.map((layer, i) => {
                 multihazardMap.addSource(`damageloss-${layer}`, {
                     type: 'vector',
@@ -797,7 +688,7 @@ const MultiHazardMap = (props: Props) => {
 
                 return null;
             });
-            // -----------------------------------------------------------SLIDE-4---------------------------------------------------------
+            // ------------------------------------SLIDE-4-------------------------
 
             if (floodHazardLayersArr && floodHazardLayersArr.length > 0) {
                 floodHazardLayersArr.map((layer) => {
@@ -861,33 +752,8 @@ const MultiHazardMap = (props: Props) => {
                 },
 
             );
-            multihazardMap.addSource('buildingsPolygon', {
-                type: 'geojson',
-                data: getgeoJsonLayer(`${MAINKEYNAME}_buildings`),
 
-            });
-            multihazardMap.addLayer(
-                {
-                    id: 'buildingsdata',
-                    type: 'fill-extrusion',
-                    source: 'buildingsPolygon',
-                    layout: {
-                        visibility: 'none',
-
-                    },
-                    paint: {
-
-                        'fill-extrusion-color': '#964B00',
-                        'fill-extrusion-height': 10,
-                        'fill-extrusion-base': 0,
-                        'fill-extrusion-opacity': 1,
-                    },
-
-                },
-
-            );
-
-            // -----------------------------------------------SLIDE-4-------------------------------------------
+            // -----------------------------------------------SLIDE-5-----------------------------
             const avialableVulColors = [colorForhdi, colorForhpi];
             const availableData = [hdiData, hpiData];
             ['hdiData', 'hpiData'].map((layer, i) => {
@@ -966,7 +832,6 @@ const MultiHazardMap = (props: Props) => {
                             { hover: false },
 
                         );
-                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                     }
                     hoveredWardId = null;
                 });
@@ -974,10 +839,47 @@ const MultiHazardMap = (props: Props) => {
                 return null;
             });
 
+            multihazardMap.addSource('earthquake-data', {
+                type: 'vector',
+                url: mapSources.nepal.url,
+            });
 
-            // -----------------------------------------------SLIDE-6-------------------------------------------
-            const mainTempData = [tempDataForMapUpto2010, tempDataForMapUpto2045, tempDataForMapUpto2065];
-            const mainPrepData = [prepDataForMapUpto2010, prepDataForMapUpto2045, prepDataForMapUpto2065];
+            multihazardMap.addLayer({
+                id: 'earthquake-risk-score',
+                source: 'earthquake-data',
+                'source-layer': mapSources.nepal.layers.district,
+                type: 'fill',
+                paint: generatePaint(colorForEarthquake),
+                layout: {
+                    visibility: 'none',
+
+                },
+                filter: getDistrictFilter(2, null, districts),
+            }, 'districtgeo');
+
+            earthquakeRiskScoreArray.forEach((attribute) => {
+                multihazardMap.setFeatureState(
+                    {
+                        id: attribute.districtId,
+                        source: 'earthquake-data',
+                        sourceLayer: mapSources.nepal.layers.district,
+                    },
+                    { value: attribute.value },
+                );
+            });
+
+            // ------------------------------SLIDE-6---------------------------
+            const mainTempData = [
+                tempDataForMapUpto2010,
+                tempDataForMapUpto2045,
+                tempDataForMapUpto2065,
+            ];
+            const mainPrepData = [
+                prepDataForMapUpto2010,
+                prepDataForMapUpto2045,
+                prepDataForMapUpto2065,
+            ];
+
             tempDataAccordingToYear.map((layer, i) => {
                 multihazardMap.addSource(`temperature-fill-${layer}`, {
                     type: 'vector',
@@ -1054,7 +956,6 @@ const MultiHazardMap = (props: Props) => {
                             { hover: false },
 
                         );
-                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                     }
                     hoveredWardId = null;
                 });
@@ -1138,7 +1039,6 @@ const MultiHazardMap = (props: Props) => {
                             { hover: false },
 
                         );
-                        // multihazardMap.setPaintProperty('ward-fill-local', 'fill-color', populationWardExpression);
                     }
                     hoveredWardId = null;
                 });
@@ -1147,7 +1047,7 @@ const MultiHazardMap = (props: Props) => {
             });
 
 
-            // -----------------------------------------------SLIDE-7-------------------------------------------
+            // -----------------------------------------------SLIDE-7--------------------------
             const ciCategory: any = [...new Set(CIData.features.map(
                 item => item.properties.Type,
             ))];
@@ -1220,7 +1120,12 @@ const MultiHazardMap = (props: Props) => {
                     source: layer,
                     filter: ['!', ['has', 'point_count']],
                     layout: {
-                        'icon-image': (layer === 'education' && 'education') || (layer === 'finance' && 'finance') || (layer === 'health' && 'health') || (layer === 'governance' && 'governance') || (layer === 'cultural' && 'cultural') || (layer === 'fireengine' && 'fireengine') || (layer === 'helipad' && 'helipad'),
+                        'icon-image': (layer === 'education' && 'education')
+						 || (layer === 'finance' && 'finance')
+						 || (layer === 'health' && 'health')
+						 || (layer === 'governance' && 'governance')
+						 || (layer === 'cultural' && 'cultural') || (layer === 'fireengine' && 'fireengine')
+						 || (layer === 'helipad' && 'helipad'),
                         'icon-size': 0.08,
                         'icon-anchor': 'bottom',
                         visibility: 'none',
@@ -1254,8 +1159,9 @@ const MultiHazardMap = (props: Props) => {
                 return null;
             });
 
-            // -----------------------------------------------SLIDE-8-------------------------------------------
-            const contactDataArr = [...new Set(contactGeoJson.features.map(item => item.properties.name))];
+            // --------------------------SLIDE-8--------------------
+            const contactDataArr = [
+                ...new Set(contactGeoJson.features.map(item => item.properties.name))];
 
             multihazardMap.addSource('contactInfo', {
 				 type: 'geojson',
@@ -1343,9 +1249,6 @@ const MultiHazardMap = (props: Props) => {
 		`)
                     .addTo(multihazardMap);
             });
-
-
-            multihazardMap.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
         });
 
 
@@ -1370,52 +1273,105 @@ const MultiHazardMap = (props: Props) => {
 
 
     useEffect(() => {
-        const switchFloodRasters = (floodlayer: FloodLayer) => {
-            if (floodHazardLayersArr && floodHazardLayersArr.length > 0 && map.current) {
-                floodHazardLayersArr.map((layer) => {
+        if (rightElement === 6) {
+            const switchFloodRasters = (floodlayer: FloodLayer) => {
+                if (floodHazardLayersArr && floodHazardLayersArr.length > 0 && map.current) {
+                    floodHazardLayersArr.map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`raster-flood-${layer.year}`, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    map.current.setLayoutProperty(`raster-flood-${floodlayer}`, 'visibility', 'visible');
+                }
+            };
+
+            if (map.current && floodHazardLayersArr && map.current.isStyleLoaded()) {
+                switchFloodRasters(floodLayer);
+            }
+            if (map.current && map.current.isStyleLoaded()) {
+                ciCategoryCritical.map((layer) => {
                     if (map.current) {
-                        map.current.setLayoutProperty(`raster-flood-${layer.year}`, 'visibility', 'none');
+                        map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
+                        map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
+                        map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
                     }
                     return null;
                 });
-                map.current.setLayoutProperty(`raster-flood-${floodlayer}`, 'visibility', 'visible');
+                const layer = criticalElement;
+                if (layer === 'all') {
+                    ciCategoryCritical.map((item: string) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
+                            map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
+                            map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
+                        }
+                        return null;
+                    });
+                } else {
+                    map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
+                    map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
+                    map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+                }
+
+
+                if (hazardLegendClickedArr[0] === 1) {
+                    if (map.current) {
+                        layers[3].map(layermain => map.current.setLayoutProperty(layermain, 'visibility', 'visible'));
+                        if (floodLayer) {
+                            map.current.setLayoutProperty(`raster-flood-${floodLayer}`, 'visibility', 'visible');
+                        }
+                    }
+                } else {
+                    map.current.setLayoutProperty(`raster-flood-${floodLayer}`, 'visibility', 'none');
+                }
+
+
+                if (hazardLegendClickedArr[2] === 1) {
+                    if (map.current) {
+                        map.current.setLayoutProperty('landslideLayer', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('landslideLayer', 'visibility', 'none');
+                }
+
+                if (hazardLegendClickedArr[1] === 1) {
+                    if (map.current) {
+                        map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
+                }
+                if (earthquakeRisk === 'Earthquake Risk') {
+                    if (map.current) {
+                        map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'visible');
+                    }
+                } else {
+                    map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'none');
+                }
             }
-        };
-
-        if (map.current && floodHazardLayersArr && map.current.isStyleLoaded()) {
-            switchFloodRasters(floodLayer);
         }
-    }, [floodHazardLayersArr, floodLayer]);
-
+    }, [criticalElement, floodLayer, floodHazardLayersArr, clickedHazardItem, hazardLegendClickedArr, layers, earthquakeRisk]);
 
     useEffect(() => {
-        if (map.current && map.current.isStyleLoaded()) {
-            ciCategoryCritical.map((layer) => {
-                if (map.current) {
-                    map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'none');
-                    map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'none');
-                    map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'none');
+        if (rightElement === 4) {
+            const switchFloodRasters = (floodlayer: FloodLayer) => {
+                if (floodHazardLayersArr && floodHazardLayersArr.length > 0 && map.current) {
+                    floodHazardLayersArr.map((layer) => {
+                        if (map.current) {
+                            map.current.setLayoutProperty(`raster-flood-${layer.year}`, 'visibility', 'none');
+                        }
+                        return null;
+                    });
+                    map.current.setLayoutProperty(`raster-flood-${floodlayer}`, 'visibility', 'visible');
                 }
-                return null;
-            });
-            const layer = criticalElement;
-            if (layer === 'all') {
-                ciCategoryCritical.map((item: string) => {
-                    if (map.current) {
-                        map.current.setLayoutProperty(`unclustered-point-${item}`, 'visibility', 'visible');
-                        map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
-                        map.current.setLayoutProperty(`clusters-count-${item}`, 'visibility', 'visible');
-                    }
-                    return null;
-                });
-            } else {
-                map.current.setLayoutProperty(`unclustered-point-${layer}`, 'visibility', 'visible');
-                map.current.setLayoutProperty(`clusters-${layer}`, 'visibility', 'visible');
-                map.current.setLayoutProperty(`clusters-count-${layer}`, 'visibility', 'visible');
+            };
+
+            if (map.current && floodHazardLayersArr && map.current.isStyleLoaded()) {
+                switchFloodRasters(floodLayer);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [criticalElement]);
+    }, [floodLayer, floodHazardLayersArr]);
 
     useEffect(() => {
         if (map.current) {
@@ -1473,10 +1429,14 @@ const MultiHazardMap = (props: Props) => {
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
             // -----------------------------------------------------First Page-------------------------------------------------
-            if (rightElement <= layers.length - 1
-                && layers[rightElement].length > 0
-            ) {
-                if (rightElement === 0 && legendElement === 'Adminstrative Map') {
+            map.current.easeTo({
+                pitch: 37,
+                zoom: 8.2,
+                duration: 1200,
+                // center: [lng, lat],
+            });
+            if (rightElement === 0) {
+                if (legendElement === 'Adminstrative Map') {
                     layers[1].map((layer) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1492,7 +1452,7 @@ const MultiHazardMap = (props: Props) => {
                     if (map.current) {
                         layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'visible'));
                     }
-                } else if (rightElement === 0 && legendElement === 'Landcover') {
+                } else if (legendElement === 'Landcover') {
                     layers[1].map((layer) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1514,7 +1474,7 @@ const MultiHazardMap = (props: Props) => {
                         duration: 1200,
                         // center: [lng, lat],
                     });
-                } else if (rightElement === 0 && legendElement === 'Population By District') {
+                } else if (legendElement === 'Population By District') {
                     layers[2].map((layer) => {
                         if (map.current) {
                             map.current.setLayoutProperty(layer, 'visibility', 'visible');
@@ -1528,27 +1488,19 @@ const MultiHazardMap = (props: Props) => {
                         }
                         return null;
                     });
-                } else if (rightElement > 0) {
-                    layers[1].map((layer) => {
-                        if (map.current) {
-                            map.current.setLayoutProperty(layer, 'visibility', 'none');
-                        }
-                        return null;
-                    });
-                    layers[2].map((layer) => {
-                        if (map.current) {
-                            map.current.setLayoutProperty(layer, 'visibility', 'none');
-                        }
-                        return null;
-                    });
                 }
-            }
-            if (rightElement === 2) {
-                map.current.easeTo({
-                    pitch: 27,
-                    zoom: 8.2,
-                    duration: 1200,
-                    // center: [lng, lat],
+            } else {
+                layers[1].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
+                });
+                layers[2].map((layer) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(layer, 'visibility', 'none');
+                    }
+                    return null;
                 });
             }
 
@@ -1568,8 +1520,9 @@ const MultiHazardMap = (props: Props) => {
                     return null;
                 });
             }
-            // -----------------------------------------------------Third Page-------------------------------------------------
-            if ((ciPages && rightElement === 6 && clickedArr[0] === 1) || (rightElement === 3 && exposureElementsArr[1] === 1)) {
+            // ----------------------------Third Page-----------------------------
+            if ((ciPages && rightElement === 6 && clickedArr[0] === 1)
+			 || (rightElement === 3 && exposureElementsArr[1] === 1)) {
                 ciCategoryCritical.map((item: string) => {
                     if (map.current) {
                         map.current.setLayoutProperty(`clusters-${item}`, 'visibility', 'visible');
@@ -1683,11 +1636,10 @@ const MultiHazardMap = (props: Props) => {
                 }
             } else {
                 map.current.setLayoutProperty(`raster-flood-${floodLayer}`, 'visibility', 'none');
-                // layers[3].map(layer => map.current.setLayoutProperty(layer, 'visibility', 'none'));
             }
 
 
-            if ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[2] === 1) {
+            if ((rightElement === 4) && hazardLegendClickedArr[2] === 1) {
                 if (map.current) {
                     map.current.setLayoutProperty('landslideLayer', 'visibility', 'visible');
                 }
@@ -1695,22 +1647,22 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('landslideLayer', 'visibility', 'none');
             }
 
-            if ((rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[1] === 1) {
+            if ((rightElement === 4) && hazardLegendClickedArr[1] === 1) {
                 if (map.current) {
                     map.current.setLayoutProperty('inundationLayer', 'visibility', 'visible');
                 }
             } else {
                 map.current.setLayoutProperty('inundationLayer', 'visibility', 'none');
             }
-            // ------------------------------------------------------------Climate Data Layer-----------------------------------------
-
-            if ((rightElement === 0 && legendElement === 'Landcover') || (rightElement === 2 && clickedArr[2] === 1) || (rightElement === 3 && exposureElementsArr[3] === 1)) {
+            if ((rightElement === 4 || rightElement === 6) && (earthquakeRisk === 'Earthquake Risk')) {
                 if (map.current) {
-                    map.current.setLayoutProperty('buildingsdata', 'visibility', 'visible');
+                    map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'visible');
                 }
             } else {
-                map.current.setLayoutProperty('buildingsdata', 'visibility', 'none');
+                map.current.setLayoutProperty('earthquake-risk-score', 'visibility', 'none');
             }
+            // ------------------------------------------------------------Climate Data Layer-----------------------------------------
+
 
             if (rightElement === 5 && climateDataType === 'Temperature') {
                 tempDataAccordingToYear.map((layer) => {
@@ -1778,15 +1730,11 @@ const MultiHazardMap = (props: Props) => {
                 map.current.setLayoutProperty('contacts-cluster-count', 'visibility', 'none');
                 map.current.setLayoutProperty('contacts-unclustered-point', 'visibility', 'none');
             }
-            map.current.easeTo({
-                pitch: 37,
-                zoom: 8.2,
-                duration: 1200,
-                // center: [lng, lat],
-            });
         }
-    }, [ciCategoryCritical,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
         rightElement,
+        ciCategoryCritical,
         legendElement,
         layers,
         exposureElementsArr,
@@ -1801,31 +1749,16 @@ const MultiHazardMap = (props: Props) => {
         clickedFatalityInfraDamage,
     ]);
 
-
-    useEffect(() => {
-        if (map.current && map.current.isStyleLoaded()) {
-            map.current.setFeatureState(
-                {
-                    id: buildingVul.osmId || 0,
-                    source: 'composite',
-                    sourceLayer: buildingSourceLayerName,
-                },
-                {
-                    vuln: buildingVul.vulnerabilityScore || -1,
-                },
-            );
-            map.current.setPaintProperty('Buildings', 'fill-extrusion-color', buildingColor);
-        }
-    }, [buildingVul]);
-
-
     return (
 
         <div style={mapCSS} ref={mapContainerRef}>
 
             {rightElement === 1 && (
                 <div className={styles.mainLegendDiv}>
-                    <p style={{ color: 'white', margin: '0' }}>People Death</p>
+                    <p style={{ color: 'white', margin: '0' }}>
+                        {clickedFatalityInfraDamage === 'Fatality' ? 'People Death' : 'Infrastructural Damage Count' }
+                        {' '}
+                    </p>
                     <div className={styles.scale}>
                         { lossLegendsData.map((c, i) => {
                             if (i % 2 === 0) {
@@ -1851,6 +1784,7 @@ const MultiHazardMap = (props: Props) => {
                     </div>
                 </div>
             )}
+
             {rightElement === 5 && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{climateDataType === 'Temperature' ? 'Temperature (°C) ' : 'Precipitation (mm/year) ' }</p>
@@ -1879,6 +1813,7 @@ const MultiHazardMap = (props: Props) => {
                     </div>
                 </div>
             )}
+
             {rightElement === 3 && (
                 <div className={styles.mainLegendDiv}>
                     <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>{vulnerability === 'Human Development Index' ? 'Human Development Index' : 'Human Poverty Index'}</p>
@@ -1898,6 +1833,34 @@ const MultiHazardMap = (props: Props) => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+            {((rightElement === 4 || rightElement === 6) && earthquakeRisk === 'Earthquake Risk') && (
+                <div className={styles.mainLegendDiv}>
+                    <p style={{ color: 'white', margin: '0 0 3px 0', fontSize: '14px' }}>Earthquake Risk Score</p>
+                    <div className={styles.scale}>
+                        {colorForEarthquake.map((c, i) => {
+                            if (i % 2 === 0) {
+                                return null;
+                            }
+
+                            return (
+                                <div className={styles.scaleElement} key={c}>
+                                    <div
+                                        key={c}
+                                        className={styles.colorUnit}
+                                        style={{
+                                            // width: colorUnitWidth,
+                                            backgroundColor: c,
+                                        }}
+                                    />
+                                    <div className={styles.value}>
+                                        { colorForEarthquake[i - 1].toFixed(2)}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             )}
@@ -1928,6 +1891,7 @@ const MultiHazardMap = (props: Props) => {
                     </>
                 )
             }
+
             {
                 (rightElement === 4 || rightElement === 6) && hazardLegendClickedArr[2] === 1
                 && (

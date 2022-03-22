@@ -175,15 +175,15 @@ $button-color: rgb(0,170,223);
        
         h1{
             @extend .heading-style;
-            button{
-                padding: 3px 10px 10px 10px;
-                z-index: 3;
-                opacity: 0.87;
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
-                filter: saturate(100%);
-            }
+            button {
+          padding: 3px 10px 10px 10px;
+          z-index: 3;
+          opacity: 0.87;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          filter: saturate(100%);
+      }
         }
         h2{
             @extend .heading-style;

@@ -1,0 +1,227 @@
+$button-color: rgb(0, 170, 223);
+
+
+
+@media all and (max-width : 1500px) {
+    .mainTiitleInfo {
+        left: 180px;
+    }
+
+}
+
+.vrSideBar::-webkit-scrollbar {
+    display: none;
+
+}
+
+.heading-style {
+    font-family: 'Playfair Display';
+    font-size: 28px;
+    color: white;
+    line-height: 1.4em;
+}
+
+.para-style {
+    color: white;
+    font-size: 16px;
+    font-family: 'Source Sans Pro';
+    padding: 0 40px 15px 0;
+    text-align: initial;
+    opacity: 0.87;
+    line-height: 1.5em;
+    letter-spacing: 1px;
+    word-spacing: 0.5px;
+
+}
+
+.vrSideBar {
+    scrollbar-width: none;
+    flex-direction: column;
+    background-color: rgb(12, 36, 50);
+    color: #b6d6e4;
+    padding: 65px 18px 60px 18px;
+    width: 100%;
+    left: 0;
+    min-height: 101vh;
+
+
+    .mainIntroHtmlFromAPI {
+        h3 {
+            color: white !important;
+            font-size: 16px;
+        }
+    }
+
+    .leftBottomBar {
+        position: fixed;
+        width: calc(30% - 60px);
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        height: 38px;
+        z-index: 5;
+        background-color: #324052;
+    }
+
+    .climateChart {
+        margin-top: 10px;
+    }
+
+
+
+    .chartContainer {
+        margin-top: 20px;
+        position: relative;
+        right: 34px;
+    }
+
+    h1 {
+        @extend .heading-style;
+    }
+
+    h2 {
+        @extend .heading-style;
+        opacity: 0.9 !important;
+    }
+
+    p {
+        @extend .para-style;
+    }
+
+
+
+    .recharts-tooltip-wrapper {
+        background-color: white !important;
+        border: 1px solid gray;
+        z-index: 100;
+        color: blue;
+        padding: 0px !important;
+
+    }
+
+    .bubbleChart {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+
+        .bubbles {
+            position: relative;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: linear-gradient(to bottom, #193343, #3b6885);
+            filter: saturate(100%);
+            opacity: 1 !important;
+            align-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease-in;
+            border: none;
+            outline: none;
+            animation: movingBubbles 1s ease-in-out 0.001s alternate-reverse;
+
+            &:nth-child(2n+1) {
+                margin: 10px;
+            }
+
+            &:nth-child(2n+2) {
+                margin: 30px;
+            }
+
+            &:hover {
+                background: #24c3f3;
+                top: 1px;
+                left: 8px;
+            }
+
+            h1 {
+                margin: 0;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ciCount {
+                color: white;
+            }
+
+            .bubbleContents {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+        }
+
+        @keyframes movingBubbles {
+            100% {
+                left: 10px;
+                top: 15px;
+                margin-top: 50px;
+            }
+        }
+
+        .tickBubbles {
+            position: relative;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            margin: 15px;
+            flex-shrink: 0;
+            background: #24c3f3;
+            filter: saturate(100%);
+            cursor: pointer;
+            transition: all 0.3s ease-in;
+            border: none;
+            outline: none;
+
+            &:nth-child(2n+1) {
+                margin: 10px;
+            }
+
+            &:nth-child(2n+2) {
+                margin: 33px;
+            }
+
+            h1 {
+                margin: 0;
+            }
+
+            p {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ciCount {
+                color: white;
+            }
+
+            .bubbleContents {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .tickIcon {
+                    position: absolute;
+                    top: -5%;
+                    right: 15%;
+                }
+            }
+        }
+
+
+    }
+}

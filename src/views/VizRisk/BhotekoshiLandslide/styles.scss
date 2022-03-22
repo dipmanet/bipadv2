@@ -1,4 +1,4 @@
-.tempButtons{
+.tempButtons {
     position: absolute;
     top: 100px;
     left: 50px;
@@ -8,37 +8,44 @@
     display: flex;
     flex-direction: column;
 }
-.leftPane{
+
+.leftPane {
     scrollbar-width: none;
     position: absolute;
     left: 0;
     // display: flex;
+    padding: 30px 10px;
     width: calc(30% - 60px);
     height: 100vh;
-    background-color:rgb(12,36,50);
+    background-color: rgb(12, 36, 50);
     overflow-y: scroll;
-    h1{
+
+    h1 {
         font-size: 38px;
     }
-    .narrativeText{
+
+    .narrativeText {
         font-size: 20px !important;
     }
 }
 
 @media only screen and (max-width: 1366px) {
-    .leftPane{
-        h1{
-          font-size: 28px;
+    .leftPane {
+        h1 {
+            font-size: 28px;
         }
-        .narrativeText{
-          font-size: 16px !important;
+
+        .narrativeText {
+            font-size: 16px !important;
         }
     }
 }
+
 .leftPane::-webkit-scrollbar {
     display: none;
-  }
-.narrativesContainer{
+}
+
+.narrativesContainer {
     background-color: transparent;
     position: fixed;
     left: 0;
@@ -51,17 +58,19 @@
     z-index: 2;
     height: 100vh;
     border: 1px solid red;
-    .narrativeTitle{
+
+    .narrativeTitle {
         font-family: 'Source Sans Pro';
         font-size: 32px;
     }
-    .narrativeDescription{
+
+    .narrativeDescription {
         font-family: 'Source Sans Pro';
         font-size: 16px;
     }
 }
 
-.chartDiv{
+.chartDiv {
     border: 1px solid red;
     position: fixed;
     width: 100%;
@@ -72,121 +81,143 @@
     align-items: center;
 }
 
-.loaderClass{
+.loaderClass {
     position: fixed;
-  top: 48%;
-  left: 57%;
-  z-index: 203;
-    .loader{
+    top: 48%;
+    left: 57%;
+    z-index: 203;
+
+    .loader {
         background-color: white;
     }
-    p{
+
+    p {
         color: white;
         position: relative;
         top: 35px;
     }
-  }
+}
 
-  .vrSideBar::-webkit-scrollbar {
+.vrSideBar::-webkit-scrollbar {
     display: none;
-  }
-  .heading-style{
+}
+
+.heading-style {
     font-family: 'Playfair Display';
     font-size: 28px;
     color: white;
     line-height: 1.4em;
 }
-.para-style{
-    color:white;
+
+.para-style {
+    color: white;
     font-size: 15px;
     font-family: 'Source Sans Pro';
     padding: 0 10px 0 0;
     opacity: 0.87;
     line-height: 1.4em;
 }
-.vrSideBar{
+
+.vrSideBar {
     scrollbar-width: none;
-    background-color:rgb(12,36,50);
-    color:#b6d6e4;
+    background-color: rgb(12, 36, 50);
+    color: #b6d6e4;
     padding: 20px;
     min-height: 90vh;
     overflow-y: scroll;
-    .climateChart{
+
+    .climateChart {
         margin-top: 10px;
         width: 100%;
         height: 40vh;
         padding: 0;
     }
-    .iconRow{
+
+    .iconRow {
         display: flex;
         padding-left: 30px;
-        .infoIconsContainerHidden{
+
+        .infoIconsContainerHidden {
             visibility: hidden;
         }
-        .infoIconsContainer{
+
+        .infoIconsContainer {
             display: flex;
             margin: 15px 15px 15px 0;
             flex: 1;
-            .infoIcon{
+
+            .infoIcon {
                 margin: 0px 15px 0 5px;
                 width: 32px;
-                path{
-                opacity: 1 !important;
+
+                path {
+                    opacity: 1 !important;
                     fill: #FFEBBE;
                 }
             }
-            .descriptionCotainer{
+
+            .descriptionCotainer {
                 display: flex;
                 flex-direction: column;
-                .iconTitle{
-                font-size: 20px;
-                color: #A7B3BB;
-                font-family: 'Source Sans Pro';
+
+                .iconTitle {
+                    font-size: 20px;
+                    color: #A7B3BB;
+                    font-family: 'Source Sans Pro';
 
                 }
-                .iconText{
+
+                .iconText {
                     font-size: 12px;
-                color: #A7B3BB;
+                    color: #A7B3BB;
                 }
             }
         }
     }
-    .lastPara{
+
+    .lastPara {
         z-index: 2;
-        background-color:#112330;
+        background-color: #112330;
     }
-    .chartContainer{
+
+    .chartContainer {
         margin-top: 20px;
         position: relative;
         right: 35px;
     }
-    h1{
+
+    h1 {
         @extend .heading-style;
     }
-    h2{
+
+    h2 {
         @extend .heading-style;
         opacity: 0.9 !important;
     }
-    p{
+
+    p {
         @extend .para-style;
     }
-    .climateLegendContainer{
-        display:flex;
+
+    .climateLegendContainer {
+        display: flex;
         justify-content: flex-start;
         margin-left: 55px;
         min-width: 200px;
-        
-        .climatelegend{
-        display:flex;
-        padding-right: 20px;
-            .legendMax{
+
+        .climatelegend {
+            display: flex;
+            padding-right: 20px;
+
+            .legendMax {
                 width: 15px;
                 height: 15px;
                 background-color: #ffbf00;
                 padding-right: 4px;
                 margin-right: 3px;
             }
-            .legendMin{
+
+            .legendMin {
                 width: 15px;
                 height: 15px;
                 background-color: #347eff;
@@ -194,15 +225,17 @@
                 margin-right: 3px;
 
             }
-            .legendDaily{
+
+            .legendDaily {
                 width: 15px;
                 height: 15px;
                 background-color: #00d725;
                 // border: 1px solid #047a18;
                 margin-right: 3px;
-            
+
             }
-            .legendText{
+
+            .legendText {
                 color: #6490a4;
                 // opacity: 0.45;
                 font-size: 10px;
@@ -212,11 +245,12 @@
     }
 }
 
-.loaderInfo{
+.loaderInfo {
     position: fixed;
     top: 54%;
     left: 55%;
-    .loader{
+
+    .loader {
         background-color: white;
     }
 }

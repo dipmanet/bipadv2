@@ -5,6 +5,10 @@
 import React from 'react';
 import styles from '../LeftPane/styles.scss';
 import { ChartData } from '../../../DataArchive/Modals/Pollution/types';
+import RainTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Rain';
+import RiverTooltip from '#views/Dashboard/Map/Tooltips/Alerts/River';
+import FireTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Fire';
+import PollutionTooltip from '#views/Dashboard/Map/Tooltips/Alerts/Pollution';
 
 export const parseStringToNumber = (content) => {
     // const changedNumber = parseInt(content, 10);
@@ -269,4 +273,169 @@ export const getColor = (totalPopulationByWard, intervals, newDemoColorArray, wa
         return newDemoColorArray[4];
     }
     return null;
+};
+
+export const alertColorIs = (type: string) => {
+    if (type === 'pollution') {
+        return 'purple';
+    }
+    if (type === 'fire') {
+        return 'red';
+    }
+    if (type === 'rain') {
+        return '#418fde';
+    }
+    if (type === 'river') {
+        return 'rgb(0, 0, 139)';
+    }
+    if (type === 'earthquake') {
+        return 'rgb(93, 64, 55)';
+    }
+    return 'black';
+};
+
+
+export const currentAverageTemp = (tempInString: string) => {
+    let numb;
+    if (tempInString) {
+        numb = tempInString.match(/\d/g);
+        if (tempInString.split('')[0] === '-') {
+            return tempInString;
+        }
+        if (numb && numb.length === 2) {
+            const firstNum = parseInt(numb[0], 10);
+            const secondNum = parseInt(numb[1], 10);
+            return (firstNum + secondNum) / 2;
+        }
+        if (numb && numb.length === 3) {
+            const firstNum = parseInt(numb[0], 10);
+            const secondNum = numb[1];
+            const thirdNum = numb[2];
+            return (firstNum + parseInt((secondNum + thirdNum), 10)) / 2;
+        }
+        if (numb && numb.length === 4) {
+            const firstNum = numb[0];
+            const secondNum = numb[1];
+            const thirdNum = numb[2];
+            const fourthNum = numb[3];
+            return (parseInt((firstNum + secondNum), 10) + parseInt((thirdNum + fourthNum), 10)) / 2;
+        }
+    }
+
+
+    return '';
+};
+
+
+export const generatePaintByQuantile = (
+    colorDomain: string[],
+    minValue: number,
+    maxValue: number,
+    categoryData: number[],
+    parts: number,
+) => {
+    const range = maxValue - minValue;
+    const gap = range / colorDomain.length;
+
+    const data = categoryData;
+    const divider = Math.ceil(data.length / parts);
+    data.sort((a, b) => a - b);
+    const dividedSpecificData = new Array(Math.ceil(data.length / divider))
+        .fill()
+        .map(_ => data.splice(0, divider));
+
+    const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
+
+    const intervals: number[] = [];
+    nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+        ? Math.max(...d) + 1 : Math.max(...d)));
+
+    /* Quantile Division ends */
+
+    const countBasedIntervals = intervals;
+    const colors: (string | number)[] = [];
+
+    colorDomain.forEach((color, i) => {
+        const val = +(minValue + (i + 1) * gap).toFixed(1);
+        // NOTE: avoid duplicates
+        if (colors.length > 0 && colors[colors.length - 1] === val) {
+            return;
+        }
+        colors.push(color);
+        colors.push(val);
+    });
+
+
+    if (colors.length !== 0) {
+        return colors;
+    }
+    return null;
+};
+
+
+export const generatePaint = color => ({
+    'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['feature-state', 'value'],
+        ...color,
+    ],
+    'fill-opacity': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        0.8,
+        1,
+    ],
+});
+
+export const generatePaintQuantile = color => ({
+    'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['feature-state', 'value'],
+        0,
+        ...color.slice(0, -1),
+    ],
+    'fill-opacity': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        0.8,
+        1,
+    ],
+});
+
+
+function EarthquakeTooltip(title: any, description: any, createdDate: any, referenceData: any) {
+    throw new Error('Function not implemented.');
+}
+
+
+export const AlertTooltip = ({ title, description, referenceType, referenceData, createdDate }) => {
+    if (referenceType && referenceType === 'rain') {
+        return RainTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'river') {
+        return RiverTooltip(title, description, createdDate, referenceData);
+    }
+    if (title.toUpperCase().includes('EARTH') && referenceData) {
+        return EarthquakeTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'fire') {
+        return FireTooltip(title, description, createdDate, referenceData);
+    }
+    if (referenceType && referenceType === 'pollution') {
+        return PollutionTooltip(title, description, createdDate, referenceData);
+    }
+    if (title) {
+        return (
+            <div className={styles.alertTooltip}>
+                <h3 className={styles.heading}>
+                    {title}
+                </h3>
+                <div className={styles.description}>
+                    { description }
+                </div>
+            </div>
+        );
+    } return null;
 };

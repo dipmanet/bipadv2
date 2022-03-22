@@ -1,0 +1,19 @@
+.leftTopBar {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    width: calc(30% - 60px);
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 60px;
+    z-index: 5;
+    background-color: #0c2432;
+
+    .munName {
+        padding: 15px 0px 0px 50px;
+        color: white !important;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+}

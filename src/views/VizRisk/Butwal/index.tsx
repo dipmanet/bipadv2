@@ -503,9 +503,6 @@ export const Butwal = (props) => {
     const DISTRICTID = String(htmlData.map(item => item.district)[0]);
 
 
-    console.log('main key name is', MAINKEYNAME);
-
-
     const SUFFIXID = `${PROVINCEID}_${DISTRICTID}_${MUNICIPALITYID}`;
     const {
         regions,

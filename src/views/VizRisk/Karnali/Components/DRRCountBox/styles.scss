@@ -1,0 +1,67 @@
+.drrCountBox{
+	.provinceSummary{
+		width: 90%;
+		background-color: #228EBF;
+		.provinceTitle{
+			color: white;
+			padding: 16px 14px 4px 14px;
+		}
+		.contactPara{
+			color: white;
+			margin: 0px;
+			padding: 2px 14px;
+			font-size: 14px;
+		}
+		.totalCount{
+			color: white;
+			margin: 0;
+			font-size: 45px;
+			padding: 1px 14px;
+		}
+	}
+	.otherInfoRow{
+		display: flex;
+		width: 92%;
+		margin-top: 8px;
+		.smallBox{
+			margin: 0px 8px 0px 0px;
+			background-color: #003F5C;
+			.provinceTitle{
+				font-size: 12px;
+				padding: 16px 14px 4px 14px;
+			}
+			.contactPara{
+				color: white;
+				margin: 0px;
+				padding: 2px 14px;
+				font-size: 14px;
+			}
+			.totalCount{
+				color: white;
+				margin: 0;
+				font-size: 45px;
+				padding: 1px 14px;
+			}
+		}
+		.smallBox2{
+			margin: 0px 10px 0px 0px;
+			background-color: #003F5C;
+			.provinceTitle{
+				font-size: 12px;
+				padding: 16px 14px 4px 14px;
+			}
+			.contactPara{
+				color: white;
+				margin: 0px;
+				padding: 2px 14px;
+				font-size: 14px;
+			}
+			.totalCount{
+				color: white;
+				margin: 0;
+				font-size: 45px;
+				padding: 1px 14px;
+			}
+		}
+	}
+}
