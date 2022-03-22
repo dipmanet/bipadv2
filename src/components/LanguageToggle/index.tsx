@@ -37,6 +37,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setLanguage: params => dispatch(setLanguageAction(params)),
 });
 
+
 const LanguageToggle = (props: Props) => {
     const { language: { language }, setLanguage } = props;
 

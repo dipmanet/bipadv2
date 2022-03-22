@@ -252,6 +252,7 @@ const Bulletin = (props: Props) => {
         },
         hazardTypes,
         language: { language },
+        uri,
     } = props;
 
 
@@ -382,6 +383,7 @@ const Bulletin = (props: Props) => {
     };
 
     const handlehazardAdd = (hazard) => {
+        console.log('hazard', hazard);
         const newData = { ...addedHazardFields };
         setAddedData({ ...newData, [Math.random()]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         // add it to hazard too
@@ -389,6 +391,8 @@ const Bulletin = (props: Props) => {
     };
     // this runs when button is clicked
     const handleSameHazardAdd = (hazard) => {
+        console.log('hazard', hazard);
+
         const newData = { ...addedHazardFields };
         setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         console.log('feedback appended', feedback);
@@ -794,6 +798,7 @@ const Bulletin = (props: Props) => {
             handleSameHazardChange={handleSameHazardChange}
             recordSelectedDate={recordSelectedDate}
             handleBulletinDate={handleBulletinDate}
+            uri={uri}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}

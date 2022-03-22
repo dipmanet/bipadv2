@@ -61,6 +61,10 @@ export const vaccineStatObj = [
         title: 'Second Dosage Count',
         khopKey: 'secondDosage',
     },
+    {
+        title: 'Third Dosage Count',
+        khopKey: 'thirdDosage',
+    },
 ];
 
 

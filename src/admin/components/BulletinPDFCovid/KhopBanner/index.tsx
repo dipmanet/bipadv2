@@ -16,7 +16,7 @@ const KhopBanner = (props) => {
                                 t => (
                                     <p className={styles.small}>
                                         {t('Percentage of 1st Dosage')}
-                                        {''}
+                                        {' '}
                                         {`${percentage} %`}
 
                                     </p>

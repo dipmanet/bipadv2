@@ -143,7 +143,7 @@ const ProgressMenu = (props: Props): JSX.Element => {
 
     return (
         <div className={styles.progressMenuContainer}>
-            <LanguageToggle />
+            {/* <LanguageToggle /> */}
             {
                 MenuItems.map((menuItem: MenuItems, i: number) => (
                     <div

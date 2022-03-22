@@ -190,7 +190,6 @@ const BulletinPDF = (props: Props) => {
     };
 
     useEffect(() => {
-        console.log('hazardWiseLoss loss', hazardWiseLoss);
         // if ((hazardTypes && hazardWiseLoss && Object.keys(hazardWiseLoss).length > 0) || (feedback && Object.keys(feedback) > 0)) {
         const getHazardColor = (hazardName) => {
             if (language === 'np') {

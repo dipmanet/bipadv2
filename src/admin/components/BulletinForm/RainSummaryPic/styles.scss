@@ -22,7 +22,7 @@
                 height: 80mm !important;
             }
             img{
-                max-width: 170mm;
+                width: 170mm;
             }
             .placeholder{
                 width: 90mm;
@@ -30,16 +30,19 @@
                 cursor: pointer;
             }
         }
-    
-
     }
     .subContainerReport{
            @extend .picture;
             // border: 1px solid red;
             position: relative;
             // right: 30px;
+            width: 192mm !important;
+            display: flex;
+            // border: 1px solid red;
+            justify-content: center;
             img{
-                max-width: 160mm;
+                border: 1px solid red;
+                width: 160mm !important;
             }
             h3{
                 position: relative;

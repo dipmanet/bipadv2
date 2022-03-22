@@ -63,11 +63,18 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
-
     {
         name: 'bulletin',
-        title: 'Bulletin',
-        path: '/admin/bulletin/add-new-bulletin',
+        title: 'Bulletin (Nepali)',
+        path: '/admin/bulletin/add-new-bulletin-nepali',
+        load: () => import('../admin/views/Bulletin'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+    {
+        name: 'bulletin',
+        title: 'Bulletin (English)',
+        path: '/admin/bulletin/add-new-bulletin-english',
         load: () => import('../admin/views/Bulletin'),
         navbar: false,
         disableIfNoAuth: true,

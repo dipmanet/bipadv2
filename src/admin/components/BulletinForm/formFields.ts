@@ -94,6 +94,7 @@ export const covidTotalStat = {
 export const vaccineStat = {
     firstDosage: 0,
     secondDosage: 0,
+    thirdDosage: 0,
 };
 
 export const covidProvinceWiseTotal = {
@@ -168,6 +169,7 @@ export const nepaliRef = {
     totalRecovered: 'कुल निको भएका संख्या',
     firstDosage: 'पहिलो मात्रा',
     secondDosage: 'दोस्रो मात्रा',
+    thirdDosage: 'तेस्रो मात्रा',
     latitude: 'अक्षांश',
     longitude: 'देशान्तर',
     response: 'प्रतिकार्य',
@@ -209,6 +211,7 @@ export const englishRef = {
     totalRecovered: 'Total Recovered',
     firstDosage: 'First Dosage',
     secondDosage: 'Second Dosage',
+    thirdDosage: 'Third Dosage',
     latitude: 'Lattitude',
     longitude: 'Longitude',
     response: 'Response',

@@ -23,6 +23,8 @@ import {
     languageSelector,
 } from '#selectors';
 
+import { setLanguageAction } from '#actionCreators';
+
 import {
     incidentSummary,
     peopleLoss,
@@ -42,6 +44,11 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     municipalities: municipalitiesSelector(state),
     language: languageSelector(state),
 });
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setLanguage: params => dispatch(setLanguageAction(params)),
+});
+
 
 interface Props {
     handleIncidentChange: (e: Record<string, undefined>) => void;
@@ -76,6 +83,8 @@ const Bulletin = (props: Props) => {
         recordSelectedDate,
         language: { language },
         handleBulletinDate,
+        setLanguage,
+        uri,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -86,8 +95,13 @@ const Bulletin = (props: Props) => {
     const [date, setDate] = useState('');
 
     useEffect(() => {
-        console.log('addedHazardFields', addedHazardFields);
-    }, [addedHazardFields]);
+        if (uri && uri.includes('nepali')) {
+            setLanguage({ language: 'np' });
+        } else {
+            setLanguage({ language: 'en' });
+        }
+    }, [uri]);
+
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return provinces.find(p => p.id === geoarea);
@@ -448,7 +462,7 @@ const Bulletin = (props: Props) => {
                                 <MenuItem value={null}>--</MenuItem>
                                 {
                                     hazardTypes
-                                    && Object.keys(hazardTypes).map(hT => (<MenuItem value={hazardTypes[hT].titleNe}>{language === 'np' ? hazardTypes[hT].titleNe : hazardTypes[hT].title}</MenuItem>))
+                                    && Object.keys(hazardTypes).map(hT => (<MenuItem value={language === 'np' ? hazardTypes[hT].titleNe : hazardTypes[hT].title}>{language === 'np' ? hazardTypes[hT].titleNe : hazardTypes[hT].title}</MenuItem>))
                                 }
                             </Select>
                         </FormControl>
@@ -507,6 +521,6 @@ const Bulletin = (props: Props) => {
 
     );
 };
-export default connect(mapStateToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     Bulletin,
 );
