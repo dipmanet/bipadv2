@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-// import Loader from 'react-loader';
 import ProgressMenu from 'src/admin/components/ProgressMenu';
 import HealthForm from 'src/admin/components/HealthForm';
 import MenuCommon from 'src/admin/components/MenuCommon';
@@ -9,10 +7,9 @@ import Navbar from 'src/admin/components/Navbar';
 import styles from './styles.module.scss';
 import Page from '#components/Page';
 
-const HealthDataStr = (): JSX.Element => {
+const HealthDataStr = () => {
     const [activeMenu, setActiveMenu] = useState<string|undefined>('Institution Details');
     const [progress, setProgress] = useState<number>(0);
-    // const { healthFormLoader } = useSelector((state: RootState) => state.health);
 
     const getActiveMenu = (menuItem: number) => {
         setActiveMenu(menuItem);
@@ -20,11 +17,6 @@ const HealthDataStr = (): JSX.Element => {
     const handleProgress = (p: number) => {
         setProgress(p);
     };
-
-    const handleViewTableBtn = () => {
-        console.log('fdf');
-    };
-
 
     return (
         <>

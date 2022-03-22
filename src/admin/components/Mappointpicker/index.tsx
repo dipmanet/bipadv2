@@ -1,9 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable max-len */
-// / <reference no-default-lib="true"/>
-
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import LayersIcon from '@mui/icons-material/Layers';
 import mapboxgl from 'mapbox-gl';
@@ -30,7 +25,7 @@ interface Props{
     };
 }
 
-const index = (props: Props): JSX.Element => {
+const Mappointpicker = (props: Props): JSX.Element => {
     const { centriodsForMap, resetMap, editedCoordinates,
         initialProvinceCenter,
         initialDistrictCenter,
@@ -116,16 +111,19 @@ const index = (props: Props): JSX.Element => {
                 positionOptions: {
                     enableHighAccuracy: true,
                 },
-                // When active the map will receive updates to the device's location as it changes.
+                // When active the map will receive updates to the
+                // device's location as it changes.
                 trackUserLocation: true,
-                // Draw an arrow next to the location dot to indicate which direction the device is heading.
+                // Draw an arrow next to the location dot to indicate
+                // which direction the device is heading.
                 showUserHeading: true,
             }),
         );
         const marker = new mapboxgl.Marker({ draggable: false, color: 'blue' });
         if (editedCoordinates) {
             if (Object.keys(editedCoordinates).length > 0) {
-                const coordinates = { lat: editedCoordinates.point.coordinates[1], lng: editedCoordinates.point.coordinates[0] };
+                const coordinates = { lat: editedCoordinates.point.coordinates[1],
+                    lng: editedCoordinates.point.coordinates[0] };
                 const popup1 = new mapboxgl.Popup({ anchor: 'top' })
                     .setLngLat(coordinates)
                     .setHTML(` Lattitude : ${coordinates.lat}  Longitude : ${coordinates.lng}`)
@@ -267,89 +265,6 @@ const index = (props: Props): JSX.Element => {
                     'text-color': 'black',
                 },
             });
-
-
-            // if (initialMunCenter && initialMunCenter.length > 0) {
-            //     map.current.setLayoutProperty('district-line', 'visibility', 'none');
-            //     map.current.setLayoutProperty('province-line', 'visibility', 'none');
-            //     map.current.setLayoutProperty('province-name', 'visibility', 'none');
-            //     map.current.setLayoutProperty('district-name', 'visibility', 'none');
-            //     map.current.setLayoutProperty('municipality-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('municipality-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-line', 'visibility', 'visible');
-            //     map.current.flyTo({
-            //         center: initialDistrictCenter,
-            //         zoom: 12,
-            //         bearing: 0,
-            //         speed: 3,
-            //         curve: 1,
-            //         essential: true,
-            //     });
-            // } else if (initialDistrictCenter && initialDistrictCenter.length > 0) {
-            //     map.current.setLayoutProperty('district-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('province-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('province-name', 'visibility', 'none');
-            //     map.current.setLayoutProperty('district-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('municipality-name', 'visibility', 'none');
-            //     map.current.setLayoutProperty('municipality-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-name', 'visibility', 'none');
-            //     map.current.setLayoutProperty('ward-line', 'visibility', 'none');
-            //     map.current.flyTo({
-            //         center: initialDistrictCenter,
-            //         zoom: 11,
-            //         bearing: 0,
-            //         speed: 3,
-            //         curve: 1,
-            //         essential: true,
-            //     });
-            // } else if (initialProvinceCenter && initialProvinceCenter.length > 0) {
-            //     map.current.setLayoutProperty('district-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('province-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('province-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('district-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('municipality-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('municipality-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-line', 'visibility', 'visible');
-            //     map.current.flyTo({
-            //         center: initialProvinceCenter,
-            //         zoom: 8,
-            //         bearing: 0,
-            //         speed: 3,
-            //         curve: 1,
-            //         essential: true,
-            //     });
-            // } else {
-            //     map.current.flyTo({
-            //         center: [84.2676, 28.5465],
-            //         zoom: 12,
-            //         bearing: 0,
-            //         speed: 3,
-            //         curve: 1,
-            //         essential: true,
-            //     });
-            // }
-
-
-            // if (editedCoordinates && editedCoordinates.point && editedCoordinates.point.coordinates[0] !== '') {
-            //     map.current.setLayoutProperty('district-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('province-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('province-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('district-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('municipality-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('municipality-line', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-name', 'visibility', 'visible');
-            //     map.current.setLayoutProperty('ward-line', 'visibility', 'visible');
-            //     map.current.flyTo({
-            //         center: editedCoordinates.point.coordinates,
-            //         zoom: 12,
-            //         bearing: 0,
-            //         speed: 3,
-            //         curve: 1,
-            //         essential: true,
-            //     });
-            // }
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -385,7 +300,8 @@ const index = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-line', 'visibility', 'none');
             }
         }
-    }, [centriodsForMap.provinceCentriodForMap, centriodsForMap.provinceId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [centriodsForMap.provinceCentriodForMap]);
 
 
     useEffect(() => {
@@ -417,7 +333,8 @@ const index = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-name', 'visibility', 'none');
             }
         }
-    }, [centriodsForMap.districtCentriodForMap, centriodsForMap.districtId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [centriodsForMap.districtCentriodForMap]);
 
     useEffect(() => {
         if (map.current.isStyleLoaded()) {
@@ -446,7 +363,8 @@ const index = (props: Props): JSX.Element => {
                 map.current.setLayoutProperty('ward-name', 'visibility', 'visible');
             }
         }
-    }, [centriodsForMap.municipalityCentriodForMap, centriodsForMap.municipalityId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [centriodsForMap.municipalityCentriodForMap]);
 
 
     useEffect(() => {
@@ -519,7 +437,10 @@ const index = (props: Props): JSX.Element => {
             <div className={styles.mapCSS} ref={mapContainerRef}>
                 <div className={styles.adminLvlTogglerMain}>
                     <LayersIcon className={styles.layerIcon} onClick={handleClose} />
-                    <div className={showToggler ? styles.adminLvlToggler : styles.adminLvlTogglerHide}>
+                    <div className={showToggler
+                        ? styles.adminLvlToggler
+                        : styles.adminLvlTogglerHide}
+                    >
                         {mapStyles.map(item => (
                             <>
                                 <div className={styles.mapStyles} role="presentation" onClick={() => handleStyleChange(item.style)}>
@@ -542,4 +463,4 @@ const index = (props: Props): JSX.Element => {
     );
 };
 
-export default index;
+export default Mappointpicker;

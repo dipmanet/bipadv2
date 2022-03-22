@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import styles from './styles.module.scss';
-// import { covidDataGetIndividualId } from '../../../Redux/covidActions/covidActions';
 
 interface Props {
     getSubMenuItem: (e: string) => void;
 }
 type SubMenuItems = 'Data Table' | 'Add New Data' | 'Bulk Upload';
-// const SubMenuList = ['Data Table', 'Add New Data', 'Bulk Upload'];
 
 const SubMenuList = [
     {
@@ -26,7 +23,6 @@ const SubMenuList = [
 
 const SubMenu = (props: Props) => {
     const { getSubMenuItem } = props;
-    // const { userDataMain } = useSelector((state:RootState) => state.user);
     const handleSubMenuItemClick = (submenuItem: SubMenuItems) => {
         getSubMenuItem(submenuItem);
     };
@@ -37,7 +33,7 @@ const SubMenu = (props: Props) => {
             {
                 <div className={styles.submenuItemContainer}>
                     {
-                        SubMenuList.map((subMenuItem: SubMenuItems) => (
+                        SubMenuList.map(subMenuItem => (
                             <div
                                 role="presentation"
                                 onClick={() => handleSubMenuItemClick(subMenuItem.title)}

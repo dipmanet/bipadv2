@@ -21,6 +21,7 @@ import {
     setEnumOptionsAction,
     setAuthAction,
     setUserDetailAction,
+    SetAdminMenuAction,
 } from '#actionCreators';
 import {
     mapStyleSelector,
@@ -50,6 +51,7 @@ interface PropsFromDispatch {
     // setEventTypes: typeof setEventTypesAction;
     setAuth: typeof setAuthAction;
     setUserDetail: typeof setUserDetailAction;
+    setAdminMenu: typeof SetAdminMenuAction;
 }
 type ReduxProps = OwnProps & PropsFromState & PropsFromDispatch;
 type Props = NewProps<ReduxProps, Params>;
@@ -69,6 +71,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAuth: params => dispatch(setAuthAction(params)),
     // setEventTypes: params => dispatch(setEventTypesAction(params)),
     setUserDetail: params => dispatch(setUserDetailAction(params)),
+    setAdminMenu: params => dispatch(SetAdminMenuAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -161,6 +164,14 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         onSuccess: ({ response, props: { setEnumOptions } }) => {
             const enumList: ModelEnum[] = response as ModelEnum[];
             setEnumOptions({ enumList });
+        },
+    },
+    getMenu: {
+        url: '/adminportal-menu/',
+        method: methods.GET,
+        onMount: true,
+        onSuccess: ({ response, props: { setAdminMenu } }) => {
+            setAdminMenu(response.results);
         },
     },
     /*

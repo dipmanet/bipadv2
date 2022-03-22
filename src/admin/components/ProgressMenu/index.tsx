@@ -44,44 +44,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     language: languageSelector(state),
 });
 
-const MenuItemsAll = [
-    {
-        name: 'Institution Details',
-        icon: InstituteLogo,
-        permission: ['superuser', 'editor', 'validator', 'user'],
-    },
-    {
-        name: 'Disaster Management',
-        icon: DisasterManLogo,
-        permission: ['superuser', 'editor', 'validator', 'user'],
-    },
-    {
-        name: 'Contact',
-        icon: ContactLogo,
-        permission: ['superuser', 'editor', 'validator', 'user'],
-    },
-    {
-        name: 'Location',
-        icon: LocationLogo,
-        permission: ['superuser', 'editor', 'validator', 'user'],
-    },
-    {
-        name: 'Picture',
-        icon: PictureLogo,
-        permission: ['superuser', 'editor', 'validator', 'user'],
-    },
-    {
-        name: 'Inventories',
-        icon: InventoryLogo,
-        permission: ['superuser', 'editor', 'validator', 'user'],
-    },
-    {
-        name: 'Verification',
-        icon: VerificationLogo,
-        permission: ['superuser', 'editor'],
-    },
 
-];
 const validatorMenu = [
     {
         name: 'Institution Details',
@@ -115,11 +78,25 @@ const validatorMenu = [
     },
 
 ];
+
+
+const getMenu = () => {
+    const location = window.location.href;
+    const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1].split('/admin')[1];
+    console.log('menuslug', menuSlug);
+    if (menuSlug.includes('health')) {
+        return (Menu.healthProgressMenu);
+    }
+    return (Menu.bulletinProgressMenu);
+};
+
 const ProgressMenu = (props: Props): JSX.Element => {
     const { progress, activeMenu: active, menuKey, language: { language } } = props;
     // const { resourceID, healthFormEditData } = useSelector((state: OurState) => state.health);
     // const { userDataMain } = useSelector((state: RootState) => state.user);
-    const [MenuItems, setMenuItems] = useState(Menu.bulletinProgressMenu);
+
+
+    const [MenuItems, setMenuItems] = useState(getMenu());
 
     // useEffect(() => {
     //     if (userDataMain.isSuperuser) {

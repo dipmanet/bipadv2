@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import Ideaicon from '../../resources/ideaicon.svg';
 import Page from '#components/Page';
 
-const DataTable = props => (
+const DataTable = () => (
     <>
         <Page hideFilter hideMap />
         <Navbar layout="common" />

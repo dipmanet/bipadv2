@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { createContext, useEffect, useRef, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -142,7 +142,7 @@ const Location = (props) => {
             setwardName(nameOfWard);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userDataMain]);
+    }, [provinceData, districtDataMain, municipalityDataMain, userDataMain]);
 
 
     // useEffect(() => {
@@ -295,6 +295,13 @@ const Location = (props) => {
         setPoint(longitude, 'lng');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [longitude]);
+
+    useEffect(() => {
+        console.log('Test', centriodsForMap,
+            initialProvinceCenter,
+            initialDistrictCenter,
+            initialMunCenter);
+    }, [centriodsForMap, initialDistrictCenter, initialMunCenter, initialProvinceCenter]);
 
     return (
         <>
@@ -478,13 +485,29 @@ const Location = (props) => {
                     />
                 </FormControl>
 
-                <Map
-                    disabled={getDisabled('point')}
-                    centriodsForMap={centriodsForMap}
-                    initialProvinceCenter={initialProvinceCenter}
-                    initialDistrictCenter={initialDistrictCenter}
-                    initialMunCenter={initialMunCenter}
-                />
+                {
+                    (resourceID) && (
+                        <Map
+                            disabled={getDisabled('point')}
+                            centriodsForMap={centriodsForMap}
+                            editedCoordinates={formData}
+                        />
+                    )
+
+                }
+                {
+                    (!resourceID)
+                    && (
+                        <Map
+                            disabled={getDisabled('point')}
+                            centriodsForMap={centriodsForMap}
+                            initialProvinceCenter={initialProvinceCenter}
+                            initialDistrictCenter={initialDistrictCenter}
+                            initialMunCenter={initialMunCenter}
+                        />
+                    )
+
+                }
 
                 {
                     validationError && <p style={{ color: 'red' }}>{validationError}</p>
