@@ -42,6 +42,7 @@ const HealthDataTable = (props) => {
         },
         userDataMain,
         setHealthInfrastructurePage,
+        uri,
     } = props;
     // const { healthTableData, inventoryItem } = useSelector((state: RootState) => state.health);
     // const { userDataMain } = useSelector((state: RootState) => state.user);
@@ -67,7 +68,7 @@ const HealthDataTable = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Health'} />
+            <MenuCommon layout="common" currentPage={'Health'} uri={uri} />
             <div className={styles.dataContainer}>
                 {
                     // healthTableData.length === 0 && inventoryItem.length === 0

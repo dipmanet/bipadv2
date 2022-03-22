@@ -44,7 +44,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 const EpidemmicDataTable = (props) => {
-    const { epidemmicsPage: { incidentData, incidentCount } } = props;
+    const { epidemmicsPage: { incidentData, incidentCount }, uri } = props;
 
 
     useEffect(() => {
@@ -56,7 +56,7 @@ const EpidemmicDataTable = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Epidemics'} />
+            <MenuCommon layout="common" currentPage={'Epidemics'} uri={uri} />
             <div className={styles.dataContainer}>
                 {
                     (

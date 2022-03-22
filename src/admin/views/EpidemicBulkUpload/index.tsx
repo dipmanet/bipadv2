@@ -60,6 +60,7 @@ const EpidemicBulkUpload = (props) => {
             uploadData,
         },
         userDataMain,
+        uri,
     } = props;
 
     const {
@@ -185,7 +186,7 @@ const EpidemicBulkUpload = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon currentPage={'Epidemics'} layout={'common'} />
+            <MenuCommon currentPage={'Epidemics'} layout={'common'} uri={uri} />
             <div className={styles.bulkUploadContainer}>
                 <div className={styles.firstRowSection}>
                     <div className={styles.headTextAres}>

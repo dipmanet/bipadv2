@@ -26,7 +26,6 @@ interface MenuItem {
 
 }
 
-
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     user: userSelector(state),
     adminMenu: adminMenuSelector(state),
@@ -36,17 +35,16 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 });
 
 const MenuCommon = (props: Props) => {
-    const { layout, adminMenu } = props;
+    const { layout, adminMenu, uri } = props;
     const [Menu, setMenu] = useState<MenuItem[] | undefined>([]);
-    const [AllMenu, setAllMenu] = useState<[] | undefined>([]);
     const [active, setActive] = useState<number | undefined>(undefined);
     const currentPageSlug = useRef(null);
 
     const handleMenuItemClick = (menuItem: MenuItem) => {
         if (menuItem.children) {
             navigate(`/admin/${menuItem.slug}/${menuItem.children[0].slug}`);
-        } else if (menuItem.parent && AllMenu) {
-            const parentSlug = AllMenu.filter(mI => mI.id === menuItem.parent)[0].slug;
+        } else if (menuItem.parent && adminMenu) {
+            const parentSlug = adminMenu.filter(mI => mI.id === menuItem.parent)[0].slug;
             navigate(`/admin/${parentSlug}/${menuItem.slug}`);
         } else {
             navigate(`/admin/${menuItem.slug}`);
@@ -54,29 +52,30 @@ const MenuCommon = (props: Props) => {
     };
 
     useEffect(() => {
-        setMenu(adminMenu);
-        setAllMenu(adminMenu);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (AllMenu) {
-            const location = window.location.href;
-            const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1].split('/admin')[1];
+        if (uri === '/admin') {
+            setMenu(adminMenu);
+        } else {
+            let menuSlug;
+            if (uri === '/admin/admin') {
+                menuSlug = '/admin';
+            } else {
+                menuSlug = uri.split('/admin')[1];
+            }
             if (menuSlug) {
                 const parentSlug = menuSlug.split('/')[1];
-
                 if (parentSlug.length > 2) {
-                    currentPageSlug.current = menuSlug.split('/')[menuSlug.split('/').length - 1];
+                    currentPageSlug.current = menuSlug.split('/')[menuSlug.split('/')
+                        .length - 1];
                 } else {
                     currentPageSlug.current = menuSlug.split('/')[1];
                 }
-                const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
+                const childMenu = adminMenu.filter(item => item.slug === parentSlug)[0];
                 if (childMenu) {
-                    const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
+                    const childM = adminMenu.filter(item => item.slug === parentSlug)[0].children;
                     if (childM) {
                         // eslint-disable-next-line max-len
-                        const activeIndex = childM.map(cM => cM.slug).indexOf(currentPageSlug.current);
+                        const activeIndex = childM.map(cM => cM.slug)
+                            .indexOf(currentPageSlug.current);
                         setActive(activeIndex);
                         setMenu(childM);
                     } else {
@@ -84,11 +83,49 @@ const MenuCommon = (props: Props) => {
                         setMenu([childMenu]);
                     }
                 }
-            } else {
-                setMenu(AllMenu);
             }
         }
-    }, [AllMenu]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // useEffect(() => {
+    //     if (AllMenu) {
+    //         const location = window.location.href;
+    //         console.log('location', location);
+    //         const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1]
+    // .split('/admin')[1];
+    //         if (menuSlug) {
+    //             const parentSlug = menuSlug.split('/')[1];
+    //             console.log('location parennt', parentSlug);
+    //             if (parentSlug.length > 2) {
+    //                 currentPageSlug.current = menuSlug.split('/')[menuSlug.split('/')
+    // .length - 1];
+    //                 console.log('location current', currentPageSlug.current);
+    //             } else {
+    //                 currentPageSlug.current = menuSlug.split('/')[1];
+    //                 console.log('location current', currentPageSlug.current);
+    //             }
+    //             const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
+    //             console.log('location child', childMenu);
+    //             if (childMenu) {
+    //                 const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
+    //                 if (childM) {
+    //                     // eslint-disable-next-line max-len
+    //                     const activeIndex = childM.map(cM => cM.slug)
+    // .indexOf(currentPageSlug.current);
+    //                     setActive(activeIndex);
+    //                     setMenu(childM);
+    //                 } else {
+    //                     setActive(0);
+    //                     setMenu([childMenu]);
+    //                 }
+    //             }
+    //         } else {
+    //             setMenu(AllMenu);
+    //         }
+    //     }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [Menu]);
 
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>

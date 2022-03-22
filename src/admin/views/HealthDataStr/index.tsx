@@ -7,22 +7,22 @@ import Navbar from 'src/admin/components/Navbar';
 import styles from './styles.module.scss';
 import Page from '#components/Page';
 
-const HealthDataStr = () => {
+const HealthDataStr = (props) => {
     const [activeMenu, setActiveMenu] = useState<string|undefined>('Institution Details');
     const [progress, setProgress] = useState<number>(0);
-
     const getActiveMenu = (menuItem: number) => {
         setActiveMenu(menuItem);
     };
     const handleProgress = (p: number) => {
         setProgress(p);
     };
-
+    const { uri } = props;
+    console.log('title of add health', uri);
     return (
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Health'} />
+            <MenuCommon layout="common" currentPage={'Health'} uri={uri} />
 
             <div className={styles.dataContainer}>
                 <h2 className={styles.mainHeading}>

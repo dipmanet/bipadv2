@@ -681,7 +681,8 @@ const Epidemics = (props) => {
     provinces,
     districts,
     municipalities,
-    wards } = props;
+    wards,
+    uri } = props;
 
     useEffect(() => {
         if (user && user.profile && user.profile.province && provinces && provinces.length > 0) {
@@ -1127,7 +1128,7 @@ const Epidemics = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Epidemics'} />
+            <MenuCommon layout="common" currentPage={'Epidemics'} uri={uri} />
             <div className={styles.container}>
                 <Modal
                     open={added || updated}

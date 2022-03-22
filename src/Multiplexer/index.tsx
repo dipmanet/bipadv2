@@ -150,7 +150,6 @@ const routes = routeSettings.map(({ load, ...settings }) => {
     );
 
     const Component = errorBound<typeof settings>(ErrorInPage)(Com);
-
     return (
         <Component
             key={settings.name}

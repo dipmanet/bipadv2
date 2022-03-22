@@ -10,20 +10,24 @@ interface Props {
 
 }
 
-const Bulletin = (props: Props) => (
-    <>
-        <Page hideFilter hideMap />
-        <Navbar />
-        <MenuCommon
-            currentPage="Health Infrastructure"
-            layout="common"
-            subLevel={'bulletin'}
-        />
-        <BulletinForm />
-        <Footer />
-    </>
+const Bulletin = (props: Props) => {
+    const { uri } = props;
+    return (
+        <>
+            <Page hideFilter hideMap />
+            <Navbar />
+            <MenuCommon
+                currentPage="Health Infrastructure"
+                layout="common"
+                subLevel={'bulletin'}
+                uri={uri}
+            />
+            <BulletinForm />
+            <Footer />
+        </>
 
 
-);
+    );
+};
 
 export default Bulletin;
