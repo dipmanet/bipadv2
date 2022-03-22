@@ -12,15 +12,11 @@ import Box from '@mui/material/Box';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { navigate } from '@reach/router';
-// import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import Healthinfrastructure from 'src/admin/views/Healthinfrastructure';
 import AccentHeading from '../../AccentHeading';
 import NextButton from '../../NextButton';
 import { FormDataType, institutionDetails } from '../utils';
-// import { setInventoryItem, getInventoryItem } from '../../../Redux/actions';
-// import { RootState } from '../../../Redux/store';
 import InventoryTable from './InventoryTable';
 import EditModal from './EditModal';
 
