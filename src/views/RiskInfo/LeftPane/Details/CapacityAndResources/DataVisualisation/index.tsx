@@ -1,3 +1,6 @@
+/* eslint-disable no-lone-blocks */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-useless-concat */
 /* eslint-disable prefer-spread */
@@ -1344,7 +1347,7 @@ const visualizationKeyValues = [
         chartDataType: [
             {
                 label: 'Fire Fighting Apparatus Types',
-                key: 'type',
+                key: 'typeOfApparatus',
                 values: ['Fire Engine', 'Fire Bike', 'Other'],
                 isBoolean: false,
                 showFalseValue: false,
@@ -1669,7 +1672,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             this.setState({
                 selectedResourceData: resourceDataList,
             });
-
+            console.log('resource type', resourceType);
             const GraphVisualizationData = await visualizationKeyValues
                 .filter(item => item.resourceType === resourceType)[0].chartDataType
                 .map((datakey) => {
@@ -1788,26 +1791,48 @@ class DataVisualisation extends React.PureComponent<Props, State> {
     }
 
     private handleSaveClick = (id) => {
+        // const myElements = document.getElementById('realMap123');
+        //     console.log('My final element', myElements);
+        //     myElements.style.setProperty('height', 'unset', 'important');
+        //     myElements.style.setProperty('width', 'unset', 'important');
+        //     myElements.style.setProperty('position', 'unset', 'important');
+        //     myElements.style.setProperty('top', 'unset', 'important');
+        //     myElements.style.setProperty('background-color', 'transparent', 'important');
+        //     myElements.style.setProperty('flex-grow', '1', 'important');
+
         if (id === 'overallDownload') {
+            const myElements = document.getElementById('1');
+            myElements.style.setProperty('display', 'none', 'important');
+            // const data = document.getElementsByClassName('test');
+            // data.style.setProperty('display', 'none', 'important');
+            // const test = document.getElementsByClassName('test');
+
+            document.getElementsByClassName('test')[0].style.display = 'none';
+
             const divToDisplay = document.getElementById('overallDownload');
             const pdf = new JsPDF('p', 'mm', 'a4');
             html2canvas(divToDisplay).then((canvas) => {
                 const divImage = canvas.toDataURL('image/png');
-                const imgWidth = 210;
+                const imgWidth = 200;
                 const pageHeight = 297;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const imgHeight = (canvas.height * imgWidth / canvas.width);
                 let heightLeft = imgHeight;
-                let position = 0;
-                pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                console.log('image geight', imgHeight);
+                let position = 10;
+                pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight, '', 'FAST');
                 heightLeft -= pageHeight;
 
                 while (heightLeft >= 0) {
                     position = heightLeft - imgHeight;
                     pdf.addPage();
-                    pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight);
+                    pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                 }
                 pdf.save('Report.pdf');
+
+                myElements.style.setProperty('display', 'flex', 'important');
+                document.getElementsByClassName('test')[0].style.display = 'flex';
+                // data.style.setProperty('display', 'unset', 'important');
             });
         } else {
             saveChart(id, id);
@@ -1856,6 +1881,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
+        console.log('GraphVisualizationData', GraphVisualizationData);
         return (
             <Modal className={
                 styles.contactFormModal
@@ -1917,24 +1943,24 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                     {' '}
 
                                 </div>
-                                <div className={styles.categoryName}>
-                                    <div className={styles.categoryLogo}>
-                                        <ScalableVectorGraphics
-                                            className={styles.categoryLogoIcon}
+                                <div id="overallDownload">
+                                    <div className={styles.categoryName}>
+                                        <div className={styles.categoryLogo} id="categorySelectedList">
+                                            <ScalableVectorGraphics
+                                                className={styles.categoryLogoIcon}
 
-                                            src={selectedImage}
-                                        />
-                                        <h3>{visualizationHeading}</h3>
-                                    </div>
-                                    {/* <div
+                                                src={selectedImage}
+                                            />
+                                            <h3>{visualizationHeading}</h3>
+                                        </div>
+                                        <div
+                                            id="1"
                                             style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                                             role="button"
                                             tabIndex={0}
-                                        // eslint-disable-next-line max-len
+                                            // eslint-disable-next-line max-len
                                             onClick={() => this.handleSaveClick('overallDownload')}
                                             onKeyDown={undefined}
-
-
                                         >
                                             <h4>DOWNLOAD</h4>
                                             {' '}
@@ -1946,73 +1972,76 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                                 iconName="download"
                                             />
 
-                                        </div> */}
-                                </div>
-                                {ErrorData ? <h2 style={{ textAlign: 'center' }}>{ErrorData}</h2> : isDataSetClicked
-                                    ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
-                                    : (
-                                        <div id="overallDownload">
-                                            {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
-                                                HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
-                                                    : (
-                                                        <div key={item.label}>
-                                                            <div className={styles.barChartSection}>
+                                        </div>
+                                    </div>
+                                    {ErrorData ? <h2 style={{ textAlign: 'center' }}>{ErrorData}</h2> : isDataSetClicked
+                                        ? <TableData selectedResourceData={updatedSelectedResource} resourceType={resourceType} />
+                                        : (
+                                            <div>
+                                                {GraphVisualizationData && GraphVisualizationData.map((item, i) => (
+                                                    HighValuePercentageCalculation[i].highValuePercentage === 0 ? ''
+                                                        : (
+                                                            <div key={item.label}>
+                                                                <div className={styles.barChartSection}>
 
-                                                                <div className={styles.percentageValue}>
-                                                                    {/* <h1>Education Institution</h1> */}
-                                                                    <h1>
-                                                                        {HighValuePercentageCalculation[i].displayingValueinVisualization}
+                                                                    <div className={styles.percentageValue}>
+                                                                        {/* <h1>Education Institution</h1> */}
+                                                                        <h1>
+                                                                            {HighValuePercentageCalculation[i].displayingValueinVisualization}
 
-                                                                    </h1>
+                                                                        </h1>
 
-                                                                    <span>
+                                                                        <span>
 
-                                                                        {HighValuePercentageCalculation[i].displayVisualizationWord}
-                                                                    </span>
+                                                                            {HighValuePercentageCalculation[i].displayVisualizationWord}
+                                                                        </span>
 
-                                                                </div>
+                                                                    </div>
 
 
-                                                                <div style={{ flex: '4' }} key={item.label}>
+                                                                    <div style={{ flex: '4' }} key={item.label}>
 
-                                                                    <div className={styles.graphicalVisualization}>
+                                                                        <div className={styles.graphicalVisualization}>
 
-                                                                        {/* <div style={{ display: 'flex',
+                                                                            {/* <div style={{ display: 'flex',
                                                                             justifyContent: 'flex-end',
                                                                     fontSize: '25px' }}
                                                                 /> */}
-                                                                        <div id={labelName[i].label}>
-                                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                                                <h3>{labelName[i].label}</h3>
-                                                                                <Button
-                                                                                    title="Download Chart"
-                                                                                    className={styles.chartDownload}
-                                                                                    transparent
-                                                                                    onClick={() => this.handleSaveClick(labelName[i].label)}
-                                                                                    iconName="download"
-                                                                                />
+                                                                            <div id={labelName[i].label}>
+                                                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                                    <h3>{labelName[i].label}</h3>
+                                                                                    <div className="test">
+                                                                                        <Button
+                                                                                            title="Download Chart"
+                                                                                            className={styles.chartDownload}
+                                                                                            transparent
+                                                                                            onClick={() => this.handleSaveClick(labelName[i].label)}
+                                                                                            iconName="download"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <BarChartVisualization item={item} />
                                                                             </div>
-                                                                            <BarChartVisualization item={item} />
+
                                                                         </div>
 
                                                                     </div>
 
+
                                                                 </div>
-
-
                                                             </div>
-                                                        </div>
-                                                    )
+                                                        )
 
-                                            ))}
-                                            {!pendingAPICall && (resourceCollection[resourceType]).length === 0
-                                                ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
-                                                : ''}
-                                            {/* {allDataNullConditionCheck
+                                                ))}
+                                                {!pendingAPICall && (resourceCollection[resourceType]).length === 0
+                                                    ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
+                                                    : ''}
+                                                {/* {allDataNullConditionCheck
                                                 ? <h2 style={{ textAlign: 'center' }}>No Data Available for Visualization</h2>
                                                 : ''} */}
-                                        </div>
-                                    )}
+                                            </div>
+                                        )}
+                                </div>
                             </div>
                         ) : <LoadingAnimation className={styles.loader} />
 
