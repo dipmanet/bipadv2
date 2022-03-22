@@ -27,7 +27,8 @@ const Map = (props: any) => {
 
     const map = useRef<mapboxgl.Map | null>(null);
     const mapContainerRef = useRef<HTMLDivElement>(null);
-    const layersRef = useRef(null);
+    const mapZoomEffect = useRef<any| undefined>(null);
+
     function noop() {}
 
     const images = [
@@ -94,7 +95,6 @@ const Map = (props: any) => {
             properties: item.properties,
         })),
     };
-
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
         if (!mapContainer) {
@@ -239,7 +239,7 @@ const Map = (props: any) => {
 
             // Hazard ,exposure dummy data
 
-            multihazardMap.addSource('contactInfo', {
+            multihazardMap.addSource('exposure', {
                 type: 'geojson',
                 data: dummyGeojson,
                 // cluster: true,
@@ -248,9 +248,9 @@ const Map = (props: any) => {
             });
 
             multihazardMap.addLayer({
-                id: 'contacts-unclustered-point',
+                id: 'exposure-point',
                 type: 'circle',
-                source: 'contactInfo',
+                source: 'exposure',
                 // filter: ['!', ['has', 'point_count']],
                 paint: {
                     'circle-color': ['get', 'color'],
@@ -268,7 +268,7 @@ const Map = (props: any) => {
                 },
             });
 
-            multihazardMap.on('click', 'contacts-unclustered-point', (e) => {
+            multihazardMap.on('click', 'exposure-point', (e) => {
                 const { lngLat } = e;
                 const coordinates = [lngLat.lng, lngLat.lat];
 
@@ -281,7 +281,7 @@ const Map = (props: any) => {
                 if (clickedId) {
                     multihazardMap.setFeatureState(
                         { id: clickedId,
-                            source: 'contactInfo' },
+                            source: 'exposure' },
                         { clicked: false },
                     );
                 }
@@ -300,12 +300,28 @@ const Map = (props: any) => {
                     .setDOMContent(popupNode)
                     .addTo(multihazardMap);
             });
+
+            multihazardMap.setZoom(1);
+
+            mapZoomEffect.current = setTimeout(() => {
+                multihazardMap.easeTo({
+                    pitch: 25,
+                    center: [
+                        84.51393887409917,
+                        27.619152424687197,
+                    ],
+                    zoom: 11.7,
+                    duration: 8000,
+                });
+            }, 4000);
         });
 
 
         const destroyMap = () => {
             multihazardMap.remove();
+            clearTimeout(mapZoomEffect.current);
         };
+
         return destroyMap;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -314,7 +330,8 @@ const Map = (props: any) => {
 
 
     useEffect(() => {
-        if (leftElement === 2) {
+        if (map.current && map.current.isStyleLoaded()) {
+            if (leftElement === 2) {
     	 clickedCiName.map((layerName: string) => {
     		 if (map.current) {
     			 map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'visible');
@@ -327,8 +344,8 @@ const Map = (props: any) => {
     			 map.current.moveLayer(`unclustered-point-${layerName}`);
     		 }
     		 return null;
-            });
-            unClickedCIName.map((layerName: string) => {
+                });
+                unClickedCIName.map((layerName: string) => {
     		 if (map.current) {
     			 map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
     			 map.current.moveLayer(`clusters-${layerName}`);
@@ -340,31 +357,32 @@ const Map = (props: any) => {
     			 map.current.moveLayer(`unclustered-point-${layerName}`);
     		 }
     		 return null;
-            });
-        } else {
-            ciNameList.map((layerName: string) => {
-                if (map.current) {
-                    map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
-                    map.current.moveLayer(`clusters-${layerName}`);
+                });
+            } else {
+                ciNameList.map((layerName: string) => {
+                    if (map.current) {
+                        map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'none');
+                        map.current.moveLayer(`clusters-${layerName}`);
 
-                    map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
-                    map.current.moveLayer(`clusters-count-${layerName}`);
+                        map.current.setLayoutProperty(`clusters-count-${layerName}`, 'visibility', 'none');
+                        map.current.moveLayer(`clusters-count-${layerName}`);
 
-                    map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
-                    map.current.moveLayer(`unclustered-point-${layerName}`);
-                }
-                return null;
+                        map.current.setLayoutProperty(`unclustered-point-${layerName}`, 'visibility', 'none');
+                        map.current.moveLayer(`unclustered-point-${layerName}`);
+                    }
+                    return null;
     	   });
+            }
+
+            if (leftElement === 3) {
+                if (map.current) {
+                    map.current.setLayoutProperty('exposure-point', 'visibility', 'visible');
+                }
+            } else {
+                map.current.setLayoutProperty('exposure-point', 'visibility', 'none');
+            }
         }
     }, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
-
-
-    // useEffect(() => {
-    //   if (leftElement === 3) {
-    // 	  	 if (map.current) {
-    // 			 map.current.setLayoutProperty(`clusters-${layerName}`, 'visibility', 'visible');
-    //   }
-    // }, [third])
 
 
     return (

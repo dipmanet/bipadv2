@@ -130,7 +130,8 @@ const LeftpaneSlide3 = (props: Props) => {
                                     <p style={{ fontSize: `${calculateFontSize(item.count, totalCI)}px`,
                                         textAlign: 'center' }}
                                     >
-                                        {item.resourceType}
+                                        {item.resourceType
+										 && item.resourceType.charAt(0).toUpperCase() + item.resourceType.slice(1)}
 
                                     </p>
                                     {

@@ -42,22 +42,22 @@ const SankeyChart = (props: Props) => {
 		  {
                 source: 0,
                 target: 1,
-                value: 3728.3,
+                value: 6242,
 		  },
 		  {
                 source: 0,
                 target: 2,
-                value: 354170,
+                value: 6242,
 		  },
 		  {
-                source: 2,
+                source: 0,
                 target: 3,
-                value: 62429,
+                value: 6242,
 		  },
 		  {
-                source: 2,
+                source: 0,
                 target: 4,
-                value: 291741,
+                value: 6242,
 		  },
         ],
 	  };
@@ -69,10 +69,13 @@ const SankeyChart = (props: Props) => {
             >
                 <Sankey
                     width={200}
-                    height={150}
+                    nameKey
+                    dataKey
+                    linkWidth={25}
+                    height={180}
                     data={data0}
-                    // node={<MyCustomNode />}
-                    // nodePadding={50}
+                    nodeWidth={80}
+                    node={{ stroke: '#77c878', strokeWidth: 0.5 }}
                     margin={{ left: 15, right: 25 }}
 
                     link={{ stroke: '#77c878' }}
