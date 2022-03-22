@@ -374,7 +374,8 @@ const PDFPreview = (props) => {
         const { length } = ids;
         for (let i = 0; i < length; i += 1) {
             const reportPage = document.getElementById(ids[i].id);
-            await html2canvas(reportPage).then((canvas) => {
+            // eslint-disable-next-line no-undef
+            await html2canvas(reportPage, { scale: 2 }).then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const imgWidth = 210;
                 const pageHeight = 297;
@@ -429,6 +430,9 @@ const PDFPreview = (props) => {
                 //     doc.addPage('a4', 'portrait');
                 //     pageNumber += 1;
                 // }
+
+                // const newdiv = document.getElementById('toAdd');
+                // newdiv.appendChild(canvas);
             });
         }
 
@@ -476,6 +480,9 @@ const PDFPreview = (props) => {
                 />
 
             </div>
+            {/* <div id="toAdd" /> */}
+
+
             <div className={styles.btnContainer}>
                 <button
                     type="button"
