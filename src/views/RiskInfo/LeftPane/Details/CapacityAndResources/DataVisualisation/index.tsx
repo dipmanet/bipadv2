@@ -1705,7 +1705,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         let calculatedValueData;
         let filterDataForCalculation;
         let filterDataForFalseValue;
-        console.log('key', key);
         if (typeof key === 'string') {
             filteredResourceChartDataType = visualizationKeyValues
                 .filter(item => item.resourceType === resourceType)[0].chartDataType
@@ -1729,9 +1728,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         }
         if (typeof key === 'object') {
             filteredResourceChartDataType = key;
-            const test = selectedResourceData.map(item => item.noOfDifferentlyAbledMaleStudents);
-            console.log('What is data', selectedResourceData);
-            console.log('Final test ', test);
             calculatedValueData = filteredResourceChartDataType.map((item, i) => {
                 // const isOtherItemDefined = filteredResourceChartDataType[filteredResourceChartDataType.length - 1];
 
@@ -1860,10 +1856,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
-        console.log('What resource collection', resourceCollection);
-        console.log('Graph visualization data', GraphVisualizationData);
-        console.log('resource type', resourceType);
-        console.log('allDataNullConditionCheck', allDataNullConditionCheck);
         return (
             <Modal className={
                 styles.contactFormModal

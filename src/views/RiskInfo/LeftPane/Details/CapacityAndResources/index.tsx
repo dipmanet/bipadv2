@@ -2434,9 +2434,6 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
         const filteredCheckedSubCategory = filterSubCategory.filter(item => subCategoryCheckboxChecked.includes(item));
         const showIndeterminateButton = !!(filteredCheckedSubCategory.length && (filterSubCategory !== filteredCheckedSubCategory));
         const filterPermissionGranted = checkSameRegionPermission(user, region);
-        console.log('resource collection updated', resourceCollection);
-        console.log('This reason', region);
-        console.log('pending', pending);
         return (
             <>
                 <Loading pending={pending} />

@@ -429,7 +429,6 @@ class Filters extends React.PureComponent<Props, State> {
             faramValues: {},
         });
         this.setState({ disableSubmitButton: false });
-        console.log('user', user);
         if (authState.authenticated) {
             if (user.profile.municipality) {
                 const region = { adminLevel: 3, geoarea: user.profile.municipality };
@@ -484,7 +483,6 @@ class Filters extends React.PureComponent<Props, State> {
                     hazard: [],
                     region,
                 };
-                console.log('Entering', tempF);
                 this.setState({
                     activeView: undefined,
                     faramValues: tempF,
@@ -641,7 +639,6 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-        console.log('faram values:fv', fv);
         return (
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
