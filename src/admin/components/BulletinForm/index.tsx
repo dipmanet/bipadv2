@@ -372,12 +372,12 @@ const Bulletin = (props: Props) => {
         const newFieldData = newData[field];
         if (subfield === 'location') {
             const newSubData = { ...newFieldData, coordinates: e.coordinates, district: e.district };
-            setAddedData({ ...newData, [field]: newSubData });
-            setFeedback({ ...newData, [field]: newSubData });
+            setAddedData({ ...feedback, ...newData, [field]: newSubData });
+            setFeedback({ ...feedback, ...newData, [field]: newSubData });
         } else {
             const newSubData = { ...newFieldData, [subfield]: e };
-            setAddedData({ ...newData, [field]: newSubData });
-            setFeedback({ ...newData, [field]: newSubData });
+            setAddedData({ ...feedback, ...newData, [field]: newSubData });
+            setFeedback({ ...feedback, ...newData, [field]: newSubData });
         }
     };
 
@@ -391,6 +391,7 @@ const Bulletin = (props: Props) => {
     const handleSameHazardAdd = (hazard) => {
         const newData = { ...addedHazardFields };
         setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
+        console.log('feedback appended', feedback);
         setFeedback({ ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         countId.current += 1;
     };

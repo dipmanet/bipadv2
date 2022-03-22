@@ -85,6 +85,9 @@ const Bulletin = (props: Props) => {
     const [filtered, setFiltered] = useState(false);
     const [date, setDate] = useState('');
 
+    useEffect(() => {
+        console.log('addedHazardFields', addedHazardFields);
+    }, [addedHazardFields]);
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
             return provinces.find(p => p.id === geoarea);
@@ -138,9 +141,6 @@ const Bulletin = (props: Props) => {
     };
     const test1 = new Date();
     const test = new Date('2021-11-12');
-    console.log('Testey', test);
-    console.log('test1', test1);
-    console.log('dateing', date);
     useEffect(() => {
         if (date) {
             const selectedDate = new Date(date);
@@ -162,7 +162,6 @@ const Bulletin = (props: Props) => {
             handleBulletinDate(finalDate);
         }
     }, [date]);
-    console.log('what is final date', date);
     return (
         <>
             <div className={styles.formContainer}>
@@ -360,7 +359,12 @@ const Bulletin = (props: Props) => {
                         && Object.keys(addedHazardFields).length > 0
                         && Object.keys(addedHazardFields).map(field => (
                             <>
-                                <h3>{field && addedHazardFields[field].hazard}</h3>
+                                <h3>
+                                    {
+                                        field
+                                && addedHazardFields[field].hazard}
+
+                                </h3>
                                 {field && Object.keys(addedHazardFields[field]).map((subField) => {
                                     if (subField === 'coordinates') {
                                         return (
