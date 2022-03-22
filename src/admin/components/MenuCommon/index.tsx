@@ -2,12 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import styles from './styles.module.scss';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    ClientAttributes,
-    methods,
-} from '#request';
 import { userSelector, adminMenuSelector } from '#selectors';
 import { SetAdminMenuAction } from '#actionCreators';
 
@@ -41,26 +35,12 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setAdminMenu: params => dispatch(SetAdminMenuAction(params)),
 });
 
-const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
-    getMenu: {
-        url: '/adminportal-menu/',
-        method: methods.GET,
-        onMount: false,
-        onSuccess: ({ response, params: { setMenu, setAllMenu }, props: { setAdminMenu } }) => {
-            setAdminMenu(response.results);
-            setMenu(response.results);
-            setAllMenu(response.results);
-        },
-    },
-};
-
 const MenuCommon = (props: Props) => {
-    const { layout, requests: { getMenu }, setAdminMenu, adminMenu } = props;
+    const { layout, adminMenu } = props;
     const [Menu, setMenu] = useState<MenuItem[] | undefined>([]);
     const [AllMenu, setAllMenu] = useState<[] | undefined>([]);
     const [active, setActive] = useState<number | undefined>(undefined);
     const currentPageSlug = useRef(null);
-    getMenu.setDefaultParams({ setMenu, setAllMenu });
 
     const handleMenuItemClick = (menuItem: MenuItem) => {
         if (menuItem.children) {
@@ -74,17 +54,8 @@ const MenuCommon = (props: Props) => {
     };
 
     useEffect(() => {
-        setAdminMenu(adminMenu);
         setMenu(adminMenu);
         setAllMenu(adminMenu);
-        // if (adminMenu.length === 0) {
-        //     console.log('getting menu...');
-        //     getMenu.do();
-        //     setAdminMenu();
-        // } else {
-        //     setAllMenu(adminMenu);
-        //     setMenu(adminMenu);
-        // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -149,9 +120,5 @@ const MenuCommon = (props: Props) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    createConnectedRequestCoordinator()(
-        createRequestClient(requests)(
-            MenuCommon,
-        ),
-    ),
+    MenuCommon,
 );
