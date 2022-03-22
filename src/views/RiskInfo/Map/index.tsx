@@ -91,7 +91,9 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         />
                     </MapSource>
                 ))}
-
+                <CommonMap
+                    sourceKey="risk-infoz"
+                />
                 {/* <MapSource
                     key={'buildingKey'}
                     sourceKey={'buildingFootprint'}
@@ -121,14 +123,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             url: mapSources.nepal.url,
                         }}
                     >
-                        <MapLayer
-                            layerKey="choropleth-layer-outline"
-                            layerOptions={{
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                type: 'line',
-                                paint: linePaintByAdminLevel[layer.adminLevel],
-                            }}
-                        />
+
                         <MapLayer
                             layerKey="choropleth-layer"
                             layerOptions={{
@@ -144,6 +139,14 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                             onClick={layer.onClick ? layer.onClick : undefined}
                             onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
                             onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
+                        />
+                        <MapLayer
+                            layerKey="choropleth-layer-outline"
+                            layerOptions={{
+                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                type: 'line',
+                                paint: linePaintByAdminLevel[layer.adminLevel],
+                            }}
                         />
                         <MapState
                             attributes={layer.mapState}
@@ -169,9 +172,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         }
                     </MapSource>
                 ))}
-                <CommonMap
-                    sourceKey="risk-infoz"
-                />
+
             </>
         );
     }
