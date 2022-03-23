@@ -1674,7 +1674,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             this.setState({
                 selectedResourceData: resourceDataList,
             });
-            console.log('resource type', resourceType);
             const GraphVisualizationData = await visualizationKeyValues
                 .filter(item => item.resourceType === resourceType)[0].chartDataType
                 .map((datakey) => {
@@ -1831,7 +1830,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                     pdf.text(150, 285, `page ${pdf.page}`); // print number bottom right
                     pdf.page++;
                 }
-                console.log('image geight', imgHeight);
                 let position = 10;
                 pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight, '', 'FAST');
                 heightLeft -= pageHeight;
@@ -1900,8 +1898,6 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 }
             );
         });
-        console.log('GraphVisualizationData', GraphVisualizationData);
-        console.log('downloadButtonClicked', downloadButtonClicked);
         return (
             <Modal className={
                 styles.contactFormModal
