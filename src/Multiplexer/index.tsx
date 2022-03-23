@@ -1,3 +1,7 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-tabs */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 import Loadable from 'react-loadable';
@@ -11,16 +15,15 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import { bbox, point, buffer } from '@turf/turf';
+import mapboxgl from 'mapbox-gl';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
 import { getLayerName } from '#re-map/utils';
 import Icon from '#rscg/Icon';
-
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
 import DangerButton from '#rsca/Button/DangerButton';
-
 import { AppState } from '#store/types';
 import {
     RouteDetailElement,
@@ -78,6 +81,7 @@ import {
 } from '#request';
 import DownloadButtonOption from './DownloadButtonOption';
 
+import ZoomToolBar from '#components/ZoomToolBar';
 
 function reloadPage() {
     window.location.reload(false);
@@ -174,6 +178,17 @@ interface State {
     activeRouteDetails: RouteDetailElement | undefined;
     activeLayers: Layer[];
     mapDownloadPending: boolean;
+    checkLatLngState: boolean;
+    longitude: string | number;
+    lattitude: string | number;
+    rectangleBoundingBox: [any, any];
+    drawRefState: boolean;
+    geoLocationStatus: boolean;
+    currentMarkers: [];
+    markerStatus: boolean;
+    checkFullScreenStatus: boolean;
+    currentBounds: mapboxgl.LngLatBounds;
+
 }
 
 interface BoundingClientRect {
@@ -308,7 +323,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 class Multiplexer extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
-
         this.state = {
             leftContent: undefined,
             rightContent: undefined,
@@ -330,7 +344,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
             toggleLeftPaneButtonStretched: true,
             extraFilterName: '',
             isFilterClicked: false,
-
+            longitude: '',
+            lattitude: '',
+            checkLatLngState: false,
+            rectangleBoundingBox: [],
+            drawRefState: false,
+            geoLocationStatus: false,
+            currentMarkers: [],
+            markerStatus: false,
+            checkFullScreenStatus: false,
         };
     }
 
@@ -406,6 +428,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
         return null;
     }
+
+    private lattitudeRef = React.createRef<HTMLInputElement>();
+
+    private mapContainerRef = React.createRef<mapboxgl.Map>();
+
+    private geoLocationRef = React.createRef<mapboxgl.GeolocateControl>();
+
+    private markerRef = React.createRef<mapboxgl.Marker>()
 
     private setFilterFromUrl = (
         provinces: Province[],
@@ -740,6 +770,207 @@ class Multiplexer extends React.PureComponent<Props, State> {
         });
     }
 
+    private getRegionDetails = (
+        selectedRegion: RegionValueElement,
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+    ) => {
+        if (!selectedRegion || !selectedRegion.adminLevel) {
+            return 'National';
+        }
+
+        const adminLevels: {
+            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
+        } = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regionList = adminLevels[selectedRegion.adminLevel];
+        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+
+        if (currentRegion) {
+            return currentRegion;
+        }
+
+        return 'Unknown';
+    }
+
+    private fullScreenMap = () => {
+        this.setState({ checkFullScreenStatus: true });
+
+        if (this.mapContainerRef.current) {
+            const mainapp = this.mapContainerRef.current.getContainer();
+
+            this.setState({ currentBounds: this.mapContainerRef.current.getBounds() });
+
+            mainapp.requestFullscreen();
+        }
+
+        const resetFunc = setTimeout(() => {
+            // if (this.mapContainerRef.current) {
+            //     const nepalBbox = [[80.05858661752784, 26.347836996368667],
+            //         [88.20166918432409, 30.44702867091792]];
+
+            //     const currentBbox = this.mapContainerRef.current.getBounds();
+            //     console.log('current bbox is', currentBbox);
+
+            //     let status = false;
+            //     // eslint-disable-next-line no-plusplus
+            //     for (let i = 0; i < nepalBbox.length; i++) {
+            //         // eslint-disable-next-line no-plusplus
+            //         for (let j = 0; j < nepalBbox.length; j++) {
+            //             if (nepalBbox[i][j] === currentBbox[i][j]) {
+            //                 status = true;
+            //             }
+            //         }
+            //     }
+            //     if (status) {
+            //         return;
+            //     }
+            // }
+            if (this.mapContainerRef.current) {
+                this.mapContainerRef.current.fitBounds(this.state.currentBounds, { duration: 1000 });
+            }
+        }, 700); // triggered after 700ms
+
+        return () => clearTimeout(resetFunc);
+    };
+
+    private markersArray = (marker: any) => {
+        this.setState(prevState => prevState.currentMarkers.push(marker));
+    };
+
+    private goToLocation = () => {
+        if (this.state.markerStatus) {
+            this.setState({ markerStatus: false });
+        } else {
+            this.setState({ markerStatus: true });
+        }
+
+        if (this.mapContainerRef.current) {
+            if (this.state.longitude && this.state.lattitude) {
+                this.mapContainerRef.current.flyTo({
+                    speed: 1,
+                    center: {
+                        lat: this.state.lattitude,
+                        lng: this.state.longitude,
+                    },
+                    zoom: 12,
+                });
+            }
+            const marker = new mapboxgl.Marker()
+                .setLngLat([this.state.longitude, this.state.lattitude])
+                .setPopup(
+                    new mapboxgl.Popup({ offset: 25 }) // add popups
+                        .setHTML(
+                            `<h3 style=padding:25px 50px;>Lattitude : ${this.state.lattitude}, Longitude : ${this.state.longitude}</h3>`,
+                        ),
+                )
+                .addTo(this.mapContainerRef.current);
+
+            this.markerRef.current = marker;
+
+            this.markersArray(marker);
+
+            if (this.state.currentMarkers !== null) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                    this.state.currentMarkers[i].remove();
+                }
+            }
+        }
+    }
+
+
+    private mapOnClick = (event: mapboxgl.EventData) => {
+        if (!this.state.checkLatLngState) return;
+
+        const coordinates = event.lngLat;
+
+        if (this.state.currentMarkers.length > 0) {
+            // eslint-disable-next-line no-plusplus
+            for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                this.state.currentMarkers[i].remove();
+            }
+        }
+
+        const marker = new mapboxgl.Marker();
+        this.setState({ longitude: coordinates.lng });
+        this.setState({ lattitude: coordinates.lat });
+        if (this.mapContainerRef.current) {
+            marker.setLngLat(coordinates).addTo(this.mapContainerRef.current);
+        }
+
+        this.markersArray(marker);
+    }
+
+
+    private handleToggle = () => {
+        if (this.lattitudeRef.current) {
+            this.lattitudeRef.current.focus();
+        }
+
+        if (!this.state.checkLatLngState && this.mapContainerRef.current) {
+            this.mapContainerRef.current.on('click', event => this.mapOnClick(event));
+        }
+
+        if (this.state.checkLatLngState && this.mapContainerRef.current) {
+            this.mapContainerRef.current.off('click', event => this.mapOnClick(event));
+
+            if (this.state.currentMarkers.length > 0) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                    this.state.currentMarkers[i].remove();
+                }
+            }
+        }
+
+        if (this.state.checkLatLngState) {
+            this.setState({ checkLatLngState: false });
+        } else {
+            this.setState({ checkLatLngState: true });
+        }
+    };
+
+    private drawToZoom = () => {
+        if (this.state.drawRefState) {
+            this.setState({ drawRefState: false });
+        } else {
+            this.setState({ drawRefState: true });
+        }
+    }
+
+
+    private resetDrawState = () => {
+        this.setState({ drawRefState: false });
+    }
+
+    private currentLocation = () => {
+        const dotElement = document.querySelector('.mapboxgl-user-location-dot');
+        if (dotElement) {
+            dotElement.style.display = 'unset';
+        }
+        if (this.geoLocationRef.current) {
+            this.geoLocationRef.current.trigger();
+
+
+            if (this.state.geoLocationStatus) {
+                this.setState({ geoLocationStatus: false });
+            } else {
+                this.setState({ geoLocationStatus: true });
+            }
+        }
+    };
+
+    private fullScreenOffFunc = () => {
+        if (this.state.checkFullScreenStatus) {
+            this.setState({ checkFullScreenStatus: false });
+        }
+    }
+
     public render() {
         const {
             mapStyle,
@@ -781,6 +1012,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
             toggleLeftPaneButtonStretched,
             extraFilterName,
             isFilterClicked,
+            longitude,
+            checkLatLngState,
+            rectangleBoundingBox,
+            drawRefState,
+            currentMarkers,
+            currentBounds,
+            checkFullScreenStatus,
         } = this.state;
 
 
@@ -840,7 +1078,86 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const orderedLayers = this.getLayerOrder(activeLayers);
         const hideFilters = false;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        const detailsOfLoggedAdmin = this.getRegionDetails(
+            filters.region,
+            provinces,
+            districts,
+            municipalities,
+        );
+
+        const resetLocation = () => {
+            // if (this.state.geoLocationStatus && this.geoLocationRef.current) {
+            const dotElement = document.querySelector('.mapboxgl-user-location-dot');
+            if (dotElement) {
+                dotElement.style.display = 'none';
+            }
+            // }
+            if (currentMarkers !== null) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = currentMarkers.length - 1; i >= 0; i--) {
+                    currentMarkers[i].remove();
+                }
+            }
+
+            this.setState({ geoLocationStatus: false });
+            if (this.mapContainerRef.current) {
+                // centriod of nepal
+                if (detailsOfLoggedAdmin
+                    && !detailsOfLoggedAdmin.province && !detailsOfLoggedAdmin.district) {
+                    this.mapContainerRef.current.fitBounds([
+                        [80.05858661752784, 26.347836996368667],
+                        [88.20166918432409, 30.44702867091792]], {
+                        padding: 24,
+                    });
+                }
+                // checking province
+                if (detailsOfLoggedAdmin
+                    && detailsOfLoggedAdmin.centroid) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
+                }
+                // checking district
+                if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
+                }
+                // checking municipality
+                if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province
+                    && detailsOfLoggedAdmin.district) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
+                }
+            }
+
+            this.setState({ checkLatLngState: false, longitude: '', lattitude: '' });
+        };
+
+        const longitudeData = (val: number) => {
+            this.setState({ longitude: val });
+        };
+
+        const lattiudeData = (val: number) => {
+            this.setState({ lattitude: val });
+        };
+
+        const regionName = this.getRegionName(
+            filters.region,
+            provinces,
+            districts,
+            municipalities,
+        );
+        const orderedLayers = this.getLayerOrder(activeLayers);
+        const hideFilters = false;
+        const activeRouteName = activeRouteDetails && activeRouteDetails.name;
         console.log('active layers', activeLayers);
+
+        const queryStringParams = window.location.href.split('#/')[1];
+
+        const polygonDrawAccessableRoutes = ['vulnerability'];
+
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>
@@ -854,7 +1171,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
                                     mapStyle={mapStyle}
-
                                     clickHandler={this.clickHandler}
                                     handleMapClicked={this.handleMapClicked}
                                     mapOptions={{
@@ -866,13 +1182,20 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             lat: 27.700769,
                                         },
                                     }}
-                                    // debug
-
                                     scaleControlShown
                                     scaleControlPosition="bottom-right"
-
                                     navControlShown
                                     navControlPosition="bottom-right"
+                                    geoLocationRef={this.geoLocationRef}
+                                    rectangleBoundingBox={rectangleBoundingBox}
+                                    mapContainerRefMultiplexer={this.mapContainerRef}
+                                    drawRefState={drawRefState}
+                                    resetDrawState={this.resetDrawState}
+                                    queryStringParams={queryStringParams}
+                                    polygonDrawAccessableRoutes={polygonDrawAccessableRoutes}
+                                    checkFullScreenStatus={checkFullScreenStatus}
+                                    currentBounds={currentBounds}
+                                    fullScreenOffFunc={this.fullScreenOffFunc}
                                 >
                                     {leftContent && (
                                         <aside className={_cs(
@@ -972,6 +1295,20 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     className={styles.layerSwitch}
                                                 />
                                                 <LayerToggle />
+                                                <ZoomToolBar
+                                                    fullScreenMap={this.fullScreenMap}
+                                                    resetLocation={resetLocation}
+                                                    lattitudeRef={this.lattitudeRef}
+                                                    longitude={this.state.longitude}
+                                                    lattitude={this.state.lattitude}
+                                                    setLongitude={longitudeData}
+                                                    setLattitude={lattiudeData}
+                                                    goToLocation={this.goToLocation}
+                                                    drawToZoom={this.drawToZoom}
+                                                    checkLatLngState={checkLatLngState}
+                                                    handleToggle={this.handleToggle}
+                                                    currentLocation={this.currentLocation}
+                                                />
                                             </div>
                                         )}
                                     </main>

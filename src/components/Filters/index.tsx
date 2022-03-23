@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import Redux, { compose } from 'redux';
@@ -246,6 +247,7 @@ class Filters extends React.PureComponent<Props, State> {
         },
         subdomainLoc: {},
         locRecv: false,
+        disableSubmitButton: false,
     };
 
     public componentDidMount() {
@@ -297,6 +299,14 @@ class Filters extends React.PureComponent<Props, State> {
                 const subd = { adminLevel: 1, geoarea: provinceMatch[0].id };
                 this.setState({ subdomainLoc: subd, locRecv: true });
             }
+        }
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        const { setFilters, filters } = this.props;
+        const { faramValues } = this.state;
+        if (prevProps.filters !== filters) {
+            this.setState({ faramValues: filters });
         }
     }
 
@@ -418,7 +428,8 @@ class Filters extends React.PureComponent<Props, State> {
         setProjectFilters({
             faramValues: {},
         });
-
+        this.setState({ disableSubmitButton: false });
+        console.log('user', user);
         if (authState.authenticated) {
             if (user.profile.municipality) {
                 const region = { adminLevel: 3, geoarea: user.profile.municipality };
@@ -463,20 +474,23 @@ class Filters extends React.PureComponent<Props, State> {
                 setFilters({ filters: tempF });
                 this.setState({ faramValues: tempF, activeView: undefined });
             } else {
+                const region = {};
+                const tempF = {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region,
+                };
+                console.log('Entering', tempF);
                 this.setState({
                     activeView: undefined,
-                    faramValues: {
-                        dataDateRange: {
-                            rangeInDays: 7,
-                            startDate: undefined,
-                            endDate: undefined,
-                        },
-                        hazard: [],
-                        region: {},
-                    },
+                    faramValues: tempF,
                 });
 
-                setFilters({ filters: this.state.faramValues });
+                setFilters({ filters: tempF });
             }
         } else if (Object.keys(subdomainLoc).length > 0) {
             const tempF = {
@@ -514,18 +528,25 @@ class Filters extends React.PureComponent<Props, State> {
 
     private handleFaramChange = (faramValues: FiltersElement) => {
         this.setState({ faramValues });
+        this.setState({ disableSubmitButton: false });
     }
 
     private handleSubmitClick = () => {
         const { setFilters, carKeys, FilterClickedStatus } = this.props;
-        const { faramValues } = this.state;
+        const { faramValues, disableSubmitButton } = this.state;
         const { filters: propFilters } = this.props;
         FilterClickedStatus(true);
-        if (faramValues) {
+        if (!disableSubmitButton) {
+            this.setState({ disableSubmitButton: true });
             setFilters({ filters: faramValues });
-        } else {
-            setFilters({ filters: propFilters });
+            // if (faramValues) {
+            //     setFilters({ filters: faramValues });
+            // }
+            // else {
+            //     setFilters({ filters: propFilters });
+            // }
         }
+
         const { activeRouteDetails } = this.context;
 
         /** This API is already called in capacity and resource module */
@@ -588,7 +609,7 @@ class Filters extends React.PureComponent<Props, State> {
             projectFilters,
         } = this.props;
 
-        const { faramValues: fv } = this.state;
+        const { faramValues: fv, disableSubmitButton } = this.state;
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
@@ -620,7 +641,7 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
+        console.log('faram values:fv', fv);
         return (
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>

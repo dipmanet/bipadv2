@@ -638,46 +638,47 @@ const setDashboardHazardTypes = (state: Type.PageState, action: Type.SetDashboar
     const { hazardTypes: hazardTypesFromAction } = action;
 
     // TODO Remove this after we get type from server
-    // const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
-    //     ...hazardType,
-    //     type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-    // }));
+    const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
+        ...hazardType,
+        type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    }));
 
-    let hazardTypes = hazardTypesFromAction.map((hazardType, i) => {
-        if (hazardType.title.toUpperCase() === 'HEAVY RAINFALL') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'ENVIRONMENTAL POLLUTION') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'FIRE') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'EARTHQUAKE') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'FLOOD') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        return null;
-    });
+    // commenting this code to fix hazard legend undefine issue
+    // let hazardTypes = hazardTypesFromAction.map((hazardType, i) => {
+    //     if (hazardType.title.toUpperCase() === 'HEAVY RAINFALL') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'ENVIRONMENTAL POLLUTION') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'FIRE') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'EARTHQUAKE') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'FLOOD') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     return null;
+    // });
 
-    hazardTypes = hazardTypes.filter(hazardType => hazardType);
+    // hazardTypes = hazardTypes.filter(hazardType => hazardType);
 
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
