@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-lone-blocks */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-return-assign */
@@ -1627,6 +1628,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             isValueCalculated: false,
             isDataSetClicked: false,
             allDataNullConditionCheck: false,
+            downloadButtonClicked: false,
 
         };
     }
@@ -1801,22 +1803,34 @@ class DataVisualisation extends React.PureComponent<Props, State> {
         //     myElements.style.setProperty('flex-grow', '1', 'important');
 
         if (id === 'overallDownload') {
+            this.setState({ downloadButtonClicked: true });
             const myElements = document.getElementById('1');
             myElements.style.setProperty('display', 'none', 'important');
             // const data = document.getElementsByClassName('test');
             // data.style.setProperty('display', 'none', 'important');
             // const test = document.getElementsByClassName('test');
 
-            document.getElementsByClassName('test')[0].style.display = 'none';
+            // document.getElementsByClassName('test')[0].style.display = 'none';
+            let downloadBtnElements = document.getElementsByClassName('test');
+
+            for (let i = 0; i < downloadBtnElements.length; i++) {
+                downloadBtnElements[i].style.display = 'none';
+            }
 
             const divToDisplay = document.getElementById('overallDownload');
             const pdf = new JsPDF('p', 'mm', 'a4');
+            pdf.page = 1;
+
             html2canvas(divToDisplay).then((canvas) => {
                 const divImage = canvas.toDataURL('image/png');
                 const imgWidth = 200;
                 const pageHeight = 297;
                 const imgHeight = (canvas.height * imgWidth / canvas.width);
                 let heightLeft = imgHeight;
+                function footer() {
+                    pdf.text(150, 285, `page ${pdf.page}`); // print number bottom right
+                    pdf.page++;
+                }
                 console.log('image geight', imgHeight);
                 let position = 10;
                 pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight, '', 'FAST');
@@ -1824,6 +1838,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
 
                 while (heightLeft >= 0) {
                     position = heightLeft - imgHeight;
+                    footer();
                     pdf.addPage();
                     pdf.addImage(divImage, 'PNG', 5, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
@@ -1831,7 +1846,11 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                 pdf.save('Report.pdf');
 
                 myElements.style.setProperty('display', 'flex', 'important');
-                document.getElementsByClassName('test')[0].style.display = 'flex';
+
+                for (let i = 0; i < downloadBtnElements.length; i++) {
+                    downloadBtnElements[i].style.display = 'flex';
+                }
+                this.setState({ downloadButtonClicked: false });
                 // data.style.setProperty('display', 'unset', 'important');
             });
         } else {
@@ -1846,7 +1865,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             resourceType, level, lvl2catName, typeName,
             resourceCollection, selectedCategoryName,
             wards, provinces, districts, municipalities, pendingAPICall, ErrorData } = this.props;
-        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck } = this.state;
+        const { GraphVisualizationData, isValueCalculated, isDataSetClicked, selectedResourceData, allDataNullConditionCheck, downloadButtonClicked } = this.state;
 
 
         const labelName = visualizationKeyValues
@@ -1882,6 +1901,7 @@ class DataVisualisation extends React.PureComponent<Props, State> {
             );
         });
         console.log('GraphVisualizationData', GraphVisualizationData);
+        console.log('downloadButtonClicked', downloadButtonClicked);
         return (
             <Modal className={
                 styles.contactFormModal
@@ -1953,6 +1973,13 @@ class DataVisualisation extends React.PureComponent<Props, State> {
                                             />
                                             <h3>{visualizationHeading}</h3>
                                         </div>
+                                        {downloadButtonClicked ? (
+                                            <div style={{ position: 'relative' }}>
+                                                <LoadingAnimation className={styles.loaderDownload} />
+                                                <p>Downloading...</p>
+                                                {' '}
+                                            </div>
+                                        ) : ''}
                                         <div
                                             id="1"
                                             style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
