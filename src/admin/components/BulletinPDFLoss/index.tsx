@@ -373,7 +373,7 @@ const BulletinPDF = (props: Props) => {
                     </div>
                 </div>
                 <div className={styles.loss}>
-                    <h2 style={{ marginBottom: '10px', fontSize: '16px' }}>
+                    <h2 style={{ marginBottom: '10px' }}>
                         {
                             language === 'np'
                                 ? `${month_yesterday} ${day_yesterday} बिहान 10:00 बजेदेखी ${month} ${day} बिहान 10:00 बजे सम्म`

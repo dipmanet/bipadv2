@@ -84,6 +84,7 @@ const BulletinPDFAnnex = (props) => {
                         t => <span>{t('Annex')}</span>
                     }
                 </Translation>
+                {' '}
                 1
             </h1>
 

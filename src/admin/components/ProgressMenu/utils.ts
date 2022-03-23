@@ -9,7 +9,7 @@ import PreviewLogo from '../../resources/preview.svg';
 export const Menu = {
     bulletinProgressMenu: [
         {
-            name: 'दैनिक बिपद् बुलेटिन',
+            name: 'दैनिक विपद् बुलेटिन',
             name_en: 'Daily BIPAD Bulletin',
             icon: LossesLogo,
             position: 0,

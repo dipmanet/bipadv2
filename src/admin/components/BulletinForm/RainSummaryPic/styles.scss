@@ -25,7 +25,7 @@
                 width: 170mm;
             }
             .placeholder{
-                width: 90mm;
+                width: 180mm;
                 border: 1px solid rgb(196, 195, 195);
                 cursor: pointer;
             }
@@ -39,6 +39,7 @@
             width: 192mm !important;
             display: flex;
             // border: 1px solid red;
+            flex-direction: column;
             justify-content: center;
             img{
                 border: 1px solid red;

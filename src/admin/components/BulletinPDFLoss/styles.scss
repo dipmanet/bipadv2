@@ -25,15 +25,27 @@
             .subDiv{
                 align-items: center;
                 display: flex;
+                img{
+                    width: 100px;
+                }
                 .govTitles{
                     color: white;
                     position: relative;
                     right: 30px;
                     ul{
                         list-style: none;
-                        font-size: 16px;
+                        // font-size: 16px;
                         .bold{
                             font-weight: 600;
+                        }
+                        li:first-child{
+                            font-size: 12px;
+                        }
+                        li:nth-child(2){
+                            font-size: 14px;
+                        }
+                        li:nth-child(3){
+                            font-size: 16px;
                         }
                     }
                 }
@@ -47,6 +59,7 @@
 
             h2{
                 color: white;
+                font-size: 14px;
                 
             }
             p{
@@ -82,6 +95,7 @@
             // margin-top: 5mm;
             margin-left: 8mm;
             // height: 80mm;
+            line-height:2em;
             color: #004877;
             ul{
                 display: flex;
@@ -109,12 +123,13 @@
             right: 5mm;
             h2{
                 position: relative;
-                left: 10mm;
+                left: 0mm;
                 font-size: 4mm;
                 margin-bottom: 2mm;
                 width: 85mm;
                 font-size: 14px;
-                // color: rgb(15, 11, 11)
+                
+                color: rgb(15, 11, 11)
             }
             
         }
@@ -216,7 +231,7 @@
             h2{
                 font-size: 14px;
                 margin: 0 0 6mm 0mm;
-                
+                color: rgb(15, 11, 11)
             }
         }
     }

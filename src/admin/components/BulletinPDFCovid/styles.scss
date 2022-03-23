@@ -25,10 +25,11 @@ padding: 10mm;
         // bottom: 15mm;
         left: 0mm;
         h2{
-            font-size: 4mm;
+            font-size: 14px;
             margin-bottom: 2mm;
             position: relative;
             left: 0mm;
+            color: rgb(15, 11, 11);
         }
     }
     .genderWiseStats{
@@ -38,10 +39,11 @@ padding: 10mm;
         right:0;
         // border: 1px solid red;
         h2{
-            font-size: 4mm;
+            font-size: 14px;
             margin-bottom: 2mm;
             position: relative;
             right: 3mm;
+            color: rgb(15, 11, 11);
         }
     }
 }
@@ -56,9 +58,9 @@ padding: 10mm;
         width: 87mm;
         // border: 1px solid red;
         h2{
-            color: #4C4C4C;
+            color: rgb(15, 11, 11);
             margin-bottom: 20px;
-            font-size: 16px;
+            font-size: 14px;
         }
         p{
             color: white;
@@ -95,8 +97,8 @@ padding: 10mm;
         }
         .khopContainer{
             h2{
-                color: #4C4C4C;
-                font-size: 16px;
+                color: rgb(15, 11, 11);
+                font-size: 14px;
     
             }
             .khopRow{
@@ -106,6 +108,7 @@ padding: 10mm;
                 justify-content: space-between;
                 h2{
                     color: white;
+                  
                 }
             }
         }
@@ -119,9 +122,9 @@ padding: 10mm;
         position: relative;
         bottom: 19px;
         h2{
-            color: #4C4C4C;
+            color: rgb(15, 11, 11);
             margin-bottom: 20px;
-            font-size: 16px;
+            font-size: 14px;
         }
         div{
             display: flex;
@@ -142,8 +145,9 @@ padding: 10mm;
                 left: 10mm;
                 margin-top: 10mm;
                 position: relative;
-                font-size: 16px;
-    
+                font-size: 14px;
+                color: rgb(15, 11, 11);
+
             }
         }
         .provTable{

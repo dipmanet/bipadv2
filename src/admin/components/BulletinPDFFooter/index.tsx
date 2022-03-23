@@ -63,6 +63,7 @@ const BulletinPDFFooter = (props) => {
                             t => <span>{t('Annex')}</span>
                         }
                     </Translation>
+                    {' '}
                     1
                     :
                     {' '}

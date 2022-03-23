@@ -43,6 +43,7 @@ const Bulletin = (props: Props) => {
         minTempFooter,
         rainSummaryFooter,
         handleRainSummaryFooter,
+        language: { language },
     } = props;
     console.log('max temp footer', maxTempFooter);
     console.log('rain footer', rainSummaryFooter);
@@ -62,17 +63,24 @@ const Bulletin = (props: Props) => {
                 !hideForm
                 && (
 
-                    <div className={styles.formItemDailySummary}>
+                    <div className={styles.formItemTextRainSummary}>
                         <FormControl fullWidth>
-                            <InputLabel>
-                                <Translation>
-                                    {
-                                        t => <span>{t('Daily Temperature and Rain Summary')}</span>
-                                    }
-                                </Translation>
-                            </InputLabel>
+                            <Translation>
+                                {
+                                    t => (
+                                        <textarea
+                                            placeholder={t('Daily Temperature and Rain Summary')}
+                                            value={dailySummary}
+                                            onChange={e => handleDailySummary(e)}
+                                            rows={5}
+                                            className={styles.textArea}
+                                        />
+                                    )
+                                }
+                            </Translation>
                             {' '}
-                            <Input
+
+                            {/* <Input
                                 type="text"
                                 value={dailySummary}
                                 onChange={e => handleDailySummary(e)}
@@ -82,7 +90,7 @@ const Bulletin = (props: Props) => {
                                     disableUnderline: true,
                                 }}
                                 style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                            />
+                            /> */}
                             {/* <TextareaAutosize
                                 aria-label="minimum height"
                                 value={dailySummary}
@@ -107,18 +115,23 @@ const Bulletin = (props: Props) => {
                     !hideForm
                     && (
 
-                        <div className={styles.formItemfooter}>
+                        <div className={styles.formItemTextFull}>
                             <FormControl fullWidth>
 
-                                <InputLabel>
-                                    <Translation>
-                                        {
-                                            t => <span>{t('Daily Rainfall Map Description')}</span>
-                                        }
-                                    </Translation>
-                                </InputLabel>
-                                {' '}
-                                <Input
+                                <Translation>
+                                    {
+                                        t => (
+                                            <textarea
+                                                placeholder={t('Daily Rainfall Map Description')}
+                                                value={rainSummaryFooter}
+                                                onChange={e => handleRainSummaryFooter(e)}
+                                                rows={5}
+                                                className={styles.textArea}
+                                            />
+                                        )
+                                    }
+                                </Translation>
+                                {/* <Input
                                     type="text"
                                     value={rainSummaryFooter}
                                     onChange={e => handleRainSummaryFooter(e)}
@@ -128,7 +141,7 @@ const Bulletin = (props: Props) => {
                                         disableUnderline: true,
                                     }}
                                     style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                                />
+                                /> */}
                             </FormControl>
 
 
@@ -146,18 +159,22 @@ const Bulletin = (props: Props) => {
                     !hideForm
                     && (
 
-                        <div className={styles.formItemfooter}>
+                        <div className={styles.formItemText}>
                             <FormControl fullWidth>
-
-                                <InputLabel>
-                                    <Translation>
-                                        {
-                                            t => <span>{t('Daily Max Temperature Map Description')}</span>
-                                        }
-                                    </Translation>
-                                </InputLabel>
-                                {' '}
-                                <Input
+                                <Translation>
+                                    {
+                                        t => (
+                                            <textarea
+                                                placeholder={t('Daily Max Temperature Map Description')}
+                                                value={maxTempFooter}
+                                                onChange={e => handleFooterMax(e)}
+                                                rows={5}
+                                                className={styles.textArea}
+                                            />
+                                        )
+                                    }
+                                </Translation>
+                                {/* <Input
                                     type="text"
                                     value={maxTempFooter}
                                     onChange={e => handleFooterMax(e)}
@@ -167,7 +184,7 @@ const Bulletin = (props: Props) => {
                                         disableUnderline: true,
                                     }}
                                     style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                                />
+                                /> */}
                             </FormControl>
 
 
@@ -183,27 +200,21 @@ const Bulletin = (props: Props) => {
                     !hideForm
                     && (
 
-                        <div className={styles.formItemfooter}>
+                        <div className={styles.formItemText}>
                             <FormControl fullWidth>
-                                <InputLabel>
-                                    <Translation>
-                                        {
-                                            t => <span>{t('Daily Min Temperature Map Description')}</span>
-                                        }
-                                    </Translation>
-                                </InputLabel>
-                                {' '}
-                                <Input
-                                    type="text"
-                                    value={minTempFooter}
-                                    onChange={e => handleFooterMin(e)}
-                                    className={styles.select}
-                                    disableUnderline
-                                    inputProps={{
-                                        disableUnderline: true,
-                                    }}
-                                    style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                                />
+                                <Translation>
+                                    {
+                                        t => (
+                                            <textarea
+                                                placeholder={t('Daily Min Temperature Map Description')}
+                                                value={minTempFooter}
+                                                onChange={e => handleFooterMin(e)}
+                                                rows={5}
+                                                className={styles.textArea}
+                                            />
+                                        )
+                                    }
+                                </Translation>
                             </FormControl>
 
 

@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
+import TextField from '@mui/material/TextField';
 
 import { NepaliDatePicker } from 'nepali-datepicker-reactjs';
 import 'nepali-datepicker-reactjs/dist/index.css';
@@ -233,12 +234,20 @@ const Bulletin = (props: Props) => {
                             t => <h3>{t('Disaster Hilights')}</h3>
                         }
                     </Translation>
-                    <div className={styles.formItem}>
+                    <div className={styles.formItemText}>
                         <FormControl fullWidth>
-                            <InputLabel>
+                            {/* <InputLabel>
                                 {language === 'np' ? 'हाइलाईट...' : 'Hilight...'}
-                            </InputLabel>
-                            <Input
+                            </InputLabel> */}
+                            <textarea
+                                placeholder={language === 'np' ? 'अधिकतम 700 अक्षरहरू' : 'Maximum 700 Characters'}
+                                value={hilight}
+                                onChange={e => handleHilightChange(e)}
+                                maxLength="700"
+                                rows={7}
+                                className={styles.textArea}
+                            />
+                            {/* <Input
                                 type="text"
                                 value={hilight}
                                 onChange={e => handleHilightChange(e)}
@@ -248,7 +257,7 @@ const Bulletin = (props: Props) => {
                                     disableUnderline: true,
                                 }}
                                 style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
-                            />
+                            /> */}
                         </FormControl>
                     </div>
 
@@ -350,12 +359,14 @@ const Bulletin = (props: Props) => {
                                                         : englishRef[subField]
                                                     }
                                                 </InputLabel>
+
                                                 <Input
                                                     type="number"
                                                     className={styles.select}
                                                     value={hazardWiseLossData[field][subField]}
                                                     onChange={e => handlehazardwiseLoss(e.target.value, field, subField)}
                                                     disableUnderline
+                                                    disabled
                                                     inputProps={{
                                                         disableUnderline: true,
                                                     }}

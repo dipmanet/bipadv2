@@ -9,6 +9,9 @@
         padding-left: 10px;
         // padding-top: 30px;
     }
+    .textArea{
+        width: 100%;
+    }
   .picContainer{
       display: flex;
       flex-direction: column;
@@ -27,6 +30,10 @@
           width: 95mm !important;
           right: 30px !important;
       }
+      .formItemTextFull{
+        @extend .formItemText;
+        width: 100% !important;
+    }
   }
   .picContainerReport{
     @extend .picContainer;
@@ -45,18 +52,49 @@
     }  
         
 h2{
-    color: #003572;
-    font-size: 22px;
+    color: rgb(15,11,11);
+    font-size: 14px;
     margin-bottom: 50px;
     margin: 50px 0 20px 0;
 }
 h3{
-    color:#707070;
+    color: rgb(15,11,11);
     margin: 50px 0 20px 0;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
 }
 
+.formItemText{
+    width: 50%;
+    border-radius: 3px;
+    border: 1px solid #cecccc;
+    // padding: 20px;
+    margin-top: 12px;
+    // height : 200px;
+    
+    textarea{
+        background-color: #f3f3f3;
+        border: none;
+        padding:10px;
+        width: 100% !important;
+    }
+}
+
+.formItemTextRainSummary{
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    border-radius: 3px;
+    border: 1px solid #cecccc;
+    // padding: 20px;
+    margin-top: 12px;
+    // height : 200px;
+    
+    textarea{
+        background-color: #f3f3f3;
+        border: none;
+        padding:10px;
+    }
+}
 .formItemDailySummary{
     max-width: calc(100% - 60px);
     margin-left: 30px;
@@ -71,6 +109,8 @@ h3{
     background-color: #f3f3f3;
     height: 65px;
     width: 100%;
+
+
 }
 
 }
