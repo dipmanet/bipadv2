@@ -30,6 +30,11 @@
           margin-bottom: 10px;
        
           border-top: 2px solid #F2F2F2;
+          .loader{
+            position: absolute;
+            left:0;
+            background: transparent;
+          }
       }
       .grid{
         display: flex;

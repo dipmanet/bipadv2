@@ -353,6 +353,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             currentMarkers: [],
             markerStatus: false,
             checkFullScreenStatus: false,
+            isTilesLoaded: false,
         };
     }
 
@@ -404,6 +405,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
     private handlemapClickedResponse = (data) => {
         this.setState({ mapClickedResponse: data });
         this.setState({ LoadingTooltip: false });
+    }
+
+    private handleTilesLoad = (boolean) => {
+        this.setState({ isTilesLoaded: boolean });
     }
 
     private handleMapClicked = (latlngData) => {
@@ -1019,6 +1024,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             currentMarkers,
             currentBounds,
             checkFullScreenStatus,
+            isTilesLoaded,
         } = this.state;
 
 
@@ -1142,20 +1148,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const lattiudeData = (val: number) => {
             this.setState({ lattitude: val });
         };
-
-        const regionName = this.getRegionName(
-            filters.region,
-            provinces,
-            districts,
-            municipalities,
-        );
-        const orderedLayers = this.getLayerOrder(activeLayers);
-        const hideFilters = false;
-        const activeRouteName = activeRouteDetails && activeRouteDetails.name;
-        console.log('active layers', activeLayers);
-
         const queryStringParams = window.location.href.split('#/')[1];
-
         const polygonDrawAccessableRoutes = ['vulnerability'];
 
         return (
@@ -1170,6 +1163,8 @@ class Multiplexer extends React.PureComponent<Props, State> {
                         <div className={_cs(styles.content, 'bipad-main-content')}>
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
+                                    handleTilesLoad={this.handleTilesLoad}
+                                    isTilesLoaded={isTilesLoaded}
                                     mapStyle={mapStyle}
                                     clickHandler={this.clickHandler}
                                     handleMapClicked={this.handleMapClicked}
@@ -1284,6 +1279,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 // activeLayers={activeLayers[activeLayers.length - 1]}
                                                 /> */}
                                                 <DownloadButtonOption
+                                                    isTilesLoaded={isTilesLoaded}
                                                     className={styles.layerSwitch}
                                                     onPendingStateChange={
                                                         this.handleMapDownloadStateChange

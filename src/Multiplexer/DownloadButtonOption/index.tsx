@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 /* eslint-disable max-len */
@@ -33,7 +34,7 @@ import Button from '#rsca/Button';
 import styles from './styles.scss';
 import SelectInput from '#rsci/SelectInput';
 import MapDownloadButton from '#components/MapDownloadButton';
-
+import LoadingAnimation from '#rscv/LoadingAnimation';
 
 const mapStyles = [
     {
@@ -96,31 +97,40 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 height: null,
                 width: null,
             },
+            isTilesLoaded: false,
         };
     }
 
     public componentDidUpdate(prevProps, prevState) {
-        const { map } = this.context;
-        const { resolution: { height, width } } = this.state;
-        const test = map.loaded();
-        console.log('test', test);
-        // if (map.loaded()) {
+        const { map, loaded } = this.context;
+        console.log('updated');
+        const { resolution: { height, width }, resolution } = this.state;
+        if (prevState.resolution !== resolution) {
+            this.setState({ isTilesLoaded: false });
+            console.log('ente');
 
-        //     console.log('Loaded with tiles');
-        // }
-        if (height && width) {
-            const finalHeight = `${height * 1.2549019607843}px`;
-            const finalWidth = `${width * 1.2549019607843}px`;
-            console.log('final height', height);
-            console.log('final width', width);
-            const myElements = document.getElementById('realMap123');
-            myElements.style.setProperty('height', finalHeight, 'important');
-            myElements.style.setProperty('width', finalWidth, 'important');
-            myElements.style.setProperty('position', 'absolute', 'important');
-            myElements.style.setProperty('overflow', 'scroll', 'important');
-            myElements.style.setProperty('top', '0', 'important');
-            myElements.style.setProperty('background-color', 'transparent', 'important');
-            myElements.style.setProperty('flex-grow', 'unset', 'important');
+            // const test = map.loaded();
+            // console.log('test', test);
+
+            // if (map.loaded()) {
+
+            //     console.log('Loaded with tiles');
+            // }
+            if (height && width) {
+                const finalHeight = `${height * 1.2549019607843}px`;
+                const finalWidth = `${width * 1.2549019607843}px`;
+                console.log('final height', height);
+                console.log('final width', width);
+                const myElements = document.getElementById('realMap123');
+                myElements.style.setProperty('height', finalHeight, 'important');
+                myElements.style.setProperty('width', finalWidth, 'important');
+                myElements.style.setProperty('position', 'absolute', 'important');
+                myElements.style.setProperty('overflow', 'scroll', 'important');
+                myElements.style.setProperty('top', '0', 'important');
+                myElements.style.setProperty('background-color', 'transparent', 'important');
+                myElements.style.setProperty('flex-grow', 'unset', 'important');
+            }
+            setTimeout(() => this.setState({ isTilesLoaded: true }), 5000);
         }
     }
 
@@ -204,11 +214,14 @@ class LayerSwitch extends React.PureComponent<Props, State> {
     // }
 
     public render() {
-        const { className, onPendingStateChange, activeLayers } = this.props;
+        const { className, onPendingStateChange, activeLayers, isTilesLoaded } = this.props;
 
-        const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType, selectedFileFormat, resolution: { height, width }, resolution } = this.state;
+        const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType,
+
+            selectedFileFormat, resolution: { height, width }, resolution } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
         console.log('resolution', resolution);
+
         return (
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}
@@ -378,12 +391,21 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                             </form>
                                         </div>
                                         <div className={styles.footerButton}>
-                                            <Button
-                                                className={styles.fileFormatButton}
-                                                onClick={this.handlepreview}
-                                            >
-                                                Preview & Download
-                                            </Button>
+                                            {!isTilesLoaded ? (
+                                                <div style={{ position: 'relative' }}>
+                                                    <LoadingAnimation className={styles.loader} />
+                                                    {' '}
+                                                    <p> Loading...</p>
+                                                </div>
+                                            )
+                                                : (
+                                                    <Button
+                                                        className={styles.fileFormatButton}
+                                                        onClick={this.handlepreview}
+                                                    >
+                                                        Download
+                                                    </Button>
+                                                )}
                                             <Button
                                                 className={styles.fileFormatButton}
                                                 onClick={() => this.setState({ showCustomSetting: false, selectedFileFormat: '', selectedPageType: '' })}
