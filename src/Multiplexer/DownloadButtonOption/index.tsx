@@ -99,6 +99,30 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         };
     }
 
+    public componentDidUpdate(prevProps, prevState) {
+        const { map } = this.context;
+        const { resolution: { height, width } } = this.state;
+        const test = map.loaded();
+        console.log('test', test);
+        // if (map.loaded()) {
+
+        //     console.log('Loaded with tiles');
+        // }
+        if (height && width) {
+            const finalHeight = `${height * 1.2549019607843}px`;
+            const finalWidth = `${width * 1.2549019607843}px`;
+            console.log('final height', height);
+            console.log('final width', width);
+            const myElements = document.getElementById('realMap123');
+            myElements.style.setProperty('height', finalHeight, 'important');
+            myElements.style.setProperty('width', finalWidth, 'important');
+            myElements.style.setProperty('position', 'absolute', 'important');
+            myElements.style.setProperty('overflow', 'scroll', 'important');
+            myElements.style.setProperty('top', '0', 'important');
+            myElements.style.setProperty('background-color', 'transparent', 'important');
+            myElements.style.setProperty('flex-grow', 'unset', 'important');
+        }
+    }
 
     private isActiveMapStyle = (styleFromLayer) => {
         const { currentMapStyle } = this.props;
@@ -145,43 +169,46 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         this.setState({
             resolution: {
                 ...resolution,
-                [e.target.name]: e.target.value,
+                [e.target.name]: Number(e.target.value),
             },
 
         });
     }
 
-    private handlepreview = () => {
-        const { map } = this.context;
-        const finalHeight = `${300 * 1.2549019607843}px`;
-        const finalWidth = `${300 * 1.2549019607843}px`;
-
-        const myElements = document.getElementById('realMap123');
-        myElements.style.setProperty('height', finalHeight, 'important');
-        myElements.style.setProperty('width', finalWidth, 'important');
-        myElements.style.setProperty('position', 'absolute', 'important');
-        myElements.style.setProperty('top', '0', 'important');
-        myElements.style.setProperty('background-color', 'transparent', 'important');
-        myElements.style.setProperty('flex-grow', 'unset', 'important');
-        // myElements.style.height = finalHeight;
-        // myElements.style.width = finalWidth;
-        // myElements.style.position = 'absolute';
-        // myElements.style.top = '0';
-        // myElements.style.backgroundColor = 'transparent';
-        // myElements.style.flexGrow = 'unset';
-        if (map) {
-            const mapContainer = map.getContainer();
-            console.log('map container', mapContainer);
-            mapContainer.requestFullscreen();
-        }
-    }
+    // private handlepreview = () => {
+    //     const { map } = this.context;
+    //     const { resolution: { height, width } } = this.state;
+    //     const finalHeight = `${height * 1.2549019607843}px`;
+    //     const finalWidth = `${width * 1.2549019607843}px`;
+    //     console.log('final height', height);
+    //     console.log('final width', width);
+    //     const myElements = document.getElementById('realMap123');
+    //     myElements.style.setProperty('height', finalHeight, 'important');
+    //     myElements.style.setProperty('width', finalWidth, 'important');
+    //     myElements.style.setProperty('position', 'absolute', 'important');
+    //     myElements.style.setProperty('overflow', 'scroll', 'important');
+    //     myElements.style.setProperty('top', '0', 'important');
+    //     myElements.style.setProperty('background-color', 'transparent', 'important');
+    //     myElements.style.setProperty('flex-grow', 'unset', 'important');
+    //     // myElements.style.height = finalHeight;
+    //     // myElements.style.width = finalWidth;
+    //     // myElements.style.position = 'absolute';
+    //     // myElements.style.top = '0';
+    //     // myElements.style.backgroundColor = 'transparent';
+    //     // myElements.style.flexGrow = 'unset';
+    //     // if (map) {
+    //     //     const mapContainer = map.getContainer();
+    //     //     console.log('map container', mapContainer);
+    //     //     mapContainer.requestFullscreen();
+    //     // }
+    // }
 
     public render() {
         const { className, onPendingStateChange, activeLayers } = this.props;
 
         const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType, selectedFileFormat, resolution: { height, width }, resolution } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
-
+        console.log('resolution', resolution);
         return (
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}

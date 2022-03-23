@@ -840,6 +840,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const orderedLayers = this.getLayerOrder(activeLayers);
         const hideFilters = false;
         const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        console.log('active layers', activeLayers);
         return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>
@@ -924,6 +925,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 styles.map,
                                                 hideMap && styles.hidden,
                                             )}
+                                            activeLayers={activeLayers}
+                                            onPendingStateChange={
+                                                this.handleMapDownloadStateChange
+                                            }
                                         />
                                         {/* hazardList.map((item) => {
                                         if (!item.icon) {

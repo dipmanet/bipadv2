@@ -151,7 +151,6 @@ const MapDownloadButton = (props: Props) => {
         activeLayers,
         layers,
         layerGroups,
-        resolution,
         ...otherProps
     } = props;
 
@@ -222,8 +221,8 @@ const MapDownloadButton = (props: Props) => {
             console.log('my element', myElements);
             const width = '5000px';
             const height = '5000px';
-            const finalHeight = `${5000 * 1.2549019607843}px`;
-            const finalWidth = `${5000 * 1.2549019607843}px`;
+            const finalHeight = `${1000 * 1.2549019607843}px`;
+            const finalWidth = `${1000 * 1.2549019607843}px`;
 
 
             // myElements.style.height = finalHeight;
