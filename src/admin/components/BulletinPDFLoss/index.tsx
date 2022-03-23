@@ -215,17 +215,17 @@ const BulletinPDF = (props: Props) => {
         const getSeverity = (deaths) => {
             if (deaths) {
                 if (Number(deaths) === 0) {
-                    return 8;
+                    return 4;
                 }
                 if (Number(deaths) < 10) {
-                    return 11;
+                    return 6;
                 } if (Number(deaths) >= 10 && Number(deaths) < 100) {
-                    return 15;
+                    return 8;
                 } if (Number(deaths) >= 100) {
-                    return 20;
+                    return 10;
                 }
             }
-            return 8;
+            return 4;
         };
 
         let obj = {};
@@ -257,7 +257,6 @@ const BulletinPDF = (props: Props) => {
         } else if (newhazardLegends.length > 0 && Object.keys(obj).length === 0) {
             setHazardLegends([...newhazardLegends]);
         }
-        console.log('newhazardLegends', newhazardLegends);
 
         const features = [];
         Object.keys(hazardWiseLoss).map((h) => {
@@ -276,6 +275,8 @@ const BulletinPDF = (props: Props) => {
             return null;
         });
 
+        console.log('hazardwiseloss data', hazardWiseLoss);
+        console.log('features from added data', features);
         Object.keys(feedback)
             .map(item => feedback[item])
             .filter(item => item.coordinates)
@@ -292,8 +293,7 @@ const BulletinPDF = (props: Props) => {
                 return null;
             });
 
-
-        console.log('features', features);
+        console.log('total features', features);
         setincidentPoints({
             type: 'FeatureCollection',
             features,

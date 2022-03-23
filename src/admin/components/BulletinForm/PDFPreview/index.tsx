@@ -368,8 +368,6 @@ const PDFPreview = (props) => {
         setPending(true);
         const doc = new JsPDF('p', 'mm', 'a4');
         // const doc = new JsPDF('p', 'mm', 'a4');
-
-
         const ids = document.querySelectorAll('.page');
         const { length } = ids;
         for (let i = 0; i < length; i += 1) {

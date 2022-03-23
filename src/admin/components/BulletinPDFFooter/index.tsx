@@ -24,14 +24,10 @@ const BulletinPDFFooter = (props) => {
         rainSummaryPic,
         maxTempFooter,
         minTempFooter,
-
-
     } = props.bulletinData;
 
     const { language: { language }, rainSummaryFooter } = props;
-    console.log('What is props', props.bulletinData);
-    console.log('daily summary', dailySummary);
-    console.log('rain summary footer', rainSummaryFooter);
+
     return (
         <div className={language === 'np' ? styles.footerContainer : styles.footerContainerEnglish}>
             <div className={styles.dailySummary}>

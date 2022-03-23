@@ -156,6 +156,7 @@ const IncidentMap = (props) => {
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
 
+        console.log('incidentPoints', incidentPoints);
 
         const Map = new mapboxgl.Map({
             container: mapContainer,
@@ -330,7 +331,7 @@ const IncidentMap = (props) => {
                 },
             );
         });
-    }, [incidentPoints, language, pointFeatureCollection, props]);
+    }, [incidentPoints, language, pointFeatureCollection]);
     // const filteredHazardTypes = getIncidentHazardTypesList(sanitizedIncidentList);
     // const sanitizedIncidentList = getSanitizedIncidents(
     //     incidentList,
