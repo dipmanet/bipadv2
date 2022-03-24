@@ -228,22 +228,21 @@ const BulletinPDF = (props: Props) => {
             return 4;
         };
 
-        let obj = {};
+        const obj = {};
         let newhazardLegends = [];
-        if (Object.keys(hazardWiseLoss).length > 0) {
-            obj = Object.keys(hazardWiseLoss).map(hazardName => (
-                {
-                    title: getHazardTitle(hazardName),
-                    // titleEn: getHazardTitle(hazardName),
-                    color: getHazardColor(hazardName),
-                }
-            ));
-        }
+        // if (Object.keys(hazardWiseLoss).length > 0) {
+        //     obj = Object.keys(hazardWiseLoss).map(hazardName => (
+        //         {
+        //             title: getHazardTitle(hazardName),
+        //             // titleEn: getHazardTitle(hazardName),
+        //             color: getHazardColor(hazardName),
+        //         }
+        //     ));
+        // }
 
         if (Object.keys(feedback).length > 0) {
             const allHazardsAdded = Object.keys(feedback)
                 .map(item => feedback[item])
-                .filter(item => item.coordinates)
                 .map(item => item.hazard);
             const uniqueAddedHazards = [...new Set(allHazardsAdded)];
             newhazardLegends = uniqueAddedHazards.map(h => ({
@@ -252,12 +251,11 @@ const BulletinPDF = (props: Props) => {
                 color: getHazardColor(h),
             }));
         }
-        if (Object.keys(obj).length > 0 && newhazardLegends.length > 0) {
-            setHazardLegends([...obj, ...newhazardLegends]);
-        } else if (newhazardLegends.length > 0 && Object.keys(obj).length === 0) {
+        if (newhazardLegends.length > 0) {
             setHazardLegends([...newhazardLegends]);
         }
 
+        console.log('hazardWiseLoss and feedback', hazardWiseLoss, feedback);
         const features = [];
         Object.keys(hazardWiseLoss).map((h) => {
             if (Object.keys(hazardWiseLoss[h]).length > 2) {

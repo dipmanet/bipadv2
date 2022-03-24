@@ -382,6 +382,10 @@ const Bulletin = (props: Props) => {
         }
     };
 
+    const resetFeedback = () => {
+        setFeedback({});
+    };
+
     const handlehazardAdd = (hazard) => {
         console.log('hazard', hazard);
         const newData = { ...addedHazardFields };
@@ -799,6 +803,7 @@ const Bulletin = (props: Props) => {
             recordSelectedDate={recordSelectedDate}
             handleBulletinDate={handleBulletinDate}
             uri={uri}
+            resetFeedback={resetFeedback}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}

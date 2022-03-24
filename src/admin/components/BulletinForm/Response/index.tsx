@@ -123,10 +123,10 @@ const Response = (props: Props) => {
             const cumulativeData = Object.keys(feedback)
                 .map(item => feedback[item])
                 .reduce((acc, cur) => ({
-                    deaths: acc.deaths + Number(cur.deaths || 0),
-                    missing: acc.missing + Number(cur.missing || 0),
-                    injured: acc.injured + Number(cur.injured || 0),
-                }));
+                    deaths: Number(acc.deaths) + Number(cur.deaths || 0),
+                    missing: Number(acc.missing) + Number(cur.missing || 0),
+                    injured: Number(acc.injured) + Number(cur.injured || 0),
+                }), { deaths: 0, missing: 0, injured: 0 });
             const other = {
                 district: getDistricts(),
                 incidents: getIncidents(),

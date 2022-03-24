@@ -85,6 +85,7 @@ const Bulletin = (props: Props) => {
         language: { language },
         handleBulletinDate,
         setLanguage,
+        resetFeedback,
         uri,
     } = props;
 
@@ -102,6 +103,10 @@ const Bulletin = (props: Props) => {
             setLanguage({ language: 'en' });
         }
     }, [uri]);
+
+    useEffect(() => {
+        resetFeedback();
+    }, []);
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
@@ -240,7 +245,7 @@ const Bulletin = (props: Props) => {
                                 {language === 'np' ? 'हाइलाईट...' : 'Hilight...'}
                             </InputLabel> */}
                             <textarea
-                                placeholder={language === 'np' ? 'अधिकतम 700 अक्षरहरू' : 'Maximum 700 Characters'}
+                                placeholder={language === 'np' ? 'अधिकतम ७०० अक्षरहरू' : 'Maximum 700 Characters'}
                                 value={hilight}
                                 onChange={e => handleHilightChange(e)}
                                 maxLength="700"
