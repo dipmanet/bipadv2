@@ -98,6 +98,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 width: null,
             },
             isTilesLoaded: false,
+            disableDefaultDownload: false,
         };
     }
 
@@ -105,8 +106,10 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         const { map, loaded } = this.context;
         console.log('updated');
         const { resolution: { height, width }, resolution } = this.state;
+        const { showCustomSetting } = this.state;
+
         if (prevState.resolution !== resolution) {
-            this.setState({ isTilesLoaded: false });
+            // this.setState({ isTilesLoaded: false });
             console.log('ente');
 
             // const test = map.loaded();
@@ -116,9 +119,14 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
             //     console.log('Loaded with tiles');
             // }
-            if (height && width) {
-                const finalHeight = `${height * 1.2549019607843}px`;
-                const finalWidth = `${width * 1.2549019607843}px`;
+            if ((height > 499 && height < 5001) && (width > 499 && width < 5001)) {
+                const dpr = window.devicePixelRatio || 1;
+                console.log('Dpr', dpr);
+
+                // const finalHeight = `${height * 1.2549019607843}px`;
+                // const finalWidth = `${width * 1.2549019607843}px`;
+                const finalHeight = `${height / dpr}px`;
+                const finalWidth = `${width / dpr}px`;
                 console.log('final height', height);
                 console.log('final width', width);
                 const myElements = document.getElementById('realMap123');
@@ -130,7 +138,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 myElements.style.setProperty('background-color', 'transparent', 'important');
                 myElements.style.setProperty('flex-grow', 'unset', 'important');
             }
-            setTimeout(() => this.setState({ isTilesLoaded: true }), 5000);
+            // setTimeout(() => this.setState({ isTilesLoaded: true }), 5000);
         }
     }
 
@@ -212,13 +220,45 @@ class LayerSwitch extends React.PureComponent<Props, State> {
     //     //     mapContainer.requestFullscreen();
     //     // }
     // }
+    private handleCustomDownloadClick = () => {
+        const { handleToggleAnimationMapDownloadButton } = this.props;
+        this.setState({ showCustomSetting: true });
+        handleToggleAnimationMapDownloadButton(true);
+        this.setState({ disableDefaultDownload: true });
+        console.log('Wht');
+    }
+
+    private handleCancelButton = () => {
+        const { handleToggleAnimationMapDownloadButton } = this.props;
+        handleToggleAnimationMapDownloadButton(false);
+        const myElements = document.getElementById('realMap123');
+        console.log('My final element', myElements);
+        myElements.style.setProperty('height', 'unset', 'important');
+        myElements.style.setProperty('width', 'unset', 'important');
+        myElements.style.setProperty('position', 'unset', 'important');
+        myElements.style.setProperty('top', 'unset', 'important');
+        myElements.style.setProperty('background-color', 'transparent', 'important');
+        myElements.style.setProperty('flex-grow', '1', 'important');
+
+        this.setState({
+            showCustomSetting: false,
+            selectedFileFormat: '',
+            disableDefaultDownload: false,
+            selectedPageType: '',
+            resolution: {
+                height: null,
+                width: null,
+            },
+            showPageType: 'true',
+        });
+    }
 
     public render() {
-        const { className, onPendingStateChange, activeLayers, isTilesLoaded } = this.props;
+        const { className, onPendingStateChange, activeLayers, isTilesLoaded, handleToggleAnimationMapDownloadButton } = this.props;
 
         const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType,
 
-            selectedFileFormat, resolution: { height, width }, resolution } = this.state;
+            selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
         console.log('resolution', resolution);
 
@@ -228,6 +268,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 iconName="download"
                 hideDropdownIcon
                 tooltip="Download Map"
+                handleToggleAnimationMapDownloadButton={handleToggleAnimationMapDownloadButton}
             >
                 <div className={styles.mainContainer}>
                     <div className={styles.heading}>
@@ -250,12 +291,15 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                             }
                             activeLayers={activeLayers}
                             resolution={resolution}
+                            buttonText="Download with default settings"
+                            defaultMap
+                            disableDefaultDownload={disableDefaultDownload}
                         />
                         {
                             showCustomSetting ? '' : (
                                 <Button
                                     className={styles.downloadButton}
-                                    onClick={() => this.setState({ showCustomSetting: true })}
+                                    onClick={this.handleCustomDownloadClick}
                                 >
                                     Download with custom settings
                                 </Button>
@@ -289,25 +333,60 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                     <div>
                                                         <Button
                                                             className={_cs(selectedPageType === 'A3' ? (styles.active) : (styles.pageSizeButton))}
-                                                            onClick={() => this.setState({ selectedPageType: 'A3' })}
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    selectedPageType: 'A3',
+                                                                    resolution: {
+                                                                        height: 4961,
+                                                                        width: 3508,
+                                                                    },
+                                                                });
+                                                            }}
                                                         >
                                                             A3
                                                         </Button>
                                                         <Button
                                                             className={_cs(selectedPageType === 'A4' ? (styles.active) : (styles.pageSizeButton))}
-                                                            onClick={() => this.setState({ selectedPageType: 'A4' })}
+
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    selectedPageType: 'A4',
+                                                                    resolution: {
+                                                                        height: 3508,
+                                                                        width: 2480,
+                                                                    },
+                                                                });
+                                                            }}
                                                         >
                                                             A4
                                                         </Button>
                                                         <Button
                                                             className={_cs(selectedPageType === 'B4' ? (styles.active) : (styles.pageSizeButton))}
-                                                            onClick={() => this.setState({ selectedPageType: 'B4' })}
+
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    selectedPageType: 'B4',
+                                                                    resolution: {
+                                                                        height: 4169,
+                                                                        width: 2953,
+                                                                    },
+                                                                });
+                                                            }}
                                                         >
                                                             B4
                                                         </Button>
                                                         <Button
                                                             className={_cs(selectedPageType === 'B5' ? (styles.active) : (styles.pageSizeButton))}
-                                                            onClick={() => this.setState({ selectedPageType: 'B5' })}
+
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    selectedPageType: 'B5',
+                                                                    resolution: {
+                                                                        height: 2953,
+                                                                        width: 2079,
+                                                                    },
+                                                                });
+                                                            }}
                                                         >
                                                             B5
                                                         </Button>
@@ -330,6 +409,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             value={height}
                                                             style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
                                                             onChange={e => this.handleChangeResolution(e)}
+
                                                         />
                                                         X
                                                         <input
@@ -339,6 +419,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             value={width}
                                                             style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
                                                             onChange={e => this.handleChangeResolution(e)}
+
+
                                                         />
 
                                                     </div>
@@ -357,25 +439,28 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                 </label>
                                                 <div>
                                                     <Button
-                                                        className={_cs(selectedFileFormat === 'PNG' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                        onClick={() => this.setState({ selectedFileFormat: 'PNG' })}
+                                                        className={_cs(selectedFileFormat === 'png' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                        onClick={() => this.setState({ selectedFileFormat: 'png' })}
 
                                                     >
                                                         PNG
                                                     </Button>
                                                     <Button
-                                                        className={_cs(selectedFileFormat === 'JPG' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                        onClick={() => this.setState({ selectedFileFormat: 'JPG' })}
+                                                        className={_cs(selectedFileFormat === 'jpeg' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                        onClick={() => this.setState({ selectedFileFormat: 'jpeg' })}
 
                                                     >
                                                         JPG
                                                     </Button>
-                                                    <Button
-                                                        className={_cs(selectedFileFormat === 'PDF' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                        onClick={() => this.setState({ selectedFileFormat: 'PDF' })}
-                                                    >
-                                                        PDF
-                                                    </Button>
+                                                    {showPageType === 'true'
+                                                        ? (
+                                                            <Button
+                                                                className={_cs(selectedFileFormat === 'PDF' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
+                                                                onClick={() => this.setState({ selectedFileFormat: 'png' })}
+                                                            >
+                                                                PDF
+                                                            </Button>
+                                                        ) : ''}
 
                                                 </div>
                                             </form>
@@ -399,16 +484,30 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                 </div>
                                             )
                                                 : (
-                                                    <Button
-                                                        className={styles.fileFormatButton}
-                                                        onClick={this.handlepreview}
-                                                    >
-                                                        Download
-                                                    </Button>
+                                                    // <Button
+                                                    //     className={styles.fileFormatButton}
+                                                    //     onClick={this.handlepreview}
+                                                    // >
+                                                    //     Download
+                                                    // </Button>
+                                                    <MapDownloadButton
+                                                        // className={styles.mapDownloadButton}
+                                                        className={styles.downloadButton}
+                                                        // transparent
+                                                        title="Download custom map"
+                                                        // iconName="download"
+                                                        onPendingStateChange={
+                                                            onPendingStateChange
+                                                        }
+                                                        activeLayers={activeLayers}
+                                                        resolution={resolution}
+                                                        buttonText="Download"
+                                                        selectedFileFormat={selectedFileFormat}
+                                                    />
                                                 )}
                                             <Button
                                                 className={styles.fileFormatButton}
-                                                onClick={() => this.setState({ showCustomSetting: false, selectedFileFormat: '', selectedPageType: '' })}
+                                                onClick={this.handleCancelButton}
                                             >
                                                 Cancel
                                             </Button>

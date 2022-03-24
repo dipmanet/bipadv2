@@ -354,6 +354,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             markerStatus: false,
             checkFullScreenStatus: false,
             isTilesLoaded: false,
+            toggleAnimationMapDownloadButton: false,
         };
     }
 
@@ -976,6 +977,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
     }
 
+    private handleToggleAnimationMapDownloadButton = (boolean) => {
+        this.setState({ toggleAnimationMapDownloadButton: boolean });
+    }
+
     public render() {
         const {
             mapStyle,
@@ -1025,6 +1030,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             currentBounds,
             checkFullScreenStatus,
             isTilesLoaded,
+            toggleAnimationMapDownloadButton,
         } = this.state;
 
 
@@ -1168,6 +1174,9 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                     mapStyle={mapStyle}
                                     clickHandler={this.clickHandler}
                                     handleMapClicked={this.handleMapClicked}
+
+                                    toggleAnimationMapDownloadButton={toggleAnimationMapDownloadButton}
+
                                     mapOptions={{
                                         logoPosition: 'top-left',
                                         minZoom: 5,
@@ -1285,6 +1294,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                         this.handleMapDownloadStateChange
                                                     }
                                                     activeLayers={activeLayers[activeLayers.length - 1]}
+                                                    handleToggleAnimationMapDownloadButton={this.handleToggleAnimationMapDownloadButton}
 
                                                 />
                                                 <LayerSwitch

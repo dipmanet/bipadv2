@@ -66,8 +66,8 @@ const indexBounds = {
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
 
-const largeFont = '20px Source Sans Pro';
-const smallFont = '14px Source Sans Pro';
+// const largeFont = '20px Source Sans Pro';
+// const smallFont = '14px Source Sans Pro';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     region: regionSelector(state),
@@ -151,6 +151,11 @@ const MapDownloadButton = (props: Props) => {
         activeLayers,
         layers,
         layerGroups,
+        buttonText,
+        defaultMap,
+        selectedFileFormat,
+        disableDefaultDownload,
+        resolution,
         ...otherProps
     } = props;
 
@@ -176,6 +181,7 @@ const MapDownloadButton = (props: Props) => {
         && filteredLayerGroup[0].metadata && filteredLayerGroup[0].metadata.value
         && filteredLayerGroup[0].metadata.value.general
         && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
+    console.log('disableDefaultDownload', resolution);
     const handleExport = useCallback(
         () => {
             if (!mapContext || !mapContext.map) {
@@ -198,6 +204,7 @@ const MapDownloadButton = (props: Props) => {
                 return;
             }
 
+            console.log('default time', defaultMap);
             const pageTitle = pageContext.activeRouteDetails.title;
 
             let regionName = 'Nepal';
@@ -268,11 +275,24 @@ const MapDownloadButton = (props: Props) => {
                 const rightMargin = 24;
                 const topMargin = 24;
 
-                const indexMapWidth = 200;
-                const indexMapHeight = 200 * indexMap.height / indexMap.width;
+                // const indexMapWidth = 200;
+                // const indexMapHeight = 200 * indexMap.height / indexMap.width;
+                let indexMapWidth = 200;
+                let indexMapHeight = 200 * indexMap.height / indexMap.width;
+                if (resolution.width && (resolution.width <= resolution.height)) {
+                    indexMapWidth = (resolution.width * 0.25);
+                    indexMapHeight = indexMapWidth * indexMap.height / indexMap.width;
+                } else if (resolution.width && (resolution.width > resolution.height)) {
+                    indexMapHeight = (resolution.height * 0.25);
+                    indexMapWidth = indexMapHeight * indexMap.width / indexMap.height;
+                }
 
+
+                const constant = (indexMapWidth < indexMapHeight) ? indexMapWidth : indexMapHeight;
                 const left = canvas.width - indexMapWidth - rightMargin;
                 const top = topMargin;
+                const right = canvas.width - indexMapWidth - rightMargin;
+                const bottom = topMargin;
 
                 const dx = mp.left * indexMapWidth;
                 const dy = mp.top * indexMapHeight;
@@ -287,11 +307,17 @@ const MapDownloadButton = (props: Props) => {
 
                 context.beginPath();
                 context.strokeStyle = '#ff0000';
+                // context.rect(
+                //     left + dx,
+                //     top + dy,
+                //     indexMapWidth * mp.width,
+                //     indexMapHeight * mp.height,
+                // );
                 context.rect(
-                    left + dx,
-                    top + dy,
-                    indexMapWidth * mp.width,
-                    indexMapHeight * mp.height,
+                    left - 10,
+                    top - 5,
+                    indexMapWidth + 15,
+                    indexMapHeight + 10,
                 );
 
                 context.stroke();
@@ -318,23 +344,30 @@ const MapDownloadButton = (props: Props) => {
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
                 source = specificSource || '';
-                drawText(context, largeFont, title, 12, 24, '#000', '#fff');
-                drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
+                const calculation = value => (
+                    (value / 200) * constant
+                );
+                const largeFont = `${calculation(40)}px Source Sans Pro`;
+                const smallFont = `${calculation(34)}px Source Sans Pro`;
+                const space = 50;
+                drawText(context, largeFont, title, calculation(32), calculation(44), '#000', '#fff');
+                drawText(context, smallFont, exportText, calculation(32), calculation(44 + space), '#000', '#fff');
 
                 if (source) {
-                    drawText(context, smallFont, `Source: ${source}`, 12, 68, '#000', '#fff');
+                    drawText(context, smallFont, `Source: ${source}`, calculation(32), calculation(44 + (2 * space)), '#000', '#fff');
                 }
                 if (publicationDate) {
                     if (source) {
-                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, 12, 82, '#000', '#fff');
+                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, calculation(32), calculation(88 + (2 * space)), '#000', '#fff');
                     } else {
-                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, 12, 68, '#000', '#fff');
+                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, calculation(32), calculation(88 + (2 * space)), '#000', '#fff');
                     }
                 }
                 const allPromises = [];
 
                 if (scale) {
                     const scaleCanvas = html2canvas(scale as HTMLElement);
+
 
                     const scalePromise = new Promise((resolve) => {
                         scaleCanvas.then((c) => {
@@ -372,7 +405,8 @@ const MapDownloadButton = (props: Props) => {
                 if (legend) {
                     const legendPromise = new Promise((resolve) => {
                         const promises = Array.from(legend).map((legendElement) => {
-                            const elCanvas = html2canvas(legendElement as HTMLElement);
+                            const elCanvas = html2canvas(legendElement as HTMLElement,
+                                { scale: indexMapWidth / 200 });
                             return elCanvas;
                         });
                         Promise.all(promises).then((canvases) => {
@@ -395,13 +429,14 @@ const MapDownloadButton = (props: Props) => {
                 Promise.all(allPromises).then(() => {
                     canvas.toBlob((blob) => {
                         const link = document.createElement('a');
-                        link.download = `map-export-${(new Date()).getTime()}.png`;
+                        link.download = defaultMap ? `map-export-${(new Date()).getTime()}.png`
+                            : `map-export-${(new Date()).getTime()}.${selectedFileFormat}`;
                         link.href = URL.createObjectURL(blob);
                         link.click();
                         setDownloadPending(false);
                         document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '29px';
                         navigation.getElementsByTagName('span')[0].style.backgroundSize = 'auto';
-                    }, 'image/png');
+                    }, defaultMap ? 'image/png' : `image/${selectedFileFormat}`);
                 });
             };
         },
@@ -418,6 +453,7 @@ const MapDownloadButton = (props: Props) => {
             realtimeFilters,
         ],
     );
+
     const handleSaveClick = (classname) => {
         if (classname === 'mapboxgl-canvas') {
             const divToDisplay = document.getElementsByClassName('mapboxgl-canvas');
@@ -448,13 +484,14 @@ const MapDownloadButton = (props: Props) => {
     };
     return (
         <Button
-            disabled={disabled || !mapContext || !mapContext.map}
+            disabled={disabled || !mapContext || !mapContext.map || disableDefaultDownload}
             pending={pending || pendingFromProps}
             onClick={handleExport}
             // onClick={handleSaveClick('mapboxgl-canvas')}
             {...otherProps}
         >
-            Download with default settings
+            {buttonText}
+
         </Button>
     );
 };
