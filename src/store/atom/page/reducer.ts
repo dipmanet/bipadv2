@@ -25,14 +25,15 @@ export const setBulletinLossAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN,
     bulletinData,
 });
-export const setBulletinCovidAction = bulletinData => ({
-    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
-    bulletinData,
-});
 export const setBulletinFeedbackAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK,
     bulletinData,
 });
+export const setBulletinCovidAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
+    bulletinData,
+});
+
 export const setBulletinTemperatureAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE,
     bulletinData,
@@ -1798,10 +1799,25 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
         deferedState.bulletinPage.sitRep = bulletinData.sitRep;
         deferedState.bulletinPage.hilight = bulletinData.hilight;
+        deferedState.bulletinPage.bulletinDate = bulletinData.bulletinDate;
     });
 
     return newState;
 };
+
+// export const setBulletinFeedback = (
+//     state: Type.PageState,
+//     action: Type.SetBulletinData,
+// ) => {
+//     const {
+//         bulletinData,
+//     } = action;
+//     const newState = produce(state, (deferedState) => {
+//         /* eslint-disable no-param-reassign */
+//         deferedState.bulletinPage.feedback = bulletinData.feedback;
+//     });
+//     return newState;
+// };
 
 export const setBulletinCovid = (
     state: Type.PageState,
@@ -1830,7 +1846,7 @@ export const setBulletinFeedback = (
     const {
         bulletinData,
     } = action;
-
+    console.log('feedback is ', bulletinData);
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.bulletinPage.feedback = bulletinData.feedback;
@@ -1855,6 +1871,7 @@ export const setBulletinDataTemperature = (
         deferedState.bulletinPage.rainSummaryPic = bulletinData.rainSummaryPic;
         deferedState.bulletinPage.maxTempFooter = bulletinData.maxTempFooter;
         deferedState.bulletinPage.minTempFooter = bulletinData.minTempFooter;
+        deferedState.bulletinPage.rainSummaryFooter = bulletinData.rainSummaryFooter;
     });
 
     return newState;
@@ -2093,14 +2110,14 @@ export default function routeReducer(
             return setIbfPage(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
             return setBulletinEditData(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
+            return setBulletinFeedback(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN:
             return setBulletinLoss(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA:
             return setBulletinYearlyData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
             return setBulletinCovid(state, action);
-        case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
-            return setBulletinFeedback(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE:
             return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:

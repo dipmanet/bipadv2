@@ -267,9 +267,13 @@ const BulletinTable = (props) => {
         }
     }, [bulletinTableData]);
 
-    const handleTableEdit = (row) => {
-        setBulletinEditData(row);
-        navigate('/admin/bulletin/add-new-bulletin');
+    const handleTableEdit = (row, lang) => {
+        setBulletinEditData({ ...row, language: lang });
+        if (lang === 'nepali') {
+            navigate('/admin/bulletin/add-new-bulletin-nepali');
+        } else {
+            navigate('/admin/bulletin/add-new-bulletin-english');
+        }
     };
 
 
@@ -317,16 +321,8 @@ const BulletinTable = (props) => {
         <>
             {
                 filteredRowDatas.length === 0 || loader ? (
-                    <Loader options={{
-                        position: 'fixed',
-                        top: '48%',
-                        right: 0,
-                        bottom: 0,
-                        left: '48%',
-                        background: 'gray',
-                        zIndex: 9999,
-                    }}
-                    />
+                    <h1 className={styles.noDataHeading}>No Table Data</h1>
+
                 )
                     : (
                         <Box
@@ -1087,11 +1083,22 @@ const BulletinTable = (props) => {
                             {
                                 (permission === 'editor' || permission === 'user' || permission === 'superuser')
                                 ? (
-                                <IconButton
-                                    onClick={() => handleTableEdit(row)}
-                                >
-                                    <EditIcon />
-                                </IconButton>
+                                    <>
+                                    <button
+                                        type="button"
+                                        className={styles.editBtn}
+                                        onClick={() => handleTableEdit(row, 'nepali')}
+                                    >
+                                    Edit Nepali
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={styles.editBtn}
+                                        onClick={() => handleTableEdit(row, 'english')}
+                                    >
+                                    Edit English
+                                    </button>
+                                    </>
                                 )
                                 : <span>No Action</span>
 
@@ -1129,8 +1136,6 @@ const BulletinTable = (props) => {
                         </Box>
                     )
             }
-
-
         </>
     );
 };

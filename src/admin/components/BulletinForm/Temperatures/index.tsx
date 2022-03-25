@@ -45,8 +45,6 @@ const Bulletin = (props: Props) => {
         handleRainSummaryFooter,
         language: { language },
     } = props;
-    console.log('max temp footer', maxTempFooter);
-    console.log('rain footer', rainSummaryFooter);
     return (
         <div className={styles.formContainer}>
             {
@@ -78,27 +76,7 @@ const Bulletin = (props: Props) => {
                                     )
                                 }
                             </Translation>
-                            {' '}
 
-                            {/* <Input
-                                type="text"
-                                value={dailySummary}
-                                onChange={e => handleDailySummary(e)}
-                                className={styles.select}
-                                disableUnderline
-                                inputProps={{
-                                    disableUnderline: true,
-                                }}
-                                style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                            /> */}
-                            {/* <TextareaAutosize
-                                aria-label="minimum height"
-                                value={dailySummary}
-                                onChange={e => handleDailySummary(e)}
-                                minRows={8}
-                                placeholder=""
-                                style={{ border: '1px solid #cecccc', borderRadius: '3px', padding: '0 10px' }}
-                            /> */}
                         </FormControl>
 
 
@@ -117,7 +95,6 @@ const Bulletin = (props: Props) => {
 
                         <div className={styles.formItemTextFull}>
                             <FormControl fullWidth>
-
                                 <Translation>
                                     {
                                         t => (
@@ -131,17 +108,6 @@ const Bulletin = (props: Props) => {
                                         )
                                     }
                                 </Translation>
-                                {/* <Input
-                                    type="text"
-                                    value={rainSummaryFooter}
-                                    onChange={e => handleRainSummaryFooter(e)}
-                                    className={styles.select}
-                                    disableUnderline
-                                    inputProps={{
-                                        disableUnderline: true,
-                                    }}
-                                    style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                                /> */}
                             </FormControl>
 
 
@@ -174,17 +140,7 @@ const Bulletin = (props: Props) => {
                                         )
                                     }
                                 </Translation>
-                                {/* <Input
-                                    type="text"
-                                    value={maxTempFooter}
-                                    onChange={e => handleFooterMax(e)}
-                                    className={styles.select}
-                                    disableUnderline
-                                    inputProps={{
-                                        disableUnderline: true,
-                                    }}
-                                    style={{ border: '1px solid #cecccc;', borderRadius: '3px', padding: '0 10px' }}
-                                /> */}
+
                             </FormControl>
 
 

@@ -5,12 +5,15 @@ import { useDropzone } from 'react-dropzone';
 import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import {
-    bulletinPageSelector, languageSelector,
+    bulletinPageSelector,
+    languageSelector,
+    bulletinEditDataSelector,
 } from '#selectors';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
     language: languageSelector(state),
 });
 
@@ -24,6 +27,7 @@ const TemperatureMax = (props: Props) => {
         handleMaxTemp,
         maxTempFooter,
         hideForm,
+        bulletinEditData,
     } = props;
     const [picFromEdit, setPicFromEdit] = useState(false);
     const [picLink, setpicLink] = useState(false);
@@ -73,6 +77,19 @@ const TemperatureMax = (props: Props) => {
             showPicMax(maxTemp);
         }
     }, [maxTemp]);
+
+
+    useEffect(() => {
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            if (bulletinEditData.language === 'nepali' && bulletinEditData.rainSummaryPictureNe) {
+                setpicLink(bulletinEditData.tempMaxNe);
+                setPicFromEdit(true);
+            } else if (bulletinEditData.language === 'english' && bulletinEditData.rainSummaryPicture) {
+                setpicLink(bulletinEditData.tempMax);
+                setPicFromEdit(true);
+            }
+        }
+    }, [bulletinEditData]);
 
     return (
         <div className={styles.formContainer}>

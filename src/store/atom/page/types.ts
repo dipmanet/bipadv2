@@ -255,6 +255,8 @@ export interface Bulletin {
     district: number;
     municipality: number;
     ward: number;
+    hilight: string;
+    bulletinDate: string;
 }
 
 export interface Province {
@@ -984,10 +986,10 @@ export enum PageType {
     // Bulletin
     ADMIN__PORTAL_BULLETIN = 'page/ADMIN__PORTAL_BULLETIN',
     ADMIN__PORTAL_BULLETIN_COVID = 'page/ADMIN__PORTAL_BULLETIN_COVID',
-    ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     ADMIN__PORTAL_BULLETIN_TEMPERATURE = 'page/ADMIN__PORTAL_BULLETIN_TEMPERATURE',
     ADMIN__PORTAL_BULLETIN_EDIT_DATA = 'page/ADMIN__PORTAL_BULLETIN_EDIT_DATA',
     ADMIN__PORTAL_BULLETIN_YEARLYDATA = 'page/ADMIN__PORTAL_BULLETIN_YEARLYDATA',
+    ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
     // Epidemics
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
@@ -1017,6 +1019,7 @@ export interface SetBulletinDataCovid {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_COVID;
     bulletinData: Bulletin;
 }
+
 export interface SetBulletinYearlyData {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA;
     bulletinData: Bulletin;

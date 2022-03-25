@@ -9,13 +9,14 @@ import { useDropzone } from 'react-dropzone';
 import { Translation } from 'react-i18next';
 import { connect } from 'react-redux';
 import {
-    bulletinPageSelector, languageSelector,
+    bulletinPageSelector, languageSelector, bulletinEditDataSelector,
 } from '#selectors';
 import styles from './styles.scss';
 
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
     language: languageSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 
 interface Props {
@@ -28,6 +29,7 @@ const TemperaturesMin = (props: Props) => {
         handleMinTemp,
         hideForm,
         minTempFooter,
+        bulletinEditData,
     } = props;
 
     const [picFromEdit, setPicFromEdit] = useState(false);
@@ -80,6 +82,18 @@ const TemperaturesMin = (props: Props) => {
             showPicMin(minTemp);
         }
     }, [minTemp]);
+
+    useEffect(() => {
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            if (bulletinEditData.language === 'nepali' && bulletinEditData.rainSummaryPictureNe) {
+                setpicLink(bulletinEditData.tempMinNe);
+                setPicFromEdit(true);
+            } else if (bulletinEditData.language === 'english' && bulletinEditData.rainSummaryPicture) {
+                setpicLink(bulletinEditData.tempMin);
+                setPicFromEdit(true);
+            }
+        }
+    }, [bulletinEditData]);
 
     return (
         <div className={styles.formContainer}>

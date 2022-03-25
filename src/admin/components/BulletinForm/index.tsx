@@ -327,7 +327,28 @@ const Bulletin = (props: Props) => {
             setcovidTotalStat(bulletinEditData.covidTotalStat);
             setvaccineStat(bulletinEditData.vaccineStat);
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
-            setDailySumamry(bulletinEditData.dailySummary);
+
+            if (bulletinEditData.language === 'nepali') {
+                setMinTemp(bulletinEditData.tempMinNe);
+                setMinTempFooter(bulletinEditData.tempMinFooterNe);
+                setMaxTemp(bulletinEditData.tempMaxNe);
+                setMaxTempFooter(bulletinEditData.tempMaxFooterNe);
+                setFeedback(bulletinEditData.feedbackNe);
+                setDailySumamry(bulletinEditData.dailySummaryNe);
+                setRainSummaryPic(bulletinEditData.rainSummaryPictureNe);
+                setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooterNe);
+                setHilight(bulletinEditData.highlightNe);
+            } else {
+                setMinTemp(bulletinEditData.tempMin);
+                setMinTempFooter(bulletinEditData.tempMinFooter);
+                setMaxTemp(bulletinEditData.tempMax);
+                setMaxTempFooter(bulletinEditData.tempMaxFooter);
+                setFeedback(bulletinEditData.feedback);
+                setDailySumamry(bulletinEditData.dailySummary);
+                setRainSummaryPic(bulletinEditData.rainSummaryPicture);
+                setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooter);
+                setHilight(bulletinEditData.highlight);
+            }
         } else {
             // incidentsGetRequest.do();
             covidNationalInfo.do();
@@ -493,7 +514,9 @@ const Bulletin = (props: Props) => {
             setActive(progress - 1);
         }
     };
-
+    useEffect(() => {
+        console.log('hazardwise loss data', hazardWiseLossData);
+    }, [feedback]);
     const handleNextBtn = () => {
         if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
@@ -504,6 +527,8 @@ const Bulletin = (props: Props) => {
                     genderWiseLoss: genderWiseLossData,
                     sitRep,
                     hilight,
+                    bulletinDate: date,
+                    feedback,
                 });
             }
             if (progress === 1) {
@@ -716,9 +741,6 @@ const Bulletin = (props: Props) => {
         }
     }, [covidNational]);
 
-    useEffect(() => {
-        console.log('hazardWise data form', hazardWiseLossData);
-    }, [hazardWiseLossData]);
 
     useEffect(() => {
         if (covidQuaratine.length > 0) {
@@ -845,27 +867,25 @@ const Bulletin = (props: Props) => {
             deleteFeedbackChange={deleteFeedbackChange}
             hazardWiseLossData={hazardWiseLossData}
             handleSubFieldChange={handleSubFieldChange}
-            bulletinData={
-                {
-                    incidentSummary: incidentData,
-                    peopleLoss: peopleLossData,
-                    hazardWiseLoss: hazardWiseLossData,
-                    genderWiseLoss: genderWiseLossData,
-                    covidTwentyfourHrsStat: covid24hrsStatData,
-                    covidTotalStat: covidTotalStatData,
-                    vaccineStat: vaccineStatData,
-                    covidProvinceWiseTotal: covidProvinceWiseData,
-                    feedback,
-                    tempMax: maxTemp,
-                    tempMin: minTemp,
-                    dailySummary,
-                    sitrep: sitRep,
-                    rainSummaryFooter,
-                    bulletinDate: date,
-
-
-                }
-            }
+            // bulletinData={
+            //     {
+            //         incidentSummary: incidentData,
+            //         peopleLoss: peopleLossData,
+            //         hazardWiseLoss: hazardWiseLossData,
+            //         genderWiseLoss: genderWiseLossData,
+            //         covidTwentyfourHrsStat: covid24hrsStatData,
+            //         covidTotalStat: covidTotalStatData,
+            //         vaccineStat: vaccineStatData,
+            //         covidProvinceWiseTotal: covidProvinceWiseData,
+            //         feedback,
+            //         tempMax: maxTemp,
+            //         tempMin: minTemp,
+            //         dailySummary,
+            //         sitrep: sitRep,
+            //         rainSummaryFooter,
+            //         bulletinDate: date,
+            //     }
+            // }
         />,
     ];
 

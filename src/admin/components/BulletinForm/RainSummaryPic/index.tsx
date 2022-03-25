@@ -4,14 +4,22 @@ import FileUploader from 'src/admin/components/FileUploader';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { connect } from 'react-redux';
 import Placeholder from 'src/admin/resources/placeholder.png';
 import { Translation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import styles from './styles.scss';
+import { setBulletinEditDataAction } from '#actionCreators';
+import { bulletinEditDataSelector } from '#selectors';
 
 interface Props {
 
 }
+
+const mapStateToProps = state => ({
+    bulletinEditData: bulletinEditDataSelector(state),
+});
+
 
 const TemperaturesMin = (props: Props) => {
     const {
@@ -19,6 +27,7 @@ const TemperaturesMin = (props: Props) => {
         handleRainSummaryPic,
         hideForm,
         rainSummaryFooter,
+        bulletinEditData,
     } = props;
 
     const [picFromEdit, setPicFromEdit] = useState(false);
@@ -67,10 +76,23 @@ const TemperaturesMin = (props: Props) => {
     };
     useEffect(() => {
         window.scrollTo({ top: 400, left: 0 });
+
         if (rainSummaryPic && typeof rainSummaryPic !== 'string') {
             showPicMin(rainSummaryPic);
         }
     }, [rainSummaryPic]);
+
+    useEffect(() => {
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            if (bulletinEditData.language === 'nepali' && bulletinEditData.rainSummaryPictureNe) {
+                setpicLink(bulletinEditData.rainSummaryPictureNe);
+                setPicFromEdit(true);
+            } else if (bulletinEditData.language === 'english' && bulletinEditData.rainSummaryPicture) {
+                setpicLink(bulletinEditData.rainSummaryPicture);
+                setPicFromEdit(true);
+            }
+        }
+    }, [bulletinEditData]);
 
     return (
         <div className={styles.formContainer}>
@@ -130,4 +152,4 @@ const TemperaturesMin = (props: Props) => {
     );
 };
 
-export default TemperaturesMin;
+export default connect(mapStateToProps)(TemperaturesMin);

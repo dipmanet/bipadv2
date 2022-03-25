@@ -1,7 +1,19 @@
 $Fira: 'Fira Sans', sans-serif;
 $inputBackground : #F7F7F7;
 $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
-
+.mainTableContainer{
+	position: absolute;
+	background: red;
+	padding: 40px;
+}
+.noDataHeading{
+	margin: 0 auto;
+	border: 1px solid #f5f5f5;
+	padding: 20px 0;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+}
 .setStyleForHead{
 	font-size:16px ;
 	color: #303030 !important;
@@ -13,13 +25,23 @@ $boxShadow : 0px 2px 5px rgba(151, 149, 148, 0.25);
 	font-size: 14px;
 	font-weight: 500 !important;
 	line-height: 24px !important;
-	// font-weight: bold !important;
 	.curdOptions{
 		cursor: pointer;
 		height: 18px;
 		margin: 5px;
 	}
-
+}
+.editBtn{
+	background: #02247B;
+	border: none;
+	filter: saturate(90%);
+	color: #ffffff;
+	padding: 4px 12px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+.editBtn:first-child{
+	margin-right: 4px;
 }
 .MuiTableCell-root{
 	padding: 0 !important;

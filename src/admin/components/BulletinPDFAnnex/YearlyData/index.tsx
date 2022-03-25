@@ -157,7 +157,7 @@ const YearlyData = (props: Props) => {
     const [summaryData, setSummaryData] = useState();
     const [lossData, setLossData] = useState([]);
     const [cumulative, setCumulative] = useState([]);
-    const { requests: { incidentsGetRequest }, hazardTypes, setBulletinYearlyData, language: { language } } = props;
+    const { requests: { incidentsGetRequest }, hazardTypes, setBulletinYearlyData, language: { language }, bulletinEditData } = props;
     incidentsGetRequest.setDefaultParams({ setLossData });
 
     const calculateSummary = (data) => {
@@ -174,6 +174,7 @@ const YearlyData = (props: Props) => {
         stat.count = data.length;
         return stat;
     };
+
 
     const calculateSummaryHazard = (data) => {
         const stat = lossMetricsHazard.reduce((acc, { key }) => ({
@@ -194,10 +195,15 @@ const YearlyData = (props: Props) => {
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
-        if (lossData && lossData.length > 0) {
+        if (Object.keys(bulletinEditData).length > 0) {
+            if (bulletinEditData.language === 'nepali') {
+                setSummaryData(bulletinEditData.yearlyDataNe);
+            } else {
+                setSummaryData(bulletinEditData.yearlyData);
+            }
+        } else if (lossData && lossData.length > 0) {
             const newhazardData = {};
             const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
-            console.log('lossData', lossData);
             const hD = uniqueHazards.map((h) => {
                 const summaryCalc = calculateSummaryHazard(lossData.filter(l => l.hazard === h));
                 if (language === 'np') {

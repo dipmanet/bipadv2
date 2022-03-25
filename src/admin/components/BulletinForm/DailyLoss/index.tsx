@@ -22,6 +22,7 @@ import {
     districtsSelector,
     municipalitiesSelector,
     languageSelector,
+    bulletinEditDataSelector,
 } from '#selectors';
 
 import { setLanguageAction } from '#actionCreators';
@@ -44,6 +45,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     districts: districtsSelector(state),
     municipalities: municipalitiesSelector(state),
     language: languageSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -87,6 +89,7 @@ const Bulletin = (props: Props) => {
         setLanguage,
         resetFeedback,
         uri,
+        bulletinEditData,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -167,7 +170,12 @@ const Bulletin = (props: Props) => {
             recordSelectedDate(selectedDate);
             handleBulletinDate(date);
         } else {
-            const today = new Date();
+            let today;
+            if (bulletinEditData && Object.keys(bulletinEditData).length > 0 && bulletinEditData.bulletinDate) {
+                today = new Date(bulletinEditData.bulletinDate);
+            } else {
+                today = new Date();
+            }
             const dd = String(today.getDate()).padStart(2, '0');
             const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
             const yyyy = today.getFullYear();
@@ -181,7 +189,7 @@ const Bulletin = (props: Props) => {
             setDate(finalDate);
             handleBulletinDate(finalDate);
         }
-    }, [date]);
+    }, [date, bulletinEditData]);
     return (
         <>
             <div className={styles.formContainer}>

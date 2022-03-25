@@ -543,6 +543,7 @@ const state: PageState = {
         yearlyData: {},
         municipality: 27006,
         ward: null,
+        bulletinDate: null,
     },
 
     epidemicsPage: {

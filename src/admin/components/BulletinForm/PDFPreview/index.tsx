@@ -19,6 +19,7 @@ import {
     userSelector,
     bulletinEditDataSelector,
     languageSelector,
+    bulletinPageSelector,
 } from '#selectors';
 import {
     setBulletinEditDataAction,
@@ -36,6 +37,7 @@ const mapStateToProps = state => ({
     user: userSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
     language: languageSelector(state),
+    bulletinData: bulletinPageSelector(state),
 
 });
 
@@ -89,8 +91,9 @@ const PDFPreview = (props) => {
     const [pending, setPending] = useState(false);
 
     const {
+        bulletinOurData,
         bulletinData: {
-            sitrep,
+            sitRep,
             incidentSummary,
             peopleLoss,
             hazardWiseLoss,
@@ -104,7 +107,7 @@ const PDFPreview = (props) => {
             tempMin,
             tempMax,
             maxTempFooter,
-            // feedback,
+            feedback,
             pdfFile,
             dailySummary,
             rainSummaryPic,
@@ -118,11 +121,10 @@ const PDFPreview = (props) => {
         setBulletinEditData,
         handlePrevBtn,
         handleFeedbackChange,
-        feedback,
         deleteFeedbackChange,
         hazardWiseLossData,
         handleSubFieldChange,
-        language,
+        language: { language },
     } = props;
 
     getSitRep.setDefaultParams({
@@ -130,7 +132,13 @@ const PDFPreview = (props) => {
         setAllBulletinData,
     });
 
+    useEffect(() => {
+        console.log('feedback in pdf', feedback);
+    }, [feedback]);
 
+    useEffect(() => {
+        console.log('bulletin dates in preview', props);
+    }, [props, props.bulletinData, props.bulletinOurData]);
     const isFile = (input: any): input is File => (
         'File' in window && input instanceof File
     );
@@ -178,7 +186,7 @@ const PDFPreview = (props) => {
     const getPostData = (file) => {
         if (language === 'np') {
             return getFormData({
-                sitrep,
+                sitrep: sitRep,
                 incidentSummary,
                 peopleLoss,
                 hazardWiseLoss,
@@ -189,7 +197,7 @@ const PDFPreview = (props) => {
                 covidProvinceWiseTotal,
                 province,
                 district,
-                yearlyData,
+                yearlyDataNe: yearlyData,
                 municipality,
                 ward,
                 pdfFile: file,
@@ -207,7 +215,7 @@ const PDFPreview = (props) => {
             });
         }
         return getFormData({
-            sitrep,
+            sitrep: sitRep,
             incidentSummary,
             peopleLoss,
             hazardWiseLoss,
@@ -238,7 +246,7 @@ const PDFPreview = (props) => {
     const getPatchData = (file) => {
         if (language === 'np') {
             return getFormData({
-                sitrep,
+                sitrep: sitRep,
                 incidentSummary,
                 peopleLoss,
                 hazardWiseLoss,
@@ -268,7 +276,7 @@ const PDFPreview = (props) => {
             });
         }
         return getFormData({
-            sitrep,
+            sitrep: sitRep,
             incidentSummary,
             peopleLoss,
             hazardWiseLoss,
@@ -435,18 +443,18 @@ const PDFPreview = (props) => {
         }
 
         const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
-
-        if (sitrep) {
-            // if the sitrep is in DB
-            if (sitRepArr.includes(sitrep)) {
-                // do patch
-                const id = getIdFromSitrep(sitrep);
-                updatePDF(bulletin, doc, id);
-            } else {
-                // do post
-                savePDf(bulletin, doc);
-            }
-        }
+        savePDf(bulletin, doc);
+        // if (sitrep) {
+        //     // if the sitrep is in DB
+        //     if (sitRepArr.includes(sitrep)) {
+        //         // do patch
+        //         const id = getIdFromSitrep(sitrep);
+        //         updatePDF(bulletin, doc, id);
+        //     } else {
+        //         // do post
+        //         savePDf(bulletin, doc);
+        //     }
+        // }
         // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
         //     updatePDF(bulletin, doc);
         // } else {

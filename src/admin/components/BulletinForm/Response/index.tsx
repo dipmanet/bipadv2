@@ -10,7 +10,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
-import { districtsSelector, incidentListSelectorIP, hazardTypesSelector, languageSelector } from '#selectors';
+import { setBulletinFeedbackAction } from '#actionCreators';
+import { districtsSelector, bulletinEditDataSelector, incidentListSelectorIP, hazardTypesSelector, languageSelector } from '#selectors';
 import styles from './styles.scss';
 
 interface Props {
@@ -21,8 +22,14 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     incidentList: incidentListSelectorIP(state),
     hazardTypes: hazardTypesSelector(state),
     language: languageSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 
 });
+
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setBulletinFeedback: params => dispatch(setBulletinFeedbackAction(params)),
+});
+
 const Response = (props: Props) => {
     const {
         handleFeedbackChange,
@@ -35,6 +42,8 @@ const Response = (props: Props) => {
         incidentList,
         hazardTypes,
         language: { language },
+        setBulletinFeedback,
+        bulletinEditData,
     } = props;
 
 
@@ -86,7 +95,9 @@ const Response = (props: Props) => {
 
 
     useEffect(() => {
-        if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            handleFeedbackChange(bulletinEditData.feedback);
+        } else if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
             const temp = {};
             incidentList.map((item) => {
                 const hazardNp = hazardTypes[item.hazard].titleNe;
@@ -106,6 +117,8 @@ const Response = (props: Props) => {
             });
             if (temp && Object.keys(temp).length > 0) {
                 handleFeedbackChange({ ...temp });
+                console.log('feedback changed to', { ...temp });
+                setBulletinFeedback({ feedback: { ...temp } });
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +126,6 @@ const Response = (props: Props) => {
 
     useEffect(() => {
         if (feedback && Object.keys(feedback).length > 0) {
-            console.log('feedback', feedback);
             const getIncidents = () => Object.keys(feedback).length;
             const getDistricts = () => {
                 const aD = Object.keys(feedback)
@@ -340,4 +352,4 @@ const Response = (props: Props) => {
     );
 };
 
-export default connect(mapStateToProps)(Response);
+export default connect(mapStateToProps, mapDispatchToProps)(Response);
