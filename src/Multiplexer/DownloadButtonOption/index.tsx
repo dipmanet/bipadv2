@@ -102,10 +102,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         };
     }
 
+
     public componentDidUpdate(prevProps, prevState) {
         const { map, loaded } = this.context;
-        console.log('updated');
-        const { resolution: { height, width }, resolution } = this.state;
+
+
+        const { resolution: { height, width }, resolution, selectedFileFormat } = this.state;
         const { showCustomSetting } = this.state;
 
         if (prevState.resolution !== resolution) {
@@ -253,6 +255,27 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleCustomPageCategory = (e) => {
+        this.setState({
+            showPageType: e.target.value,
+            resolution: {
+                height: null,
+                width: null,
+            },
+            selectedFileFormat: '',
+            selectedPageType: '',
+        });
+        const myElements = document.getElementById('realMap123');
+        console.log('My final element', myElements);
+        myElements.style.setProperty('height', 'unset', 'important');
+        myElements.style.setProperty('width', 'unset', 'important');
+        myElements.style.setProperty('position', 'unset', 'important');
+        myElements.style.setProperty('top', 'unset', 'important');
+        myElements.style.setProperty('background-color', 'transparent', 'important');
+        myElements.style.setProperty('flex-grow', '1', 'important');
+    }
+
+
     public render() {
         const { className, onPendingStateChange, activeLayers, isTilesLoaded, handleToggleAnimationMapDownloadButton } = this.props;
 
@@ -260,7 +283,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
             selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
-        console.log('resolution', resolution);
+        console.log('resolution', selectedFileFormat);
 
         return (
             <DropdownMenu
@@ -270,7 +293,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                 tooltip="Download Map"
                 handleToggleAnimationMapDownloadButton={handleToggleAnimationMapDownloadButton}
             >
-                <div className={styles.mainContainer}>
+                <div className={styles.mainContainer} id="downloadButtonOption123">
                     <div className={styles.heading}>
                         <h3>Download</h3>
                     </div>
@@ -314,7 +337,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                 <label htmlFor="Custom">
                                                     Custom:
                                                 </label>
-                                                <select name="custom" id="custom" onClick={e => this.setState({ showPageType: e.target.value })}>
+                                                <select name="custom" id="custom" onClick={this.handleCustomPageCategory}>
                                                     <option value>Page Type</option>
                                                     <option value={false}>Resolution Type</option>
 
@@ -337,8 +360,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                 this.setState({
                                                                     selectedPageType: 'A3',
                                                                     resolution: {
-                                                                        height: 4961,
-                                                                        width: 3508,
+                                                                        height: 1587,
+                                                                        width: 1123,
                                                                     },
                                                                 });
                                                             }}
@@ -352,8 +375,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                 this.setState({
                                                                     selectedPageType: 'A4',
                                                                     resolution: {
-                                                                        height: 3508,
-                                                                        width: 2480,
+                                                                        height: 1123,
+                                                                        width: 794,
                                                                     },
                                                                 });
                                                             }}
@@ -367,8 +390,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                 this.setState({
                                                                     selectedPageType: 'B4',
                                                                     resolution: {
-                                                                        height: 4169,
-                                                                        width: 2953,
+                                                                        height: 1334,
+                                                                        width: 945,
                                                                     },
                                                                 });
                                                             }}
@@ -382,8 +405,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                 this.setState({
                                                                     selectedPageType: 'B5',
                                                                     resolution: {
-                                                                        height: 2953,
-                                                                        width: 2079,
+                                                                        height: 945,
+                                                                        width: 665,
                                                                     },
                                                                 });
                                                             }}
@@ -395,6 +418,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
                                             </div>
                                         ) : (
+
                                             <div>
                                                 <form className={styles.pageType}>
                                                     <label htmlFor="Custom">
@@ -402,16 +426,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                     </label>
 
                                                     <div>
-                                                        <input
-                                                            type="number"
-                                                            name="height"
-                                                            id="vehicle1"
-                                                            value={height}
-                                                            style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
-                                                            onChange={e => this.handleChangeResolution(e)}
 
-                                                        />
-                                                        X
                                                         <input
                                                             type="number"
                                                             name="width"
@@ -419,12 +434,28 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             value={width}
                                                             style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
                                                             onChange={e => this.handleChangeResolution(e)}
+                                                            placeholder="Width"
+                                                        />
 
+                                                        X
+                                                        <input
+                                                            type="number"
+                                                            name="height"
+                                                            id="vehicle1"
+                                                            value={height}
+                                                            style={{ width: '66px', marginLeft: '5px', marginRight: '5px' }}
+                                                            onChange={e => this.handleChangeResolution(e)}
+                                                            placeholder="Height"
 
                                                         />
 
                                                     </div>
+
+
                                                 </form>
+                                                {(height > 499 && height < 5001) && (width > 499 && width < 5001) ? ''
+                                                    : <h5 style={{ textAlign: 'right', marginRight: '10px', color: '#E35163' }}>Max value 5000 & Min value 500</h5>
+                                                }
 
                                             </div>
                                         )
@@ -456,7 +487,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                         ? (
                                                             <Button
                                                                 className={_cs(selectedFileFormat === 'PDF' ? (styles.activeFileFormatButton) : (styles.fileFormatButton))}
-                                                                onClick={() => this.setState({ selectedFileFormat: 'png' })}
+                                                                onClick={() => this.setState({ selectedFileFormat: 'PDF' })}
                                                             >
                                                                 PDF
                                                             </Button>
@@ -480,7 +511,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                 <div style={{ position: 'relative' }}>
                                                     <LoadingAnimation className={styles.loader} />
                                                     {' '}
-                                                    <p> Loading...</p>
+                                                    <p style={{ marginLeft: '20px' }}> Loading...</p>
                                                 </div>
                                             )
                                                 : (
@@ -503,6 +534,10 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                         resolution={resolution}
                                                         buttonText="Download"
                                                         selectedFileFormat={selectedFileFormat}
+                                                        selectedPageType={selectedPageType}
+                                                        showPageType={showPageType}
+
+
                                                     />
                                                 )}
                                             <Button

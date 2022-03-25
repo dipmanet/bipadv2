@@ -155,6 +155,8 @@ const MapDownloadButton = (props: Props) => {
         defaultMap,
         selectedFileFormat,
         disableDefaultDownload,
+        selectedPageType,
+        showPageType,
         resolution,
         ...otherProps
     } = props;
@@ -181,7 +183,8 @@ const MapDownloadButton = (props: Props) => {
         && filteredLayerGroup[0].metadata && filteredLayerGroup[0].metadata.value
         && filteredLayerGroup[0].metadata.value.general
         && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
-    console.log('disableDefaultDownload', resolution);
+    console.log('disableDefaultDownload', selectedFileFormat);
+
     const handleExport = useCallback(
         () => {
             if (!mapContext || !mapContext.map) {
@@ -203,6 +206,7 @@ const MapDownloadButton = (props: Props) => {
                 console.warn('RiskInfo context not found');
                 return;
             }
+            console.log('selected format', selectedFileFormat);
 
             console.log('default time', defaultMap);
             const pageTitle = pageContext.activeRouteDetails.title;
@@ -288,7 +292,8 @@ const MapDownloadButton = (props: Props) => {
                 }
 
 
-                const constant = (indexMapWidth < indexMapHeight) ? indexMapWidth : indexMapHeight;
+                const constant = (indexMapWidth < indexMapHeight)
+                    ? indexMapWidth : indexMapHeight;
                 const left = canvas.width - indexMapWidth - rightMargin;
                 const top = topMargin;
                 const right = canvas.width - indexMapWidth - rightMargin;
@@ -426,20 +431,37 @@ const MapDownloadButton = (props: Props) => {
                     allPromises.push(legendPromise);
                 }
 
+
                 Promise.all(allPromises).then(() => {
-                    canvas.toBlob((blob) => {
-                        const link = document.createElement('a');
-                        link.download = defaultMap ? `map-export-${(new Date()).getTime()}.png`
-                            : `map-export-${(new Date()).getTime()}.${selectedFileFormat}`;
-                        link.href = URL.createObjectURL(blob);
-                        link.click();
+                    console.log('selectedFileFormat', selectedFileFormat);
+                    if (selectedFileFormat === 'PDF') {
+                        const pdf = new JsPDF('p', 'mm', 'a4');
+                        const pageData = canvas.toDataURL('image/png', 1.0);
+                        pdf.addImage(pageData, 'PNG', 0, 0, 210, 297);
+                        pdf.save('Report.pdf');
                         setDownloadPending(false);
-                        document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '29px';
-                        navigation.getElementsByTagName('span')[0].style.backgroundSize = 'auto';
-                    }, defaultMap ? 'image/png' : `image/${selectedFileFormat}`);
+                        // canvas.toBlob((blob) => {
+                        //     const win = window.open();
+                        //     const link = URL.createObjectURL(blob);
+                        //     win.document.write(`<img src='${link}'/>`);
+                        //     win.print();
+                        // });
+                    } else {
+                        canvas.toBlob((blob) => {
+                            const link = document.createElement('a');
+                            link.download = defaultMap ? `map-export-${(new Date()).getTime()}.png`
+                                : `map-export-${(new Date()).getTime()}.${selectedFileFormat}`;
+                            link.href = URL.createObjectURL(blob);
+                            link.click();
+                            setDownloadPending(false);
+                            document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '29px';
+                            navigation.getElementsByTagName('span')[0].style.backgroundSize = 'auto';
+                        }, defaultMap ? 'image/png' : `image/${selectedFileFormat}`);
+                    }
                 });
             };
         },
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
             region,
@@ -451,9 +473,10 @@ const MapDownloadButton = (props: Props) => {
             titleContext,
             hazard,
             realtimeFilters,
+            selectedFileFormat,
         ],
     );
-
+    console.log('selectedFileFormat', selectedFileFormat);
     const handleSaveClick = (classname) => {
         if (classname === 'mapboxgl-canvas') {
             const divToDisplay = document.getElementsByClassName('mapboxgl-canvas');
@@ -484,7 +507,15 @@ const MapDownloadButton = (props: Props) => {
     };
     return (
         <Button
-            disabled={disabled || !mapContext || !mapContext.map || disableDefaultDownload}
+            disabled={disabled || !mapContext || !mapContext.map || disableDefaultDownload
+                || (!defaultMap && !resolution.width) || (!defaultMap && !resolution.height)
+                || (!defaultMap && !selectedFileFormat)
+                || (!defaultMap && selectedFileFormat === undefined)
+                || (!defaultMap && resolution.width < 500)
+                || (!defaultMap && resolution.width > 5000)
+                || (!defaultMap && resolution.height < 500)
+                || (!defaultMap && resolution.height > 5000)
+            }
             pending={pending || pendingFromProps}
             onClick={handleExport}
             // onClick={handleSaveClick('mapboxgl-canvas')}
