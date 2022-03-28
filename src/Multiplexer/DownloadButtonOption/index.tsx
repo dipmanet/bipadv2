@@ -99,6 +99,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             },
             isTilesLoaded: false,
             disableDefaultDownload: false,
+            mapOrientation: '',
         };
     }
 
@@ -281,11 +282,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
         const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType,
 
-            selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload } = this.state;
+            selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload, mapOrientation } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
         console.log('resolution', selectedFileFormat);
 
         return (
+
             <DropdownMenu
                 className={_cs(styles.layerSwitch, className)}
                 iconName="download"
@@ -461,7 +463,37 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                         )
 
                                         }
+                                        {/* <div>
+                                            <form className={styles.pageType}>
+                                                <label htmlFor="Custom">
+                                                    Orientation :
+                                                </label>
+                                                <div>
+                                                    <Button
+                                                        className={_cs(mapOrientation === 'landscape' ? (styles.active) : (styles.pageSizeButton))}
+                                                        onClick={() => {
+                                                            this.setState({
+                                                                mapOrientation: 'landscape',
+                                                            });
+                                                        }}
+                                                    >
+                                                        Landscape
+                                                    </Button>
+                                                    <Button
+                                                        className={_cs(mapOrientation === 'potrait' ? (styles.active) : (styles.pageSizeButton))}
+                                                        onClick={() => {
+                                                            this.setState({
+                                                                mapOrientation: 'potrait',
+                                                            });
+                                                        }}
+                                                    >
+                                                        Potrait
+                                                    </Button>
 
+                                                </div>
+                                            </form>
+
+                                        </div> */}
 
                                         <div>
                                             <form className={styles.pageType}>
@@ -497,7 +529,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                             </form>
 
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <form className={styles.grid}>
 
                                                 <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" />
@@ -505,7 +537,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
 
                                             </form>
-                                        </div>
+                                        </div> */}
                                         <div className={styles.footerButton}>
                                             {!isTilesLoaded ? (
                                                 <div style={{ position: 'relative' }}>
@@ -536,6 +568,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                         selectedFileFormat={selectedFileFormat}
                                                         selectedPageType={selectedPageType}
                                                         showPageType={showPageType}
+                                                        handleCancelButton={this.handleCancelButton}
+                                                        mapOrientation={mapOrientation}
 
 
                                                     />
@@ -564,6 +598,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                     rendererParams={this.getLayerButtonRendererParams}
                 /> */}
             </DropdownMenu>
+
         );
     }
 }

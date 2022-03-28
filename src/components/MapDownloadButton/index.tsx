@@ -3,6 +3,7 @@ import React, { useContext, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
 import JsPDF from 'jspdf';
+import slugify from 'slugify';
 import { saveChart } from '#utils/common';
 
 import Button from '#rsca/Button';
@@ -11,10 +12,9 @@ import { MapChildContext } from '#re-map/context';
 import PageContext from '#components/PageContext';
 import { TitleContext } from '#components/TitleContext';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-
+import styles from './styles.scss';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
-
 import {
     District,
     Province,
@@ -158,6 +158,8 @@ const MapDownloadButton = (props: Props) => {
         selectedPageType,
         showPageType,
         resolution,
+        handleCancelButton,
+        mapOrientation,
         ...otherProps
     } = props;
 
@@ -184,7 +186,7 @@ const MapDownloadButton = (props: Props) => {
         && filteredLayerGroup[0].metadata.value.general
         && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
     console.log('disableDefaultDownload', selectedFileFormat);
-
+    console.log('Map orientation', mapOrientation);
     const handleExport = useCallback(
         () => {
             if (!mapContext || !mapContext.map) {
@@ -286,9 +288,17 @@ const MapDownloadButton = (props: Props) => {
                 if (resolution.width && (resolution.width <= resolution.height)) {
                     indexMapWidth = (resolution.width * 0.25);
                     indexMapHeight = indexMapWidth * indexMap.height / indexMap.width;
+                    // indexMapWidth = mapOrientation === 'landscape'
+                    // ? indexMapHeight : indexMapWidth;
+                    // indexMapHeight = mapOrientation === 'landscape'
+                    // ? indexMapWidth : indexMapHeight;
                 } else if (resolution.width && (resolution.width > resolution.height)) {
                     indexMapHeight = (resolution.height * 0.25);
                     indexMapWidth = indexMapHeight * indexMap.width / indexMap.height;
+                    // indexMapWidth = mapOrientation === 'landscape'
+                    // ? indexMapHeight : indexMapWidth;
+                    // indexMapHeight = mapOrientation === 'landscape'
+                    // ? indexMapWidth : indexMapHeight;
                 }
 
 
@@ -438,8 +448,11 @@ const MapDownloadButton = (props: Props) => {
                         const pdf = new JsPDF('p', 'mm', 'a4');
                         const pageData = canvas.toDataURL('image/png', 1.0);
                         pdf.addImage(pageData, 'PNG', 0, 0, 210, 297);
-                        pdf.save('Report.pdf');
+                        const pageDownloadTitle = slugify(title, '_');
+                        console.log('slugity', pageDownloadTitle);
+                        pdf.save(`${pageDownloadTitle}.pdf`);
                         setDownloadPending(false);
+                        handleCancelButton();
                         // canvas.toBlob((blob) => {
                         //     const win = window.open();
                         //     const link = URL.createObjectURL(blob);
@@ -449,14 +462,16 @@ const MapDownloadButton = (props: Props) => {
                     } else {
                         canvas.toBlob((blob) => {
                             const link = document.createElement('a');
-                            link.download = defaultMap ? `map-export-${(new Date()).getTime()}.png`
-                                : `map-export-${(new Date()).getTime()}.${selectedFileFormat}`;
+                            const pageDownloadTitle = slugify(title, '_');
+                            link.download = defaultMap ? `${pageDownloadTitle}.png`
+                                : `${pageDownloadTitle}.${selectedFileFormat}`;
                             link.href = URL.createObjectURL(blob);
                             link.click();
                             setDownloadPending(false);
                             document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '29px';
                             navigation.getElementsByTagName('span')[0].style.backgroundSize = 'auto';
                         }, defaultMap ? 'image/png' : `image/${selectedFileFormat}`);
+                        handleCancelButton();
                     }
                 });
             };

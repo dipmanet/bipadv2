@@ -402,14 +402,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
         const { boundingClientRect } = this.props;
 
         this.setLeftPanelWidth(boundingClientRect);
-        console.log('Data123');
-        const element = document.getElementById('downloadButtonOption123');
-        const element2 = document.querySelectorAll('.dropdown-container');
-        console.log('Elem', element2);
-        if (!element) {
-            console.log('element', element);
-            this.handleToggleAnimationMapDownloadButton(false);
-        }
     }
 
     private handlemapClickedResponse = (data) => {

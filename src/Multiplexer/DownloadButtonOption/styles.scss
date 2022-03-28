@@ -63,7 +63,8 @@
             }
           }
           .activeFileFormatButton{
-            background-color: #484848 !important;
+            background-color: #E35163 !important;
+            filter: saturate(100%) !important;
             color: white !important;
             margin-top: 5px;
             margin-bottom: 5px;
@@ -84,7 +85,8 @@
           }
           }
           .active{
-            background-color: #484848 !important;
+            background-color: #E35163 !important;
+            filter: saturate(100%) !important;
             color: white !important;
             margin-top: 5px;
             margin-bottom: 5px;
@@ -111,9 +113,6 @@
           margin-top: 5px;
           
           select{
-           
-          
-            
               background-color: #E8E8E8;
               padding-left: 10px;
               padding-right: 10px;
@@ -124,15 +123,28 @@
               }
           }
       }
+      
       .downloadButton{
           margin-top: 5px;
           margin-bottom: 5px;
           border-radius: 5px;
+          background-color: #E35163 !important;
+          color: white !important;
+          filter: saturate(100%) !important;
+          
         //   &:hover {
         //     color:#E45163 !important ;
         //     border: 1px solid #E45163 !important;
         // }
           
+      }
+      .disableButton{
+        margin-top: 5px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+        background-color: gray !important;
+        color: white !important;
+        filter: saturate(100%) !important;
       }
     }
     
