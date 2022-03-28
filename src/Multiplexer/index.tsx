@@ -1,3 +1,9 @@
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-tabs */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 import Loadable from 'react-loadable';
 import React from 'react';
 import Redux from 'redux';
@@ -8,17 +14,16 @@ import {
     bound,
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
-
+import { bbox, point, buffer } from '@turf/turf';
+import mapboxgl from 'mapbox-gl';
 import Map from '#re-map';
 import MapContainer from '#re-map/MapContainer';
 import MapOrder from '#re-map/MapOrder';
 import { getLayerName } from '#re-map/utils';
 import Icon from '#rscg/Icon';
-
 import { setStyleProperty } from '#rsu/styles';
 import Responsive from '#rscg/Responsive';
 import DangerButton from '#rsca/Button/DangerButton';
-
 import { AppState } from '#store/types';
 import {
     RouteDetailElement,
@@ -66,8 +71,15 @@ import {
 import authRoute from '#components/authRoute';
 import errorBound from '../errorBound';
 import helmetify from '../helmetify';
-
+import { getFeatureInfo } from '#utils/domain';
 import styles from './styles.scss';
+import {
+    createConnectedRequestCoordinator,
+    createRequestClient,
+    ClientAttributes,
+    methods,
+} from '#request';
+import ZoomToolBar from '#components/ZoomToolBar';
 
 function reloadPage() {
     window.location.reload(false);
@@ -164,6 +176,17 @@ interface State {
     activeRouteDetails: RouteDetailElement | undefined;
     activeLayers: Layer[];
     mapDownloadPending: boolean;
+    checkLatLngState: boolean;
+    longitude: string | number;
+    lattitude: string | number;
+    rectangleBoundingBox: [any, any];
+    drawRefState: boolean;
+    geoLocationStatus: boolean;
+    currentMarkers: [];
+    markerStatus: boolean;
+    checkFullScreenStatus: boolean;
+    currentBounds: mapboxgl.LngLatBounds;
+
 }
 
 interface BoundingClientRect {
@@ -282,11 +305,22 @@ const getUserRegion = (user?: User): RegionValueElement => {
     }
     return {};
 };
+const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+    FeatureGetRequest: {
+        url: ({ params }) => `${params.api}`,
+        method: methods.GET,
+        onMount: false,
 
+        onSuccess: ({ response, params }) => {
+            params.responseData(response);
+        },
+    },
+
+
+};
 class Multiplexer extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
         super(props);
-
         this.state = {
             leftContent: undefined,
             rightContent: undefined,
@@ -296,6 +330,27 @@ class Multiplexer extends React.PureComponent<Props, State> {
             activeLayers: [],
             leftContainerHidden: false,
             mapDownloadPending: false,
+            mapDataOnClick: {},
+            tooltipClicked: false,
+            mapClickedResponse: {},
+            tooltipLatlng: undefined,
+            LoadingTooltip: false,
+            landslidePolygonImagemap: [],
+            landslidePolygonChoroplethMapData: [],
+            climateChangeSelectedDistrict: { id: undefined, title: undefined },
+            addResource: false,
+            toggleLeftPaneButtonStretched: true,
+            extraFilterName: '',
+            isFilterClicked: false,
+            longitude: '',
+            lattitude: '',
+            checkLatLngState: false,
+            rectangleBoundingBox: [],
+            drawRefState: false,
+            geoLocationStatus: false,
+            currentMarkers: [],
+            markerStatus: false,
+            checkFullScreenStatus: false,
         };
     }
 
@@ -343,6 +398,42 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         this.setLeftPanelWidth(boundingClientRect);
     }
+
+    private handlemapClickedResponse = (data) => {
+        this.setState({ mapClickedResponse: data });
+        this.setState({ LoadingTooltip: false });
+    }
+
+    private handleMapClicked = (latlngData) => {
+        const { activeLayers } = this.state;
+
+        if (activeLayers.length && !activeLayers[activeLayers.length - 1].jsonData) {
+            this.setState({
+                tooltipLatlng: undefined,
+            });
+        }
+        if (latlngData && activeLayers.length) {
+            const { requests: { FeatureGetRequest } } = this.props;
+            const latlng = point([latlngData.lngLat.lng, latlngData.lngLat.lat]);
+            const buffered = buffer(latlng, 1, { units: 'meters' });
+            const bBox = bbox(buffered);
+            const api = getFeatureInfo(activeLayers[activeLayers.length - 1], bBox);
+            this.setState({ LoadingTooltip: true });
+            FeatureGetRequest.do({
+                api,
+                responseData: this.handlemapClickedResponse,
+            });
+        }
+        return null;
+    }
+
+    private lattitudeRef = React.createRef<HTMLInputElement>();
+
+    private mapContainerRef = React.createRef<mapboxgl.Map>();
+
+    private geoLocationRef = React.createRef<mapboxgl.GeolocateControl>();
+
+    private markerRef = React.createRef<mapboxgl.Marker>()
 
     private setFilterFromUrl = (
         provinces: Province[],
@@ -500,6 +591,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ hideDataRangeFilter: false });
     }
 
+    private extraFilterName = (data) => {
+        this.setState({ extraFilterName: data });
+    }
+
+    private FilterClickedStatus = (boolean) => {
+        this.setState({ isFilterClicked: boolean });
+    }
+
     private addLayer = (layer: Layer) => {
         this.setState(({ activeLayers }) => {
             const layerIndex = activeLayers.findIndex(d => d.id === layer.id);
@@ -591,6 +690,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         ];
     })
 
+
     private getRegionName = (
         selectedRegion: RegionValueElement,
         provinces: Province[],
@@ -620,116 +720,475 @@ class Multiplexer extends React.PureComponent<Props, State> {
     }
 
     private handleToggleLeftContainerVisibilityButtonClick = () => {
+        const { toggleLeftPaneButtonStretched } = this.state;
         this.setState(
             ({ leftContainerHidden: prevLeftContainerHidden }) => ({
                 leftContainerHidden: !prevLeftContainerHidden,
             }),
         );
+        this.setState({ toggleLeftPaneButtonStretched: !toggleLeftPaneButtonStretched });
+    }
+
+    private clickHandler = (data) => {
+        const { activeRouteDetails } = this.context;
+        this.setState({ mapDataOnClick: data });
+        this.setState({ tooltipClicked: true });
+        this.setState({
+            tooltipLatlng: data.lngLat,
+        });
+    }
+
+    private closeTooltip = (data) => {
+        this.setState({ tooltipLatlng: data });
+    }
+
+    private handleLandslidePolygonImageMap = (data) => {
+        this.setState({
+            landslidePolygonImagemap: data,
+        });
+    }
+
+    private handlelandslidePolygonChoroplethMapData = (data) => {
+        this.setState({
+            landslidePolygonChoroplethMapData: data,
+        });
+    }
+
+    private setClimateChangeSelectedDistrict = (data) => {
+        const { id, properties: { title } } = data;
+
+        this.setState({
+            climateChangeSelectedDistrict: { id, title },
+        });
+    }
+
+    private setAddResource = (boolean) => {
+        this.setState({
+            addResource: boolean,
+        });
+    }
+
+    private getRegionDetails = (
+        selectedRegion: RegionValueElement,
+        provinces: Province[],
+        districts: District[],
+        municipalities: Municipality[],
+    ) => {
+        if (!selectedRegion || !selectedRegion.adminLevel) {
+            return 'National';
+        }
+
+        const adminLevels: {
+            [key in RegionAdminLevel]: Province[] | District[] | Municipality[];
+        } = {
+            1: provinces,
+            2: districts,
+            3: municipalities,
+        };
+
+        const regionList = adminLevels[selectedRegion.adminLevel];
+        const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+
+        if (currentRegion) {
+            return currentRegion;
+        }
+
+        return 'Unknown';
+    }
+
+    private fullScreenMap = () => {
+        this.setState({ checkFullScreenStatus: true });
+
+        if (this.mapContainerRef.current) {
+            const mainapp = this.mapContainerRef.current.getContainer();
+
+            this.setState({ currentBounds: this.mapContainerRef.current.getBounds() });
+
+            mainapp.requestFullscreen();
+        }
+
+        const resetFunc = setTimeout(() => {
+            // if (this.mapContainerRef.current) {
+            //     const nepalBbox = [[80.05858661752784, 26.347836996368667],
+            //         [88.20166918432409, 30.44702867091792]];
+
+            //     const currentBbox = this.mapContainerRef.current.getBounds();
+            //     console.log('current bbox is', currentBbox);
+
+            //     let status = false;
+            //     // eslint-disable-next-line no-plusplus
+            //     for (let i = 0; i < nepalBbox.length; i++) {
+            //         // eslint-disable-next-line no-plusplus
+            //         for (let j = 0; j < nepalBbox.length; j++) {
+            //             if (nepalBbox[i][j] === currentBbox[i][j]) {
+            //                 status = true;
+            //             }
+            //         }
+            //     }
+            //     if (status) {
+            //         return;
+            //     }
+            // }
+            if (this.mapContainerRef.current) {
+                this.mapContainerRef.current.fitBounds(this.state.currentBounds, { duration: 1000 });
+            }
+        }, 700); // triggered after 700ms
+
+        return () => clearTimeout(resetFunc);
+    };
+
+    private markersArray = (marker: any) => {
+        this.setState(prevState => prevState.currentMarkers.push(marker));
+    };
+
+    private goToLocation = () => {
+        if (this.state.markerStatus) {
+            this.setState({ markerStatus: false });
+        } else {
+            this.setState({ markerStatus: true });
+        }
+
+        if (this.mapContainerRef.current) {
+            if (this.state.longitude && this.state.lattitude) {
+                this.mapContainerRef.current.flyTo({
+                    speed: 1,
+                    center: {
+                        lat: this.state.lattitude,
+                        lng: this.state.longitude,
+                    },
+                    zoom: 12,
+                });
+            }
+            const marker = new mapboxgl.Marker()
+                .setLngLat([this.state.longitude, this.state.lattitude])
+                .setPopup(
+                    new mapboxgl.Popup({ offset: 25 }) // add popups
+                        .setHTML(
+                            `<h3 style=padding:25px 50px;>Lattitude : ${this.state.lattitude}, Longitude : ${this.state.longitude}</h3>`,
+                        ),
+                )
+                .addTo(this.mapContainerRef.current);
+
+            this.markerRef.current = marker;
+
+            this.markersArray(marker);
+
+            if (this.state.currentMarkers !== null) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                    this.state.currentMarkers[i].remove();
+                }
+            }
+        }
+    }
+
+
+    private mapOnClick = (event: mapboxgl.EventData) => {
+        if (!this.state.checkLatLngState) return;
+
+        const coordinates = event.lngLat;
+
+        if (this.state.currentMarkers.length > 0) {
+            // eslint-disable-next-line no-plusplus
+            for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                this.state.currentMarkers[i].remove();
+            }
+        }
+
+        const marker = new mapboxgl.Marker();
+        this.setState({ longitude: coordinates.lng });
+        this.setState({ lattitude: coordinates.lat });
+        if (this.mapContainerRef.current) {
+            marker.setLngLat(coordinates).addTo(this.mapContainerRef.current);
+        }
+
+        this.markersArray(marker);
+    }
+
+
+    private handleToggle = () => {
+        if (this.lattitudeRef.current) {
+            this.lattitudeRef.current.focus();
+        }
+
+        if (!this.state.checkLatLngState && this.mapContainerRef.current) {
+            this.mapContainerRef.current.on('click', event => this.mapOnClick(event));
+        }
+
+        if (this.state.checkLatLngState && this.mapContainerRef.current) {
+            this.mapContainerRef.current.off('click', event => this.mapOnClick(event));
+
+            if (this.state.currentMarkers.length > 0) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = this.state.currentMarkers.length - 1; i >= 0; i--) {
+                    this.state.currentMarkers[i].remove();
+                }
+            }
+        }
+
+        if (this.state.checkLatLngState) {
+            this.setState({ checkLatLngState: false });
+        } else {
+            this.setState({ checkLatLngState: true });
+        }
+    };
+
+    private drawToZoom = () => {
+        if (this.state.drawRefState) {
+            this.setState({ drawRefState: false });
+        } else {
+            this.setState({ drawRefState: true });
+        }
+    }
+
+
+    private resetDrawState =() => {
+        this.setState({ drawRefState: false });
+    }
+
+    private currentLocation = () => {
+        const dotElement = document.querySelector('.mapboxgl-user-location-dot');
+        if (dotElement) {
+            dotElement.style.display = 'unset';
+        }
+        if (this.geoLocationRef.current) {
+            this.geoLocationRef.current.trigger();
+
+
+            if (this.state.geoLocationStatus) {
+                this.setState({ geoLocationStatus: false });
+            } else {
+                this.setState({ geoLocationStatus: true });
+            }
+        }
+    };
+
+    private fullScreenOffFunc = () => {
+        if (this.state.checkFullScreenStatus) {
+            this.setState({ checkFullScreenStatus: false });
+        }
     }
 
     public render() {
-        const {
-            mapStyle,
-            filters,
-            provinces,
-            districts,
-            municipalities,
-            // hazardList,
-        } = this.props;
+	    const {
+	        mapStyle,
+	        filters,
+	        provinces,
+	        districts,
+	        municipalities,
+	        // hazardList,
+	    } = this.props;
 
-        const {
-            leftContent,
-            leftContentContainerClassName,
-            rightContent,
-            rightContentContainerClassName,
-            mainContent,
-            mainContentContainerClassName,
-            filterContent,
-            filterContentContainerClassName,
-            hideMap,
-            hideFilter,
-            hideLocationFilter,
-            hideDataRangeFilter,
-            hideHazardFilter,
-            activeRouteDetails,
-            activeLayers,
-            leftContainerHidden,
-            mapDownloadPending,
-        } = this.state;
+	    const {
+	        leftContent,
+	        leftContentContainerClassName,
+	        rightContent,
+	        rightContentContainerClassName,
+	        mainContent,
+	        mainContentContainerClassName,
+	        filterContent,
+	        filterContentContainerClassName,
+	        hideMap,
+	        hideFilter,
+	        hideLocationFilter,
+	        hideDataRangeFilter,
+	        hideHazardFilter,
+	        activeRouteDetails,
+	        activeLayers,
+	        leftContainerHidden,
+	        mapDownloadPending,
+	        mapDataOnClick,
+	        tooltipClicked,
+	        mapClickedResponse,
+	        tooltipLatlng,
+	        LoadingTooltip,
+	        landslidePolygonImagemap,
+	        handlelandslidePolygonChoroplethMapData,
+	        landslidePolygonChoroplethMapData,
+	        climateChangeSelectedDistrict,
+	        addResource,
+	        toggleLeftPaneButtonStretched,
+	        extraFilterName,
+	        isFilterClicked,
+            longitude,
+            checkLatLngState,
+            rectangleBoundingBox,
+            drawRefState,
+            currentMarkers,
+            currentBounds,
+            checkFullScreenStatus,
+	    } = this.state;
 
-        const pageProps = {
-            setLeftContent: this.setLeftContent,
-            setRightContent: this.setRightContent,
-            setFilterContent: this.setFilterContent,
-            setActiveRouteDetails: this.setActiveRouteDetails,
-            setMainContent: this.setMainContent,
-            activeRouteDetails,
-            hideMap: this.hideMap,
-            showMap: this.showMap,
-            showFilter: this.showFilter,
-            hideFilter: this.hideFilter,
-            showLocationFilter: this.showLocationFilter,
-            hideLocationFilter: this.hideLocationFilter,
-            showHazardFilter: this.showHazardFilter,
-            hideHazardFilter: this.hideHazardFilter,
-            showDataRangeFilter: this.showDataRangeFilter,
-            hideDataRangeFilter: this.hideDataRangeFilter,
-        };
 
-        const riskInfoLayerProps = {
-            addLayer: this.addLayer,
-            removeLayer: this.removeLayer,
-            addLayers: this.addLayers,
-            removeLayers: this.removeLayers,
-            setLayers: this.setLayers,
-            activeLayers,
-        };
+	    const pageProps = {
+	        setLeftContent: this.setLeftContent,
+	        setRightContent: this.setRightContent,
+	        setFilterContent: this.setFilterContent,
+	        setActiveRouteDetails: this.setActiveRouteDetails,
+	        setMainContent: this.setMainContent,
+	        activeRouteDetails,
+	        hideMap: this.hideMap,
+	        showMap: this.showMap,
+	        showFilter: this.showFilter,
+	        hideFilter: this.hideFilter,
+	        showLocationFilter: this.showLocationFilter,
+	        hideLocationFilter: this.hideLocationFilter,
+	        showHazardFilter: this.showHazardFilter,
+	        hideHazardFilter: this.hideHazardFilter,
+	        showDataRangeFilter: this.showDataRangeFilter,
+	        hideDataRangeFilter: this.hideDataRangeFilter,
+	        extraFilterName: this.extraFilterName,
 
-        const regionName = this.getRegionName(
+	    };
+
+	    const riskInfoLayerProps = {
+	        addLayer: this.addLayer,
+	        removeLayer: this.removeLayer,
+	        addLayers: this.addLayers,
+	        removeLayers: this.removeLayers,
+	        setLayers: this.setLayers,
+	        activeLayers,
+	        mapDataOnClick,
+	        tooltipClicked,
+	        closeTooltip: this.closeTooltip,
+	        mapClickedResponse,
+	        tooltipLatlng,
+	        LoadingTooltip,
+	        landslidePolygonImagemap,
+	        handleLandslidePolygonImageMap: this.handleLandslidePolygonImageMap,
+	        handlelandslidePolygonChoroplethMapData: this.handlelandslidePolygonChoroplethMapData,
+	        landslidePolygonChoroplethMapData,
+	        climateChangeSelectedDistrict,
+	        setClimateChangeSelectedDistrict: this.setClimateChangeSelectedDistrict,
+	        FilterClickedStatus: this.FilterClickedStatus,
+	        isFilterClicked,
+	        addResource,
+	        setAddResource: this.setAddResource,
+
+	    };
+
+	    const regionName = this.getRegionName(
+	        filters.region,
+	        provinces,
+	        districts,
+	        municipalities,
+	    );
+	    const orderedLayers = this.getLayerOrder(activeLayers);
+	    const hideFilters = false;
+	    const activeRouteName = activeRouteDetails && activeRouteDetails.name;
+        const detailsOfLoggedAdmin = this.getRegionDetails(
             filters.region,
-            provinces,
-            districts,
-            municipalities,
+	        provinces,
+	        districts,
+	        municipalities,
         );
 
-        const orderedLayers = this.getLayerOrder(activeLayers);
-        const hideFilters = false;
+        const resetLocation = () => {
+            // if (this.state.geoLocationStatus && this.geoLocationRef.current) {
+            const dotElement = document.querySelector('.mapboxgl-user-location-dot');
+            if (dotElement) {
+                dotElement.style.display = 'none';
+            }
+            // }
+            if (currentMarkers !== null) {
+                // eslint-disable-next-line no-plusplus
+                for (let i = currentMarkers.length - 1; i >= 0; i--) {
+				  currentMarkers[i].remove();
+                }
+            }
 
-        return (
+            this.setState({ geoLocationStatus: false });
+            if (this.mapContainerRef.current) {
+                // centriod of nepal
+                if (detailsOfLoggedAdmin
+            	   && !detailsOfLoggedAdmin.province && !detailsOfLoggedAdmin.district) {
+                    this.mapContainerRef.current.fitBounds([
+                        [80.05858661752784, 26.347836996368667],
+                        [88.20166918432409, 30.44702867091792]], {
+							 padding: 24,
+						 });
+                }
+                // checking province
+                if (detailsOfLoggedAdmin
+            	   && detailsOfLoggedAdmin.centroid) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
+                }
+                // checking district
+                if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
+                }
+                // checking municipality
+                if (detailsOfLoggedAdmin && detailsOfLoggedAdmin.province
+            		 && detailsOfLoggedAdmin.district) {
+                    this.mapContainerRef.current.fitBounds(detailsOfLoggedAdmin.bbox, {
+                        padding: 24,
+                    });
+                }
+            }
+
+            this.setState({ checkLatLngState: false, longitude: '', lattitude: '' });
+        };
+
+        const longitudeData = (val: number) => {
+            this.setState({ longitude: val });
+        };
+
+        const lattiudeData = (val: number) => {
+            this.setState({ lattitude: val });
+        };
+
+        const queryStringParams = window.location.href.split('#/')[1];
+
+        const polygonDrawAccessableRoutes = ['vulnerability'];
+
+	    return (
             <PageContext.Provider value={pageProps}>
                 <TitleContextProvider>
                     <div className={_cs(
-                        styles.multiplexer,
-                        leftContainerHidden && styles.leftContainerHidden,
-                        mapDownloadPending && styles.downloadingMap,
-                    )}
+	                    styles.multiplexer,
+	                    leftContainerHidden && styles.leftContainerHidden,
+	                    mapDownloadPending && styles.downloadingMap,
+	                )}
                     >
                         <div className={_cs(styles.content, 'bipad-main-content')}>
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
                                     mapStyle={mapStyle}
+                                    clickHandler={this.clickHandler}
+                                    handleMapClicked={this.handleMapClicked}
                                     mapOptions={{
-                                        logoPosition: 'top-left',
-                                        minZoom: 5,
-                                        // makes initial map center to Nepal
-                                        center: {
-                                            lng: 85.300140,
-                                            lat: 27.700769,
-                                        },
-                                    }}
-                                // debug
-
+	                                    logoPosition: 'top-left',
+	                                    minZoom: 5,
+	                                    // makes initial map center to Nepal
+	                                    center: {
+	                                        lng: 85.300140,
+	                                        lat: 27.700769,
+	                                    },
+	                                }}
                                     scaleControlShown
                                     scaleControlPosition="bottom-right"
-
                                     navControlShown
                                     navControlPosition="bottom-right"
+                                    geoLocationRef={this.geoLocationRef}
+                                    rectangleBoundingBox={rectangleBoundingBox}
+                                    mapContainerRefMultiplexer={this.mapContainerRef}
+                                    drawRefState={drawRefState}
+                                    resetDrawState={this.resetDrawState}
+                                    queryStringParams={queryStringParams}
+                                    polygonDrawAccessableRoutes={polygonDrawAccessableRoutes}
+                                    checkFullScreenStatus={checkFullScreenStatus}
+                                    currentBounds={currentBounds}
+                                    fullScreenOffFunc={this.fullScreenOffFunc}
                                 >
-                                    { leftContent && (
+                                    {leftContent && (
                                         <aside className={_cs(
-                                            styles.left,
-                                            leftContainerHidden && styles.hidden,
-                                        )}
+	                                        activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects' ? styles.halfPageLeftPane : styles.left,
+	                                        leftContainerHidden && styles.hidden,
+	                                    )}
                                         >
                                             <AppBrand
                                                 className={styles.brand}
@@ -737,42 +1196,45 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             />
                                             <div
                                                 className={_cs(
-                                                    styles.leftContentContainer,
-                                                    leftContentContainerClassName,
-                                                )}
+	                                                styles.leftContentContainer,
+	                                                leftContentContainerClassName,
+	                                            )}
                                             >
-                                                { leftContent }
+                                                {leftContent}
                                             </div>
                                         </aside>
-                                    )}
-                                    { leftContent && (
+	                                )}
+                                    {leftContent && (
                                         <div
                                             role="presentation"
-                                            className={styles.toggleLeftContainerVisibilityButton}
+                                            className={activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects' ? toggleLeftPaneButtonStretched
+	                                            ? styles.toggleLeftContainerVisibilityButtonHalfPageLeftPane
+	                                            : styles.toggleLeftPaneButtonCompresed
+	                                            : styles.toggleLeftContainerVisibilityButton}
                                             onClick={
-                                                this.handleToggleLeftContainerVisibilityButtonClick
-                                            }
+	                                            this.handleToggleLeftContainerVisibilityButtonClick
+	                                        }
                                         >
                                             <Icon
                                                 name={leftContainerHidden ? 'chevronRight' : 'chevronLeft'}
                                             />
                                         </div>
-                                    )}
+	                                )}
                                     <main className={styles.main}>
-                                        { mainContent && (
+                                        {mainContent && (
                                             <div className={_cs(
-                                                styles.mainContentContainer,
-                                                mainContentContainerClassName,
-                                            )}
+	                                            styles.mainContentContainer,
+	                                            mainContentContainerClassName,
+	                                        )}
                                             >
-                                                { mainContent }
+                                                {mainContent}
                                             </div>
-                                        )}
+	                                    )}
                                         <MapContainer
                                             className={_cs(
-                                                styles.map,
-                                                hideMap && styles.hidden,
-                                            )}
+	                                            styles.map,
+	                                            hideMap && styles.hidden,
+	                                        )}
                                         />
                                         {/* hazardList.map((item) => {
                                         if (!item.icon) {
@@ -787,50 +1249,70 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                             />
                                         );
                                     }) */}
-                                        { !hideMap && (
-                                            <div className={styles.mapActions}>
+                                        {!hideMap && (
+                                            <div className={activeRouteName === 'contacts' || activeRouteName === 'documents' || activeRouteName === 'projects'
+	                                            ? !toggleLeftPaneButtonStretched
+	                                                ? styles.mapActionsCompressed
+	                                                : styles.mapActions
+	                                            : styles.mapActions}
+                                            >
                                                 <MapDownloadButton
                                                     className={styles.mapDownloadButton}
                                                     transparent
                                                     title="Download current map"
                                                     iconName="download"
                                                     onPendingStateChange={
-                                                        this.handleMapDownloadStateChange
-                                                    }
+	                                                    this.handleMapDownloadStateChange
+	                                                }
                                                 />
                                                 <LayerSwitch
                                                     className={styles.layerSwitch}
                                                 />
                                                 <LayerToggle />
+                                                <ZoomToolBar
+                                                    fullScreenMap={this.fullScreenMap}
+                                                    resetLocation={resetLocation}
+                                                    lattitudeRef={this.lattitudeRef}
+                                                    longitude={this.state.longitude}
+                                                    lattitude={this.state.lattitude}
+                                                    setLongitude={longitudeData}
+                                                    setLattitude={lattiudeData}
+                                                    goToLocation={this.goToLocation}
+                                                    drawToZoom={this.drawToZoom}
+                                                    checkLatLngState={checkLatLngState}
+                                                    handleToggle={this.handleToggle}
+                                                    currentLocation={this.currentLocation}
+                                                />
                                             </div>
-                                        )}
+	                                    )}
                                     </main>
                                     {(rightContent || !hideFilters) && (
                                         <aside className={styles.right}>
-                                            { rightContent && (
+                                            {rightContent && (
                                                 <div
                                                     className={_cs(
-                                                        styles.rightContentContainer,
-                                                        rightContentContainerClassName,
-                                                    )}
+	                                                    styles.rightContentContainer,
+	                                                    rightContentContainerClassName,
+	                                                )}
                                                 >
-                                                    { rightContent }
+                                                    {rightContent}
                                                 </div>
-                                            )}
-                                            { !hideFilter && (
+	                                        )}
+                                            {!hideFilter && (
                                                 <Filters
                                                     className={styles.filters}
                                                     hideLocationFilter={hideLocationFilter}
                                                     hideHazardFilter={hideHazardFilter}
                                                     hideDataRangeFilter={hideDataRangeFilter}
                                                     extraContent={filterContent}
+                                                    FilterClickedStatus={this.FilterClickedStatus}
                                                     extraContentContainerClassName={
-                                                        filterContentContainerClassName
-                                                    }
+	                                                    filterContentContainerClassName
+	                                                }
                                                 />
-                                            )}
+	                                        )}
                                         </aside>
-                                    )}
+	                                )}
                                     {this.renderRoutes()}
                                     <MapOrder ordering={orderedLayers} />
                                 </Map>
@@ -840,8 +1322,15 @@ class Multiplexer extends React.PureComponent<Props, State> {
                     </div>
                 </TitleContextProvider>
             </PageContext.Provider>
-        );
+	    );
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));
+// export default connect(mapStateToProps, mapDispatchToProps)(Responsive(Multiplexer));
+export default connect(mapStateToProps, mapDispatchToProps)(
+    createConnectedRequestCoordinator<PropsWithRedux>()(
+        createRequestClient(requests)(
+            Responsive(Multiplexer),
+        ),
+    ),
+);

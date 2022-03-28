@@ -69,9 +69,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         return (
             <>
-                <CommonMap
-                    sourceKey="risk-infoz"
-                />
+
                 { rasterLayers.map(layer => (
                     <MapSource
                         key={layer.id}
@@ -93,7 +91,72 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                         />
                     </MapSource>
                 ))}
+                <CommonMap
+                    sourceKey="risk-infoz"
+                >
+                    { choroplethLayers.map(layer => (
+                        <MapSource
+                            key={layer.id}
+                            sourceKey={layer.layername}
+                            sourceOptions={{
+                                type: 'vector',
+                                url: mapSources.nepal.url,
+                            }}
+                        >
 
+                            <MapLayer
+                                layerKey="choropleth-layer"
+                                layerOptions={{
+                                    type: 'fill',
+                                    'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                    paint: {
+                                        ...layer.paint,
+                                        'fill-opacity': layer.paint['fill-opacity'].map(
+                                            val => (typeof val === 'number' ? val * layer.opacity : val),
+                                        ),
+                                    },
+                                }}
+                                onClick={layer.onClick ? layer.onClick : undefined}
+                                onMouseEnter={layer.tooltipRenderer
+                                    ? this.handleMouseEnter : undefined}
+                                onMouseLeave={layer.tooltipRenderer
+                                    ? this.handleMouseLeave : undefined}
+                            />
+                            <MapLayer
+                                layerKey="choropleth-layer-outline"
+                                layerOptions={{
+                                    'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
+                                    type: 'line',
+                                    paint: linePaintByAdminLevel[layer.adminLevel],
+                                }}
+                            />
+                            <MapState
+                                attributes={layer.mapState}
+                                attributeKey="value"
+                                sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
+                            />
+                            { layer.tooltipRenderer
+                            && hoverLngLat
+                            && feature
+                            && (feature.source === layer.layername)
+                            && (
+                                <MapTooltip
+                                    coordinates={hoverLngLat}
+                                    trackPointer
+                                    tooltipOptions={tooltipOptions}
+                                >
+                                    <layer.tooltipRenderer
+                                        feature={feature}
+                                        layer={layer}
+                                    />
+                                </MapTooltip>
+                            )
+                            }
+                        </MapSource>
+                    ))}
+
+
+                </CommonMap>
                 {/* <MapSource
                     key={'buildingKey'}
                     sourceKey={'buildingFootprint'}
@@ -114,63 +177,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
                     />
                 </MapSource> */}
 
-                { choroplethLayers.map(layer => (
-                    <MapSource
-                        key={layer.id}
-                        sourceKey={layer.layername}
-                        sourceOptions={{
-                            type: 'vector',
-                            url: mapSources.nepal.url,
-                        }}
-                    >
-                        <MapLayer
-                            layerKey="choropleth-layer-outline"
-                            layerOptions={{
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                type: 'line',
-                                paint: linePaintByAdminLevel[layer.adminLevel],
-                            }}
-                        />
-                        <MapLayer
-                            layerKey="choropleth-layer"
-                            layerOptions={{
-                                type: 'fill',
-                                'source-layer': sourceLayerByAdminLevel[layer.adminLevel],
-                                paint: {
-                                    ...layer.paint,
-                                    'fill-opacity': layer.paint['fill-opacity'].map(
-                                        val => (typeof val === 'number' ? val * layer.opacity : val),
-                                    ),
-                                },
-                            }}
-                            onClick={layer.onClick ? layer.onClick : undefined}
-                            onMouseEnter={layer.tooltipRenderer ? this.handleMouseEnter : undefined}
-                            onMouseLeave={layer.tooltipRenderer ? this.handleMouseLeave : undefined}
-                        />
-                        <MapState
-                            attributes={layer.mapState}
-                            attributeKey="value"
-                            sourceLayer={sourceLayerByAdminLevel[layer.adminLevel]}
-                        />
-                        { layer.tooltipRenderer
-                            && hoverLngLat
-                            && feature
-                            && (feature.source === layer.layername)
-                            && (
-                                <MapTooltip
-                                    coordinates={hoverLngLat}
-                                    trackPointer
-                                    tooltipOptions={tooltipOptions}
-                                >
-                                    <layer.tooltipRenderer
-                                        feature={feature}
-                                        layer={layer}
-                                    />
-                                </MapTooltip>
-                            )
-                        }
-                    </MapSource>
-                ))}
+
             </>
         );
     }

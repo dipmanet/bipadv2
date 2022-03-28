@@ -649,7 +649,7 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                             </div>
                             <a
                                 className={styles.link}
-                                href="https://www.icimod.org"
+                                href="http://110.44.114.238//NepalForestFire"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

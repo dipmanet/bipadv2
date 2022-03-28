@@ -53,10 +53,10 @@ export interface FiltersElement {
     dataDateRange: DataDateRangeValueElement;
 }
 
-export interface AlertElement extends Alert {}
-export interface EventElement extends Event {}
+export interface AlertElement extends Alert { }
+export interface EventElement extends Event { }
 
-export interface SourceElement extends Source {}
+export interface SourceElement extends Source { }
 
 export type LayerType = 'raster' | 'choropleth';
 export interface Layer {
@@ -221,9 +221,9 @@ export interface LandslideDataGeoJson {
     features: LandslideDataFeature[];
 }
 
-export type ResourceTypeKeys = 'education' | 'health' | 'tourism' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy' | 'openspace' | 'communityspace'|'helipad';
+export type ResourceTypeKeys = 'education' | 'health' | 'hotelandrestaurant' | 'industry' | 'finance' | 'governance' | 'communication' | 'cultural' | 'energy' | 'openspace' | 'communityspace' | 'helipad' | 'evacuationcentre';
 
-export type IncidentAttributeType = 'estimatedLoss' | 'incidentCount' | 'livestockDestroyedCount' | 'peopleDeathCount' | 'peopleInjuredCount' | 'peopleMissingCount'| 'totalInfrastructureDestroyedCount';
+export type IncidentAttributeType = 'estimatedLoss' | 'incidentCount' | 'livestockDestroyedCount' | 'peopleDeathCount' | 'peopleInjuredCount' | 'peopleMissingCount' | 'totalInfrastructureDestroyedCount';
 
 export interface KeyValue {
     key: string;

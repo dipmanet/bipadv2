@@ -149,7 +149,7 @@ export default class Visualizations extends React.PureComponent {
                         id="hazardSummary"
                     >
                         <h4>Number of Incidents</h4>
-                        <ResponsiveContainer height={300}>
+                        <ResponsiveContainer height={hazardSummary.length * 40}>
 
                             <BarChart
                                 layout="vertical"
@@ -166,7 +166,7 @@ export default class Visualizations extends React.PureComponent {
                                     dataKey="value"
 
                                 >
-                                    { hazardSummary.map(hazard => (
+                                    {hazardSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}
@@ -228,7 +228,7 @@ export default class Visualizations extends React.PureComponent {
                             </PieChart>
                         </ResponsiveContainer> */}
                         <h4>Hazard Severity (Fatality due to Hazard)</h4>
-                        <ResponsiveContainer height={300}>
+                        <ResponsiveContainer height={lifeLossSummary.length * 40}>
 
                             <BarChart
                                 layout="vertical"
@@ -244,7 +244,7 @@ export default class Visualizations extends React.PureComponent {
                                     dataKey="deathCount"
 
                                 >
-                                    { lifeLossSummary.map(hazard => (
+                                    {lifeLossSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}

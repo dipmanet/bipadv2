@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="171" height="171" viewBox="0 0 171 171">
+  <defs>
+    <clipPath id="clip-electricity_marker">
+      <rect width="171" height="171"/>
+    </clipPath>
+  </defs>
+  <g id="electricity_marker" clip-path="url(#clip-electricity_marker)">
+    <g id="Group_18236" data-name="Group 18236" transform="translate(19.994 6.017)">
+      <circle id="Ellipse_421" data-name="Ellipse 421" cx="45.91" cy="45.91" r="45.91" transform="translate(20.942 14.533)" fill="#fff"/>
+      <g id="OBJECTS" transform="translate(9.201 3.5)">
+        <path id="Path_36891" data-name="Path 36891" d="M65.428,3.5A56.263,56.263,0,0,0,48.7,113.471l11.744,20.286a5.182,5.182,0,0,0,7.107,1.787l.011-.007a4.289,4.289,0,0,0,1.779-1.779l11.744-20.286A56.056,56.056,0,0,0,65.428,3.5Zm0,99.293a43.063,43.063,0,1,1,43.063-43.063h0a42.984,42.984,0,0,1-42.906,43.063Zm5.694,46.978a5.694,5.694,0,1,1-5.694-5.694h0a5.622,5.622,0,0,1,5.694,5.552Z" transform="translate(-9.201 -3.5)" fill="#1664c1"/>
+      </g>
+    </g>
+    <g id="flash" transform="translate(-40.7 38)">
+      <g id="Group_18249" data-name="Group 18249" transform="translate(110.933)">
+        <path id="Path_36904" data-name="Path 36904" d="M145.687,21.092a1.025,1.025,0,0,0-.929-.592H132.612L144.6,1.573A1.025,1.025,0,0,0,143.734,0h-16.4a1.026,1.026,0,0,0-.917.567l-15.375,30.75a1.025,1.025,0,0,0,.917,1.483H122.5L111.014,60.077a1.026,1.026,0,0,0,1.729,1.059l32.8-38.95A1.026,1.026,0,0,0,145.687,21.092Z" transform="translate(-110.933 0)" fill="#1664c1"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,5 +1,6 @@
 export interface UserPermission {
     codename: string;
+    app: string;
 }
 
 export interface GroupPermission {

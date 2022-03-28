@@ -50,6 +50,7 @@ export default class LayerButton extends React.PureComponent<Props> {
                 )}
                 transparent
                 title={`${description}`}
+                disabled={isActive}
             >
                 {/* <div
                     className={styles.colorPreview}

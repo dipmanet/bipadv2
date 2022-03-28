@@ -75,11 +75,10 @@ class ProjectsProfileLeftPane extends React.PureComponent {
             className,
             projectOrganizationPieData,
         } = this.props;
-        console.log('This is projects', projects);
         return (
             <div className={_cs(className, styles.leftPane)}>
                 <div className={styles.visualizations}>
-                    { projects && projects.length > 0 && (
+                    {projects && projects.length > 0 && (
                         <div className={styles.container}>
                             <Button
                                 title="Download Chart"
@@ -110,7 +109,7 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                                                 {/* { drrCycleData.map(d => (
                                                     <Cell key={d.label} fill={d.color} />
                                                 ))} */}
-                                                { projectOrganizationPieData.map(d => (
+                                                {projectOrganizationPieData.map(d => (
                                                     <Cell key={d.label} fill={d.color} />
                                                 ))}
                                             </Pie>

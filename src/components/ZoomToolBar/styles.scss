@@ -1,0 +1,498 @@
+.zoomToolBar {
+    position: absolute;
+    top: -1px;
+    left: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3px;
+
+    .zoomSection {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        padding: 4px 4px;
+        border-radius: 3px;
+        margin: 0px 3px;
+        z-index: 5;
+
+        .svgIcon {
+            height: 15px;
+        }
+
+        .bboxDrawBtn {
+            position: relative;
+            color: white !important;
+            border: none !important;
+            background-color: transparent !important;
+            padding: 0px 6px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: red;
+            }
+
+            &:before {
+                content: 'Draw box to zoom into an area';
+                visibility: hidden;
+                opacity: 0;
+                width: 250px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+
+            }
+
+
+        }
+
+        .globeBtn {
+            position: relative;
+            color: white !important;
+            border: none !important;
+            background-color: transparent !important;
+            padding: 0px 6px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: red;
+            }
+
+            &:before {
+                content: 'Click to search by lattitude and longitude';
+                visibility: hidden;
+                opacity: 0;
+                width: 150px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+
+                position: absolute;
+                z-index: 5;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+
+            }
+
+
+        }
+
+        // .zoomInBtn {
+        //     position: relative;
+        //     color: white !important;
+        //     border: none !important;
+        //     background-color: transparent !important;
+        //     cursor: pointer;
+
+        //     &::before {
+        //         content: 'Click to zoom in';
+        //         visibility: hidden;
+        //         opacity: 0;
+        //         width: 140px;
+        //         background-color: black;
+        //         color: #fff;
+        //         text-align: center;
+        //         border-radius: 5px;
+        //         padding: 5px 0;
+        //         transition: opacity 0.5s ease-in-out;
+
+        //         position: absolute;
+        //         z-index: 1;
+        //         left: 0;
+        //         top: 110%;
+        //     }
+
+        //     &:hover:before {
+        //         opacity: 1;
+        //         visibility: visible;
+        //     }
+        // }
+
+        // .zoomOutBtn {
+        //     position: relative;
+        //     color: white !important;
+        //     border: none !important;
+        //     background-color: transparent !important;
+        //     cursor: pointer;
+
+
+        //     &::before {
+        //         content: 'Click to zoom out';
+        //         visibility: hidden;
+        //         opacity: 0;
+        //         width: 140px;
+        //         background-color: black;
+        //         color: #fff;
+        //         text-align: center;
+        //         border-radius: 5px;
+        //         padding: 5px 0;
+        //         transition: opacity 0.5s ease-in-out;
+
+        //         position: absolute;
+        //         z-index: 1;
+        //         left: 0;
+        //         top: 110%;
+        //     }
+
+        //     &:hover:before {
+        //         opacity: 1;
+        //         visibility: visible;
+        //     }
+        // }
+
+        .navigationBtn {
+            position: relative;
+            color: white !important;
+            border: none !important;
+            padding: 0px 6px;
+            background-color: transparent !important;
+            cursor: pointer;
+
+
+            &::before {
+                content: 'Click to locate your current area';
+                visibility: hidden;
+                opacity: 0;
+                width: 140px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        .reloadIcon {
+            position: relative;
+            padding: 1px 2px 0px 4px;
+            color: white !important;
+            border: none !important;
+            border-left: 1px solid rgba(0, 0, 0, 0.2) !important;
+            background-color: transparent !important;
+            cursor: pointer;
+
+
+
+            &::before {
+                content: 'Reset the zoom of map to orginal view';
+                visibility: hidden;
+                opacity: 0;
+                width: 250px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        .fullScreenIcon {
+            position: relative;
+            padding: 0px 6px;
+            color: white !important;
+            border: none !important;
+            background-color: transparent !important;
+            cursor: pointer;
+
+            &::before {
+                content: 'Click to view map in fullscreen';
+                visibility: hidden;
+                opacity: 0;
+                width: 200px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+    }
+
+    // .locationSection {
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     background-color: white;
+    //     border: 2px solid rgba(0, 0, 0, 0.1);
+    //     padding: 4px 4px;
+    //     border-radius: 3px;
+    //     margin: 0px 3px;
+
+    //     .svgIcon {
+    //         height: 15px;
+    //     }
+
+    //     .bboxDrawBtn {
+    //         position: relative;
+    //         color: white !important;
+    //         border: none !important;
+    //         background-color: transparent !important;
+    //         padding: 0px 2px;
+    //         cursor: pointer;
+
+    //         &:before {
+    //             content: 'Draw square and zoom into that position';
+    //             visibility: hidden;
+    //             opacity: 0;
+    //             width: 250px;
+    //             background-color: black;
+    //             color: #fff;
+    //             text-align: center;
+    //             border-radius: 5px;
+    //             padding: 5px 0;
+    //             transition: opacity 0.5s ease-in-out;
+
+    //             position: absolute;
+    //             z-index: 1;
+    //             left: 0;
+    //             top: 110%;
+    //         }
+
+    //         &:hover:before {
+    //             opacity: 1;
+    //             visibility: visible;
+    //         }
+    //     }
+
+
+    // }
+
+    .latLngSection {
+        position: relative;
+        // right: 151px;
+        top: 35px;
+        left: -151px;
+        display: flex;
+        visibility: visible;
+        justify-content: center;
+        align-items: center;
+        background-color: #e2e2e2;
+        padding: 3px 3px;
+        border-radius: 3px;
+        margin: 0px 3px;
+        opacity: 1;
+        transition: all 0.3s linear;
+        z-index: 1;
+
+        .latLngInputField {
+            width: 90px;
+            padding: 3px 3px;
+            text-align: center;
+            margin: 0px 2px;
+            outline: none;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .searchIcon {
+            position: relative;
+            color: white !important;
+            border: none !important;
+            background-color: #fff;
+            filter: saturate(100%);
+            padding: 1px 5px;
+            margin: 0px 2px 0px 3px;
+            border-radius: 3px;
+            cursor: pointer;
+
+
+
+            &::before {
+                content: 'Search';
+                visibility: hidden;
+                opacity: 0;
+                width: 100px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        .searchIconDisabled {
+            position: relative;
+            color: white !important;
+            border: none !important;
+            background-color: rgb(243, 243, 243);
+            padding: 1px 5px;
+            margin: 0px 2px 0px 3px;
+            border-radius: 3px;
+            cursor: pointer;
+
+
+            &::before {
+                content: 'Please add a value in Lattitude and Longitude fields';
+                visibility: hidden;
+                opacity: 0;
+                width: 200px;
+                background-color: black;
+                color: #fff;
+                text-align: center;
+                border-radius: 5px;
+                padding: 5px 0;
+                transition: opacity 0.5s ease-in-out;
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                top: 110%;
+            }
+
+            &:hover:before {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+
+
+    .latLngSectionHide {
+        @extend .latLngSection;
+        left: -1500px;
+        opacity: 0;
+        transition: all 0.3s linear;
+    }
+
+    // .relooadScreenSection {
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     background-color: white;
+    //     border: 2px solid rgba(0, 0, 0, 0.1);
+    //     padding: 4px 4px;
+    //     border-radius: 3px;
+    //     margin: 0px 3px;
+
+    //     .reloadIcon {
+    //         position: relative;
+    //         color: white !important;
+    //         border: none !important;
+    //         background-color: transparent !important;
+    //         cursor: pointer;
+
+
+    //         &::before {
+    //             content: 'Reset map';
+    //             visibility: hidden;
+    //             opacity: 0;
+    //             width: 100px;
+    //             background-color: black;
+    //             color: #fff;
+    //             text-align: center;
+    //             border-radius: 5px;
+    //             padding: 5px 0;
+    //             transition: opacity 0.5s ease-in-out;
+
+    //             position: absolute;
+    //             z-index: 1;
+    //             left: 0;
+    //             top: 110%;
+    //         }
+
+    //         &:hover:before {
+    //             opacity: 1;
+    //             visibility: visible;
+    //         }
+    //     }
+
+    //     .fullScreenIcon {
+    //         position: relative;
+    //         color: white !important;
+    //         border: none !important;
+    //         background-color: transparent !important;
+    //         cursor: pointer;
+
+    //         &::before {
+    //             content: 'Fullscreen';
+    //             visibility: hidden;
+    //             opacity: 0;
+    //             width: 100px;
+    //             background-color: black;
+    //             color: #fff;
+    //             text-align: center;
+    //             border-radius: 5px;
+    //             padding: 5px 0;
+    //             transition: opacity 0.5s ease-in-out;
+
+    //             position: absolute;
+    //             z-index: 1;
+    //             left: 0;
+    //             top: 110%;
+    //         }
+
+    //         &:hover:before {
+    //             opacity: 1;
+    //             visibility: visible;
+    //         }
+    //     }
+    // }
+
+}

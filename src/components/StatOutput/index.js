@@ -14,6 +14,7 @@ const StatOutput = ({ className, ...otherProps }) => (
         normal
         type="block"
         lang="ne"
+        finalData={otherProps}
         {...otherProps}
     />
 );

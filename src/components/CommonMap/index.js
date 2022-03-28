@@ -134,6 +134,7 @@ class CommonMap extends React.PureComponent {
             showDistrict: showDistrictFromProps,
             showMunicipality: showMunicipalityFromProps,
             showWard: showWardFromProps,
+            children,
         } = this.props;
 
         const isForced = showProvinceFromProps
@@ -238,6 +239,7 @@ class CommonMap extends React.PureComponent {
                         }}
                     />
                 </MapSource>
+                {children}
                 <MapSource
                     sourceKey={`${sourceKey}-label`}
                     sourceOptions={{

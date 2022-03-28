@@ -167,10 +167,11 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
     };
 
     private confirmDelete = () => {
-        const { openspaceDeleteRequest, id } = this.props;
+        const { openspaceDeleteRequest, id, DeletedResourceApiRecall } = this.props;
         openspaceDeleteRequest.do({
             id,
             closeModal: this.props.closeModal,
+            DeletedResourceApiRecall,
         });
     };
 
@@ -219,6 +220,7 @@ class SingleOpenspaceDetails extends React.PureComponent<Props, State> {
                         location={address}
                         onEdit={this.props.onEdit}
                         authenticated={authenticated}
+                        closeModal={closeModal}
                     />
                     <img
                         src={imageUrl || defaultImage}
