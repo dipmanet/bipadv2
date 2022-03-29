@@ -506,7 +506,13 @@ class RealTimeMap extends React.PureComponent {
                 3,
                 0,
                 ],
-                'circle-opacity': 0.3,
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
             };
         }
         if (duration === 3) {
@@ -536,7 +542,13 @@ class RealTimeMap extends React.PureComponent {
                 3,
                 0,
                 ],
-                'circle-opacity': 0.3,
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
             };
         }
         if (duration === 6) {
@@ -566,7 +578,13 @@ class RealTimeMap extends React.PureComponent {
                 3,
                 0,
                 ],
-                'circle-opacity': 0.3,
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
             };
         }
         if (duration === 12) {
@@ -596,7 +614,13 @@ class RealTimeMap extends React.PureComponent {
                 3,
                 0,
                 ],
-                'circle-opacity': 0.3,
+                'circle-opacity': ['case', ['all',
+                    ['boolean', ['feature-state', 'hover'], false],
+                    ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+                ],
+                1,
+                0.3,
+                ],
             };
         }
 
@@ -626,7 +650,13 @@ class RealTimeMap extends React.PureComponent {
             3,
             0,
             ],
-            'circle-opacity': 0.3,
+            'circle-opacity': ['case', ['all',
+                ['boolean', ['feature-state', 'hover'], false],
+                ['==', ['feature-state', 'dataSource'], 'real-time-rain-points'],
+            ],
+            1,
+            0.3,
+            ],
         };
     }
 
@@ -979,7 +1009,9 @@ class RealTimeMap extends React.PureComponent {
                                     type: 'circle',
                                     property: 'earthquakeId',
                                     // paint: mapStyles.earthquakePoint.fill,
-                                    paint: mapStyles.earthquakePoint.circleDim,
+                                    paint: isHovered
+                                        ? mapStyles.earthquakePoint.circleDim
+                                        : mapStyles.earthquakePoint.circle,
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
@@ -1033,7 +1065,9 @@ class RealTimeMap extends React.PureComponent {
                                 layerOptions={{
                                     type: 'circle',
                                     // paint: mapStyles.firePoint.paint,
-                                    paint: mapStyles.firePoint.circleDim,
+                                    paint: isHovered
+                                        ? mapStyles.firePoint.circleDim
+                                        : mapStyles.firePoint.circle,
                                 }}
                                 onMouseEnter={this.handleHazardEnter}
                                 onMouseLeave={this.handleHazardLeave}
