@@ -38,11 +38,11 @@ export const getBuildingOptions = (enumData: array) => (
             {
                 title: 'Damage Grade',
                 options: [
-                    '1',
-                    '2',
-                    '3',
-                    '4',
-                    '5',
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
                 ],
                 placeholder: 'Please select the Damage Grade',
                 select: true,

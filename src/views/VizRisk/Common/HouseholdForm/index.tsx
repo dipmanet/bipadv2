@@ -92,7 +92,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
     },
     buildingPutRequest: {
         url: ({ params }) => `/vizrisk-building/${params.id}/`,
-        method: methods.PUT,
+        method: methods.PATCH,
         body: ({ params }) => {
             if (!params) {
                 return {};
@@ -152,26 +152,38 @@ const HouseholdForm = (props) => {
             ) {
                 setFormData({
                     ...buildingFormData,
-                    suffency: '<3',
+                    agricultureNineToTwelveMonth: false,
+                    agricultureSevenToNineMonth: false,
+                    agricultureZeroToThreeMonth: true,
+                    agricultureFourToSixMonth: false,
                 });
             } else if (buildingData.agricultureSevenToNineMonth) {
                 setFormData({
                     ...buildingFormData,
-                    suffency: '7-9',
+                    agricultureNineToTwelveMonth: false,
+                    agricultureSevenToNineMonth: true,
+                    agricultureZeroToThreeMonth: false,
+                    agricultureFourToSixMonth: false,
                 });
             } else if (
                 buildingData.agricultureNineToTwelveMonth
             ) {
                 setFormData({
                     ...buildingFormData,
-                    suffency: '9-12',
+                    agricultureNineToTwelveMonth: true,
+                    agricultureSevenToNineMonth: false,
+                    agricultureZeroToThreeMonth: false,
+                    agricultureFourToSixMonth: false,
                 });
             } else if (
                 buildingData.agricultureFourToSixMonth
             ) {
                 setFormData({
                     ...buildingFormData,
-                    suffency: '4-6',
+                    agricultureNineToTwelveMonth: false,
+                    agricultureSevenToNineMonth: false,
+                    agricultureZeroToThreeMonth: false,
+                    agricultureFourToSixMonth: true,
                 });
             }
         }
@@ -220,6 +232,17 @@ const HouseholdForm = (props) => {
             });
         }
     };
+    const handleInput = (e, type) => {
+        let val = null;
+        if (Number(e.target.value) >= 0) {
+            val = Number(e.target.value);
+        }
+
+        setFormData({
+            ...buildingFormData,
+            [refData[type]]: val,
+        });
+    };
 
     const handleGetSuccess = (resp) => {
         setPending(false);
@@ -236,6 +259,9 @@ const HouseholdForm = (props) => {
         });
     };
 
+    useEffect(() => {
+        console.log('building form data ', buildingFormData);
+    }, [buildingFormData]);
     const handleSave = () => {
         setFormData({ ...buildingFormData, osmId: parseInt(osmId, 10) });
         if (buildingData && Object.keys(buildingData).length > 0 && buildingData.id) {
@@ -342,9 +368,9 @@ const HouseholdForm = (props) => {
 
                                                     }}
                                                     placeholder={`Please Enter ${type}`}
-                                                    type="text"
-                                                    value={buildingFormData[refData[type]]}
-                                                    onChange={e => handleFoundation(e, type)}
+                                                    type="number"
+                                                    value={Number(buildingFormData[refData[type]])}
+                                                    onChange={e => handleInput(e, type)}
                                                     // className={styles.selectElement}
                                                     className={styles.select}
 
@@ -424,9 +450,9 @@ const HouseholdForm = (props) => {
                                                         root: classes.select,
                                                     }}
                                                     placeholder={`Please Enter ${type}`}
-                                                    type="text"
+                                                    type="number"
                                                     value={buildingFormData[refData[type]]}
-                                                    onChange={e => handleFoundation(e, type)}
+                                                    onChange={e => handleInput(e, type)}
                                                     className={styles.select}
                                                 />
                                             </FormControl>
@@ -506,9 +532,9 @@ const HouseholdForm = (props) => {
                                                         root: classes.select,
                                                     }}
                                                     placeholder={`Please Enter ${type}`}
-                                                    type="text"
+                                                    type="number"
                                                     value={buildingFormData[refData[type]]}
-                                                    onChange={e => handleFoundation(e, type)}
+                                                    onChange={e => handleInput(e, type)}
                                                     className={styles.select}
                                                 />
                                             </FormControl>

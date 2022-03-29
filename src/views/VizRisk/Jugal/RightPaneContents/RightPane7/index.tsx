@@ -173,9 +173,9 @@ class SlideFivePane extends React.PureComponent<Props, State> {
         // this.setState({ showAddForm });
         this.props.handleShowAddForm(showAddForm);
         this.setState({ showGetData: true });
-        // if (individualResponse) {
-        this.props.appendBuildingData(individualResponse);
-        // }
+        if (individualResponse) {
+            this.props.appendBuildingData(individualResponse);
+        }
     }
 
     public render() {
