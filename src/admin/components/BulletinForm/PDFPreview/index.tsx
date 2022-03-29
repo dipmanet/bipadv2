@@ -67,18 +67,6 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             params.doc.save('Bulletin.pdf');
         },
     },
-    getSitRep: {
-        url: '/bipad-bulletin/',
-        method: methods.GET,
-        // query: requestQuery,
-        onMount: true,
-        onSuccess: ({ response, params }) => {
-            if (response && response.results.length > 0) {
-                params.setSitRepArr(response.results.map(j => j.sitrep));
-                params.setAllBulletinData(response.results);
-            }
-        },
-    },
 };
 
 const PDFPreview = (props) => {
@@ -91,7 +79,6 @@ const PDFPreview = (props) => {
     const [pending, setPending] = useState(false);
 
     const {
-        bulletinOurData,
         bulletinData: {
             sitRep,
             incidentSummary,
@@ -127,18 +114,7 @@ const PDFPreview = (props) => {
         language: { language },
     } = props;
 
-    getSitRep.setDefaultParams({
-        setSitRepArr,
-        setAllBulletinData,
-    });
 
-    useEffect(() => {
-        console.log('feedback in pdf', feedback);
-    }, [feedback]);
-
-    useEffect(() => {
-        console.log('bulletin dates in preview', props);
-    }, [props, props.bulletinData, props.bulletinOurData]);
     const isFile = (input: any): input is File => (
         'File' in window && input instanceof File
     );
@@ -236,7 +212,7 @@ const PDFPreview = (props) => {
             feedback,
             pdfFile: file,
             dailySummary,
-            rainSummaryPic,
+            rainSummaryPicture: rainSummaryPic,
             hilight,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
@@ -245,6 +221,16 @@ const PDFPreview = (props) => {
 
     const getPatchData = (file) => {
         if (language === 'np') {
+            const picObjects = {};
+            if (rainSummaryPic && typeof rainSummaryPic !== 'string') {
+                picObjects.rain_summary_picture_ne = rainSummaryPic;
+            }
+            if (tempMin && typeof tempMin !== 'string') {
+                picObjects.temp_min_ne = tempMin;
+            }
+            if (tempMax && typeof tempMax !== 'string') {
+                picObjects.temp_max_ne = tempMax;
+            }
             return getFormData({
                 sitrep: sitRep,
                 incidentSummary,
@@ -261,19 +247,27 @@ const PDFPreview = (props) => {
                 municipality,
                 ward,
                 pdfFile: file,
-                temp_min_ne: tempMin,
                 temp_min_footer_ne: minTempFooter,
-                temp_max_ne: tempMax,
                 temp_max_footer_ne: maxTempFooter,
                 feedback_ne: feedback,
                 pdf_file_ne: pdfFile,
                 daily_summary_ne: dailySummary,
-                rain_summary_picture_ne: rainSummaryPic,
                 highlight_ne: hilight,
                 rainSummaryPictureFooterNe: rainSummaryFooter,
                 bulletinDate,
+                ...picObjects,
 
             });
+        }
+        const picObjects = {};
+        if (rainSummaryPic && typeof rainSummaryPic !== 'string') {
+            picObjects.rain_summary_picture = rainSummaryPic;
+        }
+        if (tempMin && typeof tempMin !== 'string') {
+            picObjects.temp_min = tempMin;
+        }
+        if (tempMax && typeof tempMax !== 'string') {
+            picObjects.temp_max = tempMax;
         }
         return getFormData({
             sitrep: sitRep,
@@ -297,10 +291,11 @@ const PDFPreview = (props) => {
             feedback,
             pdfFile: file,
             dailySummary,
-            rainSummaryPic,
+            rainSummaryPicture: rainSummaryPic,
             hilight,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
+            ...picObjects,
         });
     };
 
@@ -363,13 +358,7 @@ const PDFPreview = (props) => {
             }
         }
     }, [user]);
-    const getIdFromSitrep = (sR) => {
-        const filtered = allBulletinData.filter(j => j.sitrep === sR);
-        if (filtered.length > 0) {
-            return filtered[0].id;
-        }
-        return 0;
-    };
+
 
     const handleDownload = async (reportType: string) => {
         let pageNumber = 0;
@@ -421,45 +410,27 @@ const PDFPreview = (props) => {
                     doc.addPage('a4', 'portrait');
                     pageNumber += 1;
                 }
-
-                // const imgData = canvas.toDataURL('image/png');
-                // const imgWidth = 210;
-                // const pageHeight = 295;
-
-                // const imgHeight = canvas.height * imgWidth / canvas.width;
-                // const heightLeft = imgHeight;
-                // const position = 0;
-                // doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-
-                // if (i <= 2) {
-                //     // doc.text(270, 10, `page ${pageNumber}`);
-                //     doc.addPage('a4', 'portrait');
-                //     pageNumber += 1;
-                // }
-
-                // const newdiv = document.getElementById('toAdd');
-                // newdiv.appendChild(canvas);
             });
         }
 
         const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
-        savePDf(bulletin, doc);
-        // if (sitrep) {
-        //     // if the sitrep is in DB
-        //     if (sitRepArr.includes(sitrep)) {
-        //         // do patch
-        //         const id = getIdFromSitrep(sitrep);
-        //         updatePDF(bulletin, doc, id);
-        //     } else {
-        //         // do post
-        //         savePDf(bulletin, doc);
-        //     }
-        // }
         // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-        //     updatePDF(bulletin, doc);
+        //     const { id } = bulletinEditData;
+        //     updatePDF(bulletin, doc, id);
+        // } else if (sitRep || sitRep === 0) {
+        //     if (sitRepArr.includes(sitRep)) {
+        //         const id = getIdFromSitrep(sitRep);
+        //         updatePDF(bulletin, doc, id);
+        //     }
         // } else {
         //     savePDf(bulletin, doc);
         // }
+        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            const { id } = bulletinEditData;
+            updatePDF(bulletin, doc, id);
+        } else {
+            savePDf(bulletin, doc);
+        }
     };
 
     return (
@@ -486,9 +457,6 @@ const PDFPreview = (props) => {
                 />
 
             </div>
-            {/* <div id="toAdd" /> */}
-
-
             <div className={styles.btnContainer}>
                 <button
                     type="button"

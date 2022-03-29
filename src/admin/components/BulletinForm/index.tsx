@@ -53,7 +53,7 @@ import {
 } from '#selectors';
 import {
     setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
-    setEventListAction,
+    setEventListAction, setBulletinEditDataAction,
 } from '#actionCreators';
 import styles from './styles.scss';
 import { Menu } from '../ProgressMenu/utils';
@@ -100,6 +100,7 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBulletinTemperature: params => dispatch(setBulletinTemperatureAction(params)),
     setIncidentList: params => dispatch(setIncidentListActionIP(params)),
     setEventList: params => dispatch(setEventListAction(params)),
+    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -209,6 +210,19 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             setSitRep(response.results[0].sitrep + 1);
         },
     },
+    getEditData: {
+        url: '/bipad-bulletin/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            sitrep: params.sitrep,
+        }),
+        onMount: false,
+        onSuccess: ({ response, props, params }) => {
+            if (response.results.length > 0) {
+                props.setBulletinEditData({ ...response.results[0], language: params.language });
+            }
+        },
+    },
 };
 
 const Bulletin = (props: Props) => {
@@ -249,6 +263,7 @@ const Bulletin = (props: Props) => {
             covidNationalInfo,
             covidQuarantine,
             sitRepQuery,
+            getEditData,
         },
         hazardTypes,
         language: { language },
@@ -265,6 +280,21 @@ const Bulletin = (props: Props) => {
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 
+    const hazardDatafromFeedback = (feedbackData, lang) => {
+        const newObj = {};
+        console.log('feedbackData', feedbackData);
+        console.log('lang', lang);
+        if (feedbackData && Object.keys(feedbackData).length > 0) {
+            Object.values(feedbackData).map((item) => {
+                if (lang === 'nepali') {
+                    newObj[item.hazardNp] = { ...item };
+                } else {
+                    newObj[item.hazardEn] = { ...item };
+                } return null;
+            });
+        }
+        return newObj;
+    };
 
     useEffect(() => {
         console.log('Enter Wait', selectedDate);
@@ -321,7 +351,6 @@ const Bulletin = (props: Props) => {
             setSitRep(bulletinEditData.sitrep);
             setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);
-            setHazardwise(bulletinEditData.hazardWiseLoss);
             setgenderWiseLoss(bulletinEditData.genderWiseLoss);
             setcovid24hrsStat(bulletinEditData.covidTwentyfourHrsStat);
             setcovidTotalStat(bulletinEditData.covidTotalStat);
@@ -329,6 +358,7 @@ const Bulletin = (props: Props) => {
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
 
             if (bulletinEditData.language === 'nepali') {
+                setHazardwise(hazardDatafromFeedback(bulletinEditData.feedbackNe, 'nepali'));
                 setMinTemp(bulletinEditData.tempMinNe);
                 setMinTempFooter(bulletinEditData.tempMinFooterNe);
                 setMaxTemp(bulletinEditData.tempMaxNe);
@@ -339,6 +369,7 @@ const Bulletin = (props: Props) => {
                 setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooterNe);
                 setHilight(bulletinEditData.highlightNe);
             } else {
+                setHazardwise(hazardDatafromFeedback(bulletinEditData.feedback, 'english'));
                 setMinTemp(bulletinEditData.tempMin);
                 setMinTempFooter(bulletinEditData.tempMinFooter);
                 setMaxTemp(bulletinEditData.tempMax);
@@ -362,6 +393,12 @@ const Bulletin = (props: Props) => {
     const handleSitRep = (num) => {
         setSitRep(num);
     };
+
+    const handlesitRepBlur = (e) => {
+        console.log('on blur event', e.target.value);
+        getEditData.do({ sitrep: e.target.value, language: language === 'np' ? 'nepali' : 'english' });
+    };
+
 
     const handleHilightChange = (e) => {
         setHilight(e.target.value);
@@ -434,6 +471,9 @@ const Bulletin = (props: Props) => {
         setgenderWiseLoss(newState);
     };
 
+    useEffect(() => {
+        console.log('feedback main obj', feedback);
+    }, [feedback]);
     const handleCovidTotalStat = (e, field) => {
         const newState = produce(covidTotalStatData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
@@ -540,6 +580,7 @@ const Bulletin = (props: Props) => {
                 });
             }
             if (progress === 2) {
+                console.log('feedback being saved', feedback);
                 setBulletinFeedback({
                     feedback,
                 });
@@ -826,6 +867,7 @@ const Bulletin = (props: Props) => {
             handleBulletinDate={handleBulletinDate}
             uri={uri}
             resetFeedback={resetFeedback}
+            handlesitRepBlur={handlesitRepBlur}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}

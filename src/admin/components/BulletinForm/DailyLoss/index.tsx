@@ -90,6 +90,7 @@ const Bulletin = (props: Props) => {
         resetFeedback,
         uri,
         bulletinEditData,
+        handlesitRepBlur,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -134,6 +135,7 @@ const Bulletin = (props: Props) => {
         const { centroid: { coordinates }, district } = getRegionDetails(region);
         handleSameHazardChange({ district, coordinates }, field, 'location');
     };
+
 
     const handleCheckFilterDisableButtonForProvince = (province) => {
         if (province) {
@@ -239,6 +241,7 @@ const Bulletin = (props: Props) => {
                                 }}
                                 // disabled
                                 style={{ border: '1px solid #f3f3f3', borderRadius: '3px', padding: '0 10px' }}
+                                onBlur={handlesitRepBlur}
                             />
                         </FormControl>
                     </div>

@@ -131,11 +131,10 @@ const requestQuery = ({
         endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
     } = {},
 }) => ({
-    expand: ['loss.peoples', 'wards'],
-    limit: -1,
+    summary: true,
+    summary_type: 'bulletin_loss_total', // eslint-disable-line @typescript-eslint/camelcase
     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-    ordering: '-incident_on',
     // lnd: true,
 });
 
@@ -201,39 +200,41 @@ const YearlyData = (props: Props) => {
             } else {
                 setSummaryData(bulletinEditData.yearlyData);
             }
-        } else if (lossData && lossData.length > 0) {
+        } else if (lossData && Object.keys(lossData).length > 0) {
             const newhazardData = {};
-            const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
-            const hD = uniqueHazards.map((h) => {
-                const summaryCalc = calculateSummaryHazard(lossData.filter(l => l.hazard === h));
-                if (language === 'np') {
-                    newhazardData[hazardTypes[h].titleNe] = {
-                        deaths: summaryCalc.peopleDeathCount || 0,
-                        incidents: summaryCalc.count || 0,
-                        missing: summaryCalc.peopleMissingCount || 0,
-                        injured: summaryCalc.peopleInjuredCount || 0,
-                        coordinates: [0, 0],
-                        estimatedLoss: summaryCalc.estimatedLoss || 0,
-                        familiesAffected: summaryCalc.familyAffectedCount || 0,
+            // const uniqueHazards = [...new Set(lossData.map(h => h.hazard))];
 
+            Object.keys(lossData).map((item) => {
+                if (language === 'np') {
+                    newhazardData[lossData[item].titleNe] = {
+                        deaths: lossData[item].totalPeopleDeath || 0,
+                        incidents: lossData[item].totalIncidents || 0,
+                        missing: lossData[item].totalPeopleMissing || 0,
+                        injured: lossData[item].totalPeopleInjured || 0,
+                        coordinates: [0, 0],
+                        estimatedLoss: lossData[item].totalEstimatedLoss || 0,
+                        familiesAffected: lossData[item].totalFamilyAffected || 0,
                     };
                 } else {
-                    newhazardData[hazardTypes[h].title] = {
-                        deaths: summaryCalc.peopleDeathCount || 0,
-                        incidents: summaryCalc.count || 0,
-                        missing: summaryCalc.peopleMissingCount || 0,
-                        injured: summaryCalc.peopleInjuredCount || 0,
+                    newhazardData[item] = {
+                        deaths: lossData[item].totalPeopleDeath || 0,
+                        incidents: lossData[item].totalIncidents || 0,
+                        missing: lossData[item].totalPeopleMissing || 0,
+                        injured: lossData[item].totalPeopleInjured || 0,
                         coordinates: [0, 0],
-                        estimatedLoss: summaryCalc.estimatedLoss || 0,
-                        familiesAffected: summaryCalc.familyAffectedCount || 0,
-
+                        estimatedLoss: lossData[item].totalEstimatedLoss || 0,
+                        familiesAffected: lossData[item].totalFamilyAffected || 0,
                     };
                 }
                 return null;
             });
+
+            console.log('newhazardData', newhazardData);
+
             setBulletinYearlyData({ yearlyData: newhazardData });
 
             if (Object.keys(newhazardData).length > 0) {
+                console.log('our data loss', newhazardData);
                 const cumulativeData = Object.keys(newhazardData)
                     .map(item => newhazardData[item])
                     .reduce((acc, cur) => ({
@@ -251,6 +252,9 @@ const YearlyData = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData, language]);
 
+    useEffect(() => {
+        console.log('lossData', lossData);
+    }, [lossData]);
     return (
         <>
             <Loading pending={incidentsGetRequest.pending} />

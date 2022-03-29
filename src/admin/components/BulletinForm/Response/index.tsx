@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
 import { setBulletinFeedbackAction } from '#actionCreators';
-import { districtsSelector, bulletinEditDataSelector, incidentListSelectorIP, hazardTypesSelector, languageSelector } from '#selectors';
+import { districtsSelector, bulletinPageSelector, bulletinEditDataSelector, incidentListSelectorIP, hazardTypesSelector, languageSelector } from '#selectors';
 import styles from './styles.scss';
 
 interface Props {
@@ -23,7 +23,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     hazardTypes: hazardTypesSelector(state),
     language: languageSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
-
+    bulletinData: bulletinPageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -34,7 +34,7 @@ const Response = (props: Props) => {
     const {
         handleFeedbackChange,
         deleteFeedbackChange,
-        feedback,
+        // feedback,
         hazardWiseLossData,
         districts,
         handleSubFieldChange,
@@ -44,6 +44,9 @@ const Response = (props: Props) => {
         language: { language },
         setBulletinFeedback,
         bulletinEditData,
+        bulletinData: {
+            feedback,
+        },
     } = props;
 
 
@@ -96,7 +99,11 @@ const Response = (props: Props) => {
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            handleFeedbackChange(bulletinEditData.feedback);
+            if (bulletinEditData.language === 'nepali') {
+                handleFeedbackChange(bulletinEditData.feedbackNe);
+            } else {
+                handleFeedbackChange(bulletinEditData.feedback);
+            }
         } else if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
             const temp = {};
             incidentList.map((item) => {
@@ -117,7 +124,7 @@ const Response = (props: Props) => {
             });
             if (temp && Object.keys(temp).length > 0) {
                 handleFeedbackChange({ ...temp });
-                console.log('feedback changed to', { ...temp });
+                // here is the issue
                 setBulletinFeedback({ feedback: { ...temp } });
             }
         }
