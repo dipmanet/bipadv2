@@ -524,7 +524,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                     });
                                                                 }}
                                                             >
-                                                                Potrait
+                                                                Portrait
                                                             </Button>
 
                                                         </div>
