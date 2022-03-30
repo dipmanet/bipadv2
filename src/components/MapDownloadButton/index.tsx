@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
 import JsPDF from 'jspdf';
@@ -160,6 +160,7 @@ const MapDownloadButton = (props: Props) => {
         resolution,
         handleCancelButton,
         mapOrientation,
+        handleDisableDownloadButton,
         ...otherProps
     } = props;
 
@@ -187,6 +188,19 @@ const MapDownloadButton = (props: Props) => {
         && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
     console.log('disableDefaultDownload', selectedFileFormat);
     console.log('Map orientation', mapOrientation);
+    useEffect(() => {
+        const disableDownloadButton = !!((disabled || !mapContext
+            || !mapContext.map || disableDefaultDownload
+            || (!defaultMap && !resolution.width) || (!defaultMap && !resolution.height)
+            || (!defaultMap && !selectedFileFormat)
+            || (!defaultMap && selectedFileFormat === undefined)
+            || (!defaultMap && resolution.width < 500)
+            || (!defaultMap && resolution.width > 5000)
+            || (!defaultMap && resolution.height < 500)
+            || (!defaultMap && resolution.height > 5000)));
+        handleDisableDownloadButton(disableDownloadButton);
+    }, [defaultMap, disableDefaultDownload, disabled, handleDisableDownloadButton,
+        mapContext, resolution.height, resolution.width, selectedFileFormat]);
     const handleExport = useCallback(
         () => {
             if (!mapContext || !mapContext.map) {
@@ -328,11 +342,21 @@ const MapDownloadButton = (props: Props) => {
                 //     indexMapWidth * mp.width,
                 //     indexMapHeight * mp.height,
                 // );
+                console.log('left ', mp.left);
+                console.log('width mp', mp.width);
+                console.log('top', mp.top);
+                console.log('height mp', mp.height);
+
                 context.rect(
-                    left - 10,
-                    top - 5,
-                    indexMapWidth + 15,
-                    indexMapHeight + 10,
+                    // left + dx,
+                    // top + dy,
+                    // indexMapWidth * (mp.width < 0 ? -1 * mp.width : mp.width),
+                    // indexMapHeight * (mp.height < 0 ? -1 * mp.height : mp.height),
+
+                    left + dx,
+                    top + dy,
+                    indexMapWidth * mp.width,
+                    indexMapHeight * mp.height,
                 );
 
                 context.stroke();
@@ -421,7 +445,10 @@ const MapDownloadButton = (props: Props) => {
                     const legendPromise = new Promise((resolve) => {
                         const promises = Array.from(legend).map((legendElement) => {
                             const elCanvas = html2canvas(legendElement as HTMLElement,
-                                { scale: indexMapWidth / 200 });
+                                // { scale: indexMapWidth / 200 }
+
+
+                            );
                             return elCanvas;
                         });
                         Promise.all(promises).then((canvases) => {
@@ -520,6 +547,8 @@ const MapDownloadButton = (props: Props) => {
 
         // saveChart("hazardSeverity", "hazardSeverity");
     };
+
+
     return (
         <Button
             disabled={disabled || !mapContext || !mapContext.map || disableDefaultDownload

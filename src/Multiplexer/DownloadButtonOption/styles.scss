@@ -30,6 +30,18 @@
           margin-bottom: 10px;
        
           border-top: 2px solid #F2F2F2;
+          .cancelButton{
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-left: 12px;
+            margin-right: 5px;
+            
+            &:hover {
+              color:#E45163 !important ;
+              border: 1px solid #E45163 !important;
+            }
+          }
           .loader{
             position: absolute;
             left:5px;

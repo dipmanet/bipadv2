@@ -99,7 +99,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             },
             isTilesLoaded: false,
             disableDefaultDownload: false,
-            mapOrientation: '',
+            mapOrientation: 'potrait',
+            disableDownloadButton: true,
+            orientationType: {
+                height: null,
+                width: null,
+            },
         };
     }
 
@@ -108,7 +113,18 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         const { map, loaded } = this.context;
 
 
-        const { resolution: { height, width }, resolution, selectedFileFormat } = this.state;
+        const { resolution: { height, width }, resolution, selectedFileFormat, mapOrientation, orientationType } = this.state;
+        console.log('map orient', mapOrientation);
+        if (prevState.mapOrientation !== mapOrientation) {
+            console.log('enter');
+            console.log('orientation', orientationType);
+            this.setState({
+                resolution: {
+                    height: orientationType.height,
+                    width: orientationType.width,
+                },
+            });
+        }
         const { showCustomSetting } = this.state;
 
         if (prevState.resolution !== resolution) {
@@ -256,6 +272,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleDisableDownloadButton = (boolean) => {
+        this.setState({
+            disableDownloadButton: boolean,
+        });
+    }
+
     private handleCustomPageCategory = (e) => {
         this.setState({
             showPageType: e.target.value,
@@ -282,9 +304,9 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
         const { faramValues, faramErrors, showCustomSetting, showPageType, selectedPageType,
 
-            selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload, mapOrientation } = this.state;
+            selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload, mapOrientation, disableDownloadButton } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
-        console.log('resolution', selectedFileFormat);
+        console.log('resolution', resolution);
 
         return (
 
@@ -307,7 +329,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                         </Button> */}
                         <MapDownloadButton
                             // className={styles.mapDownloadButton}
-                            className={styles.downloadButton}
+                            className={showCustomSetting ? styles.disableButton : styles.downloadButton}
                             // transparent
                             title="Download current map"
                             // iconName="download"
@@ -319,6 +341,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                             buttonText="Download with default settings"
                             defaultMap
                             disableDefaultDownload={disableDefaultDownload}
+                            handleDisableDownloadButton={this.handleDisableDownloadButton}
+
                         />
                         {
                             showCustomSetting ? '' : (
@@ -463,37 +487,51 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                         )
 
                                         }
-                                        {/* <div>
-                                            <form className={styles.pageType}>
-                                                <label htmlFor="Custom">
-                                                    Orientation :
-                                                </label>
+                                        {showPageType === 'true'
+                                            ? (
                                                 <div>
-                                                    <Button
-                                                        className={_cs(mapOrientation === 'landscape' ? (styles.active) : (styles.pageSizeButton))}
-                                                        onClick={() => {
-                                                            this.setState({
-                                                                mapOrientation: 'landscape',
-                                                            });
-                                                        }}
-                                                    >
-                                                        Landscape
-                                                    </Button>
-                                                    <Button
-                                                        className={_cs(mapOrientation === 'potrait' ? (styles.active) : (styles.pageSizeButton))}
-                                                        onClick={() => {
-                                                            this.setState({
-                                                                mapOrientation: 'potrait',
-                                                            });
-                                                        }}
-                                                    >
-                                                        Potrait
-                                                    </Button>
+                                                    <form className={styles.pageType}>
+                                                        <label htmlFor="Custom">
+                                                            Orientation :
+                                                        </label>
+                                                        <div>
+                                                            <Button
+                                                                className={_cs(mapOrientation === 'landscape' ? (styles.active) : (styles.pageSizeButton))}
+                                                                onClick={() => {
+                                                                    this.setState({
+                                                                        mapOrientation: 'landscape',
+                                                                        orientationType: {
+                                                                            height: width,
+                                                                            width: height,
+                                                                        },
+
+
+                                                                    });
+                                                                }}
+                                                            >
+                                                                Landscape
+                                                            </Button>
+                                                            <Button
+                                                                className={_cs(mapOrientation === 'potrait' ? (styles.active) : (styles.pageSizeButton))}
+                                                                onClick={() => {
+                                                                    this.setState({
+                                                                        mapOrientation: 'potrait',
+                                                                        orientationType: {
+                                                                            height: resolution.width,
+                                                                            width: resolution.height,
+                                                                        },
+
+                                                                    });
+                                                                }}
+                                                            >
+                                                                Potrait
+                                                            </Button>
+
+                                                        </div>
+                                                    </form>
 
                                                 </div>
-                                            </form>
-
-                                        </div> */}
+                                            ) : ''}
 
                                         <div>
                                             <form className={styles.pageType}>
@@ -555,7 +593,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                     // </Button>
                                                     <MapDownloadButton
                                                         // className={styles.mapDownloadButton}
-                                                        className={styles.downloadButton}
+                                                        className={disableDownloadButton ? styles.disableButton : styles.downloadButton}
                                                         // transparent
                                                         title="Download custom map"
                                                         // iconName="download"
@@ -570,12 +608,13 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                         showPageType={showPageType}
                                                         handleCancelButton={this.handleCancelButton}
                                                         mapOrientation={mapOrientation}
+                                                        handleDisableDownloadButton={this.handleDisableDownloadButton}
 
 
                                                     />
                                                 )}
                                             <Button
-                                                className={styles.fileFormatButton}
+                                                className={styles.cancelButton}
                                                 onClick={this.handleCancelButton}
                                             >
                                                 Cancel
