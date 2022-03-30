@@ -3,6 +3,7 @@ import { _cs } from '@togglecorp/fujs';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 import { connect } from 'react-redux';
 
+import { Translation } from 'react-i18next';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -17,8 +18,6 @@ import TimeInput from '#rsci/TimeInput';
 import SelectInput from '#rsci/SelectInput';
 import TextArea from '#rsci/TextArea';
 import ReCaptcha from '#rsci/ReCaptcha';
-
-
 import {
     HazardType,
 } from '#store/atom/page/types';
@@ -40,6 +39,7 @@ import {
     eventListSelector,
     sourceListSelector,
     hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -95,6 +95,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     eventList: eventListSelector(state),
     sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 const schema = {
@@ -119,7 +120,7 @@ const schema = {
 };
 
 const keySelector = (d: BasicElement) => d.id;
-const labelSelector = (d: BasicElement) => d.title;
+const labelSelector = (d: BasicElement, language) => (language === 'en' ? d.title : d.titleNe);
 
 const requestOptions: { [key: string]: ClientAttributes<PropsWithRedux, Params> } = {
     citizenReportPostRequest: {
@@ -214,7 +215,10 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
+
+        console.log(hazardList, 'hazard test');
 
         const {
             faramValues,
@@ -223,7 +227,8 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
 
         return (
             <Modal
-                className={_cs(styles.addCitizenReportFormModal, className)}
+                className={_cs(styles.addCitizenReportFormModal,
+                    className, language === 'np' && styles.languageFont)}
                 // onClose={closeModal}
             >
                 <Faram
@@ -236,60 +241,103 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                     onValidationFailure={this.handleFaramValidationFailure}
                     disabled={pending}
                 >
-                    <ModalHeader
-                        className={styles.header}
-                        title="Report an incident"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <ModalHeader
+                                    className={styles.header}
+                                    title={t('Report an incident')}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal}
+                                            title="Close Modal"
+                                        />
+                                    )}
+                                />
+                            )
+                        }
+                    </Translation>
+
                     <ModalBody className={styles.body}>
                         <NonFieldErrors faramElement />
-                        <TextArea
-                            className={styles.input}
-                            faramElementName="description"
-                            label="Description"
-                            autoFocus
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <TextArea
+                                        className={styles.input}
+                                        faramElementName="description"
+                                        label={t('Description')}
+                                        autoFocus
+                                    />
+                                )
+                            }
+                        </Translation>
+
                         <div className={styles.inputGroup}>
-                            <SelectInput
-                                className={styles.input}
-                                faramElementName="hazard"
-                                options={hazardList}
-                                keySelector={keySelector}
-                                labelSelector={labelSelector}
-                                label="Hazard"
-                            />
+                            <Translation>
+                                {
+                                    t => (
+                                        <SelectInput
+                                            className={styles.input}
+                                            faramElementName="hazard"
+                                            options={hazardList}
+                                            keySelector={keySelector}
+                                            labelSelector={d => labelSelector(d, language)}
+                                            label={t('Hazard')}
+                                            placeholder={language === 'np' && 'विकल्प चयन गर्नुहोस्'}
+                                        />
+                                    )
+                                }
+                            </Translation>
+
                             <div className={styles.dateTimeInput}>
-                                <DateInput
-                                    label="Incident on"
-                                    className={styles.input}
-                                    faramElementName="incidentOnDate"
-                                />
+                                <Translation>
+                                    {
+                                        t => (
+                                            <DateInput
+                                                label={t('Incident on')}
+                                                className={styles.input}
+                                                faramElementName="incidentOnDate"
+                                            />
+                                        )
+                                    }
+                                </Translation>
+
                                 <TimeInput
                                     className={styles.input}
                                     faramElementName="incidentOnTime"
                                 />
                             </div>
                         </div>
-                        <TextInput
-                            className={styles.input}
-                            faramElementName="streetAddress"
-                            label="Street Address"
-                        />
-                        <RawFileInput
-                            className={styles.fileInput}
-                            faramElementName="image"
-                            showStatus
-                            accept="image/*"
-                        >
-                            Upload Image
-                        </RawFileInput>
+                        <Translation>
+                            {
+                                t => (
+                                    <TextInput
+                                        className={styles.input}
+                                        faramElementName="streetAddress"
+                                        label={t('Street Address')}
+                                    />
+                                )
+                            }
+                        </Translation>
+
+                        <Translation>
+                            {
+                                t => (
+                                    <RawFileInput
+                                        className={styles.fileInput}
+                                        faramElementName="image"
+                                        showStatus
+                                        accept="image/*"
+                                    >
+                                        {t('Upload Image')}
+                                    </RawFileInput>
+                                )
+                            }
+                        </Translation>
+
                         <LocationInput
                             className={_cs(styles.locationInput, styles.input)}
                             faramElementName="location"

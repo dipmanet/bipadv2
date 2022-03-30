@@ -497,7 +497,7 @@ export interface PageState {
     realTimeMonitoringPage: RealTimeMonitoringPage;
     lossAndDamagePage: LossAndDamagePage;
     projectsProfilePage: ProjectsProfilePage;
-    disasterProfilePage: DisasterProfilePage;
+    Page: DisasterProfilePage;
     profileContactPage: ProfileContactPage;
 }
 

@@ -1,13 +1,15 @@
 import React from 'react';
 import memoize from 'memoize-one';
 import produce from 'immer';
-
 import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
 
+import { Translation } from 'react-i18next';
 import { MapChildContext as MapContext } from '#re-map/context';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
 import { getLayerName } from '#re-map/utils';
+import { AppState } from '#store/types';
 
 import TextInput from '#rsci/TextInput';
 
@@ -15,6 +17,9 @@ import RegionSelectInput from '#components/RegionSelectInput';
 import { Province, District, Municipality } from '#store/atom/page/types';
 
 import { mapStyles } from '#constants';
+import {
+    languageSelector,
+} from '#selectors';
 
 import styles from './styles.scss';
 
@@ -67,8 +72,11 @@ interface Props {
 
 interface State {
 }
+const mapStateToProps = (state: AppState): PropsFromState => ({
+    language: languageSelector(state),
+});
 
-export default class DraggablePoint extends React.PureComponent<Props, State> {
+class DraggablePoint extends React.PureComponent<Props, State> {
     public static defaultProps = {
         pointShape: 'circle',
     }
@@ -401,6 +409,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
             pointShape,
             hint,
             error,
+            language: { language },
         } = this.props;
 
         const {
@@ -439,36 +448,54 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
                         )}
                     </MapSource>
                 )}
-                <RegionSelectInput
-                    className={styles.regionInput}
-                    label="Region"
-                    value={region}
-                    onChange={this.handleRegionSelectInputChange}
-                    maxOptions={50}
-                    hideClearButton
-                    error={error}
-                    hint={hint}
-                    showHintAndError
-                />
-                <div className={styles.coordinateInput}>
-                    <TextInput
-                        className={styles.latInput}
-                        type="number"
-                        label="Latitude"
-                        value={lat}
-                        onChange={this.handleLatInputChange}
-                    />
-                    <TextInput
-                        className={styles.lngInput}
-                        type="number"
-                        label="Longitude"
-                        value={lng}
-                        onChange={this.handleLngInputChange}
-                    />
-                </div>
+                <Translation>
+                    {
+                        t => (
+                            <RegionSelectInput
+                                className={styles.regionInput}
+                                label={t('Region')}
+                                placeholder={language === 'np' && 'विकल्प खोज्नुहोस्'}
+                                value={region}
+                                onChange={this.handleRegionSelectInputChange}
+                                maxOptions={50}
+                                hideClearButton
+                                error={error}
+                                hint={hint}
+                                showHintAndError
+                            />
+                        )
+                    }
+                </Translation>
+
+                <Translation>
+                    {
+                        t => (
+                            <div className={styles.coordinateInput}>
+
+                                <TextInput
+                                    className={styles.latInput}
+                                    type="number"
+                                    label={t('Latitude')}
+                                    value={lat}
+                                    onChange={this.handleLatInputChange}
+                                />
+
+                                <TextInput
+                                    className={styles.lngInput}
+                                    type="number"
+                                    label={t('Longitude')}
+                                    value={lng}
+                                    onChange={this.handleLngInputChange}
+                                />
+                            </div>
+                        )
+                    }
+                </Translation>
+
             </div>
         );
     }
 }
+export default connect(mapStateToProps)(DraggablePoint);
 
 DraggablePoint.contextType = MapContext;

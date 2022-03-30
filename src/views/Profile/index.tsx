@@ -1,10 +1,10 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import AccentButton from '#rsca/Button/AccentButton';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
-
 import Page from '#components/Page';
 import DisasterProfile from './DisasterProfile';
 import ProjectsProfile from './ProjectsProfile';
@@ -73,9 +73,16 @@ export default class Profile extends React.PureComponent<Props, State> {
                                     />
                                     <div className={styles.title}>
                                         <div className={_cs(styles.icon, styles.incidentIcon)} />
-                                        <div className={styles.text}>
-                                            Summary
-                                        </div>
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <div className={styles.text}>
+                                                        {t('Summary')}
+                                                    </div>
+                                                )
+                                            }
+                                        </Translation>
+
                                     </div>
                                 </div>
                                 <div
@@ -87,9 +94,16 @@ export default class Profile extends React.PureComponent<Props, State> {
                                         className={styles.visualizationIcon}
                                         name="briefcase"
                                     />
-                                    <div className={styles.text}>
-                                        Projects
-                                    </div>
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <div className={styles.text}>
+                                                    {t('Projects')}
+                                                </div>
+                                            )
+                                        }
+                                    </Translation>
+
                                 </div>
                                 <div
                                     className={_cs(styles.tab, activeView === 'contact' && styles.active)}
@@ -102,9 +116,16 @@ export default class Profile extends React.PureComponent<Props, State> {
                                     />
                                     <div className={styles.title}>
                                         <div className={_cs(styles.icon, styles.incidentIcon)} />
-                                        <div className={styles.text}>
-                                            Contacts
-                                        </div>
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <div className={styles.text}>
+                                                        {t('Contacts')}
+                                                    </div>
+                                                )
+                                            }
+                                        </Translation>
+
                                     </div>
                                 </div>
                                 <div
@@ -118,21 +139,34 @@ export default class Profile extends React.PureComponent<Props, State> {
                                     />
                                     <div className={styles.title}>
                                         <div className={_cs(styles.icon, styles.incidentIcon)} />
-                                        <div className={styles.text}>
-                                            Document
-                                        </div>
+                                        <Translation>
+                                            {
+                                                t => (
+                                                    <div className={styles.text}>
+                                                        {t('Document')}
+                                                    </div>
+                                                )
+                                            }
+                                        </Translation>
+
                                     </div>
                                 </div>
                             </div>
                             <div className={styles.actions}>
-                                <IndicatorButton
-                                    transparent
-                                    modal={(
-                                        <Indicator />
-                                    )}
-                                >
-                                    Indicators
-                                </IndicatorButton>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <IndicatorButton
+                                                transparent
+                                                modal={(
+                                                    <Indicator />
+                                                )}
+                                            >
+                                                {t('Indicators')}
+                                            </IndicatorButton>
+                                        ) }
+                                </Translation>
+
                             </div>
                         </header>
                         {activeView === 'summary' && (

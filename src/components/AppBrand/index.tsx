@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import styles from './styles.scss';
 
 interface Props {
@@ -20,9 +21,16 @@ class AppBrand extends React.PureComponent<Props> {
                 <div className={styles.logo}>
                     <div className={styles.left} />
                     <div className={styles.right}>
-                        <h1 className={styles.title}>
-                            BIPAD
-                        </h1>
+                        <Translation>
+                            {
+                                t => (
+                                    <h1 className={styles.title}>
+                                        {t('BIPAD')}
+                                    </h1>
+                                )
+                            }
+                        </Translation>
+
                     </div>
                 </div>
                 <div className={styles.regionNameContainer}>

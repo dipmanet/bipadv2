@@ -1,9 +1,9 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import CommonMap from '#components/CommonMap';
 import Chart from '../Chart';
-
 import styles from './styles.scss';
 
 interface Props {
@@ -34,21 +34,35 @@ class Disasters extends React.PureComponent<Props> {
         return (
             <div className={_cs(styles.disasters, className)}>
                 <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        Loss by year
-                    </h2>
+                    <Translation>
+                        {
+                            t => (
+                                <h2 className={styles.heading}>
+                                    {t('Loss by year')}
+                                </h2>
+                            )
+                        }
+                    </Translation>
+
                 </header>
                 <div className={styles.content}>
                     <CommonMap
                         sourceKey="profile-disaster"
                     />
                     {attributeKeyList.map(key => (
-                        <Chart
-                            key={key}
-                            attributeKey={key}
-                            attributeName={attributes[key]}
-                            data={data}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <Chart
+                                        key={key}
+                                        attributeKey={key}
+                                        attributeName={t(attributes[key])}
+                                        data={data}
+                                    />
+                                )
+                            }
+                        </Translation>
+
                     ))}
                 </div>
             </div>

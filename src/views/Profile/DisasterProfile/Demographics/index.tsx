@@ -17,6 +17,7 @@ import {
 import { format } from 'd3-format';
 import { extent } from 'd3-array';
 
+import { Translation } from 'react-i18next';
 import CommonMap from '#components/CommonMap';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
@@ -31,6 +32,7 @@ import {
     regionSelector,
     regionNameSelector,
     municipalitiesSelector,
+    languageSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import {
@@ -41,7 +43,6 @@ import { KeyValue } from '#types';
 import SummaryItem from '#components/SummaryItem';
 import ChoroplethLegend from '#components/ChoroplethLegend';
 import { saveChart } from '#utils/common';
-
 import { TitleContext, Profile } from '#components/TitleContext';
 
 import styles from './styles.scss';
@@ -107,6 +108,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalities: municipalitiesSelector(state),
     region: regionSelector(state),
     regionName: regionNameSelector(state),
+    language: languageSelector(state),
 });
 
 const colorGrade = [
@@ -119,25 +121,25 @@ const colorGrade = [
     '#c73c32',
 ];
 
-const attributeList = [
+const attributeList = language => ([
     {
         key: 'totalPopulation',
-        title: 'Total population',
+        title: language === 'en' ? 'Total population' : 'कुल जनसंख्या',
         type: 'negative',
     },
     {
         key: 'householdCount',
-        title: 'Household count',
+        title: language === 'en' ? 'Household count' : 'घरपरिवार गणना',
         type: 'positive',
     },
     {
         key: 'literacyRate',
-        title: 'Literacy rate',
+        title: language === 'en' ? 'Literacy rate' : 'साक्षरता दर',
         type: 'positive',
     },
-];
+]);
 
-const attributes = listToMap(attributeList, d => d.key, d => d);
+const attributes = listToMap(attributeList(), d => d.key, d => d);
 
 class Demographics extends React.PureComponent<Props> {
     public state = {
@@ -272,18 +274,21 @@ class Demographics extends React.PureComponent<Props> {
 
     private getPopulationSummary = (data: SummaryData) => {
         const { totalPopulation, malePopulation, femalePopulation } = data;
+        const { language: { language } } = this.props;
         return ([
-            { key: 'totalPopulation', label: 'Total Population', value: totalPopulation },
+            { key: 'totalPopulation',
+                label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
+                value: totalPopulation },
             {
                 key: 'malePopulation',
-                label: 'Male',
+                label: language === 'en' ? 'Male' : 'पुरुष',
                 value: malePopulation,
                 color: '#64b5f6',
                 percent: ((malePopulation / totalPopulation) * 100).toFixed(2),
             },
             {
                 key: 'femalePopulation',
-                label: 'Female',
+                label: language === 'en' ? 'Female' : 'महिला',
                 value: femalePopulation,
                 color: '#f06292',
                 percent: ((femalePopulation / totalPopulation) * 100).toFixed(2),
@@ -293,21 +298,22 @@ class Demographics extends React.PureComponent<Props> {
 
     private getLiteracySummary = (data: SummaryData) => {
         const { literacyRate, maleLiteracyRate, femaleLiteracyRate } = data;
+        const { language: { language } } = this.props;
         return ([
             {
                 key: 'literacyRate',
-                label: 'Literacy Rate',
+                label: language === 'en' ? 'Literacy Rate' : 'साक्षरता दर',
                 value: literacyRate,
             },
             {
                 key: 'maleLiteracyRate',
-                label: 'Male',
+                label: language === 'en' ? 'Male' : 'पुरुष',
                 color: '#64b5f6',
                 value: maleLiteracyRate,
             },
             {
                 key: 'femaleLiteracyRate',
-                label: 'Female',
+                label: language === 'en' ? 'Female' : 'महिला',
                 color: '#f06292',
                 value: femaleLiteracyRate,
             },
@@ -316,9 +322,14 @@ class Demographics extends React.PureComponent<Props> {
 
     private getHouseholdSummary = (data: SummaryData) => {
         const { totalPopulation, householdCount } = data;
+        const { language: { language } } = this.props;
         return ([
-            { key: 'totalPopulation', label: 'Total Population', value: totalPopulation },
-            { key: 'householdCount', label: 'Household Count', value: householdCount },
+            { key: 'totalPopulation',
+                label: language === 'en' ? 'Total Population' : 'कुल जनसंख्या',
+                value: totalPopulation },
+            { key: 'householdCount',
+                label: language === 'en' ? 'Household Count' : 'घरपरिवार गणना',
+                value: householdCount },
         ]);
     }
 
@@ -358,7 +369,7 @@ class Demographics extends React.PureComponent<Props> {
             className,
             data = [],
             regionName,
-            region,
+            region, language: { language },
         } = this.props;
 
         const { selectedAttribute } = this.state;
@@ -397,9 +408,16 @@ class Demographics extends React.PureComponent<Props> {
             <>
                 <div className={_cs(styles.demographics, className)}>
                     <header className={styles.header}>
-                        <h2 className={styles.heading}>
-                            {title}
-                        </h2>
+                        <Translation>
+                            {
+                                t => (
+                                    <h2 className={styles.heading}>
+                                        {t(title)}
+                                    </h2>
+                                )
+                            }
+                        </Translation>
+
                         <Button
                             title="Download Chart"
                             className={styles.chartDownload}
@@ -417,9 +435,16 @@ class Demographics extends React.PureComponent<Props> {
                                 id="population"
                             >
                                 <header className={styles.header}>
-                                    <h3 className={styles.heading}>
-                                        Population
-                                    </h3>
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <h3 className={styles.heading}>
+                                                    {t('Population')}
+                                                </h3>
+                                            )
+                                        }
+                                    </Translation>
+
                                 </header>
                                 <ListView
                                     className={styles.info}
@@ -467,9 +492,16 @@ class Demographics extends React.PureComponent<Props> {
                                 id="literacy"
                             >
                                 <header className={styles.header}>
-                                    <h3 className={styles.heading}>
-                                        Literacy
-                                    </h3>
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <h3 className={styles.heading}>
+                                                    {t('Literacy')}
+                                                </h3>
+                                            )
+                                        }
+                                    </Translation>
+
                                 </header>
                                 <ListView
                                     className={styles.info}
@@ -516,9 +548,16 @@ class Demographics extends React.PureComponent<Props> {
                                 id="household"
                             >
                                 <header className={styles.header}>
-                                    <h3 className={styles.heading}>
-                                        Household
-                                    </h3>
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <h3 className={styles.heading}>
+                                                    {t('Household')}
+                                                </h3>
+                                            )
+                                        }
+                                    </Translation>
+
                                 </header>
                                 <ListView
                                     className={styles.info}
@@ -560,9 +599,16 @@ class Demographics extends React.PureComponent<Props> {
                                 id="agegroup"
                             >
                                 <header className={styles.header}>
-                                    <h3 className={styles.heading}>
-                                        Age Group
-                                    </h3>
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <h3 className={styles.heading}>
+                                                    {t('Age Group')}
+                                                </h3>
+                                            )
+                                        }
+                                    </Translation>
+
                                 </header>
                                 <div className={styles.chartContainer}>
                                     <ResponsiveContainer>
@@ -621,7 +667,7 @@ class Demographics extends React.PureComponent<Props> {
                 <div className={_cs('map-legend-container', styles.legendContainer)}>
                     <SegmentInput
                         className={styles.attributeSelectInput}
-                        options={attributeList}
+                        options={attributeList(language)}
                         labelSelector={d => d.title}
                         keySelector={d => d.key}
                         value={selectedAttribute}

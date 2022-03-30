@@ -3,12 +3,9 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 
 import { _cs, isDefined } from '@togglecorp/fujs';
-
-import { Translation } from 'react-i18next';
 import StatOutput from '#components/StatOutput';
 import { lossMetrics } from '#utils/domain';
 import { sum } from '#utils/common';
-
 import styles from './styles.scss';
 
 const propTypes = {
@@ -59,18 +56,14 @@ export default class LossDetails extends React.PureComponent {
                         return null;
                     }
                     return (
-                        <Translation>
-                            {
-                                t => (
-                                    <StatOutput
-                                        key={metric.key}
-                                        label={t(`${metric.label}`)}
-                                        value={summaryData[metric.key]}
-                                    />
-                                )
 
-                            }
-                        </Translation>
+                        <StatOutput
+                            key={metric.key}
+                            label={metric.label}
+                            value={summaryData[metric.key]}
+                        />
+
+
                     );
                 })}
             </div>

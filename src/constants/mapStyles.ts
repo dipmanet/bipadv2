@@ -105,12 +105,31 @@ export default {
             'text-halo-width': 2,
         },
         layout: {
-            visibility: 'visible',
+            // visibility: 'visible',
             // 'text-allow-overlap': true,
-            'text-font': ['Rubik Bold'],
+            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 12,
-            'text-transform': 'uppercase',
+            // 'text-transform': 'uppercase',
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+
+    provinceLabelNep: {
+        paint: {
+            'text-color': '#002121',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            // 'text-allow-overlap': true,
+            // 'text-font': ['Kalimati Regular'],
+            // 'text-field': ['get', 'title_ne'],
+            'text-field': ['get', 'title_ne'],
+            'text-size': 12,
+            'text-transform': 'none',
             'text-justify': 'center',
             'text-anchor': 'center',
         },
@@ -123,8 +142,24 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Bold'],
+            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
+            'text-size': 11,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    districtLabelNep: {
+        paint: {
+            'text-color': '#00695c',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            // 'text-font': ['Rubik Bold'],
+            'text-field': ['get', 'title_ne'],
+            // 'text-field': ['get', 'title_ne'],
             'text-size': 11,
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -138,8 +173,24 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Bold'],
+            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
+            'text-size': 10,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
+    municipalityLabelNep: {
+        paint: {
+            'text-color': '#00695c',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            // 'text-font': ['Rubik Bold'],
+            'text-field': ['get', 'title_ne'],
+            // 'text-field': ['get', 'title_ne'],
             'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
@@ -153,14 +204,28 @@ export default {
         },
         layout: {
             visibility: 'visible',
-            'text-font': ['Rubik Bold'],
+            // 'text-font': ['Rubik Bold'],
             'text-field': ['get', 'title'],
             'text-size': 10,
             'text-justify': 'center',
             'text-anchor': 'center',
         },
     },
-
+    wardLabelNep: {
+        paint: {
+            'text-color': '#1c9688',
+            'text-halo-color': 'rgba(255, 255, 255, 0.7)',
+            'text-halo-width': 2,
+        },
+        layout: {
+            visibility: 'visible',
+            // 'text-font': ['Rubik Bold'],
+            'text-field': ['get', 'title'],
+            'text-size': 10,
+            'text-justify': 'center',
+            'text-anchor': 'center',
+        },
+    },
     alertPoint: {
         circle: {
             'circle-color': ['get', 'hazardColor'],

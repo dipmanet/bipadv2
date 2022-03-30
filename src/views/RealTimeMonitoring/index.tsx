@@ -835,7 +835,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                                     className={_cs(styles.icon, styles.alertIcon)}
                                                 />
                                                 <div className={styles.text}>
-                                                    Rain watch
+                                                    <Translation>
+                                                        {
+                                                            t => <span>{t('Rain watch')}</span>
+                                                        }
+                                                    </Translation>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -854,7 +859,12 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                                     className={_cs(styles.icon, styles.eventIcon)}
                                                 />
                                                 <div className={styles.text}>
-                                                    River watch
+                                                    <Translation>
+                                                        {
+                                                            t => <span>{t('River watch')}</span>
+                                                        }
+                                                    </Translation>
+
                                                 </div>
                                             </div>
                                         </div>

@@ -1,6 +1,5 @@
 import { Obj, isTruthy, isDefined, normalize } from '@togglecorp/fujs';
 import { centroid, AllGeoJSON, convex } from '@turf/turf';
-
 import { hazardIcons } from '#resources/data';
 import {
     Loss,

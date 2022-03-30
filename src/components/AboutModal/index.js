@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import MultiViewContainer from '#rscv/MultiViewContainer';
 import ScrollTabs from '#rscv/ScrollTabs';
 import Modal from '#rscv/Modal';
@@ -13,7 +14,6 @@ import About from './About';
 // import Metadata from './Metadata';
 // import Disclaimer from './Disclaimer';
 import Manual from './Manual';
-
 import styles from './styles.scss';
 
 export default class AboutUs extends React.PureComponent {
@@ -78,18 +78,25 @@ export default class AboutUs extends React.PureComponent {
                 className={_cs(styles.loginModal, className)}
                 // onClose={closeModal}
             >
-                <ModalHeader
-                    className={styles.header}
-                    title="BIPAD"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
+                <Translation>
+                    {
+                        t => (
+                            <ModalHeader
+                                className={styles.header}
+                                title={t('BIPAD')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                        )
+                    }
+                </Translation>
+
                 <ModalBody className={styles.content}>
                     <ScrollTabs
                         className={styles.tabs}

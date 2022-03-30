@@ -1,7 +1,8 @@
 .languageButton {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
+position: relative;
+right: 60px;
+top: 10px;
+height: 0px;
     .nepButton {
         background-color: #a6a6a6;
         opacity: 0.67;
@@ -23,7 +24,7 @@
     }
     
     .selectedLanguage {
-        background-color: #003273;
+        background-color: #216cd7;
         opacity: 1 !important;
         width: 22px;
     }

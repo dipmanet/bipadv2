@@ -160,7 +160,7 @@ class MiniRiverWatch extends React.PureComponent<Props> {
                     } = row;
                     const className = _cs(
                         styles.waterLevel,
-                        status === 'BELOW WARNING LEVEL' && styles.below,
+                        status === 'BELOW WARNING LEVELSSSS' && styles.below,
                         status === 'ABOVE WARNING LEVEL' && styles.above,
                         status === 'ABOVE DANGER LEVEL' && styles.danger,
                     );

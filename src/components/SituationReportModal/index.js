@@ -1,11 +1,14 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
+import { connect } from 'react-redux';
 
+import { Translation } from 'react-i18next';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
     methods,
 } from '#request';
+import { languageSelector } from '#selectors';
 
 import Modal from '#rscv/Modal';
 import LoadingAnimation from '#rscv/LoadingAnimation';
@@ -16,6 +19,10 @@ import DangerButton from '#rsca/Button/DangerButton';
 import SidePane from './SidePane';
 import SituationReport from './SituationReport';
 import styles from './styles.scss';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const requestOptions = {
     situationReportsRequest: {
@@ -62,25 +69,34 @@ class SituationReportModal extends React.PureComponent {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
-
         const { selectedReport } = this.state;
         const selectedReportDetails = this.getSelectedReportDetails(response, selectedReport);
 
         return (
-            <Modal className={_cs(styles.situationReportModal, className)}>
-                <ModalHeader
-                    className={styles.header}
-                    title="Situation Report"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
+            <Modal className={_cs(styles.situationReportModal,
+                className, language === 'np' && styles.languageFont)}
+            >
+                <Translation>
+                    {
+                        t => (
+                            <ModalHeader
+                                className={styles.header}
+                                title={t('Situation Report')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                        )
+                    }
+                </Translation>
+
                 <ModalBody className={styles.modalBody}>
                     {pending ? (
                         <LoadingAnimation />
@@ -105,8 +121,11 @@ class SituationReportModal extends React.PureComponent {
     }
 }
 
-export default createConnectedRequestCoordinator()(
-    createRequestClient(requestOptions)(
-        SituationReportModal,
+
+export default connect(mapStateToProps)(
+    createConnectedRequestCoordinator()(
+        createRequestClient(requestOptions)(
+            SituationReportModal,
+        ),
     ),
 );

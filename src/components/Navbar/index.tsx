@@ -2,13 +2,13 @@ import React from 'react';
 import Redux from 'redux';
 import { connect } from 'react-redux';
 import { _cs } from '@togglecorp/fujs';
-
+import { Translation } from 'react-i18next';
 import ListView from '#rscv/List/ListView';
 import Icon from '#rscg/Icon';
 import modalize from '#rscg/Modalize';
 
 import { routeSettings } from '#constants';
-import { authStateSelector } from '#selectors';
+import { authStateSelector, languageSelector } from '#selectors';
 import { setAuthAction } from '#actionCreators';
 import { AppState } from '#store/types';
 import { AuthState } from '#store/atom/auth/types';
@@ -33,9 +33,9 @@ import MenuItem from './MenuItem';
 import styles from './styles.scss';
 
 const pages = routeSettings.filter(setting => !!setting.navbar) as Menu[];
-
 interface Menu {
     title: string;
+    titleNep: string;
     name: string;
     path: string;
     iconName: string;
@@ -66,7 +66,7 @@ const MenuItemLikeButton = ({
             name={iconName}
         />
         <div className={styles.title}>
-            { title }
+            {title}
         </div>
     </div>
 );
@@ -96,6 +96,7 @@ type Props = NewProps<ReduxProps, Params>;
 
 const mapStateToProps = (state: AppState) => ({
     authState: authStateSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -127,12 +128,13 @@ const menuKeySelector = (d: {name: string}) => d.name;
 
 class Navbar extends React.PureComponent<Props, State> {
     private menuRendererParams = (_: string, data: Menu) => ({
-        title: data.title,
+        title: this.props.language.language === 'en' ? data.title : data.titleNep,
         link: data.path,
         disabled: data.disabled,
         iconName: data.iconName,
         className: styles.menuItem,
-    });
+
+    })
 
     public render() {
         const {
@@ -156,48 +158,79 @@ class Navbar extends React.PureComponent<Props, State> {
                     className={styles.menuItemList}
                 />
                 <div className={styles.bottom}>
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Situation Report"
-                        iconName="textDocument"
-                        modal={<SituationReport />}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <ModalButton
+                                    className={styles.reportIncidentButton}
+                                    title={t('Situation Report')}
+                                    iconName="textDocument"
+                                    modal={<SituationReport />}
+                                />
+                            )}
+                    </Translation>
+
                     {authenticated && (
-                        <ModalButton
-                            className={styles.reliefButton}
-                            title="Relief"
-                            iconName="cart"
-                            modal={<Relief />}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.reliefButton}
+                                        title={t('Relief')}
+                                        iconName="cart"
+                                        modal={<Relief />}
+                                    />
+                                )}
+                        </Translation>
                     )}
                     {authenticated && (
-                        <ModalButton
-                            className={styles.reportIncidentButton}
-                            title="Reported incidents"
-                            iconName="list"
-                            modal={<CitizenReportsModal />}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.reportIncidentButton}
+                                        title={t('Reported incidents')}
+                                        iconName="list"
+                                        modal={<CitizenReportsModal />}
+                                    />
+                                )}
+                        </Translation>
                     )}
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="Report an incident"
-                        iconName="telephone"
-                        modal={<CitizenReportFormModal />}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <ModalButton
+                                    className={styles.reportIncidentButton}
+                                    title={t('Report an incident')}
+                                    iconName="telephone"
+                                    modal={<CitizenReportFormModal />}
+                                />
+                            )}
+                    </Translation>
                     {!authenticated && (
-                        <ModalButton
-                            className={styles.menuItem}
-                            title="Login"
-                            iconName="login"
-                            modal={<NewLoginModal />}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <ModalButton
+                                        className={styles.menuItem}
+                                        title={t('Login')}
+                                        iconName="login"
+                                        modal={<NewLoginModal />}
+                                    />
+                                )}
+                        </Translation>
                     )}
-                    <ModalButton
-                        className={styles.reportIncidentButton}
-                        title="About Us"
-                        iconName="aboutUs"
-                        modal={<AboutModal />}
-                    />
+                    <Translation>
+                        {
+                            t => (
+                                <ModalButton
+                                    className={styles.reportIncidentButton}
+                                    title={t('About Us')}
+                                    iconName="aboutUs"
+                                    modal={<AboutModal />}
+                                />
+                            )}
+                    </Translation>
                     {user && (
                         <Icon
                             className={styles.userIcon}
@@ -206,13 +239,18 @@ class Navbar extends React.PureComponent<Props, State> {
                         />
                     )}
                     {authenticated && (
-                        <MenuItemLikeButton
-                            className={styles.logoutButton}
-                            title="Logout"
-                            iconName="logout"
-                            onClick={logoutRequest.do}
-                            disabled={logoutRequest.pending}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <MenuItemLikeButton
+                                        className={styles.logoutButton}
+                                        title={t('Logout')}
+                                        iconName="logout"
+                                        onClick={logoutRequest.do}
+                                        disabled={logoutRequest.pending}
+                                    />
+                                )}
+                        </Translation>
                     )}
                 </div>
             </nav>

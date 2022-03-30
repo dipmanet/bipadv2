@@ -24,6 +24,7 @@ import {
 } from '#utils/transformations';
 import {
     filtersSelector,
+    languageSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -99,18 +100,24 @@ interface PropsFromAppState {
     filters: FiltersElement;
 }
 
-const tabList: Tab[] = [
-    { key: 'resources', label: 'Resources' },
-    { key: 'disasters', label: 'Losses' },
-    { key: 'demographics', label: 'Demographics' },
-];
 
 const keySelector = (d: Tab) => d.key;
 const labelSelector = (d: Tab) => d.label;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     filters: filtersSelector(state),
+    language: languageSelector(state),
 });
+
+
+const tabList = language => (
+    [
+        { key: 'resources', label: language === 'en' ? 'Resources' : 'स्रोतहरू' },
+        { key: 'disasters', label: language === 'en' ? 'Losses' : 'घाटा' },
+        { key: 'demographics', label: language === 'en' ? 'Demographics' : 'जनसांख्यिकी' },
+    ]
+);
+
 
 class DisasterProfile extends React.PureComponent<Props> {
     public static contextType = TitleContext;
@@ -189,14 +196,14 @@ class DisasterProfile extends React.PureComponent<Props> {
         }
         const { activeView } = this.state;
         const pending = isAnyRequestPending(requests);
-
+        const { language: { language } } = this.props;
         return (
             <>
                 <Loading pending={pending} />
                 <div className={_cs(styles.profileSummary, className)}>
                     <SegmentInput
                         className={styles.summarySelection}
-                        options={tabList}
+                        options={tabList(language)}
                         value={activeView}
                         onChange={this.handleTabClick}
                         keySelector={keySelector}

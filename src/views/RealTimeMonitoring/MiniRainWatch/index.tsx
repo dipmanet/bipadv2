@@ -44,28 +44,36 @@ interface KeyValue {
     label: string;
 }
 
-const durationOptions: KeyValue[] = [
-    {
-        key: 1,
-        label: '1 HR',
-    },
-    {
-        key: 3,
-        label: '3 HR',
-    },
-    {
-        key: 6,
-        label: '6 HR',
-    },
-    {
-        key: 12,
-        label: '12 HR',
-    },
-    {
-        key: 24,
-        label: '24 HR',
-    },
-];
+const durationOptions = language => (
+    [
+        {
+            key: 1,
+            label: language === 'en' ? '1 HR' : '१ घण्टा',
+
+        },
+        {
+            key: 3,
+            label: language === 'en' ? '3 HR' : '३ घण्टा',
+
+        },
+        {
+            key: 6,
+            label: language === 'en' ? '6 HR' : '६ घण्टा',
+
+        },
+        {
+            key: 12,
+            label: language === 'en' ? '12 HR' : '१२ घण्टा',
+
+        },
+        {
+            key: 24,
+            label: language === 'en' ? '24 HR' : '२४ घण्टा',
+
+        },
+    ]
+);
+
 
 const defaultSort = {
     key: 'status',
@@ -250,7 +258,7 @@ class MiniRainWatch extends React.PureComponent<Props, State> {
                     <SegmentInput
                         label="Time range"
                         className={styles.durationInput}
-                        options={durationOptions}
+                        options={durationOptions(language)}
                         value={duration}
                         onChange={this.handleDurationSelect}
                         keySelector={durationKeySelector}

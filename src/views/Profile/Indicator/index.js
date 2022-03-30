@@ -15,7 +15,7 @@ const Indicator = ({
 }) => (
     <Modal className={_cs(className, styles.indicatorsModal)}>
         <ModalHeader
-            title="Indicators"
+            title="Indicatorsssss"
             rightComponent={(
                 <DangerButton
                     transparent

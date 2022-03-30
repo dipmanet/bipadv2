@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { Translation } from 'react-i18next';
 import Spinner from '#rsu/../v2/View/Spinner';
 
 import styles from './styles.scss';
@@ -16,9 +16,17 @@ const Loading = ({ pending, text }) => {
                 size="large"
                 className={styles.spinner}
             />
-            <div className={styles.text}>
-                {text}
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={styles.text}>
+                            {t(text)}
+                        </div>
+                    )
+                }
+
+            </Translation>
+
         </div>
     );
 };

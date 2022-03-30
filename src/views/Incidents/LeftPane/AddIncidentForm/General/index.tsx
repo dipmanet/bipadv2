@@ -76,7 +76,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                     <SelectInput
                         className={styles.input}
                         faramElementName="hazard"
-                        options={hazardList}
+                        options="test"
                         keySelector={keySelector}
                         labelSelector={labelSelector}
                         label="Hazard"

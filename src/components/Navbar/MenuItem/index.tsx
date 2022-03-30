@@ -51,7 +51,6 @@ export default class MenuItem extends React.PureComponent<Props, State> {
             iconName,
             titleClassName,
         } = this.props;
-        console.log('title', title);
         return (
             <Link
                 to={link}

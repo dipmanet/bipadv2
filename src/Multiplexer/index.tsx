@@ -9,7 +9,7 @@ import {
 } from '@togglecorp/fujs';
 import memoize from 'memoize-one';
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import { initReactI18next, Translation } from 'react-i18next';
 
 import { enTranslation, npTranslation } from '#constants/translations';
 import Map from '#re-map';
@@ -83,27 +83,41 @@ function reloadPage() {
 }
 
 const ErrorInPage = () => (
-    <div className={styles.errorInPage}>
-        Some problem occurred.
-        <DangerButton
-            transparent
-            onClick={reloadPage}
-        >
-            Reload
-        </DangerButton>
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.errorInPage}>
+                    {t('Some problem occurred.')}
+                    <DangerButton
+                        transparent
+                        onClick={reloadPage}
+                    >
+                        {t('Reload')}
+                    </DangerButton>
+                </div>
+            )
+        }
+    </Translation>
 );
 
 const RetryableErrorInPage = ({ error, retry }: LoadOptions) => (
-    <div className={styles.retryableErrorInPage}>
-        Some problem occurred.
-        <DangerButton
-            onClick={retry}
-            transparent
-        >
-            Reload
-        </DangerButton>
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.retryableErrorInPage}>
+                    {t('Some problem occurred.')}
+                    <DangerButton
+                        onClick={retry}
+                        transparent
+                    >
+                        {t('Reload')}
+                    </DangerButton>
+                </div>
+            )
+
+        }
+    </Translation>
+
 );
 
 
@@ -124,12 +138,20 @@ const LoadingPage = ({ error, retry }: LoadOptions) => {
         );
     }
     return (
-        <Loading
-            text="Loading Page"
-            pending
-        />
+        <Translation>
+            {
+                t => (
+                    <Loading
+                        text={t('Loading Page')}
+                        pending
+                    />
+                )
+            }
+        </Translation>
+
     );
 };
+
 
 const routes = routeSettings.map(({ load, ...settings }) => {
     const Com = authRoute<typeof settings>()(
@@ -423,10 +445,17 @@ class Multiplexer extends React.PureComponent<Props, State> {
         }
         if (pending) {
             return (
-                <Loading
-                    text="Loading Resources"
-                    pending
-                />
+                <Translation>
+                    {
+                        t => (
+                            <Loading
+                                text={t('Loading Resources')}
+                                pending
+                            />
+                        )
+                    }
+                </Translation>
+
             );
         }
         return (
@@ -627,7 +656,13 @@ class Multiplexer extends React.PureComponent<Props, State> {
         municipalities: Municipality[],
     ) => {
         if (!selectedRegion || !selectedRegion.adminLevel) {
-            return 'National';
+            return (
+                <Translation>
+                    {
+                        t => <span>{t('National')}</span>
+                    }
+                </Translation>
+            );
         }
 
         const adminLevels: {
@@ -836,10 +871,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                     <LayerToggle />
 
                                                 </div>
-                                                <LanguageToggle />
                                             </div>
                                         )}
                                     </main>
+
                                     {(rightContent || !hideFilters) && (
                                         <aside className={styles.right}>
                                             { rightContent && (
@@ -854,7 +889,10 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                                 </div>
 
                                             )}
+                                            <LanguageToggle />
+
                                             { !hideFilter && (
+
                                                 <Filters
                                                     className={styles.filters}
                                                     hideLocationFilter={hideLocationFilter}
@@ -873,6 +911,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
                                 </Map>
                             </RiskInfoLayerContext.Provider>
                         </div>
+
                         <Navbar className={styles.navbar} />
                     </div>
                 </TitleContextProvider>

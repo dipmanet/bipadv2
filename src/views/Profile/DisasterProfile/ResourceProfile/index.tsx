@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import ScalableVectorGraphcis from '#rscv/ScalableVectorGraphics';
 
 import modalize from '#rscg/Modalize';
@@ -87,9 +88,16 @@ class ResourceProfile extends React.PureComponent<Props> {
         return (
             <div className={_cs(styles.resourceProfile, className)}>
                 <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        Available resources
-                    </h2>
+                    <Translation>
+                        {
+                            t => (
+                                <h2 className={styles.heading}>
+                                    {t('Available resources')}
+                                </h2>
+                            )
+                        }
+                    </Translation>
+
                 </header>
                 <div className={styles.content}>
                     <CommonMap
@@ -110,9 +118,15 @@ class ResourceProfile extends React.PureComponent<Props> {
                                 <div className={styles.value}>
                                     { data[attributes[key].dataKey] || '-' }
                                 </div>
-                                <div className={styles.label}>
-                                    { attributes[key].title }
-                                </div>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <div className={styles.label}>
+                                                {t(attributes[key].title)}
+                                            </div>
+                                        )}
+                                </Translation>
+
                             </div>
                         </div>
                     ))}
