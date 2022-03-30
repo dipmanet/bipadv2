@@ -99,7 +99,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             },
             isTilesLoaded: false,
             disableDefaultDownload: false,
-            mapOrientation: 'potrait',
+            mapOrientation: 'portrait',
             disableDownloadButton: true,
             orientationType: {
                 height: null,
@@ -385,9 +385,13 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             onClick={() => {
                                                                 this.setState({
                                                                     selectedPageType: 'A3',
+                                                                    // resolution: {
+                                                                    //     height: 1587,
+                                                                    //     width: 1123,
+                                                                    // },
                                                                     resolution: {
-                                                                        height: 1587,
-                                                                        width: 1123,
+                                                                        height: mapOrientation === 'portrait' ? 1587 : 1123,
+                                                                        width: mapOrientation === 'portrait' ? 1123 : 1587,
                                                                     },
                                                                 });
                                                             }}
@@ -401,8 +405,8 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                 this.setState({
                                                                     selectedPageType: 'A4',
                                                                     resolution: {
-                                                                        height: 1123,
-                                                                        width: 794,
+                                                                        height: mapOrientation === 'portrait' ? 1123 : 794,
+                                                                        width: mapOrientation === 'portrait' ? 794 : 1123,
                                                                     },
                                                                 });
                                                             }}
@@ -415,9 +419,13 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             onClick={() => {
                                                                 this.setState({
                                                                     selectedPageType: 'B4',
+                                                                    // resolution: {
+                                                                    //     height: 1334,
+                                                                    //     width: 945,
+                                                                    // },
                                                                     resolution: {
-                                                                        height: 1334,
-                                                                        width: 945,
+                                                                        height: mapOrientation === 'portrait' ? 1334 : 945,
+                                                                        width: mapOrientation === 'portrait' ? 945 : 1334,
                                                                     },
                                                                 });
                                                             }}
@@ -430,9 +438,13 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                             onClick={() => {
                                                                 this.setState({
                                                                     selectedPageType: 'B5',
+                                                                    // resolution: {
+                                                                    //     height: 945,
+                                                                    //     width: 665,
+                                                                    // },
                                                                     resolution: {
-                                                                        height: 945,
-                                                                        width: 665,
+                                                                        height: mapOrientation === 'portrait' ? 945 : 665,
+                                                                        width: mapOrientation === 'portrait' ? 665 : 945,
                                                                     },
                                                                 });
                                                             }}
@@ -512,10 +524,10 @@ class LayerSwitch extends React.PureComponent<Props, State> {
                                                                 Landscape
                                                             </Button>
                                                             <Button
-                                                                className={_cs(mapOrientation === 'potrait' ? (styles.active) : (styles.pageSizeButton))}
+                                                                className={_cs(mapOrientation === 'portrait' ? (styles.active) : (styles.pageSizeButton))}
                                                                 onClick={() => {
                                                                     this.setState({
-                                                                        mapOrientation: 'potrait',
+                                                                        mapOrientation: 'portrait',
                                                                         orientationType: {
                                                                             height: resolution.width,
                                                                             width: resolution.height,
