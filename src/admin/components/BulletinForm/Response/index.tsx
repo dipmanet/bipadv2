@@ -10,7 +10,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Translation } from 'react-i18next';
 import { _cs } from '@togglecorp/fujs';
-import { setBulletinFeedbackAction } from '#actionCreators';
+import { setBulletinFeedbackAction, setBulletinCumulativeAction } from '#actionCreators';
 import { districtsSelector, bulletinPageSelector, bulletinEditDataSelector, incidentListSelectorIP, hazardTypesSelector, languageSelector } from '#selectors';
 import styles from './styles.scss';
 
@@ -28,6 +28,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBulletinFeedback: params => dispatch(setBulletinFeedbackAction(params)),
+    setCumulativeRedux: params => dispatch(setBulletinCumulativeAction(params)),
 });
 
 const Response = (props: Props) => {
@@ -47,6 +48,7 @@ const Response = (props: Props) => {
         bulletinData: {
             feedback,
         },
+        setCumulativeRedux,
     } = props;
 
 
@@ -137,7 +139,7 @@ const Response = (props: Props) => {
 
     // part is just to add in the end of the table
     useEffect(() => {
-        if (feedback && Object.keys(feedback).length > 0) {
+        if (!annex && feedback && Object.keys(feedback).length > 0) {
             const getIncidents = () => Object.keys(feedback).length;
             const getDistricts = () => {
                 const aD = Object.keys(feedback)
@@ -156,8 +158,10 @@ const Response = (props: Props) => {
                 incidents: getIncidents(),
             };
             setCumulative({ ...cumulativeData, ...other });
+            setCumulativeRedux({ cumulative: { ...cumulativeData, ...other } });
         }
-    }, [feedback]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [annex, feedback]);
 
     useEffect(() => {
         console.log('changing feedback and in response', feedback, cumulative);

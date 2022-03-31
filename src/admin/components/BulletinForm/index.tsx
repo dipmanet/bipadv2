@@ -595,7 +595,6 @@ const Bulletin = (props: Props) => {
                     sitRep,
                     hilight,
                     bulletinDate: date,
-                    feedback,
                     addedHazards: addedHazardFields,
                 });
             }
@@ -607,11 +606,11 @@ const Bulletin = (props: Props) => {
                     vaccineStat: vaccineStatData,
                 });
             }
-            if (progress === 2) {
-                setBulletinFeedback({
-                    feedback,
-                });
-            }
+            // if (progress === 2) {
+            //     setBulletinFeedback({
+            //         feedback,
+            //     });
+            // }
             if (progress === 3) {
                 setBulletinTemperature({
                     tempMin: minTemp,

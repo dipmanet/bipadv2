@@ -545,6 +545,7 @@ const state: PageState = {
         ward: null,
         bulletinDate: null,
         addedHazards: null,
+        cumulative: null,
     },
 
     epidemicsPage: {

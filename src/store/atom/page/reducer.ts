@@ -16,6 +16,10 @@ export const setBulletinYearlyDataAction = bulletinData => ({
     type: Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA,
     bulletinData,
 });
+export const setBulletinCumulativeAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_CUMULATIVE,
+    bulletinData,
+});
 // IBF
 export const setIbfPageAction = ibfPage => ({
     type: Type.PageType.SET_IBF_PAGE,
@@ -1805,6 +1809,21 @@ export const setBulletinLoss = (
 
     return newState;
 };
+export const setCumulative = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.cumulative = bulletinData.cumulative;
+    });
+
+    return newState;
+};
 
 // export const setBulletinFeedback = (
 //     state: Type.PageState,
@@ -2115,6 +2134,8 @@ export default function routeReducer(
             return setBulletinFeedback(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN:
             return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_CUMULATIVE:
+            return setCumulative(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_YEARLYDATA:
             return setBulletinYearlyData(state, action);
         case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:

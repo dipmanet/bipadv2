@@ -3,8 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { nepaliRef, englishRef } from 'src/admin/components/BulletinForm/formFields';
 import { Translation } from 'react-i18next';
+import { _cs } from '@togglecorp/fujs';
 import {
-    bulletinPageSelector, languageSelector,
+    languageSelector,
+    districtsSelector,
+    incidentListSelectorIP,
+    hazardTypesSelector,
+    bulletinEditDataSelector,
+    bulletinPageSelector,
 } from '#selectors';
 
 import Response from '../BulletinForm/Response';
@@ -14,7 +20,12 @@ import styles from './styles.scss';
 const mapStateToProps = state => ({
     bulletinData: bulletinPageSelector(state),
     language: languageSelector(state),
+    districts: districtsSelector(state),
+    incidentList: incidentListSelectorIP(state),
+    hazardTypes: hazardTypesSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
+
 
 const BulletinPDFAnnex = (props) => {
     const [provinceWiseTotal, setprovinceWiseTotal] = useState([]);
@@ -23,6 +34,8 @@ const BulletinPDFAnnex = (props) => {
     const {
         handleFeedbackChange,
         // feedback,
+        districts,
+        hazardTypes,
         language: { language },
         bulletinData: {
             incidentSummary,
@@ -34,11 +47,35 @@ const BulletinPDFAnnex = (props) => {
             vaccineStat,
             covidProvinceWiseTotal,
             feedback,
+            cumulative,
             deleteFeedbackChange,
             hazardWiseLossData,
             handleSubFieldChange,
         },
     } = props;
+
+
+    const getHazard = (h) => {
+        const filtered = Object.values(hazardTypes).filter(item => item.titleNe === h || item.titleEn === h);
+        if (filtered.length > 0 && language === 'np') {
+            return filtered[0].titleNe;
+        }
+        if (filtered.length > 0 && language === 'en') {
+            return filtered[0].title;
+        }
+        return '-';
+    };
+
+    const getDistrict = (d) => {
+        const filtered = districts.filter(item => item.title_ne === d || item.title_en === d);
+        if (filtered.length > 0 && language === 'np') {
+            return filtered[0].title_ne;
+        }
+        if (filtered.length > 0 && language === 'en') {
+            return filtered[0].title_en;
+        }
+        return '-';
+    };
 
 
     useEffect(() => {
@@ -97,14 +134,159 @@ const BulletinPDFAnnex = (props) => {
                 </Translation>
 
             </h3>
-            <Response
+            {/* <Response
                 annex
                 handleFeedbackChange={handleFeedbackChange}
                 feedback={feedback}
                 deleteFeedbackChange={deleteFeedbackChange}
                 hazardWiseLossData={hazardWiseLossData}
                 handleSubFieldChange={handleSubFieldChange}
-            />
+            /> */}
+            <div className={_cs(
+                (styles.formContainerAnnex),
+                (language === 'np' ? styles.formContainerNepali : styles.formContainerEnglish),
+            )
+            }
+            >
+                <div className={styles.pratikriyas}>
+                    {
+                        feedback && Object.keys(feedback).length > 0
+
+                            && (
+                                <table className={styles.responseTable}>
+                                    <tr>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('S.N')}</span>
+                                                }
+                                            </Translation>
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Incidents')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('District')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('death')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('missing')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('injured')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Incident Details')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                        <th>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Response')}</span>
+                                                }
+                                            </Translation>
+
+                                        </th>
+                                    </tr>
+                                    {
+                                        feedback && Object.keys(feedback).map((hwL, i) => (
+                                            <tr>
+                                                <td>
+                                                    {i + 1}
+                                                </td>
+                                                <td>
+                                                    {getHazard(feedback[hwL].hazard) }
+                                                </td>
+                                                <td>
+                                                    {getDistrict(feedback[hwL].district)}
+                                                </td>
+
+                                                <td>
+                                                    {
+                                                        feedback[hwL].deaths
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {
+                                                        feedback[hwL].missing
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {
+                                                        feedback[hwL].injured
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div className={styles.formItemHalf}>
+                                                        {
+                                                            feedback[hwL].description || ''
+                                                        }
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className={styles.formItemHalf}>
+                                                        {
+                                                            feedback[hwL].response || ''
+
+                                                        }
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
+                                    <tr className={styles.lastRow}>
+                                        <td>
+                                            <Translation>
+                                                {
+                                                    t => <span>{t('Total')}</span>
+                                                }
+                                            </Translation>
+
+                                        </td>
+                                        <td>{cumulative.incidents}</td>
+                                        <td>{cumulative.district}</td>
+                                        <td>{cumulative.deaths}</td>
+                                        <td>{cumulative.missing}</td>
+                                        <td>{cumulative.injured}</td>
+                                        <td>{' '}</td>
+                                        <td>{' '}</td>
+                                    </tr>
+                                </table>
+                            )
+                    }
+                </div>
+            </div>
             <Translation>
                 {
                     t => <h3>{t('Disaster details of the last 24 hours')}</h3>

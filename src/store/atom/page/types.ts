@@ -258,6 +258,7 @@ export interface Bulletin {
     hilight: string;
     bulletinDate: string;
     addedHazards: object;
+    cumulative: object;
 }
 
 export interface Province {
@@ -991,6 +992,7 @@ export enum PageType {
     ADMIN__PORTAL_BULLETIN_EDIT_DATA = 'page/ADMIN__PORTAL_BULLETIN_EDIT_DATA',
     ADMIN__PORTAL_BULLETIN_YEARLYDATA = 'page/ADMIN__PORTAL_BULLETIN_YEARLYDATA',
     ADMIN__PORTAL_BULLETIN_FEEDBACK = 'page/ADMIN__PORTAL_BULLETIN_FEEDBACK',
+    ADMIN__PORTAL_BULLETIN_CUMULATIVE = 'page/ADMIN__PORTAL_BULLETIN_CUMULATIVE',
     // Epidemics
     SET_EPIDEMICS_PAGE = 'page/EPIDEMICS/EPIDEMICS_PAGE',
 }
@@ -1027,6 +1029,10 @@ export interface SetBulletinYearlyData {
 }
 export interface SetBulletinDataFeedback {
     type: typeof PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK;
+    bulletinData: Bulletin;
+}
+export interface SetBulletinDataCumulative {
+    type: typeof PageType.ADMIN__PORTAL_BULLETIN_CUMULATIVE;
     bulletinData: Bulletin;
 }
 export interface SetBulletinDataTemperature {
