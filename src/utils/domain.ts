@@ -143,11 +143,11 @@ export const hazardTypesList = (listWithHazard: WithHazard[], hazardTypes: Obj<H
 };
 
 export const lossMetrics = [
-    { key: 'count', label: 'Incidents' },
-    { key: 'peopleDeathCount', label: 'People death' },
-    { key: 'estimatedLoss', label: 'Estimated loss (NPR)' },
-    { key: 'infrastructureDestroyedCount', label: 'Infrastructure destroyed' },
-    { key: 'livestockDestroyedCount', label: 'Livestock destroyed' },
+    { key: 'count', label: 'Incidents', labelNe: 'घटनाहरू' },
+    { key: 'peopleDeathCount', label: 'People death', labelNe: 'मानिसको मृत्यु' },
+    { key: 'estimatedLoss', label: 'Estimated loss (NPR)', labelNe: 'अनुमानित क्षति (रु)' },
+    { key: 'infrastructureDestroyedCount', label: 'Infrastructure destroyed', labelNe: 'पूर्वाधार ध्वस्त' },
+    { key: 'livestockDestroyedCount', label: 'Livestock destroyed', labelNe: 'पशुधन नष्ट' },
 ];
 
 // CONVERSION TO GEOJSON

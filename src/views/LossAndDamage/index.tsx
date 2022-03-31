@@ -73,17 +73,24 @@ const IncidentTableModal = ({
     incidentList,
 }) => (
     <Modal className={styles.lossAndDamageTableModal}>
-        <ModalHeader
-            title="Incidents"
-            rightComponent={(
-                <DangerButton
-                    transparent
-                    iconName="close"
-                    onClick={closeModal}
-                    title="Close Modal"
-                />
-            )}
-        />
+        <Translation>
+            {
+                t => (
+                    <ModalHeader
+                        title={t('Incidents')}
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
+                )
+            }
+        </Translation>
+
         <ModalBody className={styles.body}>
             <TabularView
                 className={styles.table}
