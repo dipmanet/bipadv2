@@ -108,9 +108,9 @@ const Bulletin = (props: Props) => {
         }
     }, [uri]);
 
-    useEffect(() => {
-        resetFeedback();
-    }, []);
+    // useEffect(() => {
+    //     resetFeedback();
+    // }, []);
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
@@ -155,6 +155,7 @@ const Bulletin = (props: Props) => {
 
     const handleHazardAddItem = () => {
         if (hazard) {
+            console.log('adding hazard', hazard);
             // handlehazardAdd(hazard);
             handleSameHazardAdd(hazard);
             setHazard(null);
@@ -166,6 +167,19 @@ const Bulletin = (props: Props) => {
     };
     const test1 = new Date();
     const test = new Date('2021-11-12');
+
+    const getRegionValue = (distCoordinate) => {
+        if (distCoordinate) {
+            const obj = districts.filter(item => item.centroid.coordinates[0] === distCoordinate[0] && item.centroid.coordinates[1] === distCoordinate[1]);
+            if (obj.length > 0) {
+                return { adminLevel: 2, geoarea: obj[0].id };
+            }
+            return null;
+        }
+        return null;
+    };
+
+
     useEffect(() => {
         if (date) {
             const selectedDate = new Date(date);
@@ -415,6 +429,7 @@ const Bulletin = (props: Props) => {
                                                         _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                                                     faramElementName="region"
                                                     wardsHidden
+                                                    value={getRegionValue(addedHazardFields[field][subField])}
                                                     onChange={region => handleFormRegion(region, field, subField)}
                                                     checkProvince={handleCheckFilterDisableButtonForProvince}
                                                     checkDistrict={handleCheckFilterDisableButtonForDistrict}

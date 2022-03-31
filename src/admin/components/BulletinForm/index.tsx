@@ -50,6 +50,7 @@ import {
     regionsSelector,
     bulletinEditDataSelector,
     languageSelector,
+    bulletinPageSelector,
 } from '#selectors';
 import {
     setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
@@ -110,6 +111,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     filters: filtersSelector(state),
     bulletinEditData: bulletinEditDataSelector(state),
     language: languageSelector(state),
+    bulletinData: bulletinPageSelector(state),
 });
 
 
@@ -122,7 +124,6 @@ const selectDateForQuery = (today) => {
     const DEFAULT_START_DATE = yesterday;
     const DEFAULT_END_DATE = today;
 
-    console.log('dateed');
     const requestQuery = ({
         params: {
             // startDate = DEFAULT_START_DATE.toISOString(),
@@ -235,7 +236,7 @@ const Bulletin = (props: Props) => {
     const [covidTotalStatData, setcovidTotalStat] = useState(covidTotalStat);
     const [vaccineStatData, setvaccineStat] = useState(vaccineStat);
     const [covidProvinceWiseData, setcovidProvinceWiseTotal] = useState(covidProvinceWiseTotal);
-    const [feedback, setFeedback] = useState({});
+    // const [feedback, setFeedback] = useState({});
     const [maxTemp, setMaxTemp] = useState(null);
     const [minTemp, setMinTemp] = useState(null);
     const [rainSummaryPic, setRainSummaryPic] = useState(null);
@@ -268,6 +269,7 @@ const Bulletin = (props: Props) => {
         hazardTypes,
         language: { language },
         uri,
+        bulletinData: { feedback },
     } = props;
 
 
@@ -282,8 +284,7 @@ const Bulletin = (props: Props) => {
 
     const hazardDatafromFeedback = (feedbackData, lang) => {
         const newObj = {};
-        console.log('feedbackData', feedbackData);
-        console.log('lang', lang);
+
         if (feedbackData && Object.keys(feedbackData).length > 0) {
             Object.values(feedbackData).map((item) => {
                 if (lang === 'nepali') {
@@ -297,7 +298,6 @@ const Bulletin = (props: Props) => {
     };
 
     useEffect(() => {
-        console.log('Enter Wait', selectedDate);
         if (selectedDate) {
             const today = selectedDate;
             const yesterday = new Date(today);
@@ -331,9 +331,8 @@ const Bulletin = (props: Props) => {
             // });
 
 
-            console.log('Enter', selectedDate);
             const test = selectDateForQuery(selectedDate);
-            console.log('data function', test);
+
             incidentsGetRequest.do({
                 expand,
                 limit,
@@ -345,9 +344,31 @@ const Bulletin = (props: Props) => {
         }
     }, [selectedDate]);
 
+    const getAddedFields = (feedbackobj) => {
+        const obj = {};
+        if (feedbackobj && Object.keys(feedbackobj).length > 0) {
+            Object.values(feedbackobj).map((item) => {
+            // coordinate means it is manually added data
+                if (item && Object.keys(item).includes('coordinates')) {
+                    obj[item.hazard] = { deaths: item.deaths, injured: item.injured, missing: item.missing, coordinates: item.coordinates };
+                }
+                return null;
+            });
+        }
+        return obj;
+    };
+
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+            const finalFeedbackFromEdit = () => {
+                if (bulletinEditData.language === 'nepali') {
+                    setBulletinFeedback({ feedback: bulletinEditData.feedbackNe });
+                } else {
+                    setBulletinFeedback({ feedback: bulletinEditData.feedback });
+                }
+            };
+
             setSitRep(bulletinEditData.sitrep);
             setIncidentData(bulletinEditData.incidentSummary);
             setPeopleLoss(bulletinEditData.peopleLoss);
@@ -356,25 +377,30 @@ const Bulletin = (props: Props) => {
             setcovidTotalStat(bulletinEditData.covidTotalStat);
             setvaccineStat(bulletinEditData.vaccineStat);
             setcovidProvinceWiseTotal(bulletinEditData.covidProvinceWiseTotal);
+            finalFeedbackFromEdit();
 
             if (bulletinEditData.language === 'nepali') {
+                setAddedData(bulletinEditData.addedHazardsNe);
                 setHazardwise(hazardDatafromFeedback(bulletinEditData.feedbackNe, 'nepali'));
                 setMinTemp(bulletinEditData.tempMinNe);
                 setMinTempFooter(bulletinEditData.tempMinFooterNe);
                 setMaxTemp(bulletinEditData.tempMaxNe);
                 setMaxTempFooter(bulletinEditData.tempMaxFooterNe);
-                setFeedback(bulletinEditData.feedbackNe);
+                // the added data will be in the api
+                // feedback data will already be there no need to construct new one
+                // when the data is changed what happens now? Its already taken care of
                 setDailySumamry(bulletinEditData.dailySummaryNe);
                 setRainSummaryPic(bulletinEditData.rainSummaryPictureNe);
                 setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooterNe);
                 setHilight(bulletinEditData.highlightNe);
             } else {
+                setAddedData(bulletinEditData.addedHazards);
                 setHazardwise(hazardDatafromFeedback(bulletinEditData.feedback, 'english'));
                 setMinTemp(bulletinEditData.tempMin);
                 setMinTempFooter(bulletinEditData.tempMinFooter);
                 setMaxTemp(bulletinEditData.tempMax);
                 setMaxTempFooter(bulletinEditData.tempMaxFooter);
-                setFeedback(bulletinEditData.feedback);
+                setBulletinFeedback({ feedback: bulletinEditData.feedback });
                 setDailySumamry(bulletinEditData.dailySummary);
                 setRainSummaryPic(bulletinEditData.rainSummaryPicture);
                 setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooter);
@@ -395,7 +421,6 @@ const Bulletin = (props: Props) => {
     };
 
     const handlesitRepBlur = (e) => {
-        console.log('on blur event', e.target.value);
         getEditData.do({ sitrep: e.target.value, language: language === 'np' ? 'nepali' : 'english' });
     };
 
@@ -426,40 +451,56 @@ const Bulletin = (props: Props) => {
         setHazardwise({ ...newData, [field]: newSubData });
     };
 
+    // this runs when added fields are changed
     const handleSameHazardChange = (e, field, subfield) => {
         const newData = { ...addedHazardFields };
         const newFieldData = newData[field];
         if (subfield === 'location') {
             const newSubData = { ...newFieldData, coordinates: e.coordinates, district: e.district };
-            setAddedData({ ...feedback, ...newData, [field]: newSubData });
-            setFeedback({ ...feedback, ...newData, [field]: newSubData });
+            setAddedData({ ...newData, [field]: newSubData });
+            setBulletinFeedback({ feedback: { ...feedback, ...newData, [field]: newSubData } });
         } else {
             const newSubData = { ...newFieldData, [subfield]: e };
-            setAddedData({ ...feedback, ...newData, [field]: newSubData });
-            setFeedback({ ...feedback, ...newData, [field]: newSubData });
+            setAddedData({ ...newData, [field]: newSubData });
+            setBulletinFeedback({ feedback: { ...feedback, ...newData, [field]: newSubData } });
         }
     };
 
+    // this runs when button is clicked
+    const handleSameHazardAdd = (hazard) => {
+        const newData = { ...addedHazardFields };
+        setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
+        setBulletinFeedback({ feedback: { ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } } });
+        countId.current += 1;
+    };
+
+    useEffect(() => {
+        console.log('changing feedback', feedback, addedHazardFields);
+    }, [feedback]);
+
+    // this runs in response comp, it appends new response obj from incidents list
+    // to the feedback state
+    const handleFeedbackChange = (e) => {
+        setBulletinFeedback({ feedback: Object.assign({}, feedback, e) });
+    };
+
+    // this runs when the response subfields are changed manually
+    const handleSubFieldChange = (e, field, subfield) => {
+        const newObj = { ...feedback[field] };
+        newObj[subfield] = e;
+        setBulletinFeedback({ feedback: Object.assign({}, feedback, { [field]: newObj }) });
+    };
+
+
     const resetFeedback = () => {
-        setFeedback({});
+        setBulletinFeedback({ feedback: {} });
     };
 
     const handlehazardAdd = (hazard) => {
-        console.log('hazard', hazard);
         const newData = { ...addedHazardFields };
         setAddedData({ ...newData, [Math.random()]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
         // add it to hazard too
         const hazardData = { ...hazardWiseLossData };
-    };
-    // this runs when button is clicked
-    const handleSameHazardAdd = (hazard) => {
-        console.log('hazard', hazard);
-
-        const newData = { ...addedHazardFields };
-        setAddedData({ ...newData, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
-        console.log('feedback appended', feedback);
-        setFeedback({ ...feedback, [countId.current]: { hazard, deaths: 0, injured: 0, missing: 0, coordinates: [0, 0] } });
-        countId.current += 1;
     };
 
 
@@ -471,9 +512,7 @@ const Bulletin = (props: Props) => {
         setgenderWiseLoss(newState);
     };
 
-    useEffect(() => {
-        console.log('feedback main obj', feedback);
-    }, [feedback]);
+
     const handleCovidTotalStat = (e, field) => {
         const newState = produce(covidTotalStatData, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
@@ -505,16 +544,6 @@ const Bulletin = (props: Props) => {
         setcovidProvinceWiseTotal({ ...newData, [field]: newSubData });
     };
 
-    const handleFeedbackChange = (e) => {
-        setFeedback(Object.assign({}, feedback, e));
-    };
-
-    const handleSubFieldChange = (e, field, subfield) => {
-        const newObj = { ...feedback[field] };
-        newObj[subfield] = e;
-        setFeedback(Object.assign({}, feedback, { [field]: newObj }));
-    };
-
     const handleMaxTemp = (e) => {
         setMaxTemp(e);
     };
@@ -543,7 +572,6 @@ const Bulletin = (props: Props) => {
 
     const deleteFeedbackChange = (idx) => {
         const n = [...feedback];
-        setFeedback(n.filter((item, i) => i !== idx));
     };
     const handleRainSummaryFooter = (e) => {
         setRainSummaryFooter(e.target.value);
@@ -554,9 +582,8 @@ const Bulletin = (props: Props) => {
             setActive(progress - 1);
         }
     };
-    useEffect(() => {
-        console.log('hazardwise loss data', hazardWiseLossData);
-    }, [feedback]);
+
+
     const handleNextBtn = () => {
         if (progress < Menu.bulletinProgressMenu.length - 1) {
             if (progress === 0) {
@@ -569,6 +596,7 @@ const Bulletin = (props: Props) => {
                     hilight,
                     bulletinDate: date,
                     feedback,
+                    addedHazards: addedHazardFields,
                 });
             }
             if (progress === 1) {
@@ -580,13 +608,11 @@ const Bulletin = (props: Props) => {
                 });
             }
             if (progress === 2) {
-                console.log('feedback being saved', feedback);
                 setBulletinFeedback({
                     feedback,
                 });
             }
             if (progress === 3) {
-                console.log('rainSummaryFooter', rainSummaryFooter);
                 setBulletinTemperature({
                     tempMin: minTemp,
                     tempMax: maxTemp,

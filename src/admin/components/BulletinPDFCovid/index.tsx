@@ -92,8 +92,26 @@ const BulletinPDFLoss = (props: Props) => {
     };
 
     useEffect(() => {
+        const getHazard = (h) => {
+            const filtered = Object.values(hazardTypes).filter(item => item.titleNe === h || item.titleEn === h);
+            if (filtered.length > 0 && language === 'np') {
+                return filtered[0].titleNe;
+            }
+            if (filtered.length > 0 && language === 'en') {
+                return filtered[0].title;
+            }
+            return '-';
+        };
+
         const getDeathCount = (arr, f) => {
-            const fnepali = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0].titleNe;
+            const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0];
+            let fnepali = null;
+
+            if (obj && obj.length > 0) {
+                if (obj[0] && obj[0].titleNe) {
+                    fnepali = obj[0].titleNe;
+                }
+            }
             const filteredArr = arr.filter((a) => {
                 if (a.hazardEn) {
                     return a.hazardNp === fnepali;
@@ -107,22 +125,18 @@ const BulletinPDFLoss = (props: Props) => {
             return 0;
         };
 
-        const getHazard = (h) => {
-            const filtered = Object.values(hazardTypes).filter(item => item.titleNe === h || item.titleEn === h);
-            if (filtered.length > 0 && language === 'np') {
-                return filtered[0].titleNe;
-            }
-            if (filtered.length > 0 && language === 'en') {
-                return filtered[0].title;
-            }
-            return '-';
-        };
-
         const getIncidentCount = (arr, f) => {
             // first check if there is hazard field with nepali version of f
 
-            const fnepali = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0].titleNe;
+            const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0];
 
+            let fnepali = null;
+
+            if (obj && obj.length > 0) {
+                if (obj[0] && obj[0].titleNe) {
+                    fnepali = obj[0].titleNe;
+                }
+            }
             const fil = arr.filter((a) => {
                 if (a.hazardEn) {
                     return a.hazardNp === fnepali;
@@ -141,8 +155,6 @@ const BulletinPDFLoss = (props: Props) => {
         // final combined unique hazard fields and convert all fields into same language
         const uniqueField = [...new Set([...uniqueFieldHazard, ...uniqueFieldArr].map(j => getHazard(j)))];
 
-        console.log('newAddedHazardArr', newAddedHazardArr);
-        console.log('feedback obj', feedback);
         const hazardsChartObj = uniqueField.filter(i => !!i).map(f => ({
             hazard: f,
             incident: getIncidentCount(newAddedHazardArr, f),
@@ -224,10 +236,6 @@ const BulletinPDFLoss = (props: Props) => {
         }
         return number.toLocaleString();
     };
-
-    useEffect(() => {
-        console.log('hazardWiseLossChart', hazardWiseLossChart);
-    }, [hazardWiseLossChart]);
 
     return (
         <div className={language === 'np' ? styles.covidPDFContainer : styles.covidPDFContainerEnglish}>

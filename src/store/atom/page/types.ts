@@ -257,6 +257,7 @@ export interface Bulletin {
     ward: number;
     hilight: string;
     bulletinDate: string;
+    addedHazards: object;
 }
 
 export interface Province {

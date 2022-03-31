@@ -99,11 +99,13 @@ const Response = (props: Props) => {
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            if (bulletinEditData.language === 'nepali') {
-                handleFeedbackChange(bulletinEditData.feedbackNe);
-            } else {
-                handleFeedbackChange(bulletinEditData.feedback);
-            }
+            console.log('doing nth');
+            // nothing needs to be done here
+            // if (bulletinEditData.language === 'nepali') {
+            //     handleFeedbackChange(bulletinEditData.feedbackNe);
+            // } else {
+            //     handleFeedbackChange(bulletinEditData.feedback);
+            // }
         } else if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
             const temp = {};
             incidentList.map((item) => {
@@ -122,15 +124,18 @@ const Response = (props: Props) => {
                 };
                 return null;
             });
+
+            console.log('temp', temp);
             if (temp && Object.keys(temp).length > 0) {
                 handleFeedbackChange({ ...temp });
-                // here is the issue
-                setBulletinFeedback({ feedback: { ...temp } });
+                setBulletinFeedback({ feedback: { ...feedback, ...temp } });
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [incidentList, hazardTypes, language]);
 
+
+    // part is just to add in the end of the table
     useEffect(() => {
         if (feedback && Object.keys(feedback).length > 0) {
             const getIncidents = () => Object.keys(feedback).length;
@@ -153,6 +158,10 @@ const Response = (props: Props) => {
             setCumulative({ ...cumulativeData, ...other });
         }
     }, [feedback]);
+
+    useEffect(() => {
+        console.log('changing feedback and in response', feedback, cumulative);
+    }, [cumulative, feedback]);
 
     return (
         <>

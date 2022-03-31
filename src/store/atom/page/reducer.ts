@@ -1800,6 +1800,7 @@ export const setBulletinLoss = (
         deferedState.bulletinPage.sitRep = bulletinData.sitRep;
         deferedState.bulletinPage.hilight = bulletinData.hilight;
         deferedState.bulletinPage.bulletinDate = bulletinData.bulletinDate;
+        deferedState.bulletinPage.addedHazards = bulletinData.addedHazards;
     });
 
     return newState;

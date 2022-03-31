@@ -544,6 +544,7 @@ const state: PageState = {
         municipality: 27006,
         ward: null,
         bulletinDate: null,
+        addedHazards: null,
     },
 
     epidemicsPage: {

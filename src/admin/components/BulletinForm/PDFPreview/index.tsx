@@ -101,6 +101,7 @@ const PDFPreview = (props) => {
             hilight,
             rainSummaryFooter,
             bulletinDate,
+            addedHazards,
         },
         user,
         requests: { bulletinPostRequest, getSitRep },
@@ -188,6 +189,7 @@ const PDFPreview = (props) => {
                 highlight_ne: hilight,
                 rainSummaryPictureFooterNe: rainSummaryFooter,
                 bulletinDate,
+                addedHazardsNe: addedHazards,
             });
         }
         return getFormData({
@@ -216,6 +218,7 @@ const PDFPreview = (props) => {
             hilight,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
+            addedHazards,
         });
     };
 
@@ -255,6 +258,7 @@ const PDFPreview = (props) => {
                 highlight_ne: hilight,
                 rainSummaryPictureFooterNe: rainSummaryFooter,
                 bulletinDate,
+                addedHazardsNe: addedHazards,
                 ...picObjects,
 
             });
@@ -295,6 +299,7 @@ const PDFPreview = (props) => {
             hilight,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,
+            addedHazards,
             ...picObjects,
         });
     };
