@@ -98,17 +98,25 @@ const Response = (props: Props) => {
         return '-';
     };
 
+    const hasResponse = (fDB) => {
+        let result = true;
+        if (fDB && Object.keys(fDB).length > 0) {
+            Object.values(fDB).map((f) => {
+                if (f.response || f.description) {
+                    result = false;
+                }
+                return null;
+            });
+        }
+        return result;
+    };
 
     useEffect(() => {
-        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            console.log('doing nth');
-            // nothing needs to be done here
-            // if (bulletinEditData.language === 'nepali') {
-            //     handleFeedbackChange(bulletinEditData.feedbackNe);
-            // } else {
-            //     handleFeedbackChange(bulletinEditData.feedback);
-            // }
-        } else if (incidentList && incidentList.length > 0 && hazardTypes && Object.keys(hazardTypes).length > 0) {
+        // this is recalculating the whole thing and resonse
+        if (hasResponse(feedback)
+            && incidentList
+            && incidentList.length > 0
+            && hazardTypes && Object.keys(hazardTypes).length > 0) {
             const temp = {};
             incidentList.map((item) => {
                 const hazardNp = hazardTypes[item.hazard].titleNe;
@@ -130,7 +138,7 @@ const Response = (props: Props) => {
             console.log('temp', temp);
             if (temp && Object.keys(temp).length > 0) {
                 handleFeedbackChange({ ...temp });
-                setBulletinFeedback({ feedback: { ...feedback, ...temp } });
+                // setBulletinFeedback({ feedback: { ...feedback, ...temp } });
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
