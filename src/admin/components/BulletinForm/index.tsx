@@ -381,7 +381,7 @@ const Bulletin = (props: Props) => {
 
             if (bulletinEditData.language === 'nepali') {
                 setAddedData(bulletinEditData.addedHazardsNe);
-                setHazardwise(hazardDatafromFeedback(bulletinEditData.feedbackNe, 'nepali'));
+                setHazardwise(bulletinEditData.hazardWiseLoss);
                 setMinTemp(bulletinEditData.tempMinNe);
                 setMinTempFooter(bulletinEditData.tempMinFooterNe);
                 setMaxTemp(bulletinEditData.tempMaxNe);
@@ -395,7 +395,7 @@ const Bulletin = (props: Props) => {
                 setHilight(bulletinEditData.highlightNe);
             } else {
                 setAddedData(bulletinEditData.addedHazards);
-                setHazardwise(hazardDatafromFeedback(bulletinEditData.feedback, 'english'));
+                setHazardwise(bulletinEditData.hazardWiseLoss);
                 setMinTemp(bulletinEditData.tempMin);
                 setMinTempFooter(bulletinEditData.tempMinFooter);
                 setMaxTemp(bulletinEditData.tempMax);
