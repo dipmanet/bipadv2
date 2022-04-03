@@ -98,7 +98,7 @@ const TemperaturesMin = (props: Props) => {
     return (
         <div className={styles.formContainer}>
             <div {...getRootProps({ className: 'dropzone' })}>
-                <input {...getInputProps()} />
+                <input disabled={hideForm} {...getInputProps()} />
 
                 <div className={styles.subContainer}>
 

@@ -104,7 +104,7 @@ const BulletinPDFLoss = (props: Props) => {
         };
 
         const getDeathCount = (arr, f) => {
-            const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0];
+            const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f);
             let fnepali = null;
 
             if (obj && obj.length > 0) {
@@ -128,8 +128,8 @@ const BulletinPDFLoss = (props: Props) => {
         const getIncidentCount = (arr, f) => {
             // first check if there is hazard field with nepali version of f
 
-            const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f)[0];
-
+            const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f);
+            console.log('incident count obj', obj, f);
             let fnepali = null;
 
             if (obj && obj.length > 0) {
@@ -269,7 +269,6 @@ const BulletinPDFLoss = (props: Props) => {
                                 dataKey="hazard"
                             />
 
-                            <Tooltip />
                             <Legend content={e => renderLegendContent(e, 'vertical')} />
                             <Bar dataKey="death" fill="#D10000" barSize={7} />
                             <Bar dataKey="incident" fill="#D4A367" barSize={7} />

@@ -173,7 +173,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             incident_on__gt: params.incident_on__gt,
             ordering: params.ordering,
         }),
-        onMount: true,
+        onMount: false,
         onSuccess: ({ response, params, props: { setIncidentList } }) => {
             setIncidentList({ incidentList: response.results });
             if (params && params.setLossData) {
@@ -252,6 +252,8 @@ const Bulletin = (props: Props) => {
     const [rainSummaryFooter, setRainSummaryFooter] = useState('');
     // const [bulletinDate, setBulletinDate] = useState();
     const [date, setDate] = useState();
+    const [dateAlt, setDateAlt] = useState('');
+
     const countId = useRef(0);
     const {
         setBulletinLoss,
@@ -297,13 +299,21 @@ const Bulletin = (props: Props) => {
         return newObj;
     };
 
+
     useEffect(() => {
-        if (selectedDate) {
-            const today = selectedDate;
-            const yesterday = new Date(today);
+        let today; let
+            yesterday;
+        if (Object.keys(bulletinEditData).length === 0) {
+            if (selectedDate) {
+                today = selectedDate;
+                yesterday = new Date(today);
 
-            yesterday.setDate(yesterday.getDate() - 1);
-
+                yesterday.setDate(yesterday.getDate() - 1);
+            } else {
+                today = new Date();
+                yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+            }
             const DEFAULT_START_DATE = yesterday;
             const DEFAULT_END_DATE = today;
             const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`;
@@ -313,23 +323,6 @@ const Bulletin = (props: Props) => {
             const incident_on__lt = endDate; // eslint-disable-line @typescript-eslint/camelcase
             const incident_on__gt = startDate; // eslint-disable-line @typescript-eslint/camelcase
             const ordering = '-incident_on';
-
-            // const requestQuery = ({
-            //     params: {
-            //         // startDate = DEFAULT_START_DATE.toISOString(),
-            //         // endDate = DEFAULT_END_DATE.toISOString(),
-            //         startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
-            //         endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
-            //     } = {},
-            // }) => ({
-            //     expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'],
-            //     limit: -1,
-            //     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
-            //     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-            //     ordering: '-incident_on',
-            //     // lnd: true,
-            // });
-
 
             const test = selectDateForQuery(selectedDate);
 
@@ -642,9 +635,7 @@ const Bulletin = (props: Props) => {
 
         return stat;
     };
-    const handleBulletinDate = (bulletinDate) => {
-        setDate(bulletinDate);
-    };
+
     const calculateSummaryProvince = (data) => {
         const stat = lossMetricsProvince.reduce((acc, { key }) => ({
             ...acc,
@@ -677,6 +668,10 @@ const Bulletin = (props: Props) => {
     };
     const recordSelectedDate = (dat) => {
         setSelectedate(dat);
+    };
+
+    const handleBulletinDate = (bulletinDate) => {
+        setDate(bulletinDate);
     };
 
     // eslint-disable-next-line consistent-return
@@ -893,6 +888,8 @@ const Bulletin = (props: Props) => {
             uri={uri}
             resetFeedback={resetFeedback}
             handlesitRepBlur={handlesitRepBlur}
+            dateAlt={dateAlt}
+            setDateAlt={setDateAlt}
         />,
         <Covid
             covid24hrsStatData={covid24hrsStatData}

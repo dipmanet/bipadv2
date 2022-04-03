@@ -91,6 +91,8 @@ const Bulletin = (props: Props) => {
         uri,
         bulletinEditData,
         handlesitRepBlur,
+        dateAlt,
+        setDateAlt,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -98,7 +100,7 @@ const Bulletin = (props: Props) => {
     const [hazardDeaths, setHazardDeaths] = useState();
     const [resetFilterProps, setResetFilterProps] = useState(false);
     const [filtered, setFiltered] = useState(false);
-    const [date, setDate] = useState('');
+    // const [dateAlt, setDate] = useState('');
 
     useEffect(() => {
         if (uri && uri.includes('nepali')) {
@@ -165,8 +167,6 @@ const Bulletin = (props: Props) => {
     const handleHazardChange = (e) => {
         setHazard(e);
     };
-    const test1 = new Date();
-    const test = new Date('2021-11-12');
 
     const getRegionValue = (distCoordinate) => {
         if (distCoordinate) {
@@ -181,10 +181,12 @@ const Bulletin = (props: Props) => {
 
 
     useEffect(() => {
-        if (date) {
-            const selectedDate = new Date(date);
+        if (dateAlt) {
+            const selectedDate = new Date(dateAlt);
             recordSelectedDate(selectedDate);
-            handleBulletinDate(date);
+            handleBulletinDate(dateAlt);
+
+            // if there is date in redux dont update
         } else {
             let today;
             if (bulletinEditData && Object.keys(bulletinEditData).length > 0 && bulletinEditData.bulletinDate) {
@@ -198,14 +200,12 @@ const Bulletin = (props: Props) => {
 
             const finalDate = `${yyyy}-${mm}-${dd}`;
 
-
             const selectedDate = new Date(finalDate);
             recordSelectedDate(selectedDate);
-            console.log('final date', finalDate);
-            setDate(finalDate);
+            setDateAlt(finalDate);
             handleBulletinDate(finalDate);
         }
-    }, [date, bulletinEditData]);
+    }, [dateAlt, bulletinEditData]);
     return (
         <>
             <div className={styles.formContainer}>
@@ -229,8 +229,8 @@ const Bulletin = (props: Props) => {
                             <NepaliDatePicker
                                 inputClassName="form-control"
                                 className={styles.datePick}
-                                value={ADToBS(date)}
-                                onChange={(value: string) => setDate(BSToAD(value))}
+                                value={ADToBS(dateAlt)}
+                                onChange={(value: string) => setDateAlt(BSToAD(value))}
                                 options={{ calenderLocale: language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
                             />
                         </form>
