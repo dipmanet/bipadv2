@@ -33,17 +33,15 @@
     }
     .subContainerReport{
            @extend .picture;
-            // border: 1px solid red;
             position: relative;
             // right: 30px;
-            width: 192mm !important;
+            width: 100% !important;
             display: flex;
-            // border: 1px solid red;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             img{
-                border: 1px solid red;
-                width: 160mm !important;
+                width: calc(100% - 15px) !important;
             }
             h3{
                 position: relative;

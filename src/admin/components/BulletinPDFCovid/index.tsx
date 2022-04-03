@@ -237,6 +237,17 @@ const BulletinPDFLoss = (props: Props) => {
         return number.toLocaleString();
     };
 
+    const getChartNull = (data = [{ value: 0 }]) => {
+        if (data && data.reduce(
+            (a, b) => ({
+                value: a.value + b.value,
+            }), { value: 0 },
+        ).value === 0) {
+            return true;
+        }
+        return false;
+    };
+
     return (
         <div className={language === 'np' ? styles.covidPDFContainer : styles.covidPDFContainerEnglish}>
             <div className={styles.container1}>
@@ -283,39 +294,49 @@ const BulletinPDFLoss = (props: Props) => {
                             }
                         </Translation>
                     </h2>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <PieChart
-                            width={200}
-                            height={150}
-                            margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
-                        >
-                            <Pie
-                                data={genderWiseLossChart}
-                                innerRadius={40}
-                                outerRadius={60}
-                                fill="#8884d8"
-                                paddingAngle={0}
-                                dataKey="value"
-                                stroke="none"
-                                label
-                                startAngle={90}
-                                endAngle={450}
-                            >
-                                {
-                                    genderWiseLossChart.map((entry, index) => (
-                                        <Cell
+                    {
+                        getChartNull(genderWiseLossChart)
+                            ? (
+                                <div className={styles.noDataPie}>
+                                    <h1>No Deaths Reported</h1>
+                                </div>
+                            )
+                            : (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart
+                                        width={200}
+                                        height={150}
+                                        margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
+                                    >
+                                        <Pie
+                                            data={genderWiseLossChart}
+                                            innerRadius={40}
+                                            outerRadius={60}
+                                            fill="#8884d8"
+                                            paddingAngle={0}
+                                            dataKey="value"
+                                            stroke="none"
                                             label
-                                            key={`cell-${entry.name}`}
-                                            fill={COLORS_CHART[index % COLORS_CHART.length]}
-                                        />
-                                    ))
-                                }
-                            </Pie>
-                            <Tooltip />
-                            <Legend layout="vertical" align="right" content={renderLegendPie} />
-                        </PieChart>
+                                            startAngle={90}
+                                            endAngle={450}
+                                        >
+                                            {
+                                                genderWiseLossChart.map((entry, index) => (
+                                                    <Cell
+                                                        label
+                                                        key={`cell-${entry.name}`}
+                                                        fill={COLORS_CHART[index % COLORS_CHART.length]}
+                                                    />
+                                                ))
+                                            }
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend layout="vertical" align="right" content={renderLegendPie} />
+                                    </PieChart>
 
-                    </ResponsiveContainer>
+                                </ResponsiveContainer>
+                            )
+                    }
                 </div>
             </div>
             <div className={styles.container2}>
@@ -422,7 +443,6 @@ const BulletinPDFLoss = (props: Props) => {
                                 t => <span>{t('COVID-19 Stats till date')}</span>
                             }
                         </Translation>
-
                     </h2>
                     <div className={styles.lossIconsRow}>
                         {

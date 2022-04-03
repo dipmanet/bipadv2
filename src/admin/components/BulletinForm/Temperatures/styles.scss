@@ -2,6 +2,7 @@
     width: 100%;
     // padding: 5px;
     // margin-bottom: 100px;
+    
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -16,9 +17,8 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      max-width: calc(100% - 60px);
-      padding: 30px;
-    // margin: 0 auto;
+      max-width: 100%;
+      margin-left: 30px;
       cursor: pointer;
       img{
           width: 95mm ;
@@ -32,20 +32,19 @@
       }
       .formItemTextFull{
         @extend .formItemText;
-        width: 100% !important;
+        width: calc(100% - 30px) !important;
     }
   }
   .picContainerReport{
     @extend .picContainer;
-    padding: 0 !important;
-    max-width: 100% !important;
-    margin-left: 0 !important;
     flex-direction: row;
     justify-content: space-between;
-    // flex-direction: column;
-    // img{
-    //     width: 92mm;
-    // }
+    padding: 0;
+    margin-left: 0 !important;
+    img{
+        width: calc(100% - 10px);
+        // margin-left: 10px;
+    }
   }
     ::-webkit-scrollbar {
         display: none;
