@@ -319,10 +319,8 @@ const InventoryTable = (props: Props) => {
             if (iunit.length > 0) {
                 return iunit[0].unit || '-';
             }
-            console.log(`not found ${title} in inventory itenm`);
             return '-';
         }
-        console.log('inventory item null', inventoryItem);
         return '-';
     };
 
@@ -392,7 +390,6 @@ const InventoryTable = (props: Props) => {
                                                 .map((row, index) => {
                                                     const isItemSelected = isSelected(row.id);
                                                     const labelId = `enhanced-table-checkbox-${index}`;
-                                                    console.log('inventory row', row);
                                                     return (
                                                         <TableRow
                                                             hover

@@ -467,10 +467,6 @@ const Bulletin = (props: Props) => {
         countId.current += 1;
     };
 
-    useEffect(() => {
-        console.log('changing feedback', feedback, addedHazardFields);
-    }, [feedback]);
-
     // this runs in response comp, it appends new response obj from incidents list
     // to the feedback state
     const handleFeedbackChange = (e) => {

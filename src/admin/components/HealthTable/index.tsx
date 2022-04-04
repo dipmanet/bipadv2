@@ -370,7 +370,6 @@ const HealthTable = (props) => {
 
     useEffect(() => {
         if (healthTableData.length > 0) {
-            console.log('...setting table data', healthTableData);
             setLoader(false);
             setfilteredRowDatas(healthTableData);
         }
@@ -642,7 +641,6 @@ const HealthTable = (props) => {
     };
 
     useEffect(() => {
-        console.log('test offset', offset);
         props.requests.resource.do({ offset });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
@@ -653,7 +651,6 @@ const HealthTable = (props) => {
         const remainder = healthDataCount % 100;
         const maxPages = ((healthDataCount - remainder) / 100 + 1);
         if (newPage <= maxPages) {
-            console.log('test page', newPage);
             setOffset(newPage * 100);
         }
     };

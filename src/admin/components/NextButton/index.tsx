@@ -98,7 +98,6 @@ const NextButton = (props) => {
                     console.log('here');
                     setMenuItems(MenuItemsAll);
                 } else {
-                    console.log('not here', Object.keys(healthFormEditData).length);
                     setMenuItems(MenuItemsAll.filter(mI => mI.permission.includes(userDataMain.profile.role)));
                 }
             } else {
@@ -154,7 +153,6 @@ const NextButton = (props) => {
     const handlePrevious = () => {
         setError(null);
         const getCurrentIndex = MenuItems.map(m => m.name).indexOf(activeMenu);
-        console.log('handle previous', getCurrentIndex);
         if (getCurrentIndex > 0) {
             handleProgress(getCurrentIndex - 1);
             getActiveMenu(MenuItems.map(m => m.name)[getCurrentIndex - 1]);
@@ -284,10 +282,6 @@ const NextButton = (props) => {
     };
     const handlePatch = () => {
         setError(null);
-        // setHealthInfrastructurePage({ healthFormLoader: true });
-        // dispatch(setHealthFormLoader(true));
-        console.log('data ward', formData);
-
         if (getResourceId()) {
             axios
                 .patch(`${baseUrl}/resource/${getResourceId()}/?meta=true`, getFormData({ is_verified: formData.is_verified, is_approved: formData.is_approved, verfication_message: formData.verfication_message, resource_type: formData.resource_type }), {
@@ -341,10 +335,8 @@ const NextButton = (props) => {
 
         if (typeof formData.picture === 'object') {
             patchObj = { ...formData };
-            console.log('...file');
         } else {
             patchObj = { ...formData };
-            console.log('...not file', typeof formData.picture);
             delete patchObj.picture;
         }
 

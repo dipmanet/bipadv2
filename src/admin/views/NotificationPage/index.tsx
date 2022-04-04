@@ -113,9 +113,7 @@ const NotificationPage = (props) => {
                 pdf.save('ErrorLog.pdf');
             });
     };
-    useEffect(() => {
-        console.log('test notification', showNotification);
-    }, [showNotification]);
+
     return (
         <>
             <Modal

@@ -145,7 +145,6 @@ const EpidemicBulkUpload = (props) => {
     const uploadBulkFile = (formdata) => {
         setLoading(true);
         if (acceptedFiles.length === 0) {
-            console.log('add file before submit');
             setLoading(false);
         } else {
             const individulaBulkData = {

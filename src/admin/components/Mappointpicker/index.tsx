@@ -88,7 +88,6 @@ const index = (props: Props): JSX.Element => {
 
     // eslint-disable-next-line consistent-return
     useEffect(() => {
-        console.log('centroid', centriodsForMap);
         if (UNSUPPORTED_BROWSER) {
             console.error('No Mapboxgl support.');
             return noop;
@@ -509,10 +508,6 @@ const index = (props: Props): JSX.Element => {
         setmapStylesChange(style);
         handleClose();
     };
-
-    useEffect(() => {
-        console.log('change in centriodsForMap', centriodsForMap);
-    }, [centriodsForMap]);
 
     return (
         <>

@@ -708,9 +708,6 @@ const Epidemics = (props) => {
         }
     }, [districts, municipalities, provinces, user, wards]);
 
-    useEffect(() => {
-        console.log('test', initialProvinceCenter);
-    }, [initialProvinceCenter]);
 
     const clearData = () => {
         setuniqueId('');

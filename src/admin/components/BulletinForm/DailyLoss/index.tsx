@@ -155,7 +155,6 @@ const Bulletin = (props: Props) => {
 
     const handleHazardAddItem = () => {
         if (hazard) {
-            console.log('adding hazard', hazard);
             // handlehazardAdd(hazard);
             handleSameHazardAdd(hazard);
             setHazard(null);

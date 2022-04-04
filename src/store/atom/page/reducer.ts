@@ -1866,7 +1866,6 @@ export const setBulletinFeedback = (
     const {
         bulletinData,
     } = action;
-    console.log('feedback is ', bulletinData);
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.bulletinPage.feedback = bulletinData.feedback;

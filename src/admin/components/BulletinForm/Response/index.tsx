@@ -135,7 +135,6 @@ const Response = (props: Props) => {
                 return null;
             });
 
-            console.log('temp', temp);
             if (temp && Object.keys(temp).length > 0) {
                 handleFeedbackChange({ ...temp });
                 // setBulletinFeedback({ feedback: { ...feedback, ...temp } });
@@ -170,10 +169,6 @@ const Response = (props: Props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annex, feedback]);
-
-    useEffect(() => {
-        console.log('changing feedback and in response', feedback, cumulative);
-    }, [cumulative, feedback]);
 
     return (
         <>

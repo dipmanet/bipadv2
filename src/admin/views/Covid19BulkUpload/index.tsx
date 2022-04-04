@@ -170,7 +170,6 @@ const CovidBulkUpload = (props) => {
     const uploadBulkFile = (formData) => {
         setLoading(true);
         if (acceptedFiles.length === 0) {
-            console.log('add file before submit');
             setLoading(false);
         } else if (formtoggler === 'Individual Form') {
             const individulaBulkData = {
@@ -239,7 +238,6 @@ const CovidBulkUpload = (props) => {
                 window.open(template[0].file);
             });
     };
-    console.log('accepted files', acceptedFiles);
 
     return (
         <>

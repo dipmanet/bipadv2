@@ -47,8 +47,6 @@ const HealthDataTable = (props) => {
     // const { userDataMain } = useSelector((state: RootState) => state.user);
 
     const getActiveMenu = (e: number) => {
-        console.log('activeMenu', e);
-
         setActiveMenu(e);
     };
 
