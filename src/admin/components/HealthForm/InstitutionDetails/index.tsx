@@ -76,10 +76,6 @@ const InstitutionDetails = (props: Props): JSX.Element => {
     const getDisabled = (field: string) => fieldsToDisable.includes(field);
 
     useEffect(() => {
-        console.log('validationError', validationError);
-    }, [validationError]);
-
-    useEffect(() => {
         const allFields = Object.keys(institutionDetails);
         const fieldsToGiveValidator = ['is_verified', 'is_approved', 'verfication_message'];
         window.scrollTo({ top: 400, left: 0 });

@@ -129,7 +129,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             limit: -1,
         }),
         onSuccess: ({ response, props: { setIncidentList } }) => {
-            console.log('What is this');
             interface Response { results: PageType.Incident[] }
             const { results: incidentList = [] } = response as Response;
             // setIncidentList({ incidentList });
@@ -242,7 +241,6 @@ class Incidents extends React.PureComponent<Props, State> {
         );
         const mapHoverAttributes = this.getMapHoverAttributes(hoveredIncidentId);
         const pending = pendingEvents || pendingIncidents;
-        console.log('sanitizedIncidentList', sanitizedIncidentList);
         return (
             <div>
                 <Loading pending={pending} />

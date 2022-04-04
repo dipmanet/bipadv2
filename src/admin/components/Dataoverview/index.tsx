@@ -33,19 +33,16 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/covid19-quarantineinfo/',
         method: methods.GET,
         onMount: false,
-        query: ({ params }) => {
-            console.log('params', params);
-            return ({
-                format: 'json',
-                summary: true,
-                summary_type: 'heoc_admin_overview_covid19_graph_daily',
-                province: params.province,
-                municipality: params.municipality,
-                district: params.district,
-                reported_on__gt: params.newYesterday,
-                reported_on__lt: params.newToday,
-            });
-        },
+        query: ({ params }) => ({
+            format: 'json',
+            summary: true,
+            summary_type: 'heoc_admin_overview_covid19_graph_daily',
+            province: params.province,
+            municipality: params.municipality,
+            district: params.district,
+            reported_on__gt: params.newYesterday,
+            reported_on__lt: params.newToday,
+        }),
         onSuccess: ({ response, props, params }) => {
             props.setCovidPage({
                 dailyCovidData: response.results,

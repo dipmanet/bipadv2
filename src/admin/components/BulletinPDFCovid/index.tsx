@@ -129,7 +129,6 @@ const BulletinPDFLoss = (props: Props) => {
             // first check if there is hazard field with nepali version of f
 
             const obj = Object.values(hazardTypes).filter(k => k.titleNe === f || k.titleEn === f);
-            console.log('incident count obj', obj, f);
             let fnepali = null;
 
             if (obj && obj.length > 0) {

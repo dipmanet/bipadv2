@@ -546,13 +546,11 @@ const CovidTable = (props) => {
         // navigate('/admin/covid-19/add-new-covid-19');
         if (formtoggler === 'Individual Form') {
             if (id) {
-                console.log('testing edit for id', id, props.requests);
                 props.requests.covid19IndivisualEdit.do({ id });
             }
         }
         if (formtoggler === 'Group Form') {
             if (id) {
-                console.log('testing edit for id', id);
                 props.requests.covid19GroupEdit.do({ id });
             }
         }

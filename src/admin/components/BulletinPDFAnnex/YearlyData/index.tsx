@@ -229,12 +229,9 @@ const YearlyData = (props: Props) => {
                 return null;
             });
 
-            console.log('newhazardData', newhazardData);
-
             setBulletinYearlyData({ yearlyData: newhazardData });
 
             if (Object.keys(newhazardData).length > 0) {
-                console.log('our data loss', newhazardData);
                 const cumulativeData = Object.keys(newhazardData)
                     .map(item => newhazardData[item])
                     .reduce((acc, cur) => ({
@@ -252,9 +249,6 @@ const YearlyData = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lossData, language]);
 
-    useEffect(() => {
-        console.log('lossData', lossData);
-    }, [lossData]);
     return (
         <>
             <Loading pending={incidentsGetRequest.pending} />

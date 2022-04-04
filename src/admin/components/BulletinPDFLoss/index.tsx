@@ -145,25 +145,22 @@ const BulletinPDF = (props: Props) => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', paddingTop: gap }}>
                 {
-                    payload.map((entry, index) => {
-                        console.log('entry.value', entry.value);
-                        return (
-                            <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
-                                <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
-                                <span>
-                                    {
-                                        <Translation>
-                                            {
-                                                t => <span>{t(`${entry.value}`)}</span>
-                                            }
-                                        </Translation>
+                    payload.map((entry, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginRight: '20px' }}>
+                            <div style={{ width: '15px', height: '15px', marginRight: '4px', backgroundColor: `${entry.color}` }} />
+                            <span>
+                                {
+                                    <Translation>
+                                        {
+                                            t => <span>{t(`${entry.value}`)}</span>
+                                        }
+                                    </Translation>
 
-                                    }
+                                }
 
-                                </span>
-                            </div>
-                        );
-                    })
+                            </span>
+                        </div>
+                    ))
                 }
             </div>
         );
@@ -227,7 +224,6 @@ const BulletinPDF = (props: Props) => {
             setHazardLegends([...newhazardLegends]);
         }
 
-        console.log('hazardWiseLoss and feedback', hazardWiseLoss, feedback);
         const features = [];
         Object.keys(hazardWiseLoss).map((h) => {
             if (Object.keys(hazardWiseLoss[h]).length > 2) {
@@ -245,8 +241,6 @@ const BulletinPDF = (props: Props) => {
             return null;
         });
 
-        console.log('hazardwiseloss data', hazardWiseLoss);
-        console.log('features from added data', features);
         Object.keys(feedback)
             .map(item => feedback[item])
             .filter(item => item.coordinates)
@@ -263,7 +257,6 @@ const BulletinPDF = (props: Props) => {
                 return null;
             });
 
-        console.log('total features', features);
         setincidentPoints({
             type: 'FeatureCollection',
             features,

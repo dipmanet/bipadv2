@@ -150,13 +150,10 @@ const IncidentMap = (props) => {
 
     const getPointFeatureCollection = memoize(incidentPointToGeojson);
     const pointFeatureCollection = getPointFeatureCollection(incidentList, hazards);
-    console.log('pointFeatureCollection', pointFeatureCollection);
     const { language: { language } } = props;
 
     useEffect(() => {
         const { current: mapContainer } = mapContainerRef;
-
-        console.log('incidentPoints', incidentPoints);
 
         const Map = new mapboxgl.Map({
             container: mapContainer,

@@ -329,7 +329,6 @@ const Covid = (props) => {
             const temp = provinces.filter(item => item.id === provinceId)
                 .map(item => item.centroid.coordinates)[0];
             setprovinceCentriodForMap(temp);
-            console.log('test province centroid', temp);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [provinceId]);
@@ -339,7 +338,6 @@ const Covid = (props) => {
             const districtCentriodForMaps = districts.filter(item => item.id === districtId)
                 .map(item => item.centroid.coordinates)[0];
             setdistrictCentriodForMap(districtCentriodForMaps);
-            console.log('test district centroid', districtCentriodForMaps);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [districtId]);
@@ -359,7 +357,6 @@ const Covid = (props) => {
             const wardCentriodForMaps = wards.filter(item => item.id === wardId)
                 .map(item => item.centroid.coordinates)[0];
             setwardCentriodForMap(wardCentriodForMaps);
-            console.log('test ward centroid', wardCentriodForMaps);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardId]);
@@ -450,9 +447,6 @@ const Covid = (props) => {
 
     const getDisabled = (field: string) => fieldsToDisable.includes(field);
 
-
-    // console.log('userDataMain is', userDataMain);
-
     useEffect(() => {
         // const allFields = Object.keys(institutionDetails);
         const allFields = [
@@ -526,10 +520,8 @@ const Covid = (props) => {
                 && userDataMain.profile.role === 'validator'
             ) {
                 if (covid19IndividualEditData && covid19IndividualEditData.id) {
-                    console.log('here we are covid edit');
                     setDisableFields(allFields.filter(f => !fieldsToGiveValidator.includes(f)));
                 } else {
-                    console.log('here we are covid not edit');
                     setDisableFields(allFields);
                 }
             } else if (
@@ -778,10 +770,6 @@ const Covid = (props) => {
             setFormtoggler('Individual Form');
         }
     };
-
-    useEffect(() => {
-        console.log('test provinceid', provinceId);
-    }, [provinceId]);
 
     const centriodsForMap = {
         provinceCentriodForMap,
