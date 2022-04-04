@@ -239,11 +239,11 @@ const MapDownloadButton = (props: Props) => {
                     regionName = municipality.title;
                 }
             }
-            let myElements = document.getElementById('realMap123');
-            const width = '5000px';
-            const height = '5000px';
-            const finalHeight = `${1000 * 1.2549019607843}px`;
-            const finalWidth = `${1000 * 1.2549019607843}px`;
+            // let myElements = document.getElementById('realMap123');
+            // const width = '5000px';
+            // const height = '5000px';
+            // const finalHeight = `${1000 * 1.2549019607843}px`;
+            // const finalWidth = `${1000 * 1.2549019607843}px`;
 
 
             // myElements.style.height = finalHeight;
@@ -377,9 +377,9 @@ const MapDownloadButton = (props: Props) => {
                 const calculation = value => (
                     (value / 200) * constant
                 );
-                const largeFont = `${calculation(20)}px Source Sans Pro`;
-                const smallFont = `${calculation(14)}px Source Sans Pro`;
-                const space = 20;
+                const largeFont = `${calculation(30)}px Source Sans Pro`;
+                const smallFont = `${calculation(24)}px Source Sans Pro`;
+                const space = 30;
                 drawText(context, largeFont, title, calculation(32), calculation(44), '#000', '#fff');
                 drawText(context, smallFont, exportText, calculation(32), calculation(44 + space), '#000', '#fff');
 
@@ -462,9 +462,54 @@ const MapDownloadButton = (props: Props) => {
 
                 Promise.all(allPromises).then(() => {
                     if (selectedFileFormat === 'PDF') {
-                        const pdf = new JsPDF('p', 'mm', 'a4');
+                        let pageType = null;
+                        let width = null;
+                        let height = null;
+                        let orientation = null;
+                        if (selectedPageType === 'A4' && mapOrientation === 'portrait') {
+                            pageType = 'a4';
+                            width = 210;
+                            height = 297;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'A4' && mapOrientation === 'landscape') {
+                            pageType = 'a4';
+                            width = 297;
+                            height = 210;
+                            orientation = 'l';
+                        } else if (selectedPageType === 'A3' && mapOrientation === 'portrait') {
+                            pageType = 'a3';
+                            width = 297;
+                            height = 420;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'A3' && mapOrientation === 'landscape') {
+                            pageType = 'a3';
+                            width = 420;
+                            height = 297;
+                            orientation = 'l';
+                        } else if (selectedPageType === 'B4' && mapOrientation === 'portrait') {
+                            pageType = 'b4';
+                            width = 250;
+                            height = 353;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'B4' && mapOrientation === 'landscape') {
+                            pageType = 'b4';
+                            width = 353;
+                            height = 250;
+                            orientation = 'l';
+                        } else if (selectedPageType === 'B5' && mapOrientation === 'portrait') {
+                            pageType = 'b5';
+                            width = 176;
+                            height = 250;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'B5' && mapOrientation === 'landscape') {
+                            pageType = 'b5';
+                            width = 250;
+                            height = 176;
+                            orientation = 'l';
+                        }
+                        const pdf = new JsPDF(orientation, 'mm', pageType);
                         const pageData = canvas.toDataURL('image/png', 1.0);
-                        pdf.addImage(pageData, 'PNG', 0, 0, 210, 297);
+                        pdf.addImage(pageData, 'PNG', 0, 0, width, height);
                         const pageDownloadTitle = slugify(title, '_');
                         pdf.save(`${pageDownloadTitle}.pdf`);
                         setDownloadPending(false);
