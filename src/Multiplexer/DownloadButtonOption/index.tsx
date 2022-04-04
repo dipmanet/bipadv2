@@ -114,10 +114,7 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
 
         const { resolution: { height, width }, resolution, selectedFileFormat, mapOrientation, orientationType } = this.state;
-        console.log('map orient', mapOrientation);
         if (prevState.mapOrientation !== mapOrientation) {
-            console.log('enter');
-            console.log('orientation', orientationType);
             this.setState({
                 resolution: {
                     height: orientationType.height,
@@ -129,7 +126,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
         if (prevState.resolution !== resolution) {
             // this.setState({ isTilesLoaded: false });
-            console.log('ente');
 
             // const test = map.loaded();
             // console.log('test', test);
@@ -140,14 +136,11 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             // }
             if ((height > 499 && height < 5001) && (width > 499 && width < 5001)) {
                 const dpr = window.devicePixelRatio || 1;
-                console.log('Dpr', dpr);
 
                 // const finalHeight = `${height * 1.2549019607843}px`;
                 // const finalWidth = `${width * 1.2549019607843}px`;
                 const finalHeight = `${height / dpr}px`;
                 const finalWidth = `${width / dpr}px`;
-                console.log('final height', height);
-                console.log('final width', width);
                 const myElements = document.getElementById('realMap123');
                 myElements.style.setProperty('height', finalHeight, 'important');
                 myElements.style.setProperty('width', finalWidth, 'important');
@@ -189,7 +182,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
     }
 
     private handleFaramChange = (faramValues: FaramValues, faramErrors: FaramErrors) => {
-        console.log('faram value', faramValues);
         this.setState({
             faramValues: {
                 customType: faramValues,
@@ -201,8 +193,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
     private handleChangeResolution = (e) => {
         const { resolution } = this.state;
-        console.log('e is', e.target.value);
-        console.log('e name', e.target.name);
         this.setState({
             resolution: {
                 ...resolution,
@@ -244,14 +234,12 @@ class LayerSwitch extends React.PureComponent<Props, State> {
         this.setState({ showCustomSetting: true });
         handleToggleAnimationMapDownloadButton(true);
         this.setState({ disableDefaultDownload: true });
-        console.log('Wht');
     }
 
     private handleCancelButton = () => {
         const { handleToggleAnimationMapDownloadButton } = this.props;
         handleToggleAnimationMapDownloadButton(false);
         const myElements = document.getElementById('realMap123');
-        console.log('My final element', myElements);
         myElements.style.setProperty('height', 'unset', 'important');
         myElements.style.setProperty('width', 'unset', 'important');
         myElements.style.setProperty('position', 'unset', 'important');
@@ -289,7 +277,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
             selectedPageType: '',
         });
         const myElements = document.getElementById('realMap123');
-        console.log('My final element', myElements);
         myElements.style.setProperty('height', 'unset', 'important');
         myElements.style.setProperty('width', 'unset', 'important');
         myElements.style.setProperty('position', 'unset', 'important');
@@ -306,7 +293,6 @@ class LayerSwitch extends React.PureComponent<Props, State> {
 
             selectedFileFormat, resolution: { height, width }, resolution, disableDefaultDownload, mapOrientation, disableDownloadButton } = this.state;
         const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
-        console.log('resolution', resolution);
 
         return (
 

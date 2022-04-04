@@ -186,8 +186,6 @@ const MapDownloadButton = (props: Props) => {
         && filteredLayerGroup[0].metadata && filteredLayerGroup[0].metadata.value
         && filteredLayerGroup[0].metadata.value.general
         && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
-    console.log('disableDefaultDownload', selectedFileFormat);
-    console.log('Map orientation', mapOrientation);
     useEffect(() => {
         const disableDownloadButton = !!((disabled || !mapContext
             || !mapContext.map || disableDefaultDownload
@@ -222,9 +220,6 @@ const MapDownloadButton = (props: Props) => {
                 console.warn('RiskInfo context not found');
                 return;
             }
-            console.log('selected format', selectedFileFormat);
-
-            console.log('default time', defaultMap);
             const pageTitle = pageContext.activeRouteDetails.title;
 
             let regionName = 'Nepal';
@@ -245,7 +240,6 @@ const MapDownloadButton = (props: Props) => {
                 }
             }
             let myElements = document.getElementById('realMap123');
-            console.log('my element', myElements);
             const width = '5000px';
             const height = '5000px';
             const finalHeight = `${1000 * 1.2549019607843}px`;
@@ -318,6 +312,7 @@ const MapDownloadButton = (props: Props) => {
 
                 const constant = (indexMapWidth < indexMapHeight)
                     ? indexMapWidth : indexMapHeight;
+                // const constant = indexMapWidth;
                 const left = canvas.width - indexMapWidth - rightMargin;
                 const top = topMargin;
                 const right = canvas.width - indexMapWidth - rightMargin;
@@ -342,10 +337,6 @@ const MapDownloadButton = (props: Props) => {
                 //     indexMapWidth * mp.width,
                 //     indexMapHeight * mp.height,
                 // );
-                console.log('left ', mp.left);
-                console.log('width mp', mp.width);
-                console.log('top', mp.top);
-                console.log('height mp', mp.height);
 
                 context.rect(
                     // left + dx,
@@ -386,9 +377,9 @@ const MapDownloadButton = (props: Props) => {
                 const calculation = value => (
                     (value / 200) * constant
                 );
-                const largeFont = `${calculation(40)}px Source Sans Pro`;
-                const smallFont = `${calculation(34)}px Source Sans Pro`;
-                const space = 50;
+                const largeFont = `${calculation(20)}px Source Sans Pro`;
+                const smallFont = `${calculation(14)}px Source Sans Pro`;
+                const space = 20;
                 drawText(context, largeFont, title, calculation(32), calculation(44), '#000', '#fff');
                 drawText(context, smallFont, exportText, calculation(32), calculation(44 + space), '#000', '#fff');
 
@@ -470,13 +461,11 @@ const MapDownloadButton = (props: Props) => {
 
 
                 Promise.all(allPromises).then(() => {
-                    console.log('selectedFileFormat', selectedFileFormat);
                     if (selectedFileFormat === 'PDF') {
                         const pdf = new JsPDF('p', 'mm', 'a4');
                         const pageData = canvas.toDataURL('image/png', 1.0);
                         pdf.addImage(pageData, 'PNG', 0, 0, 210, 297);
                         const pageDownloadTitle = slugify(title, '_');
-                        console.log('slugity', pageDownloadTitle);
                         pdf.save(`${pageDownloadTitle}.pdf`);
                         setDownloadPending(false);
                         handleCancelButton();
@@ -518,7 +507,6 @@ const MapDownloadButton = (props: Props) => {
             selectedFileFormat,
         ],
     );
-    console.log('selectedFileFormat', selectedFileFormat);
     const handleSaveClick = (classname) => {
         if (classname === 'mapboxgl-canvas') {
             const divToDisplay = document.getElementsByClassName('mapboxgl-canvas');
