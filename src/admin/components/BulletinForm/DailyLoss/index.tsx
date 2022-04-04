@@ -25,7 +25,7 @@ import {
     bulletinEditDataSelector,
 } from '#selectors';
 
-import { setLanguageAction } from '#actionCreators';
+import { setLanguageAction, setBulletinEditDataAction } from '#actionCreators';
 
 import {
     incidentSummary,
@@ -50,6 +50,7 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setLanguage: params => dispatch(setLanguageAction(params)),
+    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
 
 
@@ -93,6 +94,7 @@ const Bulletin = (props: Props) => {
         handlesitRepBlur,
         dateAlt,
         setDateAlt,
+        setBulletinEditData,
     } = props;
 
     const [hazard, setHazard] = useState(null);
@@ -109,10 +111,6 @@ const Bulletin = (props: Props) => {
             setLanguage({ language: 'en' });
         }
     }, [uri]);
-
-    // useEffect(() => {
-    //     resetFeedback();
-    // }, []);
 
     const getRegionDetails = ({ adminLevel, geoarea } = {}) => {
         if (adminLevel === 1) {
@@ -206,6 +204,13 @@ const Bulletin = (props: Props) => {
             handleBulletinDate(finalDate);
         }
     }, [dateAlt, bulletinEditData]);
+
+    useEffect(() => {
+        console.log('running..');
+        return () => {
+            setBulletinEditData({});
+        };
+    }, []);
     return (
         <>
             <div className={styles.formContainer}>
@@ -226,13 +231,29 @@ const Bulletin = (props: Props) => {
                                 {' '}
                                 {language === 'np' ? 'मिती' : 'Date'}
                             </label>
-                            <NepaliDatePicker
-                                inputClassName="form-control"
-                                className={styles.datePick}
-                                value={ADToBS(dateAlt)}
-                                onChange={(value: string) => setDateAlt(BSToAD(value))}
-                                options={{ calenderLocale: language === 'np' ? 'ne' : 'en', valueLocale: 'en' }}
-                            />
+                            {
+                                Object.keys(bulletinEditData).length > 0
+                                    ? (
+                                        <h3
+                                            style={{ position: 'relative', bottom: '5px' }}
+                                        >
+                                            {dateAlt}
+                                        </h3>
+                                    )
+                                    : (
+                                        <NepaliDatePicker
+                                            inputClassName="form-control"
+                                            className={styles.datePick}
+                                            value={ADToBS(dateAlt)}
+                                            onChange={
+                                                (value: string) => setDateAlt(BSToAD(value))}
+                                            options={{
+                                                calenderLocale: language === 'np' ? 'ne' : 'en',
+                                                valueLocale: 'en',
+                                            }}
+                                        />
+                                    )
+                            }
                         </form>
 
                     </div>

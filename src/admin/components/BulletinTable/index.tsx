@@ -33,6 +33,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
+import { ADToBS } from 'bikram-sambat-js';
 import { setBulletinEditDataAction } from '#actionCreators';
 import {
     bulletinEditDataSelector,
@@ -133,8 +134,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         // padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                         sx={{ backgroundColor: '#DCECFE', fontWeight: 'bold' }}
-
-
                     >
                         <TableSortLabel
                             className={styles.setStyleForHead}
@@ -419,7 +418,7 @@ const BulletinTable = (props) => {
                                 align="center"
                                 padding="normal"
                             >
-                                {row[k].split('T')[0]}
+                                {ADToBS(row[k]).split('T')[0]}
                             </TableCell>
                         );
                     } if (k === 'createdOn') {
@@ -428,7 +427,7 @@ const BulletinTable = (props) => {
                                 align="center"
                                 padding="normal"
                             >
-                                {row[k].split('T')[0]}
+                                {ADToBS(row[k]).split('T')[0]}
                             </TableCell>
                         );
                     }
@@ -486,6 +485,7 @@ const BulletinTable = (props) => {
 
                         );
                     }
+
                     return (
                         <TableCell
                             align="center"

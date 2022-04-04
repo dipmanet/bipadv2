@@ -90,11 +90,6 @@ const incidentPointSizeData: LegendItem[] = [
     { label: 'Catastrophic (>100)', labelNe: 'विनाशकारी (>100)', style: styles.symbol, color: '#a3a3a3', radius: 10 },
 ];
 
-// const filteredHazardTypes = [{
-//     title: 'fire',
-//     color: '#E53935',
-// }];
-
 const BulletinPDF = (props: Props) => {
     const {
         sitRep,
@@ -138,21 +133,6 @@ const BulletinPDF = (props: Props) => {
     const month_yesterday = months[Number(bsDate_yesterday.split('-')[1])];
     const monthEn_yesterday = monthsEn[Number(bsDate_yesterday.split('-')[1])];
     const day_yesterday = bsDate_yesterday.split('-')[2];
-    // const today = new Date();
-    // const baisakh1 = bsToAd(`${year}-01-01`);
-    // const DEFAULT_END_DATE = today;
-
-
-    // const aT = new Date();
-    // const bT = aT.toLocaleString();
-    // const ourDateT = bT.split(',')[0].split('/');
-    // const dateStringT = `${ourDateT[2]}-${ourDateT[0]}-${ourDateT[1]}`;
-    // const bsDateT = adToBs(dateStringT);
-    // const yearT = bsDateT.split('-')[0];
-    // const monthToday = months[Number(bsDateT.split('-')[1])];
-    // const monthEnToday = monthsEn[Number(bsDateT.split('-')[1])];
-    // const dayT = bsDateT.split('-')[2];
-
 
     const renderLegendContent = (p, layout) => {
         const { payload } = p;
@@ -230,15 +210,7 @@ const BulletinPDF = (props: Props) => {
 
         const obj = {};
         let newhazardLegends = [];
-        // if (Object.keys(hazardWiseLoss).length > 0) {
-        //     obj = Object.keys(hazardWiseLoss).map(hazardName => (
-        //         {
-        //             title: getHazardTitle(hazardName),
-        //             // titleEn: getHazardTitle(hazardName),
-        //             color: getHazardColor(hazardName),
-        //         }
-        //     ));
-        // }
+
 
         if (Object.keys(feedback).length > 0) {
             const allHazardsAdded = Object.keys(feedback)
