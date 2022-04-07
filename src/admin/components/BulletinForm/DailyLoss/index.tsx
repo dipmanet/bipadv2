@@ -204,12 +204,13 @@ const Bulletin = (props: Props) => {
         }
     }, [dateAlt, bulletinEditData]);
 
-    useEffect(() => {
-        console.log('running..');
-        return () => {
-            setBulletinEditData({});
-        };
-    }, []);
+    // useEffect(() => {
+    //     console.log('running..');
+    //     return () => {
+    //         setBulletinEditData({});
+    //     };
+    // }, []);
+
     return (
         <>
             <div className={styles.formContainer}>
@@ -225,7 +226,11 @@ const Bulletin = (props: Props) => {
                 </Translation>
                 <div className={styles.formSubContainer}>
                     <div className={styles.formItem}>
-                        <form className={styles.datePickerForm}>
+                        <form className={_cs(
+                            styles.datePickerForm,
+                            bulletinEditData && bulletinEditData.language === 'nepali' && styles.nep,
+                        )}
+                        >
                             <label htmlFor="date">
                                 {' '}
                                 {language === 'np' ? 'मिती' : 'Date'}
@@ -236,7 +241,7 @@ const Bulletin = (props: Props) => {
                                         <h3
                                             style={{ position: 'relative', bottom: '5px' }}
                                         >
-                                            {dateAlt}
+                                            {ADToBS(dateAlt)}
                                         </h3>
                                     )
                                     : (

@@ -1,4 +1,11 @@
 
+@font-face {
+    font-family: "Kalimati Regular";
+    src: url("../../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
+
+    }
+
+
 .formContainer{
     width: 100%;
     padding: 40px;
@@ -9,6 +16,9 @@
         border: 1px solid red;
      
     }
+.nep{
+    font-family: "Kalimati Regular" !important;
+}
 .formSubContainer{
     display: flex;
     flex-wrap: wrap;

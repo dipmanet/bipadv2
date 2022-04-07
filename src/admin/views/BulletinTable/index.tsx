@@ -18,6 +18,7 @@ import {
 } from '#request';
 
 import {
+    bulletinEditDataSelector,
     userSelector,
 } from '#selectors';
 
@@ -27,6 +28,7 @@ interface Props {
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     user: userSelector(state),
+    bulletinEditData: bulletinEditDataSelector(state),
 });
 
 const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
@@ -43,14 +45,20 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
 
 
 const Bulletin = (props: Props) => {
-    const { user, requests: { bulletinTableReq } } = props;
+    const { user, requests: { bulletinTableReq }, bulletinEditData } = props;
     const [tableData, setTableData] = useState([]);
     const [pending, setPending] = useState(true);
+    const [back, setBack] = useState(false);
     bulletinTableReq.setDefaultParams({
         setTableData,
         setPending,
 
     });
+
+    const handleBack = () => {
+        setBack(true);
+    };
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -61,14 +69,32 @@ const Bulletin = (props: Props) => {
                 subLevel={'bulletin'}
             />
             <div className={styles.container}>
-                <h1 className={styles.heading}> Bulletin Data Table</h1>
+                {
+                    bulletinEditData && Object.keys(bulletinEditData).length === 0
+                && <h1 className={styles.heading}> Bulletin Data Table</h1>
+                }
+                {
+                    bulletinEditData && Object.keys(bulletinEditData).length > 0
+                && (
+                    <div className={styles.btnContainer}>
+
+                        <button
+                            type="button"
+                            onClick={handleBack}
+                            className={styles.backBtn}
+                        >
+                        Back
+                        </button>
+                    </div>
+                )
+                }
 
                 {
                     pending
                         ? <Loader />
                         : (
                             <div className={styles.tableContainer}>
-                                <BulletinTable bulletinTableData={tableData} />
+                                <BulletinTable setBack={setBack} back={back} bulletinTableData={tableData} />
                             </div>
                         )
                 }

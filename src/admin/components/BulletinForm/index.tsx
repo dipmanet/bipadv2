@@ -42,6 +42,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+import Modal from '#rscv/Modal';
 
 import {
     incidentListSelectorIP,
@@ -272,6 +273,7 @@ const Bulletin = (props: Props) => {
         language: { language },
         uri,
         bulletinData: { feedback },
+        setBulletinEditData,
     } = props;
 
 
@@ -336,21 +338,6 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [selectedDate]);
-
-    const getAddedFields = (feedbackobj) => {
-        const obj = {};
-        if (feedbackobj && Object.keys(feedbackobj).length > 0) {
-            Object.values(feedbackobj).map((item) => {
-            // coordinate means it is manually added data
-                if (item && Object.keys(item).includes('coordinates')) {
-                    obj[item.hazard] = { deaths: item.deaths, injured: item.injured, missing: item.missing, coordinates: item.coordinates };
-                }
-                return null;
-            });
-        }
-        return obj;
-    };
-
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
@@ -670,6 +657,9 @@ const Bulletin = (props: Props) => {
         setDate(bulletinDate);
     };
 
+    useEffect(() => () => {
+        setBulletinEditData({});
+    }, []);
     // eslint-disable-next-line consistent-return
     useEffect(() => {
         if (lossData && lossData.length > 0) {

@@ -3,6 +3,19 @@ background-color: white;
 position: relative;
 top: -45px;
 padding: 45px 0;
+.btnContainer{
+    display: flex;
+    justify-content: flex-start;
+    .backBtn{
+        background:gray;
+        border: 1px solid #f5f5f5;
+        padding: 10px;
+        border-radius: 3px;
+        margin-left: 5%;
+        cursor:pointer;
+        filter: saturate(50%);
+    }
+}
     .tableContainer{
         background-color: white;
         margin: 0 auto;
