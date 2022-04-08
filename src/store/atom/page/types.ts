@@ -28,43 +28,43 @@ type BBox = [number, number, number, number];
 
 type DrrmProgress = number;
 
-export interface BudgetId{
+export interface BudgetId {
     id: string;
 }
 
-export interface DrrmOrg{
+export interface DrrmOrg {
     data: [];
 }
 
-export interface DrrmRegion{
+export interface DrrmRegion {
     municipality: number;
     district: number;
     province: number;
     data: {};
 }
 
-export interface DrrmContacts{
+export interface DrrmContacts {
     data: [];
 }
 
-export interface DrrmInventory{
+export interface DrrmInventory {
     data: [];
 }
 
-export interface DrrmCritical{
+export interface DrrmCritical {
     data: [];
 }
 
-export interface PalikaLanguage{
+export interface PalikaLanguage {
     language: 'en' | 'np';
 }
 
-export interface PalikaRedirect{
+export interface PalikaRedirect {
     showForm: boolean;
     redirectTo: number;
 }
 
-export interface GeneralData{
+export interface GeneralData {
     reportTitle?: string;
     fiscalYear: string;
     mayor: string;
@@ -77,19 +77,19 @@ export interface GeneralData{
 }
 
 
-export interface BudgetData{
+export interface BudgetData {
     totMunBudget: number;
     totDrrBudget: number;
     additionalDrrBudget: number;
 }
 
-export interface ProgramAndPolicyData{
+export interface ProgramAndPolicyData {
     pointOne: string;
     pointTwo: string;
     pointThree: string;
 }
 
-export interface BudgetActivityData{
+export interface BudgetActivityData {
     name: string;
     fundSource: string;
     budgetCode: string;
@@ -342,7 +342,7 @@ export interface Gender extends Field {
 }
 export interface Country extends Field {
 }
-export interface AgricultureLossType extends Field{
+export interface AgricultureLossType extends Field {
 }
 
 export interface InfrastructureType extends Field {
@@ -741,6 +741,8 @@ export interface PageState {
     selectedMapStyle: string;
     mapStyles: MapStyle[];
     carKeys: [];
+    layers: [];
+    layerGroups: [];
     region: Region;
     filters: FiltersElement;
 
@@ -823,19 +825,19 @@ export interface FederalLocation {
     municipality?: Federal;
 }
 
-export interface DataArchiveEarthquake extends FederalLocation{
+export interface DataArchiveEarthquake extends FederalLocation {
     id?: number;
     description?: string;
     point?: {
         type: string;
-        coordinates: [ number, number];
+        coordinates: [number, number];
     };
     magnitude: number;
     address: string;
     eventOn: string;
 }
 
-export interface DataArchivePollution extends RealTimePollution{
+export interface DataArchivePollution extends RealTimePollution {
     title?: string;
     description?: string;
     elevation?: number | null;
@@ -913,6 +915,8 @@ export enum PageType {
 
     SET_FILTERS = 'page/SET_FILTERS',
     SET_CAR_KEYS = 'page/SET_CAr_KEYS',
+    SET_LAYERS_LIST = 'page/SET_LAYERS_LIST',
+    SET_LAYERS_GROUP_LIST = 'page/SET_LAYERS_GROUP_LIST',
     SET_ENUM_OPTIONS = 'page/SET_ENUM_OPTIONS',
 
     // dashboard
@@ -942,17 +946,17 @@ export enum PageType {
     RTM__SET_REAL_TIME_DURATION = 'page/RTM__SET_REAL_TIME_DURATION',
 
     // data archive
-    DA__SET_DATA_ARCHIVE_RAIN_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN/',
-    DA__SET_DATA_ARCHIVE_RIVER_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER/',
-    DA__SET_DATA_ARCHIVE_POLLUTION_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION/',
-    DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
-    DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
-    DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_FILTERS/',
-    DA__SET_DATA_ARCHIVE_RAIN_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_FILTERS/',
-    DA__SET_DATA_ARCHIVE_RIVER_FILTERS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_FILTERS/',
-    DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_STATIONS/',
-    DA__SET_DATA_ARCHIVE_RAIN_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_STATIONS/',
-    DA__SET_DATA_ARCHIVE_RIVER_STATIONS='page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RAIN_LIST = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN/',
+    DA__SET_DATA_ARCHIVE_RIVER_LIST = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_LIST = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION/',
+    DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE/',
+    DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_FILTERS/',
+    DA__SET_DATA_ARCHIVE_RAIN_FILTERS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_FILTERS/',
+    DA__SET_DATA_ARCHIVE_RIVER_FILTERS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_FILTERS/',
+    DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_POLLUTION_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RAIN_STATIONS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RAIN_STATIONS/',
+    DA__SET_DATA_ARCHIVE_RIVER_STATIONS = 'page/DATA_ARCHIVE/SET_DATA_ARCHIVE_RIVER_STATIONS/',
 
     // loss and damage page
     LD__SET_FILTERS = 'page/LOSS_AND_DAMAGE/SET_FILTERS',
@@ -1019,7 +1023,14 @@ export interface SetCarKeys {
     type: typeof PageType.SET_CAR_KEYS;
     filters: [];
 }
-
+export interface SetLayers {
+    type: typeof PageType.SET_LAYERS_LIST;
+    filters: [];
+}
+export interface SetLayerGroups {
+    type: typeof PageType.SET_LAYERS_GROUP_LIST;
+    filters: [];
+}
 export interface SetRegion {
     type: typeof PageType.SET_REGION;
     region: Region;
@@ -1418,7 +1429,7 @@ export interface SetEpidemicsPage {
 export type PageActionTypes = (
     SetPalikaLanguage | SetPalikaRedirect | SetBudgetId | SetProgramAndPolicyData |
     SetBudgetActivityData | SetBudgetData | SetDrrmOrg | SetDrrmInventory | SetDrrmRegion |
-    SetGeneralData| SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
+    SetGeneralData | SetRegion | SetInitialPopupHidden | SetDrrmCritical | SetDrrmContacts |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces | SetDrrmProgress |
     SetRegion | SetInitialPopupHidden | SetBulletinData |
     SetHazardType | SetMapStyles | SetMapStyle | SetProvinces |
@@ -1428,7 +1439,7 @@ export type PageActionTypes = (
     SetIncident | RemoveIncident | PatchIncident |
     SetIncidentFilters | SetResourceList | SetEventType |
     SetRealTimeRainList | SetRealTimeRiverList | SetRealTimeEarthquakeList | SetRealTimeDuration |
-    SetRealTimeFireList| SetRealTimePollutionList | SetLossAndDamageFilters |
+    SetRealTimeFireList | SetRealTimePollutionList | SetLossAndDamageFilters |
     SetRealTimeFilters | SetEventList | SetLossAndDamageFilters | SetProjectsProfileFilters |
     SetInventoryCategoryList | SetInventoryItemList | SetLpGasCookList | SetRiskList |
     SetLossAndDamageList | SetProfileContactList | SetProfileContactFilters | SetLossList |
@@ -1437,7 +1448,7 @@ export type PageActionTypes = (
     SetDataArchiveEarthquakeFilters | SetDataArchivePollutionFilters |
     SetDataArchivePollutionStations | SetDataArchiveRainList | SetDataArchiveRiverList |
     SetDataArchiveRainFilters | SetDataArchiveRiverFilters |
-    SetDataArchiveRainStations | SetDataArchiveRiverStations|
+    SetDataArchiveRainStations | SetDataArchiveRiverStations |
     SetDashboardHazardType | SetIbfPage |
     SetDashboardHazardType | SetBulletinDataCovid
     | SetBulletinDataFeedback | SetBulletinDataTemperature | SetEpidemicsPage | SetBulletinEditData

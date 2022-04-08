@@ -210,7 +210,8 @@ const state: PageState = {
     carKeys: [],
     lossList: [],
     countryList: [],
-
+    layers: [],
+    layerGroups: [],
     // Page related
 
     dashboardPage: {

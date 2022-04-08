@@ -1,0 +1,163 @@
+.layer-switch {
+    font-size: var(--font-size-large);
+}
+.mainContainer{
+    width: 280px;
+    background-color: white;
+    padding: 10px;
+    // .active{
+    //     background-color: #484848 !important;
+    //     color: white !important;
+
+    // }
+    .heading{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #F2F2F2;
+        h3{
+            text-align: center;
+        }
+    }
+    .buttonOptions{
+        padding-top: 10px;
+      display: flex;
+      flex-direction: column;
+      .footerButton{
+          display: flex;
+          justify-content: space-between;
+          margin-top: 10px;
+          padding-top: 10px;
+          margin-bottom: 10px;
+       
+          border-top: 2px solid #F2F2F2;
+          .cancelButton{
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-left: 12px;
+            margin-right: 5px;
+            
+            &:hover {
+              color:#E45163 !important ;
+              border: 1px solid #E45163 !important;
+            }
+          }
+          .loader{
+            position: absolute;
+            left:5px;
+            top: 18px;
+            height: 0px !important;
+            width: 0px !important;
+
+            background: transparent;
+          }
+      }
+      .grid{
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+          label{
+              padding-top: 2px;
+          }
+        input{
+            margin-left: 0px;
+           
+        } 
+      }
+      .pageType{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 5px;
+          input{
+            &:focus-visible{
+                outline: none;
+            }
+          }
+          .activeFileFormatButton{
+            background-color: #E35163 !important;
+            filter: saturate(100%) !important;
+            color: white !important;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-left: 12px;
+            margin-right: 5px;
+          }
+          .fileFormatButton{
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-left: 12px;
+            margin-right: 5px;
+            
+            &:hover {
+              color:#E45163 !important ;
+              border: 1px solid #E45163 !important;
+          }
+          }
+          .active{
+            background-color: #E35163 !important;
+            filter: saturate(100%) !important;
+            color: white !important;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-left: 4px;
+            margin-right: 4px;
+          }
+          .pageSizeButton{
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            margin-left: 4px;
+            margin-right: 4px;
+            &:hover {
+              color:#E45163 !important ;
+              border: 1px solid #E45163 !important;
+          }
+        }
+
+      }
+      .dropdown{
+          display: flex;
+          flex-direction: column;
+          margin-top: 5px;
+          
+          select{
+              background-color: #E8E8E8;
+              padding-left: 10px;
+              padding-right: 10px;
+              border: none;
+              height: 30px;
+              &:focus-visible{
+                  outline: none;
+              }
+          }
+      }
+      
+      .downloadButton{
+          margin-top: 5px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+          background-color: #E35163 !important;
+          color: white !important;
+          filter: saturate(100%) !important;
+          
+        //   &:hover {
+        //     color:#E45163 !important ;
+        //     border: 1px solid #E45163 !important;
+        // }
+          
+      }
+      .disableButton{
+        margin-top: 5px;
+          margin-bottom: 5px;
+          border-radius: 5px;
+        background-color: gray !important;
+        color: white !important;
+        filter: saturate(100%) !important;
+      }
+    }
+    
+}

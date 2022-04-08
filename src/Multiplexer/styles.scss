@@ -146,6 +146,20 @@ button {
                 z-index: 11;
             }
 
+            .map {
+        
+                flex-grow: 1;
+                background-color: transparent;
+                // position: absolute;
+                // top:0;
+                // flex-grow: unset;
+                // height :calc(5000px * 1.2549019607843) !important;
+                // width :calc(5000px * 1.2549019607843) !important;
+                &.hidden {
+                visibility: hidden;
+                z-index: -1;
+                }
+            }
             .mapActionsCompressed {
                 display: flex;
                 position: absolute;
@@ -190,6 +204,7 @@ button {
                 border: var(--width-separator-medium) solid var(--color-separator);
                 border-radius: 5px;
                 background-color: var(--color-foreground);
+                height: 34px;
 
                 .map-download-button {
                     padding: var(--spacing-small) var(--spacing-medium);
@@ -212,15 +227,7 @@ button {
                 }
             }
 
-            .map {
-                flex-grow: 1;
-                background-color: transparent;
-
-                &.hidden {
-                    visibility: hidden;
-                    z-index: -1;
-                }
-            }
+           
         }
 
         .right {
