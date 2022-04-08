@@ -37,8 +37,15 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         url: '/bipad-bulletin/',
         method: methods.GET,
         onMount: true,
-        onSuccess: ({ response, params: { setTableData, setPending } }) => {
+        query: ({ params }) => ({
+            offset: params.offset,
+            limit: 3,
+            count: true,
+            ordering: '-modified_on',
+        }),
+        onSuccess: ({ response, params: { setTableData, setCount, setPending } }) => {
             setTableData(response.results);
+            setCount(response.count);
             setPending(false);
         },
     },
@@ -50,11 +57,16 @@ const Bulletin = (props: Props) => {
     const [tableData, setTableData] = useState([]);
     const [pending, setPending] = useState(true);
     const [back, setBack] = useState(false);
+    const [totalRows, setCount] = useState(0);
     bulletinTableReq.setDefaultParams({
         setTableData,
         setPending,
-
+        setCount,
     });
+
+    const fetchBulletins = (offset) => {
+        bulletinTableReq.do({ offset });
+    };
 
     const handleBack = () => {
         setBack(true);
@@ -102,6 +114,8 @@ const Bulletin = (props: Props) => {
                                     setBack={setBack}
                                     back={back}
                                     bulletinTableData={tableData}
+                                    fetchBulletins={fetchBulletins}
+                                    totalRows={totalRows}
                                 />
                             </div>
                         )

@@ -215,7 +215,18 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
 
 const BulletinTable = (props) => {
-    const { bulletinTableData, setBulletinEditData, bulletinEditData, user, uri, back, setBack } = props;
+    const {
+        bulletinTableData,
+        setBulletinEditData,
+        bulletinEditData,
+        user,
+        uri,
+        back,
+        setBack,
+        fetchBulletins,
+        totalRows,
+     } = props;
+
     const [searchValue, setsearchValue] = React.useState('');
     const [filteredRowDatas, setfilteredRowDatas] = React.useState(props.bulletinTableData);
     const [order, setOrder] = React.useState<Order>('desc');
@@ -229,6 +240,31 @@ const BulletinTable = (props) => {
     const [headCells, setHeadCells] = useState([]);
     const [tableTitle, setFinalObj] = useState({});
     const [tableShow, setTableShow] = useState(true);
+    const [offset, setOffset] = useState(0);
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+        setLoader(true);
+        const bulletinCount = bulletinTableData.length;
+        const remainder = bulletinCount % 100;
+        const maxPages = ((bulletinCount - remainder) / 100 + 1);
+        if (newPage <= maxPages) {
+            setOffset(newPage * 100);
+        }
+    };
+
+
+    useEffect(() => {
+        fetchBulletins(offset);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [offset]);
+
+    useEffect(() => {
+        setfilteredRowDatas(props.bulletinTableData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.bulletinTableData]);
+
+
     useEffect(() => {
         if (user) {
             setPermission(getUserPermission(user));
@@ -303,32 +339,16 @@ const BulletinTable = (props) => {
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected: readonly string[] = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
-    };
-
-    const isSelected = (id: string) => selected.indexOf(id) !== -1;
+    // const handleRowChange = (e) => {
+    //     console.log('e.target.value', e.target.value);
+    //     console.log('ejust', e);
+    //     setRowsPerPage(e.target.value);
+    // };
 
     return (
         <>
             {
-                tableShow && (filteredRowDatas.length === 0 || loader)
+                tableShow && (totalRows === 0 || loader)
                     && <h1 className={styles.noDataHeading}>No Table Data</h1>
             }
             {
@@ -343,12 +363,14 @@ const BulletinTable = (props) => {
 
                                 <TablePagination
                                     className={styles.tablePagination}
-                                    rowsPerPageOptions={[100]}
                                     component="div"
-                                    count={bulletinTableData.length}
+                                    rowsPerPageOptions={[100]}
+                                    count={totalRows}
                                     rowsPerPage={rowsPerPage}
+                                    // onRowsPerPageChange={handleRowChange}
                                     page={page}
-                                    onPageChange={() => console.log('dfsfs')}
+                                    onPageChange={handleChangePage}
+
                                 />
                             </div>
                         </div>
@@ -379,7 +401,7 @@ const BulletinTable = (props) => {
                                         orderBy={orderBy}
                                         onSelectAllClick={handleSelectAllClick}
                                         onRequestSort={handleRequestSort}
-                                        rowCount={filteredRowDatas.length}
+                                        rowCount={4}
                                         headCells={headCells}
                                     />
 
@@ -387,17 +409,12 @@ const BulletinTable = (props) => {
                                         {
                                             filteredRowDatas
                                             && stableSort(filteredRowDatas, order, orderBy)
-                                            .map((row, index) => {
-                                                const isItemSelected = isSelected(row.id);
-                                                const labelId = `enhanced-table-checkbox-${index}`;
-                                                return (
+                                            .map((row, index) => (
                                                     <TableRow
                                                         hover
                                                         role="checkbox"
-                                                        aria-checked={isItemSelected}
                                                         tabIndex={-1}
                                                         key={row.id}
-                                                        selected={isItemSelected}
                                                     >
 
                                                         <>
@@ -440,24 +457,6 @@ const BulletinTable = (props) => {
                         </TableCell>
                     );
                 }
-//                     if (k.includes('Hazard') && row.hazardWiseLoss) {
-//                         const haz = k.substring(
-//                             k.indexOf('(') + 1,
-//                             k.lastIndexOf(')'),
-//                         );
-//                         const ici = k.split(')')[1].toLowerCase().trim();
-
-//                             return (
-//                             <TableCell
-//                                 align="center"
-//                                 padding="normal"
-
-//                                                         >
-//                             { row.hazardWiseLoss[haz] ? row.hazardWiseLoss[haz][ici] : '-'}
-//                             </TableCell>
-// );
-//                     }
-
                 if (k === 'action') {
                     return (
 
@@ -494,7 +493,6 @@ const BulletinTable = (props) => {
 
                     );
                 }
-
                 return (
                     <TableCell
                         align="center"
@@ -510,8 +508,7 @@ const BulletinTable = (props) => {
 
 
                                                     </TableRow>
-                                                );
-                                            })}
+                                                ))}
 
                                     </TableBody>
 
