@@ -120,13 +120,16 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         }
     }
 
-    private regionLabelSelector = (r: RegionElement) => {
-        const { language: { language } } = this.props;
-        if (language === 'en') {
-            return r.title;
-        }
-        return r.title_ne;
-    }
+    private regionLabelSelector = (r: RegionElement) => r.title;
+
+
+    // private regionLabelSelector = (r: RegionElement) => {
+    //     const { language: { language } } = this.props;
+    //     if (language === 'en') {
+    //         return r.title;
+    //     }
+    //     return r.title_ne;
+    // }
 
 
     private getRegionsFromValue = memoize((
