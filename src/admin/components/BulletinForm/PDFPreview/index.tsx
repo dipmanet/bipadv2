@@ -115,10 +115,10 @@ const PDFPreview = (props) => {
         language: { language },
     } = props;
 
-
     const isFile = (input: any): input is File => (
         'File' in window && input instanceof File
     );
+
     const isBlob = (input: any): input is Blob => (
         'Blob' in window && input instanceof Blob
     );
@@ -234,6 +234,8 @@ const PDFPreview = (props) => {
             if (tempMax && typeof tempMax !== 'string') {
                 picObjects.temp_max_ne = tempMax;
             }
+
+            console.log('sending obj', picObjects);
             return getFormData({
                 sitrep: sitRep,
                 incidentSummary,
@@ -289,13 +291,10 @@ const PDFPreview = (props) => {
             yearlyData,
             municipality,
             ward,
-            tempMin,
-            tempMax,
             maxTempFooter,
             feedback,
             pdfFile: file,
             dailySummary,
-            rainSummaryPicture: rainSummaryPic,
             hilight,
             rainSummaryPictureFooter: rainSummaryFooter,
             bulletinDate,

@@ -34,7 +34,7 @@ import { visuallyHidden } from '@mui/utils';
 import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import { ADToBS } from 'bikram-sambat-js';
-import { setBulletinEditDataAction } from '#actionCreators';
+import { setBulletinEditDataAction, setLanguageAction } from '#actionCreators';
 import {
     bulletinEditDataSelector,
     bulletinPageSelector,
@@ -48,6 +48,7 @@ import BulletinForm from '../BulletinForm';
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
+    setLanguage: params => dispatch(setLanguageAction(params)),
 });
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
@@ -225,6 +226,7 @@ const BulletinTable = (props) => {
         setBack,
         fetchBulletins,
         totalRows,
+        setLanguage,
      } = props;
 
     const [searchValue, setsearchValue] = React.useState('');
@@ -312,12 +314,12 @@ const BulletinTable = (props) => {
 
     const handleTableEdit = (row, lang) => {
         setBulletinEditData({ ...row, language: lang });
+        if (lang === 'nepali') {
+            setLanguage({ language: 'np' });
+        } else {
+            setLanguage({ language: 'en' });
+        }
         setTableShow(false);
-        // if (lang === 'nepali') {
-        //     navigate('/admin/bulletin/add-new-bulletin-nepali');
-        // } else {
-        //     navigate('/admin/bulletin/add-new-bulletin-english');
-        // }
     };
 
 
@@ -331,19 +333,8 @@ const BulletinTable = (props) => {
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // if (event.target.checked) {
-        // 	const newSelecteds = filteredRowDatas.map((n) => n.id);
-        // 	setSelected(newSelecteds);
-        // 	return;
-        // }
         setSelected([]);
     };
-
-    // const handleRowChange = (e) => {
-    //     console.log('e.target.value', e.target.value);
-    //     console.log('ejust', e);
-    //     setRowsPerPage(e.target.value);
-    // };
 
     return (
         <>

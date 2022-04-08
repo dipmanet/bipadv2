@@ -39,7 +39,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         onMount: true,
         query: ({ params }) => ({
             offset: params.offset,
-            limit: 3,
+            limit: 100,
             count: true,
             ordering: '-modified_on',
         }),

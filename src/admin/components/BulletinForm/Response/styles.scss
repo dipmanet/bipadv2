@@ -35,7 +35,9 @@
             table-layout:fixed;
             width:100%;
         }
-        
+        tr{ 
+            page-break-inside: avoid;
+        }
         td,th{
             height: 20px;
             border: 1px solid rgb(107, 106, 106);

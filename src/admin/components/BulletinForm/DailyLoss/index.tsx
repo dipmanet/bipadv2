@@ -107,7 +107,7 @@ const Bulletin = (props: Props) => {
     useEffect(() => {
         if (uri && uri.includes('nepali')) {
             setLanguage({ language: 'np' });
-        } else {
+        } if (uri && uri.includes('english')) {
             setLanguage({ language: 'en' });
         }
     }, [uri]);
