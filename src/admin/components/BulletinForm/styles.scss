@@ -20,6 +20,8 @@ $boxShadow : 0px 2px 6px rgba(151, 149, 148, 0.45);
     display: flex;
     justify-content: center;
     .leftMenuSection{
+        position: relative;
+        bottom: 28px;
         // width: 25%;
         flex: 1;
 

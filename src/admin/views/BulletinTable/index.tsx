@@ -21,6 +21,7 @@ import {
     bulletinEditDataSelector,
     userSelector,
 } from '#selectors';
+import Icon from '#rscg/Icon';
 
 interface Props {
 
@@ -77,13 +78,16 @@ const Bulletin = (props: Props) => {
                     bulletinEditData && Object.keys(bulletinEditData).length > 0
                 && (
                     <div className={styles.btnContainer}>
-
                         <button
                             type="button"
                             onClick={handleBack}
                             className={styles.backBtn}
+                            title="Back to table page"
                         >
-                        Back
+                            <Icon
+                                name="chevronLeft"
+                                className={styles.backIcon}
+                            />
                         </button>
                     </div>
                 )
@@ -94,7 +98,11 @@ const Bulletin = (props: Props) => {
                         ? <Loader />
                         : (
                             <div className={styles.tableContainer}>
-                                <BulletinTable setBack={setBack} back={back} bulletinTableData={tableData} />
+                                <BulletinTable
+                                    setBack={setBack}
+                                    back={back}
+                                    bulletinTableData={tableData}
+                                />
                             </div>
                         )
                 }

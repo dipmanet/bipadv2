@@ -273,6 +273,7 @@ const BulletinTable = (props) => {
             setBack(false);
         }
     }, [back, setBack]);
+
     const handleTableEdit = (row, lang) => {
         setBulletinEditData({ ...row, language: lang });
         setTableShow(false);
@@ -329,8 +330,6 @@ const BulletinTable = (props) => {
             {
                 tableShow && (filteredRowDatas.length === 0 || loader)
                     && <h1 className={styles.noDataHeading}>No Table Data</h1>
-
-
             }
             {
                 tableShow && (filteredRowDatas.length > 0) && (
