@@ -225,6 +225,16 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             }
         },
     },
+    getEditByURl: {
+        url: ({ params }) => `/bipad-bulletin/${params.id}`,
+        method: methods.GET,
+        onMount: false,
+        onSuccess: ({ response, props, params }) => {
+            if (response.results.length > 0) {
+                props.setBulletinEditData({ ...response.results[0], language: params.language });
+            }
+        },
+    },
 };
 
 const Bulletin = (props: Props) => {
@@ -268,10 +278,13 @@ const Bulletin = (props: Props) => {
             covidQuarantine,
             sitRepQuery,
             getEditData,
+            getEditByURl,
         },
         hazardTypes,
         language: { language },
         uri,
+        id,
+        urlLanguage,
         bulletinData: { feedback },
         setBulletinEditData,
     } = props;
@@ -338,6 +351,16 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [selectedDate]);
+
+    // useEffect(() => {
+    //     if (id && urlLanguage) {
+    //         getEditByURl.do({
+    //             id,
+    //             language: urlLanguage,
+    //         });
+    //     // set edit
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {

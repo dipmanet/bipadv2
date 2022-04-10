@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import JsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { isList } from '@togglecorp/fujs';
+import { getElementAround, isList } from '@togglecorp/fujs';
 import axios from 'axios';
 import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
@@ -153,7 +153,11 @@ const PDFPreview = (props) => {
                     });
                 } else if (value !== undefined) {
                     const sanitizedValue = sanitizeFormData(value);
-                    formDataNew.append(key, sanitizedValue);
+                    if (value !== undefined && isBlob(value)) {
+                        formDataNew.append(key, sanitizedValue, `Bipad Bulletin ${bulletinEditData.bulletinDate || ''}.pdf`);
+                    } else {
+                        formDataNew.append(key, sanitizedValue);
+                    }
                 }
             },
         );
@@ -326,7 +330,7 @@ const PDFPreview = (props) => {
                     Accept: 'application/json',
                 },
             }).then((res) => {
-                doc.save('Bulletin.pdf');
+                // doc.save('Bulletin.pdf');
                 setPending(false);
                 setBulletinEditData({});
                 navigate('/admin/bulletin/bulletin-data-table');
@@ -363,103 +367,128 @@ const PDFPreview = (props) => {
         }
     }, [user]);
 
+    useEffect(() => {
+        function addScript(url) {
+            const script = document.createElement('script');
+            script.type = 'application/javascript';
+            script.src = url;
+            document.head.appendChild(script);
+        }
+        addScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js');
+    }, []);
 
     const handleDownload = async (reportType: string) => {
-        let pageNumber = 0;
+        const pageNumber = 0;
         setPending(true);
         const doc = new JsPDF('p', 'mm', 'a4');
         // const doc = new JsPDF('p', 'mm', 'a4');
         const ids = document.querySelectorAll('.page');
-        const { length } = ids;
-        for (let i = 0; i < length; i += 1) {
-            const reportPage = document.getElementById(ids[i].id);
-            // eslint-disable-next-line no-undef
-            await html2canvas(reportPage, { scale: 2 }).then((canvas) => {
-                const imgData = canvas.toDataURL('image/png');
-                const imgWidth = 210;
-                const pageHeight = 297;
-                const imgHeight = canvas.height * imgWidth / canvas.width;
-                // if (i < (length - 1) && i > 2) {
-                //     imgWidth = 295;
-                //     pageHeight = 210;
-                // }
-                let heightLeft = imgHeight;
-                let position = 0;
-                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                if (i < 3) {
-                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                    // if (i < 1) {
-                    //     doc.addPage('a4', 'portrait');
-                    // }
-                }
-                if (i >= 3) {
-                    heightLeft -= pageHeight;
-                    while (heightLeft >= 0) {
-                        position = heightLeft - imgHeight; // top padding for other pages
-                        pageNumber += 1;
-                        doc.addPage('a4', 'portrait');
-                        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-                        // doc.text(200, 285, `page ${pageNumber}`);
-                        heightLeft -= pageHeight;
-                    }
-                }
+        // const { length } = ids;
+        const reportContent = document.getElementById('bulletinPDFReport');
 
-                if (i < (length - 1) && i < 1) {
-                    // doc.text(270, 10, `page ${pageNumber}`);
-                    doc.addPage('a4', 'portrait');
-                    pageNumber += 1;
-                }
-                if (i < (length - 1) && i >= 1) {
-                    // doc.text(270, 10, `page ${pageNumber}`);
-                    doc.addPage('a4', 'portrait');
-                    pageNumber += 1;
-                }
-            });
-        }
+        const options = {
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+        };
 
-        const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
+        // eslint-disable-next-line no-undef
+        const reportPDF = html2pdf().set(options).from(reportContent).outputPdf('blob')
+            .then((bulletin: Blob) => {
+                console.log('bulletin data in then', bulletin);
+                if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+                    const { id } = bulletinEditData;
+                    updatePDF(bulletin, doc, id);
+                } else {
+                    savePDf(bulletin, doc);
+                }
+            })
+            .save(`Bipad Bulletin ${bulletinEditData.bulletinDate || ''}`);
+
+        // const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
+
+        // eslint-disable-next-line no-undef
+        // html2pdf(report);
+        // for (let i = 0; i < length; i += 1) {
+        //     const reportPage = document.getElementById(ids[i].id);
+        //     // eslint-disable-next-line no-undef
+        //     await html2canvas(reportPage, { scale: 2 }).then((canvas) => {
+        //         const imgData = canvas.toDataURL('image/png');
+        //         const imgWidth = 210;
+        //         const pageHeight = 297;
+        //         const imgHeight = canvas.height * imgWidth / canvas.width;
+        //         // if (i < (length - 1) && i > 2) {
+        //         //     imgWidth = 295;
+        //         //     pageHeight = 210;
+        //         // }
+        //         let heightLeft = imgHeight;
+        //         let position = 0;
+        //         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+        //         if (i < 3) {
+        //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+        //             // if (i < 1) {
+        //             //     doc.addPage('a4', 'portrait');
+        //             // }
+        //         }
+        //         if (i >= 3) {
+        //             heightLeft -= pageHeight;
+        //             while (heightLeft >= 0) {
+        //                 position = heightLeft - imgHeight; // top padding for other pages
+        //                 pageNumber += 1;
+        //                 doc.addPage('a4', 'portrait');
+        //                 doc.addImage
+        //  (imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+        //                 // doc.text(200, 285, `page ${pageNumber}`);
+        //                 heightLeft -= pageHeight;
+        //             }
+        //         }
+
+        //         if (i < (length - 1) && i < 1) {
+        //             // doc.text(270, 10, `page ${pageNumber}`);
+        //             doc.addPage('a4', 'portrait');
+        //             pageNumber += 1;
+        //         }
+        //         if (i < (length - 1) && i >= 1) {
+        //             // doc.text(270, 10, `page ${pageNumber}`);
+        //             doc.addPage('a4', 'portrait');
+        //             pageNumber += 1;
+        //         }
+        //     });
+        // }
+
+        // const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
+
         // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
         //     const { id } = bulletinEditData;
         //     updatePDF(bulletin, doc, id);
-        // } else if (sitRep || sitRep === 0) {
-        //     if (sitRepArr.includes(sitRep)) {
-        //         const id = getIdFromSitrep(sitRep);
-        //         updatePDF(bulletin, doc, id);
-        //     }
         // } else {
         //     savePDf(bulletin, doc);
         // }
-        if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-            const { id } = bulletinEditData;
-            updatePDF(bulletin, doc, id);
-        } else {
-            savePDf(bulletin, doc);
-        }
     };
 
     return (
         <div className={styles.pdfContainer}>
-            <div id="page1" className="page">
+            <div id="bulletinPDFReport">
+                <div id="page1" className="page">
 
-                <BulletinPDFLoss bulletinDate={bulletinDate} />
-            </div>
-            <div id="page2" className="page">
+                    <BulletinPDFLoss bulletinDate={bulletinDate} />
+                </div>
+                <div id="page2" className="page">
 
-                <BulletinPDFCovid />
-            </div>
-            <div id="page3" className="page">
-                <BulletinPDFFooter rainSummaryFooter={rainSummaryFooter} />
+                    <BulletinPDFCovid />
+                </div>
+                <div id="page3" className="page">
+                    <BulletinPDFFooter rainSummaryFooter={rainSummaryFooter} />
 
-            </div>
-            <div id="page4" className="page">
-                <BulletinPDFAnnex
-                    handleFeedbackChange={handleFeedbackChange}
-                    feedback={feedback}
-                    deleteFeedbackChange={deleteFeedbackChange}
-                    hazardWiseLossData={hazardWiseLossData}
-                    handleSubFieldChange={handleSubFieldChange}
-                />
+                </div>
+                <div id="page4" className="page">
+                    <BulletinPDFAnnex
+                        handleFeedbackChange={handleFeedbackChange}
+                        feedback={feedback}
+                        deleteFeedbackChange={deleteFeedbackChange}
+                        hazardWiseLossData={hazardWiseLossData}
+                        handleSubFieldChange={handleSubFieldChange}
+                    />
 
+                </div>
             </div>
             <div className={styles.btnContainer}>
                 <button

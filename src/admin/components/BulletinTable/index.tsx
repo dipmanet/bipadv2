@@ -316,10 +316,12 @@ const BulletinTable = (props) => {
         setBulletinEditData({ ...row, language: lang });
         if (lang === 'nepali') {
             setLanguage({ language: 'np' });
+            navigate(`/admin/bulletin/edit-bulletin/nepali/${row.id}`);
         } else {
             setLanguage({ language: 'en' });
+            navigate(`/admin/bulletin/edit-bulletin/english/${row.id}`);
         }
-        setTableShow(false);
+        // setTableShow(false);
     };
 
 
@@ -510,12 +512,12 @@ const BulletinTable = (props) => {
                     </Box>
                 )
             }
-            {
+            {/* {
                 !tableShow
                 && (
                    <BulletinForm uri={uri} />
                 )
-            }
+            } */}
         </>
     );
 };

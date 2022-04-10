@@ -88,6 +88,15 @@ const routeSettings: SomeRoute[] = [
         disableIfNoAuth: true,
     },
     {
+        name: 'edit bulletin',
+        title: 'Edit Bulletin',
+        path: '/admin/bulletin/edit-bulletin/:urlLanguage/:id',
+        load: () => import('../admin/views/Bulletin'),
+        navbar: false,
+        disableIfNoAuth: true,
+    },
+
+    {
         name: 'Covid-19',
         title: 'Covid-19 Form',
         path: '/admin/covid-19/add-new-covid-19',

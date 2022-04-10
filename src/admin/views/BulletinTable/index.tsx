@@ -70,6 +70,7 @@ const Bulletin = (props: Props) => {
 
     const handleBack = () => {
         setBack(true);
+        fetchBulletins(0);
     };
 
     return (

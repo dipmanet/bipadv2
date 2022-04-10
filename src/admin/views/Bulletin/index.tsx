@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Bulletin = (props: Props) => {
-    const { uri } = props;
+    const { uri, id, urlLanguage } = props;
     return (
         <>
             <Page hideFilter hideMap />
@@ -21,7 +21,7 @@ const Bulletin = (props: Props) => {
                 layout="common"
                 subLevel={'bulletin'}
             />
-            <BulletinForm uri={uri} />
+            <BulletinForm uri={uri} urlLanguage={urlLanguage} id={id} />
             <Footer />
         </>
     );
