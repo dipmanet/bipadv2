@@ -5,12 +5,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import produce from 'immer';
-
-import memoize from 'memoize-one';
 import {
-    listToGroupList,
     isDefined,
-    listToMap,
     _cs,
 } from '@togglecorp/fujs';
 import DailyLoss from './DailyLoss';
@@ -32,17 +28,13 @@ import {
 } from './formFields';
 import {
     sum,
-    saveChart,
-    encodeDate,
 } from '#utils/common';
 import {
     createConnectedRequestCoordinator,
     createRequestClient,
-    NewProps,
     ClientAttributes,
     methods,
 } from '#request';
-import Modal from '#rscv/Modal';
 
 import {
     incidentListSelectorIP,
@@ -54,7 +46,7 @@ import {
     bulletinPageSelector,
 } from '#selectors';
 import {
-    setBulletinCovidAction, setBulletinDataTemperature, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
+    setBulletinCovidAction, setBulletinFeedbackAction, setBulletinLossAction, setBulletinTemperatureAction, setIncidentListActionIP,
     setEventListAction, setBulletinEditDataAction,
 } from '#actionCreators';
 import styles from './styles.scss';
@@ -84,12 +76,6 @@ const lossMetricsHazard = [
     { key: 'peopleMissingCount', label: 'People missing' },
     { key: 'peopleInjuredCount', label: 'People injured' },
 ];
-const lossMetricsProvinceRef = [
-    { peopleDeathCount: 'death' },
-    { peopleMissingCount: 'missing' },
-    { peopleInjuredCount: 'injured' },
-];
-
 
 interface Props {
     setBulletinLossAction: () => void;
@@ -351,16 +337,6 @@ const Bulletin = (props: Props) => {
             });
         }
     }, [selectedDate]);
-
-    // useEffect(() => {
-    //     if (id && urlLanguage) {
-    //         getEditByURl.do({
-    //             id,
-    //             language: urlLanguage,
-    //         });
-    //     // set edit
-    //     }
-    // }, []);
 
     useEffect(() => {
         if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
