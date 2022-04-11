@@ -69,7 +69,6 @@ const PDFPreview = (props) => {
             addedHazards,
         },
         user,
-        requests: { bulletinPostRequest, getSitRep },
         bulletinEditData,
         setBulletinEditData,
         handlePrevBtn,
