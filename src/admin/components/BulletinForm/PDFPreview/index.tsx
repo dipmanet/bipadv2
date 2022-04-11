@@ -20,6 +20,7 @@ import {
 } from '#selectors';
 import {
     setBulletinEditDataAction,
+    setBulletinFeedbackAction,
 } from '#actionCreators';
 
 const mapStateToProps = state => ({
@@ -77,6 +78,7 @@ const PDFPreview = (props) => {
         hazardWiseLossData,
         handleSubFieldChange,
         language: { language },
+        setBulletinData,
     } = props;
 
     const isFile = (input: any): input is File => (
@@ -280,7 +282,6 @@ const PDFPreview = (props) => {
             }).then((res) => {
                 // doc.save('Bulletin.pdf');
                 setPending(false);
-                // navigate('/admin/bulletin/bulletin-data-table');
             })
             .catch((error) => {
                 setPending(false);

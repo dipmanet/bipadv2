@@ -285,21 +285,6 @@ const Bulletin = (props: Props) => {
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 
-    const hazardDatafromFeedback = (feedbackData, lang) => {
-        const newObj = {};
-
-        if (feedbackData && Object.keys(feedbackData).length > 0) {
-            Object.values(feedbackData).map((item) => {
-                if (lang === 'nepali') {
-                    newObj[item.hazardNp] = { ...item };
-                } else {
-                    newObj[item.hazardEn] = { ...item };
-                } return null;
-            });
-        }
-        return newObj;
-    };
-
 
     useEffect(() => {
         let today; let
@@ -658,6 +643,7 @@ const Bulletin = (props: Props) => {
 
     useEffect(() => () => {
         setBulletinEditData({});
+        setBulletinFeedback({ feedback: {} });
     }, []);
     // eslint-disable-next-line consistent-return
     useEffect(() => {
