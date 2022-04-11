@@ -4,15 +4,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import JsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { getElementAround, isList } from '@togglecorp/fujs';
+import { isList } from '@togglecorp/fujs';
 import axios from 'axios';
 import BulletinPDFCovid from 'src/admin/components/BulletinPDFCovid';
 import BulletinPDFLoss from 'src/admin/components/BulletinPDFLoss';
 import BulletinPDFFooter from 'src/admin/components/BulletinPDFFooter';
 import BulletinPDFAnnex from 'src/admin/components/BulletinPDFAnnex';
-import DownloadIcon from '@mui/icons-material/Download';
-import Loader from 'react-loader';
 import { navigate } from '@reach/router';
 import styles from './styles.scss';
 import {
@@ -24,14 +21,6 @@ import {
 import {
     setBulletinEditDataAction,
 } from '#actionCreators';
-import {
-    createConnectedRequestCoordinator,
-    createRequestClient,
-    NewProps,
-    ClientAttributes,
-    methods,
-} from '#request';
-import Document from '#views/Profile/Document';
 
 const mapStateToProps = state => ({
     user: userSelector(state),
@@ -47,35 +36,11 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 
 const baseUrl = process.env.REACT_APP_API_SERVER_URL;
 
-// const requestQuery = ({
-//     params = {},
-// }) => ({
-//     incident_on__lt: endDate, // eslint-disable-line @typescript-eslint/camelcase
-//     incident_on__gt: startDate, // eslint-disable-line @typescript-eslint/camelcase
-//     ordering: '-incident_on',
-//     // lnd: true,
-// });
-
-const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
-    bulletinPostRequest: {
-        url: '/bipad-bulletin/',
-        method: methods.POST,
-        // query: requestQuery,
-        onMount: false,
-        body: ({ params }) => params && params.body,
-        onSuccess: ({ response, params }) => {
-            params.doc.save('Bulletin.pdf');
-        },
-    },
-};
-
 const PDFPreview = (props) => {
     const [province, setProvince] = useState(null);
     const [district, setDistrict] = useState(null);
     const [municipality, setMunicipality] = useState(null);
     const [ward, setWard] = useState(null);
-    const [sitRepArr, setSitRepArr] = useState([]);
-    const [allBulletinData, setAllBulletinData] = useState([]);
     const [pending, setPending] = useState(false);
 
     const {
@@ -314,7 +279,7 @@ const PDFPreview = (props) => {
                     Accept: 'application/json',
                 },
             }).then((res) => {
-                doc.save('Bulletin.pdf');
+                // doc.save('Bulletin.pdf');
                 setPending(false);
                 // navigate('/admin/bulletin/bulletin-data-table');
             })
@@ -517,10 +482,4 @@ const PDFPreview = (props) => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    createConnectedRequestCoordinator<ReduxProps>()(
-        createRequestClient(requests)(
-            PDFPreview,
-        ),
-    ),
-);
+export default connect(mapStateToProps, mapDispatchToProps)(PDFPreview);
