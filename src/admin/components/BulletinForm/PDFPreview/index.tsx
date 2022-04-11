@@ -28,7 +28,6 @@ const mapStateToProps = state => ({
     bulletinEditData: bulletinEditDataSelector(state),
     language: languageSelector(state),
     bulletinData: bulletinPageSelector(state),
-
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -295,7 +294,6 @@ const PDFPreview = (props) => {
                     Accept: 'application/json',
                 },
             }).then((res) => {
-                // doc.save('Bulletin.pdf');
                 setPending(false);
                 setBulletinEditData({});
                 navigate('/admin/bulletin/bulletin-data-table');
@@ -313,7 +311,6 @@ const PDFPreview = (props) => {
                 }
             });
     };
-
 
     useEffect(() => {
         if (user && user.profile) {
@@ -358,13 +355,27 @@ const PDFPreview = (props) => {
         // eslint-disable-next-line no-undef
         const reportPDF = html2pdf().set(options).from(reportContent).outputPdf('blob')
             .then((bulletin: Blob) => {
-                console.log('bulletin data in then', bulletin);
-                if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-                    const { id } = bulletinEditData;
-                    updatePDF(bulletin, doc, id);
-                } else {
-                    savePDf(bulletin, doc);
-                }
+                axios.get(`${baseUrl}/bipad-bulletin/?sitrep=${sitRep}`).then((res) => {
+                    console.log('res ma k aayo?', res);
+                    if (res.data.results.length === 0) {
+                        console.log('no results', res.data.results.length);
+                        savePDf(bulletin, doc);
+                    } else {
+                        // const { id } = bulletinEditData;
+                        console.log('results', res.data.results.length);
+                        const { id } = res.data.results[0];
+                        updatePDF(bulletin, doc, id);
+                    }
+                });
+                // here
+
+
+                // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
+                //     const { id } = bulletinEditData;
+                //     updatePDF(bulletin, doc, id);
+                // } else {
+                //     savePDf(bulletin, doc);
+                // }
             })
             .save(`Bipad Bulletin ${bulletinEditData.bulletinDate || ''}`);
 
