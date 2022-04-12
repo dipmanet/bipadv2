@@ -287,136 +287,98 @@ const BulletinPDFAnnex = (props) => {
                     }
                 </div>
             </div>
-            <Translation>
-                {
-                    t => <h3>{t('Disaster details of the last 24 hours')}</h3>
-                }
-            </Translation>
-            <table className={styles.annexTable}>
-                <thead>
-                    <tr>
-                        {incidentSummary && Object.keys(incidentSummary).map(iS => (
-                            <th key={iS}>
+            <div className={styles.annexTable}>
+                <Translation>
+                    {
+                        t => <h3>{t('Disaster details of the last 24 hours')}</h3>
+                    }
+                </Translation>
+                <table>
+                    <thead>
+                        <tr>
+                            {incidentSummary && Object.keys(incidentSummary).map(iS => (
+                                <th key={iS}>
 
-                                {language === 'np'
-                                    ? nepaliRef[iS]
-                                    : englishRef[iS]
-                                }
+                                    {language === 'np'
+                                        ? nepaliRef[iS]
+                                        : englishRef[iS]
+                                    }
 
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {incidentSummary && Object.keys(incidentSummary).map(iS => (
-                            <td key={iS}>
-                                {Number(incidentSummary[iS]).toLocaleString()}
-                            </td>
-                        ))}
-                    </tr>
-                </tbody>
-
-            </table>
-            <Translation>
-                {
-                    t => <h3>{t('Provincewise Death, Missing and Injured Counts')}</h3>
-                }
-            </Translation>
-
-            <table className={styles.provTable}>
-                <thead>
-                    <tr>
-                        <th>{' '}</th>
-                        {
-                            peopleLossData.map(pwT => (
-                                <th key={pwT.province}>
-                                    {pwT.province}
                                 </th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {incidentSummary && Object.keys(incidentSummary).map(iS => (
+                                <td key={iS}>
+                                    {Number(incidentSummary[iS]).toLocaleString()}
+                                </td>
+                            ))}
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <div className={styles.provTable}>
+                <Translation>
+                    {
+                        t => <h3>{t('Provincewise Death, Missing and Injured Counts')}</h3>
+                    }
+                </Translation>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{' '}</th>
+                            {
+                                peopleLossData.map(pwT => (
+                                    <th key={pwT.province}>
+                                        {pwT.province}
+                                    </th>
+                                ))
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            Object.keys(peopleLoss.p1).map((pwT, i) => (
+                                <tr>
+                                    <td>
+
+                                        {
+                                            language === 'np'
+                                                ? nepaliRef[pwT]
+                                                : englishRef[pwT]
+                                        }
+                                    </td>
+                                    {
+                                        Object.keys(peopleLoss)
+                                            .map(prov => (
+                                                <td key={prov}>
+                                                    {Number(peopleLoss[prov][pwT]).toLocaleString()}
+                                                </td>
+                                            ))
+
+                                    }
+
+                                </tr>
                             ))
                         }
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        Object.keys(peopleLoss.p1).map((pwT, i) => (
-                            <tr>
-                                <td>
+                    </tbody>
+                </table>
+            </div>
 
-                                    {
-                                        language === 'np'
-                                            ? nepaliRef[pwT]
-                                            : englishRef[pwT]
-                                    }
-                                </td>
-                                {
-                                    Object.keys(peopleLoss)
-                                        .map(prov => (
-                                            <td key={prov}>
-                                                {Number(peopleLoss[prov][pwT]).toLocaleString()}
-                                            </td>
-                                        ))
 
-                                }
-
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
-
-            {/* {
-                typeof hazardWiseLoss === 'object'
-                && Object.keys(hazardWiseLoss).length > 0
-                && (
-                    <table className={styles.provTable}>
-                        <thead>
-                            <tr>
-                                <th>{' '}</th>
-                                {
-                                    hazardWiseLoss && Object.keys(hazardWiseLoss).map(pwT => (
-                                        <th key={pwT}>
-                                            {pwT}
-                                        </th>
-                                    ))
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                hazardWiseLoss && Object.keys(hazardWiseLoss[Object.keys(hazardWiseLoss)[0]])
-                                    .map((pwT, i) => (
-                                        <tr>
-                                            <td>
-                                                {nepaliRef[pwT]}
-                                            </td>
-                                            {
-                                                Object.keys(hazardWiseLoss)
-                                                    .map(haz => (
-                                                        <td key={haz}>
-                                                            {Number(hazardWiseLoss[haz][pwT])
-                                                                .toLocaleString()}
-                                                        </td>
-                                                    ))
-
-                                            }
-
-                                        </tr>
-                                    ))
-                            }
-                        </tbody>
-                    </table>
-                )
-            } */}
             <div className={styles.twoCols}>
-                <div>
+                <div className={styles.annexTable}>
                     <Translation>
                         {
                             t => <h3>{t('Genderwise Deaths')}</h3>
                         }
                     </Translation>
-
-                    <table className={styles.annexTable}>
+                    <table>
                         <thead>
                             <tr>
                                 {genderWiseLoss && Object.keys(genderWiseLoss).map(iS => (
@@ -442,14 +404,14 @@ const BulletinPDFAnnex = (props) => {
 
                     </table>
                 </div>
-                <div>
+                <div className={styles.annexTable}>
                     <Translation>
                         {
                             t => <h3>{t('COVID-19 details of the last 24 hrs')}</h3>
                         }
                     </Translation>
 
-                    <table className={styles.annexTable}>
+                    <table>
                         <thead>
                             <tr>
                                 {covid24hrsStat && Object.keys(covid24hrsStat).map(iS => (
@@ -477,14 +439,14 @@ const BulletinPDFAnnex = (props) => {
                 </div>
             </div>
             <div className={styles.twoCols}>
-                <div>
+                <div className={styles.annexTable}>
                     <Translation>
                         {
                             t => <h3>{t('Stats till date')}</h3>
                         }
                     </Translation>
 
-                    <table className={styles.annexTable}>
+                    <table>
                         <thead>
                             <tr>
                                 {covidTotalStat && Object.keys(covidTotalStat).map(iS => (
@@ -510,13 +472,13 @@ const BulletinPDFAnnex = (props) => {
 
                     </table>
                 </div>
-                <div>
+                <div className={styles.annexTable}>
                     <Translation>
                         {
                             t => <h3>{t('Vaccine Stats')}</h3>
                         }
                     </Translation>
-                    <table className={styles.annexTable}>
+                    <table>
                         <thead>
                             <tr>
                                 {vaccineStat && Object.keys(vaccineStat).map(iS => (

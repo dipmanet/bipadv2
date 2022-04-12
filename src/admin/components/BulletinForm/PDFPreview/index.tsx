@@ -378,66 +378,6 @@ const PDFPreview = (props) => {
                 // }
             })
             .save(`Bipad Bulletin ${bulletinEditData.bulletinDate || ''}`);
-
-        // const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
-
-        // eslint-disable-next-line no-undef
-        // html2pdf(report);
-        // for (let i = 0; i < length; i += 1) {
-        //     const reportPage = document.getElementById(ids[i].id);
-        //     // eslint-disable-next-line no-undef
-        //     await html2canvas(reportPage, { scale: 2 }).then((canvas) => {
-        //         const imgData = canvas.toDataURL('image/png');
-        //         const imgWidth = 210;
-        //         const pageHeight = 297;
-        //         const imgHeight = canvas.height * imgWidth / canvas.width;
-        //         // if (i < (length - 1) && i > 2) {
-        //         //     imgWidth = 295;
-        //         //     pageHeight = 210;
-        //         // }
-        //         let heightLeft = imgHeight;
-        //         let position = 0;
-        //         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-        //         if (i < 3) {
-        //             doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-        //             // if (i < 1) {
-        //             //     doc.addPage('a4', 'portrait');
-        //             // }
-        //         }
-        //         if (i >= 3) {
-        //             heightLeft -= pageHeight;
-        //             while (heightLeft >= 0) {
-        //                 position = heightLeft - imgHeight; // top padding for other pages
-        //                 pageNumber += 1;
-        //                 doc.addPage('a4', 'portrait');
-        //                 doc.addImage
-        //  (imgData, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-        //                 // doc.text(200, 285, `page ${pageNumber}`);
-        //                 heightLeft -= pageHeight;
-        //             }
-        //         }
-
-        //         if (i < (length - 1) && i < 1) {
-        //             // doc.text(270, 10, `page ${pageNumber}`);
-        //             doc.addPage('a4', 'portrait');
-        //             pageNumber += 1;
-        //         }
-        //         if (i < (length - 1) && i >= 1) {
-        //             // doc.text(270, 10, `page ${pageNumber}`);
-        //             doc.addPage('a4', 'portrait');
-        //             pageNumber += 1;
-        //         }
-        //     });
-        // }
-
-        // const bulletin = new Blob([doc.output('blob')], { type: 'application/pdf' });
-
-        // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-        //     const { id } = bulletinEditData;
-        //     updatePDF(bulletin, doc, id);
-        // } else {
-        //     savePDf(bulletin, doc);
-        // }
     };
 
     return (

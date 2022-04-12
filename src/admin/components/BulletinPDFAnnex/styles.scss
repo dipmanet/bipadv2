@@ -2,6 +2,8 @@
     font-family: "Kalimati Regular";
     src: url("../../../resources/fonts/Kalimati\ Regular.ttf") format("truetype");
     }
+
+  
     .footerPDFContainer{
     font-family: "Kalimati Regular"!important;
     width: 210mm;
@@ -18,8 +20,10 @@
         justify-content: space-between;
      
         .annexTable{
-            border-collapse: collapse;
             position: relative;
+            table{
+                border-collapse: collapse;
+            }
             td,th{
                 height: 20px;
                 border: 1px solid rgb(107, 106, 106);
@@ -30,6 +34,7 @@
             
         }
     }
+
     h3{
         position: relative;
         margin: 40px 0 20px 0;
@@ -42,6 +47,9 @@
     .provTable{
         border-collapse: collapse;
         position: relative;
+        table{
+            border-collapse: collapse;
+        }
         td,th{
             white-space: nowrap;
             text-align: center;
@@ -62,6 +70,9 @@
     .annexTable{
         border-collapse: collapse;
         position: relative;
+        table{
+            border-collapse: collapse;
+        }
         td,th{
             border: 1px solid rgb(107, 106, 106);
             padding: 2px;
