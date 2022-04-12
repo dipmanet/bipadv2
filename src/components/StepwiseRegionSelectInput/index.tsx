@@ -124,8 +124,9 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
     // private regionLabelSelector = (r: RegionElement) => r.title;
 
 
-    private regionLabelSelector = (r: RegionElement) => {
-        const { language: { language }, bulletin } = this.props;
+    private regionLabelSelector = (r: RegionElement, bulletin: boolean) => {
+        const { language: { language } } = this.props;
+        console.log('in bulletin?', bulletin);
         if (bulletin && language === 'np') {
             return r.title_ne;
         }
@@ -329,6 +330,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             autoFocus,
             showHintAndError,
             drrmLanguage,
+            bulletin,
         } = this.props;
         const {
             selectedProvinceId,
@@ -364,15 +366,15 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                         t => (
                             <SelectInput
                                 className={_cs(provinceInputClassName, styles.provinceInput)}
-                                label={t('Province')}
+                                label={bulletin ? t('Province') : 'Province'}
                                 options={provinceOptions}
                                 keySelector={regionKeySelector}
-                                labelSelector={this.regionLabelSelector}
+                                labelSelector={d => this.regionLabelSelector(d, bulletin)}
                                 value={selectedProvinceId}
                                 onChange={this.handleProvinceChange}
                                 disabled={shouldDisableProvinceInput}
                                 showHintAndError={showHintAndError}
-                                placeholder={t('All provinces')}
+                                placeholder={bulletin ? t('All provinces') : 'All provinces'}
                                 autoFocus={autoFocus}
                             />
                         )
@@ -383,15 +385,15 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                         t => (
                             <SelectInput
                                 className={_cs(districtInputClassName, styles.districtInput)}
-                                label={t('District')}
+                                label={bulletin ? t('District') : 'District'}
                                 options={districtOptions}
                                 keySelector={regionKeySelector}
-                                labelSelector={this.regionLabelSelector}
+                                labelSelector={d => this.regionLabelSelector(d, bulletin)}
                                 value={selectedDistrictId}
                                 onChange={this.handleDistrictChange}
                                 disabled={shouldDisableDistrictInput}
                                 showHintAndError={showHintAndError}
-                                placeholder={t('All districts')}
+                                placeholder={bulletin ? t('All districts') : 'All districts'}
                             />
                         )
                     }
@@ -403,15 +405,15 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
                                 className={
                                     _cs(municipalityInputClassName, styles.municipalityInput)
                                 }
-                                label={t('Municipality')}
+                                label={bulletin ? t('Municipality') : 'Municipality'}
                                 options={municipalityOptions}
                                 keySelector={regionKeySelector}
-                                labelSelector={this.regionLabelSelector}
+                                labelSelector={d => this.regionLabelSelector(d, bulletin)}
                                 value={selectedMunicipalityId}
                                 onChange={this.handleMunicipalityChange}
                                 disabled={shouldDisableMunicipalityInput}
                                 showHintAndError={showHintAndError}
-                                placeholder={t('All municipalities')}
+                                placeholder={bulletin ? t('All municipalities') : 'All municipalities'}
                             />
                         )
                     }
