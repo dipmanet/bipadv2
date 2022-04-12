@@ -454,6 +454,7 @@ const Bulletin = (props: Props) => {
                                                         _cs(styles.activeView, styles.stepwiseRegionSelectInput)}
                                                     faramElementName="region"
                                                     wardsHidden
+                                                    bulletin
                                                     value={getRegionValue(addedHazardFields[field][subField])}
                                                     onChange={region => handleFormRegion(region, field, subField)}
                                                     checkProvince={handleCheckFilterDisableButtonForProvince}

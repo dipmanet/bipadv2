@@ -54,6 +54,7 @@ interface OwnProps {
     wardsHidden?: boolean;
     autoFocus?: boolean;
     showHintAndError?: boolean;
+    bulletin?: boolean;
 }
 
 interface State {
@@ -120,16 +121,16 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
         }
     }
 
-    private regionLabelSelector = (r: RegionElement) => r.title;
+    // private regionLabelSelector = (r: RegionElement) => r.title;
 
 
-    // private regionLabelSelector = (r: RegionElement) => {
-    //     const { language: { language } } = this.props;
-    //     if (language === 'en') {
-    //         return r.title;
-    //     }
-    //     return r.title_ne;
-    // }
+    private regionLabelSelector = (r: RegionElement) => {
+        const { language: { language }, bulletin } = this.props;
+        if (bulletin && language === 'np') {
+            return r.title_ne;
+        }
+        return r.title;
+    }
 
 
     private getRegionsFromValue = memoize((
@@ -327,6 +328,7 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
             wardsHidden,
             autoFocus,
             showHintAndError,
+            drrmLanguage,
         } = this.props;
         const {
             selectedProvinceId,
