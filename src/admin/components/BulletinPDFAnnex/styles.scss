@@ -18,11 +18,14 @@
     .twoCols{
         display: flex;
         justify-content: space-between;
-     
+        flex-direction: column;
         .annexTable{
             position: relative;
             table{
                 border-collapse: collapse;
+                margin-left:5px !important;
+                width:190mm;
+
             }
             td,th{
                 height: 20px;
@@ -49,6 +52,7 @@
         position: relative;
         table{
             border-collapse: collapse;
+            width: 190mm;
         }
         td,th{
             white-space: nowrap;
@@ -72,6 +76,7 @@
         position: relative;
         table{
             border-collapse: collapse;
+            width: 190mm;
         }
         td,th{
             border: 1px solid rgb(107, 106, 106);
@@ -108,7 +113,7 @@
                 padding-left: 0;
             }
             ul li{
-                width: calc(48% - 4mm);
+                width: calc(100% - 4mm);
                 margin: 2mm;
                 font-size: 14px;
                 list-style: none;
@@ -121,7 +126,7 @@
             width: 100%;
             table {
                 table-layout:fixed;
-                width:100%;
+                width: 190mm;
             }
             
             td,th{
