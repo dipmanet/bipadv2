@@ -36,7 +36,18 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
 const Bulletin = (props: Props) => {
-    const { uri } = props;
+    const { uri, id, urlLanguage, requests: { getEditByURl } } = props;
+
+    useEffect(() => {
+        if (id && urlLanguage) {
+            getEditByURl.do({
+                id,
+                language: urlLanguage,
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             <Page hideFilter hideMap />
@@ -47,7 +58,12 @@ const Bulletin = (props: Props) => {
                 subLevel={'bulletin'}
                 uri={uri}
             />
-            <BulletinForm />
+            <BulletinForm
+                uri={uri}
+                urlLanguage={urlLanguage}
+                id={id}
+            />
+
             <Footer />
         </>
     );

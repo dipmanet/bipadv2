@@ -105,6 +105,7 @@ const Bulletin = (props: Props) => {
     // const [dateAlt, setDate] = useState('');
 
     useEffect(() => {
+        console.log('uri here', uri);
         if (uri && uri.includes('nepali')) {
             setLanguage({ language: 'np' });
         } if (uri && uri.includes('english')) {
