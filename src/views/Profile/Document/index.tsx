@@ -7,6 +7,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import modalize from '#rscg/Modalize';
 import DangerConfirmButton from '#rsca/ConfirmButton/DangerConfirmButton';
 import PrimaryButton from '#rsca/Button/PrimaryButton';
@@ -40,6 +41,7 @@ import {
 import {
     regionSelector,
     regionNameSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -84,11 +86,18 @@ interface RegionOption {
     title: string;
 }
 
+
 const regionOptions: RegionOption[] = [
     { id: 'national', title: 'national' },
     { id: 'province', title: 'province' },
     { id: 'district', title: 'district' },
     { id: 'municipality', title: 'municipality' },
+];
+const regionOptionsNe: RegionOption[] = [
+    { id: 'national', title: 'राष्ट्रिय' },
+    { id: 'province', title: 'प्रान्त' },
+    { id: 'district', title: 'जिल्‍ला' },
+    { id: 'municipality', title: 'नगरपालिका' },
 ];
 
 type ReduxProps = ComponentProps & PropsFromState;
@@ -97,6 +106,7 @@ type Props = NewProps<ReduxProps, Params>;
 const mapStateToProps = (state: AppState): PropsFromState => ({
     region: regionSelector(state),
     regionName: regionNameSelector(state),
+    language: languageSelector(state),
 });
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     documentsGetRequest: {
@@ -167,76 +177,83 @@ const DocumentRenderer = (props: DocumentProps) => {
                     src={documentIcon}
                 />
             </div>
-            <div className={styles.details}>
-                <header className={styles.header}>
-                    <h3 className={styles.heading}>
-                        { title }
-                    </h3>
-                    <div className={styles.actions}>
-                        <Cloak hiddenIf={p => !p.change_document}>
-                            <ModalButton
-                                className={styles.editButton}
-                                iconName="edit"
-                                transparent
-                                modal={(
-                                    <AddDocumentForm
-                                        value={document}
-                                        onUpdate={onUpdate}
-                                    />
-                                )}
-                                disabled={disabled}
-                            >
-                                Edit
-                            </ModalButton>
-                        </Cloak>
-                        <Cloak hiddenIf={p => !p.delete_document}>
-                            <DangerConfirmButton
-                                className={styles.deleteButton}
-                                confirmationMessage="Are you sure you want to delete this document?"
-                                disabled={disabled}
-                                iconName="delete"
-                                onClick={handleDelete}
-                                transparent
-                            >
-                                Delete
-                            </DangerConfirmButton>
-                        </Cloak>
-                        <a
-                            className={styles.downloadLink}
-                            href={file}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Icon
-                                className={styles.downloadIcon}
-                                name="download"
-                            />
-                            <div className={styles.text}>
-                                Download
+            <Translation>
+                {
+                    t => (
+                        <div className={styles.details}>
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    { title }
+                                </h3>
+                                <div className={styles.actions}>
+                                    <Cloak hiddenIf={p => !p.change_document}>
+                                        <ModalButton
+                                            className={styles.editButton}
+                                            iconName="edit"
+                                            transparent
+                                            modal={(
+                                                <AddDocumentForm
+                                                    value={document}
+                                                    onUpdate={onUpdate}
+                                                />
+                                            )}
+                                            disabled={disabled}
+                                        >
+                                            {t('Edit')}
+                                        </ModalButton>
+                                    </Cloak>
+                                    <Cloak hiddenIf={p => !p.delete_document}>
+                                        <DangerConfirmButton
+                                            className={styles.deleteButton}
+                                            confirmationMessage={t('Are you sure you want to delete this document?')}
+                                            disabled={disabled}
+                                            iconName="delete"
+                                            onClick={handleDelete}
+                                            transparent
+                                        >
+                                            {t('Delete')}
+                                        </DangerConfirmButton>
+                                    </Cloak>
+                                    <a
+                                        className={styles.downloadLink}
+                                        href={file}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <Icon
+                                            className={styles.downloadIcon}
+                                            name="download"
+                                        />
+                                        <div className={styles.text}>
+                                            {t('Download')}
+                                        </div>
+                                    </a>
+                                </div>
+                            </header>
+                            <div className={styles.content}>
+                                <DetailItem
+                                    label={t('Date of publication')}
+                                    value={(
+                                        <FormattedDate
+                                            value={publishedDate}
+                                            mode="yyyy-MM-dd"
+                                        />
+                                    )}
+                                />
+                                <DetailItem
+                                    label={t('Region')}
+                                    value={region}
+                                />
+                                <DetailItem
+                                    label={t('Category')}
+                                    value={categoryName}
+                                />
                             </div>
-                        </a>
-                    </div>
-                </header>
-                <div className={styles.content}>
-                    <DetailItem
-                        label="Date of publication"
-                        value={(
-                            <FormattedDate
-                                value={publishedDate}
-                                mode="yyyy-MM-dd"
-                            />
-                        )}
-                    />
-                    <DetailItem
-                        label="Region"
-                        value={region}
-                    />
-                    <DetailItem
-                        label="Category"
-                        value={categoryName}
-                    />
-                </div>
-            </div>
+                        </div>
+                    )
+                }
+            </Translation>
+
         </div>
     );
 };
@@ -332,6 +349,7 @@ class Document extends React.PureComponent<Props, State> {
             className,
             requests,
             region,
+            language: { language },
         } = this.props;
 
         const {
@@ -389,28 +407,37 @@ class Document extends React.PureComponent<Props, State> {
                         </AccentModalButton>
                     </Cloak>
                 </header>
-                <div className={styles.filters}>
-                    <SelectInput
-                        className={styles.categorySelectInput}
-                        label="category"
-                        onChange={this.handleCategorySelection}
-                        value={selectedCategory}
-                        options={documentCategories}
-                        showHintAndError={false}
-                        keySelector={categoryKeySelector}
-                        labelSelector={categoryLabelSelector}
-                    />
-                    <SelectInput
-                        className={styles.regionSelectInput}
-                        label="region"
-                        onChange={this.handleRegionSelection}
-                        value={selectedRegion}
-                        options={regionOptions}
-                        showHintAndError={false}
-                        keySelector={regionKeySelector}
-                        labelSelector={regionLabelSelector}
-                    />
-                </div>
+                <Translation>
+                    {
+                        t => (
+                            <div className={styles.filters}>
+
+                                <SelectInput
+                                    className={styles.categorySelectInput}
+                                    label={t('Category')}
+                                    onChange={this.handleCategorySelection}
+                                    value={selectedCategory}
+                                    options={documentCategories}
+                                    showHintAndError={false}
+                                    keySelector={categoryKeySelector}
+                                    labelSelector={categoryLabelSelector}
+                                />
+                                <SelectInput
+                                    className={styles.regionSelectInput}
+                                    label={t('Region')}
+                                    onChange={this.handleRegionSelection}
+                                    value={selectedRegion}
+                                    options={language === 'en' ? regionOptions : regionOptionsNe}
+                                    showHintAndError={false}
+                                    keySelector={regionKeySelector}
+                                    labelSelector={regionLabelSelector}
+                                />
+
+
+                            </div>
+                        )
+                    }
+                </Translation>
                 <ListView
                     className={styles.content}
                     data={expandedDocuments}

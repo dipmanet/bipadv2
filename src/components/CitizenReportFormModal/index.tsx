@@ -286,7 +286,7 @@ class CitizenReportFormModal extends React.PureComponent<Props, State> {
                                             keySelector={keySelector}
                                             labelSelector={d => labelSelector(d, language)}
                                             label={t('Hazard')}
-                                            placeholder={language === 'np' && 'विकल्प चयन गर्नुहोस्'}
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         />
                                     )
                                 }

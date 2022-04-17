@@ -7,6 +7,7 @@ import {
     listToMap,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
 import MapSource from '#re-map/MapSource';
@@ -381,34 +382,42 @@ class ContactPage extends React.PureComponent<Props, State> {
                         }}
                     />
                 </MapSource>
-                <div className={_cs(className, styles.left)}>
-                    <header className={styles.header}>
-                        <h2 className={styles.heading}>
-                            Contact personnels
-                        </h2>
-                        <Cloak hiddenIf={p => !p.add_contact}>
-                            <AccentModalButton
-                                className={styles.button}
-                                iconName="add"
-                                transparent
-                                modal={(
-                                    <ContactEditForm
-                                        onAddSuccess={this.handleContactAdd}
-                                    />
-                                )}
-                            >
-                                Add Contact
-                            </AccentModalButton>
-                        </Cloak>
-                    </header>
-                    <ListView
-                        className={styles.contactDetailsList}
-                        data={filteredContactList}
-                        renderer={ContactItem}
-                        rendererParams={this.contactRendererParams}
-                        keySelector={contactKeySelector}
-                    />
-                </div>
+                <Translation>
+                    {
+                        t => (
+                            <div className={_cs(className, styles.left)}>
+                                <header className={styles.header}>
+                                    <h2 className={styles.heading}>
+                                        {t('Contact personnels')}
+                                    </h2>
+                                    <Cloak hiddenIf={p => !p.add_contact}>
+                                        <AccentModalButton
+                                            className={styles.button}
+                                            iconName="add"
+                                            transparent
+                                            modal={(
+                                                <ContactEditForm
+                                                    onAddSuccess={this.handleContactAdd}
+                                                />
+                                            )}
+                                        >
+                                        Add Contact
+                                        </AccentModalButton>
+                                    </Cloak>
+                                </header>
+                                <ListView
+                                    className={styles.contactDetailsList}
+                                    data={filteredContactList}
+                                    renderer={ContactItem}
+                                    rendererParams={this.contactRendererParams}
+                                    keySelector={contactKeySelector}
+                                />
+                            </div>
+                        )
+                    }
+
+                </Translation>
+
             </>
         );
     }

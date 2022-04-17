@@ -4,6 +4,8 @@ import {
     compareNumber,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Modal from '#rscv/Modal';
 import ModalHeader from '#rscv/Modal/Header';
 import ModalBody from '#rscv/Modal/Body';
@@ -23,11 +25,16 @@ import {
 } from '#utils/table';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
 
 interface Props {
     realTimeRain: RealTimeRain[];
     closeModal?: () => void;
 }
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const rainWatchKeySelector = (rain: RealTimeRain) => rain.id;
 
@@ -53,30 +60,30 @@ const defaultSort = {
 class RainWatch extends React.PureComponent<Props> {
     public constructor(props: Props) {
         super(props);
-
+        const { language: { language } } = this.props;
         this.rainWatchHeader = [
             {
                 key: 'basin',
-                label: 'Basin',
+                label: language === 'en' ? 'Basin' : 'बेसिन',
                 order: 1,
                 sortable: true,
                 comparator: (a, b) => compareString(a.basin, b.basin),
             },
             {
                 key: 'title',
-                label: 'Title',
+                label: language === 'en' ? 'Title' : 'शीर्षक',
                 order: 2,
                 sortable: true,
                 comparator: (a, b) => compareString(a.title, b.title),
             },
             {
                 key: 'description',
-                label: 'Description',
+                label: language === 'en' ? 'Description' : 'विवरण',
                 order: 3,
             },
             {
                 key: 'lastHour',
-                label: 'Accumulated rainfall within last 1 hours',
+                label: language === 'en' ? 'Accumulated rainfall within last 1 hours' : 'पछिल्‍लो १ घण्टा भित्र सञ्चित वर्षा',
                 order: 4,
                 modifier: (row) => {
                     const {
@@ -90,7 +97,7 @@ class RainWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'lastThreeHours',
-                label: 'Accumulated rainfall within last 3 hours',
+                label: language === 'en' ? 'Accumulated rainfall within last 3 hours' : 'पछिल्‍लो ३ घण्टामा सञ्चित वर्षा',
                 order: 5,
                 modifier: (row) => {
                     const {
@@ -104,7 +111,7 @@ class RainWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'lastSixHours',
-                label: 'Accumulated rainfall within last 6 hours',
+                label: language === 'en' ? 'Accumulated rainfall within last 6 hours' : 'पछिल्‍लो ६ घण्टामा सञ्चित वर्षा',
                 order: 6,
                 modifier: (row) => {
                     const {
@@ -118,7 +125,7 @@ class RainWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'lastTwelveHours',
-                label: 'Accumulated rainfall within last 12 hours',
+                label: language === 'en' ? 'Accumulated rainfall within last 12 hours' : 'पछिल्‍लो १२ घण्टामा सञ्चित वर्षा',
                 order: 7,
                 modifier: (row) => {
                     const {
@@ -132,7 +139,7 @@ class RainWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'lastTwentyFourHours',
-                label: 'Accumulated rainfall within last 24 hours',
+                label: language === 'en' ? 'Accumulated rainfall within last 24 hours' : 'पछिल्‍लो २४ घण्टामा सञ्चित वर्षा',
                 order: 8,
                 modifier: (row) => {
                     const {
@@ -146,7 +153,7 @@ class RainWatch extends React.PureComponent<Props> {
             },
             {
                 key: 'status',
-                label: 'Status',
+                label: language === 'en' ? 'Status' : 'स्थिति',
                 order: 9,
                 sortable: true,
                 comparator: (a, b) => compareString(a.status, b.status),
@@ -178,52 +185,60 @@ class RainWatch extends React.PureComponent<Props> {
 
         const formattedTableData = convertNormalTableToCsv(realTimeRain, this.rainWatchHeader);
         return (
-            <Modal
-                // closeOnEscape
-                // onClose={closeModal}
-                className={styles.rainWatchModal}
-            >
-                <ModalHeader
-                    title="Rainfall Watch"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <div className={styles.warning}>
-                    Note : Warning level for rainfall (mm): 60 mm in 1 hr, 80 mm in 3 hr,
-                    100 mm in 6 hr, 120 mm in 12 hr, 140 mm in 24 hr. This indicates
-                    potential threat for landslides in steep slope and high flow in local areas.
-                </div>
-                <hr />
-                <ModalBody className={styles.body}>
-                    <Table
-                        rowClassNameSelector={this.getClassName}
-                        className={styles.rainWatchTable}
-                        data={realTimeRain}
-                        headers={this.rainWatchHeader}
-                        keySelector={rainWatchKeySelector}
-                        defaultSort={defaultSort}
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <DangerButton onClick={closeModal}>
-                        Close
-                    </DangerButton>
-                    <DownloadButton
-                        value={formattedTableData}
-                        name="Rainfall Watch.csv"
-                    >
-                        Download
-                    </DownloadButton>
-                </ModalFooter>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal
+                            // closeOnEscape
+                            // onClose={closeModal}
+                            className={styles.rainWatchModal}
+                        >
+
+                            <ModalHeader
+                                title={t('Rainfall Watch')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <div className={styles.warning}>
+                                {
+                                    t('Note : Warning level for rainfall (mm): 60 mm in 1 hr, 80 mm in 3 hr, 100 mm in 6 hr, 120 mm in 12 hr, 140 mm in 24 hr. This indicates potential threat for landslides in steep slope and high flow in local areas.')
+                                }
+                            </div>
+                            <hr />
+                            <ModalBody className={styles.body}>
+                                <Table
+                                    rowClassNameSelector={this.getClassName}
+                                    className={styles.rainWatchTable}
+                                    data={realTimeRain}
+                                    headers={this.rainWatchHeader}
+                                    keySelector={rainWatchKeySelector}
+                                    defaultSort={defaultSort}
+                                />
+                            </ModalBody>
+                            <ModalFooter>
+                                <DangerButton onClick={closeModal}>
+                                    {t('Close')}
+                                </DangerButton>
+                                <DownloadButton
+                                    value={formattedTableData}
+                                    name="Rainfall Watch.csv"
+                                >
+                                    {t('Download')}
+                                </DownloadButton>
+                            </ModalFooter>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default RainWatch;
+export default connect(mapStateToProps)(RainWatch);

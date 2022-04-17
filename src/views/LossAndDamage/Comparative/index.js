@@ -219,6 +219,7 @@ class Comparative extends React.PureComponent {
                                     <>
                                         <RegionSelectInput
                                             label={t('First location')}
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                             className={styles.regionInput}
                                             faramElementName="region1"
                                             showHintAndError={false}
@@ -226,6 +227,7 @@ class Comparative extends React.PureComponent {
                                         />
                                         <RegionSelectInput
                                             label={t('Second location')}
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                             className={styles.regionInput}
                                             faramElementName="region2"
                                             showHintAndError={false}

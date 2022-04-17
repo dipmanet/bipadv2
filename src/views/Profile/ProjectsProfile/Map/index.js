@@ -2,6 +2,7 @@ import React from 'react';
 import memoize from 'memoize-one';
 import { _cs, mapToList, isNotDefined } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import Numeral from '#rscv/Numeral';
 
 import ChoroplethMap from '#components/ChoroplethMap';
@@ -90,9 +91,16 @@ export default class ProjectsProfileMap extends React.PureComponent {
                         leftPaneExpanded && styles.leftPaneExpanded,
                     )}
                 >
-                    <h5 className={styles.heading}>
-                        No. of projects
-                    </h5>
+                    <Translation>
+                        {
+                            t => (
+                                <h5 className={styles.heading}>
+                                    {t('No. of projects')}
+                                </h5>
+                            )
+                        }
+                    </Translation>
+
                     <div className={styles.range}>
                         <Numeral
                             className={styles.min}

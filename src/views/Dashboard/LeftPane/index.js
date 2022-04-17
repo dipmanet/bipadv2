@@ -29,6 +29,7 @@ import Visualizations from './Visualizations';
 import AddAlertForm from './AddAlertForm';
 import AddEventForm from './AddEventForm';
 import AlertTable from './AlertTable';
+import { languageSelector } from '#selectors';
 
 import {
     pastDaysToDateRange,
@@ -52,6 +53,10 @@ const defaultProps = {
     className: undefined,
     // language: { language: 'en' },
 };
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const AlertTableModalButton = modalize(Button);
 
@@ -79,22 +84,33 @@ const EventEmptyComponent = () => (
     </div>
 );
 
+
 const AlertTableModal = ({
     closeModal,
     alertList,
+    language,
 }) => (
-    <Modal className={styles.alertTableModal}>
-        <ModalHeader
-            title="Alerts"
-            rightComponent={(
-                <DangerButton
-                    transparent
-                    iconName="close"
-                    onClick={closeModal}
-                    title="Close Modal"
-                />
-            )}
-        />
+    <Modal className={_cs(styles.alertTableModal,
+        language === 'np' && styles.languageFont)}
+    >
+        <Translation>
+            {
+                t => (
+                    <ModalHeader
+                        title={t('Alerts')}
+                        rightComponent={(
+                            <DangerButton
+                                transparent
+                                iconName="close"
+                                onClick={closeModal}
+                                title="Close Modal"
+                            />
+                        )}
+                    />
+                )
+            }
+        </Translation>
+
         <ModalBody className={styles.body}>
             <AlertTable
                 className={styles.table}
@@ -249,8 +265,8 @@ class LeftPane extends React.PureComponent {
             eventList,
             hazardTypes,
             dateRange,
+            language: { language },
         } = this.props;
-
         const {
             showAddAlertModal,
             showAddEventModal,
@@ -417,6 +433,7 @@ class LeftPane extends React.PureComponent {
                             modal={(
                                 <AlertTableModal
                                     alertList={alertList}
+                                    language={language}
                                 />
                             )}
                         />
@@ -473,4 +490,4 @@ class LeftPane extends React.PureComponent {
         );
     }
 }
-export default connect(undefined, undefined)(LeftPane);
+export default connect(mapStateToProps)(LeftPane);

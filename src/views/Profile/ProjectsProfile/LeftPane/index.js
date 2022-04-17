@@ -9,6 +9,7 @@ import {
     PieChart,
 } from 'recharts';
 
+import { Translation } from 'react-i18next';
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import StatOutput from '#components/StatOutput';
@@ -151,11 +152,18 @@ class ProjectsProfileLeftPane extends React.PureComponent {
                         </div>
                     )}
                 </div>
-                <StatOutput
-                    className={styles.stat}
-                    label="No. of Projects"
-                    value={projects.length}
-                />
+                <Translation>
+                    {
+                        t => (
+                            <StatOutput
+                                className={styles.stat}
+                                label={t('No. of Projects')}
+                                value={projects.length}
+                            />
+                        )
+                    }
+                </Translation>
+
                 <ListView
                     className={styles.projectsList}
                     data={projects}

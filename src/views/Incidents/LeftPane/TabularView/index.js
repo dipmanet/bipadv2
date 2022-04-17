@@ -9,6 +9,8 @@ import {
     compareNumber,
 } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import Numeral from '#rscv/Numeral';
 import NormalTaebul from '#rscv/Taebul';
 import Sortable from '#rscv/Taebul/Sortable';
@@ -25,6 +27,8 @@ import {
 } from '#utils/table';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
 
 const Taebul = Sortable(ColumnWidth(NormalTaebul));
 
@@ -37,6 +41,10 @@ const defaultProps = {
     incidentList: [],
     className: undefined,
 };
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const NumeralCell = ({ value }) => (
     <Numeral
@@ -59,7 +67,7 @@ const getDateFromMilliseconds = (milliseconds) => {
         .split('T')[0];
 };
 
-export default class TabularView extends React.PureComponent {
+class TabularView extends React.PureComponent {
     static propTypes = propTypes
 
     static defaultProps = defaultProps
@@ -68,38 +76,39 @@ export default class TabularView extends React.PureComponent {
 
     constructor(props) {
         super(props);
+        const { language: { language } } = this.props;
 
         this.columns = prepareColumns([
             {
                 key: 'verified',
-                value: { title: 'Verified' },
+                value: { title: language === 'en' ? 'Verified' : 'प्रमाणित' },
 
                 comparator: createComparator(compareBoolean, 'verified'),
                 transformer: value => (value ? 'Yes' : 'No'),
             },
             {
                 key: 'title',
-                value: { title: 'Title' },
+                value: { title: language === 'en' ? 'Title' : 'शीर्षक' },
                 comparator: createComparator(compareString, 'title'),
             },
             {
                 key: 'description',
-                value: { title: 'Description' },
+                value: { title: language === 'en' ? 'Description' : 'विवरण' },
                 comparator: createComparator(compareString, 'description'),
             },
             {
                 key: 'source',
-                value: { title: 'Source' },
+                value: { title: language === 'en' ? 'Source' : 'श्रोत' },
                 comparator: createComparator(compareString, 'source'),
             },
             {
                 key: 'hazardInfo.title',
-                value: { title: 'Hazard' },
+                value: { title: language === 'en' ? 'Hazard' : 'प्रकोप' },
                 comparator: createComparator(compareString, 'hazardInfo.title'),
             },
             {
                 key: 'incidentOn',
-                value: { title: 'Incident on' },
+                value: { title: language === 'en' ? 'Incident on' : 'घटना भएको' },
                 // cellRenderer: TableDateCell,
                 // comparator: createComparator(compareDate, 'incidentOn'),
                 comparator: createComparator(compareNumber, 'incidentOn'),
@@ -113,156 +122,156 @@ export default class TabularView extends React.PureComponent {
             // },
             {
                 key: 'provinceTitle',
-                value: { title: 'Province' },
+                value: { title: language === 'en' ? 'Province' : 'प्रदेश' },
                 comparator: createComparator(compareString, 'provinceTitle'),
             },
             {
                 key: 'districtTitle',
-                value: { title: 'District' },
+                value: { title: language === 'en' ? 'District' : 'जिल्‍ला' },
                 comparator: createComparator(compareString, 'districtTitle'),
             },
             {
                 key: 'municipalityTitle',
-                value: { title: 'Municipality' },
+                value: { title: language === 'en' ? 'Municipality' : 'नगरपालिका' },
                 comparator: createComparator(compareString, 'municipalityTitle'),
             },
             {
                 key: 'wardTitle',
-                value: { title: 'Ward' },
+                value: { title: language === 'en' ? 'Ward' : 'वार्ड' },
                 comparator: createComparator(compareString, 'wardTitle'),
             },
 
             {
                 key: 'loss.estimatedLoss',
-                value: { title: 'Total estimated loss (NPR)' },
+                value: { title: language === 'en' ? 'Total estimated loss (NPR)' : 'कुल अनुमानित क्षति (रु)' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.estimatedLoss'),
             },
             {
                 key: 'loss.agricultureEconomicLoss',
-                value: { title: 'Agriculture economic loss (NPR)' },
+                value: { title: language === 'en' ? 'Agriculture economic loss (NPR)' : 'कृषि आर्थिक नोक्सान (रु)' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.agricultureEconomicLoss'),
             },
             {
                 key: 'loss.infrastructureEconomicLoss',
-                value: { title: 'Infrastructur economic loss (NPR)' },
+                value: { title: language === 'en' ? 'Infrastructure economic loss (NPR)' : 'भौतिक पूर्वाधारमा आर्थिक क्षति (रु)' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.infrastructureEconomicLoss'),
             },
             {
                 key: 'loss.infrastructureDestroyedCount',
-                value: { title: 'Total infrastructure destroyed' },
+                value: { title: language === 'en' ? 'Total infrastructure destroyed' : 'कुल पूर्वाधार हानि' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedCount'),
             },
             {
                 key: 'loss.infrastructureDestroyedHouseCount',
-                value: { title: 'House destroyed' },
+                value: { title: language === 'en' ? 'House destroyed' : 'घर भत्‍किएको' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.infrastructureDestroyedHouseCount'),
             },
             {
                 key: 'loss.infrastructureAffectedHouseCount',
-                value: { title: 'House affected' },
+                value: { title: language === 'en' ? 'House affected' : 'घर प्रभावित' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.infrastructureAffectedHouseCount'),
             },
 
             {
                 key: 'loss.livestockDestroyedCount',
-                value: { title: 'Total livestock destroyed' },
+                value: { title: language === 'en' ? 'Total livestock destroyed' : 'कुल पशुधन नष्ट' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.livestockDestroyedCount'),
             },
 
             {
                 key: 'loss.peopleDeathCount',
-                value: { title: 'Total - People Death' },
+                value: { title: language === 'en' ? 'Total - People Death' : 'कुल - मानिसहरूको मृत्यु' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleDeathCount'),
             },
             {
                 key: 'loss.peopleDeathMaleCount',
-                value: { title: 'Male - People Death' },
+                value: { title: language === 'en' ? 'Male - People Death' : 'पुरुष - मान्छे मृत्यु' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleDeathMaleCount'),
             },
             {
                 key: 'loss.peopleDeathFemaleCount',
-                value: { title: 'Female - People Death' },
+                value: { title: language === 'en' ? 'Female - People Death' : 'महिला - मान्छे मृत्यु' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleDeathFemaleCount'),
             },
             {
                 key: 'loss.peopleDeathUnknownCount',
-                value: { title: 'Unknown - People Death' },
+                value: { title: language === 'en' ? 'Unknown - People Death' : 'अज्ञात - मान्छे मृत्यु' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleDeathUnknownCount'),
             },
             {
                 key: 'loss.peopleDeathDisabledCount',
-                value: { title: 'Disabled - People Death' },
+                value: { title: language === 'en' ? 'Disabled - People Death' : 'अशक्त - मान्छे मृत्यु' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleDeathDisabledCount'),
             },
             {
                 key: 'loss.peopleMissingCount',
-                value: { title: 'Total - People Missing' },
+                value: { title: language === 'en' ? 'Total - People Missing' : 'कुल - हराएको मान्छे' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleMissingCount'),
             },
             {
                 key: 'loss.peopleMissingMaleCount',
-                value: { title: 'Male - People Missing' },
+                value: { title: language === 'en' ? 'Male - People Missing' : 'पुरुष - हराएको मान्छे' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleMissingMaleCount'),
             },
             {
                 key: 'loss.peopleMissingFemaleCount',
-                value: { title: 'Female - People Missing' },
+                value: { title: language === 'en' ? 'Female - People Missing' : 'महिला - हराएको मान्छे' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleMissingFemaleCount'),
             },
             {
                 key: 'loss.peopleMissingUnknownCount',
-                value: { title: 'Unknown - People Missing' },
+                value: { title: language === 'en' ? 'Unknown - People Missing' : 'अज्ञात - मान्छे हराइरहेको' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleMissingUnknownCount'),
             },
             {
                 key: 'loss.peopleMissingDisabledCount',
-                value: { title: 'Disabled - People Missing' },
+                value: { title: language === 'en' ? 'Disabled - People Missing' : 'असक्षम - मान्छे हराइरहेको' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleMissingDisabledCount'),
             },
             {
                 key: 'loss.peopleInjuredCount',
-                value: { title: 'Total - People Injured' },
+                value: { title: language === 'en' ? 'Total - People Injured' : 'कुल - व्यक्ति घाइते' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredCount'),
             },
             {
                 key: 'loss.peopleInjuredMaleCount',
-                value: { title: 'Male - People Injured' },
+                value: { title: language === 'en' ? 'Male - People Injured' : 'पुरुष - मानिसहरू घाइते' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredMaleCount'),
             },
             {
                 key: 'loss.peopleInjuredFemaleCount',
-                value: { title: 'Female - People Injured' },
+                value: { title: language === 'en' ? 'Female - People Injured' : 'महिला - व्यक्ति घाइते' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredFemaleCount'),
             },
             {
                 key: 'loss.peopleInjuredUnknownCount',
-                value: { title: 'Unknown - People Injured' },
+                value: { title: language === 'en' ? 'Unknown - People Injured' : 'अज्ञात - मानिसहरू घाइते' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredUnknownCount'),
             },
             {
                 key: 'loss.peopleInjuredDisabledCount',
-                value: { title: 'Disabled - People Injured' },
+                value: { title: language === 'en' ? 'Disabled - People Injured' : 'अशक्त - घाइते व्यक्तिहरू' },
                 cellRenderer: NumeralCell,
                 comparator: createComparator(compareNumber, 'loss.peopleInjuredDisabledCount'),
             },
@@ -283,12 +292,15 @@ export default class TabularView extends React.PureComponent {
         const {
             className,
             incidentList,
+            language: { language },
         } = this.props;
 
         const incidentListForExport = this.convertValues(incidentList, this.columns);
 
         return (
-            <div className={_cs(className, styles.tabularView)}>
+            <div className={_cs(className, styles.tabularView,
+                styles.tabularView, language === 'np' && styles.languageFont)}
+            >
                 <div className={styles.tableContainer}>
                     <Taebul
                         className={styles.incidentsTable}
@@ -303,14 +315,22 @@ export default class TabularView extends React.PureComponent {
                     />
                 </div>
                 <div className={styles.downloadLinkContainer}>
-                    <DownloadButton
-                        value={incidentListForExport}
-                        name="incidents"
-                    >
-                        Download csv
-                    </DownloadButton>
+                    <Translation>
+                        {
+                            t => (
+                                <DownloadButton
+                                    value={incidentListForExport}
+                                    name="incidents"
+                                >
+                                    {t('Download csv')}
+                                </DownloadButton>
+                            )
+                        }
+                    </Translation>
+
                 </div>
             </div>
         );
     }
 }
+export default connect(mapStateToProps)(TabularView);

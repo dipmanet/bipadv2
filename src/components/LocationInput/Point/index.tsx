@@ -454,7 +454,7 @@ class DraggablePoint extends React.PureComponent<Props, State> {
                             <RegionSelectInput
                                 className={styles.regionInput}
                                 label={t('Region')}
-                                placeholder={language === 'np' && 'विकल्प खोज्नुहोस्'}
+                                placeholder={language === 'en' ? 'Search for an option' : 'विकल्प खोज्नुहोस्'}
                                 value={region}
                                 onChange={this.handleRegionSelectInputChange}
                                 maxOptions={50}

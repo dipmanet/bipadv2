@@ -1,6 +1,24 @@
 export const enTranslation = {
     translation: {
+        Category: 'Category',
+        'Nothing to show.': 'Nothing to show.',
+        'Date of publication': 'Date of publication',
+        'Are you sure you want to delete this document?': 'Are you sure you want to delete this document?',
+
+
+        'Contact personnels': 'Contact personnels',
+        'No. of Projects': 'No. of Projects',
+        'No. of projects': 'No. of projects',
+        'priority area': 'priority area',
+        'priority action': 'priority action',
+        activities: 'activities',
+        organization: 'organization',
+
+
         'Download csv': 'Download csv',
+        'Note : Warning level for rainfall (mm): 60 mm in 1 hr, 80 mm in 3 hr, 100 mm in 6 hr, 120 mm in 12 hr, 140 mm in 24 hr. This indicates potential threat for landslides in steep slope and high flow in local areas.': 'Note : Warning level for rainfall (mm): 60 mm in 1 hr, 80 mm in 3 hr, 100 mm in 6 hr, 120 mm in 12 hr, 140 mm in 24 hr. This indicates potential threat for landslides in steep slope and high flow in local areas.',
+
+        'Rainfall Watch': 'Rainfall Watch',
         'No Publications to display': 'No Publications to display',
         'BIPAD: Building Information Platform Against Disaster': 'BIPAD: Building Information Platform Against Disaster',
         'Disaster related data/information is one of the most crucial components for policy making, planning, and implementing DRRM activities.BIPAD is built at a time when disaster governance in Nepal is changing on account of federal restructuring of the country.However, disaster data/information is still scattered, insufficient and not fully harmonized.On this backdrop, BIPAD is developed by pooling all credible digital and spatial data that are available within different government bodies, non-governmental organizations, academic institutions and research organizations on a single platform.The platform has six modules in the portal that has the potential to:': 'Disaster related data/information is one of the most crucial components for policy making, planning, and implementing DRRM activities.BIPAD is built at a time when disaster governance in Nepal is changing on account of federal restructuring of the country.However, disaster data/information is still scattered, insufficient and not fully harmonized.On this backdrop, BIPAD is developed by pooling all credible digital and spatial data that are available within different government bodies, non-governmental organizations, academic institutions and research organizations on a single platform.The platform has six modules in the portal that has the potential to:',
@@ -136,6 +154,7 @@ export const enTranslation = {
         'Situation Report': 'Situation Report',
         'Rain watch': 'Rain watch',
         'River watch': 'River watch',
+        'River Watch': 'River Watch',
         'Data source': 'Data source',
         DateRangeInfo: 'Showing Data From',
         to: 'to',
@@ -302,6 +321,20 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Nothing to show.': 'देखाउन को लागी केहि छैन।',
+        Category: 'श्रेणी',
+        'Date of publication': 'प्रकाशन मिति',
+        'Are you sure you want to delete this document?': 'के तपाइँ यो कागजात मेटाउन निश्चित हुनुहुन्छ?',
+
+        'Contact personnels': 'सम्पर्क कर्मचारीहरू',
+        'No. of Projects': 'परियोजनाहरूको संख्या',
+        'No. of projects': 'परियोजनाहरूको संख्या',
+        'priority area': 'प्राथमिकता क्षेत्र',
+        'priority action': 'प्राथमिकता कार्य',
+        activities: 'गतिविधिहरु',
+        organization: 'संगठन',
+        'Note : Warning level for rainfall (mm): 60 mm in 1 hr, 80 mm in 3 hr, 100 mm in 6 hr, 120 mm in 12 hr, 140 mm in 24 hr. This indicates potential threat for landslides in steep slope and high flow in local areas.': 'नोट: वर्षाको लागि चेतावनी स्तर (मिमी): १ घण्टामा ६० मिमी, ३ घण्टामा ८० मिमी, ६ घण्टामा १०० मिमी, १२ घण्टामा १२० मिमी, २४ घण्टामा १४० मिमी। यसले स्थानीय क्षेत्रमा ठाडो ढलान र उच्च प्रवाहमा पहिरोको सम्भावित खतरालाई सङ्केत गर्छ।',
+        'Rainfall Watch': 'वर्षाको डाटा',
         'Download csv': 'csv डाउनलोड गर्नुहोस्',
         'No Publications to display': 'प्रदर्शन गर्न कुनै प्रकाशनहरू छैनन्',
         'BIPAD: Building Information Platform Against Disaster': 'विपद्: प्रकोप विरुद्ध जानकारी प्लेटफर्म निर्माण',
@@ -435,8 +468,9 @@ export const npTranslation = {
         'Report an incident': 'घटना रिपोर्ट गर्नुहोस्',
         Relief: 'राहत',
         'Situation Report': 'स्थिति रिपोर्ट',
-        'Rain watch': 'वर्षा घडी',
-        'River watch': 'नदी घडी',
+        'Rain watch': 'वर्षा डाटा',
+        'River watch': 'नदी डाटा',
+        'River Watch': 'नदी डाटा',
         'Data source': 'डाटा स्रोत',
         DateRangeInfo: 'देखाइएको डाटा देखी',
         to: 'सम्म',
@@ -449,7 +483,7 @@ export const npTranslation = {
         'Flood at': 'बाढी',
         Ma: 'मा',
         Edit: 'सम्पादन गर्नुहोस्',
-        Delete: 'मेटाउनहोस्',
+        Delete: 'मेटाउनुहोस्',
         Filters: 'फिल्टरहरु',
         Submit: 'पेस गर्नुहोस्',
         Dashboard: 'ड्यासबोर्ड',
@@ -591,7 +625,7 @@ export const npTranslation = {
         'Second location': 'दोस्रो स्थान',
         'Select an option': 'विकल्प चयन गर्नुहोस्',
         SelectMessage: 'कृपया तुलना सुरु गर्न स्थानहरू चयन गर्नुहोस्',
-        'Estimated Monetary Loss': 'अनुमानित क्षति (NPR)',
+        'Estimated Monetary Loss': 'अनुमानित क्षति (रु)',
         'Death toll by disaster': 'प्रकोपबाट मृत्यु हुनेको संख्या',
         'Estimated economic loss by disaster': 'विपद्बाट अनुमानित आर्थिक क्षति',
         'Realtime layers': 'वास्तविक समय तहहरू',
