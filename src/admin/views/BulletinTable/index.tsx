@@ -53,7 +53,7 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
 
 
 const Bulletin = (props: Props) => {
-    const { user, requests: { bulletinTableReq }, bulletinEditData } = props;
+    const { user, requests: { bulletinTableReq }, bulletinEditData, uri } = props;
     const [tableData, setTableData] = useState([]);
     const [pending, setPending] = useState(true);
     const [back, setBack] = useState(false);
@@ -81,6 +81,7 @@ const Bulletin = (props: Props) => {
                 currentPage="Health Infrastructure"
                 layout="common"
                 subLevel={'bulletin'}
+                uri={uri}
             />
             <div className={styles.container}>
                 {

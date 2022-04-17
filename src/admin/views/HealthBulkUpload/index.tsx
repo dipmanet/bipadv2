@@ -60,6 +60,7 @@ const HealthBulkUpload = (props) => {
             uploadData,
         },
         userDataMain,
+        uri,
     } = props;
 
     const {
@@ -162,7 +163,7 @@ const HealthBulkUpload = (props) => {
                         reset();
                     })
                     .catch((error) => {
-                        console.log('tesst error', error);
+                        console.log('Error:', error);
                     });
             } else {
                 console.log('Something went wrong');
@@ -184,7 +185,7 @@ const HealthBulkUpload = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon currentPage={'Epidemics'} layout={'common'} />
+            <MenuCommon currentPage={'Epidemics'} layout={'common'} uri={uri} />
 
             <div className={styles.bulkUploadContainer}>
                 <div className={styles.firstRowSection}>

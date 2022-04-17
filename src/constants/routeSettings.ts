@@ -39,15 +39,6 @@ const routeSettings: SomeRoute[] = [
         iconName: 'dashboard',
     },
     {
-        name: 'login',
-        title: 'Login',
-        path: '/login',
-        load: () => import('../admin/views/Login'),
-        navbar: false,
-        // iconName: 'dashboard',
-    },
-
-    {
         name: 'admin',
         title: 'Admin',
         path: '/admin',
@@ -176,7 +167,6 @@ const routeSettings: SomeRoute[] = [
         navbar: false,
         disableIfNoAuth: true,
     },
-
     {
         name: 'incident',
         title: 'Incident',

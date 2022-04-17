@@ -70,11 +70,12 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             expand: ['ward', 'ward.municipality', 'ward.municipality.district', 'ward.municipality.district.province'],
             ordering: '-last_modified_date',
         }),
-        onSuccess: ({ response, props }) => {
+        onSuccess: ({ response, props, params }) => {
             props.setHealthInfrastructurePage({
                 healthTableData: response.results,
                 healthDataCount: response.count,
             });
+            params.setLoader(false);
         },
     },
 
@@ -251,7 +252,7 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, selected, dispatch, formDataForEdit, healthFormEditData, userDataMain } = props;
+    const { numSelected, selected, dispatch, formDataForEdit, healthFormEditData, userDataMain, setLoader } = props;
     // const navigate = useNavigate();
 
 
@@ -259,7 +260,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         console.log('...delete');
     };
     const handleEdit = () => {
-        formDataForEdit.do({ resourceID: selected[0] });
+        setLoader(true);
+        formDataForEdit.do({ resourceID: selected[0], setLoader });
     };
 
 
@@ -344,12 +346,13 @@ const HealthTable = (props) => {
 
     useEffect(() => {
         if (Object.keys(healthFormEditData).length > 0) {
-            navigate('/admin/health-infrastructure/add-new-health-infrastructure');
+            navigate('add-new-health-infrastructure');
         }
     }, [healthFormEditData]);
 
     useEffect(() => {
-        props.requests.resource.do();
+        setLoader(true);
+        props.requests.resource.do({ setLoader });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -404,7 +407,7 @@ const HealthTable = (props) => {
                     item.type,
                     item.serviceType,
                     item.operationalStatus,
-                    item.bedCount,
+                    Number(item.hospitalBed) + Number(item.icuBed) + Number(item.ventilatorBed),
                     item.hospitalBed,
                     item.icuBed,
                     item.ventilatorBed,
@@ -641,7 +644,8 @@ const HealthTable = (props) => {
     };
 
     useEffect(() => {
-        props.requests.resource.do({ offset });
+        setLoader(true);
+        props.requests.resource.do({ offset, setLoader });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [offset]);
 
@@ -677,7 +681,7 @@ const HealthTable = (props) => {
 
         <>
             {
-                filteredRowDatas.length === 0 || loader ? (
+                loader ? (
                     <Loader options={{
                         position: 'fixed',
                         top: '48%',
@@ -721,12 +725,12 @@ const HealthTable = (props) => {
                                     // dispatch={dispatch}
                                     // deleteHealthTable={deleteHealthTable}
                                     formDataForEdit={props.requests.formDataForEdit}
+                                    setLoader={setLoader}
                                     userDataMain={userDataMain}
                                     healthFormEditData={healthFormEditData}
                                 />
                                 <TableContainer
                                     sx={{ maxHeight: 800 }}
-                                    stickyHeader
                                     style={{ width: '100%', overflowX: 'scroll' }}
                                 >
                                     <Table
@@ -758,7 +762,7 @@ const HealthTable = (props) => {
                                                             role="checkbox"
                                                             aria-checked={isItemSelected}
                                                             tabIndex={-1}
-                                                            key={row.id}
+                                                            key={Number(row.id)}
                                                             selected={isItemSelected}
                                                         >
                                                             <TableCell
@@ -869,6 +873,21 @@ const HealthTable = (props) => {
                                                                                     key={val}
                                                                                 >
                                                                                     {`${row[snakeToCamel(val)].split('T')[0]}`}
+                                                                                </TableCell>
+                                                                            );
+                                                                        }
+                                                                        if (val === 'bed_count') {
+                                                                            return (
+                                                                                <TableCell
+                                                                                    align="center"
+                                                                                    className={styles.setStyleForTableCell}
+                                                                                    component="th"
+                                                                                    id={labelId}
+                                                                                    scope="row"
+                                                                                    padding="none"
+                                                                                    key={val}
+                                                                                >
+                                                                                    {`${Number(row.hospitalBed) + Number(row.icuBed) + Number(row.ventilatorBed)}`}
                                                                                 </TableCell>
                                                                             );
                                                                         }

@@ -20,10 +20,6 @@ interface Props {
     urlLanguage: string;
 }
 
-const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
-    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
-});
-
 const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
     getEditByURl: {
         url: ({ params }) => `/bipad-bulletin/${params.id}`,
@@ -36,21 +32,11 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
         },
     },
 };
-
-
+const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
+    setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
+});
 const Bulletin = (props: Props) => {
-    const { uri, id, urlLanguage, requests: { getEditByURl } } = props;
-
-    useEffect(() => {
-        if (id && urlLanguage) {
-            getEditByURl.do({
-                id,
-                language: urlLanguage,
-            });
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+    const { uri } = props;
     return (
         <>
             <Page hideFilter hideMap />
@@ -59,12 +45,9 @@ const Bulletin = (props: Props) => {
                 currentPage="Health Infrastructure"
                 layout="common"
                 subLevel={'bulletin'}
-            />
-            <BulletinForm
                 uri={uri}
-                urlLanguage={urlLanguage}
-                id={id}
             />
+            <BulletinForm />
             <Footer />
         </>
     );

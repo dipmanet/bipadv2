@@ -60,7 +60,7 @@ const Picture = (props: Props): JSX.Element => {
     const [picFromEdit, setPicFromEdit] = useState(false);
     const [picLink, setpicLink] = useState(false);
     const handleViewTableBtn = () => {
-        navigate('/health-table');
+        navigate('health-infrastructure-data-table');
     };
     const [fieldsToDisable, setDisableFields] = useState([]);
     const getDisabled = (field: string) => fieldsToDisable.includes(field);

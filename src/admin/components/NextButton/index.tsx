@@ -95,7 +95,6 @@ const NextButton = (props) => {
         } else if (userDataMain.profile && userDataMain.profile.role) {
             if (userDataMain.profile.role === 'validator') {
                 if (Object.keys(healthFormEditData).length > 0) {
-                    console.log('here');
                     setMenuItems(MenuItemsAll);
                 } else {
                     setMenuItems(MenuItemsAll.filter(mI => mI.permission.includes(userDataMain.profile.role)));
@@ -205,7 +204,6 @@ const NextButton = (props) => {
         }
     };
     const handleFinish = () => {
-        console.log('..finishing');
         setError(null);
         setFinish(true);
         setFinishOpenModal(true);
@@ -282,6 +280,8 @@ const NextButton = (props) => {
     };
     const handlePatch = () => {
         setError(null);
+        // setHealthInfrastructurePage({ healthFormLoader: true });
+
         if (getResourceId()) {
             axios
                 .patch(`${baseUrl}/resource/${getResourceId()}/?meta=true`, getFormData({ is_verified: formData.is_verified, is_approved: formData.is_approved, verfication_message: formData.verfication_message, resource_type: formData.resource_type }), {
@@ -335,7 +335,8 @@ const NextButton = (props) => {
 
         if (typeof formData.picture === 'object') {
             patchObj = { ...formData };
-        } else {
+        }
+        if (formData.picture === null) {
             patchObj = { ...formData };
             delete patchObj.picture;
         }

@@ -80,6 +80,7 @@ const CovidBulkUpload = (props) => {
             covid19BulkGroupData,
         },
         userDataMain,
+        uri,
     } = props;
 
     const {
@@ -243,7 +244,7 @@ const CovidBulkUpload = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon currentPage={'Covid'} layout={'common'} />
+            <MenuCommon currentPage={'Covid'} layout={'common'} uri={uri} />
             <div className={styles.bulkUploadContainer}>
                 <div className={styles.firstRowSection}>
                     <div className={styles.headTextAres}>

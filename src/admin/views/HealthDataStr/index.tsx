@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-// import Loader from 'react-loader';
 import ProgressMenu from 'src/admin/components/ProgressMenu';
 import HealthForm from 'src/admin/components/HealthForm';
 import MenuCommon from 'src/admin/components/MenuCommon';
@@ -9,28 +7,22 @@ import Navbar from 'src/admin/components/Navbar';
 import styles from './styles.module.scss';
 import Page from '#components/Page';
 
-const HealthDataStr = (): JSX.Element => {
+const HealthDataStr = (props) => {
     const [activeMenu, setActiveMenu] = useState<string|undefined>('Institution Details');
     const [progress, setProgress] = useState<number>(0);
-    // const { healthFormLoader } = useSelector((state: RootState) => state.health);
-
     const getActiveMenu = (menuItem: number) => {
         setActiveMenu(menuItem);
     };
     const handleProgress = (p: number) => {
         setProgress(p);
     };
-
-    const handleViewTableBtn = () => {
-        console.log('fdf');
-    };
-
-
+    const { uri } = props;
+    console.log('title of add health', uri);
     return (
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Health'} />
+            <MenuCommon layout="common" currentPage={'Health'} uri={uri} />
 
             <div className={styles.dataContainer}>
                 <h2 className={styles.mainHeading}>

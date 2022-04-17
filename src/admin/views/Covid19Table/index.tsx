@@ -10,7 +10,7 @@ import Page from '#components/Page';
 
 const Covid19Table = (props) => {
     const [formtoggler, setformToggler] = useState('Individual Form');
-
+    const { uri } = props;
     const handleChangeForm = (toggle) => {
         if (toggle === 'Individual Form') {
             setformToggler('Individual Form');
@@ -22,7 +22,7 @@ const Covid19Table = (props) => {
         <>
             <Page hideFilter hideMap />
             <Navbar />
-            <MenuCommon layout="common" currentPage={'Covid'} />
+            <MenuCommon layout="common" currentPage={'Covid'} uri={uri} />
             <div className={styles.dataContainer}>
                 <div className={styles.dataTable}>
                     <div className={styles.generalInfoAndTableButton}>

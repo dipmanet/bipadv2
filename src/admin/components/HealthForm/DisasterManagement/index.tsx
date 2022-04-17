@@ -83,7 +83,7 @@ const DisasterManagement = (props: Props): JSX.Element => {
 
     // const navigate = useNavigate();
     const handleViewTableBtn = () => {
-        navigate('/health-table');
+        navigate('health-infrastructure-data-table');
     };
 
     useEffect(() => {

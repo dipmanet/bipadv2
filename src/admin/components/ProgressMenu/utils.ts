@@ -4,6 +4,13 @@ import LossesLogo from '../../resources/losses.svg';
 import FeedbackLogo from '../../resources/feedback.svg';
 import GroupLogo from '../../resources/Group.svg';
 import PreviewLogo from '../../resources/preview.svg';
+import InstituteLogo from '../../resources/institute.svg';
+import DisasterManLogo from '../../resources/disaster-management.svg';
+import ContactLogo from '../../resources/contact.svg';
+import InventoryLogo from '../../resources/inventory.svg';
+import LocationLogo from '../../resources/location.svg';
+import PictureLogo from '../../resources/picture.svg';
+import VerificationLogo from '../../resources/verification.svg';
 
 /* eslint-disable import/prefer-default-export */
 export const Menu = {
@@ -41,6 +48,55 @@ export const Menu = {
             icon: PreviewLogo,
             position: 4,
 
+        },
+    ],
+
+    healthProgressMenu: [
+        {
+            name: 'Institution Details',
+            name_en: 'Institution Details',
+            icon: InstituteLogo,
+            position: 1,
+        },
+        {
+            name: 'Disaster Management',
+            name_en: 'Disaster Management',
+            icon: DisasterManLogo,
+            position: 2,
+
+        },
+        {
+            name: 'Contact',
+            name_en: 'Contact',
+            icon: ContactLogo,
+            position: 3,
+
+        },
+        {
+            name: 'Location',
+            name_en: 'Location',
+            icon: LocationLogo,
+            position: 4,
+
+        },
+        {
+            name: 'Picture',
+            name_en: 'Picture',
+            icon: PictureLogo,
+            position: 5,
+
+        },
+        {
+            name: 'Inventories',
+            name_en: 'Inventories',
+            icon: InventoryLogo,
+            position: 6,
+
+        },
+        {
+            name: 'Verification',
+            name_en: 'Verification',
+            icon: VerificationLogo,
         },
     ],
 };
