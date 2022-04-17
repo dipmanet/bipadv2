@@ -34,7 +34,7 @@ const HealthDataTable = props => (
     <>
         <Page hideFilter hideMap />
         <Navbar />
-        <MenuCommon layout="common" currentPage={'Health'} uri={uri} />
+        <MenuCommon layout="common" currentPage={'Health'} uri={props.uri} />
         <div className={styles.dataContainer}>
             {
                 (
