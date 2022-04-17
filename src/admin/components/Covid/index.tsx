@@ -52,10 +52,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/covid19-case/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
-            console.log('added covid individual data');
-            // props.setCovidPage({ lossID: response.id });
-        },
         onFailure: ({ error, params }) => {
             if (params && params.setCovidPage) {
                 // TODO: handle error
@@ -77,17 +73,9 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: '/covid19-quarantineinfo/',
         method: methods.POST,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
-            console.log('added covid grop data');
-            // props.setEpidemicsPage({ lossID: response.id });
-        },
         onFailure: ({ error, params }) => {
             if (params && params.setCovidPage) {
-                // TODO: handle error
                 console.warn('failure', error);
-                // params.setEpidemicsPage({
-                //     lossError: 'Some problem occurred',
-                // });
             }
         },
         onFatal: ({ params }) => {
@@ -102,10 +90,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ params }) => `/covid19-case/${params.id}/`,
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
-            console.log('updated covid grop data');
-            // props.setEpidemicsPage({ lossID: response.id });
-        },
         onFailure: ({ error, params }) => {
             if (params && params.setCovidPage) {
                 // TODO: handle error
@@ -127,10 +111,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         url: ({ params }) => `/covid19-quarantineinfo/${params.id}/`,
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
-        onSuccess: ({ response, props }) => {
-            console.log('updated covid grop data');
-            // props.setEpidemicsPage({ lossID: response.id });
-        },
         onFailure: ({ error, params }) => {
             if (params && params.setCovidPage) {
                 // TODO: handle error
@@ -370,10 +350,6 @@ const Covid = (props) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wardName]);
-
-    useEffect(() => {
-        console.log('test reported date', reportedDate);
-    }, [reportedDate]);
 
     useEffect(() => {
         if (covid19IndividualEditData && Object.keys(covid19IndividualEditData).length > 0) {

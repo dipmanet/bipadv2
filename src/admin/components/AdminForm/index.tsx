@@ -68,7 +68,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.PATCH,
         body: ({ params }) => params && params.body,
         onSuccess: ({ response, props }) => {
-            console.log('posted data', response);
+            console.log('posted data...');
         },
         onFailure: ({ error, params }) => {
             if (params && params.setEpidemicsPage) {

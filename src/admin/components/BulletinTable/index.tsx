@@ -174,7 +174,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const handleEdit = () => {
         // dispatch(formDataForEdit(selected[0]));
         // navigate('/health-form');
-        console.log('edit clicked');
+        console.log(' ');
     };
 
 
