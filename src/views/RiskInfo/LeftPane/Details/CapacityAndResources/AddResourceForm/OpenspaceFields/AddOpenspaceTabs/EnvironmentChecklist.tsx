@@ -59,7 +59,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.POST,
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ response }) => {
-            console.log('sucess', response);
+            console.log(response);
         },
     },
     editEiaRequest: {
@@ -68,7 +68,7 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
         method: methods.PUT,
         body: ({ params: { body } = { body: {} } }) => body,
         onSuccess: ({ response }) => {
-            console.log('sucess', response);
+            console.log(response);
         },
     },
 };
@@ -186,7 +186,7 @@ class EnvironmentChecklist extends React.PureComponent<Props, State> {
         fetch(`${process.env.REACT_APP_API_SERVER_URL}/open-eia/${id}/`, requestOptions)
             .then(response => response.json())
             .then((data) => {
-                console.log('PUT success', data);
+                console.log('PUT success..');
             });
     }
 

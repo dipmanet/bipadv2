@@ -30,7 +30,6 @@ const setNotificationPage = (state: Type.NotificationState, action: Type.SetNoti
             deferedState.notificationPage.showNotification = false;
         }
     });
-    console.log('test new state');
     return newState;
 };
 

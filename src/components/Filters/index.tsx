@@ -253,9 +253,6 @@ class Filters extends React.PureComponent<Props, State> {
     public componentDidMount() {
         const {
             filters: faramValues,
-            municipalities,
-            districts,
-            provinces,
         } = this.props;
 
         this.setState({ faramValues });

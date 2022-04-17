@@ -188,7 +188,7 @@ const CovidBulkUpload = (props) => {
                         reset();
                     })
                     .catch((error) => {
-                        console.log('tesst error', error);
+                        console.log(error);
                     });
             } else {
                 console.log('Something went wrong');
@@ -209,7 +209,7 @@ const CovidBulkUpload = (props) => {
                         reset();
                     })
                     .catch((error) => {
-                        console.log('tesst error', error);
+                        console.log(error);
                     });
             } else {
                 console.log('Something went wrong');

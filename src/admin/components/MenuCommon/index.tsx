@@ -88,45 +88,6 @@ const MenuCommon = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // useEffect(() => {
-    //     if (AllMenu) {
-    //         const location = window.location.href;
-    //         console.log('location', location);
-    //         const menuSlug = location.split(`${process.env.REACT_APP_DOMAIN}`)[1]
-    // .split('/admin')[1];
-    //         if (menuSlug) {
-    //             const parentSlug = menuSlug.split('/')[1];
-    //             console.log('location parennt', parentSlug);
-    //             if (parentSlug.length > 2) {
-    //                 currentPageSlug.current = menuSlug.split('/')[menuSlug.split('/')
-    // .length - 1];
-    //                 console.log('location current', currentPageSlug.current);
-    //             } else {
-    //                 currentPageSlug.current = menuSlug.split('/')[1];
-    //                 console.log('location current', currentPageSlug.current);
-    //             }
-    //             const childMenu = AllMenu.filter(item => item.slug === parentSlug)[0];
-    //             console.log('location child', childMenu);
-    //             if (childMenu) {
-    //                 const childM = AllMenu.filter(item => item.slug === parentSlug)[0].children;
-    //                 if (childM) {
-    //                     // eslint-disable-next-line max-len
-    //                     const activeIndex = childM.map(cM => cM.slug)
-    // .indexOf(currentPageSlug.current);
-    //                     setActive(activeIndex);
-    //                     setMenu(childM);
-    //                 } else {
-    //                     setActive(0);
-    //                     setMenu([childMenu]);
-    //                 }
-    //             }
-    //         } else {
-    //             setMenu(AllMenu);
-    //         }
-    //     }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [Menu]);
-
     return (
         <div className={styles.menuCommonContainer} style={layout === 'landing' ? { background: '#fff' } : { background: '#3e3e3e' }}>
             {

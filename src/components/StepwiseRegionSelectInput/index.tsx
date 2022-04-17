@@ -126,7 +126,6 @@ class StepwiseRegionSelectInput extends React.PureComponent<Props, State> {
 
     private regionLabelSelector = (r: RegionElement, bulletin: boolean) => {
         const { language: { language } } = this.props;
-        console.log('in bulletin?', bulletin);
         if (bulletin && language === 'np') {
             return r.title_ne;
         }

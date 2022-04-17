@@ -281,27 +281,15 @@ const Location = (props) => {
         longitude,
     };
 
-
-    // useEffect(() => {
-    //     if (wardName) {
-    //         handleFormData(wardName, 'ward');
-    //     }
-    // }, [handleFormData, wardName]);
     useEffect(() => {
         setPoint(lattitude, 'lat');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [lattitude]);
+
     useEffect(() => {
         setPoint(longitude, 'lng');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [longitude]);
-
-    useEffect(() => {
-        console.log('Test', centriodsForMap,
-            initialProvinceCenter,
-            initialDistrictCenter,
-            initialMunCenter);
-    }, [centriodsForMap, initialDistrictCenter, initialMunCenter, initialProvinceCenter]);
 
     return (
         <>

@@ -163,7 +163,7 @@ const EpidemicBulkUpload = (props) => {
                         reset();
                     })
                     .catch((error) => {
-                        console.log('tesst error', error);
+                        console.log(error);
                     });
             } else {
                 console.log('Something went wrong');

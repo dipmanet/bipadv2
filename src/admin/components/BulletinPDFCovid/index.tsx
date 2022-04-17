@@ -297,7 +297,11 @@ const BulletinPDFLoss = (props: Props) => {
                         getChartNull(genderWiseLossChart)
                             ? (
                                 <div className={styles.noDataPie}>
-                                    <h1>No Deaths Reported</h1>
+                                    <Translation>
+                                        {
+                                            t => <h1>{t('No Deaths Reported')}</h1>
+                                        }
+                                    </Translation>
                                 </div>
                             )
                             : (

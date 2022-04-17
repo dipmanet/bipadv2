@@ -356,26 +356,14 @@ const PDFPreview = (props) => {
         const reportPDF = html2pdf().set(options).from(reportContent).outputPdf('blob')
             .then((bulletin: Blob) => {
                 axios.get(`${baseUrl}/bipad-bulletin/?sitrep=${sitRep}`).then((res) => {
-                    console.log('res ma k aayo?', res);
                     if (res.data.results.length === 0) {
-                        console.log('no results', res.data.results.length);
                         savePDf(bulletin, doc);
                     } else {
                         // const { id } = bulletinEditData;
-                        console.log('results', res.data.results.length);
                         const { id } = res.data.results[0];
                         updatePDF(bulletin, doc, id);
                     }
                 });
-                // here
-
-
-                // if (bulletinEditData && Object.keys(bulletinEditData).length > 0) {
-                //     const { id } = bulletinEditData;
-                //     updatePDF(bulletin, doc, id);
-                // } else {
-                //     savePDf(bulletin, doc);
-                // }
             })
             .save(`Bipad Bulletin ${bulletinEditData.bulletinDate || ''}`);
     };

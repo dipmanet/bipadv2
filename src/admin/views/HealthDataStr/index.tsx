@@ -17,7 +17,6 @@ const HealthDataStr = (props) => {
         setProgress(p);
     };
     const { uri } = props;
-    console.log('title of add health', uri);
     return (
         <>
             <Page hideFilter hideMap />

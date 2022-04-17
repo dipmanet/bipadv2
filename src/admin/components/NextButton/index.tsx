@@ -248,34 +248,6 @@ const NextButton = (props) => {
                 // dispatch(setHealthFormLoader(false));
                 const getCurrentIndex = MenuItems.map(m => m.name).indexOf('Inventories');
                 handleProgress(getCurrentIndex);
-            })
-            .catch((error) => {
-                if (error.response) {
-                    // setHealthInfrastructurePage({ healthFormLoader: false });
-                    // dispatch(setHealthFormLoader(false));
-
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    console.log(error.response.data);
-                    if (error.response.data) {
-                        const msgKey = Object.keys(error.response.data)[0];
-                        if (typeof error.response.data[msgKey] !== 'object') {
-                            setError(error.response.data[msgKey]);
-                        } else {
-                            setError(`${msgKey}: ${error.response.data[msgKey]}`);
-                        }
-                    }
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                }
             });
     };
     const handlePatch = () => {
@@ -294,34 +266,6 @@ const NextButton = (props) => {
                     setHealthInfrastructurePage({ healthFormEditData: {} });
                     // dispatch(resetEdit());
                     handleFinish();
-                })
-                .catch((error) => {
-                    // setHealthInfrastructurePage({ healthFormLoader: false });
-                    // dispatch(setHealthFormLoader(false));
-
-                    if (error.response) {
-                        // The request was made and the server responded with a status code
-                        // that falls out of the range of 2xx
-                        console.log(error.response.data);
-                        if (error.response.data) {
-                            const msgKey = Object.keys(error.response.data)[0];
-                            if (typeof error.response.data[msgKey] !== 'object') {
-                                setError(error.response.data[msgKey]);
-                            } else {
-                                setError(`${msgKey}: ${error.response.data[msgKey]}`);
-                            }
-                        }
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                    } else if (error.request) {
-                        // The request was made but no response was received
-                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                        // http.ClientRequest in node.js
-                        console.log(error.request);
-                    } else {
-                        // Something happened in setting up the request that triggered an Error
-                        console.log('Error', error.message);
-                    }
                 });
         } else {
             window.location.reload();
@@ -364,32 +308,7 @@ const NextButton = (props) => {
                 setUpdate(true);
             })
             .catch((error) => {
-                // setHealthInfrastructurePage({ healthFormLoader: false });
-                // dispatch(setHealthFormLoader(false));
-
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    console.log(error.response.data);
-                    if (error.response.data) {
-                        const msgKey = Object.keys(error.response.data)[0];
-                        if (typeof error.response.data[msgKey] !== 'object') {
-                            setError(error.response.data[msgKey]);
-                        } else {
-                            setError(`${msgKey}: ${error.response.data[msgKey]}`);
-                        }
-                    }
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                    // http.ClientRequest in node.js
-                    console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                }
+                console.log(error);
             });
     };
 

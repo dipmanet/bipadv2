@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'No Deaths Reported': 'No Deaths Reported',
         incident: 'Incidents',
         'Add New Hazard': 'Add New Hazard',
         'Daily Disaster Bulletin': 'Daily Disaster Bulletin',
@@ -229,6 +230,7 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'No Deaths Reported': 'कुनै मृत्यु रिपोर्ट गरिएको छैन',
         incident: 'घटना',
         'Add New Hazard': 'नयाँ प्रकोप थप्नुहोस्',
         'Daily Disaster Bulletin': 'दैनिक विपद् बुलेटिन',
