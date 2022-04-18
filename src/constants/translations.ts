@@ -1,5 +1,7 @@
 export const enTranslation = {
     translation: {
+        Documents: 'Documents',
+        'New document': 'New document',
         Category: 'Category',
         'Nothing to show.': 'Nothing to show.',
         'Date of publication': 'Date of publication',
@@ -321,6 +323,8 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        Documents: 'कागजातहरू',
+        'New document': 'नयाँ कागजात',
         'Nothing to show.': 'देखाउन को लागी केहि छैन।',
         Category: 'श्रेणी',
         'Date of publication': 'प्रकाशन मिति',

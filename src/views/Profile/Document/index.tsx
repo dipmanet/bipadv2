@@ -88,16 +88,10 @@ interface RegionOption {
 
 
 const regionOptions: RegionOption[] = [
-    { id: 'national', title: 'national' },
-    { id: 'province', title: 'province' },
-    { id: 'district', title: 'district' },
-    { id: 'municipality', title: 'municipality' },
-];
-const regionOptionsNe: RegionOption[] = [
-    { id: 'national', title: 'राष्ट्रिय' },
-    { id: 'province', title: 'प्रान्त' },
-    { id: 'district', title: 'जिल्‍ला' },
-    { id: 'municipality', title: 'नगरपालिका' },
+    { id: 'national', title: 'national', titleNe: 'राष्ट्रिय' },
+    { id: 'province', title: 'province', titleNe: 'प्रान्त' },
+    { id: 'district', title: 'district', titleNe: 'जिल्‍ला' },
+    { id: 'municipality', title: 'municipality', titleNe: 'नगरपालिका' },
 ];
 
 type ReduxProps = ComponentProps & PropsFromState;
@@ -257,12 +251,11 @@ const DocumentRenderer = (props: DocumentProps) => {
         </div>
     );
 };
-
 const keySelector = (d: DocumentItem) => d.id;
 const categoryKeySelector = (d: DocumentCategory) => d.id;
-const categoryLabelSelector = (d: DocumentCategory) => d.title;
+const categoryLabelSelector = (d: DocumentCategory, language) => (language === 'en' ? d.title : d.titleNe);
 const regionKeySelector = (d: RegionOption) => d.id;
-const regionLabelSelector = (d: RegionOption) => d.title;
+const regionLabelSelector = (d: RegionOption, language) => (language === 'en' ? d.title : d.titleNe);
 
 class Document extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -385,31 +378,38 @@ class Document extends React.PureComponent<Props, State> {
             });
         }
 
+        console.log(documentCategories, 'test');
+
         return (
-            <div className={_cs(className, styles.documents)}>
-                <Loading pending={pending} />
-                <CommonMap sourceKey="profile-document" />
-                <header className={styles.header}>
-                    <h2 className={styles.heading}>
-                        Documents
-                    </h2>
-                    <Cloak hiddenIf={p => !p.add_document}>
-                        <AccentModalButton
-                            transparent
-                            iconName="add"
-                            modal={(
-                                <AddDocumentForm
-                                    onUpdate={this.handleUpdate}
-                                />
-                            )}
-                        >
-                            New document
-                        </AccentModalButton>
-                    </Cloak>
-                </header>
-                <Translation>
-                    {
-                        t => (
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.documents)}>
+                            <Loading pending={pending} />
+                            <CommonMap sourceKey="profile-document" />
+
+                            <header className={styles.header}>
+
+                                <h2 className={styles.heading}>
+                                    {t('Documents')}
+                                </h2>
+                                <Cloak hiddenIf={p => !p.add_document}>
+                                    <AccentModalButton
+                                        transparent
+                                        iconName="add"
+                                        modal={(
+                                            <AddDocumentForm
+                                                onUpdate={this.handleUpdate}
+                                            />
+                                        )}
+                                    >
+                                        {t('New document')}
+                                    </AccentModalButton>
+                                </Cloak>
+
+
+                            </header>
+
                             <div className={styles.filters}>
 
                                 <SelectInput
@@ -420,32 +420,33 @@ class Document extends React.PureComponent<Props, State> {
                                     options={documentCategories}
                                     showHintAndError={false}
                                     keySelector={categoryKeySelector}
-                                    labelSelector={categoryLabelSelector}
+                                    labelSelector={d => categoryLabelSelector(d, language)}
                                 />
                                 <SelectInput
                                     className={styles.regionSelectInput}
                                     label={t('Region')}
                                     onChange={this.handleRegionSelection}
                                     value={selectedRegion}
-                                    options={language === 'en' ? regionOptions : regionOptionsNe}
+                                    options={regionOptions}
                                     showHintAndError={false}
                                     keySelector={regionKeySelector}
-                                    labelSelector={regionLabelSelector}
+                                    labelSelector={d => regionLabelSelector(d, language)}
                                 />
 
 
                             </div>
-                        )
-                    }
-                </Translation>
-                <ListView
-                    className={styles.content}
-                    data={expandedDocuments}
-                    renderer={DocumentRenderer}
-                    keySelector={keySelector}
-                    rendererParams={this.rendererParams}
-                />
-            </div>
+
+                            <ListView
+                                className={styles.content}
+                                data={expandedDocuments}
+                                renderer={DocumentRenderer}
+                                keySelector={keySelector}
+                                rendererParams={this.rendererParams}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
         );
     }
 }
