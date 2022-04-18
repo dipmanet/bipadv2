@@ -339,8 +339,8 @@ const BulletinPDF = (props: Props) => {
                     <h2 style={{ marginBottom: '10px' }}>
                         {
                             language === 'np'
-                                ? `${month_yesterday} ${day_yesterday} बिहान 10:00 बजेदेखी ${month} ${day} बिहान 10:00 बजे सम्म`
-                                : `Disaster Incidents from ${day_yesterday} ${monthEn_yesterday} 10:00 am to ${day} ${monthEn} 10:00 am`
+                                ? `${month_yesterday} ${day_yesterday} देखी ${month} ${day} सम्म`
+                                : `Disaster Incidents from ${day_yesterday} ${monthEn_yesterday} to ${day} ${monthEn}`
                         }
 
 

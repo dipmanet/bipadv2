@@ -174,7 +174,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const handleEdit = () => {
         // dispatch(formDataForEdit(selected[0]));
         // navigate('/health-form');
-        console.log(' ');
+        console.log('edit clicked');
     };
 
 
@@ -512,12 +512,7 @@ const BulletinTable = (props) => {
                     </Box>
                 )
             }
-            {/* {
-                !tableShow
-                && (
-                   <BulletinForm uri={uri} />
-                )
-            } */}
+
         </>
     );
 };

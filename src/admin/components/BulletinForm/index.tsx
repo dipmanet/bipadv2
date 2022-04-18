@@ -115,8 +115,8 @@ const selectDateForQuery = (today) => {
         params: {
             // startDate = DEFAULT_START_DATE.toISOString(),
             // endDate = DEFAULT_END_DATE.toISOString(),
-            startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
-            endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`,
+            startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`,
+            endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`,
         } = {},
     }) => ({
         expand: ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'],
@@ -302,8 +302,8 @@ const Bulletin = (props: Props) => {
             }
             const DEFAULT_START_DATE = yesterday;
             const DEFAULT_END_DATE = today;
-            const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T10:00:00+05:45`;
-            const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T10:00:00+05:45`;
+            const startDate = `${DEFAULT_START_DATE.toISOString().split('T')[0]}T00:00:00+05:45`;
+            const endDate = `${DEFAULT_END_DATE.toISOString().split('T')[0]}T23:59:59+05:45`;
             const expand = ['loss.peoples', 'wards', 'wards.municipality', 'wards.municipality.district'];
             const limit = -1;
             const incident_on__lt = endDate; // eslint-disable-line @typescript-eslint/camelcase
