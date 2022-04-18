@@ -465,7 +465,7 @@ export const npTranslation = {
         Realtime: 'वास्तविक समय',
         Profile: 'प्रोफाइल',
         'Risk Info': 'जोखिम जानकारी',
-        National: 'राष्ट्रिय',
+        National: 'राष्‍ट्रिय',
         Logout: 'लग आउट',
         'About Us': 'हाम्रो बारे',
         'Reported incidents': 'घटना रिपोर्ट',
