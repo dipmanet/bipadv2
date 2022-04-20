@@ -11,7 +11,6 @@ import modalize from '#rscg/Modalize';
 import AccentButton from '#rsca/Button/AccentButton';
 import MapSource from '#re-map/MapSource';
 import MapLayer from '#re-map/MapSource/MapLayer';
-
 import Cloak from '#components/Cloak';
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
@@ -21,6 +20,7 @@ import {
     regionSelector,
     municipalitiesSelector,
     profileContactFiltersSelector,
+    userSelector,
 } from '#selectors';
 import {
     AppState,
@@ -42,7 +42,6 @@ import {
 import { TitleContext, Profile } from '#components/TitleContext';
 
 import { mapStyles } from '#constants';
-
 import ContactItem from './ContactItem';
 import ContactEditForm from './ContactEditForm';
 
@@ -76,6 +75,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     municipalityList: municipalitiesSelector(state),
     region: regionSelector(state),
     filters: profileContactFiltersSelector(state),
+    user: userSelector(state),
 });
 
 const contactKeySelector = (d: Contact) => d.id;
@@ -93,18 +93,51 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
             }
         },
         onMount: true,
-        query: {
+        query: ({ params }) => ({
+
             expand: ['trainings', 'organization'],
             limit: -1,
+            province: params.province,
+            district: params.district,
+            municipality: params.municipality,
+
+
+        }),
+    },
+    municipalityContactPatchSelectedID: {
+        url: ({ params }) => '/municipality-contact/',
+        method: methods.GET,
+        query: ({ params }) => ({
+            swap: true,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            first_contact: params && params.selectedId,
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            second_contact: params && params.alternateId,
+
+        }),
+        onSuccess: ({ params, response }) => {
+            if (params && params.loaderCondition) {
+                const { loaderCondition } = params;
+                loaderCondition(response.results);
+            }
+        },
+        onFailure: ({ error, params }) => {
+            console.warn('failure', error.errorMessage);
+        },
+        onFatal: ({ error, params }) => {
+            console.warn('failure', error.errorMessage);
         },
     },
+
 };
 
 interface SelectInputOption {
     key: string;
     label: string;
 }
-
+// eslint-disable-next-line no-unused-vars
+let filteredContactList = [];
+let filteredContactListLastIndex = null;
 class ContactPage extends React.PureComponent<Props, State> {
     public static contextType = TitleContext;
 
@@ -117,13 +150,40 @@ class ContactPage extends React.PureComponent<Props, State> {
             },
         } = this.props;
 
-        municipalityContactRequest.setDefaultParams({
-            setProfileContactList: this.setProfileContactList,
-        });
 
         this.state = {
             contactList: [],
+            indexOfSelectedContact: null,
+            changedIndex: null,
+            contactLoading: false,
+            isSortByOrdering: true,
+
         };
+        const { contactList } = this.state;
+        if (!contactList.length) {
+            const { user } = this.props;
+
+            // console.log('This is user', user);
+            if (user) {
+                const { user: { profile: {
+                    province,
+                    district,
+                    municipality,
+                } },
+                region } = this.props;
+                municipalityContactRequest.setDefaultParams({
+                    setProfileContactList: this.setProfileContactList,
+                    province: region.adminLevel === 1 ? region.geoarea : '',
+                    district: region.adminLevel === 2 ? region.geoarea : '',
+                    municipality: region.adminLevel === 3 ? region.geoarea : '',
+
+                });
+            } else {
+                municipalityContactRequest.setDefaultParams({
+                    setProfileContactList: this.setProfileContactList,
+                });
+            }
+        }
     }
 
 
@@ -170,6 +230,7 @@ class ContactPage extends React.PureComponent<Props, State> {
         return geojson;
     })
 
+
     private getFilteredContactList = memoize((
         contactList: Contact[],
         region,
@@ -183,13 +244,14 @@ class ContactPage extends React.PureComponent<Props, State> {
             drrFocalPersonOnly,
         } = filterOptions;
 
-        let newContactList = [...contactList].sort((a: Contact, b: Contact) => {
-            const aWeight = a.isDrrFocalPerson ? 1 : 0;
-            const bWeight = b.isDrrFocalPerson ? 1 : 0;
+        // let newContactList = [...contactList].sort((a: Contact, b: Contact) => {
+        //     const aWeight = a.isDrrFocalPerson ? 1 : 0;
+        //     const bWeight = b.isDrrFocalPerson ? 1 : 0;
 
-            return (bWeight - aWeight);
-        });
+        //     return (bWeight - aWeight);
+        // });
 
+        let newContactList = contactList;
         if (drrFocalPersonOnly) {
             newContactList = newContactList.filter(d => d.isDrrFocalPerson);
         }
@@ -259,7 +321,177 @@ class ContactPage extends React.PureComponent<Props, State> {
         municipalityList: this.props.municipalityList,
         onContactEdit: this.handleContactEdit,
         onContactDelete: this.handleContactDelete,
+        onContactSortDown: this.handleContactSortDown,
+        onContactSortUp: this.handleContactSortUp,
+        filteredContactListLastIndex,
+        contactLoading: this.state.contactLoading,
+
     })
+
+    private handleContactSortUp=(contactDetail) => {
+        this.setState({
+            contactLoading: true,
+            isSortByOrdering: false,
+        });
+        const {
+            contactList,
+        } = this.state;
+        const {
+            region,
+            municipalityList,
+            className,
+            filters: {
+                faramValues: filterValues,
+            },
+            requests: {
+                municipalityContactPatchSelectedID,
+                municipalityContactPatchAlternateID,
+
+                municipalityContactRequest: {
+                    pending = false,
+                } = {},
+            },
+        } = this.props;
+
+        filteredContactList = this.getFilteredContactList(
+            contactList,
+            region,
+            municipalityList,
+            filterValues,
+        );
+        // filteredContactList = contactList;
+        const indexOfSelectedContact = filteredContactList
+            .findIndex(item => item.id === contactDetail.id);
+
+
+        const moveElement = (filteredList, indexInitial,
+            indexDestination) => {
+            filteredList.splice(indexDestination, 0, filteredList.splice(indexInitial, 1)[0]);
+
+            return filteredList;
+        };
+        filteredContactList = moveElement(filteredContactList,
+            indexOfSelectedContact, indexOfSelectedContact - 1);
+
+
+        const TargetOrderData = filteredContactList[indexOfSelectedContact].order;
+        const SelectedOrderData = filteredContactList[indexOfSelectedContact - 1].order;
+        const alternateContactId = filteredContactList[indexOfSelectedContact].id;
+        const selectedContactId = filteredContactList[indexOfSelectedContact - 1].id;
+
+        this.setState({
+            indexOfSelectedContact,
+            changedIndex: indexOfSelectedContact - 1,
+        });
+        const selectedContactBody = {
+            order: TargetOrderData,
+            province: filteredContactList[indexOfSelectedContact].province,
+            district: filteredContactList[indexOfSelectedContact].district,
+            municipality: filteredContactList[indexOfSelectedContact].municipality,
+            committee: filteredContactList[indexOfSelectedContact].committee,
+        };
+        const selectedAlternateBody = {
+            order: SelectedOrderData,
+            province: filteredContactList[indexOfSelectedContact - 1].province,
+            district: filteredContactList[indexOfSelectedContact - 1].district,
+            municipality: filteredContactList[indexOfSelectedContact - 1].municipality,
+            committee: filteredContactList[indexOfSelectedContact - 1].committee,
+        };
+
+        municipalityContactPatchSelectedID.do({
+
+            selectedId: selectedContactId,
+            alternateId: alternateContactId,
+            loaderCondition: this.handleLoader,
+
+
+        });
+    }
+
+    private handleLoader=(data) => {
+        this.setState({
+            contactLoading: false,
+            isSortByOrdering: true,
+        });
+    }
+
+    private handleContactSortDown=(contactDetail) => {
+        this.setState({
+            contactLoading: true,
+            isSortByOrdering: false,
+        });
+        const {
+            contactList,
+        } = this.state;
+        const {
+            region,
+            municipalityList,
+            className,
+            filters: {
+                faramValues: filterValues,
+            },
+            requests: {
+                municipalityContactPatchSelectedID,
+                municipalityContactPatchAlternateID,
+                municipalityContactRequest: {
+                    pending = false,
+                } = {},
+            },
+        } = this.props;
+        filteredContactList = this.getFilteredContactList(
+            contactList,
+            region,
+            municipalityList,
+            filterValues,
+        );
+        // filteredContactList = contactList;
+        const indexOfSelectedContact = filteredContactList
+            .findIndex(item => item.id === contactDetail.id);
+
+
+        const moveElement = (filteredList, indexInitial,
+            indexDestination) => {
+            filteredList.splice(indexDestination, 0, filteredList.splice(indexInitial, 1)[0]);
+
+            return filteredList;
+        };
+        filteredContactList = moveElement(filteredContactList,
+            indexOfSelectedContact, indexOfSelectedContact + 1);
+
+
+        const TargetOrderData = filteredContactList[indexOfSelectedContact].order;
+        const SelectedOrderData = filteredContactList[indexOfSelectedContact + 1].order;
+        const alternateContactId = filteredContactList[indexOfSelectedContact].id;
+        const selectedContactId = filteredContactList[indexOfSelectedContact + 1].id;
+
+
+        this.setState({
+            indexOfSelectedContact,
+            changedIndex: indexOfSelectedContact + 1,
+        });
+        const selectedContactBody = {
+            order: TargetOrderData,
+            province: filteredContactList[indexOfSelectedContact].province,
+            district: filteredContactList[indexOfSelectedContact].district,
+            municipality: filteredContactList[indexOfSelectedContact].municipality,
+            committee: filteredContactList[indexOfSelectedContact].committee,
+        };
+        const selectedAlternateBody = {
+            order: SelectedOrderData,
+            province: filteredContactList[indexOfSelectedContact + 1].province,
+            district: filteredContactList[indexOfSelectedContact + 1].district,
+            municipality: filteredContactList[indexOfSelectedContact + 1].municipality,
+            committee: filteredContactList[indexOfSelectedContact + 1].committee,
+        };
+        municipalityContactPatchSelectedID.do({
+
+            selectedId: selectedContactId,
+            alternateId: alternateContactId,
+            loaderCondition: this.handleLoader,
+
+
+        });
+    }
 
     private handleContactEdit = (contactId: Contact['id'], contact: Contact) => {
         const { contactList } = this.state;
@@ -300,11 +532,29 @@ class ContactPage extends React.PureComponent<Props, State> {
         this.setState({ contactList: newContactList });
     }
 
+    public componentDidUpdate(prevProps, prevState, snapshot) {
+        const { region,
+            requests: {
+                municipalityContactRequest,
+            } } = this.props;
+        if (prevProps.region !== region) {
+            municipalityContactRequest.do(
+                {
+                    setProfileContactList: this.setProfileContactList,
+                    province: region.adminLevel === 1 ? region.geoarea : '',
+                    district: region.adminLevel === 2 ? region.geoarea : '',
+                    municipality: region.adminLevel === 3 ? region.geoarea : '',
+                },
+            );
+        }
+    }
+
     public render() {
         const {
             region,
             municipalityList,
             className,
+            user,
             filters: {
                 faramValues: filterValues,
             },
@@ -312,10 +562,12 @@ class ContactPage extends React.PureComponent<Props, State> {
                 municipalityContactRequest: {
                     pending = false,
                 } = {},
+
             },
         } = this.props;
 
         const { setProfile } = this.context;
+        const { isSortByOrdering, contactList } = this.state;
 
         if (setProfile) {
             setProfile((prevProfile: Profile) => {
@@ -325,18 +577,18 @@ class ContactPage extends React.PureComponent<Props, State> {
                 return prevProfile;
             });
         }
-
-        const {
-            contactList,
-        } = this.state;
-
-        const filteredContactList = this.getFilteredContactList(
-            contactList,
-            region,
-            municipalityList,
-            filterValues,
-        );
-
+        if (isSortByOrdering) {
+            const filteredContactListWithoutArrayIndex = this.getFilteredContactList(
+                contactList,
+                region,
+                municipalityList,
+                filterValues,
+            );
+            // const filteredContactListWithoutArrayIndex = contactList;
+            filteredContactList = filteredContactListWithoutArrayIndex
+                .map((item, i) => ({ ...item, indexValue: i }));
+            filteredContactListLastIndex = filteredContactList.length - 1;
+        }
         const pointsGeoJson = this.getPointsGeoJson(filteredContactList, municipalityList);
         const clusteredPointFilter = ['has', 'point_count'];
         const nonClusteredPointFilter = ['!', clusteredPointFilter];

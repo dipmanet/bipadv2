@@ -25,6 +25,37 @@ button {
         flex-grow: 1;
         overflow: auto;
 
+        .halfPageLeftPane {
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 11;
+            box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.3);
+            width: 48%;
+            overflow: auto;
+            transition: margin-left .3s ease-in-out;
+
+            &.hidden {
+                // margin-left: calc(-1 * var(--width-left-panel));
+                margin-left: -48%;
+                // display: none;
+                // width: 0px;
+                // transition: 0.3s width ease-in-out;
+                transition: margin-left .3s ease-in-out;
+            }
+
+            .brand {
+                flex-shrink: 0;
+                z-index: 1;
+                box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+            }
+
+            .left-content-container {
+                flex-grow: 1;
+                overflow: auto;
+            }
+        }
+
         .left {
             display: flex;
             flex-direction: column;
@@ -48,6 +79,41 @@ button {
                 flex-grow: 1;
                 overflow: auto;
             }
+        }
+
+        .toggle-left-container-visibility-button-halfPageLeftPane {
+            position: fixed;
+            top: 50%;
+            left: 46.3%;
+            transform: translateY(-100%);
+            z-index: 11;
+            border: var(--width-separator-thin) solid var(--color-separator-light);
+            border-left: 0;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+            box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.5);
+            background-color: var(--color-foreground);
+            cursor: pointer;
+            padding: var(--spacing-medium) var(--spacing-small);
+            font-size: var(--font-size-large);
+        }
+
+        .toggleLeftPaneButtonCompresed {
+            position: fixed;
+            top: 50%;
+            left: 0%;
+            transform: translateY(-100%);
+            z-index: 11;
+            border: var(--width-separator-thin) solid var(--color-separator-light);
+            border-left: 0;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+            box-shadow: 3px 0 4px -3px rgba(0, 0, 0, 0.5);
+            background-color: var(--color-foreground);
+            transition: 0.3s left ease-in-out;
+            cursor: pointer;
+            padding: var(--spacing-medium) var(--spacing-small);
+            font-size: var(--font-size-large);
         }
 
         .toggle-left-container-visibility-button {
@@ -80,11 +146,27 @@ button {
                 z-index: 11;
             }
 
-            .map-actions {
+            .map {
+        
+                flex-grow: 1;
+                background-color: transparent;
+                // position: absolute;
+                // top:0;
+                // flex-grow: unset;
+                // height :calc(5000px * 1.2549019607843) !important;
+                // width :calc(5000px * 1.2549019607843) !important;
+                &.hidden {
+                visibility: hidden;
+                z-index: -1;
+                }
+            }
+            .mapActionsCompressed {
                 display: flex;
                 position: absolute;
-                top: var(--spacing-medium);
-                left: var(--spacing-medium);
+                // top: var(--spacing-medium);
+                // left: var(--spacing-medium);
+                top: 10px;
+                left: 1%;
                 z-index: 1;
                 border: var(--width-separator-medium) solid var(--color-separator);
                 border-radius: 5px;
@@ -111,15 +193,41 @@ button {
                 }
             }
 
-            .map {
-                flex-grow: 1;
-                background-color: transparent;
+            .map-actions {
+                display: flex;
+                position: absolute;
+                // top: var(--spacing-medium);
+                // left: var(--spacing-medium);
+                top: 10px;
+                left: 10px;
+                z-index: 1;
+                border: var(--width-separator-medium) solid var(--color-separator);
+                border-radius: 5px;
+                background-color: var(--color-foreground);
+                height: 34px;
 
-                &.hidden {
-                    visibility: hidden;
-                    z-index: -1;
+                .map-download-button {
+                    padding: var(--spacing-small) var(--spacing-medium);
+                    font-size: var(--font-size-large);
+
+                    &:hover {
+                        background-color: var(--color-background-hover);
+                    }
+                }
+
+                .layer-switch {
+                    text-align: center;
+
+                    :global {
+                        .dropdown-button {
+                            padding: var(--spacing-small) var(--spacing-medium);
+                            font-size: var(--font-size-large);
+                        }
+                    }
                 }
             }
+
+           
         }
 
         .right {
@@ -130,7 +238,7 @@ button {
             flex-direction: column;
             z-index: 11;
             border-radius: 5px;
-            box-shadow: 0 2px 5px -2px rgba(0, 0, 0, .3);
+            box-shadow: 0 2px 5px -2px rgba(0, 0, 0, 0.3);
             background-color: var(--color-foreground);
             // width: 200px;
             width: 220px;
@@ -145,16 +253,15 @@ button {
                 flex-grow: 1;
             }
         }
-
     }
 
     &:not(.downloading-map) {
         .left {
-            transition: .3s margin-left ease-in-out;
+            transition: 0.3s margin-left ease-in-out;
         }
 
         .toggle-left-container-visibility-button {
-            transition: .3s left ease-in-out;
+            transition: 0.3s left ease-in-out;
         }
     }
 
@@ -187,7 +294,7 @@ button {
 
 :global {
     .mapboxgl-ctrl-top-left {
-        top: 36px!important;
+        top: 36px !important;
     }
 
     .mapboxgl-ctrl-bottom-right {
@@ -210,7 +317,7 @@ button {
     }
 
     .mapboxgl-ctrl-logo {
-        display: none!important;
+        display: none !important;
     }
 
     .mapbox-improve-map {
@@ -233,5 +340,28 @@ button {
     .input-label {
         font-size: var(--font-size-extra-small-alt);
     }
-}
 
+    // .mapbox-gl-draw_polygon {
+    //     position: fixed !important;
+    //     right: 0px;
+    //     bottom: 165px;
+    //     background-color: white !important;
+    //     filter: saturate(1000%);
+    //     border-radius: 3px;
+    //     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1)
+    // }
+
+    // .mapbox-gl-draw_trash {
+    //     position: fixed !important;
+    //     right: 0px;
+    //     bottom: 130px;
+    //     background-color: white !important;
+    //     filter: saturate(1000%);
+    //     border-radius: 3px;
+    //     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1)
+    // }
+    .mapboxgl-ctrl-geolocate {
+        display: none !important;
+    }
+
+}

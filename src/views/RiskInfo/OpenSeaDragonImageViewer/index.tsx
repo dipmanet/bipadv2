@@ -46,8 +46,9 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
     };
     const handleDownloadFullImage = (e) => {
         const element = document.createElement('a');
-        element.setAttribute('href', `/media/iiif/durham_landslides_images/HighResImages/${selectedImage}`);
-        element.setAttribute('download', selectedImage);
+        const imageName = decodeURIComponent(selectedImage).split('/');
+        element.setAttribute('href', `/media/iiif/${decodeURIComponent(selectedImage)}`);
+        element.setAttribute('download', imageName[imageName.length - 1]);
 
         element.style.display = 'none';
         document.body.appendChild(element);
@@ -60,10 +61,10 @@ const OpenSeaDragonViewer = ({ image, selectedImage, loadLoader }) => {
         const { width, height } = calculateDownloadDimensions();
 
         if (downloadContent !== null) {
-            const imageName = selectedImage.split('.');
+            const imageName = decodeURIComponent(selectedImage).split('/');
             Canvas2Image.saveAsPNG(
                 viewer.drawer.canvas,
-                `${imageName[0]}`,
+                `${imageName[imageName.length - 1].split('.')[0]}`,
                 width,
                 height,
             );

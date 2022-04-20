@@ -24,7 +24,7 @@ class RiskInfo extends React.PureComponent<Props> {
             health: false,
             finance: false,
             governance: false,
-            tourism: false,
+            hotelandrestaurant: false,
             cultural: false,
             industry: false,
             communication: false,
@@ -32,6 +32,7 @@ class RiskInfo extends React.PureComponent<Props> {
             communityspace: false,
             fireengine: false,
             helipad: false,
+            evacuationcentre: false,
         },
     }
 

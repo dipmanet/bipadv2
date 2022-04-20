@@ -73,6 +73,12 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         pointShape: 'circle',
     }
 
+
+    public componentDidMount() {
+        const { pointShape } = this.props;
+        this.setMapEvents(this.context.map, pointShape);
+    }
+
     public componentDidUpdate() {
         const { pointShape } = this.props;
         this.setMapEvents(this.context.map, pointShape);
@@ -194,10 +200,10 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
         });
 
-        const point = this.context.map.project([lng, lat]);
+        const point = this.context.map.project([Number(lng), Number(lat)]);
 
         const features = this.context.map.queryRenderedFeatures(
             point,
@@ -235,7 +241,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
         });
 
         const point = this.context.map.project([lng, lat]);
@@ -275,7 +281,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         const newGeoJson = produce(geoJson, (deferedState) => {
             if (deferedState.features[0].geometry) {
                 // eslint-disable-next-line no-param-reassign
-                deferedState.features[0].geometry.coordinates = [lng, lat];
+                deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
             } else {
                 // eslint-disable-next-line no-param-reassign
                 deferedState.features[0].geometry = {
@@ -312,7 +318,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
         const newGeoJson = produce(geoJson, (deferedState) => {
             if (deferedState.features[0].geometry) {
                 // eslint-disable-next-line no-param-reassign
-                deferedState.features[0].geometry.coordinates = [lng, lat];
+                deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
             } else {
                 // eslint-disable-next-line no-param-reassign
                 deferedState.features[0].geometry = {
@@ -366,7 +372,7 @@ export default class DraggablePoint extends React.PureComponent<Props, State> {
 
         const newGeoJson = produce(geoJson, (deferedState) => {
             // eslint-disable-next-line no-param-reassign
-            deferedState.features[0].geometry.coordinates = [lng, lat];
+            deferedState.features[0].geometry.coordinates = [Number(lng), Number(lat)];
         });
 
         // console.warn(e);

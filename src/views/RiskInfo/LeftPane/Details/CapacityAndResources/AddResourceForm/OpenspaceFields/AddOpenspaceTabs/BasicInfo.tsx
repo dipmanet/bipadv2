@@ -10,12 +10,13 @@ import { authStateSelector } from '#selectors';
 import { AuthState } from '#store/atom/auth/types';
 import RegionSelectInput from './RegionSelectInput';
 import NumberInput from '#rsci/NumberInput';
+import LocationInput from '#components/LocationInput';
 
 interface PropsFromState {
     authState: AuthState;
 }
 
-type ReduxProps = PropsFromState ;
+type ReduxProps = PropsFromState;
 
 
 interface Props {
@@ -31,7 +32,7 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
 
     <React.Fragment>
         <br />
-        <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} />
+        {/* <RegionSelectInput setAdministrativeParameters={setAdministrativeParameters} /> */}
         <TextInput
             faramElementName="oid"
             label="OID"
@@ -95,31 +96,37 @@ const BasicInfo: React.FC<Props> = ({ handleTabClick, postBasicInfo, openspacePo
             label="Change Remarks"
         />
 
-        {
+        {/* {
             openspacePostError && (
                 <NonFieldErrors
                     faramElement
                     errors={['Some error occured!']}
                 />
             )
-        }
+        } */}
+        <LocationInput
+            // className={styles.locationInput}
+            faramElementName="location"
+            classCategory={styles.locationInputOpenSpace}
+            category={'capacityResource'}
+        />
         {resourceId === undefined
 
-&& <span>Please make sure to complete all the steps while filling the form.</span>}
+            && <span>Please make sure to complete all the steps while filling the form.</span>}
         <div className={styles.stepButtons}>
-            <PrimaryButton
+            {/* <PrimaryButton
                 type="submit"
                 // disabled={pristine}
                 // pending={addResourcePending || editResourcePending}
                 onClick={() => handleTabClick('closeModal')}
             >
             Close
-            </PrimaryButton>
+            </PrimaryButton> */}
 
             <PrimaryButton
                 onClick={() => postBasicInfo()}
             >
-         Save and Continue
+                Save and Continue
             </PrimaryButton>
 
 

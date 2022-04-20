@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-Electricity">
+      <rect width="32" height="32"/>
+    </clipPath>
+  </defs>
+  <g id="Electricity" clip-path="url(#clip-Electricity)">
+    <path id="Path_660" data-name="Path 660" d="M111.436,10.186a.491.491,0,0,0-.427-.249h-6.428L105.658,1.7a.493.493,0,0,0-.9-.321l-7.817,13.7a.491.491,0,0,0,.418.748h6.332l-.854,8.247a.494.494,0,0,0,.909.3L111.43,10.68a.491.491,0,0,0,.006-.494Z" transform="translate(-87.864 2.843)" fill="#0070ab"/>
+  </g>
+</svg>

@@ -346,6 +346,38 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#ffd046',
         },
+        bridge: {
+            ...resourceClusterInitial,
+            'circle-color': '#AAB2AD',
+        },
+        evacuationcentre: {
+            ...resourceClusterInitial,
+            'circle-color': '#F47267',
+        },
+        sanitation: {
+            ...resourceClusterInitial,
+            'circle-color': '#2F6209',
+        },
+        watersupply: {
+            ...resourceClusterInitial,
+            'circle-color': '#3BC7F8',
+        },
+        electricity: {
+            ...resourceClusterInitial,
+            'circle-color': '#CA8D4E',
+        },
+        airway: {
+            ...resourceClusterInitial,
+            'circle-color': '#F763C6',
+        },
+        roadway: {
+            ...resourceClusterInitial,
+            'circle-color': '#1698EE',
+        },
+        waterway: {
+            ...resourceClusterInitial,
+            'circle-color': '#9BD1E9',
+        },
         health: {
             ...resourceClusterInitial,
             'circle-color': '#EADAA2',
@@ -358,7 +390,7 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#82ddf0',
         },
-        tourism: {
+        hotelandrestaurant: {
             ...resourceClusterInitial,
             'circle-color': '#7dcd85',
         },
@@ -391,6 +423,7 @@ export default {
             ...resourceClusterInitial,
             'circle-color': '#BCE618',
         },
+
     },
 
     resourcePoint: {
@@ -410,6 +443,38 @@ export default {
             ...resourcePointInitial,
             'circle-color': '#ffd046',
         },
+        bridge: {
+            ...resourcePointInitial,
+            'circle-color': '#AAB2AD',
+        },
+        evacuationcentre: {
+            ...resourcePointInitial,
+            'circle-color': '#F47267',
+        },
+        airway: {
+            ...resourcePointInitial,
+            'circle-color': '#F763C6',
+        },
+        roadway: {
+            ...resourcePointInitial,
+            'circle-color': '#1698EE',
+        },
+        waterway: {
+            ...resourcePointInitial,
+            'circle-color': '#9BD1E9',
+        },
+        watersupply: {
+            ...resourcePointInitial,
+            'circle-color': '#3BC7F8',
+        },
+        electricity: {
+            ...resourcePointInitial,
+            'circle-color': '#CA8D4E',
+        },
+        sanitation: {
+            ...resourcePointInitial,
+            'circle-color': '#2F6209',
+        },
         health: {
             ...resourcePointInitial,
             'circle-color': '#EADAA2',
@@ -422,7 +487,7 @@ export default {
             ...resourcePointInitial,
             'circle-color': '#82ddf0',
         },
-        tourism: {
+        hotelandrestaurant: {
             ...resourcePointInitial,
             'circle-color': '#7dcd85',
         },
@@ -537,6 +602,96 @@ export default {
             ],
         },
     },
+    rain24Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'twentyfour']], 'number'], '-',
+                ['get', 'twentyfour'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'twentyfour']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain12Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'twelve']], 'number'], '-',
+                ['get', 'twelve'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'twelve']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain6Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'six']], 'number'], '-',
+                ['get', 'six'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'six']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain3Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'three']], 'number'], '-',
+                ['get', 'three'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'three']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    rain1Text: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': [
+                'case',
+                ['!=', ['typeof', ['get', 'one']], 'number'], '-',
+                ['get', 'one'],
+            ],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'one']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
 
     rainSymbol: {
         layout: {
@@ -647,7 +802,20 @@ export default {
             // ],
         },
     },
-
+    riverText: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': ['get', 'waterLevel'],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'waterLevel']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
     firePoint: {
         layout: {
             'text-field': '◆',
@@ -745,6 +913,20 @@ export default {
             'text-allow-overlap': false,
             'text-size': 10,
             'symbol-sort-key': ['-', ['get', 'aqi']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
+    archivePollutionText: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': ['get', 'aqi'],
+            'text-allow-overlap': false,
+            'text-size': 10,
+            'symbol-sort-key': ['-', ['get', 'date']],
         },
         paint: {
             'text-color': '#000000',
@@ -865,6 +1047,29 @@ export default {
             'text-halo-width': 1.5,
         },
     },
+    archiveEarthquakeText: {
+        layout: {
+            'text-font': ['League Mono Regular'],
+            'text-field': ['get', 'magnitude'],
+            'text-allow-overlap': false,
+            'text-size': [
+                'case',
+                ['>=', ['get', 'magnitude'], 8], 12,
+                ['>=', ['get', 'magnitude'], 7], 11,
+                ['>=', ['get', 'magnitude'], 6], 10,
+                ['>=', ['get', 'magnitude'], 5], 9,
+                ['>=', ['get', 'magnitude'], 4], 8,
+                7,
+            ],
+            // NOTE: should negate idk why
+            'symbol-sort-key': ['-', ['get', 'date']],
+        },
+        paint: {
+            'text-color': '#000000',
+            'text-halo-color': '#ffffff',
+            'text-halo-width': 1.5,
+        },
+    },
     contactPoint: {
         circle: {
             'circle-color': '#1565c0',
@@ -877,10 +1082,10 @@ export default {
                 'interpolate',
                 ['linear'],
                 ['get', 'point_count'],
-                2,
+                5,
                 10,
-                40,
-                100,
+                15,
+                25,
             ],
             'circle-opacity': 1,
         },

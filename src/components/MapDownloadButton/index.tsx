@@ -1,6 +1,10 @@
-import React, { useContext, useState, useCallback } from 'react';
+/* eslint-disable prefer-const */
+import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import html2canvas from 'html2canvas';
+import JsPDF from 'jspdf';
+import slugify from 'slugify';
+import { saveChart } from '#utils/common';
 
 import Button from '#rsca/Button';
 import { MapChildContext } from '#re-map/context';
@@ -8,11 +12,9 @@ import { MapChildContext } from '#re-map/context';
 import PageContext from '#components/PageContext';
 import { TitleContext } from '#components/TitleContext';
 import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
-
-
+import styles from './styles.scss';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
-
 import {
     District,
     Province,
@@ -26,6 +28,8 @@ import {
     regionSelector,
     filtersSelector,
     realTimeFiltersSelector,
+    layersSelector,
+    layerGroupSelector,
 } from '#selectors';
 
 import indexMapImage from '#resources/images/index-map.png';
@@ -62,8 +66,8 @@ const indexBounds = {
     ne: { lng: 88.1748043151, lat: 30.4227169866 },
 };
 
-const largeFont = '20px Source Sans Pro';
-const smallFont = '14px Source Sans Pro';
+// const largeFont = '20px Source Sans Pro';
+// const smallFont = '14px Source Sans Pro';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     region: regionSelector(state),
@@ -72,6 +76,9 @@ const mapStateToProps = (state: AppState): PropsFromAppState => ({
     provinces: provincesSelector(state),
     filters: filtersSelector(state),
     realtimeFilters: realTimeFiltersSelector(state),
+    layers: layersSelector(state),
+    layerGroups: layerGroupSelector(state),
+
 });
 
 interface GeoPoint {
@@ -141,7 +148,19 @@ const MapDownloadButton = (props: Props) => {
         filters: { hazard, dataDateRange },
         realtimeFilters,
         onPendingStateChange,
-
+        activeLayers,
+        layers,
+        layerGroups,
+        buttonText,
+        defaultMap,
+        selectedFileFormat,
+        disableDefaultDownload,
+        selectedPageType,
+        showPageType,
+        resolution,
+        handleCancelButton,
+        mapOrientation,
+        handleDisableDownloadButton,
         ...otherProps
     } = props;
 
@@ -158,7 +177,28 @@ const MapDownloadButton = (props: Props) => {
             onPendingStateChange(isPending);
         }
     }, [setPending, onPendingStateChange]);
-
+    const filteredLayer = layers && activeLayers
+        && layers.filter(item => item.layername
+            === activeLayers.layername).filter(data => data.title === activeLayers.title);
+    const filteredLayerGroup = filteredLayer && filteredLayer.length
+        && layerGroups.filter(i => i.id === filteredLayer[0].group);
+    const publicationDate = filteredLayerGroup && filteredLayerGroup.length
+        && filteredLayerGroup[0].metadata && filteredLayerGroup[0].metadata.value
+        && filteredLayerGroup[0].metadata.value.general
+        && filteredLayerGroup[0].metadata.value.general.datasetCreationDate;
+    useEffect(() => {
+        const disableDownloadButton = !!((disabled || !mapContext
+            || !mapContext.map || disableDefaultDownload
+            || (!defaultMap && !resolution.width) || (!defaultMap && !resolution.height)
+            || (!defaultMap && !selectedFileFormat)
+            || (!defaultMap && selectedFileFormat === undefined)
+            || (!defaultMap && resolution.width < 500)
+            || (!defaultMap && resolution.width > 5000)
+            || (!defaultMap && resolution.height < 500)
+            || (!defaultMap && resolution.height > 5000)));
+        handleDisableDownloadButton(disableDownloadButton);
+    }, [defaultMap, disableDefaultDownload, disabled, handleDisableDownloadButton,
+        mapContext, resolution.height, resolution.width, selectedFileFormat]);
     const handleExport = useCallback(
         () => {
             if (!mapContext || !mapContext.map) {
@@ -180,7 +220,6 @@ const MapDownloadButton = (props: Props) => {
                 console.warn('RiskInfo context not found');
                 return;
             }
-
             const pageTitle = pageContext.activeRouteDetails.title;
 
             let regionName = 'Nepal';
@@ -200,6 +239,20 @@ const MapDownloadButton = (props: Props) => {
                     regionName = municipality.title;
                 }
             }
+            // let myElements = document.getElementById('realMap123');
+            // const width = '5000px';
+            // const height = '5000px';
+            // const finalHeight = `${1000 * 1.2549019607843}px`;
+            // const finalWidth = `${1000 * 1.2549019607843}px`;
+
+
+            // myElements.style.height = finalHeight;
+            // myElements.style.width = finalWidth;
+            // myElements.style.position = 'absolute';
+            // myElements.style.top = '0';
+            // myElements.style.backgroundColor = 'transparent';
+            // myElements.style.flexGrow = 'unset';
+
 
             let source = '';
             // previous source logic
@@ -236,11 +289,34 @@ const MapDownloadButton = (props: Props) => {
                 const rightMargin = 24;
                 const topMargin = 24;
 
-                const indexMapWidth = 200;
-                const indexMapHeight = 200 * indexMap.height / indexMap.width;
+                // const indexMapWidth = 200;
+                // const indexMapHeight = 200 * indexMap.height / indexMap.width;
+                let indexMapWidth = 200;
+                let indexMapHeight = 200 * indexMap.height / indexMap.width;
+                if (resolution.width && (resolution.width <= resolution.height)) {
+                    indexMapWidth = (resolution.width * 0.25);
+                    indexMapHeight = indexMapWidth * indexMap.height / indexMap.width;
+                    // indexMapWidth = mapOrientation === 'landscape'
+                    // ? indexMapHeight : indexMapWidth;
+                    // indexMapHeight = mapOrientation === 'landscape'
+                    // ? indexMapWidth : indexMapHeight;
+                } else if (resolution.width && (resolution.width > resolution.height)) {
+                    indexMapHeight = (resolution.height * 0.25);
+                    indexMapWidth = indexMapHeight * indexMap.width / indexMap.height;
+                    // indexMapWidth = mapOrientation === 'landscape'
+                    // ? indexMapHeight : indexMapWidth;
+                    // indexMapHeight = mapOrientation === 'landscape'
+                    // ? indexMapWidth : indexMapHeight;
+                }
 
+
+                const constant = (indexMapWidth < indexMapHeight)
+                    ? indexMapWidth : indexMapHeight;
+                // const constant = indexMapWidth;
                 const left = canvas.width - indexMapWidth - rightMargin;
                 const top = topMargin;
+                const right = canvas.width - indexMapWidth - rightMargin;
+                const bottom = topMargin;
 
                 const dx = mp.left * indexMapWidth;
                 const dy = mp.top * indexMapHeight;
@@ -255,7 +331,19 @@ const MapDownloadButton = (props: Props) => {
 
                 context.beginPath();
                 context.strokeStyle = '#ff0000';
+                // context.rect(
+                //     left + dx,
+                //     top + dy,
+                //     indexMapWidth * mp.width,
+                //     indexMapHeight * mp.height,
+                // );
+
                 context.rect(
+                    // left + dx,
+                    // top + dy,
+                    // indexMapWidth * (mp.width < 0 ? -1 * mp.width : mp.width),
+                    // indexMapHeight * (mp.height < 0 ? -1 * mp.height : mp.height),
+
                     left + dx,
                     top + dy,
                     indexMapWidth * mp.width,
@@ -267,6 +355,9 @@ const MapDownloadButton = (props: Props) => {
                 const legendContainerClassName = 'map-legend-container';
                 const legend = document.getElementsByClassName(legendContainerClassName);
                 const scale = document.getElementsByClassName('mapboxgl-ctrl-scale')[0];
+                const navigation = document.getElementsByClassName('mapboxgl-ctrl-compass')[0];
+                document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '50px';
+                navigation.getElementsByTagName('span')[0].style.backgroundSize = '50px';
 
                 const today = new Date();
                 let title = `${pageTitle} for ${regionName}`;
@@ -283,18 +374,30 @@ const MapDownloadButton = (props: Props) => {
                 );
                 title = specificTitle || `${pageTitle} for ${regionName}`;
                 source = specificSource || '';
-
-                drawText(context, largeFont, title, 12, 24, '#000', '#fff');
-                drawText(context, smallFont, exportText, 12, 52, '#000', '#fff');
+                const calculation = value => (
+                    (value / 200) * constant
+                );
+                const largeFont = `${calculation(30)}px Source Sans Pro`;
+                const smallFont = `${calculation(24)}px Source Sans Pro`;
+                const space = 30;
+                drawText(context, largeFont, title, calculation(32), calculation(44), '#000', '#fff');
+                drawText(context, smallFont, exportText, calculation(32), calculation(44 + space), '#000', '#fff');
 
                 if (source) {
-                    drawText(context, smallFont, `Source: ${source}`, 12, 68, '#000', '#fff');
+                    drawText(context, smallFont, `Source: ${source}`, calculation(32), calculation(44 + (2 * space)), '#000', '#fff');
                 }
-
+                if (publicationDate) {
+                    if (source) {
+                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, calculation(32), calculation(88 + (2 * space)), '#000', '#fff');
+                    } else {
+                        drawText(context, smallFont, `Publication Date: ${publicationDate}`, calculation(32), calculation(88 + (2 * space)), '#000', '#fff');
+                    }
+                }
                 const allPromises = [];
 
                 if (scale) {
                     const scaleCanvas = html2canvas(scale as HTMLElement);
+
 
                     const scalePromise = new Promise((resolve) => {
                         scaleCanvas.then((c) => {
@@ -309,11 +412,34 @@ const MapDownloadButton = (props: Props) => {
 
                     allPromises.push(scalePromise);
                 }
+                if (navigation) {
+                    const navigationCanvas = html2canvas(navigation as HTMLElement);
 
+                    const navigationPromise = new Promise((resolve) => {
+                        navigationCanvas.then((c) => {
+                            context.drawImage(
+                                c,
+                                mapCanvas.width - c.width - 6,
+                                mapCanvas.height - c.height - 22,
+                                // indexMap.height,
+                                // indexMapHeight - 70,
+                                // indexMapHeight - indexMapHeight + 20,
+                                // 20,
+                            );
+                            resolve();
+                        });
+                    });
+
+                    allPromises.push(navigationPromise);
+                }
                 if (legend) {
                     const legendPromise = new Promise((resolve) => {
                         const promises = Array.from(legend).map((legendElement) => {
-                            const elCanvas = html2canvas(legendElement as HTMLElement);
+                            const elCanvas = html2canvas(legendElement as HTMLElement,
+                                // { scale: indexMapWidth / 200 }
+
+
+                            );
                             return elCanvas;
                         });
                         Promise.all(promises).then((canvases) => {
@@ -333,17 +459,85 @@ const MapDownloadButton = (props: Props) => {
                     allPromises.push(legendPromise);
                 }
 
+
                 Promise.all(allPromises).then(() => {
-                    canvas.toBlob((blob) => {
-                        const link = document.createElement('a');
-                        link.download = `map-export-${(new Date()).getTime()}.png`;
-                        link.href = URL.createObjectURL(blob);
-                        link.click();
+                    if (selectedFileFormat === 'PDF') {
+                        let pageType = null;
+                        let width = null;
+                        let height = null;
+                        let orientation = null;
+                        if (selectedPageType === 'A4' && mapOrientation === 'portrait') {
+                            pageType = 'a4';
+                            width = 210;
+                            height = 297;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'A4' && mapOrientation === 'landscape') {
+                            pageType = 'a4';
+                            width = 297;
+                            height = 210;
+                            orientation = 'l';
+                        } else if (selectedPageType === 'A3' && mapOrientation === 'portrait') {
+                            pageType = 'a3';
+                            width = 297;
+                            height = 420;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'A3' && mapOrientation === 'landscape') {
+                            pageType = 'a3';
+                            width = 420;
+                            height = 297;
+                            orientation = 'l';
+                        } else if (selectedPageType === 'B4' && mapOrientation === 'portrait') {
+                            pageType = 'b4';
+                            width = 250;
+                            height = 353;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'B4' && mapOrientation === 'landscape') {
+                            pageType = 'b4';
+                            width = 353;
+                            height = 250;
+                            orientation = 'l';
+                        } else if (selectedPageType === 'B5' && mapOrientation === 'portrait') {
+                            pageType = 'b5';
+                            width = 176;
+                            height = 250;
+                            orientation = 'p';
+                        } else if (selectedPageType === 'B5' && mapOrientation === 'landscape') {
+                            pageType = 'b5';
+                            width = 250;
+                            height = 176;
+                            orientation = 'l';
+                        }
+                        const pdf = new JsPDF(orientation, 'mm', pageType);
+                        const pageData = canvas.toDataURL('image/png', 1.0);
+                        pdf.addImage(pageData, 'PNG', 0, 0, width, height);
+                        const pageDownloadTitle = slugify(title, '_');
+                        pdf.save(`${pageDownloadTitle}.pdf`);
                         setDownloadPending(false);
-                    }, 'image/png');
+                        handleCancelButton();
+                        // canvas.toBlob((blob) => {
+                        //     const win = window.open();
+                        //     const link = URL.createObjectURL(blob);
+                        //     win.document.write(`<img src='${link}'/>`);
+                        //     win.print();
+                        // });
+                    } else {
+                        canvas.toBlob((blob) => {
+                            const link = document.createElement('a');
+                            const pageDownloadTitle = slugify(title, '_');
+                            link.download = defaultMap ? `${pageDownloadTitle}.png`
+                                : `${pageDownloadTitle}.${selectedFileFormat}`;
+                            link.href = URL.createObjectURL(blob);
+                            link.click();
+                            setDownloadPending(false);
+                            document.getElementsByClassName('mapboxgl-ctrl-compass')[0].style.height = '29px';
+                            navigation.getElementsByTagName('span')[0].style.backgroundSize = 'auto';
+                        }, defaultMap ? 'image/png' : `image/${selectedFileFormat}`);
+                        handleCancelButton();
+                    }
                 });
             };
         },
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
             region,
@@ -355,16 +549,58 @@ const MapDownloadButton = (props: Props) => {
             titleContext,
             hazard,
             realtimeFilters,
+            selectedFileFormat,
         ],
     );
+    const handleSaveClick = (classname) => {
+        if (classname === 'mapboxgl-canvas') {
+            const divToDisplay = document.getElementsByClassName('mapboxgl-canvas');
+            const pdf = new JsPDF('p', 'mm', 'a4');
+            html2canvas(divToDisplay).then((canvas) => {
+                const divImage = canvas.toDataURL('image/png');
+                const imgWidth = 210;
+                const pageHeight = 297;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(divImage, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                pdf.save('Report.pdf');
+            });
+        } else {
+            saveChart(classname, classname);
+        }
+
+        // saveChart("hazardSeverity", "hazardSeverity");
+    };
+
 
     return (
         <Button
-            disabled={disabled || !mapContext || !mapContext.map}
+            disabled={disabled || !mapContext || !mapContext.map || disableDefaultDownload
+                || (!defaultMap && !resolution.width) || (!defaultMap && !resolution.height)
+                || (!defaultMap && !selectedFileFormat)
+                || (!defaultMap && selectedFileFormat === undefined)
+                || (!defaultMap && resolution.width < 500)
+                || (!defaultMap && resolution.width > 5000)
+                || (!defaultMap && resolution.height < 500)
+                || (!defaultMap && resolution.height > 5000)
+            }
             pending={pending || pendingFromProps}
             onClick={handleExport}
+            // onClick={handleSaveClick('mapboxgl-canvas')}
             {...otherProps}
-        />
+        >
+            {buttonText}
+
+        </Button>
     );
 };
 

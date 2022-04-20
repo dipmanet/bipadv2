@@ -177,11 +177,12 @@ module.exports = (env) => {
         },
 
         plugins: [
-            new CopyPlugin({
-                patterns: [
-                    { from: 'public/publicFiles', to: 'publicFiles' },
-                ],
-            }),
+            new CopyPlugin([
+                {
+                    from: 'public/publicFiles',
+                    to: 'publicFiles',
+                },
+            ]),
 
             new webpack.DefinePlugin({
                 'process.env': ENV_VARS,
