@@ -152,8 +152,6 @@ const transformLandslideDataToLayer = (
 const mapStateToProps = (state: AppState): PropsFromState => ({
 
     municipalities: municipalitiesSelector(state),
-
-    // hazardList: hazardTypeListSelector(state),
 });
 
 class Hazard extends React.PureComponent<Props, State> {
@@ -181,7 +179,6 @@ class Hazard extends React.PureComponent<Props, State> {
         this.setState({
             municipalityImages: munDataWithDistrict,
         });
-        // handleLandslidePolygonImageMap(munDataWithDistrict);
     }
 
     public render() {
@@ -194,9 +191,6 @@ class Hazard extends React.PureComponent<Props, State> {
         } = this.props;
         const { municipalityImages } = this.state;
 
-        // const { landslidePolygonImagemap } = this.context;
-
-
         FeatureGetMunicipalityImages.setDefaultParams({
             municipalityData: this.municipalityImageData,
         });
@@ -206,29 +200,6 @@ class Hazard extends React.PureComponent<Props, State> {
             layerList,
             layerGroupList,
         );
-        const landslideLayerToDataMap = {
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            // durham_landslide_hazard_risk_district: {
-            //     data: districtLandslideRaw.features,
-            //     adminLevel: 'district',
-            //     dataKey: 'district_d',
-            //     dataValue: 'District_r',
-            // },
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            post_monsoon: {
-                data: [],
-                adminLevel: 'municipality',
-                dataKey: 'municipali',
-                dataValue: 'Palika_ris',
-            },
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            // durham_landslide_hazard_risk_ward: {
-            //     data: wardLandslideRaw.features,
-            //     adminLevel: 'ward',
-            //     dataKey: 'ward_id',
-            //     dataValue: 'Ward_War_4',
-            // },
-        };
         const RiskLayerSelectionItem = (p) => {
             const { data: layer } = p;
             const { municipalities } = this.props;
@@ -236,12 +207,11 @@ class Hazard extends React.PureComponent<Props, State> {
                 <LayerSelectionItem
                     key={layer.id}
                     data={
-                        landslideLayerToDataMap[layer.layername] ? (
+                        layer.layername === 'durham_post_monsoon_2020_landslide_map' ? (
                             transformLandslideDataToLayer(
                                 municipalityImages,
                                 layer,
                                 municipalities,
-
                             )
                         ) : (
                             layer
