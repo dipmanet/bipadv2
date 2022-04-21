@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-concat */
+/* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -201,6 +202,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         endDate: encodeDate(DEFAULT_END_DATE),
         submittedStartDate: encodeDate(DEFAULT_START_DATE),
         submittedEndDate: encodeDate(DEFAULT_END_DATE),
+        Null_check_estimatedLoss: false,
     }
 
     private handleSaveClick = () => {
@@ -271,7 +273,12 @@ class LossAndDamage extends React.PureComponent<Props, State> {
         const filteredData = hazardFilter.length > 0
             ? regionFilteredData.filter(d => hazardFilterMap[d.hazard])
             : regionFilteredData;
-
+        const null_check_estimatedLoss = filteredData.map(item => (item.loss
+            ? item.loss.estimatedLoss : undefined))
+            .filter(item => item === undefined);
+        if (filteredData.length > 0 && (filteredData.length === null_check_estimatedLoss.length)) {
+            this.setState({ Null_check_estimatedLoss: true });
+        }
         return filteredData;
     })
 
@@ -361,6 +368,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             endDate,
             submittedStartDate,
             submittedEndDate,
+            Null_check_estimatedLoss,
         } = this.state;
 
         const incidentList = getResults(requests, 'incidentsGetRequest');
@@ -374,6 +382,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
             regions,
         );
         const chartData = this.getDataAggregatedByYear(filteredData);
+
 
         return (
             <>
@@ -523,6 +532,7 @@ class LossAndDamage extends React.PureComponent<Props, State> {
                                 <LossDetails
                                     className={styles.lossDetails}
                                     data={filteredData}
+                                    nullCondition={Null_check_estimatedLoss}
                                 />
                                 <Button
                                     title="Download Chart"

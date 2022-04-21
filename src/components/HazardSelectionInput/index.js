@@ -135,10 +135,26 @@ class HazardSelectionInput extends React.PureComponent {
             value,
         } = this.props;
 
-        const groupedHazardTypes = this.getGroupedHazardTypes(hazardTypeList);
-        const groupedValues = this.getGroupedHazardTypeValues(value);
 
+        const dashboardHazadTypeList = hazardTypeList.filter(item => item.title === 'Flood'
+        || item.title === 'Forest Fire'
+        || item.title === 'Heavy Rainfall'
+        || item.title === 'Environmental pollution'
+        || item.title === 'Earthquake');
+
+        let groupedHazardTypes;
+        let groupedValues;
+
+
+        if (activePage === 'dashboard') {
+            groupedHazardTypes = this.getGroupedHazardTypes(dashboardHazadTypeList);
+            groupedValues = this.getGroupedHazardTypeValues(value);
+        } else {
+            groupedHazardTypes = this.getGroupedHazardTypes(hazardTypeList);
+            groupedValues = this.getGroupedHazardTypeValues(value);
+        }
         const withoutFire = [...groupedHazardTypes.natural].filter(item => item.title !== 'Fire');
+
         return (
             <div className={_cs(className, styles.hazardSelectionInput)}>
                 {activePage === 'dashboard' ? (

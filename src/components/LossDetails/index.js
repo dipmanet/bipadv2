@@ -23,6 +23,7 @@ const defaultProps = {
     hideIncidentCount: false,
 };
 const emptyList = [];
+// eslint-disable-next-line space-infix-ops
 
 class LossDetails extends React.PureComponent {
     static propTypes = propTypes;
@@ -43,15 +44,26 @@ class LossDetails extends React.PureComponent {
         return stat;
     });
 
+    null_check=(m) => {
+        const { nullCondition, data = emptyList } = this.props;
+        if (nullCondition) {
+            const summaryData = this.calculateSummary(data);
+            summaryData.estimatedLoss = '-';
+
+            return summaryData[m];
+        }
+        const summaryData = this.calculateSummary(data);
+
+        return summaryData[m];
+    }
+
     render() {
         const {
             className,
-            data = emptyList,
             hideIncidentCount,
             language: { language },
         } = this.props;
 
-        const summaryData = this.calculateSummary(data);
 
         return (
             <div className={_cs(className, styles.lossDetails)}>
@@ -64,7 +76,9 @@ class LossDetails extends React.PureComponent {
                         <StatOutput
                             key={metric.key}
                             label={language === 'en' ? metric.label : metric.labelNe}
-                            value={summaryData[metric.key]}
+                            // value={summaryData[metric.key]}
+                            // label={metric.label}
+                            value={this.null_check(metric.key)}
                         />
 
 

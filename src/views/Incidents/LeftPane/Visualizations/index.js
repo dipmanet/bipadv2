@@ -164,7 +164,7 @@ class Visualizations extends React.PureComponent {
                                 }
                             </Translation>
                         </h4>
-                        <ResponsiveContainer height={300}>
+                        <ResponsiveContainer height={hazardSummary.length * 40}>
 
                             <BarChart
                                 layout="vertical"
@@ -181,7 +181,7 @@ class Visualizations extends React.PureComponent {
                                     dataKey="value"
 
                                 >
-                                    { hazardSummary.map(hazard => (
+                                    {hazardSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}
@@ -250,7 +250,7 @@ class Visualizations extends React.PureComponent {
                             </Translation>
 
                         </h4>
-                        <ResponsiveContainer height={300}>
+                        <ResponsiveContainer height={lifeLossSummary.length * 40}>
 
                             <BarChart
                                 layout="vertical"
@@ -264,7 +264,7 @@ class Visualizations extends React.PureComponent {
                                 <Bar
                                     dataKey="deathCount"
                                 >
-                                    { lifeLossSummary.map(hazard => (
+                                    {lifeLossSummary.map(hazard => (
                                         <Cell
                                             key={hazard.label}
                                             fill={hazard.color}

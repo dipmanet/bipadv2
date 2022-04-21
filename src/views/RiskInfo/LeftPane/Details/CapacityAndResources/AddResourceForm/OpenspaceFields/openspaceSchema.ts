@@ -5,18 +5,19 @@ type Schema = {
     [key in OpenspaceTabs]: object;
 };
 
-// const defaultFields = {
-//     resourceType: [requiredCondition],
-//     title: [requiredCondition],
-//     point: [],
-//     description: [],
-//     ward: [],
-//     location: [],
-// };
+const defaultFields = {
+    resourceType: [requiredCondition],
+    title: [requiredCondition],
+    point: [],
+    description: [],
+    ward: [],
+    location: [],
+};
 
 const schema: Schema = {
     basicInfo: {
         fields: {
+            ...defaultFields,
             oid: [requiredCondition],
             name: [],
             description: [],

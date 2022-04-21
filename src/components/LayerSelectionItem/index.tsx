@@ -17,12 +17,14 @@ interface Props {
 
 class LayerSelectionItem extends React.PureComponent<Props> {
     private handleChange = (value: boolean) => {
+        const { closeTooltip } = this.context;
         const { data } = this.props;
         const {
             addLayer,
             removeLayer,
         } = this.context;
-        console.log('final data>>>', data);
+        closeTooltip(undefined);
+
         if (value) {
             addLayer(data);
         } else {
@@ -32,18 +34,14 @@ class LayerSelectionItem extends React.PureComponent<Props> {
 
     // TOOD: memoize
     private getIsActive = (activeLayers: LayerHierarchy[], layerKey: LayerHierarchy['id']) => {
-        // console.log('this is layer>>>', layerKey);
-        // console.log('This is active inside>>>', activeLayers);
         const layerIndex = activeLayers.findIndex(d => d.id === layerKey);
         // let demo = [];
         // if (activeLayers.length > 1 && layerIndex !== -1) {
         //     demo = activeLayers.filter(item => item.id === layerKey);
-        //     console.log('this demo>>>', demo);
+
         //     activeLayers.push(demo[0]);
         // }
 
-
-        // console.log('This index>>>', layerIndex);
 
         return layerIndex !== -1;
     }
@@ -55,7 +53,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
             disabled,
         } = this.props;
 
-        const { activeLayers } = this.context;
+        const { activeLayers, closeTooltip } = this.context;
         const isActive = this.getIsActive(activeLayers, data.id);
 
         return (
@@ -68,6 +66,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                         off={false}
                         value={isActive}
                         onChange={this.handleChange}
+
                     />
                     <div className={styles.title}>
                         { data.title }

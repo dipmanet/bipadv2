@@ -6,6 +6,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const StylishPlugin = require('eslint/lib/cli-engine/formatters/stylish');
+const CopyPlugin = require('copy-webpack-plugin');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const dotenv = require('dotenv').config({
@@ -168,9 +169,21 @@ module.exports = (env) => {
                         },
                     ],
                 },
+
+
             ],
+
+
         },
+
         plugins: [
+            new CopyPlugin([
+                {
+                    from: 'public/publicFiles',
+                    to: 'publicFiles',
+                },
+            ]),
+
             new webpack.DefinePlugin({
                 'process.env': ENV_VARS,
             }),

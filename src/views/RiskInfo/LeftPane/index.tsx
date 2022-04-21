@@ -6,6 +6,8 @@ import {
 } from '@togglecorp/fujs';
 
 import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { compose, Dispatch } from 'redux';
 import {
     createRequestClient,
     NewProps,
@@ -15,26 +17,55 @@ import {
 } from '#request';
 
 import Button from '#rsca/Button';
-
 import CommonMap from '#components/CommonMap';
 import Loading from '#components/Loading';
 import {
     setHashToBrowser,
     getHashFromBrowser,
 } from '#rscg/HashManager';
-
+import RiskInfoLayerContext from '#components/RiskInfoLayerContext';
 import { AttributeKey } from '#types';
 import { Layer, LayerMap, LayerGroup } from '#store/atom/page/types';
 import {
     getResults,
     isAnyRequestPending,
 } from '#utils/request';
-
 import Overview from './Overview';
 import Details from './Details';
-
+import {
+    generatePaint,
+    getLayerHierarchy,
+} from '#utils/domain';
+import {
+    incidentListSelectorIP,
+    filtersSelector,
+    hazardTypesSelector,
+    regionsSelector,
+} from '#selectors';
+import {
+    setIncidentListActionIP,
+    setEventListAction,
+    SetLayersAction,
+    SetLayerGroupsAction,
+} from '#actionCreators';
 import styles from './styles.scss';
+import { AppState } from '#store/types';
 
+interface PropsFromDispatch {
+    setIncidentList: typeof setIncidentListActionIP;
+    setEventList: typeof setEventListAction;
+}
+interface PropsFromAppState {
+    incidentList: PageType.Incident[];
+    filters: FiltersElement;
+    hazardTypes: Obj<PageType.HazardType>;
+    regions: {
+        provinces: object;
+        districts: object;
+        municipalities: object;
+        wards: object;
+    };
+}
 interface OwnProps {
     className?: string;
     handleCarActive: Function;
@@ -54,8 +85,21 @@ interface State {
 }
 
 type Props = NewProps<OwnProps, Params>;
+const mapStateToProps = (state: AppState): PropsFromAppState => ({
+    incidentList: incidentListSelectorIP(state),
+    hazardTypes: hazardTypesSelector(state),
+    regions: regionsSelector(state),
+    filters: filtersSelector(state),
+});
 
-const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params>} = {
+const mapDispatchToProps = (dispatch: Dispatch): PropsFromDispatch => ({
+    setIncidentList: params => dispatch(setIncidentListActionIP(params)),
+    setEventList: params => dispatch(setEventListAction(params)),
+    setLayers: params => dispatch(SetLayersAction(params)),
+    setLayerGroup: params => dispatch(SetLayerGroupsAction(params)),
+
+});
+const requestOptions: { [key: string]: ClientAttributes<OwnProps, Params> } = {
     layerGetRequest: {
         url: '/layer/',
         method: methods.GET,
@@ -81,6 +125,8 @@ const attributeNames = {
     'capacity-and-resources': 'Capacity and Resources',
     'climate-change': 'Climate change',
 };
+let layerGroupListRedux;
+let layerListRedux;
 
 class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     public constructor(props: Props) {
@@ -89,6 +135,13 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         this.state = {
             activeAttribute: getHashFromBrowser() as AttributeKey,
         };
+    }
+
+    public componentDidUpdate() {
+        const { setLayers, setLayerGroup } = this.props;
+
+        setLayers(layerListRedux);
+        setLayerGroup(layerGroupListRedux);
     }
 
     private getGroupedLayers = (layerList: Layer[], layerGroupList: LayerGroup[]) => {
@@ -122,8 +175,13 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
     }
 
     private handleDetailsBackButtonClick = () => {
-        this.setState({ activeAttribute: undefined });
-        setHashToBrowser(undefined);
+        const { setAddResource, addResource } = this.context;
+        if (addResource) {
+            setAddResource(false);
+        } else {
+            this.setState({ activeAttribute: undefined });
+            setHashToBrowser(undefined);
+        }
     }
 
     public render() {
@@ -138,14 +196,15 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         } = this.props;
 
         const { activeAttribute } = this.state;
-        const layerList = getResults(requests, 'layerGetRequest');
+
 
         const layerGroupList = getResults(requests, 'layerGroupGetRequest');
         const pending = isAnyRequestPending(requests);
 
-
+        const layerList = getResults(requests, 'layerGetRequest');
         const groupedLayers = this.getGroupedLayers(layerList, layerGroupList);
-
+        layerGroupListRedux = layerGroupList;
+        layerListRedux = layerList;
         return (
             <div className={
                 _cs(
@@ -217,7 +276,10 @@ class RiskInfoLeftPane extends React.PureComponent<Props, State> {
         );
     }
 }
+RiskInfoLeftPane.contextType = RiskInfoLayerContext;
 
-export default createConnectedRequestCoordinator<OwnProps>()(
-    createRequestClient(requestOptions)(RiskInfoLeftPane),
-);
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    createConnectedRequestCoordinator<OwnProps>(),
+    createRequestClient(requestOptions),
+)(RiskInfoLeftPane);

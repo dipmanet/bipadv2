@@ -26,7 +26,7 @@ interface Props {
     className?: string;
 }
 
-interface Params {}
+interface Params { }
 
 const attributes = {
     education: {
@@ -56,7 +56,7 @@ const attributes = {
     },
     tourism: {
         dataKey: 'tourismCount',
-        title: 'Tourism',
+        title: 'Hotel and Restaurant',
         icon: TourismIcon,
     },
     industry: {
@@ -103,7 +103,7 @@ class ResourceProfile extends React.PureComponent<Props> {
                     <CommonMap
                         sourceKey="profile-resource"
                     />
-                    { Object.keys(attributes).map(key => (
+                    {Object.keys(attributes).map(key => (
                         <div
                             key={key}
                             className={styles.attribute}
@@ -116,7 +116,7 @@ class ResourceProfile extends React.PureComponent<Props> {
                             </div>
                             <div className={styles.details}>
                                 <div className={styles.value}>
-                                    { data[attributes[key].dataKey] || '-' }
+                                    {data[attributes[key].dataKey] || '-'}
                                 </div>
                                 <Translation>
                                     {

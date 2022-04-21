@@ -1,3 +1,5 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable @typescript-eslint/indent */
 import React from 'react';
 import Redux, { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -19,7 +21,7 @@ import {
     methods,
 } from '#request';
 
-import { setFiltersAction } from '#actionCreators';
+import { setFiltersAction, setProjectsProfileFiltersAction } from '#actionCreators';
 import {
     filtersSelector,
     provincesSelector,
@@ -27,6 +29,7 @@ import {
     municipalitiesSelector,
     carKeysSelector,
     userSelector,
+    projectsProfileFiltersSelector,
 } from '#selectors';
 import { AppState } from '#store/types';
 import { FiltersElement } from '#types';
@@ -34,9 +37,9 @@ import StepwiseRegionSelectInput from '#components/StepwiseRegionSelectInput';
 import HazardSelectionInput from '#components/HazardSelectionInput';
 import PastDateRangeInput from '#components/PastDateRangeInput';
 
-import styles from './styles.scss';
-import { colorScheme } from '#constants';
 import { getAuthState } from '#utils/session';
+import { colorScheme } from '#constants';
+import styles from './styles.scss';
 
 
 interface ComponentProps {
@@ -70,10 +73,12 @@ const mapStateToProps = (state: AppState) => ({
     municipalities: municipalitiesSelector(state),
     carKeys: carKeysSelector(state),
     user: userSelector(state),
+    projectFilters: projectsProfileFiltersSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setFilters: params => dispatch(setFiltersAction(params)),
+    setProjectFilters: params => dispatch(setProjectsProfileFiltersAction(params)),
 });
 
 type TabKey = 'location' | 'hazard' | 'dataRange' | 'others';
@@ -157,7 +162,7 @@ const requestOptions: { [key: string]: ClientAttributes<Props, Params> } = {
                 [`${destParamName}`]: params.resource_type,
                 [`${destParamName}`]: 'health',
             };
-            console.log('car region', params.region.region);
+
             return {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 // resource_type: {params.resource_type ? params.resource_type : ''},
@@ -243,6 +248,7 @@ class Filters extends React.PureComponent<Props, State> {
         },
         subdomainLoc: {},
         locRecv: false,
+        disableSubmitButton: false,
     };
 
     public componentDidMount() {
@@ -269,8 +275,8 @@ class Filters extends React.PureComponent<Props, State> {
 
         if (
             (Object.keys(municipalities).length > 0
-            || Object.keys(districts).length > 0
-            || Object.keys(provinces).length > 0) && !locRecv
+                || Object.keys(districts).length > 0
+                || Object.keys(provinces).length > 0) && !locRecv
         ) {
             const subDomain = window.location.href.split('//')[1].split('.')[0];
             const municipalityMatch = municipalities.filter(
@@ -293,6 +299,14 @@ class Filters extends React.PureComponent<Props, State> {
                 const subd = { adminLevel: 1, geoarea: provinceMatch[0].id };
                 this.setState({ subdomainLoc: subd, locRecv: true });
             }
+        }
+    }
+
+    public componentDidUpdate(prevProps, prevState) {
+        const { setFilters, filters } = this.props;
+        const { faramValues } = this.state;
+        if (prevProps.filters !== filters) {
+            this.setState({ faramValues: filters });
         }
     }
 
@@ -361,7 +375,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <HazardSelectionInput
                     className={styles.activeView}
                     faramElementName="hazard"
-                    // autoFocus
+                // autoFocus
                 />
             ),
         },
@@ -370,7 +384,7 @@ class Filters extends React.PureComponent<Props, State> {
                 <div className={styles.activeView}>
                     <PastDateRangeInput
                         faramElementName="dataDateRange"
-                        // autoFocus
+                    // autoFocus
                     />
                 </div>
             ),
@@ -383,7 +397,7 @@ class Filters extends React.PureComponent<Props, State> {
                         this.props.extraContentContainerClassName,
                     )}
                     >
-                        { this.props.extraContent }
+                        {this.props.extraContent}
                     </div>
                 ) : null
             ),
@@ -408,8 +422,13 @@ class Filters extends React.PureComponent<Props, State> {
 
     private handleResetFiltersButtonClick = () => {
         const authState = getAuthState();
-        const { setFilters, user } = this.props;
+        const { setFilters, user, filters, setProjectFilters, FilterClickedStatus } = this.props;
         const { subdomainLoc } = this.state;
+        FilterClickedStatus(true);
+        setProjectFilters({
+            faramValues: {},
+        });
+        this.setState({ disableSubmitButton: false });
         if (authState.authenticated) {
             if (user.profile.municipality) {
                 const region = { adminLevel: 3, geoarea: user.profile.municipality };
@@ -454,18 +473,22 @@ class Filters extends React.PureComponent<Props, State> {
                 setFilters({ filters: tempF });
                 this.setState({ faramValues: tempF, activeView: undefined });
             } else {
-                this.setState({ activeView: undefined,
-                    faramValues: {
-                        dataDateRange: {
-                            rangeInDays: 7,
-                            startDate: undefined,
-                            endDate: undefined,
-                        },
-                        hazard: [],
-                        region: {},
-                    } });
+                const region = {};
+                const tempF = {
+                    dataDateRange: {
+                        rangeInDays: 7,
+                        startDate: undefined,
+                        endDate: undefined,
+                    },
+                    hazard: [],
+                    region,
+                };
+                this.setState({
+                    activeView: undefined,
+                    faramValues: tempF,
+                });
 
-                setFilters({ filters: this.state.faramValues });
+                setFilters({ filters: tempF });
             }
         } else if (Object.keys(subdomainLoc).length > 0) {
             const tempF = {
@@ -480,7 +503,8 @@ class Filters extends React.PureComponent<Props, State> {
             setFilters({ filters: tempF });
             this.setState({ faramValues: tempF, activeView: undefined });
         } else {
-            this.setState({ activeView: undefined,
+            this.setState({
+                activeView: undefined,
                 faramValues: {
                     dataDateRange: {
                         rangeInDays: 7,
@@ -489,7 +513,8 @@ class Filters extends React.PureComponent<Props, State> {
                     },
                     hazard: [],
                     region: {},
-                } });
+                },
+            });
 
             setFilters({ filters: this.state.faramValues });
         }
@@ -501,28 +526,39 @@ class Filters extends React.PureComponent<Props, State> {
 
     private handleFaramChange = (faramValues: FiltersElement) => {
         this.setState({ faramValues });
+        this.setState({ disableSubmitButton: false });
     }
 
     private handleSubmitClick = () => {
-        const { setFilters, carKeys } = this.props;
-        const { faramValues } = this.state;
+        const { setFilters, carKeys, FilterClickedStatus } = this.props;
+        const { faramValues, disableSubmitButton } = this.state;
         const { filters: propFilters } = this.props;
-        if (faramValues) {
+        FilterClickedStatus(true);
+        if (!disableSubmitButton) {
+            this.setState({ disableSubmitButton: true });
             setFilters({ filters: faramValues });
-        } else {
-            setFilters({ filters: propFilters });
+            // if (faramValues) {
+            //     setFilters({ filters: faramValues });
+            // }
+            // else {
+            //     setFilters({ filters: propFilters });
+            // }
         }
+
         const { activeRouteDetails } = this.context;
-        if (Object.keys(activeRouteDetails).length !== 0) {
-            const { name: activePage } = activeRouteDetails;
-            if (activePage === 'riskInfo') {
-                this.props.requests.resourceGetRequest.do({
-                    resourceType: carKeys,
-                    getRegionDetails: this.getRegionDetails,
-                    region: this.state.faramValues,
-                });
-            }
-        }
+
+        /** This API is already called in capacity and resource module */
+
+        // if (Object.keys(activeRouteDetails).length !== 0) {
+        //     const { name: activePage } = activeRouteDetails;
+        //     if (activePage === 'riskInfo') {
+        //         this.props.requests.resourceGetRequest.do({
+        //             resourceType: carKeys,
+        //             getRegionDetails: this.getRegionDetails,
+        //             region: this.state.faramValues,
+        //         });
+        //     }
+        // }
     }
 
     private getTabs = memoize(
@@ -531,14 +567,12 @@ class Filters extends React.PureComponent<Props, State> {
             hideLocationFilter,
             hideHazardFilter,
             hideDataRangeFilter,
-        ): {
-            [key in TabKey]?: string;
-        } => {
+        ): { [key in TabKey]?: string; } => {
             const tabs = {
                 location: 'Location',
                 hazard: 'Hazard',
                 dataRange: 'Data range',
-                others: 'Others',
+                others: 'Project',
             };
 
             if (!extraContent) {
@@ -570,15 +604,17 @@ class Filters extends React.PureComponent<Props, State> {
             hideHazardFilter,
             hideLocationFilter,
             user,
+            projectFilters,
         } = this.props;
 
-        const { faramValues: fv } = this.state;
+        const { faramValues: fv, disableSubmitButton } = this.state;
         const tabs = this.getTabs(
             extraContent,
             hideLocationFilter,
             hideHazardFilter,
             hideDataRangeFilter,
         );
+
         // if (user && Object.keys(user.profile).length > 0) {
         //     if (user.profile.municipality > 0) {
         //         const newFaramValues = {
@@ -594,7 +630,7 @@ class Filters extends React.PureComponent<Props, State> {
         //         };
 
         //         this.setState({ faramValues: newFaramValues });
-        //         console.log('region set: ', newFaramValues);
+
         //     }
         // }
         const { activeView } = this.state;
@@ -603,8 +639,6 @@ class Filters extends React.PureComponent<Props, State> {
         const validActiveView = isDefined(activeView) && tabs[activeView]
             ? activeView
             : undefined;
-
-
         return (
             <div className={_cs(styles.filters, className)}>
                 <header className={styles.header}>
@@ -670,7 +704,7 @@ class Filters extends React.PureComponent<Props, State> {
                             active={validActiveView}
                         />
                     </Faram>
-                    {validActiveView && (
+                    {validActiveView && activeView !== 'others' && (
                         <div
                             onClick={this.handleSubmitClick}
                             className={styles.submitButton}

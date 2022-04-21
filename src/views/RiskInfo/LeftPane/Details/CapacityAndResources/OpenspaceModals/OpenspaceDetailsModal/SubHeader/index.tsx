@@ -7,7 +7,7 @@ import { ic_delete as Delete } from 'react-icons-kit/md/ic_delete';
 import { ic_directions as Directions } from 'react-icons-kit/md/ic_directions';
 import styles from './styles.scss';
 
-interface Point {}
+interface Point { }
 interface Props {
     title: string;
     location: string;
@@ -28,6 +28,7 @@ export default class SubHeader extends React.PureComponent<Props> {
             routeToOpenspace,
             handleDeleteModal,
             authenticated,
+            closeModal,
         } = this.props;
         return (
             <div className={styles.subHeader}>
@@ -38,13 +39,15 @@ export default class SubHeader extends React.PureComponent<Props> {
                             className={styles.option}
                             onClick={() => {
                                 onEdit();
+                                closeModal();
                             }}
                             onKeyDown={() => {
                                 onEdit();
+                                closeModal();
                             }}
                         >
                             <Icon icon={Edit} size={15} />
-                       Edit
+                            Edit
                         </div>
                     )}
 
@@ -56,7 +59,7 @@ export default class SubHeader extends React.PureComponent<Props> {
                         >
                             {' '}
                             <Icon icon={Delete} size={15} />
-                        Delete
+                            Delete
                         </div>
                     )}
                     <div

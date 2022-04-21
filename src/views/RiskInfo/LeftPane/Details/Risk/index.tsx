@@ -277,6 +277,7 @@ class Risk extends React.PureComponent<Props, State> {
         this.setState({ metricValues: newMetricValues });
         const riskDataRaw = getResults(requests, 'riskGetRequest') as RiskData[];
         const riskData = this.getRiskData(riskDataRaw, newMetricValues);
+
         const riskLayer = transformRiskDataToLayer(riskData, earthquakeLayer[0], {});
 
         if (addLayer) {
@@ -401,8 +402,10 @@ class Risk extends React.PureComponent<Props, State> {
             </>
         ));
 
+
         const RiskLayerSelectionItem = (p) => {
             const { data: layer } = p;
+
             if (layer.layername === 'durham_earthquake_risk_score') {
                 return (
                     <React.Fragment>

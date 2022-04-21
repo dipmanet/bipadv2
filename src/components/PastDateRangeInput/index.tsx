@@ -6,6 +6,7 @@ import { _cs } from '@togglecorp/fujs';
 import { Translation } from 'react-i18next';
 import DateInput from '#rsci/DateInput';
 import RadioInput from '#components/RadioInput';
+import PageContext from '#components/PageContext';
 
 import {
     languageSelector,
@@ -54,6 +55,33 @@ const pastDateRangeOptions = [
     },
 ];
 
+const pastDateRangeDashboardOptions = [
+    {
+        label: '3 days',
+        key: 3,
+    },
+    {
+        label: '7 days',
+        key: 7,
+    },
+    {
+        label: '2 weeks',
+        key: 14,
+    },
+    {
+        label: '1 month',
+        key: 30,
+    },
+    {
+        label: '6 months',
+        key: 183,
+    },
+    {
+        label: '1 year',
+        key: 365,
+    },
+];
+
 interface InputValue {
     rangeInDays: number | 'custom';
     startDate: string | undefined;
@@ -70,6 +98,8 @@ class PastDateRangeInput extends React.PureComponent<Props> {
     public static defaultProps = {
         value: undefined,
     };
+
+    public static contextType = PageContext;
 
     private handleRadioInputChange = (rangeInDays: number | 'custom') => {
         const { onChange } = this.props;
@@ -129,13 +159,14 @@ class PastDateRangeInput extends React.PureComponent<Props> {
             className,
             value,
         } = this.props;
+        const { activeRouteDetails: { name: activePage } } = this.context;
 
         return (
             <div className={_cs(styles.pastDateRangeInput, className)}>
                 <RadioInput
                     keySelector={pastDataKeySelector}
                     labelSelector={this.pastDataLabelSelector}
-                    options={pastDateRangeOptions}
+                    options={activePage === 'dashboard' ? pastDateRangeDashboardOptions : pastDateRangeOptions}
                     onChange={this.handleRadioInputChange}
                     value={value.rangeInDays}
                     contentClassName={styles.dateRanges}

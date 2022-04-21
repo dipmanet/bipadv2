@@ -217,8 +217,9 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
     private postAmenities = () => {
         const { allAmenitiesToPost } = this.state;
         const {
-            handleTabClick,
+            handleTabClick,LoadingSuccessHalt
         } = this.props;
+        LoadingSuccessHalt(true)
         if (allAmenitiesToPost.length !== 0) {
             for (let i = 0; i < allAmenitiesToPost.length; i++) {
                 const requestOptions = {
@@ -234,19 +235,22 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
                     .then(() => {
                         if (i === allAmenitiesToPost.length - 1) {
                             handleTabClick('environmentChecklist');
+                            LoadingSuccessHalt(false)
                         }
                     });
             }
         } else {
             handleTabClick('environmentChecklist');
+            LoadingSuccessHalt(false)
         }
     }
 
     private postEditedAmenities = () => {
         const { singleAmenitiesList } = this.state;
         const {
-            handleTabClick,
+            handleTabClick,LoadingSuccessHalt
         } = this.props;
+        LoadingSuccessHalt(true)
         if (singleAmenitiesList.length !== 0) {
             for (let i = 0; i < singleAmenitiesList.length; i++) {
                 const requestOptions = {
@@ -262,11 +266,13 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
                     .then(() => {
                         if (i === singleAmenitiesList.length - 1) {
                             handleTabClick('environmentChecklist');
+                            LoadingSuccessHalt(false)
                         }
                     });
             }
         } else {
             handleTabClick('environmentChecklist');
+            LoadingSuccessHalt(false)
         }
     }
 
@@ -418,12 +424,12 @@ class OnSiteAmenities extends React.PureComponent<Props, State> {
                 }
 
                 <div className={styles.stepButtons}>
-                    <PrimaryButton
+                    {/* <PrimaryButton
                         disabled
                         onClick={() => handleTabClick('suggestedUses')}
                     >
                         Back
-                    </PrimaryButton>
+                    </PrimaryButton> */}
                     <PrimaryButton
                         // type="submit"
                         // disabled={pristine}

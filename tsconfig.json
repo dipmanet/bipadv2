@@ -24,6 +24,7 @@
         "#selectors": ["./src/store/selectors"],
         "#request": ["./src/request"],
         "#resources/*": ["./src/resources/*"],
+        "#openseadragon-images/*":["./src/resources/openseadragon-images/*"],
         "#schema": ["./src/schema"],
         "#store": ["./src/store"],
         "#store/*": ["./src/store/*"],

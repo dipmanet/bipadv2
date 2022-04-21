@@ -18,7 +18,7 @@ import Icon from '#rscg/Icon';
 import ListView from '#rscv/List/ListView';
 import SelectInput from '#rsci/SelectInput';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
-
+import { checkSameRegionPermission } from '#utils/common';
 import documentIcon from '#resources/icons/file-document.svg';
 
 import Loading from '#components/Loading';
@@ -42,6 +42,7 @@ import {
     regionSelector,
     regionNameSelector,
     languageSelector,
+    userSelector,
 } from '#selectors';
 
 import {
@@ -101,12 +102,24 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     region: regionSelector(state),
     regionName: regionNameSelector(state),
     language: languageSelector(state),
+    user: userSelector(state),
 });
 const requestOptions: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
     documentsGetRequest: {
         url: '/document/',
         method: methods.GET,
         onMount: true,
+        query: ({ params }) => ({
+            province: params && params.province,
+            district: params && params.district,
+            municipality: params && params.municipality,
+        }),
+        onSuccess: ({ response, params }) => {
+            if (params && params.output) {
+                params.output(response.results);
+            }
+        },
+
     },
     documentCategoryGetRequest: {
         url: '/document-category/',
@@ -148,7 +161,7 @@ const DetailItem = ({
 );
 
 const DocumentRenderer = (props: DocumentProps) => {
-    const { document, onUpdate, onDelete, disabled } = props;
+    const { document, onUpdate, onDelete, disabled, user, regions } = props;
 
     const {
         id,
@@ -157,12 +170,13 @@ const DocumentRenderer = (props: DocumentProps) => {
         file,
         publishedDate,
         categoryName,
+
     } = document;
 
     const handleDelete = () => {
         onDelete(id);
     };
-
+    const filterPermissionGranted = checkSameRegionPermission(user, regions);
     return (
         <div className={styles.documentDetails}>
             <div className={styles.documentIcon}>
@@ -180,34 +194,40 @@ const DocumentRenderer = (props: DocumentProps) => {
                                     { title }
                                 </h3>
                                 <div className={styles.actions}>
-                                    <Cloak hiddenIf={p => !p.change_document}>
-                                        <ModalButton
-                                            className={styles.editButton}
-                                            iconName="edit"
-                                            transparent
-                                            modal={(
-                                                <AddDocumentForm
-                                                    value={document}
-                                                    onUpdate={onUpdate}
-                                                />
-                                            )}
-                                            disabled={disabled}
-                                        >
-                                            {t('Edit')}
-                                        </ModalButton>
-                                    </Cloak>
-                                    <Cloak hiddenIf={p => !p.delete_document}>
-                                        <DangerConfirmButton
-                                            className={styles.deleteButton}
-                                            confirmationMessage={t('Are you sure you want to delete this document?')}
-                                            disabled={disabled}
-                                            iconName="delete"
-                                            onClick={handleDelete}
-                                            transparent
-                                        >
-                                            {t('Delete')}
-                                        </DangerConfirmButton>
-                                    </Cloak>
+                                    {filterPermissionGranted
+                                        ? (
+                                            <>
+                                                <Cloak hiddenIf={p => !p.change_document}>
+                                                    <ModalButton
+                                                        className={styles.editButton}
+                                                        iconName="edit"
+                                                        transparent
+                                                        modal={(
+                                                            <AddDocumentForm
+                                                                value={document}
+                                                                onUpdate={onUpdate}
+                                                            />
+                                                        )}
+                                                        disabled={disabled}
+                                                    >
+                                                        {t('Edit')}
+                                                    </ModalButton>
+                                                </Cloak>
+                                                <Cloak hiddenIf={p => !p.delete_document}>
+                                                    <DangerConfirmButton
+                                                        className={styles.deleteButton}
+                                                        confirmationMessage={t('Are you sure you want to delete this document?')}
+                                                        disabled={disabled}
+                                                        iconName="delete"
+                                                        onClick={handleDelete}
+                                                        transparent
+                                                    >
+                                                        {t('Delete')}
+                                                    </DangerConfirmButton>
+                                                </Cloak>
+
+                                            </>
+                                        ) : ''}
                                     <a
                                         className={styles.downloadLink}
                                         href={file}
@@ -258,12 +278,15 @@ const regionKeySelector = (d: RegionOption) => d.id;
 const regionLabelSelector = (d: RegionOption, language) => (language === 'en' ? d.title : d.titleNe);
 
 class Document extends React.PureComponent<Props, State> {
+    public static contextType = TitleContext;
+
     public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            documents: [],
+        };
     }
 
-    public static contextType = TitleContext;
 
     private getCategoryExpandedDocuments = memoize((
         documents: DocumentItem[],
@@ -280,6 +303,8 @@ class Document extends React.PureComponent<Props, State> {
     })
 
     private rendererParams = (_: string, data: DocumentItem) => ({
+        user: this.props.user,
+        regions: this.props.region,
         document: data,
         onUpdate: this.handleUpdate,
         onDelete: this.handleDelete,
@@ -293,23 +318,25 @@ class Document extends React.PureComponent<Props, State> {
         selectedRegion?: string,
     ) => {
         let filtered = documents;
-        if (!doesObjectHaveNoData(region)) {
-            const { adminLevel, geoarea } = region;
-            if (adminLevel === 1) {
-                filtered = documents.filter(d => d.province === geoarea);
-            }
-            if (adminLevel === 2) {
-                filtered = documents.filter(d => d.district === geoarea);
-            }
-            if (adminLevel === 3) {
-                filtered = documents.filter(d => d.municipality === geoarea);
-            }
-        }
+
+        // if (!doesObjectHaveNoData(region)) {
+        //     const { adminLevel, geoarea } = region;
+        //     if (adminLevel === 1) {
+        //         filtered = documents.filter(d => d.province === geoarea);
+        //     }
+        //     if (adminLevel === 2) {
+        //         filtered = documents.filter(d => d.district === geoarea);
+        //     }
+        //     if (adminLevel === 3) {
+        //         filtered = documents.filter(d => d.municipality === geoarea);
+        //     }
+        // }
+
         if (selectedCategory) {
             filtered = filtered.filter(document => document.category === selectedCategory);
         }
         if (selectedRegion) {
-            filtered = filtered.filter(document => document.region === region);
+            filtered = filtered.filter(document => document.region === selectedRegion);
         }
 
         return filtered;
@@ -337,20 +364,60 @@ class Document extends React.PureComponent<Props, State> {
         });
     }
 
+    private handleResults=(data) => {
+        this.setState({
+            documents: data,
+        });
+    }
+
+    public componentDidUpdate(prevProps, prevState, snapshot) {
+        const { region,
+            requests: {
+                documentsGetRequest,
+            } } = this.props;
+        if (prevProps.region !== region) {
+            documentsGetRequest.do({
+
+                province: region.adminLevel === 1 ? region.geoarea : '',
+                district: region.adminLevel === 2 ? region.geoarea : '',
+                municipality: region.adminLevel === 3 ? region.geoarea : '',
+                output: this.handleResults,
+
+            });
+        }
+    }
+
     public render() {
         const {
             className,
             requests,
+            requests: {
+                documentsGetRequest,
+            },
+            user,
             region,
             language: { language },
+
         } = this.props;
 
         const {
             selectedCategory,
             selectedRegion,
+            documents,
         } = this.state;
 
-        const documents = getResults(requests, 'documentsGetRequest');
+
+        // const documents = getResults(requests, 'documentsGetRequest');
+        documentsGetRequest.setDefaultParams({
+
+            province: region.adminLevel === 1 ? region.geoarea : '',
+            district: region.adminLevel === 2 ? region.geoarea : '',
+            municipality: region.adminLevel === 3 ? region.geoarea : '',
+            output: this.handleResults,
+
+        });
+
+
         const documentCategories = getResults(requests, 'documentCategoryGetRequest');
 
         const filteredDocuments = this.getFilteredDocuments(
