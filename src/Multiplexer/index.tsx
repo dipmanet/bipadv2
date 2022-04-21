@@ -290,6 +290,7 @@ const getMatchingRegion = (
     return undefined;
 };
 
+
 const layerNameMap = {
     raster: 'raster-layer',
     choropleth: 'choropleth-layer',
@@ -393,6 +394,14 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (prevProps.language !== language) {
             i18n.changeLanguage(language);
         }
+
+        // const x = document.getElementsByClassName('mapboxgl-ctrl mapboxgl-ctrl-scale')[0];
+
+        // if (language === 'np' && x && x.innerHTML.includes('km')) {
+        //     x.innerHTML = x.innerHTML.replaceAll('km', 'किमि');
+        // } else if (language === 'en' && x && x.innerHTML.includes('किमि')) {
+        //     x.innerHTML = x.innerHTML.replaceAll('किमि', 'km');
+        // }
     }
 
     private setFilterFromUrl = (

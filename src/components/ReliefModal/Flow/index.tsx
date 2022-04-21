@@ -1,6 +1,7 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     NewProps,
@@ -75,36 +76,43 @@ class ReliefFlow extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div className={_cs(className, styles.flow)}>
-                { pending && <LoadingAnimation />}
-                <header className={styles.header}>
-                    <h3 className={styles.heading}>
-                        Flows
-                    </h3>
-                    <Cloak hiddenIf={p => !p.add_flow}>
-                        <ModalAccentButton
-                            className={styles.addFlowButton}
-                            title="Add Flow"
-                            iconName="add"
-                            transparent
-                            modal={(
-                                <AddFlowForm
-                                    onUpdate={this.handleReliefFlowChange}
-                                />
-                            )}
-                        >
-                            New Flow
-                        </ModalAccentButton>
-                    </Cloak>
-                </header>
-                <ListView
-                    className={styles.content}
-                    data={flowList}
-                    keySelector={flowKeySelector}
-                    renderer={FlowItem}
-                    rendererParams={this.getFlowRendererParams}
-                />
-            </div>
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.flow)}>
+                            { pending && <LoadingAnimation />}
+                            <header className={styles.header}>
+                                <h3 className={styles.heading}>
+                                    {t('Flows')}
+                                </h3>
+                                <Cloak hiddenIf={p => !p.add_flow}>
+                                    <ModalAccentButton
+                                        className={styles.addFlowButton}
+                                        title={t('Add Flow')}
+                                        iconName="add"
+                                        transparent
+                                        modal={(
+                                            <AddFlowForm
+                                                onUpdate={this.handleReliefFlowChange}
+                                            />
+                                        )}
+                                    >
+                                        {t('New Flow')}
+                                    </ModalAccentButton>
+                                </Cloak>
+                            </header>
+                            <ListView
+                                className={styles.content}
+                                data={flowList}
+                                keySelector={flowKeySelector}
+                                renderer={FlowItem}
+                                rendererParams={this.getFlowRendererParams}
+                            />
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }

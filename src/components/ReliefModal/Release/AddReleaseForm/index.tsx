@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Redux, {
     compose,
@@ -6,6 +7,7 @@ import { isDefined, isNotDefined } from '@togglecorp/fujs';
 import { connect } from 'react-redux';
 import Faram, { requiredCondition } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
 import TextArea from '#rsci/TextArea';
 import TextInput from '#rsci/TextInput';
 import DangerButton from '#rsca/Button/DangerButton';
@@ -21,7 +23,6 @@ import LoadingAnimation from '#rscv/LoadingAnimation';
 import NonFieldErrors from '#rsci/NonFieldErrors';
 import Button from '#rsca/Button';
 import modalize from '#rscg/Modalize';
-
 import {
     createRequestClient,
     NewProps,
@@ -378,105 +379,112 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
 
         return (
             <Modal>
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={this.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                    disabled={pending}
-                >
-                    <ModalHeader
-                        title="Add Release"
-                        rightComponent={(
-                            <DangerButton
-                                transparent
-                                iconName="close"
-                                onClick={closeModal}
-                                title="Close Modal"
-                            />
-                        )}
-                    />
-                    <ModalBody className={styles.modalBody}>
-                        { pending && <LoadingAnimation />}
-                        <NonFieldErrors faramElement />
-                        <TextArea
-                            faramElementName="description"
-                            label="Description"
-                            autoFocus
-                        />
-                        <div className={styles.organizationContainer}>
-                            <SelectInput
-                                faramElementName="providerOrganization"
-                                label="Provider Organization"
-                                options={organizationList}
-                                keySelector={organizationKeySelector}
-                                labelSelector={organizationLabelSelector}
-                            />
-                            <ModalButton
-                                className={styles.button}
-                                modal={(
-                                    <AddOrganizationModal
-                                        onOrganizationAdd={this.handleOrganizationAdd}
+                <Translation>
+                    {
+                        t => (
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={this.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                                disabled={pending}
+                            >
+                                <ModalHeader
+                                    title={t('Add Release')}
+                                    rightComponent={(
+                                        <DangerButton
+                                            transparent
+                                            iconName="close"
+                                            onClick={closeModal}
+                                            title={t('Close Modal')}
+                                        />
+                                    )}
+                                />
+                                <ModalBody className={styles.modalBody}>
+                                    { pending && <LoadingAnimation />}
+                                    <NonFieldErrors faramElement />
+                                    <TextArea
+                                        faramElementName="description"
+                                        label={t('Description')}
+                                        autoFocus
                                     />
-                                )}
-                                iconName="add"
-                                transparent
-                            />
-                        </div>
-                        <NumberInput
-                            faramElementName="amount"
-                            label="Amount"
-                        />
-                        <SearchSelectInput
-                            faramElementName="incident"
-                            label="Incident"
-                            options={incidentList}
-                            keySelector={incidentKeySelector}
-                            labelSelector={incidentLabelSelector}
-                        />
-                        <SelectInput
-                            faramElementName="person"
-                            label="Person"
-                            options={personList}
-                            keySelector={personKeySelector}
-                            labelSelector={personLabelSelector}
-                            disabled={peopleGetPending || isNotDefined(faramValues.incident)}
-                        />
-                        <SelectInput
-                            faramElementName="benificiary"
-                            label="Beneficiary"
-                            options={personList}
-                            keySelector={personKeySelector}
-                            labelSelector={personLabelSelector}
-                            disabled={peopleGetPending || isNotDefined(faramValues.incident)}
-                        />
-                        <TextInput
-                            faramElementName="benificiaryOther"
-                            label="Beneficiary Other"
-                        />
-                        <SelectInput
-                            faramElementName="status"
-                            label="Status"
-                            options={statusList}
-                            keySelector={statusKeySelector}
-                            labelSelector={statusLabelSelector}
-                        />
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Close
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            pending={addReliefPending}
-                            disabled={pristine || pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
+                                    <div className={styles.organizationContainer}>
+                                        <SelectInput
+                                            faramElementName="providerOrganization"
+                                            label={t('Provider Organization')}
+                                            options={organizationList}
+                                            keySelector={organizationKeySelector}
+                                            labelSelector={organizationLabelSelector}
+                                        />
+                                        <ModalButton
+                                            className={styles.button}
+                                            modal={(
+                                                <AddOrganizationModal
+                                                    onOrganizationAdd={this.handleOrganizationAdd}
+                                                />
+                                            )}
+                                            iconName="add"
+                                            transparent
+                                        />
+                                    </div>
+                                    <NumberInput
+                                        faramElementName="amount"
+                                        label={t('Amount')}
+                                    />
+                                    <SearchSelectInput
+                                        faramElementName="incident"
+                                        label={t('Incident')}
+                                        options={incidentList}
+                                        keySelector={incidentKeySelector}
+                                        labelSelector={incidentLabelSelector}
+                                    />
+                                    <SelectInput
+                                        faramElementName="person"
+                                        label={t('Person')}
+                                        options={personList}
+                                        keySelector={personKeySelector}
+                                        labelSelector={personLabelSelector}
+                                        disabled={peopleGetPending || isNotDefined(faramValues.incident)}
+                                    />
+                                    <SelectInput
+                                        faramElementName="benificiary"
+                                        label={t('Beneficiary')}
+                                        options={personList}
+                                        keySelector={personKeySelector}
+                                        labelSelector={personLabelSelector}
+                                        disabled={peopleGetPending || isNotDefined(faramValues.incident)}
+                                    />
+                                    <TextInput
+                                        faramElementName="benificiaryOther"
+                                        label={t('Beneficiary Other')}
+                                    />
+                                    <SelectInput
+                                        faramElementName="status"
+                                        label={t('Status')}
+                                        options={statusList}
+                                        keySelector={statusKeySelector}
+                                        labelSelector={statusLabelSelector}
+                                    />
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Close')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        pending={addReliefPending}
+                                        disabled={pristine || pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        )
+                    }
+                </Translation>
+
             </Modal>
         );
     }
