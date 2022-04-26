@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import NumberInput from '#rsci/NumberInput';
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
@@ -11,83 +13,102 @@ import RawFileInput from '#rsci/RawFileInput';
 import styles from '../styles.scss';
 import DateInput from '#rsci/DateInput';
 
+import { languageSelector } from '#selectors';
+
+
 interface Props {
     resourceEnums: EnumItem[];
 }
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 
 const BridgeFields: FunctionComponent<Props> = ({ resourceEnums,
-    faramValues, optionsClassName, iconName }: Props) => {
+    faramValues, optionsClassName, iconName, language: { language } }: Props) => {
     // const typeOptions = getAttributeOptions(resourceEnums, 'type');
     // const towerNameOptions = getAttributeOptions(resourceEnums, 'towers_name');
     // const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
     // const offGridSiteOptions = getAttributeOptions(resourceEnums, 'off_grid_cell_sites');
     // const internetTypeOptions = getAttributeOptions(resourceEnums, 'internet_type');
-    const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
-    const bridgeCondition = [{ key: 'Good', label: 'Good' }, { key: 'Bad', label: 'Bad' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
+        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
+        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+    const bridgeCondition = [{ key: 'Good', label: language === 'en' ? 'Good' : 'राम्रो' },
+        { key: 'Bad', label: language === 'en' ? 'Bad' : 'नराम्रो' }];
+
 
     return (
-        <>
-            <DateInput
-                faramElementName="dateOfOperation"
-                label="From When was the bridge operational?"
-                inputFieldClassName={styles.dateInput}
-            />
-            <SelectInput
-                faramElementName="isMotorable"
-                label="Is the bridge motorable?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.isMotorable
+        <Translation>
+            {
+                t => (
+                    <>
+                        <DateInput
+                            faramElementName="dateOfOperation"
+                            label={t('From When was the bridge operational?')}
+                            inputFieldClassName={styles.dateInput}
+                        />
+                        <SelectInput
+                            faramElementName="isMotorable"
+                            label={t('Is the bridge motorable?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.isMotorable
                 && (
                     <NumberInput
                         faramElementName="noOfLanes"
-                        label="How many lane does the bridge have?"
+                        label={t('How many lane does the bridge have?')}
                     />
                 )}
 
-            <TextInput
-                faramElementName="length"
-                label="Length (in meter)"
-            />
-            <TextInput
-                faramElementName="width"
-                label="Width (in meter)"
-            />
+                        <TextInput
+                            faramElementName="length"
+                            label={t('Length (in meter)')}
+                        />
+                        <TextInput
+                            faramElementName="width"
+                            label={t('Width (in meter)')}
+                        />
 
-            <SelectInput
-                faramElementName="condition"
-                label="Condition of Bridge?"
-                options={bridgeCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            <TextInput
-                faramElementName="localAddress"
-                label="Local Address"
-            />
-            {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
-                ? (
-                    <RawFileInput
-                        faramElementName="picture"
-                        showStatus
-                        accept="image/*"
-                    >
-                        Upload Image
-                    </RawFileInput>
-                ) : ''}
+                        <SelectInput
+                            faramElementName="condition"
+                            label={t('Condition of Bridge?')}
+                            options={bridgeCondition}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        <TextInput
+                            faramElementName="localAddress"
+                            label={t('Local Address')}
+                        />
+                        {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
+                            ? (
+                                <RawFileInput
+                                    faramElementName="picture"
+                                    showStatus
+                                    accept="image/*"
+                                >
+                                    {t('Upload Image')}
+                                </RawFileInput>
+                            ) : ''}
 
 
-        </>
+                    </>
+                )
+            }
+        </Translation>
+
     );
 };
 
-export default BridgeFields;
+export default connect(mapStateToProps)(BridgeFields);

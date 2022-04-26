@@ -26,6 +26,7 @@ import {
     isDefined,
     mapToList,
 } from '@togglecorp/fujs';
+import { Translation } from 'react-i18next';
 
 import Icon from '#rscg/Icon';
 
@@ -2455,78 +2456,85 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     )
                         : (
                             <>
-                                <header className={styles.header}>
+                                <Translation>
+                                    {
+                                        t => (
+                                            <header className={styles.header}>
 
-                                    <div className={styles.actions}>
-                                        {filterPermissionGranted
-                                            ? (
-                                                <Cloak hiddenIf={p => !p.add_resource}>
-                                                    {/* <DangerButton
+                                                <div className={styles.actions}>
+                                                    {filterPermissionGranted
+                                                        ? (
+                                                            <Cloak hiddenIf={p => !p.add_resource}>
+                                                                {/* <DangerButton
 
-                                                        onClick={this.handleResourceAdd}
+                                                            onClick={this.handleResourceAdd}
+                                                            className={styles.clearButton}
+                                                            transparent
+                                                        >
+                                             + Add Resource
+                                                        </DangerButton> */}
+
+                                                                <AccentModalButton
+                                                                    iconName="add"
+                                                                    title="Add New Resource"
+                                                                    transparent
+                                                                    onClick={this.resourceAdd}
+
+                                                        // modal={(
+                                                                //     <AddResourceForm
+                                                                //         onAddSuccess={this.handleResourceAdd}
+                                                                //         onEditSuccess={this.handleResourceEdit}
+                                                                //     />
+                                                                // )}
+                                                                >
+                                                                    {t('Add Resource')}
+                                                                </AccentModalButton>
+                                                            </Cloak>
+                                                        )
+                                                        : ''}
+                                                    <DangerButton
+                                                        // disabled={!activeLayerKey}
+                                                        disabled={!Object.values(activeLayersIndication).some(Boolean)
+                                                    && !activeLayerKey}
+                                                        onClick={this.handleLayerUnselect}
                                                         className={styles.clearButton}
                                                         transparent
                                                     >
-                                         + Add Resource
-                                                    </DangerButton> */}
-
-                                                    <AccentModalButton
-                                                        iconName="add"
-                                                        title="Add New Resource"
-                                                        transparent
-                                                        onClick={this.resourceAdd}
-
-                                                    // modal={(
-                                                    //     <AddResourceForm
-                                                    //         onAddSuccess={this.handleResourceAdd}
-                                                    //         onEditSuccess={this.handleResourceEdit}
-                                                    //     />
-                                                    // )}
-                                                    >
-                                                        Add Resource
-                                                    </AccentModalButton>
-                                                </Cloak>
-                                            )
-                                            : ''}
-                                        <DangerButton
-                                            // disabled={!activeLayerKey}
-                                            disabled={!Object.values(activeLayersIndication).some(Boolean)
-                                                && !activeLayerKey}
-                                            onClick={this.handleLayerUnselect}
-                                            className={styles.clearButton}
-                                            transparent
-                                        >
-                                            Clear
-                                        </DangerButton>
-                                        {/*
-                                            <SummaryButton
-                                                transparent
-                                                className={styles.summaryButton}
-                                                disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
+                                                        {t('Clear')}
+                                                    </DangerButton>
+                                                    {/*
+                                                <SummaryButton
+                                                    transparent
+                                                    className={styles.summaryButton}
+                                                    disabled={!(isTruthy(activeLayerKey) && !polygonSelectPending)}
+                                                    modal={(
+                                                        <Summary
+                                                            data={polygonResources}
+                                                            resourceType={activeLayerKey}
+                                                        />
+                                                    )}
+                                                >
+                                                    Show summary
+                                                </SummaryButton>
+                                                         */}
+                                                    {/* <TableModalButton
                                                 modal={(
-                                                    <Summary
-                                                        data={polygonResources}
-                                                        resourceType={activeLayerKey}
+                                                    <CapacityResourceTable
+                                                        data={resourceList}
+                                                        name={activeLayerKey}
                                                     />
                                                 )}
-                                            >
-                                                Show summary
-                                            </SummaryButton>
-                                                     */}
-                                        {/* <TableModalButton
-                                            modal={(
-                                                <CapacityResourceTable
-                                                    data={resourceList}
-                                                    name={activeLayerKey}
-                                                />
-                                            )}
-                                            initialShowModal={false}
-                                            iconName="table"
-                                            transparent
-                                            disabled={pending || !activeLayerKey}
-                                        /> */}
-                                    </div>
-                                </header>
+                                                initialShowModal={false}
+                                                iconName="table"
+                                                transparent
+                                                disabled={pending || !activeLayerKey}
+                                            /> */}
+                                                </div>
+                                            </header>
+                                        )
+                                    }
+                                </Translation>
+
                                 {capacityResource.map((item, idx) => (
                                     <div key={item.name}>
                                         <div

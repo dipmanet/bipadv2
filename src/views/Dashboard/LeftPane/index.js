@@ -64,9 +64,15 @@ const alertKeySelector = d => d.id;
 const eventKeySelector = d => d.id;
 
 const AlertEmptyComponent = () => (
-    <div className={styles.alertEmpty}>
-        There are no alerts at the moment.
-    </div>
+    <Translation>
+        {
+            t => (
+                <div className={styles.alertEmpty}>
+                    {t('There are no alerts at the moment.')}
+                </div>
+            )
+        }
+    </Translation>
 );
 
 const AlertTableEmptyComponent = () => (

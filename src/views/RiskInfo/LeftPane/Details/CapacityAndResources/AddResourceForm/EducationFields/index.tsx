@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import NumberInput from '#rsci/NumberInput';
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
@@ -11,290 +13,309 @@ import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
 import styles from '../styles.scss';
 
+import {
+    languageSelector,
+} from '#selectors';
+
 interface Props {
     resourceEnums: EnumItem[];
 }
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 
 const EducationFields: FunctionComponent<Props> = ({ resourceEnums,
-    faramValues, optionsClassName, iconName }: Props) => {
+    faramValues, optionsClassName, iconName, language: { language } }: Props) => {
     // const typeOptions = getAttributeOptions(resourceEnums, 'type');
+
+
     const operatorTypeOptions = getAttributeOptions(resourceEnums, 'operator_type');
 
-    const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' }, { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' }, { key: false, label: language === 'en' ? 'No' : 'छैन' }];
+
 
     return (
-        <>
-            <SelectInput
-                faramElementName="operatorType"
-                label="Operator Type"
-                options={operatorTypeOptions}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {(faramValues.operatorType === 'Other')
+
+        <Translation>
+            {
+                t => (
+                    <>
+                        <SelectInput
+                            faramElementName="operatorType"
+                            label={t('Operator Type')}
+                            options={operatorTypeOptions}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {(faramValues.operatorType === 'Other')
                 && (
                     <TextInput
                         faramElementName="otherOperatorType"
-                        label="Please specify operator type"
+                        label={t('Please specify operator type')}
                     />
                 )
-            }
+                        }
 
-            <NumberInput
-                faramElementName="classroomCount"
-                label="Number of Classrooms"
-            />
-            <NumberInput
-                faramElementName="area"
-                label="Area Of School (Sq.Km)"
-            />
-            <h2>NUMBER OF EMPLOYEES</h2>
-            <NumberInput
-                faramElementName="noOfMaleEmployee"
-                label="Number of Male Employees"
-            />
-            <NumberInput
-                faramElementName="noOfFemaleEmployee"
-                label="Number of Female Employees"
-            />
-            <NumberInput
-                faramElementName="noOfOtherEmployee"
-                label="Number of Other Employees"
-            />
-            <NumberInput
-                faramElementName="noOfEmployee"
-                label="Total Number of Employees"
-                disabled
+                        <NumberInput
+                            faramElementName="classroomCount"
+                            label={t('Number of Classrooms')}
+                        />
+                        <NumberInput
+                            faramElementName="area"
+                            label={t('Area Of School (Sq.Km)')}
+                        />
+                        <h2>{t('NUMBER OF EMPLOYEES')}</h2>
+                        <NumberInput
+                            faramElementName="noOfMaleEmployee"
+                            label={t('Number of Male Employees')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfFemaleEmployee"
+                            label={t('Number of Female Employees')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfOtherEmployee"
+                            label={t('Number of Other Employees')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfEmployee"
+                            label={t('Total Number of Employees')}
+                            disabled
+                        />
+                        <NumberInput
+                            faramElementName="noOfDifferentlyAbledMaleEmployees"
+                            label={t('Number of Differently-abled Male Employees')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfDifferentlyAbledFemaleEmployees"
+                            label={t('Number of Differently-abled Female Employees')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfDifferentlyAbledOtherEmployees"
+                            label={t('Number of Differently-abled Other Employees')}
+                        />
+                        <h2>{t('NUMBER OF STUDENTS')}</h2>
+                        <NumberInput
+                            faramElementName="noOfMaleStudent"
+                            label={t('Number of Male Students')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfFemaleStudent"
+                            label={t('Number of Female Students')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfOtherStudent"
+                            label={t('Number of Other Students')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfStudent"
+                            label={t('Total Number of Students')}
+                            disabled
+                        />
+                        <NumberInput
+                            faramElementName="noOfDifferentlyAbledMaleStudents"
+                            label={t('Number of Differently-abled Male Students')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfDifferentlyAbledFemaleStudents"
+                            label={t('Number of Differently-abled Female Students')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfDifferentlyAbledOtherStudents"
+                            label={t('Number of Differently-abled Other Students')}
+                        />
+                        <h2>{t('STUDENT AGE GROUP')}</h2>
+                        <NumberInput
+                            faramElementName="noOfStudentsLessThanTen"
+                            label={t('Less than 10 years')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfStudentsTenToFifteen"
+                            label={t('Between 10-15 years')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfStudentsFifteenToTwenty"
+                            label={t('Between 15-20 years')}
+                        />
+                        <NumberInput
+                            faramElementName="noOfStudentsMoreThanTwenty"
+                            label={t('Above 20 years')}
+                        />
+                        <h1>{t('DISASTER MANAGEMENT')}</h1>
+                        <SelectInput
+                            faramElementName="isDesignedFollowingBuildingCode"
+                            label={t('Is the school designed following building codes?')}
+                            options={booleanCondition}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
 
-            />
-            <NumberInput
-                faramElementName="noOfDifferentlyAbledMaleEmployees"
-                label="Number of Differently-abled Male Employees"
-            />
-            <NumberInput
-                faramElementName="noOfDifferentlyAbledFemaleEmployees"
-                label="Number of Differently-abled Female Employees"
-            />
-            <NumberInput
-                faramElementName="noOfDifferentlyAbledOtherEmployees"
-                label="Number of Differently-abled Other Employees"
-            />
-            <h2>NUMBER OF STUDENTS</h2>
-            <NumberInput
-                faramElementName="noOfMaleStudent"
-                label="Number of Male Students"
-            />
-            <NumberInput
-                faramElementName="noOfFemaleStudent"
-                label="Number of Female Students"
-            />
-            <NumberInput
-                faramElementName="noOfOtherStudent"
-                label="Number of Other Students"
-            />
-            <NumberInput
-                faramElementName="noOfStudent"
-                label="Total Number of Students"
-                disabled
-            />
-            <NumberInput
-                faramElementName="noOfDifferentlyAbledMaleStudents"
-                label="Number of Differently-abled Male Students"
-            />
-            <NumberInput
-                faramElementName="noOfDifferentlyAbledFemaleStudents"
-                label="Number of Differently-abled Female Students"
-            />
-            <NumberInput
-                faramElementName="noOfDifferentlyAbledOtherStudents"
-                label="Number of Differently-abled Other Students"
-            />
-            <h2>STUDENT AGE GROUP</h2>
-            <NumberInput
-                faramElementName="noOfStudentsLessThanTen"
-                label="Less than 10 years"
-            />
-            <NumberInput
-                faramElementName="noOfStudentsTenToFifteen"
-                label="Between 10-15 years"
-            />
-            <NumberInput
-                faramElementName="noOfStudentsFifteenToTwenty"
-                label="Between 15-20 years"
-            />
-            <NumberInput
-                faramElementName="noOfStudentsMoreThanTwenty"
-                label="Above 20 years"
-            />
-            <h1>DISASTER MANAGEMENT</h1>
-            <SelectInput
-                faramElementName="isDesignedFollowingBuildingCode"
-                label="Is the school designed following building codes?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-
-            <TextInput
-                faramElementName="remarksOnBuildingCode"
-                label="Remarks on Building Code"
-            />
-            <SelectInput
-                faramElementName="hasOpenSpace"
-                label="Does the facility have open space?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasOpenSpace
+                        <TextInput
+                            faramElementName="remarksOnBuildingCode"
+                            label={t('Remarks on Building Code')}
+                        />
+                        <SelectInput
+                            faramElementName="hasOpenSpace"
+                            label={t('Does the facility have open space?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasOpenSpace
                 && (
                     <TextInput
                         faramElementName="areaOfOpenSpace"
-                        label="Area of Open Space (Sq.Km) "
+                        label={t('Area of Open Space (Sq.Km) ')}
                     />
                 )}
-            <SelectInput
-                faramElementName="hasDisableFriendlyInfrastructure"
-                label="Does the facility have disabled friendly infrastructure?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasDisableFriendlyInfrastructure
+                        <SelectInput
+                            faramElementName="hasDisableFriendlyInfrastructure"
+                            label={t('Does the facility have disabled friendly infrastructure?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasDisableFriendlyInfrastructure
                 && (
                     <TextInput
                         faramElementName="specifyInfrastructure"
-                        label="Disable Friendly Infrastructures"
+                        label={t('Disable Friendly Infrastructures')}
                     />
                 )}
-            <SelectInput
-                faramElementName="hasEvacuationRoute"
-                label="Does the facility have evacuation route?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            <SelectInput
-                faramElementName="hasDisasterCommittee"
-                label="Does the school have disaster committee or/and other related clubs?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasDisasterCommittee
+                        <SelectInput
+                            faramElementName="hasEvacuationRoute"
+                            label={t('Does the facility have evacuation route?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        <SelectInput
+                            faramElementName="hasDisasterCommittee"
+                            label={t('Does the school have disaster committee or/and other related clubs?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasDisasterCommittee
                 && (
                     <TextInput
                         faramElementName="specifyCommittee"
-                        label="Disaster Management committee or related Clubs"
+                        label={t('Disaster Management committee or related Clubs')}
                     />
                 )}
-            <SelectInput
-                faramElementName="hasDisasterAwarenessConducted"
-                label="Has disaster related awareness and training programs been conducted within the school?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasDisasterAwarenessConducted
+                        <SelectInput
+                            faramElementName="hasDisasterAwarenessConducted"
+                            label={t('Has disaster related awareness and training programs been conducted within the school?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasDisasterAwarenessConducted
                 && (
                     <TextInput
                         faramElementName="specifyAwarenessProgram"
-                        label="Name of Disaster related awareness and training program conducted within the school."
+                        label={t('Name of Disaster related awareness and training program conducted within the school.')}
                     />
                 )}
-            <SelectInput
-                faramElementName="providesDisasterEducationToStudent"
-                label="Does the school provide disaster related education to students?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
+                        <SelectInput
+                            faramElementName="providesDisasterEducationToStudent"
+                            label={t('Does the school provide disaster related education to students?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
 
-            {faramValues.providesDisasterEducationToStudent
+                        {faramValues.providesDisasterEducationToStudent
                 && (
                     <TextInput
                         faramElementName="specifyDisasterEducation"
-                        label="Disaster related education provided by school"
+                        label={t('Disaster related education provided by school')}
                     />
                 )}
-            <SelectInput
-                faramElementName="hasHealthCenterPsychoCounseling"
-                label="Does the school have health center and/or psycho-counseling?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
+                        <SelectInput
+                            faramElementName="hasHealthCenterPsychoCounseling"
+                            label={t('Does the school have health center and/or psycho-counseling?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
 
-            <h2>OPENING HOUR</h2>
+                        <h2>{t('OPENING HOUR')}</h2>
 
-            {/* <TextInput
+                        {/* <TextInput
                 faramElementName="startTime"
                 label="Start Time"
             /> */}
-            <TimeInput
-                faramElementName="startTime"
-                label="Start Time"
-            />
-            <TimeInput
-                faramElementName="endTime"
-                label="End Time"
-            />
-            <TextInput
-                faramElementName="remarksOnOpeningHours"
-                label="Remarks on opening hours"
-            />
-            <h1>CONTACT</h1>
-            <TextInput
-                faramElementName="phoneNumber"
-                label="Phone Number"
-            />
-            <TextInput
-                faramElementName="emailAddress"
-                label="Email Address"
-            />
-            <TextInput
-                faramElementName="website"
-                label="Website"
-            />
-            <TextInput
-                faramElementName="localAddress"
-                label="Local Address"
-            />
-            {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
-                ? (
-                    <RawFileInput
-                        faramElementName="picture"
-                        showStatus
-                        accept="image/*"
-                    >
-                        Upload Image
-                    </RawFileInput>
-                ) : ''}
+                        <TimeInput
+                            faramElementName="startTime"
+                            label={t('Start Time')}
+                        />
+                        <TimeInput
+                            faramElementName="endTime"
+                            label={t('End Time')}
+                        />
+                        <TextInput
+                            faramElementName="remarksOnOpeningHours"
+                            label={t('Remarks on opening hours')}
+                        />
+                        <h1>{t('CONTACT')}</h1>
+                        <TextInput
+                            faramElementName="phoneNumber"
+                            label={t('Phone Number')}
+                        />
+                        <TextInput
+                            faramElementName="emailAddress"
+                            label={t('Email Address')}
+                        />
+                        <TextInput
+                            faramElementName="website"
+                            label={t('Website')}
+                        />
+                        <TextInput
+                            faramElementName="localAddress"
+                            label={t('Local Address')}
+                        />
+                        {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
+                            ? (
+                                <RawFileInput
+                                    faramElementName="picture"
+                                    showStatus
+                                    accept="image/*"
+                                >
+                                    {t('Upload Image')}
+                                </RawFileInput>
+                            ) : ''}
 
 
-        </>
+                    </>
+                )
+            }
+        </Translation>
+
     );
 };
 
-export default EducationFields;
+export default connect(mapStateToProps)(EducationFields);

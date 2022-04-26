@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import TextInput from '#rsci/TextInput';
 import SelectInput from '#rsci/SelectInput';
 import Checkbox from '#rsci/Checkbox';
@@ -11,7 +13,11 @@ import TimeInput from '#rsci/TimeInput';
 import LocationInput from '#components/LocationInput';
 import RawFileInput from '#rsci/RawFileInput';
 import styles from '../styles.scss';
+import { languageSelector } from '#selectors';
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 interface Props {
     resourceEnums: EnumItem[];
 }
@@ -20,187 +26,197 @@ const keySelector = (d: KeyLabel) => d.key;
 const labelSelector = (d: KeyLabel) => d.label;
 
 const CulturalFields: FunctionComponent<Props> = ({ resourceEnums,
-    faramValues, optionsClassName, iconName }: Props) => {
+    faramValues, optionsClassName, iconName, language: { language } }: Props) => {
     // const religionOptions = getAttributeOptions(resourceEnums, 'religion');
-    const booleanCondition = [{ key: true, label: 'Yes' }, { key: false, label: 'No' }];
+    const booleanCondition = [{ key: true, label: language === 'en' ? 'Yes' : 'हो' },
+        { key: false, label: language === 'en' ? 'No' : 'होइन' }];
+    const booleanConditionNe = [{ key: true, label: language === 'en' ? 'Yes' : 'छ' },
+        { key: false, label: language === 'en' ? 'No' : 'छैन' }];
     return (
-        <>
-            <h1>DISASTER MANAGEMENT</h1>
-            <SelectInput
-                faramElementName="isDesignedFollowingBuildingCode"
-                label="Is the facility designed following building codes?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            <SelectInput
-                faramElementName="hasOpenSpace"
-                label="Does the facility have open space?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasOpenSpace
-                && (
+        <Translation>
+            {
+                t => (
                     <>
-                        <TextInput
-                            faramElementName="areaOfOpenSpace"
-                            label="Area of open space (Sq.Km)"
+                        <h1>{t('DISASTER MANAGEMENT')}</h1>
+                        <SelectInput
+                            faramElementName="isDesignedFollowingBuildingCode"
+                            label={t('Is the facility designed following building codes?')}
+                            options={booleanCondition}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        <SelectInput
+                            faramElementName="hasOpenSpace"
+                            label={t('Does the facility have open space?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasOpenSpace
+                        && (
+                            <>
+                                <TextInput
+                                    faramElementName="areaOfOpenSpace"
+                                    label={t('Area of open space (Sq.Km)')}
+                                />
+                                <NumberInput
+                                    faramElementName="capacityOfOpenSpace"
+                                    label={t('Total capacity of the open space.')}
+                                />
+                            </>
+                        )}
+                        <SelectInput
+                            faramElementName="hasDisableFriendlyInfrastructure"
+                            label={t('Does the facility have disabled friendly infrastructure?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasDisableFriendlyInfrastructure
+                        && (
+                            <TextInput
+                                faramElementName="specifyInfrastructure"
+                                label={t('Please specify,disable friendly infrastructures')}
+                            />
+                        )}
+                        <SelectInput
+                            faramElementName="drinkingWater"
+                            label={t('Is drinking water available? ')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        <SelectInput
+                            faramElementName="toilet"
+                            label={t('Is toilet available? ')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.toilet
+                        && (
+                            <NumberInput
+                                faramElementName="noOfToilets"
+                                label={t('Number Of Toilets')}
+                            />
+                        )
+                        }
+
+                        <SelectInput
+                            faramElementName="hasWashFacility"
+                            label={t('Does the facility have WASH facility?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasWashFacility
+                        && (
+                            <TextInput
+                                faramElementName="specifyWashFacility"
+                                label={t('Specify WASH facility available ')}
+                            />
+
+                        )}
+                        <SelectInput
+                            faramElementName="hasSleepingFacility"
+                            label={t('Has sleeping facility available?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+                        {faramValues.hasSleepingFacility
+                        && (
+                            <NumberInput
+                                faramElementName="noOfBeds"
+                                label={t('Number of beds available')}
+                            />
+                        )}
+                        <NumberInput
+                            faramElementName="noOfMats"
+                            label={t('Number of mats available')}
                         />
                         <NumberInput
-                            faramElementName="capacityOfOpenSpace"
-                            label="Total capacity of the open space."
+                            faramElementName="noOfCots"
+                            label={t('Number of cots available')}
                         />
+                        <TextInput
+                            faramElementName="otherFacilities"
+                            label={t('If other facilities are available, please specify.')}
+                        />
+                        <SelectInput
+                            faramElementName="hasElectricity"
+                            label={t('Does the facility have electricity facility?')}
+                            options={booleanConditionNe}
+                            keySelector={keySelector}
+                            labelSelector={labelSelector}
+                            optionsClassName={optionsClassName}
+                            iconName={iconName}
+                        />
+
+
+                        <h2>{t('OPENING HOUR')}</h2>
+
+                        <TimeInput
+                            faramElementName="startTime"
+                            label={t('Start Time')}
+                        />
+                        <TimeInput
+                            faramElementName="endTime"
+                            label={t('End Time')}
+                        />
+                        <TextInput
+                            faramElementName="remarksOnOpeningHours"
+                            label={t('Remarks on opening hours')}
+                        />
+                        <h1>{t('CONTACT')}</h1>
+                        <TextInput
+                            faramElementName="phoneNumber"
+                            label={t('Phone Number')}
+                        />
+                        <TextInput
+                            faramElementName="emailAddress"
+                            label={t('Email Address')}
+                        />
+                        <TextInput
+                            faramElementName="website"
+                            label={t('Website')}
+                        />
+                        <TextInput
+                            faramElementName="localAddress"
+                            label={t('Local Address')}
+                        />
+                        {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
+                            ? (
+                                <RawFileInput
+                                    faramElementName="picture"
+                                    showStatus
+                                    accept="image/*"
+                                >
+                                    {t('Upload Image')}
+                                </RawFileInput>
+                            ) : ''}
+
+
                     </>
-                )}
-            <SelectInput
-                faramElementName="hasDisableFriendlyInfrastructure"
-                label="Does the facility have disabled friendly infrastructure?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasDisableFriendlyInfrastructure
-                && (
-                    <TextInput
-                        faramElementName="specifyInfrastructure"
-                        label="Please specify,disable friendly infrastructures"
-                    />
-                )}
-            <SelectInput
-                faramElementName="drinkingWater"
-                label="Is drinking water available? "
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            <SelectInput
-                faramElementName="toilet"
-                label="Is toilet available? "
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.toilet
-                && (
-                    <NumberInput
-                        faramElementName="noOfToilets"
-                        label="Number Of Toilets"
-                    />
                 )
             }
+        </Translation>
 
-            <SelectInput
-                faramElementName="hasWashFacility"
-                label="Does the facility have WASH facility?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasWashFacility
-                && (
-                    <TextInput
-                        faramElementName="specifyWashFacility"
-                        label="Specify WASH facility available "
-                    />
-
-                )}
-            <SelectInput
-                faramElementName="hasSleepingFacility"
-                label="Has sleeping facility available?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-            {faramValues.hasSleepingFacility
-                && (
-                    <NumberInput
-                        faramElementName="noOfBeds"
-                        label="Number of beds available"
-                    />
-                )}
-            <NumberInput
-                faramElementName="noOfMats"
-                label="Number of mats available"
-            />
-            <NumberInput
-                faramElementName="noOfCots"
-                label="Number of cots available"
-            />
-            <TextInput
-                faramElementName="otherFacilities"
-                label="If other facilities are available, please specify."
-            />
-            <SelectInput
-                faramElementName="hasElectricity"
-                label="Does the facility have electricity facility?"
-                options={booleanCondition}
-                keySelector={keySelector}
-                labelSelector={labelSelector}
-                optionsClassName={optionsClassName}
-                iconName={iconName}
-            />
-
-
-            <h2>OPENING HOUR</h2>
-
-            <TimeInput
-                faramElementName="startTime"
-                label="Start Time"
-            />
-            <TimeInput
-                faramElementName="endTime"
-                label="End Time"
-            />
-            <TextInput
-                faramElementName="remarksOnOpeningHours"
-                label="Remarks on opening hours"
-            />
-            <h1>CONTACT</h1>
-            <TextInput
-                faramElementName="phoneNumber"
-                label="Phone Number"
-            />
-            <TextInput
-                faramElementName="emailAddress"
-                label="Email Address"
-            />
-            <TextInput
-                faramElementName="website"
-                label="Website"
-            />
-            <TextInput
-                faramElementName="localAddress"
-                label="Local Address"
-            />
-            {((faramValues.resourceType !== 'openspace') || (faramValues.resourceType !== 'communityspace'))
-                ? (
-                    <RawFileInput
-                        faramElementName="picture"
-                        showStatus
-                        accept="image/*"
-                    >
-                        Upload Image
-                    </RawFileInput>
-                ) : ''}
-
-
-        </>
     );
 };
 
-export default CulturalFields;
+export default connect(mapStateToProps)(CulturalFields);
