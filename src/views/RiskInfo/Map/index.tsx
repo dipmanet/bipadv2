@@ -126,7 +126,7 @@ class RiskInfoMap extends React.PureComponent<Props, State> {
 
         setClimateChangeSelectedDistrict(feature);
         const municipalityAvailableForOpenseadragon = !!(feature && feature.state.value);
-        if (activeLayers[activeLayers.length - 1].type === 'choropleth' && municipalityAvailableForOpenseadragon && choroplethLayers[choroplethLayers.length - 1].layername === 'post_monsoon' && feature && feature.state.value === 1) {
+        if (activeLayers[activeLayers.length - 1].type === 'choropleth' && municipalityAvailableForOpenseadragon && choroplethLayers[choroplethLayers.length - 1].layername === 'durham_post_monsoon_2020_landslide_map' && feature && feature.state.value === 1) {
             const municipalityName = (`${feature.properties.title_en} ${feature.properties.type}`);
             this.setState({
                 selectedMunicipalityName: municipalityName,
@@ -513,7 +513,6 @@ Notes:
                     <MapSource
                         key={layer.id}
                         sourceKey={layer.layername}
-                        // sourceKey={layer.layername === 'post_monsoon' ? `${layer.layername}-${i}` : layer.layername}
                         sourceOptions={{
                             type: 'vector',
                             url: mapSources.nepal.url,
@@ -562,7 +561,7 @@ Notes:
                             && municipalityAvailableForOpenseadragon && (
                             <MapTooltip
                                 coordinates={hoverLngLat}
-                                trackPointer
+                                // trackPointer
                                 tooltipOptions={tooltipOptions}
                             >
                                 <layer.tooltipRenderer
