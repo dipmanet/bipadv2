@@ -8,7 +8,7 @@
 /* eslint-disable max-len */
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { PostionInitialValues, ScrollTopInitialValues } from '../..';
-import LeftpaneSlide6 from '../../Components/LeftpaneSlide6';
+import DemographicSlide from '../../Components/DemographicSlide';
 import Navbuttons from '../../Components/NavButtons/index';
 import styles from './styles.scss';
 
@@ -22,7 +22,7 @@ export interface Props {
 	onButtonClick: (item: number) => void;
 }
 
-function LeftPane6(props: Props) {
+function Demographic(props: Props) {
 	const {
 		leftElement,
 		setLeftElement,
@@ -42,8 +42,8 @@ function LeftPane6(props: Props) {
 			const { scrollHeight } = articleRef.current;
 			const { scrollTop } = articleRef.current;
 			const percentage = scrollTop / (scrollHeight - clientHeight);
-			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page7ScrolltopValue: scrollTop });
-			setPostionsPerPage({ ...postionsPerPage, page7PositionValue: Math.max(1 - percentage, 0) });
+			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, demographicScrolltopValue: scrollTop });
+			setPostionsPerPage({ ...postionsPerPage, demographicPositionValue: Math.max(1 - percentage, 0) });
 			console.log('scrollTop Val is', scrollTop, clientHeight, scrollHeight);
 		};
 		updateHeight();
@@ -59,27 +59,26 @@ function LeftPane6(props: Props) {
 
 
 	useEffect(() => {
-		articleRef.current.scrollTo(0, scrollTopValuesPerPage.page7ScrolltopValue);
+		articleRef.current.scrollTo(0, scrollTopValuesPerPage.demographicScrolltopValue);
 	}, []);
 
 	const onPreviousClick = () => {
 		articleRef.current.scrollTo({
-			top: scrollTopValuesPerPage.page7ScrolltopValue - 300,
+			top: scrollTopValuesPerPage.demographicScrolltopValue - 300,
 			behavior: 'smooth',
 		});
-
-		if (postionsPerPage.page7PositionValue === (1 || NaN)) {
+		if (postionsPerPage.demographicPositionValue === 1) {
 			setLeftElement(leftElement - 1);
 		}
 	};
 
 	const onNextClick = () => {
 		articleRef.current.scrollTo({
-			top: scrollTopValuesPerPage.page7ScrolltopValue + 300,
+			top: scrollTopValuesPerPage.demographicScrolltopValue + 300,
 			behavior: 'smooth',
 		});
 
-		if (postionsPerPage.page7PositionValue === 0) {
+		if (postionsPerPage.demographicPositionValue === 0) {
 			setLeftElement(leftElement + 1);
 		}
 	};
@@ -87,7 +86,7 @@ function LeftPane6(props: Props) {
 	return (
 		<>
 			<div ref={articleRef} className={styles.mainLeftSlide}>
-				<LeftpaneSlide6 />
+				<DemographicSlide />
 				<Navbuttons
 					postionsPerPage={postionsPerPage}
 					leftElement={leftElement}
@@ -100,4 +99,4 @@ function LeftPane6(props: Props) {
 	);
 }
 
-export default LeftPane6;
+export default Demographic;
