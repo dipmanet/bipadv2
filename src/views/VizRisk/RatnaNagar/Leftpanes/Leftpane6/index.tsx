@@ -6,20 +6,14 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-tabs */
 /* eslint-disable max-len */
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import { PostionInitialValues, ScrollTopInitialValues } from '../..';
-import LeftpaneSlide6 from '../../Components/LeftpaneSlide6';
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react';
+import LeftpaneSlide6 from '../../Components/LeftPaneSlides/LeftpaneSlide6';
 import Navbuttons from '../../Components/NavButtons/index';
+import { MainPageDataContext } from '../../context';
 import styles from './styles.scss';
 
-export interface Props {
-	leftElement: number;
-	setLeftElement: React.Dispatch<React.SetStateAction<number>>;
-	scrollTopValuesPerPage: ScrollTopInitialValues;
-	setScrollTopValuesPerPage: React.Dispatch<React.SetStateAction<ScrollTopInitialValues>>;
-	postionsPerPage: PostionInitialValues;
-	setPostionsPerPage: React.Dispatch<React.SetStateAction<PostionInitialValues>>;
-	onButtonClick: (item: number) => void;
+interface Props {
+
 }
 
 function LeftPane6(props: Props) {
@@ -31,7 +25,7 @@ function LeftPane6(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
-	} = props;
+	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 

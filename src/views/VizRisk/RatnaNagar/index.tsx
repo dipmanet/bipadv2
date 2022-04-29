@@ -29,56 +29,11 @@ import {
 	methods,
 } from '#request';
 import * as PageTypes from '#store/atom/page/types';
+import { CIData, Params, PostionInitialValues, ReduxProps, ScrollTopInitialValues } from './interfaces';
+import { MainPageDataContext, positionInitialValues, scrollTopPageInitialValues } from './context';
 
 const mapStateToProps = (state: any) => { };
 const mapDispatchToProps = (state: any) => { };
-
-export interface ScrollTopInitialValues {
-	page1ScrolltopValue: number;
-	page2ScrolltopValue: number;
-	page4ScrolltopValue: number;
-	page5ScrolltopValue: number;
-	page6ScrolltopValue: number;
-	page7ScrolltopValue: number;
-	page8ScrolltopValue: number;
-	page9ScrolltopValue: number;
-	page10ScrolltopValue: number;
-	page11ScrolltopValue: number;
-	demographicScrolltopValue: number;
-}
-
-export interface PostionInitialValues {
-	page1PositionValue: number;
-	page2PositionValue: number;
-	page4PositionValue: number;
-	page5PositionValue: number;
-	page6PositionValue: number;
-	page7PositionValue: number;
-	page8PositionValue: number;
-	page9PositionValue: number;
-	page10PositionValue: number;
-	page11PositionValue: number;
-	demographicPositionValue: number;
-}
-
-interface Params {
-	municipalityId: number;
-	setcIData: any;
-}
-interface CIDataList {
-	id: number;
-	point: [];
-	title: string;
-	resourceType: string;
-
-}
-
-type CIData = CIDataList[]
-
-
-interface OwnProps { }
-interface Params { }
-interface ReduxProps { }
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -103,34 +58,6 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 };
 
 const Ratnanagar = (props: any) => {
-	const scrollTopPageInitialValues = {
-		page1ScrolltopValue: 0,
-		page2ScrolltopValue: 0,
-		page4ScrolltopValue: 0,
-		page5ScrolltopValue: 0,
-		page6ScrolltopValue: 0,
-		page7ScrolltopValue: 0,
-		page8ScrolltopValue: 0,
-		page9ScrolltopValue: 0,
-		page10ScrolltopValue: 0,
-		page11ScrolltopValue: 0,
-		demographicScrolltopValue: 0,
-	};
-
-	const positionInitialValues = {
-		page1PositionValue: 1,
-		page2PositionValue: 1,
-		page4PositionValue: 1,
-		page5PositionValue: 1,
-		page6PositionValue: 1,
-		page7PositionValue: 1,
-		page8PositionValue: 1,
-		page9PositionValue: 1,
-		page10PositionValue: 1,
-		page11PositionValue: 1,
-		demographicPositionValue: 1,
-	};
-
 	const [pending, setpending] = useState<boolean>(true);
 	const [leftElement, setLeftElement] = useState<number>(0);
 	const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
@@ -193,165 +120,87 @@ const Ratnanagar = (props: any) => {
 		})),
 	};
 
+	const contextValues = {
+		leftElement,
+		setLeftElement,
+		scrollTopValuesPerPage,
+		setScrollTopValuesPerPage,
+		postionsPerPage,
+		setPostionsPerPage,
+		onButtonClick,
+	};
 
 	return (
 		<>
-
-			{
-				pending ? (
-					<div className={styles.loaderInfo}>
-						<Loader loaded={!pending} color="#fff" className={styles.loader} />
-						<p className={styles.loaderText}>
-							Loading Data...
-						</p>
-					</div>
-				)
-					: (
-						<>
-							{
-								leftElement < 11 && (
-									<>
-										<Map
-											leftElement={leftElement}
-											CIData={geoJsonCI}
-											clickedCiName={clickedCiName}
-											ciNameList={ciNameList}
-											setciNameList={setciNameList}
-											unClickedCIName={unClickedCIName}
-										/>
-										<LeftTopBar />
-									</>
-
-								)
-							}
-							{leftElement === 0 && (
-								<Leftpane1
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 1 && (
-								<Leftpane2
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 2 && (
-								<Demographic
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 3 && (
-								<Leftpane3
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-									clickedCiName={clickedCiName}
-									handleCIClick={handleCIClick}
-									cIData={cIData}
-								/>
-							)}
-							{leftElement === 4 && (
-								<Leftpane4
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 5 && (
-								<Leftpane5
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 6 && (
-								<Leftpane6
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 7 && (
-								<Leftpane7
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 8 && (
-								<Leftpane8
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 9 && (
-								<Leftpane9
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-							{leftElement === 10 && (
-								<Leftpane10
-									leftElement={leftElement}
-									setLeftElement={setLeftElement}
-									scrollTopValuesPerPage={scrollTopValuesPerPage}
-									setScrollTopValuesPerPage={setScrollTopValuesPerPage}
-									postionsPerPage={postionsPerPage}
-									setPostionsPerPage={setPostionsPerPage}
-									onButtonClick={onButtonClick}
-								/>
-							)}
-						</>
+			<MainPageDataContext.Provider value={contextValues}>
+				{
+					pending ? (
+						<div className={styles.loaderInfo}>
+							<Loader loaded={!pending} color="#fff" className={styles.loader} />
+							<p className={styles.loaderText}>
+								Loading Data...
+							</p>
+						</div>
 					)
-			}
+						: (
+							<>
+								{
+									leftElement < 11 && (
+										<>
+											<Map
+												leftElement={leftElement}
+												CIData={geoJsonCI}
+												clickedCiName={clickedCiName}
+												ciNameList={ciNameList}
+												setciNameList={setciNameList}
+												unClickedCIName={unClickedCIName}
+											/>
+											<LeftTopBar />
+										</>
 
+									)
+								}
+								{leftElement === 0 && (
+									<Leftpane1 />
+								)}
+								{leftElement === 1 && (
+									<Leftpane2 />
+								)}
+								{leftElement === 2 && (
+									<Demographic />
+								)}
+								{leftElement === 3 && (
+									<Leftpane3
+										clickedCiName={clickedCiName}
+										handleCIClick={handleCIClick}
+										cIData={cIData}
+									/>
+								)}
+								{leftElement === 4 && (
+									<Leftpane4 />
+								)}
+								{leftElement === 5 && (
+									<Leftpane5 />
+								)}
+								{leftElement === 6 && (
+									<Leftpane6 />
+								)}
+								{leftElement === 7 && (
+									<Leftpane7 />
+								)}
+								{leftElement === 8 && (
+									<Leftpane8 />
+								)}
+								{leftElement === 9 && (
+									<Leftpane9 />
+								)}
+								{leftElement === 10 && (
+									<Leftpane10 />
+								)}
+							</>
+						)
+				}
+			</MainPageDataContext.Provider>
 		</>
 	);
 };

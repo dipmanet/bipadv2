@@ -136,7 +136,7 @@ const Map = (props: any) => {
 		multihazardMap.on('style.load', () => {
 			// --------------------------------------SLIDE-3----------------------------------------
 			const ciCategory: any = [...new Set(CIData.features.map(
-				item => item.properties.Type,
+				(item: any) => item.properties.Type,
 			))];
 			setciNameList(ciCategory);
 			const popup = new mapboxgl.Popup({
@@ -289,7 +289,7 @@ const Map = (props: any) => {
 			multihazardMap.on('click', 'exposure-point', (e) => {
 				e.preventDefault();
 				const { lngLat } = e;
-				const coordinates = [lngLat.lng, lngLat.lat];
+				const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
 
 				while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
 					coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
@@ -306,7 +306,9 @@ const Map = (props: any) => {
 						{ clicked: false },
 					);
 				}
-				clickedId = e.features[0].id;
+				if (e.features) {
+					clickedId = e.features[0].id;
+				}
 				multihazardMap.setFeatureState(
 					{
 						id: clickedId,
@@ -411,7 +413,7 @@ const Map = (props: any) => {
 				});
 			}
 
-			if (leftElement === 3) {
+			if (leftElement === 4) {
 				if (map.current) {
 					map.current.setLayoutProperty('exposure-point', 'visibility', 'visible');
 				}

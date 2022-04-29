@@ -6,23 +6,14 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-tabs */
 /* eslint-disable max-len */
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import { PostionInitialValues, ScrollTopInitialValues } from '../..';
-import LeftpaneSlide1 from '../../Components/LeftpaneSlide1';
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react';
 import Navbuttons from '../../Components/NavButtons/index';
 import styles from './styles.scss';
+import { MainPageDataContext } from '../../context';
+import LeftpaneSlide1 from '../../Components/LeftPaneSlides/LeftpaneSlide1';
 
-export interface Props {
-	leftElement: number;
-	setLeftElement: React.Dispatch<React.SetStateAction<number>>;
-	scrollTopValuesPerPage: ScrollTopInitialValues;
-	setScrollTopValuesPerPage: React.Dispatch<React.SetStateAction<ScrollTopInitialValues>>;
-	postionsPerPage: PostionInitialValues;
-	setPostionsPerPage: React.Dispatch<React.SetStateAction<PostionInitialValues>>;
-	onButtonClick: (item: number) => void;
-}
 
-function LeftPane2(props: Props) {
+function LeftPane1() {
 	const {
 		leftElement,
 		setLeftElement,
@@ -31,7 +22,8 @@ function LeftPane2(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
-	} = props;
+	} = useContext(MainPageDataContext);
+
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
 
@@ -99,4 +91,4 @@ function LeftPane2(props: Props) {
 	);
 }
 
-export default LeftPane2;
+export default LeftPane1;
