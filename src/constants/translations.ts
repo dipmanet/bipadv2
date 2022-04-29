@@ -1,5 +1,15 @@
 export const enTranslation = {
     translation: {
+        'Add / edit alert': 'Add / edit alert',
+        'Started on': 'Started on',
+        'Expires on': 'Expires on',
+        Public: 'Public',
+        'Are you sure you want to close the form?': 'Are you sure you want to close the form?',
+        Confirm: 'Confirm',
+        Cancel: 'Cancel',
+        Ok: 'Ok',
+
+
         'Shapefile needs to be uploaded first..': 'Shapefile needs to be uploaded first..',
         'Upload cover image:': 'Upload cover image:',
         Workspace: 'Workspace',
@@ -679,6 +689,15 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Add / edit alert': 'अलर्ट थप्नुहोस् / सम्पादन गर्नुहोस्',
+        'Started on': 'सुरु भएको गते र समय',
+        'Expires on': 'म्याद सकिने गते र समय',
+        Public: 'सार्वजनिक',
+        'Are you sure you want to close the form?': 'के तपाईं निश्चित रूपमा फारम बन्द गर्न चाहनुहुन्छ?',
+        Confirm: 'पुष्टि गर्नुहोस्',
+        Cancel: 'रद्द गर्नुहोस्',
+        Ok: 'ठिक छ',
+
         'Shapefile needs to be uploaded first..': 'Shapefile पहिले अपलोड गर्न आवश्यक छ .. ',
         'Upload cover image:': 'कभर ईमेज अपलोड गर्नुहोस्:',
         Workspace: 'कार्यक्षेत्र',
