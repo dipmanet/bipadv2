@@ -543,7 +543,6 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                 <ModalFooter>
                                     <DangerConfirmButton
                                         onClick={onCloseButtonClick}
-
                                         confirmationMessage={t('Are you sure you want to close the form?')}
                                         disabled={pending}
                                     >

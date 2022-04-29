@@ -8,6 +8,7 @@ export const enTranslation = {
         Confirm: 'Confirm',
         Cancel: 'Cancel',
         Ok: 'Ok',
+        'Are you sure to delete the Alert?': 'Are you sure to delete the Alert?',
 
 
         'Shapefile needs to be uploaded first..': 'Shapefile needs to be uploaded first..',
@@ -689,6 +690,7 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Are you sure to delete the Alert?': 'के तपाइँ अलर्ट मेटाउन निश्चित हुनुहुन्छ?',
         'Add / edit alert': 'अलर्ट थप्नुहोस् / सम्पादन गर्नुहोस्',
         'Started on': 'सुरु भएको गते र समय',
         'Expires on': 'म्याद सकिने गते र समय',

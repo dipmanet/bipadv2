@@ -252,19 +252,24 @@ class AlertItem extends React.PureComponent {
                             </Button>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_alert}>
-                            <DangerConfirmButton
-                                iconName="delete"
-                                transparent
-                                className={styles.deleteButton}
-                                onClick={this.handleDeleteButtonClick}
-                                confirmationMessage="Are you sure to delete the Alert?"
-                            >
-                                <Translation>
-                                    {
-                                        t => <span>{t('Delete')}</span>
-                                    }
-                                </Translation>
-                            </DangerConfirmButton>
+                            <Translation>
+                                {
+                                    t => (
+                                        <DangerConfirmButton
+                                            iconName="delete"
+                                            transparent
+                                            className={styles.deleteButton}
+                                            onClick={this.handleDeleteButtonClick}
+                                            confirmationMessage={t('Are you sure to delete the Alert?')}
+                                        >
+
+                                            <span>{t('Delete')}</span>
+
+                                        </DangerConfirmButton>
+                                    )
+
+                                }
+                            </Translation>
                         </Cloak>
                     </div>
                     <div className={styles.bottom}>

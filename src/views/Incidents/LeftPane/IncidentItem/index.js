@@ -8,7 +8,7 @@ import {
     reverseRoute,
 } from '@togglecorp/fujs';
 import { Link } from '@reach/router';
-import { Translation, Trans } from 'react-i18next';
+import { Translation } from 'react-i18next';
 import {
     createRequestClient,
     methods,
@@ -279,21 +279,26 @@ class IncidentItem extends React.PureComponent {
                             </ModalAccentButton>
                         </Cloak>
                         <Cloak hiddenIf={p => !p.delete_incident}>
-                            <DangerConfirmButton
-                                iconName="delete"
-                                className={styles.button}
-                                confirmationMessage="Are you sure you want to delete this incident?"
-                                onClick={this.handleIncidentDelete}
-                                pending={incidentDeletePending}
-                                transparent
-                            >
-                                <Translation>
-                                    {
-                                        t => <span>{t('Delete')}</span>
-                                    }
-                                </Translation>
+                            <Translation>
+                                {
+                                    t => (
+                                        <DangerConfirmButton
+                                            iconName="delete"
+                                            className={styles.button}
+                                            confirmationMessage={t('Are you sure you want to delete this incident?')}
+                                            onClick={this.handleIncidentDelete}
+                                            pending={incidentDeletePending}
+                                            transparent
+                                        >
 
-                            </DangerConfirmButton>
+                                            <span>{t('Delete')}</span>
+
+                                        </DangerConfirmButton>
+                                    )
+
+                                }
+                            </Translation>
+
                         </Cloak>
                         <Cloak hiddenIf={p => !p.change_feedback}>
                             <ModalAccentButton
