@@ -14,6 +14,7 @@ import { AttributeKey } from '#types';
 
 import styles from './styles.scss';
 
+
 interface Props {
     className?: string;
     layerMap: LayerMap;
@@ -102,6 +103,7 @@ export default class Details extends React.PureComponent<Props, State> {
 
         return (
             <div className={_cs(styles.details, className)}>
+
                 <MultiViewContainer
                     views={this.views}
                     active={activeView}

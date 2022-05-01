@@ -46,6 +46,12 @@
         }
     }
 
+    .clickable-area {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
     .short-description {
         padding: var(--spacing-extra-small) var(--spacing-medium);
         text-align: justify;

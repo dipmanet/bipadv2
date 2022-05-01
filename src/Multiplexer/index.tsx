@@ -424,7 +424,12 @@ class Multiplexer extends React.PureComponent<Props, State> {
         if (latlngData && activeLayers.length) {
             const { requests: { FeatureGetRequest } } = this.props;
             const latlng = point([latlngData.lngLat.lng, latlngData.lngLat.lat]);
-            const buffered = buffer(latlng, 1, { units: 'meters' });
+            let bufferScale = 5000000;
+            if (this.mapContainerRef.current) {
+                const zoomLevel = this.mapContainerRef.current.getZoom();
+                bufferScale /= (2 ** zoomLevel);
+            }
+            const buffered = buffer(latlng, bufferScale, { units: 'meters' });
             const bBox = bbox(buffered);
             const api = getFeatureInfo(activeLayers[activeLayers.length - 1], bBox);
             this.setState({ LoadingTooltip: true });
@@ -982,6 +987,39 @@ class Multiplexer extends React.PureComponent<Props, State> {
         this.setState({ toggleAnimationMapDownloadButton: boolean });
     }
 
+    private clickHandler=(data) => {
+        const { activeRouteDetails } = this.context;
+        this.setState({ mapDataOnClick: data });
+        this.setState({ tooltipClicked: true });
+        this.setState({
+            tooltipLatlng: data.lngLat,
+        });
+    }
+
+    private closeTooltip=(data) => {
+        this.setState({ tooltipLatlng: data });
+    }
+
+    private handleLandslidePolygonImageMap=(data) => {
+        this.setState({
+            landslidePolygonImagemap: data,
+        });
+    }
+
+    private handlelandslidePolygonChoroplethMapData=(data) => {
+        this.setState({
+            landslidePolygonChoroplethMapData: data,
+        });
+    }
+
+    private setClimateChangeSelectedDistrict=(data) => {
+        const { id, properties: { title } } = data;
+
+        this.setState({
+            climateChangeSelectedDistrict: { id, title },
+        });
+    }
+
     public render() {
         const {
             mapStyle,
@@ -989,7 +1027,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             provinces,
             districts,
             municipalities,
-            // hazardList,
+        // hazardList,
         } = this.props;
 
         const {
@@ -1075,6 +1113,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
             landslidePolygonChoroplethMapData,
             climateChangeSelectedDistrict,
             setClimateChangeSelectedDistrict: this.setClimateChangeSelectedDistrict,
+
             FilterClickedStatus: this.FilterClickedStatus,
             isFilterClicked,
             addResource,
@@ -1157,6 +1196,7 @@ class Multiplexer extends React.PureComponent<Props, State> {
         };
         const queryStringParams = window.location.href.split('#/')[1];
         const polygonDrawAccessableRoutes = ['vulnerability'];
+
 
         return (
             <PageContext.Provider value={pageProps}>

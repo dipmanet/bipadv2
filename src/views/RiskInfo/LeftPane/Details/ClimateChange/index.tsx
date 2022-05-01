@@ -453,7 +453,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
         const {
             requests,
         } = this.props;
-
+        console.log('district', feature);
         this.setState({
             selectedDistrictName: title,
             selectedDistrict: id,
@@ -461,6 +461,9 @@ class ClimateChange extends React.PureComponent<Props, State> {
     }
 
     private handleDistrictUnselect = () => {
+        const { setClimateChangeSelectedDistrict } = this.context;
+        setClimateChangeSelectedDistrict({ id: undefined, properties: { title: undefined } });
+
         this.setState({
             selectedDistrictName: undefined,
             selectedDistrict: undefined,
@@ -537,6 +540,8 @@ class ClimateChange extends React.PureComponent<Props, State> {
             scenario,
             isActive,
         } = this.state;
+        const { climateChangeSelectedDistrict } = this.context;
+
 
         const temperature = getResults(requests, 'napTemperatureGetRequest') as NapData[];
         const precipitation = getResults(requests, 'napPrecipitationGetRequest') as NapData[];
@@ -544,13 +549,14 @@ class ClimateChange extends React.PureComponent<Props, State> {
 
         const selectedOption = measurementOptions.find(m => m.key === measurementType);
         const yAxisLabel = selectedOption && selectedOption.axisLabel;
-        const chartName = selectedDistrictName || 'Nepal';
+        const chartName = climateChangeSelectedDistrict.title || 'Nepal';
         const chartTitle = selectedOption && `${selectedOption.chartTitle} ${chartName}`;
-        const chartData = this.getChartData(measurementType, selectedDistrict);
+        const chartData = this.getChartData(measurementType, climateChangeSelectedDistrict.id);
 
         const rawData = measurementType === 'temperature' ? temperature : precipitation;
         const flatData = this.getFlatData(rawData);
         const layer = this.getLayer(layerGroupList, measurementType);
+
 
         return (
             <>
@@ -666,7 +672,7 @@ class ClimateChange extends React.PureComponent<Props, State> {
                                 <div className={styles.header}>
                                     {chartTitle}
                                 </div>
-                                { selectedDistrict && (
+                                { climateChangeSelectedDistrict.id && (
                                     <Button
                                         className={styles.button}
                                         onClick={this.handleDistrictUnselect}

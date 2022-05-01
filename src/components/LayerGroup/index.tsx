@@ -25,7 +25,8 @@ class LayerGroup extends React.PureComponent<Props, State> {
         isContentShown: false,
     }
 
-    private handleShowContentButtonClick = () => {
+    private handleShowContentButtonClick = (event: { stopPropagation: () => void }) => {
+        event.stopPropagation();
         this.setState(({ isContentShown }) => ({ isContentShown: !isContentShown }));
     }
 
@@ -49,17 +50,24 @@ class LayerGroup extends React.PureComponent<Props, State> {
                 className,
             )}
             >
-                <header className={styles.header}>
-                    <h3 className={styles.title}>
-                        { data.title }
-                    </h3>
-                    { (data.longDescription || data.metadata) && (
-                        <div className={styles.actions}>
-                            <LayerDetailModalButton
-                                layer={data}
-                                className={styles.infoButton}
-                            />
-                            {/*
+                <div
+                    className={styles.clickableArea}
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={this.handleShowContentButtonClick}
+                    onClick={this.handleShowContentButtonClick}
+                >
+                    <header className={styles.header}>
+                        <h3 className={styles.title}>
+                            { data.title }
+                        </h3>
+                        { (data.longDescription || data.metadata) && (
+                            <div className={styles.actions}>
+                                <LayerDetailModalButton
+                                    layer={data}
+                                    className={styles.infoButton}
+                                />
+                                {/*
                             <Button
                                 title="Show data (currently not available)"
                                 className={styles.showDataButton}
@@ -68,20 +76,21 @@ class LayerGroup extends React.PureComponent<Props, State> {
                                 disabled
                             />
                             */}
+                            </div>
+                        )}
+                        <Button
+                            transparent
+                            className={styles.showContentButton}
+                            iconName={isContentShown ? 'chevronUp' : 'chevronDown'}
+                            onClick={this.handleShowContentButtonClick}
+                        />
+                    </header>
+                    { data.shortDescription && (
+                        <div className={styles.shortDescription}>
+                            { data.shortDescription }
                         </div>
                     )}
-                    <Button
-                        transparent
-                        className={styles.showContentButton}
-                        iconName={isContentShown ? 'chevronUp' : 'chevronDown'}
-                        onClick={this.handleShowContentButtonClick}
-                    />
-                </header>
-                { data.shortDescription && (
-                    <div className={styles.shortDescription}>
-                        { data.shortDescription }
-                    </div>
-                )}
+                </div>
                 { isContentShown && (
                     <div className={styles.content}>
                         {data.children.length !== 0 && (

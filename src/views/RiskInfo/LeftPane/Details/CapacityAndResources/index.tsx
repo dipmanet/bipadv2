@@ -87,7 +87,6 @@ import FoodWarehouseIcon from '#resources/icons/Food-warehouse.png';
 import { ResourceTypeKeys } from '#types';
 import { AppState } from '#store/types';
 import * as PageType from '#store/atom/page/types';
-import '#resources/openspace-resources/humanitarian-fonts.css';
 import { capacityResource } from '#utils/domain';
 import ScalableVectorGraphics from '#rscv/ScalableVectorGraphics';
 import finance from '#resources/icons/newCapResBanking.svg';
@@ -125,6 +124,9 @@ import CommunityOpenspaceDetails from './OpenspaceModals/CommunitySpaceDetails';
 import PolygonBoundaryCommunity from './OpenspaceModals/PolygonCommunitySpace/main';
 import PolygonBoundary from './OpenspaceModals/PolygonOpenSpace/main';
 import styles from './styles.scss';
+import '#resources/openspace-resources/humanitarian-fonts.css';
+import { OpenSeaDragonViewer } from '#views/RiskInfo/OpenSeaDragonImageViewer';
+
 import DataVisualisation from './DataVisualisation';
 
 const TableModalButton = modalize(Button);

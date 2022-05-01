@@ -17,11 +17,13 @@ interface Props {
 
 class LayerSelectionItem extends React.PureComponent<Props> {
     private handleChange = (value: boolean) => {
+        const { closeTooltip } = this.context;
         const { data } = this.props;
         const {
             addLayer,
             removeLayer,
         } = this.context;
+        closeTooltip(undefined);
 
         if (value) {
             addLayer(data);
@@ -51,7 +53,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
             disabled,
         } = this.props;
 
-        const { activeLayers } = this.context;
+        const { activeLayers, closeTooltip } = this.context;
         const isActive = this.getIsActive(activeLayers, data.id);
 
         return (
@@ -64,6 +66,7 @@ class LayerSelectionItem extends React.PureComponent<Props> {
                         off={false}
                         value={isActive}
                         onChange={this.handleChange}
+
                     />
                     <div className={styles.title}>
                         { data.title }

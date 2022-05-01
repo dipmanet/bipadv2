@@ -854,7 +854,7 @@ export function getRasterLegendUrl(layer: { layername: string }) {
         '&request=GetLegendGraphic',
         `&layer=Bipad:${layer.layername}`,
         '&format=image/png',
-        '&legend_options=fontAntiAliasing:true;layout:vertical;columnheight:100;dpi:96;labelMargin:2;fontSize:9;',
+        '&legend_options=fontAntiAliasing:true;layout:vertical;dpi:96;labelMargin:2;fontSize:9;',
         '&width=12',
         '&height=12',
         '&scale=1',
