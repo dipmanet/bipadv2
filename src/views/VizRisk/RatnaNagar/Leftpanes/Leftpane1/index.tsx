@@ -36,7 +36,6 @@ function LeftPane1() {
 			const percentage = scrollTop / (scrollHeight - clientHeight);
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page1ScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, page1PositionValue: Math.max(1 - percentage, 0) });
-			console.log('scrollTop Val is', scrollTop, clientHeight, scrollHeight);
 		};
 		updateHeight();
 		if (articleRef.current) {

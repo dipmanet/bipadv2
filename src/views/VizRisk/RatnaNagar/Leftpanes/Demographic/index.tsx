@@ -35,7 +35,6 @@ function Demographic(props: Props) {
 			const percentage = scrollTop / (scrollHeight - clientHeight);
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, demographicScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, demographicPositionValue: Math.max(1 - percentage, 0) });
-			console.log('scrollTop Val is', scrollTop, clientHeight, scrollHeight);
 		};
 		updateHeight();
 		if (articleRef.current) {

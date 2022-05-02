@@ -37,8 +37,7 @@ function LeftPane10(props: Props) {
 			const { scrollTop } = articleRef.current;
 			const percentage = scrollTop / (scrollHeight - clientHeight);
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page10ScrolltopValue: scrollTop });
-			setPostionsPerPage({ ...postionsPerPage, page10PositionValue: Math.max(1 - percentage, 0) });
-			console.log('scrollTop Val is', scrollTop, clientHeight, scrollHeight);
+			setPostionsPerPage({ ...postionsPerPage, page11PositionValue: Math.max(1 - percentage, 0) });
 		};
 		updateHeight();
 		if (articleRef.current) {
@@ -53,27 +52,27 @@ function LeftPane10(props: Props) {
 
 
 	useEffect(() => {
-		articleRef.current.scrollTo(0, scrollTopValuesPerPage.page10ScrolltopValue);
+		articleRef.current.scrollTo(0, scrollTopValuesPerPage.page11ScrolltopValue);
 	}, []);
 
 	const onPreviousClick = () => {
 		articleRef.current.scrollTo({
-			top: scrollTopValuesPerPage.page10ScrolltopValue - 300,
+			top: scrollTopValuesPerPage.page11ScrolltopValue - 300,
 			behavior: 'smooth',
 		});
 
-		if (postionsPerPage.page10PositionValue === (1 || NaN)) {
+		if (postionsPerPage.page11PositionValue === (1 || NaN)) {
 			setLeftElement(leftElement - 1);
 		}
 	};
 
 	const onNextClick = () => {
 		articleRef.current.scrollTo({
-			top: scrollTopValuesPerPage.page10ScrolltopValue + 300,
+			top: scrollTopValuesPerPage.page11ScrolltopValue + 300,
 			behavior: 'smooth',
 		});
 
-		if (postionsPerPage.page10PositionValue === 0) {
+		if (postionsPerPage.page11PositionValue === 0) {
 			setLeftElement(leftElement + 1);
 		}
 	};

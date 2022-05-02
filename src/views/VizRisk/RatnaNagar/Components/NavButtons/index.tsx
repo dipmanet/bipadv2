@@ -58,8 +58,6 @@ const Navbuttons = (props: Props) => {
 	}, []);
 
 
-	console.log('nav left', leftElement);
-
 	return (
 		<div className={leftElement < 10 ? styles.pagination : styles.lastPagePagination}>
 			<button

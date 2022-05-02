@@ -101,6 +101,30 @@ const Map = (props: any) => {
 				color: 'orange',
 			},
 		},
+		{
+			id: 5,
+			geometry: { type: 'Point', coordinates: [84.5050, 27.619] },
+			properties: {
+				name: 'dummy d',
+				color: 'orange',
+			},
+		},
+		{
+			id: 6,
+			geometry: { type: 'Point', coordinates: [84.505, 27.6155] },
+			properties: {
+				name: 'dummy d',
+				color: 'orange',
+			},
+		},
+		{
+			id: 7,
+			geometry: { type: 'Point', coordinates: [84.5, 27.5] },
+			properties: {
+				name: 'dummy d',
+				color: 'orange',
+			},
+		},
 	];
 
 	const dummyGeojson = {
@@ -363,9 +387,6 @@ const Map = (props: any) => {
 		return destroyMap;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-
-	console.log('leftElemnt in map is', leftElement, ciNameList);
 
 
 	useEffect(() => {

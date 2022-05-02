@@ -79,8 +79,6 @@ const LeftpaneSlide3 = (props: Props) => {
 		return (itemCounts / totalCounts) * 50 + 10;
 	};
 
-	console.log('ciData', findOcc(cIData, 'resourceType'));
-
 	return (
 		<div className={styles.vrSideBar}>
 			{' '}
