@@ -2,20 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Input from '@material-ui/core/Input';
-import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import produce from 'immer';
-import TextField from '@mui/material/TextField';
 import { Translation } from 'react-i18next';
 import { languageSelector } from '#selectors';
 
 import {
-    incidentSummary,
-    peopleLoss,
-    hazardWiseLoss,
-    genderWiseLoss,
     nepaliRef,
     englishRef,
     covid24hrsStat,
@@ -24,7 +16,6 @@ import {
     covidProvinceWiseTotal,
 } from '../formFields';
 import styles from './styles.scss';
-import FileUploader from '#components/NewLoginModal/FileUploader';
 
 interface Props {
 
@@ -46,6 +37,9 @@ const Bulletin = (props: Props) => {
         language: { language },
     } = props;
 
+    useEffect(() => {
+        console.log('covidProvinceWiseTotal', covidProvinceWiseTotal, 'covidProvinceWiseData', covidProvinceWiseData);
+    }, [covidProvinceWiseData]);
 
     return (
         <>

@@ -346,7 +346,6 @@ const Bulletin = (props: Props) => {
                 setMaxTempFooter(bulletinEditData.tempMaxFooterNe);
                 // the added data will be in the api
                 // feedback data will already be there no need to construct new one
-                // when the data is changed what happens now? Its already taken care of
                 setDailySumamry(bulletinEditData.dailySummaryNe);
                 setRainSummaryPic(bulletinEditData.rainSummaryPictureNe);
                 setRainSummaryFooter(bulletinEditData.rainSummaryPictureFooterNe);
@@ -759,8 +758,8 @@ const Bulletin = (props: Props) => {
                 recovered: covidNational[0].newRecovered || 0,
             });
             setcovidTotalStat({
-                totalAffected: covidNational[0].totalInfected || 0,
-                // totalActive: covidNational[0]
+                totalAffected: covidNational[0].totalCases || 0,
+                totalActive: covidNational[0].totalInfected || 0,
                 totalRecovered: covidNational[0].totalRecovered || 0,
                 totalDeaths: covidNational[0].totalDeath || 0,
             });
@@ -771,7 +770,7 @@ const Bulletin = (props: Props) => {
     useEffect(() => {
         if (covidQuaratine.length > 0) {
             const p1Data = covidQuaratine.filter(p => p.provinceName === 'Province 1')[0];
-            const p2Data = covidQuaratine.filter(p => p.provinceName === 'Province 2')[0];
+            const p2Data = covidQuaratine.filter(p => p.provinceName === 'Madhesh')[0];
             const p3Data = covidQuaratine.filter(p => p.provinceName === 'Bagmati')[0];
             const p4Data = covidQuaratine.filter(p => p.provinceName === 'Gandaki')[0];
             const p5Data = covidQuaratine.filter(p => p.provinceName === 'Lumbini')[0];
