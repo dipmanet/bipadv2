@@ -131,19 +131,13 @@ const selectDateForQuery = (today) => {
 
 const todayDate = new Date();
 const requestQueryCovidNational = ({
-    params: {
-        startDate = `${todayDate.toISOString().split('T')[0]}`,
-    } = {},
+    params,
 }) => ({
-    limit: -1,
-    reported_on: startDate, // eslint-disable-line @typescript-eslint/camelcase
+    limit: 1,
+    reported_on__lt: params.dateAlt, // eslint-disable-line @typescript-eslint/camelcase
+    ordering: '-reported_on',
 });
-const requestQueryCovidQuarantine = ({
-    params: {
-        startDate = `${todayDate.toISOString().split('T')[0]}`,
-    } = {},
-}) => ({
-    limit: -1,
+const requestQueryCovidQuarantine = () => ({
     summary: true,
     // eslint-disable-next-line @typescript-eslint/camelcase
     summary_type: 'heoc_admin_overview_covid19_table',
@@ -281,7 +275,7 @@ const Bulletin = (props: Props) => {
     const [covidQuaratine, setCovidQurantine] = useState([]);
 
 
-    covidNationalInfo.setDefaultParams({ setCovidNational });
+    covidNationalInfo.setDefaultParams({ setCovidNational, dateAlt });
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 

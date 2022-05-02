@@ -227,6 +227,7 @@ const BulletinTable = (props) => {
         fetchBulletins,
         totalRows,
         setLanguage,
+        handleBulletinDelete,
      } = props;
 
     const [searchValue, setsearchValue] = React.useState('');
@@ -272,6 +273,7 @@ const BulletinTable = (props) => {
             setPermission(getUserPermission(user));
         }
     }, [user]);
+
 
     useEffect(() => {
         if (bulletinTableData[0] && bulletinTableData[0].hazardWiseLoss && Object.keys(bulletinTableData[0].hazardWiseLoss).length > 0) {
@@ -474,6 +476,13 @@ const BulletinTable = (props) => {
                                     onClick={() => handleTableEdit(row, 'english')}
                                 >
                                 Edit English
+                                </button>
+                                <button
+                                    type="button"
+                                    className={styles.editBtn}
+                                    onClick={() => handleBulletinDelete(row.id)}
+                                >
+                                Delete
                                 </button>
                                 </>
                             )

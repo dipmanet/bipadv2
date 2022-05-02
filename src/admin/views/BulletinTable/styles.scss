@@ -43,3 +43,26 @@ padding: 45px 0;
         margin:3vw;
     }
 }
+.box{
+	position: absolute;
+	 top: 50%;
+	 left: 50%;
+	 transform: translate(-50%, -50%);
+	 width: 400px;
+	 background-color: white;
+	 display: flex;
+	 flex-direction: column;
+	 justify-content: center;
+	 align-items:flex-start;
+	 box-shadow: 0px 2px 5px rgba(151, 149, 148, 0.25);
+	 padding:40px;
+	.nextBtn{
+	   background: #003572;
+	   border: none;
+	   padding: 7px 18px;
+	   border-radius: 3px;
+	   color: rgba(255,255,255,0.95);
+	   cursor: pointer;
+	   margin-top: 20px;
+	}
+ }

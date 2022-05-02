@@ -874,7 +874,6 @@ class Multiplexer extends React.PureComponent<Props, State> {
                             <RiskInfoLayerContext.Provider value={riskInfoLayerProps}>
                                 <Map
                                     mapStyle={mapStyle}
-
                                     clickHandler={this.clickHandler}
                                     handleMapClicked={this.handleMapClicked}
                                     mapOptions={{

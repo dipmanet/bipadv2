@@ -7,6 +7,9 @@ import Navbar from 'src/admin/components/Navbar';
 import Footer from 'src/admin/components/Footer';
 import BulletinTable from 'src/admin/components/BulletinTable';
 import Loader from 'react-loader';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import styles from './styles.scss';
 import Page from '#components/Page';
 import {
@@ -16,6 +19,7 @@ import {
     ClientAttributes,
     methods,
 } from '#request';
+
 
 import {
     bulletinEditDataSelector,
@@ -49,15 +53,25 @@ const requests: { [key: string]: ClientAttributes<ComponentProps, Params> } = {
             setPending(false);
         },
     },
+    bulletinDelete: {
+        url: ({ params }) => `/bipad-bulletin/${params.id}`,
+        method: methods.DELETE,
+        onMount: false,
+        onSuccess: ({ params: { setDeleteMessage, fetchBulletins } }) => {
+            fetchBulletins(0);
+            setDeleteMessage(true);
+        },
+    },
 };
 
 
 const Bulletin = (props: Props) => {
-    const { user, requests: { bulletinTableReq }, bulletinEditData, uri } = props;
+    const { user, requests: { bulletinTableReq, bulletinDelete }, bulletinEditData, uri } = props;
     const [tableData, setTableData] = useState([]);
     const [pending, setPending] = useState(true);
     const [back, setBack] = useState(false);
     const [totalRows, setCount] = useState(0);
+    const [deleteMessage, setDeleteMessage] = useState(false);
     bulletinTableReq.setDefaultParams({
         setTableData,
         setPending,
@@ -71,6 +85,14 @@ const Bulletin = (props: Props) => {
     const handleBack = () => {
         setBack(true);
         fetchBulletins(0);
+    };
+
+    const handleBulletinDelete = (id: number) => {
+        bulletinDelete.do({ id, setDeleteMessage, fetchBulletins });
+    };
+
+    const handleClose = () => {
+        setDeleteMessage(false);
     };
 
     return (
@@ -118,11 +140,30 @@ const Bulletin = (props: Props) => {
                                     bulletinTableData={tableData}
                                     fetchBulletins={fetchBulletins}
                                     totalRows={totalRows}
+                                    handleBulletinDelete={handleBulletinDelete}
                                 />
                             </div>
                         )
                 }
             </div>
+            <Modal
+                open={deleteMessage}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className={styles.box}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                       Bulletin has been deleted successfully
+                    </Typography>
+                    <button
+                        onClick={handleClose}
+                        type="button"
+                        className={styles.nextBtn}
+                    >
+                        Ok
+                    </button>
+                </Box>
+            </Modal>
             <Footer />
         </>
     );
