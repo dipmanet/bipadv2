@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import React from 'react';
+import Icon from '#rscg/Icon';
 
 import styles from './styles.scss';
 
@@ -40,7 +41,7 @@ const FireTooltip = (
     const { fields:
         { title: headerTitle,
             land_cover: landCover,
-            brightness } } = referenceData || nullData;
+            brightness, confidence } } = referenceData || nullData;
     const date = createdDate.split('T')[0];
     const time = createdDate.split('T')[1].split('+')[0];
     const timeOnly = time.split(':').slice(0, 2).join(':');
@@ -63,16 +64,35 @@ const FireTooltip = (
                     <div className={styles.title}>Brightness:</div>
                     <div className={styles.value}>{brightness || 'N/A'}</div>
                 </div>
+                <div className={styles.brightness}>
+                    <div className={styles.title}>Confidence:</div>
+                    <div className={styles.value}>{confidence || 'N/A'}</div>
+                </div>
                 <div className={styles.source}>
                     <div className={styles.title}>SOURCE:</div>
                     <a
-                        href="https://www.icimod.org/"
+                        href="http://110.44.114.238//NepalForestFire"
                         target="_blank"
                         rel="noopener noreferrer"
                         className={styles.value}
                     >
                         International Centre for Integrated Mountain Development
                     </a>
+                </div>
+                <div className={styles.source}>
+
+                    <div className={styles.disclaimer}>
+                        <Icon
+                            className={styles.infoIcon}
+                            name="info"
+                        />
+                         Forest fires are detected by a satellite-based forest fire detection
+                        and monitoring system from Moderate Resolution Imaging Spectroradiometer
+                        (MODIS) sensors. It provides location information on active fires present
+                        during the satellite’s twice-daily overpasses. The confidence level,
+                        which ranges from 0% to 100%, help users gauge the quality
+                        of individual fire.
+                    </div>
                 </div>
             </div>
         </div>

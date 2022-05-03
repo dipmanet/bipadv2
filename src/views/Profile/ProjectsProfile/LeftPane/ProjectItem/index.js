@@ -89,7 +89,6 @@ class ProjectItem extends React.PureComponent {
             drrCycleMap = {},
             categoryMap = {},
         } = this.props;
-
         const category = d.category.map(p => (categoryMap[p] || {}).title).join(', ');
         const drrCycle = d.drrcycle.map(p => (drrCycleMap[p] || {}).title).join(', ');
 
@@ -127,7 +126,7 @@ class ProjectItem extends React.PureComponent {
                     className={styles.project}
                     onClick={this.handleProjectClick}
                     role="button"
-                    onKeyPress={() => {}}
+                    onKeyPress={() => { }}
                     tabIndex={0}
                 >
                     <h4 className={styles.heading}>
@@ -169,8 +168,8 @@ class ProjectItem extends React.PureComponent {
                 {showModal && (
                     <Modal
                         className={styles.modal}
-                        // closeOnEscape
-                        // closeOnOutsideClick
+                    // closeOnEscape
+                    // closeOnOutsideClick
                     >
                         <ModalHeader
                             className={styles.modalHeader}
@@ -239,13 +238,13 @@ class ProjectItem extends React.PureComponent {
                                     value={donorNames}
                                 />
                             </div>
-                            <ListView
+                            {/* <ListView
                                 className={styles.outputs}
                                 data={output}
                                 renderer={Output}
                                 rendererParams={this.outputRendererParams}
                                 keySelector={outputKeySelector}
-                            />
+                            /> */}
                         </ModalBody>
                     </Modal>
                 )}

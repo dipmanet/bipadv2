@@ -1,0 +1,132 @@
+.landslideTooltip {
+  width: 300px;
+  background-color: #fff;
+  max-height: 400px;
+  .tooltipTable {
+    border-collapse: collapse;
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+  }
+  .header {
+    background-color: #216cd7;
+    color: white;
+    padding: 10px;
+  }
+
+  .content {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    max-height: 200px;
+    overflow: scroll;
+    flex-direction: column;
+  }
+  .noData {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+  }
+}
+.modalBody {
+  width: auto;
+  .imageViewer {
+    display: flex;
+    border: 1px solid #3684d9;
+    height: 100%;
+    .leftPane {
+      flex: 1;
+
+      border-right: 1px solid #3684d9;
+      padding: 5px;
+      height: 100%;
+      background-color: #e5ebf1;
+      .municipalityName {
+        height: 5%;
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        .notesButton {
+          color: black;
+          cursor: pointer;
+          background-color: #e5ebf1;
+          padding: 5px;
+          height: 30px;
+        }
+        .notesButtonActive {
+          color: white;
+          cursor: pointer;
+          background-color: #165aac;
+          padding: 5px;
+          height: 30px;
+        }
+      }
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        height: 95%;
+        .selectedAgreeBtn {
+          margin: 10px;
+
+          align-items: center;
+          filter: saturate(100%);
+          background-color: #105aac !important;
+          opacity: 1;
+          border-radius: 5px;
+          color: white !important;
+          border-radius: 5px;
+
+          font-size: 12px;
+          padding: 20px;
+        }
+        .agreeBtn {
+          margin: 10px;
+
+          align-items: center;
+          filter: saturate(100%);
+          background-color: #0a7efd !important;
+          opacity: 1;
+          border-radius: 5px;
+          color: white !important;
+          border-radius: 5px;
+
+          font-size: 12px;
+          padding: 20px;
+        }
+        .agreeBtn:hover {
+          background-color: #78b4f7 !important;
+          border-color: #78b4f7;
+        }
+      }
+    }
+    .rightPane {
+      flex: 5;
+      padding: 5px;
+      height: 100%;
+      overflow: scroll;
+    }
+  }
+}
+.openseadragon {
+  width: 90vw;
+  height: 90vh;
+  overflow: auto;
+}

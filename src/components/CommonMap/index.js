@@ -152,6 +152,7 @@ class CommonMap extends React.PureComponent {
             districtFromComp,
             municipalityFromComp,
             boundingsFromComp,
+            children,
         } = this.props;
         const regionLevel = regionFromComp || selfRegionLevel;
         const provinceId = provinceFromComp || selfProvinceId;
@@ -261,6 +262,7 @@ class CommonMap extends React.PureComponent {
                         }}
                     />
                 </MapSource>
+                {children}
                 <MapSource
                     sourceKey={`${sourceKey}-label`}
                     sourceOptions={{

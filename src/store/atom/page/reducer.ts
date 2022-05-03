@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import produce from 'immer';
 import { listToMap } from '@togglecorp/fujs';
 
@@ -5,13 +6,113 @@ import * as Type from './types';
 import initialState from './initialState';
 
 import { ModelEnum } from '#types';
+
 // ACTION CREATORS
+
+// IBF
+export const setIbfPageAction = ibfPage => ({
+    type: Type.PageType.SET_IBF_PAGE,
+    ibfPage,
+});
+export const setBulletinLossAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN,
+    bulletinData,
+});
+export const setBulletinCovidAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_COVID,
+    bulletinData,
+});
+export const setBulletinFeedbackAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK,
+    bulletinData,
+});
+export const setBulletinTemperatureAction = bulletinData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE,
+    bulletinData,
+});
+export const setBulletinEditDataAction = bulletinEditData => ({
+    type: Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA,
+    bulletinEditData,
+});
+
+// bulletin actions end
+// Epidemics
+export const SetEpidemicsPageAction = epidemicsPage => ({
+    type: Type.PageType.SET_EPIDEMICS_PAGE,
+    epidemicsPage,
+});
 
 export const setRegionAction = (
     { region }: { region: Type.Region },
 ) => ({
     type: Type.PageType.SET_REGION,
     region,
+});
+
+export const setDrrmProgressAction = drrmProgress => ({
+    type: Type.PageType.SET_DRRM_PROGRESS,
+    drrmProgress,
+});
+
+export const setDrrmOrgAction = drrmOrg => ({
+    type: Type.PageType.SET_DRRM_ORG,
+    drrmOrg,
+});
+
+export const setDrrmRegionAction = drrmRegion => ({
+    type: Type.PageType.SET_DRRM_REGION,
+    drrmRegion,
+});
+
+export const setDrrmCriticalAction = drrmCritical => ({
+    type: Type.PageType.SET_DRRM_CRITICAL,
+    drrmCritical,
+});
+
+export const setDrrmContactsAction = drrmContacts => ({
+    type: Type.PageType.SET_DRRM_CONTACTS,
+    drrmContacts,
+});
+
+export const setDrrmInventoryAction = drrmInventory => ({
+    type: Type.PageType.SET_DRRM_INVENTORY,
+    drrmInventory,
+});
+
+export const setPalikaLanguageAction = palikaLanguage => ({
+    type: Type.PageType.SET_PALIKA_LANGUAGE,
+    palikaLanguage,
+});
+
+export const setGeneralDataAction = generalData => ({
+    type: Type.PageType.SET_GENERAL_DATA,
+    generalData,
+});
+
+export const setPalikaRedirectAction = palikaRedirect => ({
+    type: Type.PageType.SET_PALIKA_REDIRECT,
+    palikaRedirect,
+});
+
+export const setBudgetIdAction = budgetId => ({
+    type: Type.PageType.SET_BUDGET_ID,
+    budgetId,
+});
+
+export const setBudgetDataAction = budgetData => ({
+    type: Type.PageType.SET_BUDGET_DATA,
+    budgetData,
+});
+
+export const setBudgetActivityDataAction = budgetActivityData => ({
+    type: Type.PageType.SET_BUDGET_ACTIVITY_DATA,
+    budgetActivityData,
+});
+
+
+export const setProgramAndPolicyDataAction = programAndPolicyData => ({
+    type: Type.PageType.SET_PROGRAM_AND_POLICY_DATA,
+    programAndPolicyData,
 });
 
 export const setInitialPopupHiddenAction = (
@@ -92,54 +193,54 @@ export const setWardsAction = (
 
 
 export const setShowProvinceAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_PROVINCE,
     value,
 });
 
 export const setShowDistrictAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_DISTRICT,
     value,
 });
 
 export const setShowMunicipalityAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_MUNICIPALITY,
     value,
 });
 
 export const setShowWardAction = (
-    { value }: {value: boolean },
+    { value }: { value: boolean },
 ) => ({
     type: Type.PageType.SET_SHOW_WARD,
     value,
 });
 
-export const setLossListAction = ({ lossList }: { lossList: Type.Loss[]}) => ({
+export const setLossListAction = ({ lossList }: { lossList: Type.Loss[] }) => ({
     type: Type.PageType.SET_LOSS_LIST,
     lossList,
 });
 
 export const setDocumentCategoryListAction = (
-    { documentCategoryList }: { documentCategoryList: Type.DocumentCategory[]},
+    { documentCategoryList }: { documentCategoryList: Type.DocumentCategory[] },
 ) => ({
     type: Type.PageType.SET_DOCUMENT_CATEGORY_LIST,
     documentCategoryList,
 });
 
 export const setCountryListAction = (
-    { countryList }: { countryList: Type.Country[]},
+    { countryList }: { countryList: Type.Country[] },
 ) => ({
     type: Type.PageType.SET_COUNTRY_LIST,
     countryList,
 });
 
 export const setAgricultureLossTypeListAction = (
-    { agricultureLossTypeList }: { agricultureLossTypeList: Type.AgricultureLossType[]},
+    { agricultureLossTypeList }: { agricultureLossTypeList: Type.AgricultureLossType[] },
 ) => ({
     type: Type.PageType.SET_AGRICULTURE_LOSS_TYPE_LIST,
     agricultureLossTypeList,
@@ -148,12 +249,12 @@ export const setAgricultureLossTypeListAction = (
 
 // dashboard action creator
 
-export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[]}) => ({
+export const setAlertListActionDP = ({ alertList }: { alertList: Type.Alert[] }) => ({
     type: Type.PageType.DP__SET_ALERTS,
     alertList,
 });
 
-export const setEventListAction = ({ eventList }: { eventList: Type.Event[]}) => ({
+export const setEventListAction = ({ eventList }: { eventList: Type.Event[] }) => ({
     type: Type.PageType.DP__SET_EVENTS,
     eventList,
 });
@@ -176,7 +277,7 @@ export const setFiltersActionDP = (
 
 // incident action creator
 
-export const setIncidentListActionIP = ({ incidentList }: { incidentList: Type.Incident[]}) => ({
+export const setIncidentListActionIP = ({ incidentList }: { incidentList: Type.Incident[] }) => ({
     type: Type.PageType.IP__SET_INCIDENT_LIST,
     incidentList,
 });
@@ -211,7 +312,7 @@ export const setFiltersActionIP = (
 
 // response action creator
 
-export const setResourceListActionRP = ({ resourceList }: {resourceList: Type.Resource[]}) => ({
+export const setResourceListActionRP = ({ resourceList }: { resourceList: Type.Resource[] }) => ({
     type: Type.PageType.RP__SET_RESOURCE_LIST,
     resourceList,
 });
@@ -233,22 +334,28 @@ export const setInventoryItemListActionRP = (
 // real time monitoring action creator
 
 export const setRealTimeRainListAction = (
-    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[]},
+    { realTimeRainList }: { realTimeRainList: Type.RealTimeRain[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST,
     realTimeRainList,
 });
 
 export const setRealTimeRiverListAction = (
-    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[]},
+    { realTimeRiverList }: { realTimeRiverList: Type.RealTimeRiver[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST,
     realTimeRiverList,
 });
+export const setRealTimeDurationAction = (
+    { duration }: { duration: Type.Duration },
+) => ({
+    type: Type.PageType.RTM__SET_REAL_TIME_DURATION,
+    duration,
+});
 
 export const setRealTimeEarthquakeListAction = (
     { realTimeEarthquakeList }:
-    { realTimeEarthquakeList: Type.RealTimeEarthquake[]},
+        { realTimeEarthquakeList: Type.RealTimeEarthquake[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST,
     realTimeEarthquakeList,
@@ -256,7 +363,7 @@ export const setRealTimeEarthquakeListAction = (
 
 export const setRealTimeFireListAction = (
     { realTimeFireList }:
-    { realTimeFireList: Type.RealTimeFire[]},
+        { realTimeFireList: Type.RealTimeFire[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_FIRE_LIST,
     realTimeFireList,
@@ -264,7 +371,7 @@ export const setRealTimeFireListAction = (
 
 export const setRealTimePollutionListAction = (
     { realTimePollutionList }:
-    { realTimePollutionList: Type.RealTimePollution[]},
+        { realTimePollutionList: Type.RealTimePollution[] },
 ) => ({
     type: Type.PageType.RTM__SET_REAL_TIME_POLLUTION_LIST,
     realTimePollutionList,
@@ -283,77 +390,88 @@ export const setRealTimeFiltersAction = (
 
 export const setDataArchiveRainListAction = (
     { dataArchiveRainList }:
-    { dataArchiveRainList: Type.DataArchiveRain[]}) => ({
+        { dataArchiveRainList: Type.DataArchiveRain[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_LIST,
     dataArchiveRainList,
 });
 
 export const setDataArchiveRiverListAction = (
     { dataArchiveRiverList }:
-    { dataArchiveRiverList: Type.DataArchiveRiver[]}) => ({
+        { dataArchiveRiverList: Type.DataArchiveRiver[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_LIST,
     dataArchiveRiverList,
 });
 
 export const setDataArchivePollutionListAction = (
     { dataArchivePollutionList }:
-    { dataArchivePollutionList: Type.DataArchivePollution[]}) => ({
+        { dataArchivePollutionList: Type.DataArchivePollution[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_LIST,
     dataArchivePollutionList,
 });
 
 export const setDataArchiveEarthquakeListAction = (
     { dataArchiveEarthquakeList }:
-    { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[]}) => ({
+        { dataArchiveEarthquakeList: Type.DataArchiveEarthquake[] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_LIST,
     dataArchiveEarthquakeList,
 });
 
 export const setDataArchiveEarthquakeFilterAction = (
     { dataArchiveEarthquakeFilters }:
-    { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters']}) => ({
+        { dataArchiveEarthquakeFilters: Type.SetDataArchiveEarthquakeFilters['dataArchiveEarthquakeFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_EARTHQUAKE_FILTERS,
     dataArchiveEarthquakeFilters,
 });
 
 export const setDataArchivePollutionFilterAction = (
     { dataArchivePollutionFilters }:
-    { dataArchivePollutionFilters: Type.SetDataArchivePollutionFilters['dataArchivePollutionFilters']}) => ({
+        { dataArchivePollutionFilters: Type.SetDataArchivePollutionFilters['dataArchivePollutionFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_FILTERS,
     dataArchivePollutionFilters,
 });
 
 export const setDataArchiveRainFilterAction = (
     { dataArchiveRainFilters }:
-    { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters']}) => ({
+        { dataArchiveRainFilters: Type.SetDataArchiveRainFilters['dataArchiveRainFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_FILTERS,
     dataArchiveRainFilters,
 });
 
 export const setDataArchiveRiverFilterAction = (
     { dataArchiveRiverFilters }:
-    { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters']}) => ({
+        { dataArchiveRiverFilters: Type.SetDataArchiveRiverFilters['dataArchiveRiverFilters'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_FILTERS,
     dataArchiveRiverFilters,
 });
 
 export const setDataArchivePollutionStationAction = (
     { dataArchivePollutionStations }:
-    { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations']}) => ({
+        { dataArchivePollutionStations: Type.SetDataArchivePollutionStations['dataArchivePollutionStations'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_POLLUTION_STATIONS,
     dataArchivePollutionStations,
 });
 
 export const setDataArchiveRainStationAction = (
     { dataArchiveRainStations }:
-    { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations']}) => ({
+        { dataArchiveRainStations: Type.SetDataArchiveRainStations['dataArchiveRainStations'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RAIN_STATIONS,
     dataArchiveRainStations,
 });
 
 export const setDataArchiveRiverStationAction = (
     { dataArchiveRiverStations }:
-    { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations']}) => ({
+        { dataArchiveRiverStations: Type.SetDataArchiveRiverStations['dataArchiveRiverStations'] },
+) => ({
     type: Type.PageType.DA__SET_DATA_ARCHIVE_RIVER_STATIONS,
     dataArchiveRiverStations,
 });
@@ -423,7 +541,14 @@ export const setCarKeysAction = carKeys => ({
     type: Type.PageType.RIC__SET_CAR_KEYS,
     carKeys,
 });
-
+export const SetLayersAction = layers => ({
+    type: Type.PageType.SET_LAYERS_LIST,
+    layers,
+});
+export const SetLayerGroupsAction = layerGroups => ({
+    type: Type.PageType.SET_LAYERS_GROUP_LIST,
+    layerGroups,
+});
 //  REDUCERS
 
 const setCarKeys = (state: Type.PageState, action: Type.SetCarKeys) => {
@@ -437,7 +562,26 @@ const setCarKeys = (state: Type.PageState, action: Type.SetCarKeys) => {
     return newState;
 };
 
+const setLayers = (state: Type.PageState, action: Type.SetLayers) => {
+    const { layers } = action;
 
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.layers = layers;
+    });
+
+    return newState;
+};
+const SetLayerGroups = (state: Type.PageState, action: Type.SetLayerGroups) => {
+    const { layerGroups } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.layerGroups = layerGroups;
+    });
+
+    return newState;
+};
 const setFilters = (state: Type.PageState, action: Type.SetFilters) => {
     const { filters } = action;
 
@@ -494,46 +638,47 @@ const setDashboardHazardTypes = (state: Type.PageState, action: Type.SetDashboar
     const { hazardTypes: hazardTypesFromAction } = action;
 
     // TODO Remove this after we get type from server
-    // const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
-    //     ...hazardType,
-    //     type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-    // }));
+    const hazardTypes = hazardTypesFromAction.map((hazardType, i) => ({
+        ...hazardType,
+        type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    }));
 
-    let hazardTypes = hazardTypesFromAction.map((hazardType, i) => {
-        if (hazardType.title.toUpperCase() === 'HEAVY RAINFALL') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'ENVIRONMENTAL POLLUTION') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'FIRE') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'EARTHQUAKE') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        if (hazardType.title.toUpperCase() === 'FLOOD') {
-            return {
-                ...hazardType,
-                type: hazardType.type === 'natural' ? 'natural' : 'artificial',
-            };
-        }
-        return null;
-    });
+    // commenting this code to fix hazard legend undefine issue
+    // let hazardTypes = hazardTypesFromAction.map((hazardType, i) => {
+    //     if (hazardType.title.toUpperCase() === 'HEAVY RAINFALL') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'ENVIRONMENTAL POLLUTION') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'FIRE') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'EARTHQUAKE') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     if (hazardType.title.toUpperCase() === 'FLOOD') {
+    //         return {
+    //             ...hazardType,
+    //             type: hazardType.type === 'natural' ? 'natural' : 'artificial',
+    //         };
+    //     }
+    //     return null;
+    // });
 
-    hazardTypes = hazardTypes.filter(hazardType => hazardType);
+    // hazardTypes = hazardTypes.filter(hazardType => hazardType);
 
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
@@ -979,6 +1124,19 @@ export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealT
     const newState = produce(state, (deferedState) => {
         /* eslint-disable no-param-reassign */
         deferedState.realTimeMonitoringPage.realTimeRainList = realTimeRainList;
+        /* eslint-enable no-param-reassign */
+    });
+
+    return newState;
+};
+export const setRealTimeDuration = (state: Type.PageState, action: Type.SetRealTimeDuration) => {
+    const {
+        duration,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.realTimeMonitoringPage.duration = duration;
         /* eslint-enable no-param-reassign */
     });
 
@@ -1442,11 +1600,489 @@ export const setProfileContactFilters = (
     return newState;
 };
 
+
+const setGeneralData = (state: Type.PageState, action: Type.SetGeneralData) => {
+    const { generalData } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.generalData = generalData;
+    });
+    return newState;
+};
+
+
+const setBudgetData = (state: Type.PageState, action: Type.SetBudgetData) => {
+    const { budgetData } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.budgetData = budgetData;
+    });
+    return newState;
+};
+
+const setBudgetActivityData = (state: Type.PageState, action: Type.SetBudgetActivityData) => {
+    const { budgetActivityData } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.budgetActivityData = budgetActivityData;
+    });
+    return newState;
+};
+// IBF
+const setIbfPage = (state: Type.PageState, action: Type.SetIbfPage) => {
+    const { ibfPage:
+        {
+            demo,
+            stations,
+            stationDetail,
+            selectedStation,
+            calendarData,
+            returnPeriod,
+            leadTime,
+            overallFloodHazard,
+            filter,
+            householdJson,
+            showHouseHold,
+            selectedIndicator,
+            householdDistrictAverage,
+            selectedLegend,
+        } } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (demo) {
+            deferedState.ibfPage.demo = demo;
+        }
+        if (demo === 0) {
+            deferedState.ibfPage.demo = demo;
+        }
+        if (stations) {
+            deferedState.ibfPage.stations = stations;
+        }
+        if (stationDetail) {
+            deferedState.ibfPage.stationDetail = stationDetail;
+        }
+        if (selectedStation) {
+            deferedState.ibfPage.selectedStation = selectedStation;
+        }
+        if (calendarData) {
+            deferedState.ibfPage.calendarData = calendarData;
+        }
+        if (returnPeriod) {
+            deferedState.ibfPage.returnPeriod = returnPeriod;
+        }
+        if (returnPeriod === 0) {
+            deferedState.ibfPage.returnPeriod = returnPeriod;
+        }
+        if (leadTime) {
+            deferedState.ibfPage.leadTime = leadTime;
+        }
+        if (leadTime === 0) {
+            deferedState.ibfPage.leadTime = leadTime;
+        }
+        if (overallFloodHazard) {
+            deferedState.ibfPage.overallFloodHazard = overallFloodHazard;
+        }
+        if (householdJson) {
+            deferedState.ibfPage.householdJson = householdJson;
+        }
+        if (showHouseHold) {
+            deferedState.ibfPage.showHouseHold = showHouseHold;
+        }
+        if (showHouseHold === 0) {
+            deferedState.ibfPage.showHouseHold = showHouseHold;
+        }
+        if (selectedIndicator) {
+            deferedState.ibfPage.selectedIndicator = selectedIndicator;
+        }
+        if (householdDistrictAverage) {
+            deferedState.ibfPage.householdDistrictAverage = householdDistrictAverage;
+        }
+        if (selectedLegend) {
+            deferedState.ibfPage.selectedLegend = selectedLegend;
+        }
+        if (selectedLegend === '') {
+            deferedState.ibfPage.selectedLegend = selectedLegend;
+        }
+        if (filter) {
+            if (filter.district) {
+                deferedState.ibfPage.filter.district = filter.district;
+            }
+            if (filter.district === '') {
+                deferedState.ibfPage.filter.district = filter.district;
+            }
+            if (filter.municipality) {
+                deferedState.ibfPage.filter.municipality = filter.municipality;
+            }
+            if (filter.municipality === '') {
+                deferedState.ibfPage.filter.municipality = filter.municipality;
+            }
+            if (filter.ward) {
+                deferedState.ibfPage.filter.ward = filter.ward;
+            }
+        }
+        /* eslint-disable no-param-reassign */
+    });
+    return newState;
+};
+
+const setProgramAndPolicyData = (state: Type.PageState, action: Type.SetProgramAndPolicyData) => {
+    const { programAndPolicyData } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.programAndPolicyData = programAndPolicyData;
+    });
+    return newState;
+};
+
+const setBudgetId = (state: Type.PageState, action: Type.SetBudgetId) => {
+    const { budgetId } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.budgetId = budgetId;
+    });
+    return newState;
+};
+
+const setPalikaRedirect = (state: Type.PageState, action: Type.SetPalikaRedirect) => {
+    const { palikaRedirect } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.palikaRedirect = palikaRedirect;
+    });
+    return newState;
+};
+
+const setPalikaLanguage = (state: Type.PageState, action: Type.SetPalikaLanguage) => {
+    const { language } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.palikaLanguage = language;
+    });
+    return newState;
+};
+
+const setDrrmOrg = (state: Type.PageState, action: Type.SetDrrmOrg) => {
+    const { drrmOrg } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmOrg = drrmOrg;
+    });
+    return newState;
+};
+
+const setDrrmContacts = (state: Type.PageState, action: Type.SetDrrmContacts) => {
+    const { drrmContacts } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmContacts = drrmContacts;
+    });
+    return newState;
+};
+
+const setDrrmInventory = (state: Type.PageState, action: Type.SetDrrmInventory) => {
+    const { drrmInventory } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmInventory = drrmInventory;
+    });
+    return newState;
+};
+
+const setDrrmCritical = (state: Type.PageState, action: Type.SetDrrmCritical) => {
+    const { drrmCritical } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmCritical = drrmCritical;
+    });
+    return newState;
+};
+
+const setDrrmRegion = (state: Type.PageState, action: Type.SetDrrmRegion) => {
+    const { drrmRegion } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmRegion = drrmRegion;
+    });
+    return newState;
+};
+
+const setDrrmProgress = (state: Type.PageState, action: Type.SetDrrmProgress) => {
+    const { drrmProgress } = action;
+    const newState = produce(state, (deferedState) => {
+        // eslint-disable-next-line no-param-reassign
+        deferedState.drrmProgress = drrmProgress;
+    });
+    return newState;
+};
+// bulletin data
+export const setBulletinLoss = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.incidentSummary = bulletinData.incidentSummary;
+        deferedState.bulletinPage.peopleLoss = bulletinData.peopleLoss;
+        deferedState.bulletinPage.hazardWiseLoss = bulletinData.hazardWiseLoss;
+        deferedState.bulletinPage.genderWiseLoss = bulletinData.genderWiseLoss;
+        deferedState.bulletinPage.sitRep = bulletinData.sitRep;
+    });
+
+    return newState;
+};
+
+export const setBulletinCovid = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.covid24hrsStat = bulletinData.covid24hrsStat;
+        deferedState.bulletinPage.covidProvinceWiseTotal = bulletinData.covidProvinceWiseTotal;
+        deferedState.bulletinPage.covidTotalStat = bulletinData.covidTotalStat;
+        deferedState.bulletinPage.vaccineStat = bulletinData.vaccineStat;
+    });
+
+    return newState;
+};
+
+
+export const setBulletinFeedback = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.feedback = bulletinData.feedback;
+    });
+
+    return newState;
+};
+
+export const setBulletinDataTemperature = (
+    state: Type.PageState,
+    action: Type.SetBulletinData,
+) => {
+    const {
+        bulletinData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinPage.tempMin = bulletinData.tempMin;
+        deferedState.bulletinPage.tempMax = bulletinData.tempMax;
+        deferedState.bulletinPage.dailySummary = bulletinData.dailySummary;
+    });
+
+    return newState;
+};
+
+export const setBulletinEditData = (
+    state: Type.PageState,
+    action: Type.SetBulletinEditData,
+) => {
+    const {
+        bulletinEditData,
+    } = action;
+
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        deferedState.bulletinEditData = bulletinEditData;
+    });
+
+    return newState;
+};
+
+
+// Epidemics
+const setEpidemicsPage = (state: Type.PageState, action: Type.SetEpidemicsPage) => {
+    const { epidemicsPage: {
+        lossID,
+        loader,
+        lossError,
+        incidentError,
+        lossPeopleError,
+        successMessage,
+        incidentData,
+        incidentEditData,
+        incidentUpdateError,
+        epidemicChartHourlyLoading,
+        epidemicChartHourlyData,
+        epidemicChartHourlyError,
+        epidemicChartDailyLoading,
+        epidemicChartDailyData,
+        epidemicChartDailyError,
+        epidemicChartWeeklyLoading,
+        epidemicChartWeeklyData,
+        epidemicChartWeeklyError,
+        epidemicChartYearlyLoading,
+        epidemicChartYearlyData,
+        epidemicChartYearlyError,
+        epidemicChartMonthlyLoading,
+        epidemicChartMonthlyData,
+        epidemicChartMonthlyError,
+        epidemicTableLoading,
+        epidemicTableData,
+        epidemicTableError,
+        epidemicTotalLoading,
+        epidemicTotalData,
+        epidemicTotalError,
+        incidentCount,
+    } } = action;
+    const newState = produce(state, (deferedState) => {
+        /* eslint-disable no-param-reassign */
+        if (lossID) {
+            deferedState.epidemicsPage.lossID = lossID;
+        }
+        if (loader) {
+            deferedState.epidemicsPage.loader = loader;
+        }
+        if (lossError) {
+            deferedState.epidemicsPage.lossError = lossError;
+        }
+        if (incidentError) {
+            deferedState.epidemicsPage.incidentError = incidentError;
+        }
+        if (lossPeopleError) {
+            deferedState.epidemicsPage.lossPeopleError = lossPeopleError;
+        }
+        if (successMessage) {
+            deferedState.epidemicsPage.successMessage = successMessage;
+        }
+        if (incidentData) {
+            deferedState.epidemicsPage.incidentData = incidentData;
+        }
+        if (incidentEditData) {
+            deferedState.epidemicsPage.incidentEditData = incidentEditData;
+        }
+        if (incidentUpdateError) {
+            deferedState.epidemicsPage.incidentUpdateError = incidentUpdateError;
+        }
+        if (epidemicChartHourlyLoading) {
+            deferedState.epidemicsPage.epidemicChartHourlyLoading = epidemicChartHourlyLoading;
+        }
+        if (epidemicChartHourlyData) {
+            deferedState.epidemicsPage.epidemicChartHourlyData = epidemicChartHourlyData;
+        }
+        if (epidemicChartHourlyError) {
+            deferedState.epidemicsPage.epidemicChartHourlyError = epidemicChartHourlyError;
+        }
+        if (epidemicChartDailyLoading) {
+            deferedState.epidemicsPage.epidemicChartDailyLoading = epidemicChartDailyLoading;
+        }
+        if (epidemicChartDailyData) {
+            deferedState.epidemicsPage.epidemicChartDailyData = epidemicChartDailyData;
+        }
+        if (epidemicChartDailyError) {
+            deferedState.epidemicsPage.epidemicChartDailyError = epidemicChartDailyError;
+        }
+        if (epidemicChartWeeklyLoading) {
+            deferedState.epidemicsPage.epidemicChartWeeklyLoading = epidemicChartWeeklyLoading;
+        }
+        if (epidemicChartWeeklyData) {
+            deferedState.epidemicsPage.epidemicChartWeeklyData = epidemicChartWeeklyData;
+        }
+        if (epidemicChartWeeklyError) {
+            deferedState.epidemicsPage.epidemicChartWeeklyError = epidemicChartWeeklyError;
+        }
+        if (epidemicChartYearlyLoading) {
+            deferedState.epidemicsPage.epidemicChartYearlyLoading = epidemicChartYearlyLoading;
+        }
+        if (epidemicChartYearlyData) {
+            deferedState.epidemicsPage.epidemicChartYearlyData = epidemicChartYearlyData;
+        }
+        if (epidemicChartYearlyError) {
+            deferedState.epidemicsPage.epidemicChartYearlyError = epidemicChartYearlyError;
+        }
+        if (epidemicChartMonthlyLoading) {
+            deferedState.epidemicsPage.epidemicChartMonthlyLoading = epidemicChartMonthlyLoading;
+        }
+        if (epidemicChartMonthlyData) {
+            deferedState.epidemicsPage.epidemicChartMonthlyData = epidemicChartMonthlyData;
+        }
+        if (epidemicChartMonthlyError) {
+            deferedState.epidemicsPage.epidemicChartMonthlyError = epidemicChartMonthlyError;
+        }
+        if (epidemicTableLoading) {
+            deferedState.epidemicsPage.epidemicTableLoading = epidemicTableLoading;
+        }
+        if (epidemicTableData) {
+            deferedState.epidemicsPage.epidemicTableData = epidemicTableData;
+        }
+        if (epidemicTableError) {
+            deferedState.epidemicsPage.epidemicTableError = epidemicTableError;
+        }
+        if (epidemicTotalLoading) {
+            deferedState.epidemicsPage.epidemicTotalLoading = epidemicTotalLoading;
+        }
+        if (epidemicTotalData) {
+            deferedState.epidemicsPage.epidemicTotalData = epidemicTotalData;
+        }
+        if (epidemicTotalError) {
+            deferedState.epidemicsPage.epidemicTotalError = epidemicTotalError;
+        }
+        if (incidentCount) {
+            deferedState.epidemicsPage.incidentCount = incidentCount;
+        }
+    });
+    return newState;
+};
+
 export default function routeReducer(
     state = initialState,
     action: Type.PageActionTypes,
 ): Type.PageState {
     switch (action.type) {
+        case Type.PageType.SET_DRRM_PROGRESS:
+            return setDrrmProgress(state, action);
+        case Type.PageType.SET_DRRM_REGION:
+            return setDrrmRegion(state, action);
+        case Type.PageType.SET_DRRM_CONTACTS:
+            return setDrrmContacts(state, action);
+        case Type.PageType.SET_DRRM_CRITICAL:
+            return setDrrmCritical(state, action);
+        case Type.PageType.SET_DRRM_INVENTORY:
+            return setDrrmInventory(state, action);
+        case Type.PageType.SET_DRRM_ORG:
+            return setDrrmOrg(state, action);
+        case Type.PageType.SET_PALIKA_LANGUAGE:
+            return setPalikaLanguage(state, action);
+        case Type.PageType.SET_BUDGET_ID:
+            return setBudgetId(state, action);
+        case Type.PageType.SET_PALIKA_REDIRECT:
+            return setPalikaRedirect(state, action);
+        case Type.PageType.SET_PROGRAM_AND_POLICY_DATA:
+            return setProgramAndPolicyData(state, action);
+        case Type.PageType.SET_BUDGET_ACTIVITY_DATA:
+            return setBudgetActivityData(state, action);
+        case Type.PageType.SET_BUDGET_DATA:
+            return setBudgetData(state, action);
+        case Type.PageType.SET_GENERAL_DATA:
+            return setGeneralData(state, action);
+        case Type.PageType.SET_IBF_PAGE:
+            return setIbfPage(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_EDIT_DATA:
+            return setBulletinEditData(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN:
+            return setBulletinLoss(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_COVID:
+            return setBulletinCovid(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_FEEDBACK:
+            return setBulletinFeedback(state, action);
+        case Type.PageType.ADMIN__PORTAL_BULLETIN_TEMPERATURE:
+            return setBulletinDataTemperature(state, action);
         case Type.PageType.SET_REGION:
             return setRegion(state, action);
         case Type.PageType.SET_INITIAL_POPUP_HIDDEN:
@@ -1483,6 +2119,10 @@ export default function routeReducer(
             return setFilters(state, action);
         case Type.PageType.RIC__SET_CAR_KEYS:
             return setCarKeys(state, action);
+        case Type.PageType.SET_LAYERS_LIST:
+            return setLayers(state, action);
+        case Type.PageType.SET_LAYERS_GROUP_LIST:
+            return SetLayerGroups(state, action);
         case Type.PageType.DP__SET_ALERTS:
             return setAlertList(state, action);
         case Type.PageType.DP__SET_FILTERS:
@@ -1505,6 +2145,8 @@ export default function routeReducer(
             return setInventoryItemListAction(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RAIN_LIST:
             return setRealTimeRainList(state, action);
+        case Type.PageType.RTM__SET_REAL_TIME_DURATION:
+            return setRealTimeDuration(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_RIVER_LIST:
             return setRealTimeRiverList(state, action);
         case Type.PageType.RTM__SET_REAL_TIME_EARTHQUAKE_LIST:
@@ -1561,6 +2203,8 @@ export default function routeReducer(
             return setAgricultureLossTypeList(state, action);
         case Type.PageType.SET_ENUM_OPTIONS:
             return setEnumOptions(state, action);
+        case Type.PageType.SET_EPIDEMICS_PAGE:
+            return setEpidemicsPage(state, action);
         default:
             return state;
     }

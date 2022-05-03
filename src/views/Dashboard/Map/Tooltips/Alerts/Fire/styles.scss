@@ -37,9 +37,20 @@
     .title {
       font-weight: bold;
       }
+
   }   
       .source {
         padding: var(--spacing-small) var(--spacing-medium-alt);
+      
+      .disclaimer {
+        font-size: 10px;
+        color: #716465;
+        .infoIcon{
+          color:red;
+          font-size: 13px;
+          padding-right: 3px;
+        }
+      }
 
       .title {
         font-weight: bold;

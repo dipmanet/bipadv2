@@ -77,7 +77,7 @@ type Props = OwnProps & PropsFromState & PropsFromDispatch;
 //             interface Response { results: PageTypes.HazardType[] }
 //             const { results } = response as Response;
 //             params.data(results);
-//             console.log('This is hazard>>>', results);
+//
 //         },
 //         extras: {
 //             schemaName: 'hazardResponse',

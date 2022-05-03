@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 import Page from '#components/Page';
 
 import LeftPane from './LeftPane';
@@ -8,8 +9,10 @@ import ActiveLayers from './ActiveLayers';
 import CapacityAndResourcesLegend from './LeftPane/Details/CapacityAndResources/Legend';
 import styles from './styles.scss';
 
+
 interface Props {
 }
+
 
 class RiskInfo extends React.PureComponent<Props> {
     public state = {
@@ -21,12 +24,15 @@ class RiskInfo extends React.PureComponent<Props> {
             health: false,
             finance: false,
             governance: false,
-            tourism: false,
+            hotelandrestaurant: false,
             cultural: false,
             industry: false,
             communication: false,
             openspace: false,
             communityspace: false,
+            fireengine: false,
+            helipad: false,
+            evacuationcentre: false,
         },
     }
 
@@ -53,6 +59,7 @@ class RiskInfo extends React.PureComponent<Props> {
             resourceIdForLegend,
             droneImagePending,
         } = this.state;
+
 
         return (
             <>

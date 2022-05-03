@@ -138,6 +138,7 @@ const orderedKeys = {
         organizationName: '',
         positionName: '',
         role: '',
+        email: '',
     },
     geographicExtent: {
         geographicExtentEast: '',
