@@ -59,11 +59,10 @@ padding: 10mm;
     display: flex;
     position: absolute;
     top: 105mm;
-    // border: 1px solid red;
     .covid24{
         padding: 5mm 0;
         width: 87mm;
-        // border: 1px solid red;
+        height: fit-content;
         h2{
             color: rgb(15, 11, 11);
             margin-bottom: 20px;
@@ -74,7 +73,6 @@ padding: 10mm;
             font-size: 11px;
         }
         .lossIconsRow{
-            
             display: flex;
             justify-content: space-between;
             li{
@@ -87,9 +85,11 @@ padding: 10mm;
             position: relative;
             bottom: 18px;
             left: 5px;
+            display: none;
         }
         .genderRow{
             display: flex;
+            display: none;
             justify-content: space-between;
             padding-top: 15px;
             margin-top: 15px;
@@ -104,6 +104,8 @@ padding: 10mm;
             }
         }
         .khopContainer{
+            display: none;
+
             h2{
                 color: rgb(15, 11, 11);
                 font-size: 14px;
@@ -139,50 +141,49 @@ padding: 10mm;
             li{
                 font-size: 14px !important;
             }
-        }
-       
-        .provinceWiseTotal{
-            display: flex;
-            flex-direction: column !important;
-            height: 85mm;
-            width: 100mm;
-            position: relative;
-            right: 5mm;
-          
-            h2{
-                left: 10mm;
-                margin-top: 10mm;
-                position: relative;
-                font-size: 14px;
-                color: rgb(15, 11, 11);
-
-            }
-        }
-        .provTable{
-            border-collapse: collapse;
-            position: relative;
-            right: 50mm;
-            top: 2mm;
-            td,th{
-                white-space: nowrap;
-                text-align: center;
-                border: 1px solid rgb(190, 188, 188);
-                padding: 4px;
-                font-size: 10px;
-            }
-    
-            tr:first-child th:first-child{
-                border: none;
-            }
-            td:first-child{
-                display: flex;
-                align-items: center;
-               text-align: left;
-            }
-            
-        }
-      
+        }   
     }
+}
+.provinceWiseTotal{
+    display: flex;
+    flex-direction: column !important;
+    height: 85mm;
+    width: 200mm;
+    position: absolute;
+    left: 5mm;
+    bottom: 50mm;
+    h2{
+        left: 10mm;
+        margin-top: 10mm;
+        position: relative;
+        font-size: 14px;
+        color: rgb(15, 11, 11);
+
+    }
+}
+.provTable{
+    border-collapse: collapse;
+    position: absolute;
+    left: 15mm;
+    width: 180mm;
+    bottom: 22mm;
+    td,th{
+        white-space: nowrap;
+        text-align: center;
+        border: 1px solid rgb(190, 188, 188);
+        padding: 4px;
+        font-size: 10px;
+    }
+
+    tr:first-child th:first-child{
+        border: none;
+    }
+    td:first-child{
+        display: flex;
+        align-items: center;
+       text-align: left;
+    }
+    
 }
 }
 

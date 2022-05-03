@@ -465,110 +465,111 @@ const BulletinPDFLoss = (props: Props) => {
                             ))
                         }
                     </div>
-                    <div className={styles.provinceWiseTotal}>
-                        <h2>
-                            <Translation>
-                                {
-                                    t => <span>{t('Province-wise death, missing and injured')}</span>
-                                }
-                            </Translation>
 
-                        </h2>
-                        <ResponsiveContainer width="90%" height="100%">
-                            <BarChart
-                                layout="vertical"
-                                data={provinceWiseTotal}
-                                margin={{
-                                    top: 20,
-                                    right: 10,
-                                    left: 20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                <XAxis
-                                    type="number"
-                                    // tickFormatter={tick => tick.toLocaleString()}
-                                    tickFormatter={e => DataFormater(e, language)}
-                                    tick={{ fontSize: 10, width: 250 }}
-                                    // unit={'लाख'}
-                                />
-                                <YAxis
-                                    type="category"
-                                    dataKey="province"
-                                    tick={{ fontSize: 11, width: 250 }}
-                                />
-
-                                {/* <Tooltip /> */}
-                                <Bar
-                                    stackId={'a'}
-                                    dataKey={
-                                        language === 'np' ? 'कुल संक्रमित संन्ख्या' : 'Total Affected'}
-                                    fill="#A6B2DE"
-                                    barSize={12}
-                                />
-                                <Bar
-                                    stackId={'a'}
-                                    dataKey={language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active'}
-                                    fill="#3F69C8"
-                                    barSize={12}
-                                />
-                                <Bar
-
-                                    stackId={'a'}
-                                    dataKey={language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths'}
-                                    fill="#3457A6"
-                                    barSize={12}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div>
-                        <table className={styles.provTable}>
-                            <thead>
-                                <tr>
-                                    <th>{' '}</th>
-                                    {
-                                        provinceWiseTotal.map(pwT => (
-                                            <th key={pwT.province}>
-                                                {pwT.province}
-                                            </th>
-                                        ))
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    Object.keys(covidProvinceWiseTotal.p1).map((pwT, i) => (
-                                        <tr>
-                                            <Translation>
-                                                {
-                                                    t => (
-                                                        <td>
-                                                            {bullets[i]}
-                                                            {t(`${pwT}`)}
-                                                        </td>
-                                                    )
-                                                }
-                                            </Translation>
-
-                                            {
-                                                Object.keys(covidProvinceWiseTotal)
-                                                    .map(prov => (
-                                                        <td key={prov}>
-                                                            {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
-                                                        </td>
-                                                    ))
-
-                                            }
-
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
+            </div>
+            <div className={styles.provinceWiseTotal}>
+                <h2>
+                    <Translation>
+                        {
+                            t => <span>{t('Province-wise death, missing and injured')}</span>
+                        }
+                    </Translation>
+
+                </h2>
+                <ResponsiveContainer width="90%" height="100%">
+                    <BarChart
+                        layout="vertical"
+                        data={provinceWiseTotal}
+                        margin={{
+                            top: 20,
+                            right: 10,
+                            left: 20,
+                            bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                        <XAxis
+                            type="number"
+                            // tickFormatter={tick => tick.toLocaleString()}
+                            tickFormatter={e => DataFormater(e, language)}
+                            tick={{ fontSize: 10, width: 250 }}
+                                    // unit={'लाख'}
+                        />
+                        <YAxis
+                            type="category"
+                            dataKey="province"
+                            tick={{ fontSize: 11, width: 250 }}
+                        />
+
+                        {/* <Tooltip /> */}
+                        <Bar
+                            stackId={'a'}
+                            dataKey={
+                                language === 'np' ? 'कुल संक्रमित संन्ख्या' : 'Total Affected'}
+                            fill="#A6B2DE"
+                            barSize={12}
+                        />
+                        <Bar
+                            stackId={'a'}
+                            dataKey={language === 'np' ? 'कुल सक्रिय संक्रमित संन्ख्या' : 'Total Active'}
+                            fill="#3F69C8"
+                            barSize={12}
+                        />
+                        <Bar
+
+                            stackId={'a'}
+                            dataKey={language === 'np' ? 'कुल मृत्‍यु संन्ख्या' : 'Total Deaths'}
+                            fill="#3457A6"
+                            barSize={12}
+                        />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+            <div>
+                <table className={styles.provTable}>
+                    <thead>
+                        <tr>
+                            <th>{' '}</th>
+                            {
+                                provinceWiseTotal.map(pwT => (
+                                    <th key={pwT.province}>
+                                        {pwT.province}
+                                    </th>
+                                ))
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            Object.keys(covidProvinceWiseTotal.p1).map((pwT, i) => (
+                                <tr>
+                                    <Translation>
+                                        {
+                                            t => (
+                                                <td>
+                                                    {bullets[i]}
+                                                    {t(`${pwT}`)}
+                                                </td>
+                                            )
+                                        }
+                                    </Translation>
+
+                                    {
+                                        Object.keys(covidProvinceWiseTotal)
+                                            .map(prov => (
+                                                <td key={prov}>
+                                                    {Number(covidProvinceWiseTotal[prov][pwT]).toLocaleString()}
+                                                </td>
+                                            ))
+
+                                    }
+
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     );

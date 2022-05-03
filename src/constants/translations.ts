@@ -59,7 +59,7 @@ export const enTranslation = {
         injured: 'Injured',
         'Province-wise death, missing and injured': 'Province-wise death, missing and injured',
         'Hazard-wise breakdown of incidents (last 24 hours)': 'Hazard-wise breakdown of incidents (last 24 hours) in map',
-        'Disaster Hilights': 'Disaster Hilights',
+        'Disaster Hilights': 'Disaster Highlights',
         'Nepal Government': 'Nepal Government',
         'Ministry of Home Affairs': 'Ministry of Home Affairs',
         ndrrma: 'National Disaster Risk Reduction and Management Authority',
