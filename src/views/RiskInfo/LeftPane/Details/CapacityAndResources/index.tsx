@@ -1,3 +1,4 @@
+/* eslint-disable space-infix-ops */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-self-assign */
 /* eslint-disable no-return-assign */
@@ -2740,7 +2741,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                     />
                     {Object.values(activeLayersIndication).some(Boolean) && (
                         <>
-                            <MapShapeEditor
+                            {/* <MapShapeEditor
                                 geoJsons={selectedFeatures}
                                 onCreate={this.handlePolygonCreate}
                                 onUpdate={this.handlePolygonUpdate}
@@ -2752,7 +2753,7 @@ class CapacityAndResources extends React.PureComponent<Props, State> {
                                         trash: true,
                                     },
                                 }}
-                            />
+                            /> */}
 
                             {/* Education */}
                             {activeLayersIndication.education && (

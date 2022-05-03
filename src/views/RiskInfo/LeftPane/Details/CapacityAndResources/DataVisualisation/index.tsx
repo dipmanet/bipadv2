@@ -874,7 +874,7 @@ const visualizationKeyValues = [
             {
                 label: 'Motorable Bridge ',
                 key: ['isMotorable'],
-                values: ['Motorable Bridge '],
+                values: ['Motorable Bridge'],
                 isBoolean: true,
                 showFalseValue: false,
                 visualizationKey: 'total',
@@ -885,7 +885,7 @@ const visualizationKeyValues = [
             {
                 label: 'Condition of the Bridge',
                 key: 'condition',
-                values: ['Good ', 'Bad'],
+                values: ['Good', 'Bad'],
                 isBoolean: false,
                 showFalseValue: false,
                 visualizationKey: 'highestValue',
