@@ -148,6 +148,7 @@ const Ratnanagar = (props: any) => {
 									leftElement < 11 && (
 										<>
 											<Map
+												municipalityId={municipalityId}
 												leftElement={leftElement}
 												CIData={geoJsonCI}
 												clickedCiName={clickedCiName}

@@ -7,6 +7,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 import styles from './styles.scss';
 import Education from '#resources/icons/Educationcopy.png';
 import Finance from '#resources/icons/bank.png';
@@ -18,15 +19,25 @@ import Heli from '#resources/icons/Heli.png';
 import { getGeoJSONPH } from '#views/VizRisk/Butwal/utils';
 import PopupOnMapClick from '../Components/PopupOnMapClick';
 import RangeStatusLegend from '../Components/Legends/RangeStatusLegend';
+import mapSources from '#constants/mapSources';
+import { wardsSelector } from '#selectors';
+import { AppState } from '#types';
+import { getWardFilter } from '#utils/domain';
+import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
+import { demographicsData, ratnaNagarVizriskCoordinates } from '../dummy';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
 	mapboxgl.accessToken = TOKEN;
 }
+const mapStateToProps = (state: AppState) => ({
+	wards: wardsSelector(state),
+});
 
 let clickedId: string | number | undefined;
+let hoveredWardId: number | string | undefined;
 const Map = (props: any) => {
-	const { CIData, leftElement, ciNameList, setciNameList, clickedCiName, unClickedCIName } = props;
+	const { municipalityId, CIData, leftElement, ciNameList, setciNameList, clickedCiName, unClickedCIName, wards } = props;
 
 	const map = useRef<mapboxgl.Map | null>(null);
 	const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -66,67 +77,6 @@ const Map = (props: any) => {
 
 	];
 
-	const ratnaNagarVizriskCoordinates = [
-		{
-			id: 1,
-			geometry: { type: 'Point', coordinates: [84.49574, 27.61634] },
-			properties: {
-				name: 'dummy a',
-				color: 'red',
-			},
-		},
-		{
-			id: 2,
-			geometry: { type: 'Point', coordinates: [84.49735, 27.61905] },
-			properties: {
-				name: 'dummy b',
-				color: 'blue',
-
-			},
-		},
-		{
-			id: 3,
-			geometry: { type: 'Point', coordinates: [84.50101, 27.62052] },
-			properties: {
-				name: 'dummy c',
-				color: 'pink',
-
-			},
-		},
-		{
-			id: 4,
-			geometry: { type: 'Point', coordinates: [84.50503, 27.61976] },
-			properties: {
-				name: 'dummy d',
-				color: 'orange',
-			},
-		},
-		{
-			id: 5,
-			geometry: { type: 'Point', coordinates: [84.5050, 27.619] },
-			properties: {
-				name: 'dummy d',
-				color: 'orange',
-			},
-		},
-		{
-			id: 6,
-			geometry: { type: 'Point', coordinates: [84.505, 27.6155] },
-			properties: {
-				name: 'dummy d',
-				color: 'orange',
-			},
-		},
-		{
-			id: 7,
-			geometry: { type: 'Point', coordinates: [84.5, 27.5] },
-			properties: {
-				name: 'dummy d',
-				color: 'orange',
-			},
-		},
-	];
-
 	const dummyGeojson = {
 		type: 'FeatureCollection',
 		features: ratnaNagarVizriskCoordinates.map(item => ({
@@ -136,6 +86,80 @@ const Map = (props: any) => {
 			properties: item.properties,
 		})),
 	};
+
+	const populationStepColor = ['#ffffd6', '#fed990', '#fe9b2a', '#d95f0e', '#9a3404'];
+
+	const totalPopulationByWard = demographicsData.map(item => ({ ward: item.name, totalpop: item.MalePop + item.FemalePop }));
+	const arrayValue = totalPopulationByWard.map(item => item.totalpop);
+	const maxPop = Math.max(...arrayValue);
+	const minPop = Math.min(...arrayValue);
+	const popStep = Math.floor((maxPop - minPop) / 5);
+	const mainArray = Array.from({ length: arrayValue.length }, (v, i) => i + 1);
+	const divider = Math.ceil(arrayValue.length / 5);
+	arrayValue.sort((a, b) => a - b);
+	const dividedSpecificData = new Array(Math.ceil(arrayValue.length / divider))
+		.fill()
+		.map(_ => arrayValue.splice(0, divider));
+	const intervals: number[] = [];
+	const nonEmptyData = dividedSpecificData.filter(r => r.length > 0);
+	nonEmptyData.map(d => intervals.push(Math.max(...d) === 0
+		? Math.max(...d) + 1 : Math.max(...d)));
+
+
+	const getColor = (wardId: string | number) => {
+		const colorCondition1 = totalPopulationByWard.filter(item => item.totalpop <= intervals[0]);
+		const colorCondition2 = totalPopulationByWard.filter(item => item.totalpop >= intervals[0] && item.totalpop <= intervals[1]);
+		const colorCondition3 = totalPopulationByWard.filter(item => item.totalpop >= intervals[1] && item.totalpop <= intervals[2]);
+		const colorCondition4 = totalPopulationByWard.filter(item => item.totalpop >= intervals[2] && item.totalpop <= intervals[3]);
+		const colorCondition5 = totalPopulationByWard.filter(item => item.totalpop >= intervals[3]);
+
+		const filteredWards1 = colorCondition1.map(item => item.ward);
+		const filteredWards2 = colorCondition2.map(item => item.ward);
+		const filteredWards3 = colorCondition3.map(item => item.ward);
+		const filteredWards4 = colorCondition4.map(item => item.ward);
+		const filteredWards5 = colorCondition5.map(item => item.ward);
+		if (filteredWards1.includes(`Ward ${wardId}`)) {
+			return populationStepColor[0];
+		} if (filteredWards2.includes(`Ward ${wardId}`)) {
+			return populationStepColor[1];
+		} if (filteredWards3.includes(`Ward ${wardId}`)) {
+			return populationStepColor[2];
+		} if (filteredWards4.includes(`Ward ${wardId}`)) {
+			return populationStepColor[3];
+		} if (filteredWards5.includes(`Ward ${wardId}`)) {
+			return populationStepColor[4];
+		}
+		return null;
+	};
+
+
+	const fillPaint = () => {
+		const colorArray = mainArray.map(item => [item, getColor(item)]);
+
+
+		const saveArray = [];
+
+		for (let i = 0; i < colorArray.length; i += 1) {
+			const newArray = [...colorArray[i]];
+			saveArray.push(...newArray);
+		}
+		return {
+			'fill-color': [
+				'interpolate',
+				['linear'],
+				['feature-state', 'value'],
+				...saveArray,
+			],
+			'fill-opacity':
+				[
+					'case',
+					['boolean', ['feature-state', 'hover'], false],
+					1,
+					1,
+				],
+		};
+	};
+
 	useEffect(() => {
 		const { current: mapContainer } = mapContainerRef;
 		if (!mapContainer) {
@@ -143,6 +167,11 @@ const Map = (props: any) => {
 			return noop;
 		}
 		// if (map.current) { return noop; }
+
+		const mapping = wards.filter(item => item.municipality === municipalityId).map(item => ({
+			...item,
+			value: Number(item.title),
+		}));
 
 		const multihazardMap = new mapboxgl.Map({
 			container: mapContainer,
@@ -175,9 +204,11 @@ const Map = (props: any) => {
 				if (map.current) {
 					map.current.loadImage(
 						img.url,
-						(error, image) => {
+						(error: any, image: any) => {
 							if (error) throw error;
-							map.current.addImage(img.name, image);
+							if (map.current) {
+								map.current.addImage(img.name, image);
+							}
 						},
 					);
 				}
@@ -219,6 +250,7 @@ const Map = (props: any) => {
 						],
 					},
 				});
+
 				multihazardMap.addLayer({
 					id: `clusters-count-${layer}`,
 					type: 'symbol',
@@ -278,14 +310,94 @@ const Map = (props: any) => {
 				return null;
 			});
 
+			// -----------------------------DEMOFRAPHICS LAYER-----------------------------
+			multihazardMap.addSource('vizrisk-fills', {
+				type: 'vector',
+				url: mapSources.nepal.url,
+			});
+
+			multihazardMap.addLayer({
+				id: 'ward-fill-local',
+				source: 'vizrisk-fills',
+				'source-layer': mapSources.nepal.layers.ward,
+				type: 'fill',
+
+				paint: fillPaint(),
+				layout: {
+					visibility: 'none',
+
+				},
+				filter: getWardFilter(3, 35, municipalityId, wards),
+			}, 'wardgeo');
+			mapping.forEach((attribute) => {
+				multihazardMap.setFeatureState(
+					{
+						id: attribute.id,
+						source: 'vizrisk-fills',
+						sourceLayer: mapSources.nepal.layers.ward,
+					},
+					{ value: attribute.value },
+				);
+			});
+			multihazardMap.on('mousemove', 'ward-fill-local', (e) => {
+				if (e.features && e.features.length > 0) {
+					multihazardMap.getCanvas().style.cursor = 'pointer';
+					const { lngLat } = e;
+
+					const coordinates: [number, number] = [lngLat.lng, lngLat.lat];
+					const wardno = e.features[0].properties && e.features[0].properties.title;
+					const details = demographicsData.filter(item => item.name === `Ward ${wardno}`);
+					const totalPop = details[0].MalePop + details[0].FemalePop;
+					popup.setLngLat(coordinates).setHTML(
+						`<div style="padding: 5px;border-radius: 5px">
+                            <p>${details[0].name} Total Population: ${parseStringToNumber(totalPop)}</p>
+                        </div>
+                        `,
+					).addTo(multihazardMap);
+					if (hoveredWardId) {
+						multihazardMap.setFeatureState(
+							{
+								id: hoveredWardId,
+								source: 'vizrisk-fills',
+								sourceLayer: mapSources.nepal.layers.ward,
+							},
+							{ hover: false },
+						);
+					}
+					hoveredWardId = e.features[0].id;
+					multihazardMap.setFeatureState(
+						{
+							id: hoveredWardId,
+							source: 'vizrisk-fills',
+							sourceLayer: mapSources.nepal.layers.ward,
+
+						},
+						{ hover: true },
+					);
+				}
+			});
+			multihazardMap.on('mouseleave', 'ward-fill-local', () => {
+				multihazardMap.getCanvas().style.cursor = '';
+				popup.remove();
+				if (hoveredWardId) {
+					multihazardMap.setFeatureState(
+						{
+							source: 'vizrisk-fills',
+							id: hoveredWardId,
+							sourceLayer: mapSources.nepal.layers.ward,
+						},
+						{ hover: false },
+
+					);
+				}
+				hoveredWardId = undefined;
+			});
+
 			// Hazard ,exposure dummy data
 
 			multihazardMap.addSource('exposure', {
 				type: 'geojson',
 				data: dummyGeojson,
-				// cluster: true,
-				// clusterMaxZoom: 14,
-				// clusterRadius: 50,
 			});
 
 			multihazardMap.addLayer({
@@ -391,6 +503,12 @@ const Map = (props: any) => {
 
 	useEffect(() => {
 		if (map.current && map.current.isStyleLoaded()) {
+			if (leftElement === 2) {
+				if (!map.current) return;
+				map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
+			} else {
+				map.current.setLayoutProperty('ward-fill-local', 'visibility', 'none');
+			}
 			if (leftElement === 3) {
 				clickedCiName.map((layerName: string) => {
 					if (map.current) {
@@ -452,4 +570,4 @@ const Map = (props: any) => {
 	);
 };
 
-export default Map;
+export default connect(mapStateToProps)(Map);

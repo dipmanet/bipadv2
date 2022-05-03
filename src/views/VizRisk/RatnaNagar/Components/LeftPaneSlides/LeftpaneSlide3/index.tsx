@@ -31,52 +31,60 @@ const LeftpaneSlide3 = (props: Props) => {
 	const totalCI = mainCIData.map(item => item.count).reduce((a, b) => a + b);
 
 	const calculateBubbleWidthHeight = (itemCounts: number, totalCounts: number) => {
-		if (itemCounts <= 25) {
-			const height = itemCounts + 50;
-			return height;
+		let height;
+		switch (true) {
+			case itemCounts <= 25: {
+				height = itemCounts + 75;
+				return height;
+			}
+			case itemCounts > 25 && itemCounts <= 50: {
+				height = itemCounts + 85;
+				return height;
+			}
+			case itemCounts > 50 && itemCounts <= 75: {
+				height = itemCounts + 90;
+				return height;
+			}
+			case itemCounts > 75 && itemCounts <= 100: {
+				height = itemCounts + 95;
+				return height;
+			}
+			case itemCounts > 100 && itemCounts <= 150: {
+				height = itemCounts + 90;
+				return height;
+			}
+			default:
+				return (itemCounts / totalCounts) * 1000 + 25;
 		}
-		if (itemCounts > 25 && itemCounts <= 50) {
-			const height = itemCounts + 55;
-			return height;
-		}
-		if (itemCounts > 50 && itemCounts <= 75) {
-			const height = itemCounts + 60;
-			return height;
-		}
-		if (itemCounts > 75 && itemCounts <= 100) {
-			const height = itemCounts + 65;
-			return height;
-		}
-		if (itemCounts > 100 && itemCounts <= 150) {
-			const height = itemCounts + 70;
-			return height;
-		}
-		return (itemCounts / totalCounts) * 1000 + 25;
 	};
 
 
 	const calculateFontSize = (itemCounts: number, totalCounts: number) => {
-		if (itemCounts <= 10) {
-			const fontsize = (itemCounts / totalCounts) * 20 + 5;
-			return fontsize;
+		let fontsize;
+		switch (true) {
+			case (itemCounts <= 10): {
+				fontsize = (itemCounts / totalCounts) * 20 + 8;
+				return fontsize;
+			}
+			case (itemCounts > 25 && itemCounts <= 50): {
+				fontsize = (itemCounts / totalCounts) * 20 + 5;
+				return fontsize;
+			}
+			case (itemCounts > 50 && itemCounts <= 75): {
+				fontsize = (itemCounts / totalCounts) * 20 + 5;
+				return fontsize;
+			}
+			case (itemCounts > 75 && itemCounts <= 100): {
+				fontsize = (itemCounts / totalCounts) * 20 + 5;
+				return fontsize;
+			}
+			case (itemCounts > 100 && itemCounts <= 150): {
+				fontsize = (itemCounts / totalCounts) * 20 + 5;
+				return fontsize;
+			}
+			default:
+				return (itemCounts / totalCounts) * 50 + 10;
 		}
-		if (itemCounts > 25 && itemCounts <= 50) {
-			const fontsize = (itemCounts / totalCounts) * 20 + 5;
-			return fontsize;
-		}
-		if (itemCounts > 50 && itemCounts <= 75) {
-			const fontsize = (itemCounts / totalCounts) * 20 + 5;
-			return fontsize;
-		}
-		if (itemCounts > 75 && itemCounts <= 100) {
-			const fontsize = (itemCounts / totalCounts) * 20 + 5;
-			return fontsize;
-		}
-		if (itemCounts > 100 && itemCounts <= 150) {
-			const fontsize = (itemCounts / totalCounts) * 20 + 5;
-			return fontsize;
-		}
-		return (itemCounts / totalCounts) * 50 + 10;
 	};
 
 	return (
@@ -145,7 +153,7 @@ const LeftpaneSlide3 = (props: Props) => {
 											<img
 												style={{
 													height:
-														`${calculateBubbleWidthHeight(item.count, totalCI) - item.count * 1.25}%`,
+														`${(item.count / totalCI) + 25}%`,
 												}}
 												className={styles.tickIcon}
 												src={Tick}
