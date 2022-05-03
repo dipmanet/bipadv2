@@ -472,7 +472,7 @@ const BulletinPDFAnnex = (props) => {
 
                     </table>
                 </div>
-                <div className={styles.annexTable}>
+                {/* <div className={styles.annexTable}>
                     <Translation>
                         {
                             t => <h3>{t('Vaccine Stats')}</h3>
@@ -503,7 +503,7 @@ const BulletinPDFAnnex = (props) => {
                         </tbody>
 
                     </table>
-                </div>
+                </div> */}
             </div>
             <Translation>
                 {

@@ -113,7 +113,7 @@ const Bulletin = (props: Props) => {
                         </div>
                     ))}
                 </div>
-                <Translation>
+                {/* <Translation>
                     {
                         t => <h3>{t('Vaccine Stats')}</h3>
                     }
@@ -143,7 +143,7 @@ const Bulletin = (props: Props) => {
                             </FormControl>
                         </div>
                     ))}
-                </div>
+                </div> */}
                 <Translation>
                     {
                         t => <h3>{t('Provincewise stats till date')}</h3>

@@ -78,8 +78,8 @@ export const genderWiseLoss = {
 
 export const covid24hrsStat = {
     affected: 0,
-    femaleAffected: 0,
-    maleAffected: 0,
+    // femaleAffected: 0,
+    // maleAffected: 0,
     deaths: 0,
     recovered: 0,
 };
