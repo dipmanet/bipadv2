@@ -1129,7 +1129,7 @@ export const setRealTimeRainList = (state: Type.PageState, action: Type.SetRealT
 
     return newState;
 };
-export const setRealTimeDuration = (state: Type.PageState, action: Type.SetRealTimeeDuration) => {
+export const setRealTimeDuration = (state: Type.PageState, action: Type.SetRealTimeDuration) => {
     const {
         duration,
     } = action;
@@ -1753,10 +1753,10 @@ const setPalikaRedirect = (state: Type.PageState, action: Type.SetPalikaRedirect
 };
 
 const setPalikaLanguage = (state: Type.PageState, action: Type.SetPalikaLanguage) => {
-    const { palikaLanguage } = action;
+    const { language } = action;
     const newState = produce(state, (deferedState) => {
         // eslint-disable-next-line no-param-reassign
-        deferedState.palikaLanguage = palikaLanguage;
+        deferedState.palikaLanguage = language;
     });
     return newState;
 };
