@@ -190,6 +190,7 @@
         "mapbox-gl": "^1.6.0",
         "mapbox-gl-draw-rectangle-mode": "^1.0.4",
         "memoize-one": "^5.0.5",
+        "mongodb": "^4.5.0",
         "node-sass": "4.14.1",
         "pbf": "^3.2.1",
         "prop-types": "^15.7.2",
