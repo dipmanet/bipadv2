@@ -279,6 +279,9 @@ const Bulletin = (props: Props) => {
     covidQuarantine.setDefaultParams({ setCovidQurantine });
     sitRepQuery.setDefaultParams({ setSitRep });
 
+    const resetFeedback = () => {
+        setBulletinFeedback({ feedback: {} });
+    };
 
     useEffect(() => {
         let today; let
@@ -305,6 +308,7 @@ const Bulletin = (props: Props) => {
             const ordering = '-incident_on';
 
             const test = selectDateForQuery(selectedDate);
+            resetFeedback();
 
             incidentsGetRequest.do({
                 expand,
@@ -449,10 +453,6 @@ const Bulletin = (props: Props) => {
         setBulletinFeedback({ feedback: Object.assign({}, feedback, { [field]: newObj }) });
     };
 
-
-    const resetFeedback = () => {
-        setBulletinFeedback({ feedback: {} });
-    };
 
     const handlehazardAdd = (hazard) => {
         const newData = { ...addedHazardFields };
