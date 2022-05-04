@@ -53,7 +53,6 @@ const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
     setBulletinEditData: params => dispatch(setBulletinEditDataAction(params)),
 });
 
-
 interface Props {
     handleIncidentChange: (e: Record<string, undefined>) => void;
     handlePeopleLossChange: (e: Record<string, undefined>) => void;
@@ -137,7 +136,6 @@ const Bulletin = (props: Props) => {
         handleSameHazardChange({ district, coordinates }, field, 'location');
     };
 
-
     const handleCheckFilterDisableButtonForProvince = (province) => {
         if (province) {
             setFiltered(false);
@@ -183,7 +181,7 @@ const Bulletin = (props: Props) => {
             const selectedDate = new Date(dateAlt);
             recordSelectedDate(selectedDate);
             handleBulletinDate(dateAlt);
-
+            // update the covid API
             // if there is date in redux dont update
         } else {
             let today;
@@ -205,12 +203,6 @@ const Bulletin = (props: Props) => {
         }
     }, [dateAlt, bulletinEditData]);
 
-    // useEffect(() => {
-    //     console.log('running..');
-    //     return () => {
-    //         setBulletinEditData({});
-    //     };
-    // }, []);
 
     return (
         <>

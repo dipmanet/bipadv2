@@ -37,10 +37,6 @@ const Bulletin = (props: Props) => {
         language: { language },
     } = props;
 
-    useEffect(() => {
-        console.log('covidProvinceWiseTotal', covidProvinceWiseTotal, 'covidProvinceWiseData', covidProvinceWiseData);
-    }, [covidProvinceWiseData]);
-
     return (
         <>
             <div className={styles.formContainer}>

@@ -372,6 +372,11 @@ const Bulletin = (props: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bulletinEditData]);
 
+    useEffect(() => {
+        if (dateAlt) {
+            covidNationalInfo.do();
+        }
+    }, [dateAlt]);
 
     const handleSitRep = (num) => {
         setSitRep(num);
@@ -864,6 +869,7 @@ const Bulletin = (props: Props) => {
             handleCovid24hrStat={handleCovid24hrStat}
             handleVaccineStat={handleVaccineStat}
             handleprovincewiseTotal={handleprovincewiseTotal}
+            dateAlt={dateAlt}
         />,
         <Response
             handleFeedbackChange={handleFeedbackChange}
