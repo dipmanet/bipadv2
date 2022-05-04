@@ -30,7 +30,7 @@ const pastDateRangeOptions = [
     },
     {
         label: '2 weeks',
-        labelNe: '2 हप्ता',
+        labelNe: '2 हप्‍ता',
         key: 14,
     },
     {
@@ -133,6 +133,8 @@ class PastDateRangeInput extends React.PureComponent<Props> {
             value,
             onChange,
         } = this.props;
+        console.log(newStartDate, 'date test start');
+
 
         onChange({
             rangeInDays: 'custom',
@@ -146,6 +148,7 @@ class PastDateRangeInput extends React.PureComponent<Props> {
             value,
             onChange,
         } = this.props;
+        console.log(newEndDate, 'date test end');
 
         onChange({
             rangeInDays: 'custom',

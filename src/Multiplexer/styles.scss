@@ -311,6 +311,9 @@ button {
 }
 
 :global {
+    .nepaliDate{
+        opacity:0
+    }
     .mapboxgl-ctrl-top-left {
         top: 36px !important;
     }
