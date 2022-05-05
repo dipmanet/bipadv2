@@ -1,5 +1,6 @@
 export const enTranslation = {
     translation: {
+        'There are no incidents at the moment.': 'There are no incidents at the moment.',
         'Metropolitan City': 'Metropolitan City',
         'Submetropolitan City': 'Submetropolitan City',
         'Rural Municipality': 'Rural Municipality',
@@ -693,6 +694,7 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'There are no incidents at the moment.': 'अहिले कुनै घटना छैन।',
         'Metropolitan City': 'महानगरपालिका',
         'Submetropolitan City': 'उप-महानगरपालिका',
         'Rural Municipality': 'गाउँपालिका',
