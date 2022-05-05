@@ -1,5 +1,9 @@
 export const enTranslation = {
     translation: {
+        'People Dead': 'People Dead',
+        'Livestock Destroyed': 'Livestock Destroyed',
+        'Infrastructures Destroyed': 'Infrastructures Destroyed',
+        'Estimated Loss (NRs.)': 'Estimated Loss (NRs.)',
         Yes: 'Yes',
         No: 'No',
         Loss: 'Loss',
@@ -704,6 +708,10 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'People Dead': 'मान्‍छे मृत्‍यु संख्‍या',
+        'Livestock Destroyed': 'पशुधन नष्ट संख्‍या',
+        'Infrastructures Destroyed': 'पूर्वाधार ध्वस्त संख्‍या',
+        'Estimated Loss (NRs.)': 'अनुमानित क्षति (रु.)',
         Yes: 'हो',
         No: 'होईन',
         Loss: 'घाटा',
