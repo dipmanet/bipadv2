@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/jsx-indent */
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
@@ -8,9 +10,13 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Item } from 'semantic-ui-react';
 import Loader from 'react-loader';
+import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
+import { incidentListSelectorIP } from '#selectors';
+import { setIncidentListActionIP } from '#actionCreators';
+import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
+import Loading from '#components/Loading';
 import Icon from '#rscg/Icon';
 import Page from '#components/Page';
-import styles from './styles.scss';
 import Button from '#rsca/Button';
 import Rajapur from './Rajapur';
 import Gulariya from './Gulariya';
@@ -19,16 +25,12 @@ import Dhangadi from './Dhangadi';
 import Butwal from './Butwal';
 import Barabise from './BarabiseLandslide';
 import Bhotekoshi from './BhotekoshiLandslide';
-import VizRiskContext, { VizRiskContextProps } from '#components/VizRiskContext';
 import Panchpokhari from './Panchpokhari';
 import Jugal from './Jugal';
-import { ClientAttributes, createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
-import { incidentListSelectorIP } from '#selectors';
-import { setIncidentListActionIP } from '#actionCreators';
-import Loading from '#components/Loading';
 import ProvinceTwo from './Province2';
 import Karnali from './Karnali';
 import Ratnanagar from './RatnaNagar';
+import styles from './styles.scss';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
 	incidentList: incidentListSelectorIP(state),
@@ -128,144 +130,144 @@ const VizRiskMainPage = (props: Props) => {
 
 
 	return (
-    <>
-        {pendingMainPage ? <Loader color="#fff" className={styles.loader} />
+		<>
+			{pendingMainPage ? <Loader color="#fff" className={styles.loader} />
 
 				: (
-    <VizRiskContext.Provider value={vrcontextProps}>
-        <div className={styles.mainVzContainer}>
-            <Page
-                hideMap
-                hideFilter
-            />
-            <div className={styles.navBtnsContainer}>
-                <div className={getBtnStyle()}>
-                    <Button
-                        transparent
-                        onClick={handleMenuIconClick}
-                        className={styles.hamburgerBtn}
-                    >
-                        <Icon
-                            name="menu"
-                            className={styles.hamburgerBtnIcon}
-                        />
-                        {!showMenu
+					<VizRiskContext.Provider value={vrcontextProps}>
+						<div className={styles.mainVzContainer}>
+							<Page
+								hideMap
+								hideFilter
+							/>
+							<div className={styles.navBtnsContainer}>
+								<div className={getBtnStyle()}>
+									<Button
+										transparent
+										onClick={handleMenuIconClick}
+										className={styles.hamburgerBtn}
+									>
+										<Icon
+											name="menu"
+											className={styles.hamburgerBtnIcon}
+										/>
+										{!showMenu
 											&& (
 												<>
-    <span className={styles.strong} />
+													<span className={styles.strong} />
 												</>
 											)
 										}
-                    </Button>
-                </div>
-            </div>
-            {pendingMainPage ? <Loading />
+									</Button>
+								</div>
+							</div>
+							{pendingMainPage ? <Loading />
 
 								: (
-    <div className={styles.vizrisknmenupagecontainer}>
-        {showMenu ? (
-            <>
-                <div className={styles.vizrisknmenupage}>
-                    <p className={styles.menuTitle}>Visualizing Flood Exposure </p>
-                    {floodMunicipality.map(munName => (
+									<div className={styles.vizrisknmenupagecontainer}>
+										{showMenu ? (
+											<>
+												<div className={styles.vizrisknmenupage}>
+													<p className={styles.menuTitle}>Visualizing Flood Exposure </p>
+													{floodMunicipality.map(munName => (
 
-                        <div key={munName.id} className={styles.vizriskmunicipalityName}>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
-                            >
-                                <h1
-                                    className={styles.menuItems}
-                                >
-                                    {munName.title}
-                                </h1>
+														<div key={munName.id} className={styles.vizriskmunicipalityName}>
+															<Button
+																transparent
+																onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
+															>
+																<h1
+																	className={styles.menuItems}
+																>
+																	{munName.title}
+																</h1>
 
-                            </Button>
-                        </div>
+															</Button>
+														</div>
 
 													))}
-                </div>
-            </>
+												</div>
+											</>
 										) : ((munThemeId === 103 && <Rajapur />)
 											|| (munThemeId === 104 && <Tikapur />)
 											|| (munThemeId === 106 && <Dhangadi />)
 											|| (munThemeId === 105 && <Gulariya />)
 										)
 										}
-        {showMenu ? (
-            <>
-                <div className={styles.vizrisknmenupage}>
-                    {/* {showMenu ? ( */}
+										{showMenu ? (
+											<>
+												<div className={styles.vizrisknmenupage}>
+													{/* {showMenu ? ( */}
 
-                    <p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
-                    {LandslideMunicipality.map(munName => (
+													<p className={styles.menuTitle}>Visualizing Landslide Exposure </p>
+													{LandslideMunicipality.map(munName => (
 
-                        <div key={munName.id} className={styles.vizriskmunicipalityName}>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
-                            >
-                                <h1
-                                    className={styles.menuItems}
-                                >
-                                    {munName.title}
-                                </h1>
-                            </Button>
-                        </div>
+														<div key={munName.id} className={styles.vizriskmunicipalityName}>
+															<Button
+																transparent
+																onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
+															>
+																<h1
+																	className={styles.menuItems}
+																>
+																	{munName.title}
+																</h1>
+															</Button>
+														</div>
 													))}
 
-                </div>
-            </>
+												</div>
+											</>
 										) : ((munThemeId === 107 && <Barabise />)
 											|| (munThemeId === 108 && <Bhotekoshi />)
 										)
 										}
-        {showMenu ? (
-            <>
-                <div className={styles.vizrisknmenupage}>
+										{showMenu ? (
+											<>
+												<div className={styles.vizrisknmenupage}>
 
 
-                    <p className={styles.menuTitle}>Visualizing Multi Hazard Exposure </p>
-                    {MultiHazradMunicipality.map(munName => (
+													<p className={styles.menuTitle}>Visualizing Multi Hazard Exposure </p>
+													{MultiHazradMunicipality.map(munName => (
 
-                        <div key={munName.id} className={styles.vizriskmunicipalityName}>
-                            <Button
-                                transparent
-                                onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
-                            >
-                                <h1
-                                    className={styles.menuItems}
-                                >
-                                    {munName.title}
-                                </h1>
+														<div key={munName.id} className={styles.vizriskmunicipalityName}>
+															<Button
+																transparent
+																onClick={() => handleMenuTitleClick(munName.title, munName.themeId, munName.province, munName.municipality)}
+															>
+																<h1
+																	className={styles.menuItems}
+																>
+																	{munName.title}
+																</h1>
 
-                            </Button>
+															</Button>
 
-                        </div>
+														</div>
 
 													))}
 
-                </div>
-            </>
+												</div>
+											</>
 										) : (
 											(munThemeId === 101 && <Butwal municipalityId={municipalityId} togglingBetweenMun={togglingBetweenMun} munThemeId={munThemeId} />)
 											|| (munThemeId === 109 && <Jugal />)
 											|| (munThemeId === 110 && <Panchpokhari />)
 											|| ((munThemeId === 300 && provinceId === 2) && <ProvinceTwo />)
 											|| ((munThemeId === 300 && provinceId === 6) && <Karnali />)
-											//  || ((munThemeId === 301) && <Ratnanagar />)
+											|| ((munThemeId === 301) && <Ratnanagar />)
 										)
 										}
-    </div>
+									</div>
 								)
 							}
-        </div>
-    </VizRiskContext.Provider>
+						</div>
+					</VizRiskContext.Provider>
 				)
 			}
 
 
-    </>
+		</>
 	);
 };
 

@@ -1,103 +1,108 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable max-len */
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import { PostionInitialValues, ScrollTopInitialValues } from '../..';
-import LeftpaneSlide3 from '../../Components/LeftpaneSlide3';
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable indent */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable no-tabs */
+/* eslint-disable max-len */
+import React, { useContext, useEffect, useLayoutEffect, useRef } from 'react';
+import LeftpaneSlide3 from '../../Components/LeftPaneSlides/LeftpaneSlide3';
 import Navbuttons from '../../Components/NavButtons/index';
+import { MainPageDataContext } from '../../context';
 import styles from './styles.scss';
 
 interface Props {
-    leftElement: number;
-    setLeftElement: React.Dispatch<React.SetStateAction<number>>;
-    scrollTopValuesPerPage: ScrollTopInitialValues;
-    setScrollTopValuesPerPage: React.Dispatch<React.SetStateAction<ScrollTopInitialValues>>;
-    postionsPerPage: PostionInitialValues;
-    setPostionsPerPage: React.Dispatch<React.SetStateAction<PostionInitialValues>>;
-    onButtonClick: (item: number) => void;
-    handleCIClick: (item: string) => void;
-    clickedCiName: string[];
-    cIData: any;
+	handleCIClick: (item: string) => void;
+	clickedCiName: string[];
+	cIData: any;
 }
 
 function LeftPane3(props: Props) {
-    const {
-        leftElement,
-        setLeftElement,
-        scrollTopValuesPerPage,
-        setScrollTopValuesPerPage,
-        postionsPerPage,
-        setPostionsPerPage,
-        onButtonClick,
-        handleCIClick,
-        clickedCiName,
-        cIData,
-    } = props;
+	const {
+		handleCIClick,
+		clickedCiName,
+		cIData,
+	} = props;
 
-    const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+	const {
+		leftElement,
+		setLeftElement,
+		scrollTopValuesPerPage,
+		setScrollTopValuesPerPage,
+		postionsPerPage,
+		setPostionsPerPage,
+		onButtonClick,
+	} = useContext(MainPageDataContext);
 
-    useLayoutEffect(() => {
-        const updateHeight = () => {
-            const { clientHeight } = articleRef.current;
-            if (!articleRef.current) return;
-            const { scrollHeight } = articleRef.current;
-            const { scrollTop } = articleRef.current;
-            const percentage = scrollTop / (scrollHeight - clientHeight);
-            setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page3ScrolltopValue: scrollTop });
-            setPostionsPerPage({ ...postionsPerPage, page3PositionValue: Math.max(1 - percentage, 0) });
-            console.log('scrollTop Val is', scrollTop, clientHeight, scrollHeight);
-        };
-        updateHeight();
-        if (articleRef.current) {
-            articleRef.current.addEventListener('scroll', updateHeight);
-        }
-        return () => {
-            if (articleRef.current) {
-                articleRef.current.removeEventListener('scroll', updateHeight);
-            }
-        };
-    }, []);
+	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
+
+	useLayoutEffect(() => {
+		const updateHeight = () => {
+			const { clientHeight } = articleRef.current;
+			if (!articleRef.current) return;
+			const { scrollHeight } = articleRef.current;
+			const { scrollTop } = articleRef.current;
+			const percentage = scrollTop / (scrollHeight - clientHeight);
+			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page4ScrolltopValue: scrollTop });
+			setPostionsPerPage({ ...postionsPerPage, page4PositionValue: Math.max(1 - percentage, 0) });
+		};
+		updateHeight();
+		if (articleRef.current) {
+			articleRef.current.addEventListener('scroll', updateHeight);
+		}
+		return () => {
+			if (articleRef.current) {
+				articleRef.current.removeEventListener('scroll', updateHeight);
+			}
+		};
+	}, []);
 
 
-    useEffect(() => {
-        articleRef.current.scrollTo(0, scrollTopValuesPerPage.page3ScrolltopValue);
-    }, []);
+	useEffect(() => {
+		articleRef.current.scrollTo(0, scrollTopValuesPerPage.page4ScrolltopValue);
+	}, []);
 
-    const onPreviousClick = () => {
-        articleRef.current.scrollTo({ top: scrollTopValuesPerPage.page3ScrolltopValue - 300,
-            behavior: 'smooth' });
+	const onPreviousClick = () => {
+		articleRef.current.scrollTo({
+			top: scrollTopValuesPerPage.page4ScrolltopValue - 300,
+			behavior: 'smooth',
+		});
 
-        if (postionsPerPage.page3PositionValue === (1 || NaN)) {
-            setLeftElement(leftElement - 1);
-        }
-    };
+		if (postionsPerPage.page4PositionValue === (1 || NaN)) {
+			setLeftElement(leftElement - 1);
+		}
+	};
 
-    const onNextClick = () => {
-        articleRef.current.scrollTo({ top: scrollTopValuesPerPage.page3ScrolltopValue + 300,
-            behavior: 'smooth' });
+	const onNextClick = () => {
+		articleRef.current.scrollTo({
+			top: scrollTopValuesPerPage.page4ScrolltopValue + 300,
+			behavior: 'smooth',
+		});
 
-        if (postionsPerPage.page3PositionValue === 0) {
-            setLeftElement(leftElement + 1);
-        }
-    };
+		if (postionsPerPage.page4PositionValue === 0) {
+			setLeftElement(leftElement + 1);
+		}
+	};
 
-    return (
-        <>
-            <div ref={articleRef} className={styles.mainLeftSlide}>
-                <LeftpaneSlide3
-                    handleCIClick={handleCIClick}
-                    clickedCiName={clickedCiName}
-                    cIData={cIData}
-                />
-                <Navbuttons
-                    postionsPerPage={postionsPerPage}
-                    leftElement={leftElement}
-                    onPreviousClick={onPreviousClick}
-                    onNextClick={onNextClick}
-                    onButtonClick={onButtonClick}
-                />
-            </div>
-        </>
-    );
+	return (
+		<>
+			<div ref={articleRef} className={styles.mainLeftSlide}>
+				<LeftpaneSlide3
+					handleCIClick={handleCIClick}
+					clickedCiName={clickedCiName}
+					cIData={cIData}
+				/>
+				<Navbuttons
+					postionsPerPage={postionsPerPage}
+					leftElement={leftElement}
+					onPreviousClick={onPreviousClick}
+					onNextClick={onNextClick}
+					onButtonClick={onButtonClick}
+				/>
+			</div>
+		</>
+	);
 }
 
 export default LeftPane3;

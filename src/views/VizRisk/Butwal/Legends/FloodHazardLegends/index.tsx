@@ -32,7 +32,7 @@ const FloodHistoryLegends = (props: Props) => {
                         className={styles.toggleFlood}
                         onClick={handleFloodChange}
                     >
-                        <h2>
+                        <h2 className={styles.floodHazard}>
                     Flood Hazard
                             <br />
                     in Return Period

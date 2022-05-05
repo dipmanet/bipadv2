@@ -1,8 +1,9 @@
-    h2{
+    .floodDepth2 {
         margin-top: 10px;
         opacity: 0.67;
     }
-    .toggleFlood{
+
+    .toggleFlood {
         background: transparent;
         border: none;
         display: flex;
@@ -10,21 +11,25 @@
         color: white;
         opacity: 0.87;
         text-transform: uppercase;
-        .chevrontoggle{
+
+        .chevrontoggle {
             font-size: 12px;
             position: relative;
             bottom: 4px;
         }
     }
-    .floodMainContainer{
-        display:flex;
+
+    .floodMainContainer {
+        display: flex;
         padding: 7px 0 15px 0;
-        .floodSubGroup{
+
+        .floodSubGroup {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            .floodItemContainer{
-                .legendBtn{
+
+            .floodItemContainer {
+                .legendBtn {
                     cursor: pointer;
                     background-color: transparent;
                     font-size: 12px;
@@ -34,58 +39,68 @@
                     align-items: center;
                     margin-bottom: 5px;
                     opacity: 0.37;
-                    .educationHexagon{
+
+                    .educationHexagon {
                         width: 15px;
                         margin: 0 4px 0 5px;
 
                     }
-                    .exposedIcons{
+
+                    .exposedIcons {
                         margin-right: 10px;
                         color: rgb(70, 70, 70);
                         font-size: 12px;
                     }
-                    .exposedIconsClicked{
+
+                    .exposedIconsClicked {
                         margin-right: 10px;
                         color: rgb(255, 72, 17);
                         font-size: 12px;
                     }
                 }
-                .legendBtnSelected{
+
+                .legendBtnSelected {
                     cursor: pointer;
                     background-color: transparent;
                     font-size: 12px;
                     border: none;
                     color: white;
-                    
+
                     display: flex;
                     align-items: center;
                     margin-bottom: 5px;
-                    .educationHexagon{
+
+                    .educationHexagon {
                         width: 15px;
                         margin: 0 4px 0 5px;
 
                     }
-                    .exposedIcons{
+
+                    .exposedIcons {
                         margin-right: 10px;
                         color: rgb(70, 70, 70);
                         font-size: 12px;
                     }
-                    .exposedIconsClicked{
+
+                    .exposedIconsClicked {
                         margin-right: 10px;
                         color: rgb(255, 72, 17);
                         font-size: 12px;
                     }
                 }
-           
+
             }
         }
     }
-    .floodDepthContainer{
+
+    .floodDepthContainer {
         display: flex;
-        .floodDepth{
+
+        .floodDepth {
             display: flex;
             flex-direction: column;
-            .floodIndicator1{
+
+            .floodIndicator1 {
                 background-color: rgb(255, 94, 24);
                 font-size: 10px;
                 color: rgb(245, 216, 216);
@@ -95,8 +110,9 @@
                 min-width: 30px;
                 padding: 2px;
             }
-            .floodIndicator2{
-                background-color:rgb(221,252,56); 
+
+            .floodIndicator2 {
+                background-color: rgb(221, 252, 56);
                 font-size: 10px;
                 color: rgb(57, 66, 2);
                 display: flex;
@@ -105,8 +121,9 @@
                 min-width: 50px;
                 padding: 2px;
             }
-            .floodIndicator3{
-                background-color:rgb(16, 104, 169);
+
+            .floodIndicator3 {
+                background-color: rgb(16, 104, 169);
                 font-size: 10px;
                 color: rgb(188, 220, 243);
                 display: flex;
@@ -115,26 +132,22 @@
                 min-width: 30px;
                 padding: 2px;
             }
-            .floodText{
+
+            .floodText {
                 color: white;
-                opacity:0.87;
+                opacity: 0.87;
                 font-size: 10px;
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
                 padding: 0 22px;
             }
-            .floodText:first-child{
-               
+
+            .floodText:first-child {
+
                 border-radius: 3px;
             }
-  
+
         }
-   
+
     }
-
-    
-
-
-
-
