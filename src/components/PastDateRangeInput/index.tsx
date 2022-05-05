@@ -104,11 +104,16 @@ class PastDateRangeInput extends React.Component<Props> {
 		value: undefined,
 	};
 
+
 	public static contextType = PageContext;
 
+	public state = {
+		customActive: false,
+	};
 
 	private handleRadioInputChange = (rangeInDays: number | 'custom') => {
 		const { onChange } = this.props;
+		this.setState({ customActive: true });
 
 		if (rangeInDays === 'custom') {
 			onChange({
@@ -168,6 +173,9 @@ class PastDateRangeInput extends React.Component<Props> {
 			className,
 			value,
 		} = this.props;
+		const {
+			customActive,
+		} = this.state;
 		const { activeRouteDetails: { name: activePage } } = this.context;
 
 		return (
