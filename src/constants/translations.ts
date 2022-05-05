@@ -1,5 +1,9 @@
 export const enTranslation = {
     translation: {
+        'Leave Feedback': 'Leave Feedback',
+        Email: 'Email',
+        'Mobile number': 'Mobile number',
+        Comment: 'Comment',
         'There are no incidents at the moment.': 'There are no incidents at the moment.',
         'Metropolitan City': 'Metropolitan City',
         'Submetropolitan City': 'Submetropolitan City',
@@ -694,6 +698,10 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Leave Feedback': 'सुझाव छोड्नुहोस्',
+        Email: 'इमेल',
+        'Mobile number': 'मोबाइल नम्बर',
+        Comment: 'टिप्पणी',
         'There are no incidents at the moment.': 'अहिले कुनै घटना छैन।',
         'Metropolitan City': 'महानगरपालिका',
         'Submetropolitan City': 'उप-महानगरपालिका',
@@ -1365,7 +1373,7 @@ export const npTranslation = {
         'Estimated loss (NPR)': 'अनुमानित क्षति (रु)',
         'Infrastructure destroyed': 'पूर्वाधार ध्वस्त',
         'Livestock destroyed': 'पशुधन नष्ट',
-        'LEAVE FEEDBACK': 'सुझाव छोड्नु',
+        'LEAVE FEEDBACK': 'सुझाव छोड्नुहोस्',
         'Number of Incidents': 'घटनाहरूको संख्या',
         'Hazard Severity (Fatality due to Hazard)': 'प्रकोप गम्भीरता (प्रकोपको कारण मृत्यु)',
         DateMismatchWarning: 'चेतावनी! सुरु मिति अन्त्य मिति भन्दा ठूलो हुन सक्दैन',
