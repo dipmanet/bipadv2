@@ -799,9 +799,33 @@ class Multiplexer extends React.PureComponent<Props, State> {
 
         const regionList = adminLevels[selectedRegion.adminLevel];
         const currentRegion = regionList.find(d => d.id === selectedRegion.geoarea);
+        const { language: { language } } = this.props;
+        if (currentRegion && language === 'en') {
+            return (
+                <Translation>
+                    {
+                        t => (
+                            `${currentRegion.title} ${t(currentRegion.type)}`
 
-        if (currentRegion) {
-            return currentRegion.title;
+                        )
+                    }
+                </Translation>
+
+
+            );
+        }
+
+        if (currentRegion && language === 'np') {
+            return (
+                <Translation>
+                    {
+                        t => (
+                            `${currentRegion.title_ne} ${t(currentRegion.type)}`
+
+                        )
+                    }
+                </Translation>
+            );
         }
 
         return 'Unknown';

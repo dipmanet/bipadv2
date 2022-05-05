@@ -1,5 +1,8 @@
 export const enTranslation = {
     translation: {
+        'Metropolitan City': 'Metropolitan City',
+        'Submetropolitan City': 'Submetropolitan City',
+        'Rural Municipality': 'Rural Municipality',
         'Add / edit alert': 'Add / edit alert',
         'Started on': 'Started on',
         'Expires on': 'Expires on',
@@ -690,6 +693,9 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Metropolitan City': 'महानगरपालिका',
+        'Submetropolitan City': 'उप-महानगरपालिका',
+        'Rural Municipality': 'गाउँपालिका',
         'Are you sure to delete the Alert?': 'के तपाइँ अलर्ट मेटाउन निश्चित हुनुहुन्छ?',
         'Add / edit alert': 'अलर्ट थप्नुहोस् / सम्पादन गर्नुहोस्',
         'Started on': 'सुरु भएको गते र समय',

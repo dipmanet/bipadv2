@@ -20,32 +20,32 @@ const pastDataKeySelector = d => d.key;
 const pastDateRangeOptions = [
     {
         label: '3 days',
-        labelNe: '3 दिन',
+        labelNe: '३ दिन',
         key: 3,
     },
     {
         label: '7 days',
-        labelNe: '7 दिन',
+        labelNe: '७ दिन',
         key: 7,
     },
     {
         label: '2 weeks',
-        labelNe: '2 हप्‍ता',
+        labelNe: '२ हप्‍ता',
         key: 14,
     },
     {
         label: '1 month',
-        labelNe: '1 महिना',
+        labelNe: '१ महिना',
         key: 30,
     },
     {
         label: '6 months',
-        labelNe: '3 महिना',
+        labelNe: '६ महिना',
         key: 183,
     },
     {
         label: '1 year',
-        labelNe: '3 वर्ष',
+        labelNe: '१ वर्ष',
         key: 365,
     },
     {
@@ -58,26 +58,32 @@ const pastDateRangeOptions = [
 const pastDateRangeDashboardOptions = [
     {
         label: '3 days',
+        labelNe: '३ दिन',
         key: 3,
     },
     {
         label: '7 days',
+        labelNe: '७ दिन',
         key: 7,
     },
     {
         label: '2 weeks',
+        labelNe: '२ हप्‍ता',
         key: 14,
     },
     {
         label: '1 month',
+        labelNe: '१ महिना',
         key: 30,
     },
     {
         label: '6 months',
+        labelNe: '६ महिना',
         key: 183,
     },
     {
         label: '1 year',
+        labelNe: '१ वर्ष',
         key: 365,
     },
 ];
