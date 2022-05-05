@@ -1,5 +1,11 @@
 export const enTranslation = {
     translation: {
+        Yes: 'Yes',
+        No: 'No',
+        Loss: 'Loss',
+        'Are you sure you want to delete this incident?': 'Are you sure you want to delete this incident?',
+        'Reported On': 'Reported On',
+        Wards: 'Wards',
         'Leave Feedback': 'Leave Feedback',
         Email: 'Email',
         'Mobile number': 'Mobile number',
@@ -698,6 +704,12 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        Yes: 'हो',
+        No: 'होईन',
+        Loss: 'घाटा',
+        'Are you sure you want to delete this incident?': 'के तपाइँ यो घटना मेटाउन निश्चित हुनुहुन्छ?',
+        'Reported On': 'रिपोर्ट गरिएको मिति',
+        Wards: 'वार्डहरू',
         'Leave Feedback': 'सुझाव छोड्नुहोस्',
         Email: 'इमेल',
         'Mobile number': 'मोबाइल नम्बर',
