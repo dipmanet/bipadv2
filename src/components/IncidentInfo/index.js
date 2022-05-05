@@ -91,8 +91,6 @@ export default class IncidentInfo extends React.PureComponent {
             id,
         } = incident;
 
-        console.log(loss, 'incident');
-
         const verifiedText = verified ? 'Yes' : 'No';
         // FIXME: memoize later
         const wardNames = wards.map((ward) => {
