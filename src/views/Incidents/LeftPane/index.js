@@ -46,24 +46,31 @@ const IncidentTableModal = ({
     closeModal,
     incidentList,
 }) => (
-    <Modal className={styles.incidentTableModal}>
-        <ModalHeader
-            title="Incidents"
-            rightComponent={(
-                <Button
-                    iconName="close"
-                    onClick={closeModal}
-                    transparent
-                />
-            )}
-        />
-        <ModalBody className={styles.body}>
-            <IncidentTable
-                className={styles.table}
-                incidentList={incidentList}
-            />
-        </ModalBody>
-    </Modal>
+    <Translation>
+        {
+            t => (
+                <Modal className={styles.incidentTableModal}>
+                    <ModalHeader
+                        title={t('Incidents')}
+                        rightComponent={(
+                            <Button
+                                iconName="close"
+                                onClick={closeModal}
+                                transparent
+                            />
+                        )}
+                    />
+                    <ModalBody className={styles.body}>
+                        <IncidentTable
+                            className={styles.table}
+                            incidentList={incidentList}
+                        />
+                    </ModalBody>
+                </Modal>
+            )
+        }
+    </Translation>
+
 );
 
 const propTypes = {
