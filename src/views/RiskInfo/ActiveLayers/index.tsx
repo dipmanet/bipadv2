@@ -29,7 +29,6 @@ interface State {
 	showOpacityInput: boolean;
 	showLegend: boolean;
 }
-
 const ActiveLayer = ({
 	className,
 	layer,
@@ -39,6 +38,14 @@ const ActiveLayer = ({
 	showOpacityInput,
 }) => {
 	const { map } = useContext(MapChildContext);
+	console.log('all layers', layer);
+	let uniqueId;
+
+	if (layer.bbox.length > 0) {
+		uniqueId = layer.id;
+	}
+	console.log('unique', uniqueId);
+
 	const zoomToBbox = () => {
 		if (map) {
 			if (!layer && !layer.bbox) return;
@@ -57,8 +64,9 @@ const ActiveLayer = ({
 					iconName="close"
 					onClick={() => onRemoveButtonClick(layer)}
 				/>
+
 				{
-					layer && layer.bbox && layer.bbox.length > 0
+					layer && layer.bbox && layer.bbox.length > 0 && uniqueId === layer.id
 					&& (
 						<img
 							src={Bbox}
@@ -67,7 +75,6 @@ const ActiveLayer = ({
 							onClick={zoomToBbox}
 							role="button"
 						/>
-
 					)
 				}
 
