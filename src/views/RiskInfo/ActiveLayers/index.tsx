@@ -41,11 +41,6 @@ const ActiveLayer = ({
 	console.log('all layers', layer);
 	let uniqueId;
 
-	if (layer.bbox.length > 0) {
-		uniqueId = layer.id;
-	}
-	console.log('unique', uniqueId);
-
 	const zoomToBbox = () => {
 		if (map) {
 			if (!layer && !layer.bbox) return;
@@ -66,7 +61,7 @@ const ActiveLayer = ({
 				/>
 
 				{
-					layer && layer.bbox && layer.bbox.length > 0 && uniqueId === layer.id
+					layer && layer.bbox && layer.bbox.length > 0
 					&& (
 						<img
 							src={Bbox}
