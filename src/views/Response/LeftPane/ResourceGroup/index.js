@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { _cs } from '@togglecorp/fujs';
 
+import { Translation } from 'react-i18next';
 import ListView from '#rscv/List/ListView';
 import Button from '#rsca/Button';
 import TextOutput from '#components/TextOutput';
@@ -102,42 +103,49 @@ export default class ResourceGroup extends React.PureComponent {
         });
 
         return (
-            <div className={styles.summary}>
+            <Translation>
                 {
-                    // Aggregation of types
-                    groupedTypes.map(group => (group.key && (
-                        <TextOutput
-                            key={group.key}
-                            label={group.key}
-                            value={group.value.length}
-                            isNumericValue
-                        />
-                    )))
+                    t => (
+                        <div className={styles.summary}>
+                            {
+                                // Aggregation of types
+                                groupedTypes.map(group => (group.key && (
+                                    <TextOutput
+                                        key={group.key}
+                                        label={t(group.key)}
+                                        value={group.value.length}
+                                        isNumericValue
+                                    />
+                                )))
+                            }
+                            {
+                                // Aggregation of resource attributes
+                                Object.keys(aggregatedAttributes).sort().map(label => (
+                                    <TextOutput
+                                        key={label}
+                                        label={label}
+                                        value={aggregatedAttributes[label]}
+                                        isNumericValue
+                                    />
+                                ))
+                            }
+                            {
+                                // Aggregation of inventories
+                                Object.keys(inventoriesSummary).sort().map(itemName => (
+                                    <TextOutput
+                                        key={itemName}
+                                        label={itemName}
+                                        isNumericValue
+                                        value={inventoriesSummary[itemName]}
+                                        suffix={` ${inventoryUnits[itemName]}`}
+                                    />
+                                ))
+                            }
+                        </div>
+                    )
                 }
-                {
-                    // Aggregation of resource attributes
-                    Object.keys(aggregatedAttributes).sort().map(label => (
-                        <TextOutput
-                            key={label}
-                            label={label}
-                            value={aggregatedAttributes[label]}
-                            isNumericValue
-                        />
-                    ))
-                }
-                {
-                    // Aggregation of inventories
-                    Object.keys(inventoriesSummary).sort().map(itemName => (
-                        <TextOutput
-                            key={itemName}
-                            label={itemName}
-                            isNumericValue
-                            value={inventoriesSummary[itemName]}
-                            suffix={` ${inventoryUnits[itemName]}`}
-                        />
-                    ))
-                }
-            </div>
+            </Translation>
+
         );
     }
 

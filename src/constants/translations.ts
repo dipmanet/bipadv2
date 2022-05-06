@@ -1,5 +1,18 @@
 export const enTranslation = {
     translation: {
+        'Stockpile Items': 'Stockpile Items',
+        Search: 'Search',
+        Item: 'Item',
+        Quantity: 'Quantity',
+        Operator: 'Operator',
+
+
+        'Health Post': 'Health Post',
+        'Primary Health Care Center': 'Primary Health Care Center',
+        'Development Bank': 'Development Bank',
+        Commercial: 'Commercial',
+        'High School': 'High School',
+
         'Get direction': 'Get direction',
         Resources: 'Resources',
         'People Dead': 'People Dead',
@@ -710,6 +723,18 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Stockpile Items': 'भण्डार वस्तुहरू',
+        Search: 'खोज्नुहोस्',
+        Item: 'वस्तु',
+        Quantity: 'मात्रा',
+        Operator: 'अपरेटर',
+
+        'Health Post': 'हेल्थपोष्ट',
+        'Primary Health Care Center': 'प्राथमिक स्वास्थ्य सेवा केन्द्र',
+        'Development Bank': 'विकास बैंक',
+        Commercial: 'व्यापारिक',
+        'High School': 'उच्‍च विद्यालय',
+
         'Get direction': 'दिशा प्राप्‍त गर्नुहोस्',
         Resources: 'स्रोतहरू',
         'People Dead': 'मान्‍छे मृत्‍यु संख्‍या',

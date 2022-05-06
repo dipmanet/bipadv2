@@ -31,7 +31,7 @@ class DistanceOutput extends React.PureComponent {
         } = this.props;
 
         let amount = valueFromProps;
-        let unit = language === 'en' ? 'Km' : 'किमि';
+        let unit = language === 'en' ? 'Km' : 'कि.मि.';
 
         if (isFalsy(valueFromProps)) {
             return null;
@@ -39,7 +39,7 @@ class DistanceOutput extends React.PureComponent {
 
         if (amount < 1) {
             amount *= 1000;
-            unit = language === 'en' ? 'm' : 'मि';
+            unit = language === 'en' ? 'm' : 'मि.';
         }
 
         return (

@@ -7,6 +7,8 @@ import Faram, {
     FaramGroup,
 } from '@togglecorp/faram';
 
+import { connect } from 'react-redux';
+import { Translation } from 'react-i18next';
 import Button from '#rsca/Button';
 import Checkbox from '#rsci/Checkbox';
 import ListView from '#rscv/List/ListView';
@@ -26,28 +28,34 @@ import IncidentInfo from '#components/IncidentInfo';
 import ResourceGroup from './ResourceGroup';
 import resourceAttributes from '../resourceAttributes';
 import { getFilterItems, getSchema } from './utils.js';
+import { languageSelector } from '#selectors';
 
 import styles from './styles.scss';
 
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
+
 const getKey = x => x.key;
 
-const getLabel = x => x.label;
+const getLabel = (x, language) => (language === 'en' ? x.label : x.labelNe);
 
-const getFilterInputElement = (filterParam, show, elementProps = {}) => {
+const getFilterInputElement = (filterParam, show, elementProps = {}, language) => {
     const {
         key,
         type: paramType,
         label,
-
+        labelNe,
         filter,
     } = filterParam;
+    const labelCheck = language === 'en' ? label : labelNe;
 
     const type = filter.type || paramType;
 
     const commonProps = {
         ...elementProps,
         key,
-        label,
+        label: labelCheck,
         faramElementName: key,
         disabled: !show,
     };
@@ -80,7 +88,7 @@ const getFilterInputElement = (filterParam, show, elementProps = {}) => {
             <SelectInput
                 {...commonProps}
                 keySelector={getKey}
-                labelSelector={getLabel}
+                labelSelector={x => getLabel(x, language)}
                 options={filter.options}
             />
         );
@@ -92,42 +100,43 @@ const getFilterInputElement = (filterParam, show, elementProps = {}) => {
     );
 };
 
-const titles = {
-    health: 'Health facilities',
-    finance: 'Finance Institutes',
-    volunteer: 'Volunteers',
-    education: 'Education',
-    openSpace: 'Open spaces',
-    hotel: 'Hotel',
-    governance: 'Governance',
-};
+const titles = language => (
+    {
+        health: language === 'en' ? 'Health facilities' : 'स्वास्थ्य सुविधाहरू',
+        finance: language === 'en' ? 'Finance Institutes' : 'वित्त संस्थानहरू',
+        volunteer: language === 'en' ? 'Volunteers' : 'स्वयंसेवकहरू',
+        education: language === 'en' ? 'Education' : 'शिक्षा',
+        openSpace: language === 'en' ? 'Open spaces' : 'खुला ठाउँहरू',
+        hotel: language === 'en' ? 'Hotel' : 'होटल',
+        governance: language === 'en' ? 'Governance' : 'सुशासन',
+    });
 
-const resourceComponentsProps = {
+const resourceComponentsProps = language => ({
     health: {
-        heading: 'Health facilities',
+        heading: language === 'en' ? 'Health facilities' : 'स्वास्थ्य सुविधाहरू',
         icon: healthFacilityIcon,
     },
     volunteer: {
-        heading: 'Volunteers',
+        heading: language === 'en' ? 'Volunteers' : 'स्वयंसेवकहरू',
         icon: groupIcon,
     },
     education: {
-        heading: 'Schools',
+        heading: language === 'en' ? 'Schools' : 'विद्यालयहरू',
         icon: educationIcon,
     },
     finance: {
-        heading: 'Financial institutes',
+        heading: language === 'en' ? 'Financial institutes' : 'वित्तीय संस्थानहरू',
         icon: financeIcon,
     },
     governance: {
-        heading: 'Governance',
+        heading: language === 'en' ? 'Governance' : 'सुशासन',
         icon: governanceIcon,
     },
     openSpace: {
-        heading: 'Open space',
+        heading: language === 'en' ? 'Open space' : 'खुल्‍ला ठाउँ',
         icon: openSpaceIcon,
     },
-};
+});
 
 const getResources = (resourceList) => {
     const resources = {
@@ -175,10 +184,11 @@ class LeftPane extends React.Component {
     }
 
     getResourceRendererParams = (d) => {
+        const { language: { language } } = this.props;
         const resources = this.getResources(this.props.resourceList);
         const filteredResources = this.getFilteredResources(this.props.filteredResourceList);
         return {
-            ...resourceComponentsProps[d],
+            ...resourceComponentsProps(language)[d],
             type: d,
             isFilterShown: this.state.selectedFilter === d,
             onFilterShowClick: this.handleFilterClick,
@@ -204,7 +214,7 @@ class LeftPane extends React.Component {
     }
 
     renderFilter = () => {
-        const { filter } = this.props;
+        const { filter, language: { language } } = this.props;
         const { selectedFilter } = this.state;
 
         const filterItems = getFilterItems(resourceAttributes);
@@ -229,7 +239,7 @@ class LeftPane extends React.Component {
                         <Checkbox
                             className={styles.checkbox}
                             faramElementName="show"
-                            label={titles[key] || key}
+                            label={titles(language)[key] || key}
                         />
                         <Button
                             className={styles.closeButton}
@@ -245,6 +255,7 @@ class LeftPane extends React.Component {
                                     param,
                                     filter[key].show,
                                     { showHintAndError: false },
+                                    language,
                                 )}
                             </div>
                         ))}
@@ -274,41 +285,48 @@ class LeftPane extends React.Component {
         const resourceKeys = Object.keys(resources);
 
         return (
-            <div className={_cs(className, styles.filter)}>
-                <div className={styles.resourceListContainer}>
-                    <IncidentInfo
-                        incident={incident}
-                        wardsMap={wardsMap}
-                        provincesMap={provincesMap}
-                        districtsMap={districtsMap}
-                        municipalitiesMap={municipalitiesMap}
-                        hideLink
-                    />
-                    <header className={styles.header}>
-                        <h3 className={styles.heading}>
-                            Resources
-                        </h3>
-                    </header>
-                    <ListView
-                        data={resourceKeys}
-                        renderer={ResourceGroup}
-                        rendererParams={this.getResourceRendererParams}
-                    />
-                </div>
-                {selectedFilter && (
-                    <Faram
-                        className={styles.filterForm}
-                        onChange={this.handleFaramChange}
-                        schema={this.schema}
-                        value={filter}
+            <Translation>
+                {
+                    t => (
+                        <div className={_cs(className, styles.filter)}>
+                            <div className={styles.resourceListContainer}>
+                                <IncidentInfo
+                                    incident={incident}
+                                    wardsMap={wardsMap}
+                                    provincesMap={provincesMap}
+                                    districtsMap={districtsMap}
+                                    municipalitiesMap={municipalitiesMap}
+                                    hideLink
+                                />
+                                <header className={styles.header}>
+                                    <h3 className={styles.heading}>
+                                        {t('Resources')}
+                                    </h3>
+                                </header>
+                                <ListView
+                                    data={resourceKeys}
+                                    renderer={ResourceGroup}
+                                    rendererParams={this.getResourceRendererParams}
+                                />
+                            </div>
+                            {selectedFilter && (
+                                <Faram
+                                    className={styles.filterForm}
+                                    onChange={this.handleFaramChange}
+                                    schema={this.schema}
+                                    value={filter}
                         // error={faramErrors}
-                    >
-                        {this.renderFilter()}
-                    </Faram>
-                )}
-            </div>
+                                >
+                                    {this.renderFilter()}
+                                </Faram>
+                            )}
+                        </div>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default LeftPane;
+export default connect(mapStateToProps)(LeftPane);
