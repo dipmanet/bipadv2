@@ -4,6 +4,8 @@ import Faram, {
     requiredCondition,
 } from '@togglecorp/faram';
 
+import { Translation } from 'react-i18next';
+import { connect } from 'react-redux';
 import {
     createRequestClient,
     NewProps,
@@ -31,6 +33,11 @@ import PrimaryButton from '#rsca/Button/PrimaryButton';
 import DangerButton from '#rsca/Button/DangerButton';
 
 import styles from './styles.scss';
+import { languageSelector } from '#selectors';
+
+const mapStateToProps = state => ({
+    language: languageSelector(state),
+});
 
 interface FaramValues {
     belowPoverty?: number;
@@ -67,7 +74,7 @@ type ReduxProps = OwnProps & PropsFromDispatch & PropsFromState;
 type Props = NewProps<ReduxProps, Params>;
 
 const keySelector = (d: BelowPovertyOption) => d.id;
-const labelSelector = (d: Field) => d.title;
+const labelSelector = (d: Field, language) => (language === 'en' ? d.title : d.titleNe);
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params>} = {
     addFamilyLossRequest: {
@@ -108,20 +115,24 @@ const familyLossStatus: Status [] = [
     {
         id: 1,
         title: 'affected',
+        titleNe: 'प्रभावित भएको',
     },
     {
         id: 2,
         title: 'relocated',
+        titleNe: 'स्थानान्तरण गरिएको',
     },
     {
         id: 3,
         title: 'evacuated',
+        titleNe: 'खाली गरिएको',
     },
 ];
 
 interface BelowPovertyOption {
     id: number;
     title: string;
+    titleNe: string;
     value: boolean;
 }
 
@@ -129,11 +140,13 @@ const belowPovertyOptions: BelowPovertyOption[] = [
     {
         id: 1,
         title: 'Yes',
+        titleNe: 'छ',
         value: true,
     },
     {
         id: 2,
         title: 'No',
+        titleNe: 'छैन',
         value: false,
     },
 ];
@@ -211,6 +224,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -220,85 +234,92 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <Modal className={className}>
-                <ModalHeader
-                    title="Add Family Loss"
-                    rightComponent={(
-                        <DangerButton
-                            transparent
-                            iconName="close"
-                            onClick={closeModal}
-                            title="Close Modal"
-                        />
-                    )}
-                />
-                <Faram
-                    onChange={this.handleFaramChange}
-                    onValidationFailure={this.handleFaramValidationFailure}
-                    onValidationSuccess={this.handleFaramValidationSuccess}
-                    schema={AddFamilyLoss.schema}
-                    value={faramValues}
-                    error={faramErrors}
-                >
-                    <ModalBody className={styles.modalBody}>
-                        {pending && <LoadingAnimation />}
-                        <NonFieldErrors faramElement />
-                        <TextInput
-                            faramElementName="ownerName"
-                            label="Owner Name"
-                            autoFocus
-                        />
-                        <SelectInput
-                            faramElementName="status"
-                            label="Status"
-                            options={familyLossStatus}
-                            keySelector={labelSelector}
-                            labelSelector={labelSelector}
-                        />
-                        <SelectInput
-                            faramElementName="belowPoverty"
-                            label="Below Poverty"
-                            options={belowPovertyOptions}
-                            keySelector={keySelector}
-                            labelSelector={labelSelector}
-                        />
-                        <TextInput
-                            faramElementName="phoneNumber"
-                            label="Phone Number"
-                        />
-                        <NumberInput
-                            faramElementName="count"
-                            label="Count"
-                        />
-                        <Cloak hiddenIf={p => !p.verify_family}>
-                            <>
-                                <Checkbox
-                                    faramElementName="verified"
-                                    label="Verified"
-                                />
-                                <TextInput
-                                    faramElementName="verificationMessage"
-                                    label="Verification Message"
-                                />
-                            </>
-                        </Cloak>
-                    </ModalBody>
-                    <ModalFooter>
-                        <DangerButton onClick={closeModal}>
-                            Cancel
-                        </DangerButton>
-                        <PrimaryButton
-                            type="submit"
-                            disabled={pristine}
-                            pending={pending}
-                        >
-                            Save
-                        </PrimaryButton>
-                    </ModalFooter>
-                </Faram>
-            </Modal>
+            <Translation>
+                {
+                    t => (
+                        <Modal className={className}>
+                            <ModalHeader
+                                title={t('Add Family Loss')}
+                                rightComponent={(
+                                    <DangerButton
+                                        transparent
+                                        iconName="close"
+                                        onClick={closeModal}
+                                        title="Close Modal"
+                                    />
+                                )}
+                            />
+                            <Faram
+                                onChange={this.handleFaramChange}
+                                onValidationFailure={this.handleFaramValidationFailure}
+                                onValidationSuccess={this.handleFaramValidationSuccess}
+                                schema={AddFamilyLoss.schema}
+                                value={faramValues}
+                                error={faramErrors}
+                            >
+                                <ModalBody className={styles.modalBody}>
+                                    {pending && <LoadingAnimation />}
+                                    <NonFieldErrors faramElement />
+                                    <TextInput
+                                        faramElementName="ownerName"
+                                        label={t('Owner Name')}
+                                        autoFocus
+                                    />
+                                    <SelectInput
+                                        faramElementName="status"
+                                        label={t('Status')}
+                                        options={familyLossStatus}
+                                        keySelector={labelSelector}
+                                        labelSelector={d => labelSelector(d, language)}
+                                    />
+                                    <SelectInput
+                                        faramElementName="belowPoverty"
+                                        label={t('Below Poverty')}
+                                        options={belowPovertyOptions}
+                                        keySelector={keySelector}
+                                        labelSelector={labelSelector}
+                                    />
+                                    <TextInput
+                                        faramElementName="phoneNumber"
+                                        label={t('Phone Number')}
+                                    />
+                                    <NumberInput
+                                        faramElementName="count"
+                                        label={t('Count')}
+                                    />
+                                    <Cloak hiddenIf={p => !p.verify_family}>
+                                        <>
+                                            <Checkbox
+                                                faramElementName="verified"
+                                                label={t('Verified')}
+                                            />
+                                            <TextInput
+                                                faramElementName="verificationMessage"
+                                                label={t('Verification Message')}
+                                            />
+                                        </>
+                                    </Cloak>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <DangerButton onClick={closeModal}>
+                                        {t('Cancel')}
+                                    </DangerButton>
+                                    <PrimaryButton
+                                        type="submit"
+                                        disabled={pristine}
+                                        pending={pending}
+                                    >
+                                        {t('Save')}
+                                    </PrimaryButton>
+                                </ModalFooter>
+                            </Faram>
+                        </Modal>
+                    )
+                }
+            </Translation>
+
         );
     }
 }
 
-export default createRequestClient(requests)(AddFamilyLoss);
+export default connect(mapStateToProps)(createRequestClient(requests)(AddFamilyLoss));

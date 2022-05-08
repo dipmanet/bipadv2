@@ -1,5 +1,24 @@
 export const enTranslation = {
     translation: {
+        'Economic Loss': 'Economic Loss',
+        'Owner Name': 'Owner Name',
+        'Add Livestock Loss': 'Add Livestock Loss',
+        'Add Family Loss': 'Add Family Loss',
+        'Add / edit incident': 'Add / edit incident',
+        Age: 'Age',
+        Gender: 'Gender',
+        'Below Poverty': 'Below Poverty',
+        Count: 'Count',
+        Nationality: 'Nationality',
+
+        'Add People Loss': 'Add People Loss',
+        'Are you sure you want to delete this item?': 'Are you sure you want to delete this item?',
+        Cause: 'Cause',
+        'Reported on': 'Reported on',
+        Approved: 'Approved',
+        'Need Followup': 'Need Followup',
+        'Verification Message': 'Verification Message',
+
         'Stockpile Items': 'Stockpile Items',
         Search: 'Search',
         Item: 'Item',
@@ -723,6 +742,25 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'Economic Loss': 'आर्थिक घाटा',
+        'Owner Name': 'घरमुलि को नाम',
+        'Add Livestock Loss': 'पशुधन हानि थप्नुहोस्',
+        'Add Family Loss': 'पारिवारिक हानि थप्नुहोस्',
+        'Add / edit incident': 'घटना थप्नुहोस् / सम्पादन गर्नुहोस्',
+        Age: 'उमेर',
+        Gender: 'लिङ्ग',
+        'Below Poverty': 'गरिबी मुनि',
+        Count: 'गणना गर्नुहोस्',
+        Nationality: 'राष्ट्रियता',
+
+        'Add People Loss': 'मान्छे हानि थप्नुहोस्',
+        'Are you sure you want to delete this item?': 'के तपाइँ यो वस्तु मेटाउन निश्चित हुनुहुन्छ?',
+        Cause: 'कारण',
+        'Reported on': 'रिपोर्ट गरिएको मिति',
+        Approved: 'स्वीकृत छ?',
+        'Need Followup': 'फलोअप चाहिन्छ?',
+        'Verification Message': 'प्रमाणीकरण सन्देश',
+
         'Stockpile Items': 'भण्डार वस्तुहरू',
         Search: 'खोज्नुहोस्',
         Item: 'वस्तु',

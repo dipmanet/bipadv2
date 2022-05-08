@@ -18,6 +18,7 @@ import {
 export interface Field {
     id: number;
     title: string;
+    titleNe: string;
 }
 export interface Language {
     language: string;
