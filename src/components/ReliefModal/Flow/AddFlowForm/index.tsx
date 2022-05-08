@@ -42,6 +42,7 @@ import {
 
 import {
     eventListSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -111,6 +112,7 @@ type Props = NewProps<PropsWithRedux, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     eventList: eventListSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -300,6 +302,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                     pending: fiscalYearsGetPending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -353,6 +356,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                                     />
                                     <div className={styles.organizationContainer}>
                                         <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                             className={styles.input}
                                             faramElementName="receiverOrganization"
                                             label={t('Receiver Organization')}
@@ -374,6 +378,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                                     </div>
                                     <div className={styles.organizationContainer}>
                                         <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                             className={styles.input}
                                             faramElementName="providerOrganization"
                                             label={t('Provider Organization')}
@@ -397,6 +402,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                                         label={t('Amount')}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="type"
                                         label={t('Type')}
                                         options={typeList}
@@ -404,6 +410,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                                         labelSelector={typeLabelSelector}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="event"
                                         label={t('Event')}
                                         options={eventList}
@@ -411,6 +418,7 @@ class AddFlowForm extends React.PureComponent<Props, State> {
                                         labelSelector={eventLabelSelector}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="fiscalYear"
                                         label={t('Fiscal Year')}
                                         options={fiscalYearOptions}

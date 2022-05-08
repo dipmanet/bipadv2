@@ -44,6 +44,7 @@ import {
 
 import {
     eventListSelector,
+    languageSelector,
 } from '#selectors';
 
 import {
@@ -105,6 +106,7 @@ type Props = NewProps<PropsWithRedux, Params>;
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
     eventList: eventListSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -351,6 +353,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                     pending: releaseStatusGetPending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -412,6 +415,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                                     />
                                     <div className={styles.organizationContainer}>
                                         <SelectInput
+                                            placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                             faramElementName="providerOrganization"
                                             label={t('Provider Organization')}
                                             options={organizationList}
@@ -434,6 +438,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                                         label={t('Amount')}
                                     />
                                     <SearchSelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प खोज्नुहोस्'}
                                         faramElementName="incident"
                                         label={t('Incident')}
                                         options={incidentList}
@@ -441,6 +446,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                                         labelSelector={incidentLabelSelector}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="person"
                                         label={t('Person')}
                                         options={personList}
@@ -449,6 +455,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                                         disabled={peopleGetPending || isNotDefined(faramValues.incident)}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="benificiary"
                                         label={t('Beneficiary')}
                                         options={personList}
@@ -461,6 +468,7 @@ class AddReleaseForm extends React.PureComponent<Props, State> {
                                         label={t('Beneficiary Other')}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="status"
                                         label={t('Status')}
                                         options={statusList}

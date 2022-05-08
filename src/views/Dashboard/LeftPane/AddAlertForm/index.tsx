@@ -44,6 +44,7 @@ import {
     eventListSelector,
     sourceOptionsSelector,
     hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 import { KeyLabel } from '#types';
 
@@ -112,6 +113,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     sourceOptions: sourceOptionsSelector(state),
     eventList: eventListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 const hazardKeySelector = (d: PageType.HazardType) => d.id;
@@ -418,6 +420,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                     pending: editAlertRequestPending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -475,6 +478,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                         />
                                         <div className={styles.inputRow}>
                                             <SelectInput
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                                 className={styles.hazardInput}
                                                 faramElementName="hazard"
                                                 options={hazardList}
@@ -483,6 +487,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                 label={t('Hazard')}
                                             />
                                             <SelectInput
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                                 className={styles.sourceInput}
                                                 faramElementName="source"
                                                 options={sourceOptions}
@@ -491,6 +496,7 @@ class AddAlertForm extends React.PureComponent<Props, State> {
                                                 label={t('Source')}
                                             />
                                             <SelectInput
+                                                placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                                 className={styles.eventInput}
                                                 faramElementName="event"
                                                 options={eventList}
