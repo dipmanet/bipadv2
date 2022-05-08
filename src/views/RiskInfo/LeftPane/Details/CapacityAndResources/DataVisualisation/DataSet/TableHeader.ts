@@ -31,14 +31,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -164,10 +164,10 @@ export const resourceHeader = [
                 value: 'No Of Students Age 10-15',
             },
 
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'providesDisasterEducationToStudent',
                 value: 'Provides Disaster Education To Student',
@@ -215,14 +215,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -600,10 +600,10 @@ export const resourceHeader = [
                 key: 'ownership',
                 value: 'Ownership',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'registrationEstDate',
                 value: 'Registration Date',
@@ -665,14 +665,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -750,10 +750,10 @@ export const resourceHeader = [
                 key: 'noOfOtherEmployee',
                 value: 'Other Employee',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'serviceUsers',
                 value: 'service Users',
@@ -795,14 +795,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -872,10 +872,10 @@ export const resourceHeader = [
                 key: 'noOfOtherEmployee',
                 value: 'Other Employee',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'towersName',
                 value: 'Towers Name',
@@ -921,14 +921,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -1010,10 +1010,10 @@ export const resourceHeader = [
                 key: 'noOfOtherEmployee',
                 value: 'Other Employee',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'website',
                 value: 'Website',
@@ -1051,14 +1051,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -1120,10 +1120,10 @@ export const resourceHeader = [
                 key: 'noOfOtherEmployee',
                 value: 'Other Employee',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'website',
                 value: 'Website',
@@ -1161,14 +1161,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'resourceType',
                 value: 'Resource Type',
@@ -1238,10 +1238,10 @@ export const resourceHeader = [
                 key: 'noOfToilets',
                 value: 'Toilets',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'religion',
                 value: 'Religion',
@@ -1295,14 +1295,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'type',
                 value: 'Type',
@@ -1365,14 +1365,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'type',
                 value: 'Type',
@@ -1425,10 +1425,10 @@ export const resourceHeader = [
                 key: 'numberOfTransporationFacilityAvailable',
                 value: 'Number Of Transporation Facility Available',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
 
         ],
     },
@@ -1463,14 +1463,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'type',
                 value: 'Type',
@@ -1545,14 +1545,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'type',
                 value: 'Type',
@@ -1605,10 +1605,10 @@ export const resourceHeader = [
                 key: 'noOfOtherEmployee',
                 value: 'Other Employee',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
 
         ],
     },
@@ -1643,14 +1643,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'altitude',
                 value: 'Altitude',
@@ -1752,22 +1752,22 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'capacityInMw',
                 value: 'Capacity(MW)',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'promoter',
                 value: 'Promoter',
@@ -1807,14 +1807,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'capacityOfFireEngine',
                 value: 'Capacity Of FireEngine',
@@ -1892,14 +1892,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'area',
                 value: 'Dumping site Area',
@@ -1946,14 +1946,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'designedWithBuildingCode',
                 value: 'Designed With Building Code',
@@ -1982,10 +1982,10 @@ export const resourceHeader = [
                 key: 'operatorType',
                 value: 'Operator Type',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
 
         ],
     },
@@ -2020,14 +2020,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'capacity',
                 value: 'Capacity',
@@ -2080,10 +2080,10 @@ export const resourceHeader = [
                 key: 'operatedBy',
                 value: 'operated By',
             },
-            {
-                key: 'phoneNumber',
-                value: 'Phone Number',
-            },
+            // {
+            //     key: 'phoneNumber',
+            //     value: 'Phone Number',
+            // },
             {
                 key: 'structure',
                 value: 'Structure',
@@ -2121,14 +2121,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'accessToSite',
                 value: 'Access To Site',
@@ -2219,14 +2219,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'address',
                 value: 'Address',
@@ -2280,14 +2280,14 @@ export const resourceHeader = [
                 key: 'localAddress',
                 value: 'Local Address',
             },
-            {
-                key: 'point1',
-                value: 'Latitude',
-            },
-            {
-                key: 'point2',
-                value: 'Longitude',
-            },
+            // {
+            //     key: 'point1',
+            //     value: 'Latitude',
+            // },
+            // {
+            //     key: 'point2',
+            //     value: 'Longitude',
+            // },
             {
                 key: 'address',
                 value: 'Address',

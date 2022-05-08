@@ -81,6 +81,16 @@
             margin: calc(var(--spacing-small) - var(--spacing-extra-small-alt)) calc(var(--spacing-medium) - var(--spacing-small));
             padding: var(--spacing-extra-small-alt) var(--spacing-small);
         }
+		.bboxIcon{
+			// flex-shrink: 0;
+            // margin: calc(var(--spacing-small) - var(--spacing-extra-small-alt)) calc(var(--spacing-medium) - var(--spacing-small));
+            // padding: var(--spacing-extra-small-alt) var(--spacing-small);
+			width: 9px;
+			position: absolute;	
+			left: 10px;
+			top: 30px;
+			cursor: pointer;
+		}
     }
 
     .content {
