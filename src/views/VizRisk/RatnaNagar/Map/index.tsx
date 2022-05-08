@@ -565,7 +565,7 @@ const Map = (props: any) => {
 
 	return (
 		<div ref={mapContainerRef} className={leftElement === 10 ? styles.mapCSSNone : styles.mapCSS}>
-			<RangeStatusLegend />
+			{leftElement > 5 && leftElement < 9 && <RangeStatusLegend />}
 		</div>
 	);
 };
