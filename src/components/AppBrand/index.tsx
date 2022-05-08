@@ -25,7 +25,7 @@ class AppBrand extends React.PureComponent<Props> {
                             {
                                 t => (
                                     <h1 className={styles.title}>
-                                        {t('BIPAD')}
+                                        {t('BIPAD Portal')}
                                     </h1>
                                 )
                             }

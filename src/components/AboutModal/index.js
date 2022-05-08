@@ -90,7 +90,7 @@ class AboutUs extends React.PureComponent {
                         t => (
                             <ModalHeader
                                 className={styles.header}
-                                title={t('BIPAD')}
+                                title={t('BIPAD Portal')}
                                 rightComponent={(
                                     <DangerButton
                                         transparent
