@@ -1,3 +1,8 @@
+/* eslint-disable react/jsx-indent-props */
+/* eslint-disable react/jsx-indent */
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable indent */
+/* eslint-disable no-tabs */
 import React from 'react';
 import { connect } from 'react-redux';
 import { FaramInputElement } from '@togglecorp/faram';
@@ -9,7 +14,7 @@ import RadioInput from '#components/RadioInput';
 import PageContext from '#components/PageContext';
 
 import {
-    languageSelector,
+	languageSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -89,138 +94,147 @@ const pastDateRangeDashboardOptions = [
 ];
 
 interface InputValue {
-    rangeInDays: number | 'custom';
-    startDate: string | undefined;
-    endDate: string | undefined;
+	rangeInDays: number | 'custom';
+	startDate: string | undefined;
+	endDate: string | undefined;
 }
 
 interface Props {
-    className?: string;
-    onChange: (value: InputValue) => void;
-    value: InputValue;
+	className?: string;
+	onChange: (value: InputValue) => void;
+	value: InputValue;
 }
 
-class PastDateRangeInput extends React.PureComponent<Props> {
-    public static defaultProps = {
-        value: undefined,
-    };
-
-    public static contextType = PageContext;
-
-    private handleRadioInputChange = (rangeInDays: number | 'custom') => {
-        const { onChange } = this.props;
-
-        if (rangeInDays === 'custom') {
-            onChange({
-                rangeInDays,
-                startDate: undefined,
-                endDate: undefined,
-            });
-        } else {
-            onChange({
-                rangeInDays,
-                startDate: undefined,
-                endDate: undefined,
-            });
-        }
-    }
-
-    private pastDataLabelSelector = (d) => {
-        const { language: { language } } = this.props;
-        if (language === 'en') {
-            return d.label;
-        }
-        return d.labelNe;
-    };
+class PastDateRangeInput extends React.Component<Props> {
+	public static defaultProps = {
+		value: undefined,
+	};
 
 
-    private handleStartDateInputChange = (newStartDate: string) => {
-        const {
-            value,
-            onChange,
-        } = this.props;
-        console.log(newStartDate, 'date test start');
+	public static contextType = PageContext;
+
+	public state = {
+		customActive: false,
+	};
+
+	private handleRadioInputChange = (rangeInDays: number | 'custom') => {
+		const { onChange } = this.props;
+		this.setState({ customActive: true });
+
+		if (rangeInDays === 'custom') {
+			onChange({
+				rangeInDays,
+				startDate: undefined,
+				endDate: undefined,
+			});
+		} else {
+			onChange({
+				rangeInDays,
+				startDate: undefined,
+				endDate: undefined,
+			});
+		}
+	}
+
+	private pastDataLabelSelector = (d) => {
+		const { language: { language } } = this.props;
+		if (language === 'en') {
+			return d.label;
+		}
+		return d.labelNe;
+	};
 
 
-        onChange({
-            rangeInDays: 'custom',
-            startDate: newStartDate,
-            endDate: value ? value.endDate : undefined,
-        });
-    }
+	private handleStartDateInputChange = (newStartDate: string) => {
+		const {
+			value,
+			onChange,
+		} = this.props;
 
-    private handleEndDateInputChange = (newEndDate: string) => {
-        const {
-            value,
-            onChange,
-        } = this.props;
-        console.log(newEndDate, 'date test end');
+		onChange({
+			rangeInDays: 'custom',
+			startDate: newStartDate,
+			endDate: value ? value.endDate : undefined,
+		});
+		console.log('start values is', value);
+	}
 
-        onChange({
-            rangeInDays: 'custom',
-            startDate: value ? value.startDate : undefined,
-            endDate: newEndDate,
-        });
-    }
+	private handleEndDateInputChange = (newEndDate: string) => {
+		const {
+			value,
+			onChange,
+		} = this.props;
 
-    public render() {
-        const {
-            className,
-            value,
-        } = this.props;
-        const { activeRouteDetails: { name: activePage } } = this.context;
 
-        return (
-            <div className={_cs(styles.pastDateRangeInput, className)}>
-                <RadioInput
-                    keySelector={pastDataKeySelector}
-                    labelSelector={this.pastDataLabelSelector}
-                    options={activePage === 'dashboard' ? pastDateRangeDashboardOptions : pastDateRangeOptions}
-                    onChange={this.handleRadioInputChange}
-                    value={value.rangeInDays}
-                    contentClassName={styles.dateRanges}
-                />
-                { value.rangeInDays === 'custom' && (
-                    <div className={styles.customRange}>
-                        <Translation>
-                            {
-                                t => (
+		onChange({
+			rangeInDays: 'custom',
+			startDate: value ? value.startDate : undefined,
+			endDate: newEndDate,
+		});
+		console.log('end values is', value);
+	}
 
-                                    <DateInput
-                                        className={styles.startDateInput}
-                                        label={t('Start Date')}
-                                        faramElementName="start"
-                                        onChange={this.handleStartDateInputChange}
-                                        value={value.startDate}
-                                    />
-                                )
-                            }
-                        </Translation>
-                        <Translation>
-                            {
-                                t => (
-                                    <DateInput
-                                        className={styles.endDateInput}
-                                        label={t('End Date')}
-                                        faramElementName="end"
-                                        onChange={this.handleEndDateInputChange}
-                                        value={value.endDate}
-                                    />
-                                )
-                            }
-                        </Translation>
+	public render() {
+		const {
+			className,
+			value,
+		} = this.props;
+		const {
+			customActive,
+		} = this.state;
+		const { activeRouteDetails: { name: activePage } } = this.context;
 
-                    </div>
-                )}
-            </div>
-        );
-    }
+		return (
+			<div className={_cs(styles.pastDateRangeInput, className)}>
+				<RadioInput
+					keySelector={pastDataKeySelector}
+					labelSelector={this.pastDataLabelSelector}
+					options={activePage === 'dashboard' ? pastDateRangeDashboardOptions : pastDateRangeOptions}
+					onChange={this.handleRadioInputChange}
+					value={value.rangeInDays}
+					contentClassName={styles.dateRanges}
+				/>
+				{value.rangeInDays === 'custom' && (
+					<div className={styles.customRange}>
+						<Translation>
+							{
+								t => (
+
+									<DateInput
+										onChange={this.handleStartDateInputChange}
+										className={'startDateInput'}
+										label={t('Start Date')}
+										faramElementName="start"
+										value={value.startDate}
+									/>
+								)
+							}
+						</Translation>
+						<Translation>
+							{
+								t => (
+									<DateInput
+										onChange={this.handleEndDateInputChange}
+										className={'endDateInput'}
+										label={t('End Date')}
+										faramElementName="end"
+										value={value.endDate}
+									/>
+								)
+							}
+						</Translation>
+
+					</div>
+				)}
+			</div>
+		);
+	}
 }
 
 const mapStateToProps = state => ({
-    language: languageSelector(state),
+	language: languageSelector(state),
 });
 
 export default FaramInputElement(connect(
-    mapStateToProps,
+	mapStateToProps,
 )(PastDateRangeInput));
