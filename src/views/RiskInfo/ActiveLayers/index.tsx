@@ -38,8 +38,6 @@ const ActiveLayer = ({
 	showOpacityInput,
 }) => {
 	const { map } = useContext(MapChildContext);
-	console.log('all layers', layer);
-	let uniqueId;
 
 	const zoomToBbox = () => {
 		if (map) {
