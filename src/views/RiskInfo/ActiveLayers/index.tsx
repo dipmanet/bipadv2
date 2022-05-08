@@ -29,7 +29,6 @@ interface State {
 	showOpacityInput: boolean;
 	showLegend: boolean;
 }
-
 const ActiveLayer = ({
 	className,
 	layer,
@@ -39,6 +38,7 @@ const ActiveLayer = ({
 	showOpacityInput,
 }) => {
 	const { map } = useContext(MapChildContext);
+
 	const zoomToBbox = () => {
 		if (map) {
 			if (!layer && !layer.bbox) return;
@@ -57,6 +57,7 @@ const ActiveLayer = ({
 					iconName="close"
 					onClick={() => onRemoveButtonClick(layer)}
 				/>
+
 				{
 					layer && layer.bbox && layer.bbox.length > 0
 					&& (
@@ -67,7 +68,6 @@ const ActiveLayer = ({
 							onClick={zoomToBbox}
 							role="button"
 						/>
-
 					)
 				}
 
