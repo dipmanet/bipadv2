@@ -22,6 +22,7 @@ import {
     eventListSelector,
     sourceListSelector,
     hazardTypeListSelector,
+    languageSelector,
 } from '#selectors';
 
 import styles from './styles.scss';
@@ -41,6 +42,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     eventList: eventListSelector(state),
     sourceList: sourceListSelector(state),
     hazardList: hazardTypeListSelector(state),
+    language: languageSelector(state),
 });
 
 const keySelector = (d: PageType.Field) => d.id;
@@ -56,6 +58,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
             sourceList,
             className,
             pending,
+            language: { language },
         } = this.props;
 
         return (
@@ -78,6 +81,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                             />
                             <div className={styles.inputGroup}>
                                 <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                     className={styles.input}
                                     faramElementName="hazard"
                                     options={hazardList}
@@ -86,6 +90,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                                     label={t('Hazard')}
                                 />
                                 <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                     className={styles.input}
                                     faramElementName="source"
                                     options={sourceList}
@@ -94,6 +99,7 @@ class GeneralIncidentDetails extends React.PureComponent<Props> {
                                     label={t('Source')}
                                 />
                                 <SelectInput
+                                    placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                     className={styles.input}
                                     faramElementName="event"
                                     options={eventList}

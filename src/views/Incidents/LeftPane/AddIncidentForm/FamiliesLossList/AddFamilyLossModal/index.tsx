@@ -266,6 +266,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                                         autoFocus
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="status"
                                         label={t('Status')}
                                         options={familyLossStatus}
@@ -273,6 +274,7 @@ class AddFamilyLoss extends React.PureComponent<Props, State> {
                                         labelSelector={d => labelSelector(d, language)}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="belowPoverty"
                                         label={t('Below Poverty')}
                                         options={belowPovertyOptions}

@@ -263,6 +263,7 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                                         autoFocus
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="type"
                                         label={t('Type')}
                                         options={livestockTypes}
@@ -270,6 +271,7 @@ class AddLivestockLoss extends React.PureComponent<Props, State> {
                                         labelSelector={d => labelSelector(d, language)}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="status"
                                         label={t('Status')}
                                         options={livestockLossStatus}

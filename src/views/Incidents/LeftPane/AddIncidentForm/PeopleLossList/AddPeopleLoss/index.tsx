@@ -23,6 +23,7 @@ import {
     countryListSelector,
     peopleLossStatusListSelector,
     genderListSelector,
+    languageSelector,
 } from '#selectors';
 
 import { AppState } from '#store/types';
@@ -100,6 +101,7 @@ const mapStateToProps = (state: AppState): PropsFromState => ({
     countryList: countryListSelector(state),
     peopleLossStatusList: peopleLossStatusListSelector(state),
     genderList: genderListSelector(state),
+    language: languageSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
@@ -222,6 +224,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                     pending,
                 },
             },
+            language: { language },
         } = this.props;
 
         const {
@@ -258,6 +261,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                                     {pending && <LoadingAnimation />}
                                     <NonFieldErrors faramElement />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="status"
                                         label={t('Status')}
                                         options={peopleLossStatusList}
@@ -274,6 +278,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                                         label={t('Age')}
                                     />
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="gender"
                                         label={t('Gender')}
                                         options={genderList}
@@ -301,6 +306,7 @@ class AddPeopleLoss extends React.PureComponent<Props, State> {
                                         </>
                                     </Cloak>
                                     <SelectInput
+                                        placeholder={language === 'en' ? 'Select an option' : 'विकल्प चयन गर्नुहोस्'}
                                         faramElementName="nationality"
                                         label={t('Nationality')}
                                         options={countryList}
