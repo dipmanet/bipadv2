@@ -191,7 +191,6 @@ class PastDateRangeInput extends React.Component<Props> {
 			value,
 		} = this.props;
 
-
 		const {
 			customActive,
 			customState,
