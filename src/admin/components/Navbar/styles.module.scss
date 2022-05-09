@@ -1,40 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&family=Poppins:wght@200&display=swap');
-body{
+
+body {
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
 	box-sizing: border-box !important;
 
 }
-html{
+
+html {
 	margin: 0;
 	padding: 0;
 	scroll-behavior: smooth;
 }
-.mainNavBar{
+
+.mainNavBar {
 	display: flex;
 	justify-content: space-between;
 	padding: 10px;
 	width: calc(100vw - 63px);
 	height: 55px;
 	background-color: #F7F7F7;
-	.navLeftSide{
+
+	.navLeftSide {
 		display: flex;
 		margin-left: 5%;
-		.navLogo{
+
+		.navLogo {
 			display: flex;
 			align-items: center;
-			.colorBar{
+
+			.colorBar {
 				width: 10px;
 				height: 43px;
-				background-color:#D80822 ;
+				background-color: #D80822;
 			}
-			.bipdLogoName{
+
+			.bipdLogoName {
 				display: flex;
 				justify-content: center;
 				align-items: center;
 				color: white;
-				width: 134px;
+				width: 180px;
 				height: 43px;
 				background-color: #226CD7;
 				font-weight: bold;
@@ -42,35 +49,40 @@ html{
 				line-height: 29px;
 				font-weight: 600;
 			}
-			.shortInfo{
-				:first-child{
+
+			.shortInfo {
+				:first-child {
 					font-family: 'Fira Sans', sans-serif;
 					font-size: 18px;
 					font-weight: 500;
-					padding:0px 10px;
+					padding: 0px 10px;
 					margin: 0;
 					color: #676767;
 				}
-				:nth-child(2){
+
+				:nth-child(2) {
 					font-family: 'Fira Sans', sans-serif;
 					font-size: 14px;
-					padding:0px 10px;
+					padding: 0px 10px;
 					margin: 0;
 					color: #676767;
 				}
 			}
 		}
-		.navMainItems{
+
+		.navMainItems {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			.navListItems{
+
+			.navListItems {
 				display: flex;
 				list-style: none;
 				margin: 0;
-				.individualItem{
-					.mainNavLinks{
-						color: #3E3E3E	;
+
+				.individualItem {
+					.mainNavLinks {
+						color: #3E3E3E;
 						font-family: 'Fira Sans', sans-serif;
 						font-weight: 600;
 						text-decoration: none;
@@ -84,19 +96,22 @@ html{
 				}
 			}
 		}
-		
+
 	}
-	.navRightSide{
+
+	.navRightSide {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		margin-right: 75px;
-		.languageToggler{
+
+		.languageToggler {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			cursor: pointer;
-			.langClass{
+
+			.langClass {
 				font-family: 'Fira Sans', sans-serif;
 				display: flex;
 				justify-content: center;
@@ -108,7 +123,8 @@ html{
 				width: 36px;
 				font-size: 14px;
 			}
-			.activeLangClass{
+
+			.activeLangClass {
 				display: flex;
 				justify-content: center;
 				font-family: 'Fira Sans', sans-serif;
@@ -120,12 +136,13 @@ html{
 				font-size: 14px;
 				color: white;
 			}
-		
+
 		}
-		.profileSvg{
+
+		.profileSvg {
 			display: flex;
 			justify-content: center;
-			
+
 			align-items: center;
 			// background-color:#A3301C;
 			border-radius: 50%;
@@ -133,14 +150,16 @@ html{
 			width: 30px;
 			fill: white !important;
 			margin-left: 15px;
-			.notification{
+
+			.notification {
 				position: relative;
-				.dot{
+
+				.dot {
 					width: 15px;
 					height: 15px;
 					border-radius: 50%;
-					position:absolute;
-					background:#A3301C;
+					position: absolute;
+					background: #A3301C;
 					font-size: 11px;
 					z-index: 9;
 					color: white;
@@ -151,52 +170,59 @@ html{
 					align-items: center;
 				}
 
-				.bell{
-					position:absolute;
+				.bell {
+					position: absolute;
 					right: 3px;
-					color:#A3301C;
-					color:#003572;
+					color: #A3301C;
+					color: #003572;
 
 					font-size: 35px;
 				}
 			}
-			.notificationBtn{
+
+			.notificationBtn {
 				background-color: transparent;
 				border: none;
 				filter: saturate(100%);
 				cursor: pointer;
 			}
-			.notificationBtn:hover{
+
+			.notificationBtn:hover {
 				opacity: 0.8;
 			}
 		}
-		.loggedInUserName{
+
+		.loggedInUserName {
 			font-size: 20px;
 			font-family: 'Fira Sans', sans-serif;
 			font-weight: 400;
-			color:#292929;
+			color: #292929;
 			margin-left: 5px;
 			font-weight: 500;
 		}
-		.logoutIcon{
+
+		.logoutIcon {
 			padding-top: 4px;
 			cursor: pointer;
 			margin-left: 15px;
-			
-			&:hover{
-				.toolTipText{
+
+			&:hover {
+				.toolTipText {
 					visibility: visible;
 				}
 			}
+
 			.logout {
 				width: 30px;
 			}
-			.toolTip{
+
+			.toolTip {
 				position: relative;
 				display: inline-block;
 				border-bottom: 1px dotted black;
 			}
-			.toolTipText{
+
+			.toolTipText {
 				visibility: hidden;
 				width: 120px;
 				background-color: black;
