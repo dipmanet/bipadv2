@@ -8,6 +8,13 @@ import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import Loader from 'react-loader';
+import {
+	ClientAttributes,
+	createConnectedRequestCoordinator,
+	createRequestClient,
+	methods,
+} from '#request';
+import * as PageTypes from '#store/atom/page/types';
 import Leftpane1 from './Leftpanes/Leftpane1/index';
 import Leftpane2 from './Leftpanes/Leftpane2/index';
 import Demographic from './Leftpanes/Demographic/index';
@@ -22,13 +29,7 @@ import Leftpane10 from './Leftpanes/Leftpane10/index';
 import Map from './Map/index';
 import styles from './styles.scss';
 import LeftTopBar from './Components/LeftTopBar';
-import {
-	ClientAttributes,
-	createConnectedRequestCoordinator,
-	createRequestClient,
-	methods,
-} from '#request';
-import * as PageTypes from '#store/atom/page/types';
+
 import { CIData, Params, PostionInitialValues, ReduxProps, ScrollTopInitialValues } from './interfaces';
 import { MainPageDataContext, positionInitialValues, scrollTopPageInitialValues } from './context';
 
@@ -37,6 +38,23 @@ const mapDispatchToProps = (state: any) => { };
 
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
+	htmlDataRequest: {
+		url: '/keyvalue-html/',
+		method: methods.GET,
+		query: ({ params }) => ({
+			municipality: params.municipalityId,
+			limit: -1,
+		}),
+
+		onSuccess: ({ params, response }) => {
+			interface Response { results: PageTypes.HtmlData[] }
+			const { results: htmlData = [] } = response as Response;
+			params.setKeyValueHtmlData(htmlData);
+			// params.setPending(false);
+		},
+		onMount: false,
+		// extras: { schemaName: 'htmlResponse' },
+	},
 
 	jsonDataRequest: {
 		url: '/keyvalue-json/',
@@ -86,6 +104,7 @@ const Ratnanagar = (props: any) => {
 	const [ciNameList, setciNameList] = useState<string[]>([]);
 	const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
 	const [keyValueJsonData, setKeyValueJsonData] = useState([]);
+	const [keyValueHtmlData, setKeyValueHtmlData] = useState([]);
 	const [currentHeaderVal, setCurrentHeaderVal] = useState('');
 
 	// state for requested data
@@ -94,6 +113,7 @@ const Ratnanagar = (props: any) => {
 
 	const { requests: {
 		cIGetRequest,
+		htmlDataRequest,
 		jsonDataRequest,
 	} } = props;
 
@@ -111,6 +131,11 @@ const Ratnanagar = (props: any) => {
 			municipalityId,
 		});
 		jsonDataRequest.do();
+		htmlDataRequest.setDefaultParams({
+			setKeyValueHtmlData,
+			municipalityId,
+		});
+		htmlDataRequest.do();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -156,6 +181,7 @@ const Ratnanagar = (props: any) => {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		keyValueHtmlData,
 		keyValueJsonData,
 		setCurrentHeaderVal,
 	};

@@ -6,7 +6,8 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-tabs */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext } from 'react';
+import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 import CommonBarChart from '../../Charts/Barcharts';
 import StackChart from '../../Charts/StackChart';
 import Factors from '../../Factors';
@@ -15,6 +16,13 @@ import SelectComponent from '../../SelectComponent';
 import styles from './styles.scss';
 
 const LeftpaneSlide4 = () => {
+	const {
+		keyValueHtmlData,
+		keyValueJsonData,
+	} = useContext(MainPageDataContext);
+
+	const htmlData = keyValueHtmlData && keyValueHtmlData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page4_htmldata_301_3_35_35007')[0];
+
 	const munName = 'Ratnanagar Municipality';
 	const factorScore = 3;
 	const scoreSattus = 'Low';
@@ -56,26 +64,15 @@ const LeftpaneSlide4 = () => {
 	];
 	return (
 		<div className={styles.vrSideBar}>
-			<h1>Exposure</h1>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
-			<Factors
-				municipalityName={munName}
-				factorScore={factorScore}
-				scoreStatus={scoreSattus}
-			/>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
+			{htmlData && htmlData.value && (
+				<div
+					style={{ textAlign: 'initial' }}
+					className={styles.mainIntroHtmlFromAPI}
+					dangerouslySetInnerHTML={{
+						__html: htmlData.value,
+					}}
+				/>
+			)}
 			<StackChart
 				stackBarChartTitle={stackBarChartTitle}
 				data={data}

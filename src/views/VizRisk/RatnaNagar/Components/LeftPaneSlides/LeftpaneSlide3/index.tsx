@@ -6,10 +6,11 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable no-tabs */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useContext } from 'react';
 import styles from './styles.scss';
 import Tick from '../../../../Common/Icons/Tick.svg';
 import { findOcc } from '#views/VizRisk/RatnaNagar/utils';
+import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 
 
 interface Props {
@@ -25,7 +26,12 @@ interface MainCIData {
 const LeftpaneSlide3 = (props: Props) => {
 	const { handleCIClick, clickedCiName, cIData } = props;
 
+	const {
+		keyValueHtmlData,
+		keyValueJsonData,
+	} = useContext(MainPageDataContext);
 
+	const htmlData = keyValueHtmlData && keyValueHtmlData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page4_htmldata_301_3_35_35007')[0];
 	const mainCIData: MainCIData[] = findOcc(cIData, 'resourceType');
 
 	const totalCI = mainCIData.map(item => item.count).reduce((a, b) => a + b);
@@ -90,28 +96,15 @@ const LeftpaneSlide3 = (props: Props) => {
 	return (
 		<div className={styles.vrSideBar}>
 			{' '}
-			<h1>Critical Infrastructure</h1>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
+			{htmlData && htmlData.value && (
+				<div
+					style={{ textAlign: 'initial' }}
+					className={styles.mainIntroHtmlFromAPI}
+					dangerouslySetInnerHTML={{
+						__html: htmlData.value,
+					}}
+				/>
+			)}
 
 			<p style={{ fontWeight: 'bold' }}>Click to view Critical Infrastructures</p>
 			<div className={styles.bubbleChart}>

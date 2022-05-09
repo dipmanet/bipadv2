@@ -24,12 +24,14 @@ import styles from './styles.scss';
 
 const LeftpaneSlide1 = () => {
 	const {
+		keyValueHtmlData,
 		keyValueJsonData,
 	} = useContext(MainPageDataContext);
-
+	const htmlData = keyValueHtmlData && keyValueHtmlData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page1_htmldata_301_3_35_35007')[0];
 	const tempData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page1_tempdata_301_3_35_35007')[0];
 	const rainFallData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page1_rainfalldata_301_3_35_35007')[0];
 
+	console.log('htmlData', htmlData);
 
 	const renderLegend = ({ active, payload, label }) => {
 		if (active && payload && payload.length) {
@@ -67,28 +69,16 @@ const LeftpaneSlide1 = () => {
 	};
 	return (
 		<div className={styles.vrSideBar}>
-			<h1> Ratnanagar Rural Municipality</h1>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
+			{htmlData && htmlData.value && (
+				<div
+					style={{ textAlign: 'initial' }}
+					className={styles.mainIntroHtmlFromAPI}
+					dangerouslySetInnerHTML={{
+						__html: htmlData.value,
+					}}
+				/>
+			)}
 
-			</p>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
 			<div className={styles.climateChart}>
 				<p style={{ marginBottom: '0px', marginTop: '30px', fontWeight: 'bold' }}> Temperature</p>
 				<div className={styles.mainLineChart}>

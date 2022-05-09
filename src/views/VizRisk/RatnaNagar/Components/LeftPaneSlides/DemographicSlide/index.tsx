@@ -12,21 +12,24 @@ import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 
 const DemographicSlide = () => {
 	const {
+		keyValueHtmlData,
 		keyValueJsonData,
 	} = useContext(MainPageDataContext);
 
+	const htmlData = keyValueHtmlData && keyValueHtmlData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page3_htmldata_301_3_35_35007')[0];
 	const populationData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007')[0];
 
 	return (
 		<div className={styles.vrSideBar}>
-			<h1>Demographics</h1>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
+			{htmlData && htmlData.value && (
+				<div
+					style={{ textAlign: 'initial' }}
+					className={styles.mainIntroHtmlFromAPI}
+					dangerouslySetInnerHTML={{
+						__html: htmlData.value,
+					}}
+				/>
+			)}
 			{
 				populationData && populationData.value && populationData.value.length > 0 && (
 					<PopulationChart

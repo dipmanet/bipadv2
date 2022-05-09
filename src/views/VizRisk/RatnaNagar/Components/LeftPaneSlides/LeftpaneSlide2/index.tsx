@@ -12,15 +12,15 @@ import { ResponsiveContainer, Treemap } from 'recharts';
 import { MainPageDataContext } from '#views/VizRisk/RatnaNagar/context';
 
 import styles from './styles.scss';
-import LandCoverLegends from '../../Legends/LandCoverLegends';
 
 const LeftpaneSlide2 = () => {
 	const barColors = ['#d3e878', '#00a811', '#e9e1d8', '#0b71bd', '#E2CF45', 'grey', 'green'];
 	const {
-		leftElement,
+		keyValueHtmlData,
 		keyValueJsonData,
 	} = useContext(MainPageDataContext);
 
+	const htmlData = keyValueHtmlData && keyValueHtmlData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page2_htmldata_301_3_35_35007')[0];
 	const landCoverData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page2_landcoverdata_301_3_35_35007')[0];
 
 	const CustomizedContent = (props: any) => {
@@ -79,28 +79,15 @@ const LeftpaneSlide2 = () => {
 
 	return (
 		<div className={styles.vrSideBar}>
-			<h1>Landcover</h1>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
-			<p>
-				Ratnanagar  Municipality is located in Sindhupalchok
-				district of Bagmati province. The rural municipality
-				has 7 wards covering a total area of 592 sq. km and
-				is situated at an elevation of 800 m to 7000m AMSL.
-
-			</p>
+			{htmlData && htmlData.value && (
+				<div
+					style={{ textAlign: 'initial' }}
+					className={styles.mainIntroHtmlFromAPI}
+					dangerouslySetInnerHTML={{
+						__html: htmlData.value,
+					}}
+				/>
+			)}
 			{landCoverData && landCoverData.value && landCoverData.value.length > 0 && (
 				<ResponsiveContainer height={400}>
 					<Treemap
