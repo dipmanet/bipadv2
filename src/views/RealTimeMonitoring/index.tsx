@@ -270,12 +270,8 @@ const itemSelector = (d: { label: string }) => d.label;
 // const iconSelector = (d: { icon: string }) => d.icon;
 const radiusSelector = (d: { radius: number }) => d.radius;
 const legendColorSelector = (d: { color: string }) => d.color;
-const legendLabelSelector = (d: { label: string }, language: string) => {
-    if (language === 'en') {
-        return d.label;
-    }
-    return d.labelNe;
-};
+const legendLabelSelector = (d: { label: string }) => d.label;
+
 const classNameSelector = (d: { style: string }) => d.style;
 
 const emptyHazardHoverAttributeList: MapStateElement[] = [];
@@ -405,17 +401,24 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </Translation>
                             </h4>
                         </header>
-                        <Legend
-                            className={styles.legend}
-                            data={rainLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            // iconSelector={iconSelector}
-                            labelSelector={e => legendLabelSelector(e, language)}
-                            symbolClassNameSelector={classNameSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <Legend
+                                        className={styles.legend}
+                                        data={rainLegendItems}
+                                        itemClassName={styles.legendItem}
+                                        keySelector={itemSelector}
+                                    // iconSelector={iconSelector}
+                                        labelSelector={d => t(legendLabelSelector(d))}
+                                        symbolClassNameSelector={classNameSelector}
+                                        colorSelector={legendColorSelector}
+                                        emptyComponent={null}
+                                    />
+                                )
+                            }
+                        </Translation>
+
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -456,24 +459,31 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </Translation>
                             </h4>
                         </header>
-                        <Legend
-                            className={styles.legend}
-                            // data={riverLegendItems}
-                            // data={newRiverLegendItems}
-                            data={
-                                realTimeRiverList.length > 0
-                                    ? autoRiverLegends
-                                    : noLegend
+                        <Translation>
+                            {
+                                t => (
+                                    <Legend
+                                        className={styles.legend}
+                                    // data={riverLegendItems}
+                                        // data={newRiverLegendItems}
+                                        data={
+                                            realTimeRiverList.length > 0
+                                                ? autoRiverLegends
+                                                : noLegend
+                                        }
+                                        itemClassName={styles.legendItem}
+                                        keySelector={itemSelector}
+                                    // iconSelector={iconSelector}
+                                        // labelSelector={legendLabelSelector}
+                                        labelSelector={d => t(legendLabelSelector(d))}
+                                        symbolClassNameSelector={classNameSelector}
+                                        colorSelector={legendColorSelector}
+                                        emptyComponent={null}
+                                    />
+                                )
                             }
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            // iconSelector={iconSelector}
-                            // labelSelector={legendLabelSelector}
-                            labelSelector={e => legendLabelSelector(e, language)}
-                            symbolClassNameSelector={classNameSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                        </Translation>
+
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -515,20 +525,27 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
                             </h4>
                         </header>
-                        <Legend
-                            className={styles.legend}
-                            data={earthquakeLegendItems}
-                            itemClassName={styles.sizeLegendItem}
-                            keySelector={itemSelector}
-                            radiusSelector={radiusSelector}
-                            // iconSelector={iconSelector}
-                            // labelSelector={legendLabelSelector}
-                            labelSelector={e => legendLabelSelector(e, language)}
+                        <Translation>
+                            {
+                                t => (
+                                    <Legend
+                                        className={styles.legend}
+                                        data={earthquakeLegendItems}
+                                        itemClassName={styles.sizeLegendItem}
+                                        keySelector={itemSelector}
+                                        radiusSelector={radiusSelector}
+                                    // iconSelector={iconSelector}
+                                        // labelSelector={legendLabelSelector}
+                                        labelSelector={d => t(legendLabelSelector(d))}
 
-                            symbolClassNameSelector={classNameSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                                        symbolClassNameSelector={classNameSelector}
+                                        colorSelector={legendColorSelector}
+                                        emptyComponent={null}
+                                    />
+                                )
+                            }
+                        </Translation>
+
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -577,22 +594,28 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
                                 </Translation>
                             </h4>
                         </header>
-                        <Legend
-                            className={styles.legend}
-                            // data={pollutionLegendItems}
-                            data={
-                                realTimePollutionList.length > 0
-                                    ? autoPollutionLegends
-                                    : noLegend
+                        <Translation>
+                            {
+                                t => (
+                                    <Legend
+                                        className={styles.legend}
+                                // data={pollutionLegendItems}
+                                        data={
+                                            realTimePollutionList.length > 0
+                                                ? autoPollutionLegends
+                                                : noLegend
+                                        }
+                                        itemClassName={styles.legendItem}
+                                        keySelector={itemSelector}
+                                // labelSelector={legendLabelSelector}
+                                        labelSelector={d => t(legendLabelSelector(d))}
+                                        symbolClassNameSelector={classNameSelector}
+                                        colorSelector={legendColorSelector}
+                                        emptyComponent={null}
+                                    />
+                                )
                             }
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            // labelSelector={legendLabelSelector}
-                            labelSelector={e => legendLabelSelector(e, language)}
-                            symbolClassNameSelector={classNameSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                        </Translation>
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>
@@ -635,17 +658,24 @@ class RealTimeMonitoring extends React.PureComponent <Props, State> {
 
                             </h4>
                         </header>
-                        <Legend
-                            className={styles.legend}
-                            data={forestFireLegendItems}
-                            itemClassName={styles.legendItem}
-                            keySelector={itemSelector}
-                            // labelSelector={legendLabelSelector}
-                            labelSelector={e => legendLabelSelector(e, language)}
-                            symbolClassNameSelector={classNameSelector}
-                            colorSelector={legendColorSelector}
-                            emptyComponent={null}
-                        />
+                        <Translation>
+                            {
+                                t => (
+                                    <Legend
+                                        className={styles.legend}
+                                        data={forestFireLegendItems}
+                                        itemClassName={styles.legendItem}
+                                        keySelector={itemSelector}
+                                    // labelSelector={legendLabelSelector}
+                                        labelSelector={d => t(legendLabelSelector(d))}
+                                        symbolClassNameSelector={classNameSelector}
+                                        colorSelector={legendColorSelector}
+                                        emptyComponent={null}
+                                    />
+                                )
+                            }
+                        </Translation>
+
                         <div className={styles.sourceDetails}>
                             <div className={styles.label}>
                                 <Translation>

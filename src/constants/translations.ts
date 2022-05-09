@@ -1,5 +1,21 @@
 export const enTranslation = {
     translation: {
+        'No legends to display': 'No legends to display',
+        'Below Warning Level': 'Below Warning Level',
+        'Warning Level': 'Warning Level',
+        'Above Warning Level': 'Above Warning Level',
+        'Above Danger Level': 'Above Danger Level',
+
+        'Below Warning Level and Steady': 'Below Warning Level and Steady',
+        'Below Warning Level and Rising': 'Below Warning Level and Rising',
+        'Below Warning Level and Falling': 'Below Warning Level and Falling',
+        'Above Warning Level and Steady': 'Above Warning Level and Steady',
+        'Above Warning Level and Rising': 'Above Warning Level and Rising',
+        'Above Warning Level and Falling': 'Above Warning Level and Falling',
+        'Above Danger Level and Steady': 'Above Danger Level and Steady',
+        'Above Danger Level and Rising': 'Above Danger Level and Rising',
+        'Above Danger Level and Falling': 'Above Danger Level and Falling',
+
         'Citizen Reports': 'Citizen Reports',
         'Economic Loss': 'Economic Loss',
         'Owner Name': 'Owner Name',
@@ -743,6 +759,22 @@ export const enTranslation = {
 
 export const npTranslation = {
     translation: {
+        'No legends to display': 'प्रदर्शन गर्न कुनै पौराणिक कथाहरू छैनन्',
+        'Below Warning Level': 'चेतावनी तहभन्दा तल',
+        'Warning Level': 'चेतावनी स्तर',
+        'Above Warning Level': 'चेतावनी स्तरभन्दा माथि',
+        'Above Danger Level': 'खतराको स्तरभन्दा माथि',
+
+        'Below Warning Level and Steady': 'चेतावनी तह र स्थिर',
+        'Below Warning Level and Rising': 'चेतावनी स्तरभन्दा तल र बढ्दै',
+        'Below Warning Level and Falling': 'चेतावनी स्तर तल र झर्दै',
+        'Above Warning Level and Steady': 'चेतावनी स्तर माथि र स्थिर',
+        'Above Warning Level and Rising': 'चेतावनी स्तर माथि र बढ्दै',
+        'Above Warning Level and Falling': 'चेतावनीको माथिल्लो तह र गिरावट',
+        'Above Danger Level and Steady': 'खतराको स्तर माथि र स्थिर',
+        'Above Danger Level and Rising': 'खतराको स्तर माथि र बढ्दै',
+        'Above Danger Level and Falling': 'खतराको स्तर माथि र झर्दै',
+
         'Citizen Reports': 'नागरिक रिपोर्ट',
         'Economic Loss': 'आर्थिक घाटा',
         'Owner Name': 'घरमुलि को नाम',
