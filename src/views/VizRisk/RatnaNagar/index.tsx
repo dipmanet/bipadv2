@@ -1,9 +1,9 @@
-/* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable indent */
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-tabs */
+/* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
+/* eslint-disable indent */
+/* eslint-disable no-tabs */
+/* eslint-disable @typescript-eslint/indent */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -82,10 +82,11 @@ const Ratnanagar = (props: any) => {
 	const [leftElement, setLeftElement] = useState<number>(0);
 	const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
 	const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
-	const [clickedCiName, setclickedCiName] = useState<string[]>([]);
+	const [clickedCiName, setclickedCiName] = useState<string[]>(['finance']);
 	const [ciNameList, setciNameList] = useState<string[]>([]);
 	const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
 	const [keyValueJsonData, setKeyValueJsonData] = useState([]);
+	const [currentHeaderVal, setCurrentHeaderVal] = useState('');
 
 	// state for requested data
 	const [cIData, setcIData] = useState<CIData>([]);
@@ -156,8 +157,8 @@ const Ratnanagar = (props: any) => {
 		setPostionsPerPage,
 		onButtonClick,
 		keyValueJsonData,
+		setCurrentHeaderVal,
 	};
-	console.log(keyValueJsonData);
 
 
 	return (
@@ -175,7 +176,7 @@ const Ratnanagar = (props: any) => {
 						: (
 							<>
 								{
-									leftElement < 9 && (
+									leftElement < 10 && (
 										<>
 											<Map
 												municipalityId={municipalityId}
@@ -186,7 +187,7 @@ const Ratnanagar = (props: any) => {
 												setciNameList={setciNameList}
 												unClickedCIName={unClickedCIName}
 											/>
-											<LeftTopBar />
+											<LeftTopBar currentHeaderVal={currentHeaderVal} />
 										</>
 
 									)

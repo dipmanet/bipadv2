@@ -23,6 +23,7 @@ function LeftPane2(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
 	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -41,6 +42,7 @@ function LeftPane2(props: Props) {
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);
 		}
+		setCurrentHeaderVal('Landcover');
 		return () => {
 			if (articleRef.current) {
 				articleRef.current.removeEventListener('scroll', updateHeight);

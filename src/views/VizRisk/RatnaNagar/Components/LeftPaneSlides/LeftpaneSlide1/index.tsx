@@ -29,8 +29,42 @@ const LeftpaneSlide1 = () => {
 
 	const tempData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page1_tempdata_301_3_35_35007')[0];
 	const rainFallData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page1_rainfalldata_301_3_35_35007')[0];
-	console.log(rainFallData);
 
+
+	const renderLegend = ({ active, payload, label }) => {
+		if (active && payload && payload.length) {
+			return (
+				<div style={{ backgroundColor: 'transparent' }}>
+					<h2 style={{ margin: 0, fontSize: 14 }}>{payload[0].payload.name}</h2>
+					{/* {payload[0].payload.Max
+						&& <p>{`Maximum: ${payload[0].payload.Max} ℃`}</p>
+					} */}
+					<p style={{ margin: 0, fontSize: 14, color: '#00d725' }}>{`Average: ${payload[0].payload.Avg} ℃`}</p>
+					{/* {payload[0].payload.Min
+						&& <p>{`Minimum: ${payload[0].payload.Min} ℃`}</p>
+					} */}
+				</div>
+			);
+		}
+		return null;
+	};
+	const renderLegendRainfall = ({ active, payload, label }) => {
+		if (active && payload && payload.length) {
+			return (
+				<div style={{ backgroundColor: 'transparent' }}>
+					<h2 style={{ margin: 0, fontSize: 14 }}>{payload[0].payload.month}</h2>
+					{/* {payload[0].payload.Max
+						&& <p>{`Maximum: ${payload[0].payload.Max} ℃`}</p>
+					} */}
+					<p style={{ margin: 0, fontSize: 14, color: '#ffbf00' }}>{`Average: ${payload[0].payload.Averagerainfall} mm`}</p>
+					{/* {payload[0].payload.Min
+						&& <p>{`Minimum: ${payload[0].payload.Min} ℃`}</p>
+					} */}
+				</div>
+			);
+		}
+		return null;
+	};
 	return (
 		<div className={styles.vrSideBar}>
 			<h1> Ratnanagar Rural Municipality</h1>
@@ -83,7 +117,7 @@ const LeftpaneSlide1 = () => {
 										allowDataOverflow
 									/>
 									<Legend iconType="circle" iconSize={10} align="center" />
-									<Tooltip />
+									<Tooltip content={renderLegend} />
 									{/* <Line type="monotone" dataKey="Max" stroke="#ffbf00" strokeWidth={5} /> */}
 									<Line type="monotone" dataKey="Avg" stroke="#00d725" strokeWidth={5} />
 									{/* <Line type="monotone" dataKey="Min" stroke="#347eff" strokeWidth={5} /> */}
@@ -119,7 +153,7 @@ const LeftpaneSlide1 = () => {
 										allowDataOverflow
 									/>
 									<Legend iconType="circle" iconSize={10} align="center" />
-									<Tooltip />
+									<Tooltip content={renderLegendRainfall} />
 									<Line type="monotone" dataKey="Averagerainfall" stroke="#ffbf00" strokeWidth={5} />
 
 								</LineChart>

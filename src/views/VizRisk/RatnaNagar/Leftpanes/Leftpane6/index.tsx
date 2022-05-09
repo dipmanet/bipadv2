@@ -13,7 +13,6 @@ import { MainPageDataContext } from '../../context';
 import styles from './styles.scss';
 
 interface Props {
-
 }
 
 function LeftPane6(props: Props) {
@@ -25,6 +24,7 @@ function LeftPane6(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
 	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -39,6 +39,7 @@ function LeftPane6(props: Props) {
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page7ScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, page7PositionValue: Math.max(1 - percentage, 0) });
 		};
+		setCurrentHeaderVal('Hazard');
 		updateHeight();
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);

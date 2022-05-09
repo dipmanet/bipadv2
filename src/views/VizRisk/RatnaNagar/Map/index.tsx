@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
@@ -24,7 +24,10 @@ import { wardsSelector } from '#selectors';
 import { AppState } from '#types';
 import { getWardFilter } from '#utils/domain';
 import { parseStringToNumber } from '#views/VizRisk/Butwal/Functions';
-import { demographicsData, ratnaNagarVizriskCoordinates } from '../dummy';
+import { ratnaNagarVizriskCoordinates } from '../dummy';
+import { MainPageDataContext } from '../context';
+import DemoGraphicsLegends from '#views/VizRisk/Butwal/Legends/DemographicsLegends';
+import LandCoverLegends from '../Components/Legends/LandCoverLegends';
 
 const { REACT_APP_MAPBOX_ACCESS_TOKEN: TOKEN } = process.env;
 if (TOKEN) {
@@ -42,6 +45,13 @@ const Map = (props: any) => {
 	const map = useRef<mapboxgl.Map | null>(null);
 	const mapContainerRef = useRef<HTMLDivElement>(null);
 	const mapZoomEffect = useRef<any | undefined>(null);
+
+	const {
+		keyValueJsonData,
+	} = useContext(MainPageDataContext);
+
+	const demographicsData = keyValueJsonData && keyValueJsonData.filter((item: any) => item.key === 'vizrisk_ratnanagar_page3_populationdata_301_3_35_35007')[0].value;
+	console.log('demographicsData', demographicsData);
 
 	function noop() { }
 
@@ -76,6 +86,8 @@ const Map = (props: any) => {
 		},
 
 	];
+
+	const landoverLayers = ['farmland-ratnanagar', 'industrial', 'forestratnanagar', 'waterratnanagar'];
 
 	const dummyGeojson = {
 		type: 'FeatureCollection',
@@ -503,6 +515,23 @@ const Map = (props: any) => {
 
 	useEffect(() => {
 		if (map.current && map.current.isStyleLoaded()) {
+			// -------------------------------------LANDCOVER LAYER-------------------------------
+			if (leftElement === 1) {
+				landoverLayers.map((layer) => {
+					if (map.current) {
+						map.current.setLayoutProperty(layer, 'visibility', 'visible');
+					}
+					return null;
+				});
+			} else {
+				landoverLayers.map((layer) => {
+					if (map.current) {
+						map.current.setLayoutProperty(layer, 'visibility', 'none');
+					}
+					return null;
+				});
+			}
+
 			if (leftElement === 2) {
 				if (!map.current) return;
 				map.current.setLayoutProperty('ward-fill-local', 'visibility', 'visible');
@@ -559,13 +588,27 @@ const Map = (props: any) => {
 			} else {
 				map.current.setLayoutProperty('exposure-point', 'visibility', 'none');
 			}
+
+			if (leftElement > 3 && leftElement < 9) {
+				if (map.current) {
+					map.current.setLayoutProperty('municipalitygeo', 'visibility', 'none');
+					map.current.setPaintProperty('wardgeo', 'line-color', 'white');
+					map.current.setPaintProperty('wardname', 'text-color', '#ede9dd');
+				}
+			} else {
+				map.current.setLayoutProperty('municipalitygeo', 'visibility', 'visible');
+				map.current.setPaintProperty('wardgeo', 'line-color', '#514d4d');
+				map.current.setPaintProperty('wardname', 'text-color', '#000000');
+			}
 		}
-	}, [ciNameList, clickedCiName, leftElement, unClickedCIName]);
+	}, [ciNameList, clickedCiName, landoverLayers, leftElement, unClickedCIName]);
 
 
 	return (
-		<div ref={mapContainerRef} className={leftElement === 10 ? styles.mapCSSNone : styles.mapCSS}>
-			{leftElement > 5 && leftElement < 9 && <RangeStatusLegend />}
+		<div ref={mapContainerRef} className={leftElement === 9 ? styles.mapCSSNone : styles.mapCSS}>
+			{leftElement > 3 && leftElement < 9 && <RangeStatusLegend />}
+			{leftElement === 2 && <DemoGraphicsLegends demographicsData={demographicsData} />}
+			{leftElement === 1 && <LandCoverLegends />}
 		</div>
 	);
 };

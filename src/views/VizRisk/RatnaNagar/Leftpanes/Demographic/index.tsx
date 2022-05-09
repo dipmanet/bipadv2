@@ -22,6 +22,8 @@ function Demographic(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
+
 	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -36,6 +38,7 @@ function Demographic(props: Props) {
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, demographicScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, demographicPositionValue: Math.max(1 - percentage, 0) });
 		};
+		setCurrentHeaderVal('Demographics');
 		updateHeight();
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);
