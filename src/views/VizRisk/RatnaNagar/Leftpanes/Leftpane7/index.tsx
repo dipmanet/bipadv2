@@ -25,6 +25,7 @@ function LeftPane7(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
 	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -39,6 +40,7 @@ function LeftPane7(props: Props) {
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page8ScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, page8PositionValue: Math.max(1 - percentage, 0) });
 		};
+		setCurrentHeaderVal('Sensitivity');
 		updateHeight();
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);

@@ -59,7 +59,7 @@ const Navbuttons = (props: Props) => {
 
 
 	return (
-		<div className={leftElement < 10 ? styles.pagination : styles.lastPagePagination}>
+		<div className={leftElement < 9 ? styles.pagination : styles.lastPagePagination}>
 			<button
 				type="submit"
 				onClick={onPreviousClick}
@@ -73,7 +73,7 @@ const Navbuttons = (props: Props) => {
 			</button>
 			<div className={styles.numberContainer} ref={navRef}>
 				{
-					new Array(11).fill(0).map((_, indexNumber) => (
+					new Array(10).fill(0).map((_, indexNumber) => (
 						<button
 							// eslint-disable-next-line react/no-array-index-key
 							key={indexNumber}
@@ -108,7 +108,7 @@ const Navbuttons = (props: Props) => {
 			<button
 				type="submit"
 				onClick={onNextClick}
-				disabled={postionsPerPage.page10PositionValue === 0 && leftElement === 10}
+				disabled={postionsPerPage.page10PositionValue === 0 && leftElement === 9}
 				className={styles.previousNextButton}
 			>
 				<ScalableVectorGraphics

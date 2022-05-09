@@ -33,6 +33,7 @@ function LeftPane3(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
 	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -47,6 +48,7 @@ function LeftPane3(props: Props) {
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page4ScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, page4PositionValue: Math.max(1 - percentage, 0) });
 		};
+		setCurrentHeaderVal('Critical Infrastructure');
 		updateHeight();
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);

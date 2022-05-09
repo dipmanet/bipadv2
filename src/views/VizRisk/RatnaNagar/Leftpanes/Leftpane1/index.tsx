@@ -22,6 +22,7 @@ function LeftPane1() {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
 	} = useContext(MainPageDataContext);
 
 
@@ -37,6 +38,7 @@ function LeftPane1() {
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page1ScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, page1PositionValue: Math.max(1 - percentage, 0) });
 		};
+		setCurrentHeaderVal('');
 		updateHeight();
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);

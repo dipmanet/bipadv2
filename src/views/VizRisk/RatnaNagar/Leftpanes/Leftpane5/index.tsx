@@ -24,6 +24,7 @@ function LeftPane5(props: Props) {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		setCurrentHeaderVal,
 	} = useContext(MainPageDataContext);
 
 	const articleRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -38,6 +39,7 @@ function LeftPane5(props: Props) {
 			setScrollTopValuesPerPage({ ...scrollTopValuesPerPage, page6ScrolltopValue: scrollTop });
 			setPostionsPerPage({ ...postionsPerPage, page6PositionValue: Math.max(1 - percentage, 0) });
 		};
+		setCurrentHeaderVal('Flood Innundation');
 		updateHeight();
 		if (articleRef.current) {
 			articleRef.current.addEventListener('scroll', updateHeight);

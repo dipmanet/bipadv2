@@ -1,9 +1,9 @@
-/* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable indent */
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable no-tabs */
+/* eslint-disable react/jsx-indent-props */
 /* eslint-disable max-len */
+/* eslint-disable indent */
+/* eslint-disable no-tabs */
+/* eslint-disable @typescript-eslint/indent */
 import React, { useEffect, useState } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -39,6 +39,26 @@ const mapDispatchToProps = (state: any) => { };
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 
+	jsonDataRequest: {
+		url: '/keyvalue-json/',
+		method: methods.GET,
+		query: ({ params }) => ({
+			// eslint-disable-next-line @typescript-eslint/camelcase
+			municipality: params.municipalityId,
+			limit: -1,
+
+		}),
+		onSuccess: ({ params, response }) => {
+			interface Response { results: PageTypes.Incident[] }
+			const { results: jsonData = [] } = response as Response;
+			if (params) {
+				params.setKeyValueJsonData(jsonData);
+			}
+			// params.setPending(false);
+		},
+		onMount: false,
+		// extras: { schemaName: 'jsonResponse' },
+	},
 	cIGetRequest: {
 		url: '/resource/',
 		method: methods.GET,
@@ -63,9 +83,11 @@ const Ratnanagar = (props: any) => {
 	const [leftElement, setLeftElement] = useState<number>(0);
 	const [scrollTopValuesPerPage, setScrollTopValuesPerPage] = useState<ScrollTopInitialValues>(scrollTopPageInitialValues);
 	const [postionsPerPage, setPostionsPerPage] = useState<PostionInitialValues>(positionInitialValues);
-	const [clickedCiName, setclickedCiName] = useState<string[]>([]);
+	const [clickedCiName, setclickedCiName] = useState<string[]>(['finance']);
 	const [ciNameList, setciNameList] = useState<string[]>([]);
 	const [unClickedCIName, setunClickedCIName] = useState<string[]>([]);
+	const [keyValueJsonData, setKeyValueJsonData] = useState([]);
+	const [currentHeaderVal, setCurrentHeaderVal] = useState('');
 
 	// state for requested data
 	const [cIData, setcIData] = useState<CIData>([]);
@@ -73,6 +95,7 @@ const Ratnanagar = (props: any) => {
 
 	const { requests: {
 		cIGetRequest,
+		jsonDataRequest,
 	} } = props;
 
 	const municipalityId = 35007;
@@ -84,14 +107,19 @@ const Ratnanagar = (props: any) => {
 			municipalityId,
 		});
 		cIGetRequest.do();
+		jsonDataRequest.setDefaultParams({
+			setKeyValueJsonData,
+			municipalityId,
+		});
+		jsonDataRequest.do();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
-		if (cIData.length > 0) {
+		if (cIData.length > 0 && keyValueJsonData.length > 0) {
 			setpending(false);
 		}
-	}, [cIData]);
+	}, [cIData, keyValueJsonData]);
 
 	const onButtonClick = (item: number) => {
 		setLeftElement(item);
@@ -129,7 +157,10 @@ const Ratnanagar = (props: any) => {
 		postionsPerPage,
 		setPostionsPerPage,
 		onButtonClick,
+		keyValueJsonData,
+		setCurrentHeaderVal,
 	};
+
 
 	return (
 		<>
@@ -146,7 +177,7 @@ const Ratnanagar = (props: any) => {
 						: (
 							<>
 								{
-									leftElement < 11 && (
+									leftElement < 10 && (
 										<>
 											<Map
 												municipalityId={municipalityId}
@@ -157,7 +188,7 @@ const Ratnanagar = (props: any) => {
 												setciNameList={setciNameList}
 												unClickedCIName={unClickedCIName}
 											/>
-											<LeftTopBar />
+											<LeftTopBar currentHeaderVal={currentHeaderVal} />
 										</>
 
 									)
@@ -194,11 +225,11 @@ const Ratnanagar = (props: any) => {
 									<Leftpane8 />
 								)}
 								{leftElement === 9 && (
-									<Leftpane9 />
-								)}
-								{leftElement === 10 && (
 									<Leftpane10 />
 								)}
+								{/* {leftElement === 10 && (
+									<Leftpane10 />
+								)} */}
 							</>
 						)
 				}

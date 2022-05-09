@@ -41,6 +41,7 @@ interface MainPageData {
 	postionsPerPage: PostionInitialValues;
 	setPostionsPerPage: React.Dispatch<React.SetStateAction<PostionInitialValues>>;
 	onButtonClick: (item: number) => void;
+	keyValueJsonData: [];
 }
 const initialMainPageData: MainPageData = {
 	leftElement: 1,
@@ -50,6 +51,7 @@ const initialMainPageData: MainPageData = {
 	postionsPerPage: positionInitialValues,
 	setPostionsPerPage: () => undefined,
 	onButtonClick: () => undefined,
+	keyValueJsonData: [],
 };
 
 export const MainPageDataContext = React.createContext(initialMainPageData);
