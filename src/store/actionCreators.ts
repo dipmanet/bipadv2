@@ -5,3 +5,4 @@ export * from './atom/covid/reducer';
 export * from './atom/healthinfrastructure/reducer';
 export * from './atom/notification/reducer';
 export * from './atom/admin/reducer';
+export * from './atom/incident/reducer';

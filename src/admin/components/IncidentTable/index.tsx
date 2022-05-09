@@ -46,18 +46,21 @@ import HealthForm from '../HealthForm';
 import { createConnectedRequestCoordinator, createRequestClient, methods } from '#request';
 // import { getHealthTable, deleteHealthTable, formDataForEdit, setInventoryItem, healthDataLoading } from '../../Redux/actions';
 
-import { SetHealthInfrastructurePageAction } from '#actionCreators';
+import { SetHealthInfrastructurePageAction, SetIncidentPageAction } from '#actionCreators';
 import {
 	healthInfrastructurePageSelector,
+	incidentPageSelector,
 	userSelector,
 } from '#selectors';
 
 const mapStateToProps = (state: AppState): PropsFromAppState => ({
 	healthInfrastructurePage: healthInfrastructurePageSelector(state),
 	userDataMain: userSelector(state),
+	incidentPage: incidentPageSelector(state),
 });
 const mapDispatchToProps = (dispatch: Redux.Dispatch): PropsFromDispatch => ({
 	setHealthInfrastructurePage: params => dispatch(SetHealthInfrastructurePageAction(params)),
+	setIncidentPage: params => dispatch(SetIncidentPageAction(params)),
 });
 
 const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
@@ -83,6 +86,33 @@ const requests: { [key: string]: ClientAttributes<ReduxProps, Params> } = {
 			params.setLoader(false);
 		},
 	},
+
+	incident: {
+		url: '/incident/',
+		method: methods.GET,
+		onMount: false,
+		query: ({ params }) => ({
+			format: 'json',
+			meta: true,
+			offset: params.offset,
+			limit: 100,
+			count: true,
+			expand: ['ward', 'ward.municipality', 'ward.municipality.district', 'ward.municipality.district.province'],
+			ordering: '-last_modified_date',
+		}),
+		onSuccess: ({ response, props, params }) => {
+			props.setIncidentPage({
+				incidentTableData: response.results,
+				incidentDataCount: response.count,
+			});
+			// props.setHealthInfrastructurePage({
+			// 	healthTableData: response.results,
+			// 	healthDataCount: response.count,
+			// });
+			// params.setLoader(false);
+		},
+	},
+
 
 	formDataForEdit: {
 		url: ({ params }) => `/resource/${params.resourceID}/`,
@@ -202,8 +232,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 			disablePadding: false,
 			label: tableTitleRef[invD],
 		}));
-	console.log('Head cell', headCells);
-	console.log('This is table title ref', tableTitleRef);
+
 	return (
 		<TableHead>
 			<TableRow>
@@ -348,6 +377,12 @@ const HealthTable = (props) => {
 			healthDataCount,
 		},
 		userDataMain,
+		incidentPage: {
+			incidentTableData,
+			incidentFormEditData,
+			incidentDataCount,
+		},
+
 	} = props;
 
 	useEffect(() => {
@@ -359,6 +394,7 @@ const HealthTable = (props) => {
 	useEffect(() => {
 		setLoader(true);
 		props.requests.resource.do({ setLoader });
+		props.requests.incident.do({});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
